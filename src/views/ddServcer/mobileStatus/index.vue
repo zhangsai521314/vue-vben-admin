@@ -186,7 +186,7 @@
         title: 'ip+port',
         showOverflow: true,
         showHeaderOverflow: true,
-        width: 150,
+        width: 154,
         slots: {
           default: 'ipport',
         },

@@ -41,7 +41,7 @@
             borderRadius: '20px',
           }"
         ></div>
-        <span>通信{{ mqttStore.mqttStatus }}</span>
+        <span style="color: black">通信{{ mqttStore.mqttStatus }}</span>
       </a-space>
     </div>
 
