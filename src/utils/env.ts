@@ -26,10 +26,12 @@ const getVariableName = (title: string) => {
 
 export function getAppEnvConfig() {
   const ENV_NAME = getVariableName(import.meta.env.VITE_GLOB_APP_SHORT_NAME);
-  const ENV = import.meta.env.DEV
+  const ENV = (import.meta.env.DEV
     ? // Get the global configuration (the configuration will be extracted independently when packaging)
       (import.meta.env as unknown as GlobEnvConfig)
-    : (window[ENV_NAME] as unknown as GlobEnvConfig);
+    : window[ENV_NAME as any]
+      ? window[ENV_NAME as any]
+      : (import.meta.env as unknown as GlobEnvConfig)) as unknown as GlobEnvConfig;
   const {
     VITE_GLOB_APP_TITLE,
     VITE_GLOB_APP_SHORT_NAME,
@@ -47,9 +49,9 @@ export function getAppEnvConfig() {
     if (address?.key) VITE_GLOB_API_URL = address?.val;
   }
   return {
-    VITE_GLOB_APP_TITLE: VITE_GLOB_APP_TITLE.replace(' ', '-'),
+    VITE_GLOB_APP_TITLE: VITE_GLOB_APP_TITLE,
     VITE_GLOB_API_URL,
-    VITE_GLOB_APP_SHORT_NAME: VITE_GLOB_APP_SHORT_NAME.replace(' ', '-'),
+    VITE_GLOB_APP_SHORT_NAME: VITE_GLOB_APP_SHORT_NAME,
     VITE_GLOB_API_URL_PREFIX,
     VITE_GLOB_UPLOAD_URL,
     VITE_GLOB_APP_VERSION,
