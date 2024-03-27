@@ -77,6 +77,7 @@
       <!-- 用户头像操作 -->
       <UserDropDown :theme="getHeaderTheme" />
 
+      <!-- 设置 -->
       <SettingDrawer v-if="getShowSetting" :class="`${prefixCls}-action__item`" />
     </div>
   </Layout.Header>
