@@ -1,11 +1,19 @@
 <template>
   <span :class="`${prefixCls}- flex items-center `">
-    <img v-if="getImg" :src="getImg" class="w-18px h-18px align-top mr-2" />
+    <!-- <img v-if="getImg" :src="getImg" class="w-18px h-18px align-top mr-2" />
     <Icon v-if="getIcon" :icon="getIcon" :size="18" :class="`${prefixCls}-wrapper__icon mr-2`" />
+    {{ getI18nName }} -->
+    <IconFontClass
+      v-if="getIcon"
+      :class="`${prefixCls}-wrapper__icon mr-2`"
+      :name="getIcon"
+      :style="{ fontSize: '18px' }"
+    />
     {{ getI18nName }}
   </span>
 </template>
 <script lang="ts" setup>
+  //IconFontClass zs菜单图标更换
   import { computed } from 'vue';
   import Icon from '@/components/Icon/Icon.vue';
   import { useI18n } from '@/hooks/web/useI18n';
@@ -18,7 +26,7 @@
 
   const { t } = useI18n();
   const { prefixCls } = useDesign('basic-menu-item-content');
-
+  debugger;
   const getI18nName = computed(() => t(props.item?.name));
   const getIcon = computed(() => (props.item?.img ? undefined : props.item?.icon));
   const getImg = computed(() => props.item?.img);

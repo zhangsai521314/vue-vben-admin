@@ -6,7 +6,15 @@
     :class="getLevelClass"
   >
     <img v-if="getImg" :src="getImg" class="w-16px h-16px align-top" />
-    <Icon v-if="getIcon" :icon="getIcon" :size="16" />
+    <!-- <Icon v-if="getIcon" :icon="getIcon" :size="16" /> -->
+
+    <IconFontClass
+      v-if="getIcon"
+      :class="`${prefixCls}-wrapper__icon mr-2`"
+      :name="getIcon"
+      :style="{ fontSize: '16px' }"
+    />
+
     <div v-if="collapsedShowTitle && getIsCollapseParent" class="mt-1 collapse-title">
       {{ getI18nName }}
     </div>
@@ -25,8 +33,13 @@
   >
     <template #title>
       <img v-if="getImg" :src="getImg" class="w-16px h-16px align-top" />
-      <Icon v-if="getIcon" :icon="getIcon" :size="16" />
-
+      <!-- <Icon v-if="getIcon" :icon="getIcon" :size="16" /> -->
+      <IconFontClass
+        v-if="getIcon"
+        :class="`${prefixCls}-wrapper__icon mr-2`"
+        :name="getIcon"
+        :style="{ fontSize: '16px' }"
+      />
       <div v-if="collapsedShowTitle && getIsCollapseParent" class="mt-2 collapse-title">
         {{ getI18nName }}
       </div>
@@ -45,6 +58,7 @@
   </SubMenu>
 </template>
 <script lang="ts" setup>
+  //IconFontClass zs菜单图标更换
   import type { PropType } from 'vue';
   import type { Menu } from '@/router/types';
 

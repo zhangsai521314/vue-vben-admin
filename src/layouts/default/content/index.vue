@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="isPowerShow()"
     :class="[prefixCls, getLayoutContentMode]"
     v-loading="getOpenPageLoading && getPageLoading"
     ref="content"
@@ -17,6 +18,8 @@
   import { useRootSetting } from '@/hooks/setting/useRootSetting';
   import { useTransitionSetting } from '@/hooks/setting/useTransitionSetting';
   import { useContentViewHeight } from './useContentViewHeight';
+  import { usePermissionStore } from '@/store/modules/permission';
+  import { useRouter } from 'vue-router';
 
   defineOptions({ name: 'LayoutContent' });
 
@@ -25,7 +28,17 @@
   const { getLayoutContentMode, getPageLoading, getUseOpenBackTop } = useRootSetting();
 
   useContentViewHeight();
-
+  //zs更改跳转检查权限
+  const { currentRoute, replace } = useRouter();
+  const permissionStore = usePermissionStore();
+  const isPowerShow = () => {
+    const power = permissionStore.checkMenuPower(currentRoute.value.fullPath, false);
+    if (!power) {
+      replace('/noPower');
+    }
+    return power;
+  };
+  //zs更改跳转检查权限
   const content = ref();
 </script>
 <style lang="less">

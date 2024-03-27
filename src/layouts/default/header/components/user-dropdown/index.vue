@@ -1,39 +1,32 @@
 <template>
   <Dropdown placement="bottomLeft" :overlayClassName="`${prefixCls}-dropdown-overlay`">
     <span :class="[prefixCls, `${prefixCls}--${theme}`]" class="flex">
-      <img :class="`${prefixCls}__header`" :src="getUserInfo.avatar" />
+      <a-avatar alt="U" size="small" :src="getUserInfo.avatar" />
       <span :class="`${prefixCls}__info hidden md:block`">
         <span :class="`${prefixCls}__name`" class="truncate">
-          {{ getUserInfo.realName }}
+          {{ getUserInfo.userName }}
         </span>
       </span>
     </span>
 
     <template #overlay>
       <Menu @click="handleMenuClick">
-        <MenuItem
-          key="doc"
-          :text="t('layout.header.dropdownItemDoc')"
-          icon="ion:document-text-outline"
-          v-if="getShowDoc"
-        />
-        <Menu.Divider v-if="getShowDoc" />
-        <MenuItem
-          v-if="getShowApi"
-          key="api"
-          :text="t('layout.header.dropdownChangeApi')"
-          icon="ant-design:swap-outlined"
-        />
-        <MenuItem
+        <MenuItem key="userInfo" :text="'用户中心'" icon="icon-baseui-geren" />
+        <!-- <MenuItem
           v-if="getUseLockPage"
           key="lock"
           :text="t('layout.header.tooltipLock')"
-          icon="ion:lock-closed-outline"
-        />
+          icon="icon-baseui-suoping"
+        /> -->
+        <!-- <MenuItem
+          key="qiehuan"
+          :text="'切换系统风格'"
+          icon="icon-baseui-qiehuan" /> -->
+        <!-- <MenuDivider v-if="getShowDoc" /> -->
         <MenuItem
           key="logout"
           :text="t('layout.header.dropdownItemLoginOut')"
-          icon="ion:power-outline"
+          icon="icon-baseui-guanji"
         />
       </Menu>
     </template>
@@ -55,6 +48,8 @@
   import { propTypes } from '@/utils/propTypes';
   import { openWindow } from '@/utils';
   import { createAsyncComponent } from '@/utils/factory/createAsyncComponent';
+  import { createLocalStorage } from '@/utils/cache';
+  import { useGo } from '@/hooks/web/usePage';
 
   type MenuEvent = 'logout' | 'doc' | 'lock' | 'api';
 
@@ -72,10 +67,12 @@
   const { t } = useI18n();
   const { getShowDoc, getUseLockPage, getShowApi } = useHeaderSetting();
   const userStore = useUserStore();
+  const go = useGo();
+  const ls = createLocalStorage();
 
   const getUserInfo = computed(() => {
-    const { realName = '', avatar, desc } = userStore.getUserInfo || {};
-    return { realName, avatar: avatar || headerImg, desc };
+    const { userName, avatar, desc } = userStore.getUserInfo || {};
+    return { userName, avatar: avatar || headerImg, desc };
   });
 
   const [register, { openModal }] = useModal();
@@ -100,7 +97,7 @@
   }
 
   function handleMenuClick(e: MenuInfo) {
-    switch (e.key as MenuEvent) {
+    switch (e.key) {
       case 'logout':
         handleLoginOut();
         break;
@@ -108,10 +105,23 @@
         openDoc();
         break;
       case 'lock':
-        handleLock();
+        ls.set('suoPin', 1);
+        // handleLock();
         break;
-      case 'api':
-        handleApi();
+      case 'userInfo':
+        go('/userInfo');
+        break;
+      case 'qiehuan':
+        const appStore = useAppStore();
+        appStore.setProjectConfig({
+          menuSetting: {
+            show: false,
+          },
+          headerSetting: {
+            show: false,
+          },
+        });
+        go('/windows');
         break;
     }
   }

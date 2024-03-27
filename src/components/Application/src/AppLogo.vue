@@ -3,14 +3,22 @@
  * @Description: logo component
 -->
 <template>
-  <div class="anticon" :class="getAppLogoClass" @click="goHome">
-    <img src="../../../assets/images/logo.png" />
+  <div
+    class="anticon"
+    :class="getAppLogoClass"
+    @click="goHome"
+    style="position: absolute; top: 38px; height: 30px; padding-left: 0px"
+  >
+    <!-- <img src="../../../assets/images/logo.png" />
     <div class="ml-2 truncate md:opacity-100" :class="getTitleClass" v-show="showTitle">
-      {{ title }}
-    </div>
+      {{ company }}
+    </div> -->
+    <!-- <div v-show="showTitle" style="margin: 9px 0 0 2px; color: #fff">{{ version }}</div> -->
+    <img src="../../../assets/images/logo.png" style="height: auto; width: auto" />
   </div>
 </template>
 <script lang="ts" setup>
+  //zs更改菜单头部图标
   import { computed, unref } from 'vue';
   import { useGlobSetting } from '@/hooks/setting';
   import { useGo } from '@/hooks/web/usePage';

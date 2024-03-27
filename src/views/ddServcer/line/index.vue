@@ -1,0 +1,549 @@
+<template>
+  <MyContent>
+    <a-spin :spinning="isRunGet" title="正在执行...">
+      <!-- 开启多字段排序 -->
+      <!-- :sort-config="{ multiple: true }" -->
+      <vxe-grid
+        v-bind="tableConfig"
+        id="mytable"
+        ref="tableRef"
+        :loading="loading"
+        :row-config="{ keyField: 'id' }"
+        :column-config="{ resizable: true }"
+        :custom-config="{ storage: true }"
+        @sort-change="onSortChange"
+      >
+        <template #toolbar_buttons>
+          <div :class="`tableBtn`">
+            <a-space
+              direction="horizontal"
+              size="small"
+              style="line-height: 50px; margin-left: 5px"
+            >
+              <AuthDom auth="line_query">
+                <a-space direction="horizontal" size="small">
+                  <a-input
+                    @press-enter="getDDServerLines"
+                    v-model:value="seacthContent.name"
+                    placeholder="输入线路名称"
+                  />
+                  <a-button @click="getDDServerLines" type="primary">查询</a-button>
+                </a-space>
+              </AuthDom>
+              <AuthDom auth="line_add">
+                <a-button class="ant-btn" @click="showFrom()">新增线路</a-button>
+              </AuthDom>
+            </a-space>
+          </div>
+        </template>
+        <template #pager>
+          <vxe-pager
+            background
+            v-model:current-page="page.current"
+            v-model:page-size="page.size"
+            :total="page.total"
+            @page-change="handlePageChange"
+          />
+        </template>
+        <template #default="{ row }">
+          <div :class="`tableOption`">
+            <AuthDom auth="line_table_edit">
+              <IconFontClass
+                name="icon-baseui-edit-fill"
+                @click="showFrom(row)"
+                style="color: #0749df"
+                title="编辑"
+              />
+            </AuthDom>
+            <AuthDom auth="line_table_delete">
+              <IconFontClass
+                name="icon-baseui-guanbicuowu"
+                @click="remove(row)"
+                style="color: red"
+                title="删除"
+              />
+            </AuthDom>
+          </div>
+        </template>
+      </vxe-grid>
+      <a-drawer
+        :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+        :width="500"
+        :visible="isShowForm"
+        title="配置"
+        :footer-style="{ textAlign: 'right' }"
+        @close="formClose"
+      >
+        <a-form
+          :label-col="{ span: 8 }"
+          :style="{ paddingRight: '2px' }"
+          :wrapper-col="{ span: 14 }"
+          autocomplete="off"
+          ref="formRef"
+          :model="formData"
+        >
+          <a-form-item
+            label="线路名称"
+            name="name"
+            :rules="[
+              { required: true, message: '' },
+              { max: 50, message: '线路名称过长' },
+              { validator: formValidator.empty, message: '请输入线路名称' },
+            ]"
+          >
+            <a-input
+              placeholder="请输入线路名称"
+              v-model:value="formData.name"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            label="线路编码"
+            name="code"
+            :rules="[
+              { required: true, message: '' },
+              { max: 50, message: '线路编码过长' },
+              { validator: formValidator.empty, message: '请输入线路编码' },
+            ]"
+          >
+            <a-input
+              placeholder="请输入线路编码"
+              v-model:value="formData.code"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="dcFn"
+            label="dcFn"
+            :rules="[
+              { required: true, message: '' },
+              { max: 250, message: 'dcFn名称过长' },
+              { validator: formValidator.positiveInteger, message: 'dcFn格式为正整数' },
+              { validator: formValidator.empty, message: '请输入dcFn' },
+            ]"
+          >
+            <a-input placeholder="请输入dcFn" v-model:value="formData.dcFn" autocomplete="off" />
+          </a-form-item>
+          <a-form-item
+            name="dcIsdn"
+            label="调度台ISDN"
+            :rules="[
+              { required: true, message: '' },
+              { max: 250, message: '调度台ISDN名称过长' },
+              { validator: formValidator.positiveInteger, message: '调度台ISDN格式为正整数' },
+              { validator: formValidator.empty, message: '请输入调度台ISDN' },
+            ]"
+          >
+            <a-input placeholder="请输入dcFn" v-model:value="formData.dcIsdn" autocomplete="off" />
+          </a-form-item>
+          <a-form-item
+            name="groupAllCirNumber"
+            label="全呼CIR组呼号"
+            :rules="[
+              { required: true, message: '' },
+              { max: 250, message: '全呼CIR组呼号过长' },
+              { validator: formValidator.positiveInteger, message: '全呼CIR组呼号格式为正整数' },
+              { validator: formValidator.empty, message: '请输入全呼CIR组呼号' },
+            ]"
+          >
+            <a-input
+              placeholder="请输入全呼CIR组呼号"
+              v-model:value="formData.groupAllCirNumber"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="groupAllCirPriority"
+            label="全呼CIR组呼优先级"
+            :rules="[{ required: true, message: '请输入全呼CIR组呼优先级' }]"
+          >
+            <a-input-number
+              placeholder="请输入全呼CIR组呼优先级"
+              style="width: 262px"
+              min="1"
+              :precision="0"
+              v-model:value="formData.groupAllCirPriority"
+            />
+          </a-form-item>
+          <a-form-item
+            name="groupAllDcNumber"
+            label="全呼CIR组呼号"
+            :rules="[
+              { required: true, message: '' },
+              { max: 250, message: '全呼调度台组呼号过长' },
+              { validator: formValidator.positiveInteger, message: '全呼调度台组呼号格式为正整数' },
+              { validator: formValidator.empty, message: '请输入全呼调度台组呼号' },
+            ]"
+          >
+            <a-input
+              placeholder="请输入全呼调度台组呼号"
+              v-model:value="formData.groupAllDcNumber"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="groupAllDcPriority"
+            label="全呼调度台组优先级"
+            :rules="[{ required: true, message: '请输入全呼调度台组优先级' }]"
+          >
+            <a-input-number
+              placeholder="请输入全呼调度台组优先级"
+              style="width: 262px"
+              min="1"
+              :precision="0"
+              v-model:value="formData.groupAllDcPriority"
+            />
+          </a-form-item>
+
+          <a-form-item
+            name="groupAllBroadcastNumber"
+            label="线路广播组呼号"
+            :rules="[
+              { required: true, message: '' },
+              { max: 250, message: '线路广播组呼号过长' },
+              {
+                validator: formValidator.positiveInteger,
+                message: '线路广播组呼号过长格式为正整数',
+              },
+              { validator: formValidator.empty, message: '请输入线路广播组呼号过长' },
+            ]"
+          >
+            <a-input
+              placeholder="请输入线路广播组呼号过长"
+              v-model:value="formData.groupAllBroadcastNumber"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="groupAllBroadcastPriority"
+            label="线路广播组呼优先级"
+            :rules="[{ required: true, message: '请输入线路广播组呼优先级' }]"
+          >
+            <a-input-number
+              placeholder="请输入线路广播组呼优先级"
+              style="width: 262px"
+              min="1"
+              :precision="0"
+              v-model:value="formData.groupAllBroadcastPriority"
+            />
+          </a-form-item>
+          <a-form-item name="reamrk" label="备注" :rules="[{ max: 250, message: '备注过长' }]">
+            <a-textarea
+              placeholder="请输入备注"
+              :rows="3"
+              v-model:value="formData.reamrk"
+              autocomplete="off"
+            />
+          </a-form-item>
+        </a-form>
+        <template #footer>
+          <a-spin :spinning="fromSpinning">
+            <a-button type="primary" @click="saveFrom">保存</a-button>
+            <a-button style="margin-left: 8px" @click="formClose">关闭</a-button>
+          </a-spin>
+        </template>
+      </a-drawer>
+    </a-spin>
+  </MyContent>
+</template>
+<script setup lang="tsx">
+  import myCommon from '@/utils/MyCommon/common';
+  import formValidator from '@/utils/MyCommon/formValidator';
+  import { ref, reactive, createVNode, nextTick, watch, unref } from 'vue';
+  import { VxeGrid, VxeGridProps } from 'vxe-table';
+  import { Line as lineApi } from '@/api/ddServcer';
+  import { message, Modal } from 'ant-design-vue';
+  import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
+
+  defineOptions({ name: 'DDServcerLine' });
+  const isRunGet = ref(false);
+  const loading = ref(true);
+  const tableConfig = reactive<VxeGridProps>({
+    height: 'auto',
+    columns: [
+      //基础
+      {
+        field: 'id',
+        title: '线路ID',
+        visible: false,
+        showHeaderOverflow: true,
+        fixed: 'left',
+      },
+      {
+        field: 'name',
+        title: '线路名称',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'code',
+        title: '线路编码',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'dcFn',
+        title: 'dc_fn',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'dcIsdn',
+        title: '调度台ISDN',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+
+      {
+        field: 'groupAllCirNumber',
+        title: '全呼CIR组呼号',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'groupAllCirPriority',
+        title: '全呼CIR组呼优先级',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'groupAllDcNumber',
+        title: '全呼调度台组呼号',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'groupAllDcPriority',
+        title: '全呼调度台组优先级',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'groupAllBroadcastNumber',
+        title: '线路广播组呼号',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'groupAllBroadcastPriority',
+        title: '线路广播组呼优先级',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'reamrk',
+        title: '备注',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        visible: false,
+      },
+      {
+        field: 'updateTime',
+        title: '更新时间',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        width: 150,
+        visible: false,
+      },
+      {
+        title: '操作',
+        width: 140,
+        slots: {
+          default: 'default',
+        },
+        showOverflow: true,
+        showHeaderOverflow: true,
+        fixed: 'right',
+      },
+    ],
+    toolbarConfig: {
+      custom: true,
+      slots: {
+        buttons: 'toolbar_buttons',
+      },
+    },
+    data: [],
+  });
+  const defFromData = reactive({
+    reamrk: null,
+    name: null,
+    code: null,
+    dcFn: null,
+    dcIsdn: null,
+    groupAllCirNumber: null,
+    groupAllCirPriority: null,
+    groupAllDcNumber: null,
+    groupAllDcPriority: null,
+    groupAllBroadcastNumber: null,
+    groupAllBroadcastPriority: null,
+  });
+  const formData = ref(_.cloneDeep(defFromData));
+  const formRef = ref(null);
+  const tableRef = ref({});
+  const isShowForm = ref(false);
+  const fromSpinning = ref(false);
+  const saveType = ref('add');
+  const page = reactive({
+    current: 1,
+    size: 20,
+    total: 0,
+    sortlist: ['updateTime desc'],
+  });
+  const seacthContent = ref({
+    name: '',
+  });
+
+  getDDServerLines();
+
+  //页码改变
+  function handlePageChange() {
+    getDDServerLines();
+  }
+
+  /**
+   * 排序条件改变
+   */
+  function onSortChange({ field, order, sortList, column, property, $event }) {
+    page.sortlist = [];
+    sortList.forEach((item) => {
+      var tempstr = item.field + ' ' + item.order;
+      page.sortlist.push(tempstr);
+    });
+    getDDServerLines();
+  }
+  /**
+   * 获取排序条件
+   */
+  function getFullSort() {
+    let fullsort = '';
+    page.sortlist.forEach((item) => {
+      fullsort += item + ',';
+    });
+    return fullsort.substring(0, fullsort.length - 1);
+  }
+
+  //显示表单
+  function showFrom(row) {
+    if (myCommon.isnull(row)) {
+      saveType.value = 'add';
+      isShowForm.value = true;
+    } else {
+      //编辑
+      getDDServerLine(row.id);
+    }
+  }
+
+  //删除线路信息
+  function remove(row) {
+    Modal.confirm({
+      maskClosable: true,
+      title: '是否删除?',
+      icon: createVNode(ExclamationCircleOutlined),
+      content: '',
+      onOk() {
+        isRunGet.value = true;
+        lineApi
+          .DeleteDDServerLine(row.id.toString())
+          .then(() => {
+            isRunGet.value = false;
+            message.success('删除线路信息成功');
+            getDDServerLines();
+          })
+          .catch(() => {
+            isRunGet.value = false;
+          });
+      },
+      onCancel() {},
+    });
+  }
+
+  //关闭表单
+  function formClose() {
+    isShowForm.value = false;
+    formData.value = _.cloneDeep(defFromData);
+    formRef.value.clearValidate();
+  }
+
+  //获取线路
+  function getDDServerLine(id) {
+    isRunGet.value = true;
+    lineApi
+      .GetDDServerLine(id.toString())
+      .then((data) => {
+        isRunGet.value = false;
+        if (data) {
+          formData.value = data;
+          saveType.value = 'edit';
+          isShowForm.value = true;
+        } else {
+          message.error('获取线路信息失败');
+        }
+      })
+      .catch(() => {
+        isRunGet.value = false;
+      });
+  }
+
+  //获取线路列表
+  function getDDServerLines() {
+    loading.value = true;
+    lineApi
+      .GetDDServerLines({
+        ...seacthContent.value,
+        execompleteBefore: () => {
+          loading.value = false;
+        },
+        PageIndex: page.current,
+        PageSize: page.size,
+        fullSort: getFullSort(),
+      })
+      .then((data) => {
+        tableConfig.data = data.source;
+        page.total = data.totalCount;
+      });
+  }
+
+  //新增和编辑
+  function saveFrom() {
+    formRef.value.validate().then(() => {
+      fromSpinning.value = true;
+      formData.value.execompleteBefore = () => {
+        fromSpinning.value = false;
+      };
+      if (saveType.value == 'add') {
+        lineApi.AddDDServerLine(formData.value).then((data) => {
+          tableRef.value.insert(data);
+          formClose();
+          message.success('新增线路成功');
+        });
+      } else {
+        lineApi.UpdateDDServerLine(formData.value).then((data) => {
+          const oldData = tableRef.value.getRowById(data.id);
+          myCommon.objectReplace(oldData, formData.value);
+          oldData.updateTime = data.updateTime;
+          formClose();
+          message.success('更新线路信息成功');
+        });
+      }
+    });
+  }
+</script>
+<style lang="less" scoped>
+  @prefixCls: ~'@{namespace}-DDServcerLine-';
+
+  .fanZhun {
+    transform: rotateX(180deg);
+    display: inline-block;
+  }
+</style>

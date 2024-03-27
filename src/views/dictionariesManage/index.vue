@@ -1,0 +1,451 @@
+<template>
+  <MyContent :class="prefixCls">
+    <a-spin :spinning="loading">
+      <div style="width: 100%; height: 100%">
+        <!-- :refresh="{ queryMethod: getDictionariess }" -->
+        <vxe-toolbar ref="toolbarRef" custom>
+          <template #buttons>
+            <a-space
+              direction="horizontal"
+              size="small"
+              style="line-height: 50px; margin-left: 5px"
+            >
+              <AuthDom auth="dictionariesManage_query">
+                <a-space direction="horizontal" size="small">
+                  <a-input
+                    @press-enter="getDictionariess"
+                    v-model:value="seacthContent.dictionariesName"
+                    placeholder="输入名称查询"
+                  />
+                  <a-button @click="getDictionariess" type="primary">查询</a-button>
+                </a-space>
+              </AuthDom>
+              <AuthDom auth="dictionariesManage_add">
+                <a-button class="ant-btn" @click="showFrom('add', null, 0)">新增顶级字典</a-button>
+              </AuthDom>
+              <AuthDom auth="dictionariesManage_sync_performance">
+                <a-spin :spinning="syncMqttPerformance">
+                  <a-button class="ant-btn" @click="syncPerformance('performanceGatherType')"
+                    >同步设备性能上报频率</a-button
+                  >
+                </a-spin>
+              </AuthDom>
+            </a-space>
+          </template>
+        </vxe-toolbar>
+        <div style="width: 100%; height: calc(100% - 62px)">
+          <vxe-table
+            :border="true"
+            max-height="100%"
+            ref="tableRef"
+            show-overflow
+            :row-config="{ isHover: true, useKey: true, keyField: 'dictionariesId' }"
+            :column-config="{ resizable: true }"
+            :tree-config="{ transform: true, rowField: 'dictionariesId', parentField: 'parentId' }"
+            :data="tableConfigData"
+          >
+            <vxe-column field="dictionariesId" title="字典键值" :visible="false" />
+            <vxe-column field="dictionariesName" title="显示名称" tree-node />
+            <vxe-column field="dictionariesClass" title="字典类型">
+              <template #default="{ row }">
+                <span>{{
+                  row.dictionariesClass == 'equipmentType'
+                    ? '设备类型'
+                    : row.dictionariesClass == 'systemType'
+                    ? '系统类型'
+                    : row.dictionariesClass == 'serviceType'
+                    ? '服务类型'
+                    : row.dictionariesClass == 'alarmType'
+                    ? '告警类型'
+                    : row.dictionariesClass == 'performanceAlarmType'
+                    ? '设备性能告警阈值'
+                    : row.dictionariesClass == 'performanceGatherType'
+                    ? '设备性能采集频率'
+                    : ''
+                }}</span>
+              </template>
+            </vxe-column>
+            <vxe-column field="isKeyMaster" title="自定义键值">
+              <template #default="{ row }">
+                <span :style="{ color: row.isKeyMaster ? 'green' : 'red' }">{{
+                  row.isKeyMaster ? '是' : '否'
+                }}</span>
+              </template>
+            </vxe-column>
+            <vxe-column field="dictionariesKey" title="输入键值" />
+            <vxe-column field="isSystem" title="是否系统">
+              <template #default="{ row }">
+                <span :style="{ color: row.isSystem ? 'green' : 'red' }">{{
+                  row.isSystem ? '是' : '否'
+                }}</span>
+              </template>
+            </vxe-column>
+            <vxe-column field="isSync" title="是否已同步">
+              <template #default="{ row }">
+                <span
+                  v-if="row.dictionariesClass == 'performanceGatherType'"
+                  :style="{ color: row.isSync ? 'green' : 'red' }"
+                  >{{ row.isSync ? '是' : '否' }}</span
+                >
+                <span v-else style="color: green">无需同步</span>
+              </template>
+            </vxe-column>
+            <vxe-column field="synTime" title="同步时间" :visible="false" />
+            <vxe-column field="orderIndex" title="排序" :visible="false" />
+            <vxe-column field="remark" title="备注" :showOverflow="true" />
+            <vxe-column field="createTime" title="创建时间" :visible="false" />
+            <vxe-column field="createUser" title="创建人" :visible="false" />
+            <vxe-column field="modifyTime" title="修改时间" :visible="false" />
+            <vxe-column field="modifyUser" title="修改人" :visible="false" />
+            <vxe-column title="操作" width="140">
+              <template #default="{ row }">
+                <div :class="`tableStyle`">
+                  <template v-if="!row.isSystem">
+                    <AuthDom auth="dictionariesManage_table_add">
+                      <IconFontClass
+                        name="icon-baseui-tianjiawukuang"
+                        @click="showFrom('add', row, row.dictionariesId)"
+                        style="color: #0a61bd"
+                        title="增加子级"
+                      />
+                    </AuthDom>
+                    <AuthDom auth="dictionariesManage_table_edit">
+                      <IconFontClass
+                        name="icon-baseui-edit-fill"
+                        @click="showFrom('edit', row, row.parentId)"
+                        style="color: #0a61bd"
+                        title="编辑"
+                      />
+                    </AuthDom>
+                    <AuthDom auth="dictionariesManage_table_delete">
+                      <IconFontClass
+                        name="icon-baseui-guanbicuowu"
+                        @click="remove(row)"
+                        style="color: red"
+                        title="删除"
+                      />
+                    </AuthDom>
+                  </template>
+                  <span v-else style="color: red">系统字典不可修改</span>
+                </div>
+              </template>
+            </vxe-column>
+          </vxe-table>
+        </div>
+      </div>
+    </a-spin>
+    <a-drawer
+      :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+      :width="500"
+      :visible="isShowForm"
+      title="字典"
+      :footer-style="{ textAlign: 'right' }"
+      @close="formClose"
+    >
+      <a-form
+        :label-col="{ span: 6 }"
+        :style="{ paddingRight: '2px' }"
+        :wrapper-col="{ span: 16 }"
+        autocomplete="off"
+        ref="formRef"
+        :model="formData"
+      >
+        <a-form-item
+          name="dictionariesName"
+          label="显示名称"
+          :rules="[
+            { required: true, message: '' },
+            { max: 250, message: '显示名称过长' },
+            { validator: formValidator.empty, message: '请输入显示名称' },
+          ]"
+        >
+          <a-input
+            v-model:value="formData.dictionariesName"
+            placeholder="请输入显示名称"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
+          name="dictionariesClass"
+          label="字典类型"
+          :rules="[{ required: true, message: '请选择字典类型' }]"
+        >
+          <a-select
+            placeholder="请选择字典类型"
+            :rules="[{ required: true, message: '请选择字典类型' }]"
+            v-model:value="formData.dictionariesClass"
+            :disabled="dictionariesClass_disabled"
+            :title="dictionariesClass_disabled ? '跟随父级，不可修改' : ''"
+          >
+            <a-select-option value="1">测试</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item
+          name="isKeyMaster"
+          label="自定义键值"
+          :rules="[{ required: true, message: '请选择自定义键值' }]"
+        >
+          <a-switch
+            :title="dictionariesClass_disabled ? '跟随父级，不可修改' : ''"
+            :disabled="dictionariesClass_disabled"
+            v-model:checked="formData.isKeyMaster"
+          />
+        </a-form-item>
+        <a-form-item
+          v-if="formData.isKeyMaster"
+          name="dictionariesKey"
+          label="输入键值"
+          :rules="[
+            { required: true, message: '' },
+            { max: 250, message: '字自定义键值过长' },
+            { validator: formValidator.empty, message: '请输入自定义键值' },
+          ]"
+        >
+          <a-input
+            v-model:value="formData.dictionariesKey"
+            placeholder="请输入字典名称"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
+          name="orderIndex"
+          label="字典排序"
+          :rules="[{ required: true, message: '请输入字典排序' }]"
+        >
+          <a-input-number
+            style="width: 300px"
+            v-model:value="formData.orderIndex"
+            placeholder="请输入字典排序"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
+          name="remark"
+          label="备注信息"
+          :rules="[{ max: 250, message: '备注信息过长' }]"
+        >
+          <a-textarea
+            placeholder="请输入备注信息"
+            :rows="3"
+            v-model:value="formData.remark"
+            autocomplete="off"
+          />
+        </a-form-item>
+      </a-form>
+      <template #footer>
+        <a-spin :spinning="fromSpinning">
+          <a-button type="primary" @click="saveFrom">保存</a-button>
+          <a-button style="margin-left: 8px" @click="formClose">关闭</a-button>
+        </a-spin>
+      </template>
+    </a-drawer>
+  </MyContent>
+</template>
+<script setup lang="tsx">
+  import formValidator from '@/utils/MyCommon/formValidator';
+  import myCommon from '@/utils/MyCommon/common';
+  import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
+  import { useDesign } from '@/hooks/web/useDesign';
+  import dictionariesApi from '@/api/dictionaries';
+  import { message, Modal } from 'ant-design-vue';
+  import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
+  import { useMqttStoreWithOut } from '@/store/modules/mqtt';
+
+  defineOptions({ name: 'dictionariesManage' });
+  const mqttStore = useMqttStoreWithOut();
+  const { prefixCls } = useDesign('suitManage-');
+  const loading = ref(true);
+  const tableConfigData = ref([]);
+  const defFromData = reactive({
+    dictionariesName: '',
+    dictionariesClass: null,
+    orderIndex: null,
+    parentId: 0,
+    isKeyMaster: false,
+    dictionariesKey: '',
+    remark: null,
+  });
+  const formData = ref(_.cloneDeep(defFromData));
+  const formRef = ref({});
+  const tableRef = ref({});
+  const toolbarRef = ref({});
+  const isShowForm = ref(false);
+  const fromSpinning = ref(false);
+  const dictionariesClass_disabled = ref(false);
+  let saveType = 'add';
+  const seacthContent = ref({
+    dictionariesName: '',
+  });
+  const syncMqttPerformance = ref(false);
+
+  getDictionariess();
+
+  function showFrom(type, row, pid) {
+    saveType = type;
+    if (type == 'add') {
+      isShowForm.value = true;
+      formData.value.parentId = pid == null ? 0 : pid;
+      dictionariesClass_disabled.value = formData.value.parentId != 0;
+      if (formData.value.parentId != 0) {
+        formData.value.dictionariesClass = row.dictionariesClass;
+        formData.value.isKeyMaster = row.isKeyMaster;
+      }
+    } else {
+      dictionariesClass_disabled.value = true;
+      //编辑
+      getByid(row.dictionariesId);
+    }
+  }
+
+  //删除字典信息
+  function remove(row) {
+    Modal.confirm({
+      maskClosable: true,
+      title: '删除该项，子集数据也将被删除，是否删除?',
+      icon: createVNode(ExclamationCircleOutlined),
+      content: '',
+      onOk() {
+        loading.value = true;
+        dictionariesApi
+          .DeleteDictionaries(row.dictionariesId)
+          .then(() => {
+            loading.value = false;
+            tableRef.value.remove(row);
+            message.success('删除字典信息成功');
+          })
+          .catch(() => {
+            loading.value = false;
+          });
+      },
+      onCancel() {},
+    });
+  }
+
+  //关闭表单
+  function formClose() {
+    formData.value = _.cloneDeep(defFromData);
+    isShowForm.value = false;
+    formRef.value.clearValidate();
+  }
+
+  //获取字典
+  function getByid(id) {
+    loading.value = true;
+    dictionariesApi
+      .GetDictionaries(id.toString())
+      .then((data) => {
+        loading.value = false;
+        if (data) {
+          formData.value = data;
+          saveType = 'edit';
+          isShowForm.value = true;
+        } else {
+          message.error('获取字典信息失败');
+        }
+      })
+      .catch(() => {
+        loading.value = false;
+      });
+  }
+
+  //获取列表
+  function getDictionariess() {
+    loading.value = true;
+    dictionariesApi
+      .GetDictionariess({
+        ...seacthContent.value,
+        execompleteBefore: () => {
+          loading.value = false;
+        },
+      })
+      .then((data) => {
+        tableConfigData.value = data;
+      })
+      .catch(() => {
+        tableConfigData.value = [];
+      });
+  }
+
+  //新增和编辑
+  function saveFrom() {
+    formRef.value.validate().then(() => {
+      fromSpinning.value = true;
+      formData.value.execompleteBefore = () => {
+        fromSpinning.value = false;
+      };
+      if (saveType == 'add') {
+        dictionariesApi.AddDictionaries(formData.value).then((data) => {
+          tableRef.value.insert(data);
+          formClose();
+          message.success('新增字典成功');
+        });
+      } else {
+        dictionariesApi.UpdateDictionaries(formData.value).then((data) => {
+          myCommon.objectReplace(tableRef.value.getRowById(data.dictionariesId), data);
+          formClose();
+          message.success('更新字典信息成功');
+        });
+      }
+    });
+  }
+
+  //同步性能数据
+  function syncPerformance(dictionariesClass) {
+    syncMqttPerformance.value = true;
+    dictionariesApi
+      .UpdateSync(dictionariesClass)
+      .then((data) => {
+        syncMqttPerformance.value = false;
+        if (data) {
+          message.success('同步成功');
+          tableRef.value.getTableData().fullData.forEach((item) => {
+            if (item.dictionariesClass == dictionariesClass) {
+              item.isSync = true;
+            }
+          });
+        } else {
+          message.success('同步失败');
+        }
+      })
+      .catch(() => {
+        syncMqttPerformance.value = false;
+      });
+  }
+
+  watch(
+    () => (formData.value.dictionariesClass, formData.value.isKeyMaster),
+    () => {
+      if (isShowForm.value) {
+        message.info('字典类型、自定义键值 新增后不可修改');
+      }
+    },
+    { deep: true },
+  );
+
+  onMounted(() => {
+    // const elink = document.createElement('a');
+    // elink.style.display = 'none';
+    // elink.href = '/uploads/loginback.zip';
+    // elink.rel = 'noopener noreferrer';
+    // elink.download = 'loginback.zip';
+    // document.body.appendChild(elink);
+    // elink.click();
+    // URL.revokeObjectURL(elink.href); // 释放URL 对象
+    // document.body.removeChild(elink);
+
+    const $table = tableRef.value;
+    const $toolbar = toolbarRef.value;
+    if ($table && $toolbar) {
+      $table.connect($toolbar);
+    }
+  });
+</script>
+<style lang="less" scoped>
+  @prefixCls: ~'@{namespace}-suitManage-';
+
+  .@{prefixCls} {
+    .@{prefixCls}tableBtn {
+      width: 100%;
+    }
+  }
+</style>

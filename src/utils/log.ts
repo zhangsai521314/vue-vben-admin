@@ -1,4 +1,4 @@
-const projectName = import.meta.env.VITE_GLOB_APP_TITLE;
+const projectName = import.meta.env.VITE_GLOB_APP_TITLE.replace(' ', '-');
 
 export function warn(message: string) {
   console.warn(`[${projectName} warn]:${message}`);

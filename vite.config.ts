@@ -15,20 +15,22 @@ export default defineApplicationConfig({
       ],
     },
     server: {
+      port: 3200,
+      //本地开发代理，可以解决跨域及多地址代理
       proxy: {
-        '/basic-api': {
-          target: 'http://localhost:3000',
+        '/api': {
+          target: 'http://localhost:8086',
           changeOrigin: true,
           ws: true,
           rewrite: (path) => path.replace(new RegExp(`^/basic-api`), ''),
           // only https
           // secure: false
         },
-        '/upload': {
-          target: 'http://localhost:3300/upload',
+        '/uploads': {
+          target: 'http://localhost:8086/uploads',
           changeOrigin: true,
           ws: true,
-          rewrite: (path) => path.replace(new RegExp(`^/upload`), ''),
+          rewrite: (path) => path.replace(new RegExp(`^/uploads`), ''),
         },
       },
       open: true, // 项目启动后，自动打开

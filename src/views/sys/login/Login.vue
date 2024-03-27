@@ -1,13 +1,13 @@
 <template>
   <div :class="prefixCls" class="relative w-full h-full px-4">
-    <div class="flex items-center absolute right-4 top-4">
-      <AppDarkModeToggle class="enter-x mr-2" v-if="!sessionTimeout" />
-      <AppLocalePicker
-        class="text-white enter-x xl:text-gray-600"
-        :show-text="false"
-        v-if="!sessionTimeout && showLocale"
-      />
-    </div>
+    <AppLocalePicker
+      class="absolute text-white top-4 right-4 enter-x xl:text-gray-600"
+      :showText="false"
+      v-if="!sessionTimeout && showLocale"
+    />
+
+    <!-- 主题切换 -->
+    <AppDarkModeToggle class="absolute top-3 right-7 enter-x" v-if="!sessionTimeout" />
 
     <span class="-enter-x xl:hidden">
       <AppLogo :alwaysShowTitle="true" />
@@ -17,17 +17,19 @@
       <div class="flex h-full">
         <div class="hidden min-h-full pl-4 mr-4 xl:flex xl:flex-col xl:w-6/12">
           <AppLogo class="-enter-x" />
-          <div class="my-auto">
-            <img
+          <div class="my-auto" style="position: absolute; top: 63px">
+            <!-- <img
               :alt="title"
               src="../../../assets/svg/login-box-bg.svg"
               class="w-1/2 -mt-16 -enter-x"
-            />
-            <div class="mt-10 font-medium text-white -enter-x">
-              <span class="inline-block mt-4 text-3xl"> {{ t('sys.login.signInTitle') }}</span>
-            </div>
-            <div class="mt-5 font-normal text-white dark:text-gray-500 -enter-x">
-              {{ t('sys.login.signInDesc') }}
+            /> -->
+            <div class="font-medium text-white -enter-x">
+              <span class="inline-block mt-4 text-3xl" style="font-size: 18px">
+                {{ t('sys.login.signInTitle') }}</span
+              >
+              <span style="position: relative; top: 4px; margin-top: 5px; margin-left: 8px">
+                {{ t('sys.login.signInDesc') }}
+              </span>
             </div>
           </div>
         </div>
@@ -48,17 +50,17 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { AppDarkModeToggle, AppLocalePicker, AppLogo } from '@/components/Application';
-  import { useGlobSetting } from '@/hooks/setting';
-  import { useDesign } from '@/hooks/web/useDesign';
-  import { useI18n } from '@/hooks/web/useI18n';
-  import { useLocaleStore } from '@/store/modules/locale';
   import { computed } from 'vue';
-  import ForgetPasswordForm from './ForgetPasswordForm.vue';
+  import { AppDarkModeToggle, AppLocalePicker, AppLogo } from '@/components/Application';
   import LoginForm from './LoginForm.vue';
+  import ForgetPasswordForm from './ForgetPasswordForm.vue';
+  import RegisterForm from './RegisterForm.vue';
   import MobileForm from './MobileForm.vue';
   import QrCodeForm from './QrCodeForm.vue';
-  import RegisterForm from './RegisterForm.vue';
+  import { useGlobSetting } from '@/hooks/setting';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useDesign } from '@/hooks/web/useDesign';
+  import { useLocaleStore } from '@/store/modules/locale';
 
   defineProps({
     sessionTimeout: {
@@ -84,7 +86,7 @@
       background-color: @dark-bg;
 
       &::before {
-        background-image: url('@/assets/svg/login-bg-dark.svg');
+        background-image: url('/@/assets/svg/login-bg-dark.svg');
       }
 
       .ant-input,
@@ -92,7 +94,7 @@
         background-color: #232a3b;
       }
 
-      .ant-btn:not(.ant-btn-link, .ant-btn-primary) {
+      .ant-btn:not(.ant-btn-link):not(.ant-btn-primary) {
         border: 1px solid #4a5569;
       }
 
@@ -103,18 +105,20 @@
       .app-iconify {
         color: #fff;
       }
+    }
 
-      .ant-divider-inner-text {
-        color: @text-color-secondary;
-      }
+    input.fix-auto-fill,
+    .fix-auto-fill input {
+      -webkit-text-fill-color: #c9d1d9 !important;
+      box-shadow: inherit !important;
     }
   }
 
   .@{prefix-cls} {
     min-height: 100%;
     overflow: hidden;
+    background-image: url('/@/assets/images/loginback.png');
 
-    /* stylelint-disable-next-line media-query-no-invalid */
     @media (max-width: @screen-xl) {
       background-color: #293146;
 
@@ -130,12 +134,13 @@
       left: 0;
       width: 100%;
       height: 100%;
-      margin-left: -48%;
-      background-image: url('@/assets/svg/login-bg.svg');
+      margin-left: -52%;
+      // background-image: url(/@/assets/svg/login-bg.svg);
+      background-image: url('/@/assets/images/long01.png');
       background-repeat: no-repeat;
       background-position: 100%;
       background-size: auto 100%;
-      /* stylelint-disable-next-line media-query-no-invalid */
+
       @media (max-width: @screen-xl) {
         display: none;
       }
@@ -187,19 +192,19 @@
 
     input:not([type='checkbox']) {
       min-width: 360px;
-      /* stylelint-disable-next-line media-query-no-invalid */
+
       @media (max-width: @screen-xl) {
         min-width: 320px;
       }
-      /* stylelint-disable-next-line media-query-no-invalid */
+
       @media (max-width: @screen-lg) {
         min-width: 260px;
       }
-      /* stylelint-disable-next-line media-query-no-invalid */
+
       @media (max-width: @screen-md) {
         min-width: 240px;
       }
-      /* stylelint-disable-next-line media-query-no-invalid */
+
       @media (max-width: @screen-sm) {
         min-width: 160px;
       }
@@ -207,6 +212,11 @@
 
     .@{countdown-prefix-cls} input {
       min-width: unset;
+    }
+
+    .ant-divider-inner-text {
+      color: @text-color-secondary;
+      font-size: 12px;
     }
   }
 </style>

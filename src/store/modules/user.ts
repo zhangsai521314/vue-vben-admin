@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 import { store } from '@/store';
 import { RoleEnum } from '@/enums/roleEnum';
 import { PageEnum } from '@/enums/pageEnum';
-import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '@/enums/cacheEnum';
+import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY, REFRESH_TOKEN_KEY } from '@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '@/utils/auth';
 import { GetUserInfoModel, LoginParams } from '@/api/sys/model/userModel';
 import { doLogout, getUserInfo, loginApi } from '@/api/sys/user';
@@ -16,10 +16,12 @@ import { RouteRecordRaw } from 'vue-router';
 import { PAGE_NOT_FOUND_ROUTE } from '@/router/routes/basic';
 import { isArray } from '@/utils/is';
 import { h } from 'vue';
+import { useAppStore } from '@/store/modules/app';
 
 interface UserState {
   userInfo: Nullable<UserInfo>;
   token?: string;
+  refreshToken?: string;
   roleList: RoleEnum[];
   sessionTimeout?: boolean;
   lastUpdateTime: number;
@@ -32,6 +34,7 @@ export const useUserStore = defineStore({
     userInfo: null,
     // token
     token: undefined,
+    refreshToken: undefined,
     // roleList
     roleList: [],
     // Whether the login expired
@@ -46,6 +49,9 @@ export const useUserStore = defineStore({
     getToken(state): string {
       return state.token || getAuthCache<string>(TOKEN_KEY);
     },
+    getRefreshToken(): string {
+      return this.refreshToken || getAuthCache<string>(REFRESH_TOKEN_KEY);
+    },
     getRoleList(state): RoleEnum[] {
       return state.roleList.length > 0 ? state.roleList : getAuthCache<RoleEnum[]>(ROLES_KEY);
     },
@@ -57,9 +63,18 @@ export const useUserStore = defineStore({
     },
   },
   actions: {
+    setAvatar(src: string) {
+      if (this.userInfo) {
+        this.userInfo.avatar = src ? src : '';
+      }
+    },
     setToken(info: string | undefined) {
       this.token = info ? info : ''; // for null or undefined value
       setAuthCache(TOKEN_KEY, info);
+    },
+    setRefreshToken(info: string | undefined) {
+      this.refreshToken = info ? info : '';
+      setAuthCache(REFRESH_TOKEN_KEY, this.refreshToken);
     },
     setRoleList(roleList: RoleEnum[]) {
       this.roleList = roleList;
@@ -74,10 +89,11 @@ export const useUserStore = defineStore({
       this.sessionTimeout = flag;
     },
     resetState() {
-      this.userInfo = null;
-      this.token = '';
-      this.roleList = [];
-      this.sessionTimeout = false;
+      this.setRefreshToken(undefined);
+      this.setToken(undefined);
+      this.setSessionTimeout(false);
+      this.setUserInfo(null);
+      this.setRoleList([]);
     },
     /**
      * @description: login
@@ -90,11 +106,9 @@ export const useUserStore = defineStore({
     ): Promise<GetUserInfoModel | null> {
       try {
         const { goHome = true, mode, ...loginParams } = params;
-        const data = await loginApi(loginParams, mode);
-        const { token } = data;
-
-        // save token
-        this.setToken(token);
+        const datas = await loginApi(loginParams, mode);
+        this.setToken(datas.accessToken);
+        this.setRefreshToken(datas.refreshToken);
         return this.afterLoginAction(goHome);
       } catch (error) {
         return Promise.reject(error);
@@ -120,8 +134,18 @@ export const useUserStore = defineStore({
           // 记录动态路由加载完成
           permissionStore.setDynamicAddedRoute(true);
         }
-
-        goHome && (await router.replace(userInfo?.homePath || PageEnum.BASE_HOME));
+        //zs 更改
+        const appStore = useAppStore();
+        if (appStore.getMenuSetting.show) {
+          // goHome && (await router.replace('/userInfo'));
+          goHome && (await router.replace(userInfo?.homePath || PageEnum.BASE_HOME));
+        } else {
+          //zs 更改
+          goHome && (await router.replace(userInfo?.homePath || PageEnum.BASE_HOME));
+          // await router.replace(myCommon.getQuery('redirect'));
+          //zs 更改
+        }
+        //zs 更改
       }
       return userInfo;
     },
@@ -150,9 +174,7 @@ export const useUserStore = defineStore({
           console.log('注销Token失败');
         }
       }
-      this.setToken(undefined);
-      this.setSessionTimeout(false);
-      this.setUserInfo(null);
+      this.resetState();
       if (goLogin) {
         // 直接回登陆页
         router.replace(PageEnum.BASE_LOGIN);

@@ -1,11 +1,12 @@
 export enum PageEnum {
-  // basic login path
+  //登录页
   BASE_LOGIN = '/login',
-  // basic home path
-  BASE_HOME = '/dashboard',
-  // error page path
+  //首页地址
+  BASE_HOME = '/userInfo/index',
+  //错误页
   ERROR_PAGE = '/exception',
-  // error log page path
+  //错误日志页
   ERROR_LOG_PAGE = '/error-log/list',
 }
+
 export const PageWrapperFixedHeightKey = 'PageWrapperFixedHeight';

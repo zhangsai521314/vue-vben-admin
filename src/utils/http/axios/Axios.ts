@@ -13,6 +13,7 @@ import { AxiosCanceler } from './axiosCancel';
 import { isFunction } from '@/utils/is';
 import { cloneDeep } from 'lodash-es';
 import { ContentTypeEnum, RequestEnum } from '@/enums/httpEnum';
+import Api from '@/api/sys/user';
 
 export * from './axiosTransform';
 
@@ -219,33 +220,65 @@ export class VAxios {
       conf = beforeRequestHook(conf, opt);
     }
     conf.requestOptions = opt;
-
     conf = this.supportFormData(conf);
-
+    if (conf.params && conf.params.execompleteBefore) {
+      delete conf.params.execompleteBefore;
+    } else if (conf.data && conf.data.execompleteBefore) {
+      delete conf.data.execompleteBefore;
+    }
     return new Promise((resolve, reject) => {
       this.axiosInstance
         .request<any, AxiosResponse<Result>>(conf)
         .then((res: AxiosResponse<Result>) => {
           if (transformResponseHook && isFunction(transformResponseHook)) {
+            const ret = transformResponseHook(res, opt);
             try {
-              const ret = transformResponseHook(res, opt);
-              resolve(ret);
-            } catch (err) {
-              reject(err || new Error('request error!'));
+              if (config.params && config.params.execompleteBefore) {
+                config.params.execompleteBefore();
+              }
+            } catch (e) {
+              console.error(e);
             }
-            return;
+            if (config.url == Api.Login) {
+              resolve({ accessToken: ret, refreshToken: res.headers['x-access-token'] });
+            } else {
+              resolve(ret);
+            }
+          } else {
+            try {
+              if (config.params && config.params.execompleteBefore) {
+                config.params.execompleteBefore();
+              }
+            } catch (e) {
+              console.error(e);
+            }
+            resolve(res as unknown as Promise<T>);
           }
-          resolve(res as unknown as Promise<T>);
         })
         .catch((e: Error | AxiosError) => {
           if (requestCatchHook && isFunction(requestCatchHook)) {
+            try {
+              if (config.params && config.params.execompleteBefore) {
+                config.params.execompleteBefore();
+              }
+            } catch (e) {
+              console.error(e);
+            }
             reject(requestCatchHook(e, opt));
             return;
+          } else {
+            try {
+              if (config.params && config.params.execompleteBefore) {
+                config.params.execompleteBefore();
+              }
+            } catch (e) {
+              console.error(e);
+            }
+            reject(e);
           }
           if (axios.isAxiosError(e)) {
             // rewrite error message from axios in here
           }
-          reject(e);
         });
     });
   }

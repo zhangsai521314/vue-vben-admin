@@ -87,6 +87,7 @@ const getVariableName = (title: string) => {
 
 async function getConfigSource(appTitle: string) {
   const config = await getEnvConfig();
+  debugger;
   const variableName = getVariableName(appTitle);
   const windowVariable = `window.${variableName}`;
   // Ensure that the variable will not be modified

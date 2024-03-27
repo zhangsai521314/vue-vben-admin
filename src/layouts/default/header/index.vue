@@ -4,7 +4,7 @@
     <div :class="`${prefixCls}-left`">
       <!-- logo -->
       <AppLogo
-        v-if="getShowHeaderLogo || getIsMobile"
+        v-if="getShowHeaderLogo"
         :class="`${prefixCls}-logo`"
         :theme="getHeaderTheme"
         :style="getLogoWidth"
@@ -19,6 +19,31 @@
       <LayoutBreadcrumb v-if="getShowContent && getShowBread" :theme="getHeaderTheme" />
     </div>
     <!-- left end -->
+
+    <div v-if="mqttStore.mqttStatus != '无需连接'" :class="`${prefixCls}-center`">
+      <a-space style="padding-top: 6px">
+        <div
+          :style="{
+            width: '26px',
+            height: '26px',
+            backgroundColor:
+              mqttStore.mqttStatus == '未连接'
+                ? 'yellow'
+                : mqttStore.mqttStatus == '已连接'
+                  ? 'green'
+                  : mqttStore.mqttStatus == '连接中'
+                    ? 'blue'
+                    : mqttStore.mqttStatus == '连接失败'
+                      ? 'red'
+                      : mqttStore.mqttStatus == '连接断开'
+                        ? 'red'
+                        : 'yellow',
+            borderRadius: '20px',
+          }"
+        ></div>
+        <span>通信{{ mqttStore.mqttStatus }}</span>
+      </a-space>
+    </div>
 
     <!-- menu start -->
     <div v-if="getShowTopMenu && !getIsMobile" :class="`${prefixCls}-menu`">
@@ -37,7 +62,8 @@
 
       <ErrorAction v-if="getUseErrorHandle" :class="`${prefixCls}-action__item error-action`" />
 
-      <Notify v-if="getShowNotice" :class="`${prefixCls}-action__item notify-item`" />
+      <!-- 消息通知 -->
+      <!-- <Notify v-if="getShowNotice" :class="`${prefixCls}-action__item notify-item`" /> -->
 
       <FullScreen v-if="getShowFullScreen" :class="`${prefixCls}-action__item fullscreen-item`" />
 
@@ -48,6 +74,7 @@
         :class="`${prefixCls}-action__item`"
       />
 
+      <!-- 用户头像操作 -->
       <UserDropDown :theme="getHeaderTheme" />
 
       <SettingDrawer v-if="getShowSetting" :class="`${prefixCls}-action__item`" />
@@ -73,6 +100,8 @@
   import LayoutMenu from '../menu/index.vue';
   import LayoutTrigger from '../trigger/index.vue';
   import { ErrorAction, FullScreen, LayoutBreadcrumb, Notify, UserDropDown } from './components';
+
+  import { useMqttStoreWithOut } from '@/store/modules/mqtt';
 
   const SettingDrawer = createAsyncComponent(() => import('@/layouts/default/setting/index.vue'), {
     loading: true,
@@ -103,6 +132,8 @@
     getShowHeader,
     getShowSearch,
   } = useHeaderSetting();
+
+  const mqttStore = useMqttStoreWithOut();
 
   const { getShowLocalePicker } = useLocale();
 

@@ -4,7 +4,7 @@
   import { computed, defineComponent, unref, toRef } from 'vue';
   import { BasicMenu } from '@/components/Menu';
   import { SimpleMenu } from '@/components/SimpleMenu';
-  import { AppLogo } from '@/components/Application';
+  import { AppLogoMenu } from '@/components/Application';
 
   import { MenuModeEnum, MenuSplitTyeEnum } from '@/enums/menuEnum';
 
@@ -130,7 +130,7 @@
         if (!unref(getIsShowLogo) && !unref(getIsMobile)) return null;
 
         return (
-          <AppLogo
+          <AppLogoMenu
             showTitle={!unref(getCollapsed)}
             class={unref(getLogoClass)}
             theme={unref(getComputedMenuTheme)}

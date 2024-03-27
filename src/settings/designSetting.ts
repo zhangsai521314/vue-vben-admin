@@ -1,6 +1,7 @@
 import { ThemeEnum } from '../enums/appEnum';
 
-export const prefixCls = 'vben';
+// 设置全局样式前缀
+export const prefixCls = 'baseui';
 
 export const multipleTabHeight = 30;
 

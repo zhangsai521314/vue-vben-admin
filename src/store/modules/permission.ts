@@ -24,6 +24,11 @@ import { getPermCode } from '@/api/sys/user';
 import { useMessage } from '@/hooks/web/useMessage';
 import { PageEnum } from '@/enums/pageEnum';
 
+import { useAppStore } from '@/store/modules/app';
+import { message } from 'ant-design-vue';
+import { getAuthCache, setAuthCache } from '@/utils/auth';
+import { POWER_MENU_KEY } from '@/enums/cacheEnum';
+
 interface PermissionState {
   // Permission code list
   // 权限代码列表
@@ -39,6 +44,7 @@ interface PermissionState {
   backMenuList: Menu[];
   // 菜单列表
   frontMenuList: Menu[];
+  domAuthList: [];
 }
 
 export const usePermissionStore = defineStore({
@@ -58,6 +64,8 @@ export const usePermissionStore = defineStore({
     // menu List
     // 菜单列表
     frontMenuList: [],
+    //页面操作按钮权限
+    domAuthList: [],
   }),
   getters: {
     getPermCodeList(state): string[] | number[] {
@@ -83,6 +91,7 @@ export const usePermissionStore = defineStore({
 
     setBackMenuList(list: Menu[]) {
       this.backMenuList = list;
+      setAuthCache(POWER_MENU_KEY, list);
       list?.length > 0 && this.setLastBuildMenuTime();
     },
 
@@ -96,6 +105,9 @@ export const usePermissionStore = defineStore({
 
     setDynamicAddedRoute(added: boolean) {
       this.isDynamicAddedRoute = added;
+    },
+    setDomAuthList(list: []) {
+      this.domAuthList = list;
     },
     resetState(): void {
       this.isDynamicAddedRoute = false;
@@ -208,47 +220,111 @@ export const usePermissionStore = defineStore({
         //  If you are sure that you do not need to do background dynamic permissions, please comment the entire judgment below
         //  如果确定不需要做后台动态权限，请在下方注释整个判断
         case PermissionModeEnum.BACK:
-          const { createMessage } = useMessage();
+          //zs增加，拿了PermissionModeEnum.ROUTE_MAPPING的获取文件路由代码
+          routes = filter(asyncRoutes, routeFilter);
+          routes = routes.filter(routeFilter);
+          routes = filter(routes, routeRemoveIgnoreFilter);
+          routes = routes.filter(routeRemoveIgnoreFilter);
+          //zs更改增加，拿了PermissionModeEnum.ROUTE_MAPPING的获取文件路由代码
+          //后台获取菜单路由
+          const appStore = useAppStore();
+          if (appStore.getProjectConfig.menuSetting.show) {
+            const { createMessage } = useMessage();
+            createMessage.loading({
+              content: t('sys.app.menuLoading'),
+              duration: 1,
+            });
+            // !Simulate to obtain permission codes from the background,
+            // this function may only need to be executed once, and the actual project can be put at the right time by itself
+            let routeList: AppRouteRecordRaw[] = [];
+            try {
+              // this.changePermissionCode();
+              const datas = await getMenuList();
+              routeList = datas.routers;
+              //保存菜单信息
+              this.setBackMenuList(datas.menus);
+              this.setDomAuthList(datas.userAuths);
+            } catch (error) {
+              console.error(error);
+            }
 
-          createMessage.loading({
-            content: t('sys.app.menuLoading'),
-            duration: 1,
-          });
+            // Dynamically introduce components
+            routeList = transformObjToRoute(routeList);
 
-          // !Simulate to obtain permission codes from the background,
-          // 模拟从后台获取权限码，
-          // this function may only need to be executed once, and the actual project can be put at the right time by itself
-          // 这个功能可能只需要执行一次，实际项目可以自己放在合适的时间
-          let routeList: AppRouteRecordRaw[] = [];
-          try {
-            await this.changePermissionCode();
-            routeList = (await getMenuList()) as AppRouteRecordRaw[];
-          } catch (error) {
-            console.error(error);
+            // remove meta.ignoreRoute item
+            routeList = filter(routeList, routeRemoveIgnoreFilter);
+            routeList = routeList.filter(routeRemoveIgnoreFilter);
+            routeList = flatMultiLevelRoutes(routeList);
+            // this.removeAttr(routeList)
+            routes = [...routes, ...routeList];
           }
-
-          // Dynamically introduce components
-          // 动态引入组件
-          routeList = transformObjToRoute(routeList);
-
-          //  Background routing to menu structure
-          //  后台路由到菜单结构
-          const backMenuList = transformRouteToMenu(routeList);
-          this.setBackMenuList(backMenuList);
-
-          // remove meta.ignoreRoute item
-          // 删除 meta.ignoreRoute 项
-          routeList = filter(routeList, routeRemoveIgnoreFilter);
-          routeList = routeList.filter(routeRemoveIgnoreFilter);
-
-          routeList = flatMultiLevelRoutes(routeList);
-          routes = [PAGE_NOT_FOUND_ROUTE, ...routeList];
           break;
       }
 
       routes.push(ERROR_LOG_ROUTE);
       patchHomeAffix(routes);
       return routes;
+    },
+    //zs更改（添加）
+    checkMenuPower(url, isShowMsg = true) {
+      const userStore = useUserStore();
+      const userData = userStore.getUserInfo;
+      if (!userData.isAdmin) {
+        //菜单白名单
+        const whiteList = [
+          '/userinfo',
+          '/windows',
+          '/nopower',
+          '/userinfo/index',
+          '/windows/index',
+          '/nopower/index',
+        ];
+        if (!whiteList.includes(url.toLowerCase())) {
+          let menuList = [];
+          if (this.backMenuList.length == 0) {
+            menuList = getAuthCache(POWER_MENU_KEY);
+          } else {
+            myCommon.generateList(menuList, this.backMenuList, 'children');
+          }
+          if (menuList) {
+            let menu = menuList.find((m) => m['path'] == url || m['menuurl'] == url);
+            if (!menu) {
+              let isUpUrl = false;
+              const urlSP = url.split('/');
+              if (urlSP[1].toLowerCase() == 'reportdesign') {
+                urlSP[1] = 'reportView';
+                isUpUrl = true;
+              } else if (urlSP[1].toLowerCase() == 'formdesign') {
+                urlSP[1] = 'formView';
+                isUpUrl = true;
+              }
+              url = urlSP.join('/');
+              menu = menuList.find((m) => m['path'] == url || m['menuurl'] == url);
+              if (
+                menu &&
+                isUpUrl &&
+                menu.powertype.indexOf('1') == -1 &&
+                menu.powertype.indexOf('2') == -1
+              ) {
+                if (isShowMsg) {
+                  message.warning('您没有打开该菜单的权限');
+                }
+                return false;
+              }
+            }
+            if (!menu && isShowMsg) {
+              message.warning('您没有打开该菜单的权限');
+            }
+            return menu != undefined ? true : false;
+          } else {
+            return false;
+          }
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }
     },
   },
 });

@@ -10,6 +10,14 @@
     />
     <title><%= VITE_GLOB_APP_TITLE %></title>
     <link rel="icon" href="/favicon.ico" />
+
+    <!-- 无色图标 -->
+    <link rel="stylesheet" href="/MyIcon/iconfont.css" />
+    <!-- 有色svg图标 -->
+    <link rel="stylesheet" href="/MyIcon/iconFont_svg.css" />
+    <script src="/MyIcon/iconFont_svg.js"></script>
+    <script src="/jquery-3.6.0.min.js"></script>
+    <script src="/mqtt-5.3.5.min.js"></script>
   </head>
   <body>
     <div id="app">
@@ -133,11 +141,17 @@
       </style>
       <div class="app-loading">
         <div class="app-loading-wrap">
-          <img src="/logo.png" class="app-loading-logo" alt="Logo" />
+          <!-- <img src="/logo.png" class="app-loading-logo" alt="Logo" /> -->
+          <img
+            src="/resource/img/logo.png"
+            class="app-loading-logo"
+            alt="Logo"
+            style="height: auto; width: auto"
+          />
           <div class="app-loading-dots">
             <span class="dot dot-spin"><i></i><i></i><i></i><i></i></span>
           </div>
-          <div class="app-loading-title"><%= VITE_GLOB_APP_TITLE %></div>
+          <div class="app-loading-title"><%= VITE_GLOB_APP_TITLE.replace(' ', '-') %></div>
         </div>
       </div>
     </div>
