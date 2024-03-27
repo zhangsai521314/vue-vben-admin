@@ -86,7 +86,6 @@
   const getIsUnFold = computed(() => !unref(getShowMenu) && !unref(getShowHeader));
 
   const { getShowSettingButton } = useRootSetting();
-  debugger
 
   const getWrapClass = computed(() => {
     return [
