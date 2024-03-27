@@ -19,7 +19,7 @@
       </template>
 
       <template #rightExtra v-if="getShowRedo || getShowQuick">
-        <SettingButton v-if="getShowSetting && ((getShowFold && getIsUnFold) || !getShowHeader)" />
+        <SettingButton v-if="getShowSettingButton && ((getShowFold && getIsUnFold) || !getShowHeader)" />
         <TabRedo v-if="getShowRedo" />
         <TabContent isExtra :tabItem="$route" v-if="getShowQuick" />
         <FoldButton v-if="getShowFold" />
@@ -58,7 +58,6 @@
   import { useHeaderSetting } from '@/hooks/setting/useHeaderSetting';
   import { useMenuSetting } from '@/hooks/setting/useMenuSetting';
   import { useRootSetting } from '@/hooks/setting/useRootSetting';
-  import { SettingButtonPositionEnum } from '@/enums/appEnum';
 
   defineOptions({ name: 'MultipleTabs' });
 
@@ -86,19 +85,8 @@
   const { getShowHeader } = useHeaderSetting();
   const getIsUnFold = computed(() => !unref(getShowMenu) && !unref(getShowHeader));
 
-  const { getShowSettingButton, getSettingButtonPosition } = useRootSetting();
-
-  const getShowSetting = computed(() => {
-    if (!unref(getShowSettingButton)) {
-      return false;
-    }
-    const settingButtonPosition = unref(getSettingButtonPosition);
-
-    if (settingButtonPosition === SettingButtonPositionEnum.AUTO) {
-      return unref(getShowHeader);
-    }
-    return settingButtonPosition === SettingButtonPositionEnum.HEADER;
-  });
+  const { getShowSettingButton } = useRootSetting();
+  debugger
 
   const getWrapClass = computed(() => {
     return [
