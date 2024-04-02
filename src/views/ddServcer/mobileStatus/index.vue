@@ -14,19 +14,6 @@
           <a-space direction="horizontal" size="small" style="margin-left: 5px">
             <AuthDom auth="message_query">
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0px">
-                <!-- <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>线路名称：</label>
-                    <a-select
-                      style="width: 170px"
-                      allow-clear
-                      show-search
-                      :filter-option="AntVueCommon.filterOption"
-                      v-model:value="seacthContent.lineCode"
-                      :options="lineDatas"
-                    />
-                  </a-space>
-                </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>车站名称：</label>
@@ -35,7 +22,7 @@
                       allow-clear
                       show-search
                       :filter-option="AntVueCommon.filterOption"
-                      v-model:value="seacthContent.stationCode"
+                      v-model:value="seacthContent.stationId"
                       :options="stationDatas"
                     />
                   </a-space>
@@ -214,7 +201,7 @@
   const myContentRef = ref({});
   const seacthContent = ref({
     lineCode: null,
-    stationCode: null,
+    stationId: null,
     laccis: [],
     isdn: null,
   });
@@ -231,7 +218,7 @@
   const stationDatas = ref([]);
 
   getStatus(true);
-  getDDServerStationCodeSimple();
+  getDDServerStationSimple();
   getDDServerLineCodeSimple();
 
   //获取列表
@@ -266,7 +253,7 @@
   function resetSeacth() {
     seacthContent.value = {
       lineCode: null,
-      stationCode: null,
+      stationId: null,
       laccis: [],
       isdn: null,
     };
@@ -322,8 +309,8 @@
     refreshTime.value = 10;
   }
 
-  function getDDServerStationCodeSimple() {
-    stationApi.GetDDServerStationCodeSimple().then((data) => {
+  function getDDServerStationSimple() {
+    stationApi.GetDDServerStationSimple().then((data) => {
       stationDatas.value = data;
     });
   }

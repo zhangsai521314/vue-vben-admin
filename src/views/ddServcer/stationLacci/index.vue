@@ -8,7 +8,7 @@
         id="mytable"
         ref="tableRef"
         :loading="loading"
-        :row-config="{ keyField: 'id' }"
+        :row-config="{ keyField: 'longId' }"
         :column-config="{ resizable: true }"
         :custom-config="{ storage: true }"
         @sort-change="onSortChange"
@@ -22,16 +22,20 @@
             >
               <AuthDom auth="line_query">
                 <a-space direction="horizontal" size="small">
-                  <a-input
-                    @press-enter="getDDServerTLaccis"
-                    v-model:value="seacthContent.name"
-                    placeholder="输入车站查询"
+                  <label>车站名称：</label>
+                  <a-select
+                    style="width: 170px"
+                    allow-clear
+                    show-search
+                    :filter-option="AntVueCommon.filterOption"
+                    v-model:value="seacthContent.stationId"
+                    :options="stationDatas"
                   />
-                  <a-button @click="getDDServerTLaccis" type="primary">查询</a-button>
+                  <a-button @click="getDDServerStationTLaccis" type="primary">查询</a-button>
                 </a-space>
               </AuthDom>
               <AuthDom auth="line_add">
-                <a-button class="ant-btn" @click="showFrom()">新增小区</a-button>
+                <a-button class="ant-btn" @click="showFrom()">新增车站小区关系</a-button>
               </AuthDom>
             </a-space>
           </div>
@@ -83,67 +87,58 @@
           :model="formData"
         >
           <a-form-item
-            label="名称"
-            name="name"
-            :rules="[
-              { required: true, message: '' },
-              { max: 50, message: '小区名称过长' },
-              { validator: formValidator.empty, message: '请输入小区名称' },
-            ]"
+            :rules="[{ required: true, message: '请选择所属线路' }]"
+            label="所属线路"
+            name="lineId"
           >
-            <a-input
-              placeholder="请输入小区名称"
-              v-model:value="formData.name"
-              autocomplete="off"
+            <a-select
+              :disabled="saveType != 'add'"
+              v-model:value="formData.lineId"
+              :options="lineDatas"
+              :allowClear="true"
+              @change="changeLine()"
+              placeholder="请选择所属线路"
             />
           </a-form-item>
           <a-form-item
-            label="lacci"
-            name="lacci"
-            :rules="[
-              { required: true, message: '' },
-              { max: 50, message: 'lacci过长' },
-              { validator: formValidator.empty, message: '请输入lacci' },
-            ]"
+            :rules="[{ required: true, message: '请选择所属车站' }]"
+            label="所属车站"
+            name="stationId"
           >
-            <a-input placeholder="请输入lacci" v-model:value="formData.lacci" autocomplete="off" />
-          </a-form-item>
-          <a-form-item
-            name="longitude"
-            label="经度"
-            :rules="[
-              { required: true, message: '' },
-              { validator: formValidator.empty, message: '请输入经度' },
-            ]"
-          >
-            <a-input-number
-              style="width: 262px"
-              placeholder="请输入经度"
-              v-model:value="formData.longitude"
-              autocomplete="off"
+            <a-select
+              :disabled="saveType != 'add'"
+              v-model:value="formData.stationId"
+              :options="stationDatas.filter((m) => m.lineId == formData.lineId)"
+              :allowClear="true"
+              placeholder="请选择所属车站"
             />
           </a-form-item>
           <a-form-item
-            name="latitude"
-            label="纬度"
-            :rules="[
-              { required: true, message: '' },
-              { validator: formValidator.empty, message: '请输入纬度' },
-            ]"
+            :rules="[{ required: true, message: '关系类型' }]"
+            label="关系类型"
+            name="type"
           >
-            <a-input-number
-              style="width: 262px"
-              placeholder="请输入纬度"
-              v-model:value="formData.latitude"
-              autocomplete="off"
-            />
+            <a-select
+              v-model:value="formData.type"
+              :disabled="saveType != 'add'"
+              placeholder="请选择关系类型"
+            >
+              <a-select-option :value="1">站内</a-select-option>
+              <a-select-option :value="2">本站左侧</a-select-option>
+              <a-select-option :value="3">本站右侧</a-select-option>
+            </a-select>
           </a-form-item>
-          <a-form-item name="remark" label="备注" :rules="[{ max: 250, message: '备注过长' }]">
-            <a-textarea
-              placeholder="请输入备注"
-              :rows="3"
-              v-model:value="formData.remark"
-              autocomplete="off"
+          <a-form-item
+            :rules="[{ required: true, message: '小区名称' }]"
+            label="小区名称"
+            name="lacciIds"
+          >
+            <a-select
+              mode="multiple"
+              v-model:value="formData.lacciIds"
+              :options="lacciDatas"
+              :allowClear="true"
+              placeholder="请选择小区名称"
             />
           </a-form-item>
         </a-form>
@@ -158,13 +153,14 @@
   </MyContent>
 </template>
 <script setup lang="tsx">
+  import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import myCommon from '@/utils/MyCommon/common';
-  import formValidator from '@/utils/MyCommon/formValidator';
   import { ref, reactive, createVNode, nextTick, watch, unref } from 'vue';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import { Line as lineApi } from '@/api/ddServcer';
   import { Station as stationApi } from '@/api/ddServcer';
   import { Lacci as lacciApi } from '@/api/ddServcer';
+  import { StationLacci as stationLacciApi } from '@/api/ddServcer';
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 
@@ -176,47 +172,39 @@
     columns: [
       //基础
       {
-        field: 'id',
-        title: '小区id',
-        visible: false,
+        field: 'lineName',
+        title: '线路名称',
+        showOverflow: true,
         showHeaderOverflow: true,
-        fixed: 'left',
+        sortable: true,
       },
       {
-        field: 'name',
+        field: 'stationName',
+        title: '车站名称',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'typeName',
+        title: '管辖区间',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'lacciNames',
         title: '小区名称',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
       },
       {
-        field: 'lacci',
-        title: 'lacci',
+        field: 'laccis',
+        title: 'Laccis',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-      },
-      {
-        field: 'longitude',
-        title: '经度',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-      },
-
-      {
-        field: 'latitude',
-        title: '纬度',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-      },
-      {
-        field: 'remark',
-        title: '备注',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        visible: false,
       },
       {
         title: '操作',
@@ -240,9 +228,9 @@
   const defFromData = reactive({
     lineId: null,
     stationId: null,
-    remark: null,
-    name: null,
-    lacci: null,
+    type: null,
+    lacciIds: [],
+    longId: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);
@@ -258,12 +246,18 @@
   });
   const seacthContent = ref({
     name: '',
+    stationId: null,
   });
-  getDDServerTLaccis();
+  const lacciDatas = ref([]);
+  const lineDatas = ref([]);
+  const stationDatas = ref([]);
+
+  getDDServerTLacciSimple();
+  getDDServerStationTLaccis();
 
   //页码改变
   function handlePageChange() {
-    getDDServerTLaccis();
+    getDDServerStationTLaccis();
   }
 
   /**
@@ -275,7 +269,7 @@
       var tempstr = item.field + ' ' + item.order;
       page.sortlist.push(tempstr);
     });
-    getDDServerTLaccis();
+    getDDServerStationTLaccis();
   }
   /**
    * 获取排序条件
@@ -290,12 +284,15 @@
 
   //显示表单
   function showFrom(row) {
+    getDDServerTLacciSimple();
+    getDDServerLineSimple();
+    getDDServerLacciSimple();
     if (myCommon.isnull(row)) {
       saveType.value = 'add';
       isShowForm.value = true;
     } else {
       //编辑
-      getDDServerTLacci(row.id);
+      getDDServerStationTLacci(row);
     }
   }
 
@@ -308,12 +305,12 @@
       content: '',
       onOk() {
         isRunGet.value = true;
-        lacciApi
-          .DeleteDDServerTLacci(row.id.toString())
+        stationLacciApi
+          .DeleteDDServerStationLacci({ StationId: row.stationId, Type: row.type })
           .then(() => {
             isRunGet.value = false;
             message.success('删除小区信息成功');
-            getDDServerTLaccis();
+            getDDServerStationTLaccis();
           })
           .catch(() => {
             isRunGet.value = false;
@@ -331,14 +328,16 @@
   }
 
   //获取小区
-  function getDDServerTLacci(id) {
+  function getDDServerStationTLacci(row) {
     isRunGet.value = true;
-    lacciApi
-      .GetDDServerTLacci(id.toString())
+    stationLacciApi
+      .GetDDServerStationLacci({ StationId: row.stationId, Type: row.type })
       .then((data) => {
         isRunGet.value = false;
         if (data) {
+          data.lacciIds = data.lacciIds.split(',');
           formData.value = data;
+          formData.value.longId = row.longId;
           saveType.value = 'edit';
           isShowForm.value = true;
         } else {
@@ -351,10 +350,10 @@
   }
 
   //获取小区列表
-  function getDDServerTLaccis() {
+  function getDDServerStationTLaccis() {
     loading.value = true;
-    lacciApi
-      .GetDDServerTLaccis({
+    stationLacciApi
+      .GetDDServerStationLaccis({
         ...seacthContent.value,
         execompleteBefore: () => {
           loading.value = false;
@@ -377,20 +376,41 @@
         fromSpinning.value = false;
       };
       if (saveType.value == 'add') {
-        lacciApi.AddDDServerTLacci(formData.value).then((data) => {
-          tableRef.value.insert(data);
+        stationLacciApi.AUDDServerStationLacci(formData.value).then((data) => {
           formClose();
           message.success('新增小区成功');
+          getDDServerStationTLaccis();
         });
       } else {
-        lacciApi.UpdateDDServerTLacci(formData.value).then((data) => {
-          const oldData = tableRef.value.getRowById(data.id);
-          myCommon.objectReplace(oldData, formData.value);
+        stationLacciApi.AUDDServerStationLacci(formData.value).then((data) => {
           formClose();
           message.success('更新小区信息成功');
+          getDDServerStationTLaccis();
         });
       }
     });
+  }
+
+  function getDDServerTLacciSimple() {
+    stationApi.GetDDServerStationSimple().then((data) => {
+      stationDatas.value = data;
+    });
+  }
+
+  function getDDServerLineSimple() {
+    lineApi.GetDDServerLineSimple().then((data) => {
+      lineDatas.value = data;
+    });
+  }
+
+  function getDDServerLacciSimple() {
+    lacciApi.GetDDServerLacciSimple().then((data) => {
+      lacciDatas.value = data;
+    });
+  }
+
+  function changeLine() {
+    formData.value.stationId = null;
   }
 </script>
 <style lang="less" scoped>

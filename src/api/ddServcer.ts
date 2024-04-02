@@ -59,6 +59,11 @@ const DCStatus = {
   },
 };
 const Lacci = {
+  GetDDServerLacciSimple: function () {
+    return defHttp.get({
+      url: '/DDServerLacci/GetDDServerLacciSimple',
+    });
+  },
   //获取列表
   GetDDServerTLaccis: function (params) {
     return defHttp.post({
@@ -207,5 +212,44 @@ const Station = {
     });
   },
 };
-
-export { Black, CirStatus, DCStatus, Lacci, Line, MobileStatus, RegisterHistory, Station };
+const StationLacci = {
+  //获取列表
+  GetDDServerStationLaccis: function (params) {
+    return defHttp.post({
+      url: '/DDServerStationLacci/GetDDServerStationLaccis',
+      params,
+    });
+  },
+  //获取实体
+  GetDDServerStationLacci: function (params) {
+    return defHttp.post({
+      url: '/DDServerStationLacci/GetDDServerStationLacci',
+      params,
+    });
+  },
+  //增加&编辑
+  AUDDServerStationLacci: function (params) {
+    return defHttp.post({
+      url: '/DDServerStationLacci/AUDDServerStationLacci',
+      params,
+    });
+  },
+  //删除
+  DeleteDDServerStationLacci: function (params) {
+    return defHttp.post({
+      url: '/DDServerStationLacci/DeleteDDServerStationLacci',
+      params,
+    });
+  },
+};
+export {
+  Black,
+  CirStatus,
+  DCStatus,
+  Lacci,
+  Line,
+  MobileStatus,
+  RegisterHistory,
+  Station,
+  StationLacci,
+};

@@ -19,7 +19,7 @@ export default defineApplicationConfig({
       //本地开发代理，可以解决跨域及多地址代理
       proxy: {
         '/basic-api': {
-          target: 'http://localhost:8088',
+          target: 'http://localhost:8086',
           changeOrigin: true,
           ws: true,
           rewrite: (path) => path.replace(new RegExp(`^/basic-api`), ''),

@@ -46,6 +46,14 @@ const ddServcer: AppRouteModule = {
       },
     },
     {
+      path: 'stationLacci',
+      name: 'DDServcerstationLacci',
+      component: () => import('/@/views/ddServcer/stationLacci/index.vue'),
+      meta: {
+        title: '车站小区管理',
+      },
+    },
+    {
       path: 'line',
       name: 'DDServcerLine',
       component: () => import('/@/views/ddServcer/line/index.vue'),
