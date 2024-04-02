@@ -298,7 +298,7 @@
     fromSpinning.value = true;
     if (fileList.value.length > 0) {
       let _formData = new FormData();
-      _formData.append('files', fileList.value[0]);
+      _formData.append('file', fileList.value[0]);
       for (const key in formData.value) {
         _formData.append(key, formData.value[key]);
       }
