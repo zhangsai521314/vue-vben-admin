@@ -30,9 +30,16 @@
           }}</span>
           <AuthDom auth="versionsManage_his_table_sync">
             <a-spin v-if="row.isRunSync != undefined" :spinning="row.isRunSync">
-              <a-button type="primary" size="small" @click="syncChange(row)">开始同步</a-button>
+              <a-button title="更改为此版本" type="primary" size="small" @click="syncChange(row)"
+                >开始同步</a-button
+              >
             </a-spin>
-            <a-button v-else type="primary" size="small" @click="syncChange(row)"
+            <a-button
+              title="更改为此版本"
+              v-else
+              type="primary"
+              size="small"
+              @click="syncChange(row)"
               >开始同步</a-button
             >
           </AuthDom>
@@ -79,6 +86,13 @@
           :rules="[{ required: true, message: '请选择是否运行版本' }]"
         >
           <a-switch v-model:checked="formData.isRun" />
+        </a-form-item>
+        <a-form-item
+          name="isForce"
+          label="是否强制升级"
+          :rules="[{ required: true, message: '请选择是否强制升级' }]"
+        >
+          <a-switch v-model:checked="formData.isForce" />
         </a-form-item>
         <a-form-item
           name="remark"
@@ -161,7 +175,7 @@
       {
         field: 'vNumber',
         title: '版本号',
-        width: 80,
+        width: 100,
         showOverflow: true,
         showHeaderOverflow: true,
         slots: {
@@ -171,6 +185,14 @@
       {
         field: 'isRun',
         title: '是否运行版本',
+        width: 120,
+        showOverflow: true,
+        showHeaderOverflow: true,
+        cellRender: { name: 'render_isno' },
+      },
+      {
+        field: 'isForce',
+        title: '是否强制升级',
         width: 120,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -233,9 +255,10 @@
   });
   const defFromData = reactive({
     vNumber: null,
-    isRun: true,
-    remark: null,
-    versionId: props.versionId,
+    isRun: false,
+    remark: '',
+    versionId: null,
+    isForce: false,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);
@@ -251,6 +274,8 @@
 
   function showFrom(row) {
     formData.value = _.cloneDeep(defFromData);
+    formData.value.versionId = props.versionId;
+    fileList.value = [];
     saveType = 'add';
     isShowForm.value = true;
   }

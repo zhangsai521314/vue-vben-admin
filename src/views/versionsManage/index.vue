@@ -50,9 +50,16 @@
           }}</span>
           <AuthDom auth="versionsManage_table_sync">
             <a-spin v-if="row.isRunSync != undefined" :spinning="row.isRunSync">
-              <a-button type="primary" size="small" @click="syncChange(row)">开始同步</a-button>
+              <a-button title="更改为此版本" type="primary" size="small" @click="syncChange(row)"
+                >开始同步</a-button
+              >
             </a-spin>
-            <a-button v-else type="primary" size="small" @click="syncChange(row)"
+            <a-button
+              title="更改为此版本"
+              v-else
+              type="primary"
+              size="small"
+              @click="syncChange(row)"
               >开始同步</a-button
             >
           </AuthDom>
@@ -165,8 +172,17 @@
         },
       },
       {
+        field: 'isForce',
+        title: '是否强制升级',
+        width: 140,
+        showOverflow: true,
+        showHeaderOverflow: true,
+        cellRender: { name: 'render_isno' },
+      },
+      {
         field: 'isSync',
         title: '是否已同步',
+        width: 160,
         showOverflow: true,
         showHeaderOverflow: true,
         slots: {
@@ -183,6 +199,7 @@
       {
         field: 'syncUserName',
         title: '同步人员',
+        width: 130,
         showOverflow: true,
         showHeaderOverflow: true,
       },
@@ -231,13 +248,13 @@
   let saveType = 'add';
   const isShowVis = ref(false);
   const dictionariesData_add = ref([]);
-  const versionId = ref(null);
+  const versionId = ref('');
 
   getVersions();
 
   function showHis(row) {
-    isShowVis.value = true;
     versionId.value = row.versionId;
+    isShowVis.value = true;
   }
 
   function showFrom() {

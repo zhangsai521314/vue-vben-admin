@@ -152,6 +152,7 @@
   import formValidator from '@/utils/MyCommon/formValidator';
   import { getAppEnvConfig } from '@/utils/env';
   import { sm2 } from 'sm-crypto-v2';
+  import commonApi from '@/api/common';
 
   const props = defineProps({
     backgroundColor: {
@@ -267,6 +268,13 @@
       fileList.value = [];
     }
   }
+
+  // setInterval(() => {
+  //   commonApi.text().then((data) => {
+  //     // console.log(data.cpuRate);
+  //     console.log(data);
+  //   });
+  // }, 500);
 
   watch(
     () => props.backgroundColor,
