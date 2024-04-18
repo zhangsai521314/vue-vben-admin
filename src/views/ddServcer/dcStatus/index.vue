@@ -75,7 +75,7 @@
           @page-change="handlePageChange"
         />
       </template>
-      <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? '+' + row.port : '' }} </template>
+      <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? ':' + row.port : '' }} </template>
     </vxe-grid>
   </MyContent>
 </template>

@@ -873,6 +873,7 @@
     if (!isChange) {
       for (let i = 0; i < treeData.length; i++) {
         const oldNode = oldData.find((m) => m.key == treeData[i].key);
+        debugger
         if (oldNode && oldNode.powerType != treeData[i].powerType) {
           isChange = true;
           break;

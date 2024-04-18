@@ -25,7 +25,7 @@
               </AuthDom>
               <AuthDom auth="dictionariesManage_sync_performance">
                 <a-spin :spinning="syncMqttPerformance">
-                  <a-button class="ant-btn" @click="syncPerformance('performanceGatherType')"
+                  <a-button class="ant-btn" @click="syncPerformance('collectionFrequency')"
                     >同步设备性能上报频率</a-button
                   >
                 </a-spin>
@@ -52,27 +52,29 @@
                   row.dictionariesClass == 'equipmentType'
                     ? '设备类型'
                     : row.dictionariesClass == 'systemType'
-                    ? '系统类型'
-                    : row.dictionariesClass == 'serviceType'
-                    ? '服务类型'
-                    : row.dictionariesClass == 'alarmType'
-                    ? '告警类型'
-                    : row.dictionariesClass == 'performanceAlarmType'
-                    ? '设备性能告警阈值'
-                    : row.dictionariesClass == 'performanceGatherType'
-                    ? '设备性能采集频率'
-                    : ''
+                      ? '系统类型'
+                      : row.dictionariesClass == 'serviceType'
+                        ? '服务类型'
+                        : row.dictionariesClass == 'alarmType'
+                          ? '告警类型'
+                          : row.dictionariesClass == 'performanceAlarmType'
+                            ? '设备性能告警阈值'
+                            : row.dictionariesClass == 'collectionFrequency'
+                              ? '设备性能采集频率'
+                              : row.dictionariesClass == 'commonConfig'
+                                ? '通用配置'
+                                : ''
                 }}</span>
               </template>
             </vxe-column>
-            <vxe-column field="isKeyMaster" title="自定义键值">
+            <vxe-column field="isKeyMaster" title="是否自定义主键">
               <template #default="{ row }">
                 <span :style="{ color: row.isKeyMaster ? 'green' : 'red' }">{{
                   row.isKeyMaster ? '是' : '否'
                 }}</span>
               </template>
             </vxe-column>
-            <vxe-column field="dictionariesKey" title="输入键值" />
+            <vxe-column field="dictionariesKey" title="自定义主键值" />
             <vxe-column field="isSystem" title="是否系统">
               <template #default="{ row }">
                 <span :style="{ color: row.isSystem ? 'green' : 'red' }">{{
@@ -83,7 +85,7 @@
             <vxe-column field="isSync" title="是否已同步">
               <template #default="{ row }">
                 <span
-                  v-if="row.dictionariesClass == 'performanceGatherType'"
+                  v-if="row.dictionariesClass == 'collectionFrequency'"
                   :style="{ color: row.isSync ? 'green' : 'red' }"
                   >{{ row.isSync ? '是' : '否' }}</span
                 >
@@ -92,6 +94,7 @@
             </vxe-column>
             <vxe-column field="synTime" title="同步时间" :visible="false" />
             <vxe-column field="orderIndex" title="排序" :visible="false" />
+            <vxe-column field="other" title="附属信息" :showOverflow="true" />
             <vxe-column field="remark" title="备注" :showOverflow="true" />
             <vxe-column field="createTime" title="创建时间" :visible="false" />
             <vxe-column field="createUser" title="创建人" :visible="false" />
@@ -153,6 +156,7 @@
         <a-form-item
           name="dictionariesName"
           label="显示名称"
+          :labelCol="{ span: 7 }"
           :rules="[
             { required: true, message: '' },
             { max: 250, message: '显示名称过长' },
@@ -168,6 +172,7 @@
         <a-form-item
           name="dictionariesClass"
           label="字典类型"
+          :labelCol="{ span: 7 }"
           :rules="[{ required: true, message: '请选择字典类型' }]"
         >
           <a-select
@@ -182,8 +187,9 @@
         </a-form-item>
         <a-form-item
           name="isKeyMaster"
-          label="自定义键值"
-          :rules="[{ required: true, message: '请选择自定义键值' }]"
+          label="是否自定义主键"
+          :labelCol="{ span: 7 }"
+          :rules="[{ required: true, message: '请选择是否自定义主键' }]"
         >
           <a-switch
             :title="dictionariesClass_disabled ? '跟随父级，不可修改' : ''"
@@ -194,11 +200,12 @@
         <a-form-item
           v-if="formData.isKeyMaster"
           name="dictionariesKey"
-          label="输入键值"
+          label="自定义主键值"
+          :labelCol="{ span: 7 }"
           :rules="[
             { required: true, message: '' },
-            { max: 250, message: '字自定义键值过长' },
-            { validator: formValidator.empty, message: '请输入自定义键值' },
+            { max: 250, message: '自定义主键值过长' },
+            { validator: formValidator.empty, message: '请输入自定义主键值' },
           ]"
         >
           <a-input
@@ -210,6 +217,7 @@
         <a-form-item
           name="orderIndex"
           label="字典排序"
+          :labelCol="{ span: 7 }"
           :rules="[{ required: true, message: '请输入字典排序' }]"
         >
           <a-input-number
@@ -220,8 +228,22 @@
           />
         </a-form-item>
         <a-form-item
+          name="other"
+          label="附属信息"
+          :labelCol="{ span: 7 }"
+          :rules="[{ max: 250, message: '附属息过长' }]"
+        >
+          <a-textarea
+            placeholder="请输入备注信息"
+            :rows="3"
+            v-model:value="formData.remark"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
           name="remark"
           label="备注信息"
+          :labelCol="{ span: 7 }"
           :rules="[{ max: 250, message: '备注信息过长' }]"
         >
           <a-textarea
@@ -264,6 +286,7 @@
     isKeyMaster: false,
     dictionariesKey: '',
     remark: null,
+    other: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref({});

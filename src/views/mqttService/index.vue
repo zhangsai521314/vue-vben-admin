@@ -5,34 +5,35 @@
       id="mytable"
       ref="tableRef"
       :loading="loading"
+      :row-config="{ keyField: 'mqttId' }"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
           <a-space direction="horizontal" size="small" style="line-height: 50px; margin-left: 5px">
-            <AuthDom auth="versionsManage_query">
+            <AuthDom auth="mqttService_query">
               <a-space direction="horizontal" size="small">
-                <a-button @click="getVersions" type="primary">查询</a-button>
+                <a-button @click="getMqtts" type="primary">查询</a-button>
               </a-space>
             </AuthDom>
-            <AuthDom auth="versionsManage_add">
-              <a-button class="ant-btn" @click="showFrom()">新增软件包类型</a-button>
+            <AuthDom auth="mqttService_add">
+              <a-button class="ant-btn" @click="showFrom()">新增通信类型</a-button>
             </AuthDom>
           </a-space>
         </div>
       </template>
       <template #default="{ row }">
         <div :class="`tableOption`">
-          <AuthDom auth="versionsManage_table_version">
+          <AuthDom auth="mqttService_table_version">
             <IconFontClass
-              name="icon-baseui-jichushezhi"
-              @click="showHis(row)"
+              name="icon-baseui-edit-fill"
+              @click="showFrom(row)"
               style="color: #0a61bd"
-              title="版本管理"
+              title="编辑"
             />
           </AuthDom>
-          <AuthDom auth="versionsManage_table_delete">
+          <AuthDom auth="mqttService_table_delete">
             <IconFontClass
               name="icon-baseui-guanbicuowu"
               @click="remove(row)"
@@ -42,35 +43,8 @@
           </AuthDom>
         </div>
       </template>
-      <template #isSync="{ row }">
-        <a-space v-if="row.isSync != null">
-          <span :style="{ color: row.isSync ? 'green' : 'red' }">{{
-            row.isSync ? '是' : '否'
-          }}</span>
-          <AuthDom auth="versionsManage_table_sync">
-            <a-spin v-if="row.isRunSync != undefined" :spinning="row.isRunSync">
-              <a-button title="更改为此版本" type="primary" size="small" @click="syncChange(row)"
-                >开始同步</a-button
-              >
-            </a-spin>
-            <a-button
-              title="更改为此版本"
-              v-else
-              type="primary"
-              size="small"
-              @click="syncChange(row)"
-              >开始同步</a-button
-            >
-          </AuthDom>
-        </a-space>
-      </template>
-      <template #runNumber="{ row }">
-        <a
-          v-if="row.runNumber !== null"
-          :href="row.filePath"
-          :download="row.filePath.split('/')[row.filePath.split('/').length - 1]"
-          >{{ row.runNumber }}</a
-        >
+      <template #ipport="{ row }">
+        {{ row.mqttIp }}{{ row.mqttPort ? ':' + row.mqttPort : '' }}
       </template>
     </vxe-grid>
     <a-drawer
@@ -91,21 +65,61 @@
       >
         <a-form-item label="服务类型" name="serviceType">
           <a-select
+            :disabled="saveType != 'add'"
             show-search
             :filter-option="AntVueCommon.filterOption"
             placeholder="请选择服务类型"
             :rules="[{ required: true, message: '请选择软件类型' }]"
             v-model:value="formData.serviceType"
-            :options="dictionariesData_add.filter((m) => m.dictionariesClass == 'serviceType')"
+            :options="dictionariesData.filter((m) => m.dictionariesClass == 'serviceType')"
+          />
+        </a-form-item>
+        <a-space>
+          <a-form-item
+            :labelCol="{ span: 8, offset: 2 }"
+            label="通信地址"
+            name="mqttIp"
+            :rules="[{ required: true, message: '请输入通信地址Ip' }]"
+          >
+            <a-input placeholder="IP" v-model:value="formData.mqttIp" style="margin-left: 2px" />
+          </a-form-item>
+          <a-form-item
+            label=""
+            name="mqttPort"
+            :rules="[{ required: true, message: '请输入通信地址端口' }]"
+          >
+            <a-input placeholder="端口号" v-model:value="formData.mqttPort" style="width: 134px" />
+          </a-form-item>
+        </a-space>
+        <a-form-item
+          label="MQTT用户名"
+          name="mqttName"
+          :rules="[{ required: true, message: '请输入MQTT用户名' }]"
+        >
+          <a-input
+            placeholder="请输入MQTT用户名"
+            v-model:value="formData.mqttName"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
+          label="MQTT密码"
+          name="mqttName"
+          :rules="[{ required: true, message: '请输入MQTT密码' }]"
+        >
+          <a-input
+            placeholder="请输入MQTT密码"
+            v-model:value="formData.mqttPwd"
+            autocomplete="off"
           />
         </a-form-item>
         <a-form-item
           name="orderIndex"
-          label="软件包排序"
-          :rules="[{ required: true, message: '请输入软件包排序' }]"
+          label="排序"
+          :rules="[{ required: true, message: '请输入排序' }]"
         >
           <a-input-number
-            placeholder="请输入软件包排序"
+            placeholder="请输入排序"
             style="width: 300px"
             :precision="3"
             v-model:value="formData.orderIndex"
@@ -119,38 +133,27 @@
         </a-spin>
       </template>
     </a-drawer>
-    <a-drawer
-      :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="1000"
-      :visible="isShowVis"
-      title="版本管理"
-      :footer-style="{ textAlign: 'right' }"
-      @close="formCloseHis"
-    >
-      <his :versionId="versionId" />
-    </a-drawer>
   </MyContent>
 </template>
 <script setup lang="tsx">
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import { ref, reactive, createVNode } from 'vue';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
-  import versionsApi from '@/api/versions';
+  import mqttApi from '@/api/mqttService';
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
-  import his from './his.vue';
   import { useDesign } from '@/hooks/web/useDesign';
 
-  defineOptions({ name: 'versionsManage' });
-  const { prefixCls } = useDesign('versionsManage-');
+  defineOptions({ name: 'mqttService' });
+  const { prefixCls } = useDesign('mqttService-');
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
     columns: [
       //基础
       {
-        field: 'versionId',
-        title: '软件包类型ID',
+        field: 'mqttId',
+        title: '通信ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -162,43 +165,23 @@
         showHeaderOverflow: true,
       },
       {
-        field: 'runNumber',
-        title: '运行版本号',
+        field: 'mqttIp',
+        title: 'MQTT地址',
         showOverflow: true,
         showHeaderOverflow: true,
         slots: {
-          default: 'runNumber',
+          default: 'ipport',
         },
       },
       {
-        field: 'isForce',
-        title: '是否强制升级',
-        width: 140,
-        showOverflow: true,
-        showHeaderOverflow: true,
-        cellRender: { name: 'render_isno' },
-      },
-      {
-        field: 'isSync',
-        title: '是否已同步',
-        width: 160,
-        showOverflow: true,
-        showHeaderOverflow: true,
-        slots: {
-          default: 'isSync',
-        },
-      },
-      {
-        field: 'syncTime',
-        title: '同步时间',
-        width: 150,
+        field: 'mqttName',
+        title: 'MQTT用户名',
         showOverflow: true,
         showHeaderOverflow: true,
       },
       {
-        field: 'syncUserName',
-        title: '同步人员',
-        width: 130,
+        field: 'mqttPwd',
+        title: 'MQTT密码',
         showOverflow: true,
         showHeaderOverflow: true,
       },
@@ -224,6 +207,22 @@
         showHeaderOverflow: true,
       },
       {
+        field: 'modifyTime',
+        title: '修改时间',
+        width: 150,
+        showOverflow: true,
+        showHeaderOverflow: true,
+        visible: false,
+      },
+      {
+        field: 'modifyUser',
+        title: '修改人',
+        width: 130,
+        showOverflow: true,
+        showHeaderOverflow: true,
+        visible: false,
+      },
+      {
         title: '操作',
         width: 140,
         slots: {
@@ -244,6 +243,10 @@
   });
   const defFromData = reactive({
     serviceType: null,
+    mqttIp: null,
+    mqttPort: null,
+    mqttName: null,
+    mqttPwd: null,
     orderIndex: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
@@ -253,21 +256,22 @@
   const fromSpinning = ref(false);
   let saveType = 'add';
   const isShowVis = ref(false);
-  const dictionariesData_add = ref([]);
+  const dictionariesData = ref([]);
   const versionId = ref('');
 
-  getVersions();
+  getMqtts();
 
-  function showHis(row) {
-    versionId.value = row.versionId;
-    isShowVis.value = true;
-  }
-
-  function showFrom() {
-    getServerTypes();
-    formData.value = _.cloneDeep(defFromData);
-    saveType = 'add';
-    isShowForm.value = true;
+  function showFrom(row) {
+    if (myCommon.isnull(row)) {
+      getServerTypes();
+      formData.value = _.cloneDeep(defFromData);
+      saveType = 'add';
+      isShowForm.value = true;
+    } else {
+      getServerTypes(row.dictionariesId);
+      //编辑
+      getByid(row.mqttId);
+    }
   }
 
   //删除软件包信息
@@ -279,8 +283,8 @@
       content: '',
       onOk() {
         loading.value = true;
-        versionsApi
-          .DeleteVersions(row.versionId)
+        mqttApi
+          .DeleteMqtt(row.versionId)
           .then(() => {
             loading.value = false;
             tableRef.value.remove(row);
@@ -300,17 +304,11 @@
     formRef.value.clearValidate();
   }
 
-  //关闭his
-  function formCloseHis() {
-    isShowVis.value = false;
-    getVersions();
-  }
-
   //获取软件包列表
-  function getVersions() {
+  function getMqtts() {
     loading.value = true;
-    versionsApi
-      .GetVersions({
+    mqttApi
+      .GetMqtts({
         execompleteBefore: () => {
           loading.value = false;
         },
@@ -332,46 +330,62 @@
       };
       formData.value['execompleteBefore'] = execompleteBefore;
       if (saveType == 'add') {
-        versionsApi.AddVersions(formData.value).then((data) => {
-          data.serviceName = dictionariesData_add.value.find(
-            (m) => m.key == data.serviceType,
-          ).label;
+        mqttApi.AddMqtt(formData.value).then((data) => {
+          data.serviceName = dictionariesData.value.find((m) => m.key == data.serviceType).label;
           tableRef.value.insert(data);
           formClose();
           message.success('新增软件包类型成功');
+        });
+      } else {
+        mqttApi.UpdateMqtt(formData.value).then((data) => {
+          const oldData = tableRef.value.getRowById(data.mqttId);
+          myCommon.objectReplace(oldData, data);
+          delete formData.value.createUser;
+          oldData.modifyTime = data.modifyTime;
+          oldData.modifyUser = data.modifyUser;
+          oldData.serviceName = dictionariesData.value.find(
+            (m) => m.key == data.serviceType,
+          )?.label;
+          formClose();
+          message.success('更新软件信息成功');
         });
       }
     });
   }
 
   //获取字典
-  function getServerTypes() {
-    versionsApi
-      .GetServerTypes()
+  function getServerTypes(dictionariesId = null) {
+    mqttApi
+      .GetServerTypes(dictionariesId)
       .then((data) => {
-        dictionariesData_add.value = data;
+        dictionariesData.value = data;
       })
       .catch(() => {
-        dictionariesData_add.value = [];
+        dictionariesData.value = [];
       });
   }
 
-  //同步
-  function syncChange(row) {
-    row.isRunSync = true;
-    versionsApi
-      .UpdateRunVersions(row.versionId.toString())
-      .then(() => {
-        row.isRunSync = false;
-        message.success('更新运行版本成功');
+  function getByid(id) {
+    loading.value = true;
+    mqttApi
+      .GetMqtt(id)
+      .then((data) => {
+        loading.value = false;
+        if (data) {
+          formData.value = data;
+          saveType = 'edit';
+          isShowForm.value = true;
+        } else {
+          message.error('获取通信信息失败');
+        }
       })
       .catch(() => {
-        row.isRunSync = false;
+        loading.value = false;
       });
   }
 </script>
 <style lang="less" scoped>
-  @prefixCls: ~'@{namespace}-versionsManage-';
+  @prefixCls: ~'@{namespace}-mqttService-';
 
   .tableBtn {
     width: 100%;

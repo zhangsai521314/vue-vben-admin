@@ -130,11 +130,11 @@
     //方法：https://g6-next.antv.antgroup.com/apis/graph/graph
     //节点 Node 、边 Edge 和节点分组 Combo
     // 图实例化，至少需要为图设置挂载容器、宽、高
-    const ExtGraph = extend(Graph, {
-      nodes: {
-        'modelRect-node': Extensions.ModelRectNode,
-      },
-    });
+    // const ExtGraph = extend(Graph, {
+    //   nodes: {
+    //     'modelRect-node': Extensions.ModelRectNode,
+    //   },
+    // });
     graph = new G6.Graph({
       container: 'mountNode', // 指定挂载容器
       width: mountRef.value?.clientWidth, // 图的宽度
