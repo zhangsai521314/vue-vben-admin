@@ -40,7 +40,21 @@ const TelephoneBook = {
     });
   },
 };
-
-export {
-  TelephoneBook
+const CallRecord = {
+  //获取列表
+  GetDCOptionCallRecords: function (params) {
+    return defHttp.post({
+      url: '/DCOptionCallRecord/GetDCOptionCallRecords',
+      params,
+    });
+  },
+  //获取录音文件地址
+  GetCallRecordFilePath: function (params) {
+    return defHttp.post({
+      url: '/DCOptionCallRecord/GetCallRecordFilePath',
+      params,
+    });
+  },
 };
+
+export { TelephoneBook, CallRecord };

@@ -1,12 +1,13 @@
 //公共方法
+import { message } from 'ant-design-vue';
+import dayjs from 'dayjs';
+
 let id = 0;
 //其他扩展
 String.prototype.replaceAll = function (f, e) {
   const reg = new RegExp(f, 'g');
   return this.replace(reg, e);
 };
-import { message } from 'ant-design-vue';
-import dayjs from 'dayjs';
 
 const Common = {
   //获取加解密密秘钥-禁止外传
@@ -272,7 +273,7 @@ const Common = {
     return getFieldTarget;
   },
   //下载文件，res为后台返回的FileStreamResult文件数据
-  downloadfile(res) {
+  downLoadFile(res) {
     try {
       const blob = new Blob([res.data], { type: 'application/octet-stream;charset=UTF-8' });
       const contentDisposition = res.headers['content-disposition'];
@@ -289,6 +290,23 @@ const Common = {
       downloadElement.click(); // 点击下载
       document.body.removeChild(downloadElement); // 下载完成移除元素
       window.URL.revokeObjectURL(href);
+    } catch (error) {
+      console.error(error);
+      message.warning('文件下载失败');
+    }
+  },
+  //下载文件，res为后台返回的FileStreamResult文件数据
+  downLoadFileByUrl(url) {
+    try {
+      const downloadElement = document.createElement('a');
+      downloadElement.style.display = 'none';
+      downloadElement.href = url;
+      let filename = url.split('/').pop();
+      filename = decodeURIComponent(filename);
+      downloadElement.download = filename; // 下载后文件名
+      document.body.appendChild(downloadElement);
+      downloadElement.click(); // 点击下载
+      document.body.removeChild(downloadElement); // 下载完成移除元素
     } catch (error) {
       console.error(error);
       message.warning('文件下载失败');
@@ -324,7 +342,7 @@ const Common = {
   },
   //拷贝对象2中对象1存在的键给对象1
   objectToObject(obj, obj2) {
-    for (let i in obj2) {
+    for (const i in obj2) {
       if ($.isPlainObject(obj[i])) {
         this.objectToObject(obj[i], obj2[i]);
       } else {

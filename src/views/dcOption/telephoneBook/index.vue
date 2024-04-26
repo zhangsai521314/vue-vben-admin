@@ -1,5 +1,5 @@
 <template>
-  <MyContent>
+  <MyContent :class="prefixCls">
     <a-spin :spinning="isRunGet" title="正在执行...">
       <!-- 开启多字段排序 -->
       <!-- :sort-config="{ multiple: true }" -->
@@ -131,8 +131,10 @@
   import { TelephoneBook as telephoneBookApi } from '@/api/dcOption';
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
+  import { useDesign } from '@/hooks/web/useDesign';
 
   defineOptions({ name: 'DCOptionTelephoneBook' });
+  const { prefixCls } = useDesign('DCOptionTelephoneBook-');
   const isRunGet = ref(false);
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
@@ -371,7 +373,7 @@
   }
 </script>
 <style lang="less" scoped>
-  @prefixCls: ~'@{namespace}-ddServcerblack-';
+  @prefixCls: ~'@{namespace}-DCOptionTelephoneBook-';
 
   .fanZhun {
     display: inline-block;

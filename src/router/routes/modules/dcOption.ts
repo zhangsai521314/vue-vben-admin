@@ -21,6 +21,14 @@ const dcOption: AppRouteModule = {
         title: '电话薄管理',
       },
     },
+    {
+      path: 'callRecord',
+      name: 'DCOptionCallRecord',
+      component: () => import('/@/views/dcOption/callRecord/index.vue'),
+      meta: {
+        title: '通话记录',
+      },
+    },
   ],
 };
 export default dcOption;

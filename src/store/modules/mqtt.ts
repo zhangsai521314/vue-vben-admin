@@ -1,66 +1,105 @@
-import type { AlarmData } from '#/store';
+import type { MsgData } from '#/store';
 import { defineStore } from 'pinia';
 import { store } from '@/store';
 import dayjs from 'dayjs';
+import { update } from 'lodash-es';
 
 export interface MqttState {
+  //系统mqtt全部配置信息
+  mqttConfig: Nullable<object>;
   //mqtt连接对象
   mqttClient: Nullable<object>;
   //mqtt连接状态:-1无需连接、0未连接、1已连接、2连接中、3连接失败
   mqttStatus: String;
-  //告警信息
-  alarmData: AlarmData[];
+  //信息
+  msgData: MsgData[];
   //通过mqtt存储的最新信息
   newInfo: object;
   //当前newInfo变更的键
   changeNewInfoKey: Nullable<String>;
   //是否已初始加载完告警信息
   isInitAlarmData: Boolean;
+  //是否打开了日志目录弹框
+
+  //最新日志目录信息内容
+  newLogShowDirectory: Nullable<String>;
+  //最新下载的日志文件地址
+  newLogDownFilePath: Nullable<String>;
+  //是否打开了通话录音播放弹框
+  //最新播放通话记录录音文件地址
+  newCallRecordPlayFile: Nullable<object>;
+  //录音文件在网管系统服务器上的状态发生改变
+  callRecordChange: Nullable<object>;
 }
 
 //mqtt数据存储类
 export const useMqttStore = defineStore({
   id: 'mqtt-data',
   state: (): MqttState => ({
+    mqttConfig: null,
     mqttClient: null,
     mqttStatus: '无需连接',
-    alarmData: [],
+    msgData: [],
     newInfo: {},
     changeNewInfoKey: null,
     isInitAlarmData: false,
+    //最新日志目录信息内容
+    newLogShowDirectory: null,
+    //最新下载的日志文件地址
+    newLogDownFilePath: null,
+    //是否打开了通话录音播放弹框
+    //最新播放通话记录录音文件地址
+    newCallRecordPlayFile: null,
+    callRecordChange: null,
   }),
   getters: {},
   actions: {
+    setCallRecordChange(data) {
+      this.callRecordChange = data;
+    },
+    setNewLogShowDirectory(data) {
+      this.newLogShowDirectory = data;
+    },
+    setNewLogDownFilePath(data) {
+      this.newLogDownFilePath = data;
+    },
+    setNewCallRecordPlayFile(data) {
+      this.newCallRecordPlayFile = data;
+    },
+    //更改mqtt配置信息
+    setMqttConfig(config) {
+      this.mqttConfig = config;
+    },
     //增加报警信息
-    addAlarmData(item: AlarmData) {
+    addAlarmData(item: MsgData) {
       if (
         !this.newInfo[item.joinId] ||
-        dayjs(this.newInfo[item.joinId].alarmTime) <= dayjs(item.alarmTime)
+        dayjs(this.newInfo[item.joinId].alarmStartTime) <= dayjs(item.alarmStartTime)
       ) {
         this.newInfo[item.joinId] = item;
       }
-      this.changeNewInfoKey = `${item.joinId}_${item.alarmStatus}`;
-      if (!this.alarmData?.find((m) => m.alarmId == item.alarmId)) {
-        this.alarmData = [item, ...(this.alarmData || [])];
-        if (this.alarmData.length > 500) {
-          this.alarmData.splice(this.alarmData.length - 1, 1);
+      this.changeNewInfoKey = `${item.joinId}_${item.msgStatus}`;
+      if (!this.msgData?.find((m) => m.msgId == item.msgId)) {
+        this.msgData = [item, ...(this.msgData || [])];
+        if (this.msgData.length > 500) {
+          this.msgData.splice(this.msgData.length - 1, 1);
         }
-        this.alarmData = _.orderBy(this.alarmData, ['alarmTime'], ['desc']);
+        this.msgData = _.orderBy(this.msgData, ['alarmStartTime'], ['desc']);
       }
     },
     //更改报警信息
-    updateAlarmData(item: AlarmData) {
+    updateAlarmData(item: MsgData) {
       if (
         !this.newInfo[item.joinId] ||
-        dayjs(this.newInfo[item.joinId].alarmTime) <= dayjs(item.alarmTime)
+        dayjs(this.newInfo[item.joinId].alarmStartTime) <= dayjs(item.alarmStartTime)
       ) {
         this.newInfo[item.joinId] = item;
       }
-      this.changeNewInfoKey = `${item.joinId}_${item.alarmStatus}`;
-      const data = this.alarmData?.find((m) => m.alarmId == item.alarmId);
+      this.changeNewInfoKey = `${item.joinId}_${item.msgStatus}`;
+      const data = this.msgData?.find((m) => m.msgId == item.msgId);
       if (data) {
         myCommon.objectReplace(data, item);
-        this.alarmData = _.orderBy(this.alarmData, ['alarmTime'], ['desc']);
+        this.msgData = _.orderBy(this.msgData, ['alarmStartTime'], ['desc']);
       }
     },
     //更改mqtt连接状态
@@ -122,7 +161,7 @@ export const useMqttStore = defineStore({
     //发布消息
     publish(topic, msg, back: Function) {
       if (this.mqttClient && this.mqttClient.connected) {
-        this.mqttClient.publish(topic, msg, { qos: 1, retain: true }, (error) => back(error));
+        this.mqttClient.publish(topic, msg, { qos: 1, retain: false }, (error) => back(error));
       } else {
         back('mqtt未连接，同步失败');
       }

@@ -12,10 +12,9 @@
         :row-config="{ isHover: true, useKey: true }"
         :custom-config="{ storage: true }"
         :column-config="{ resizable: true }"
-        :data="mqttStore.alarmData"
+        :data="mqttStore.msgData"
       >
-        <vxe-column field="joinId" title="服务id" :visible="false" />
-        <vxe-column field="alarmId" title="告警id" :visible="false" />
+        <vxe-column field="msgId" title="告警id" :visible="false" />
         <vxe-column field="serviceCode" title="服务编号" :visible="false">
           <template #default="{ row }">
             {{
@@ -34,43 +33,43 @@
             }}
           </template>
         </vxe-column>
-        <vxe-column field="alarmType" title="告警类型">
+        <vxe-column field="msgType" title="信息类型">
           <template #default="{ row }">
             {{
-              dictionariesData.find((m) => row.alarmType == m.dictionarieskey)
-                ? dictionariesData.find((m) => row.alarmType == m.dictionarieskey).label
-                : row.alarmType
+              dictionariesData.find((m) => row.msgType == m.dictionarieskey)
+                ? dictionariesData.find((m) => row.msgType == m.dictionarieskey).label
+                : row.msgType
             }}
           </template>
         </vxe-column>
-        <vxe-column field="alarmTitle" title="告警标题" />
-        <vxe-column field="alarmMsg" title="告警信息" />
-        <vxe-column field="alarmStatus" title="告警状态" width="80">
+        <vxe-column field="msgTitle" title="信息标题" />
+        <vxe-column field="msgContent" title="信息内容" />
+        <vxe-column field="msgStatus" title="信息状态" width="80">
           <template #default="{ row }">
             <span
               :style="{
                 color:
-                  row.alarmStatus == 1
+                  row.msgStatus == 1
                     ? 'red'
-                    : row.alarmStatus == 2
+                    : row.msgStatus == 2
                       ? 'green'
-                      : row.alarmStatus == 3
+                      : row.msgStatus == 3
                         ? '#0960bd '
                         : '',
               }"
             >
-              {{ row.alarmStatus == 1 ? '故障' : row.alarmStatus == 2 ? '恢复' : '' }}</span
+              {{ row.msgStatus == 1 ? '故障' : row.msgStatus == 2 ? '恢复' : '' }}</span
             >
           </template>
         </vxe-column>
-        <vxe-column field="alarmTime" title="告警开始时间" width="150">
+        <vxe-column field="alarmStartTime" title="告警开始时间" width="150">
           <template #default="{ row }">
-            {{ row.alarmTime ? dayjs(row.alarmTime).format('YYYY-MM-DD HH:mm:ss') : '' }}
+            {{ row.alarmStartTime ? dayjs(row.alarmStartTime).format('YYYY-MM-DD HH:mm:ss') : '' }}
           </template>
         </vxe-column>
-        <vxe-column field="alarmTimeEnd" title="告警结束时间" width="150">
+        <vxe-column field="alarmEndTime" title="告警结束时间" width="150">
           <template #default="{ row }">
-            {{ row.alarmTimeEnd ? dayjs(row.alarmTimeEnd).format('YYYY-MM-DD HH:mm:ss') : '' }}
+            {{ row.alarmEndTime ? dayjs(row.alarmEndTime).format('YYYY-MM-DD HH:mm:ss') : '' }}
           </template>
         </vxe-column>
         <vxe-column field="alarmDuration" title="告警持续时间" width="120">
@@ -111,7 +110,7 @@
   import dictionariesApi from '@/api/dictionaries';
   import serviceApi from '@/api/software';
 
-  defineOptions({ name: 'networkMonitor' });
+  defineOptions({ name: 'NetworkMonitor' });
   const { prefixCls } = useDesign('networkMonitor-');
   const mqttStore = useMqttStoreWithOut();
   const appStore = useAppStore();
@@ -852,7 +851,7 @@
   function getDictionaries() {
     dictionariesApi
       .GetDictionariesimple({
-        dictionariesclass: ['alarmType'],
+        dictionariesclass: ['msgType'],
       })
       .then((data) => {
         dictionariesData.value = data;
@@ -916,8 +915,8 @@
   function initStatus() {
     setTimeout(() => {
       if (mqttStore.isInitAlarmData) {
-        for (let i = mqttStore.alarmData.length - 1; i >= 0; i--) {
-          changeStatus(`${mqttStore.alarmData[i].joinId}_${mqttStore.alarmData[i].alarmStatus}`);
+        for (let i = mqttStore.msgData.length - 1; i >= 0; i--) {
+          changeStatus(`${mqttStore.msgData[i].joinId}_${mqttStore.msgData[i].msgStatus}`);
         }
         watch(
           () => mqttStore.changeNewInfoKey,

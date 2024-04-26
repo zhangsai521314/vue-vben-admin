@@ -6,6 +6,55 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "13330376",
+      "name": "录音文件",
+      "font_class": "luyinwenjian",
+      "unicode": "e7a0",
+      "unicode_decimal": 59296
+    },
+    {
+      "icon_id": "781590",
+      "name": "静音-01",
+      "font_class": "jingyin01",
+      "unicode": "e6f1",
+      "unicode_decimal": 59121
+    },
+    {
+      "icon_id": "2674483",
+      "name": "暂停",
+      "font_class": "zanting",
+      "unicode": "e6f0",
+      "unicode_decimal": 59120
+    },
+    {
+      "icon_id": "40108951",
+      "name": "快退",
+      "font_class": "kuaitui",
+      "unicode": "ed32",
+      "unicode_decimal": 60722
+    },
+    {
+      "icon_id": "20784222",
+      "name": "快进",
+      "font_class": "kuaijin",
+      "unicode": "e6ef",
+      "unicode_decimal": 59119
+    },
+    {
+      "icon_id": "2076215",
+      "name": "音量",
+      "font_class": "yinliang",
+      "unicode": "e87b",
+      "unicode_decimal": 59515
+    },
+    {
+      "icon_id": "2674474",
+      "name": "播放",
+      "font_class": "bofang",
+      "unicode": "e6ee",
+      "unicode_decimal": 59118
+    },
+    {
       "icon_id": "2486603",
       "name": "调度机",
       "font_class": "tiaoduji",

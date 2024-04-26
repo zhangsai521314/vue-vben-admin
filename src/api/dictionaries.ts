@@ -2,11 +2,19 @@
 import { defHttp } from '@/utils/http/axios';
 import { ContentTypeEnum } from '@/enums/httpEnum';
 import { ErrorMessageMode } from '/#/axios';
+
 const Dictionaries = {
   //根据ID获取详情
   GetDictionaries: function (params) {
     return defHttp.post({
       url: '/Dictionaries/GetDictionaries/',
+      params,
+    });
+  },
+  //获取字典列表-下拉框key
+  GetDictionariesSimpleKey: function (params) {
+    return defHttp.post({
+      url: '/Dictionaries/GetDictionariesSimpleKey',
       params,
     });
   },

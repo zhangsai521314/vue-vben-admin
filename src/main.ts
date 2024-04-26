@@ -116,12 +116,23 @@ async function mqttInit() {
   function init() {
     const { VITE_GLOB_MQTT } = getAppEnvConfig();
     const mqttConfig = JSON.parse(VITE_GLOB_MQTT);
-
+    mqttStore.setMqttConfig(mqttConfig);
     const decoder = new TextDecoder('utf-8');
     if (mqttConfig.IsOpen) {
+      const topics = [
+        mqttConfig.WebAlarmInsert,
+        mqttConfig.WebAlarmUpdate,
+        mqttConfig.WebDownLog,
+        mqttConfig.WebPlayCallRecord,
+        mqttConfig.WebDownCallRecord,
+        mqttConfig.UpPerformance,
+        mqttConfig.LookConfigBack,
+        mqttConfig.LookLogBack,
+        mqttConfig.WebCallRecordChange,
+      ];
       mqttStore.updateMqttStatus(2);
       const client = mqtt.connect(mqttConfig.ServerAddress, {
-        clientId: mqttConfig.ClientId + myCommon.uniqueId(),
+        clientId: mqttConfig.ClientIdPrefix + myCommon.uniqueId(),
         username: mqttConfig.UserName,
         password: mqttConfig.UserPwd,
         keepalive: mqttConfig.KeepAlivePeriod, // 默认60秒，设置0为禁用
@@ -134,15 +145,19 @@ async function mqttInit() {
       //连接成功
       client.on('connect', function () {
         mqttStore.updateMqttStatus(1);
-        Array.from(new Set(mqttConfig.Topics)).forEach((topic) => {
-          client.subscribe(topic, { qos: 1 }, function (err) {
-            if (!err) {
-              console.log(`订阅mqtt主题${topic}成功`);
-            } else {
-              errTopic.push(topic);
-              console.log(`订阅mqtt主题${topic}失败`);
-            }
-          });
+        Array.from(topics).forEach((topic) => {
+          client.subscribe(
+            topic.replace(mqttConfig.MonitorClient, '/' + client.options.clientId),
+            { qos: 1 },
+            function (err) {
+              if (!err) {
+                console.log(`订阅mqtt主题${topic}成功`);
+              } else {
+                errTopic.push(topic);
+                console.log(`订阅mqtt主题${topic}失败`);
+              }
+            },
+          );
         });
         isDingYue = true;
       });
@@ -156,17 +171,56 @@ async function mqttInit() {
         if (!myCommon.isnull(msg)) {
           try {
             msg = JSON.parse(msg);
-          } catch (error) {
-            console.warn(`mqtt_${topic}_转换错误_丢弃${error}`);
-          }
-          if (topic.indexOf('Data/Monitor/AlarmWeb/Insert') != -1) {
+          } catch (error) {}
+          if (topic == mqttConfig.WebAlarmInsert) {
             //告警插入
             mqttStore.addAlarmData(msg);
-          } else if (topic.indexOf('Data/Monitor/AlarmWeb/Update') != -1) {
+          } else if (topic == mqttConfig.WebAlarmUpdate) {
             //告警更新
             mqttStore.updateAlarmData(msg);
-          } else if (topic.indexOf('Data/Change/Performance') != -1) {
-            mqttStore.updateAlarmData(msg);
+          } else if (topic == mqttConfig.UpPerformance) {
+            //性能监测数据
+          } else if (
+            topic ==
+            mqttConfig.WebPlayCallRecord.replace(
+              mqttConfig.MonitorClient,
+              '/' + client.options.clientId,
+            )
+          ) {
+            //通话记录播放文件准备完毕
+            mqttStore.setNewCallRecordPlayFile(msg);
+          } else if (topic == mqttConfig.WebCallRecordChange) {
+            //录音文件状态发生改变
+            mqttStore.setCallRecordChange(msg);
+          } else if (
+            topic ==
+            mqttConfig.WebDownCallRecord.replace(
+              mqttConfig.MonitorClient,
+              '/' + client.options.clientId,
+            )
+          ) {
+            //通话记录下载文件准备完毕
+            if (msg && msg.recordFile) {
+              myCommon.downLoadFileByUrl(msg.recordFile);
+            }
+          } else if (
+            topic ==
+            mqttConfig.LookLogBack.replace(mqttConfig.MonitorClient, '/' + client.options.clientId)
+          ) {
+            //日志目录内容
+          } else if (
+            topic ==
+            mqttConfig.WebDownLog.replace(mqttConfig.MonitorClient, '/' + client.options.clientId)
+          ) {
+            //下载日志文件准备完毕
+          } else if (
+            topic ==
+            mqttConfig.LookConfigBack.replace(
+              mqttConfig.MonitorClient,
+              '/' + client.options.clientId,
+            )
+          ) {
+            //终端配置文件内容
           } else {
             console.warn(`mqtt_${topic}_非匹配主题_丢弃`);
           }
@@ -208,14 +262,21 @@ async function mqttInit() {
   function errTopicRetry() {
     if (isDingYue && errTopic.length > 0) {
       for (let i = errTopic.length - 1; i >= 0; i--) {
-        mqttStore.mqttClient.subscribe(errTopic[i], { qos: 1 }, function (err) {
-          if (!err) {
-            errTopic.splice(i, 1);
-            console.log(`订阅mqtt主题${errTopic[i]}成功`);
-          } else {
-            console.log(`订阅mqtt主题${errTopic[i]}失败`);
-          }
-        });
+        mqttStore.mqttClient.subscribe(
+          errTopic[i].replace(
+            mqttStore.mqttClient.MonitorClient,
+            mqttStore.mqttClient.options.clientId,
+          ),
+          { qos: 1 },
+          function (err) {
+            if (!err) {
+              errTopic.splice(i, 1);
+              console.log(`订阅mqtt主题${errTopic[i]}成功`);
+            } else {
+              console.log(`订阅mqtt主题${errTopic[i]}失败`);
+            }
+          },
+        );
       }
       if (errTopic.length > 0) {
         setTimeout(() => {

@@ -77,16 +77,16 @@ export interface TableSetting {
   showRowSelection: Recordable<Nullable<boolean>>;
 }
 
-//告警信息
-export interface AlarmData {
-  alarmId: string;
+//信息
+export interface MsgData {
+  msgId: string;
   joinId: string;
-  alarmType?: string;
-  alarmStatus?: number;
-  alarmTitle?: string;
-  alarmMsg?: string;
-  alarmTime?: string;
-  alarmTimeTnd?: string;
+  msgType?: string;
+  msgStatus?: number;
+  msgTitle?: string;
+  msgContnet?: string;
+  alarmStartTime?: string;
+  alarmEndTime?: string;
   alarmDuration?: number;
   createTime?: string;
   remark?: string;

@@ -8,7 +8,7 @@
             <a-space
               direction="horizontal"
               size="small"
-              style="line-height: 50px; margin-left: 5px"
+              style="margin-left: 5px; line-height: 50px"
             >
               <AuthDom auth="dictionariesManage_query">
                 <a-space direction="horizontal" size="small">
@@ -55,8 +55,8 @@
                       ? '系统类型'
                       : row.dictionariesClass == 'serviceType'
                         ? '服务类型'
-                        : row.dictionariesClass == 'alarmType'
-                          ? '告警类型'
+                        : row.dictionariesClass == 'msgType'
+                          ? '信息类型'
                           : row.dictionariesClass == 'performanceAlarmType'
                             ? '设备性能告警阈值'
                             : row.dictionariesClass == 'collectionFrequency'
@@ -273,7 +273,7 @@
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
 
-  defineOptions({ name: 'dictionariesManage' });
+  defineOptions({ name: 'DictionariesManage' });
   const mqttStore = useMqttStoreWithOut();
   const { prefixCls } = useDesign('suitManage-');
   const loading = ref(true);

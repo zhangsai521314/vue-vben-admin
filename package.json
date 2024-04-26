@@ -105,6 +105,8 @@
     "tinymce": "^5.10.9",
     "unocss": "^0.58.5",
     "vditor": "^3.9.9",
+    "video.js": "^8.10.0",
+    "videojs-contrib-hls": "^5.15.0",
     "vue": "^3.4.19",
     "vue-grid-layout": "^2.4.0",
     "vue-i18n": "^9.9.1",
@@ -115,6 +117,7 @@
     "vuedraggable": "^4.1.0",
     "vxe-table": "^4.5.20",
     "vxe-table-plugin-export-xlsx": "^4.0.1",
+    "wavesurfer.js": "^7.7.11",
     "xe-utils": "^3.5.20",
     "xlsx": "^0.18.5"
   },

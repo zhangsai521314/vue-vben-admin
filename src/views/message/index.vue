@@ -12,10 +12,10 @@
         <div :class="`tableBtn`">
           <a-space direction="horizontal" size="small" style="margin-left: 5px">
             <AuthDom auth="message_query">
-              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0px">
+              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>告警时间：</label>
+                    <label>信息时间：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         allowClear
@@ -41,24 +41,24 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>告警类型：</label>
+                    <label>信息类型：</label>
                     <a-select
                       style="width: 170px"
                       allow-clear
                       show-search
                       :filter-option="AntVueCommon.filterOption"
-                      v-model:value="seacthContent.alarmType"
+                      v-model:value="seacthContent.msgType"
                       :options="dictionariesData"
                     />
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>告警状态：</label>
+                    <label>信息状态：</label>
                     <a-select
                       style="width: 170px"
                       allow-clear
-                      v-model:value="seacthContent.alarmStatus"
+                      v-model:value="seacthContent.msgStatus"
                     >
                       <a-select-option :value="1">故障</a-select-option>
                       <a-select-option :value="2">恢复</a-select-option>
@@ -68,20 +68,20 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>告警名称：</label>
+                    <label>信息名称：</label>
                     <a-input
                       @press-enter="getMessages()"
-                      v-model:value="seacthContent.alarmTitle"
+                      v-model:value="seacthContent.msgTitle"
                       placeholder="输入告警名称查询"
                     />
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>告警信息：</label>
+                    <label>信息内容：</label>
                     <a-input
                       @press-enter="getMessages()"
-                      v-model:value="seacthContent.alarmMsg"
+                      v-model:value="seacthContent.msgContent"
                       placeholder="输入告警信息查询"
                     />
                   </a-space>
@@ -111,19 +111,19 @@
           @page-change="handlePageChange"
         />
       </template>
-      <template #alarmStatus="{ row }">
+      <template #msgStatus="{ row }">
         <span
           :style="{
             color:
-              row.alarmStatus == '故障'
+              row.msgStatus == '故障'
                 ? 'red'
-                : row.alarmStatus == '恢复'
-                ? 'green'
-                : row.alarmStatus == '确认'
-                ? '#0960bd '
-                : '',
+                : row.msgStatus == '恢复'
+                  ? 'green'
+                  : row.msgStatus == '确认'
+                    ? '#0960bd '
+                    : '',
           }"
-          >{{ row.alarmStatus }}</span
+          >{{ row.msgStatus }}</span
         >
       </template>
       <template #alarmDuration="{ row }">
@@ -131,14 +131,14 @@
           row.alarmDuration == null
             ? ''
             : row.alarmDuration >= 0 && row.alarmDuration <= 60
-            ? `${parseInt(row.alarmDuration)}秒`
-            : row.alarmDuration > 60 && row.alarmDuration <= 360
-            ? `${parseInt(row.alarmDuration / 60)}分`
-            : row.alarmDuration > 360 && row.alarmDuration <= 86400
-            ? `${parseInt(row.alarmDuration / 60 / 60)}时`
-            : row.alarmDuration > 86400
-            ? `${parseInt(row.alarmDuration / 60 / 60 / 24)}天`
-            : ''
+              ? `${parseInt(row.alarmDuration)} 秒`
+              : row.alarmDuration > 60 && row.alarmDuration <= 3600
+                ? `${parseFloat(row.alarmDuration / 60).toFixed(1)} 分`
+                : row.alarmDuration > 360 && row.alarmDuration <= 86400
+                  ? `${parseFloat(row.alarmDuration / 60 / 60).toFixed(1)} 时`
+                  : row.alarmDuration > 86400
+                    ? `${parseFloat(row.alarmDuration / 60 / 60 / 24).toFixed(1)} 天`
+                    : ''
         }}
       </template>
       <!-- <template #default="{ row }">
@@ -170,7 +170,7 @@
   import 'dayjs/locale/zh-cn';
   import { tryOnUnmounted } from '@vueuse/core';
 
-  defineOptions({ name: 'message' });
+  defineOptions({ name: 'Message' });
   const { prefixCls } = useDesign('message-');
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
@@ -178,15 +178,15 @@
     columns: [
       //基础
       {
-        field: 'alarmId',
-        title: '告警ID',
+        field: 'msgId',
+        title: '信息ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
       },
       {
-        field: 'joinId',
-        title: '服务id',
+        field: 'serviceCode',
+        title: '服务编号',
         showOverflow: true,
         visible: false,
         showHeaderOverflow: true,
@@ -198,41 +198,41 @@
         showHeaderOverflow: true,
       },
       {
-        field: 'alarmType',
-        title: '告警类型',
+        field: 'msgType',
+        title: '信息类型',
         showOverflow: true,
         showHeaderOverflow: true,
       },
       {
-        field: 'alarmStatus',
-        title: '告警状态',
+        field: 'msgStatus',
+        title: '信息状态',
         showOverflow: true,
         showHeaderOverflow: true,
         slots: {
-          default: 'alarmStatus',
+          default: 'msgStatus',
         },
       },
       {
-        field: 'alarmTitle',
-        title: '告警标题',
+        field: 'msgTitle',
+        title: '信息标题',
         showOverflow: true,
         showHeaderOverflow: true,
       },
       {
-        field: 'alarmMsg',
-        title: '告警信息',
+        field: 'msgContent',
+        title: '信息内容',
         showOverflow: true,
         showHeaderOverflow: true,
       },
       {
-        field: 'alarmTime',
+        field: 'alarmStartTime',
         title: '告警开始时间',
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
       },
       {
-        field: 'alarmTimeEnd',
+        field: 'alarmEndTime',
         title: '告警结束时间',
         width: 150,
         showOverflow: true,
@@ -298,11 +298,10 @@
   const myContentRef = ref({});
   const seacthContent = ref({
     joinId: null,
-    alarmName: '',
-    alarmType: '',
-    alarmStatus: null,
-    alarmTitle: '',
-    alarmMsg: '',
+    msgType: '',
+    msgStatus: null,
+    msgTitle: '',
+    msgContent: '',
     startTime: null,
     endTime: null,
   });
@@ -361,26 +360,25 @@
   function resetSeacth() {
     seacthContent.value = {
       joinId: null,
-      alarmName: '',
-      alarmType: '',
-      alarmStatus: null,
-      alarmTitle: '',
-      alarmMsg: '',
+      msgType: '',
+      msgStatus: null,
+      msgTitle: '',
+      msgContent: '',
       startTime: null,
       endTime: null,
     };
 
     timeValue.value = [
-      dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
-      dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
+      // dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
+      // dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
     ];
   }
 
   //获取字典
   function getDictionaries() {
     dictionariesApi
-      .GetDictionariesimple({
-        dictionariesclass: ['alarmType'],
+      .GetDictionariesSimpleKey({
+        dictionariesclass: ['msgType'],
       })
       .then((data) => {
         dictionariesData.value = data;
@@ -448,6 +446,10 @@
 </script>
 <style lang="less" scoped>
   @prefixCls: ~'@{namespace}-message-';
+
+  .row-div {
+    height: 30px;
+  }
 
   .tableBtn {
     width: 100%;
