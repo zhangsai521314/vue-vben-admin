@@ -161,15 +161,18 @@ importers:
       vue3-draggable-resizable:
         specifier: ^1.6.5
         version: 1.6.5
+      vue3-seamless-scroll:
+        specifier: ^2.0.1
+        version: 2.0.1
       vuedraggable:
         specifier: ^4.1.0
         version: 4.1.0(vue@3.4.19)
       vxe-table:
-        specifier: ^4.5.20
-        version: 4.5.21(vue@3.4.19)(xe-utils@3.5.20)
+        specifier: ^4.6.5
+        version: 4.6.5(vue@3.4.19)
       vxe-table-plugin-export-xlsx:
         specifier: ^4.0.1
-        version: 4.0.1(vxe-table@4.5.21)
+        version: 4.0.1(vxe-table@4.6.5)
       wavesurfer.js:
         specifier: ^7.7.11
         version: 7.7.11
@@ -5972,8 +5975,8 @@ packages:
     resolution: {integrity: sha512-6QvTW9mrGeIegrFXdtQi9pk7O/nSK6lSdXW2eqUspN5LWD7UTji2Fqw5V2YLjBpHEoU9Xl/eUWNpDeZvoyOv2w==, tarball: https://registry.npmmirror.com/dom-walk/-/dom-walk-0.1.2.tgz}
     dev: false
 
-  /dom-zindex@1.0.1:
-    resolution: {integrity: sha512-M/MERVDZ8hguvjl6MAlLWSLYLS7PzEyXaTb5gEeJ+SF+e9iUC0sdvlzqe91MMDHBoy+nqw7wKcUOrDSyvMCrRg==, tarball: https://registry.npmmirror.com/dom-zindex/-/dom-zindex-1.0.1.tgz}
+  /dom-zindex@1.0.2:
+    resolution: {integrity: sha512-QceDZxPlvzhpg6e8szxNiKPUt5Y9SfFTe3nZy8og3JoPQPlAlzBzHa/lhDkhgeG3cjbKyQcuoic+wymF0o0d1Q==, tarball: https://registry.npmmirror.com/dom-zindex/-/dom-zindex-1.0.2.tgz}
     dev: false
 
   /domelementtype@1.3.1:
@@ -12530,7 +12533,7 @@ packages:
     dev: false
 
   /throttle-debounce@5.0.0:
-    resolution: {integrity: sha512-2iQTSgkkc1Zyk0MeVrt/3BvuOXYPl/R8Z0U2xxo9rjwNciaHDG3R+Lm6dh4EeUci49DanvBnuqI6jshoQQRGEg==}
+    resolution: {integrity: sha512-2iQTSgkkc1Zyk0MeVrt/3BvuOXYPl/R8Z0U2xxo9rjwNciaHDG3R+Lm6dh4EeUci49DanvBnuqI6jshoQQRGEg==, tarball: https://registry.npmmirror.com/throttle-debounce/-/throttle-debounce-5.0.0.tgz}
     engines: {node: '>=12.22'}
 
   /through2@4.0.2:
@@ -13599,6 +13602,12 @@ packages:
     resolution: {integrity: sha512-31142E31fGNnq3HKqvmFLSsqIbhck7TyGuQWhUKrDw6DOcGAuRx4ddRjaxvT6fe7dgeKH53qAh+i0ZlWtPLl2g==, tarball: https://registry.npmmirror.com/vue3-draggable-resizable/-/vue3-draggable-resizable-1.6.5.tgz}
     dev: false
 
+  /vue3-seamless-scroll@2.0.1:
+    resolution: {integrity: sha512-mI3BaDU3pjcPUhVSw3/xNKdfPBDABTi/OdZaZqKysx4cSdNfGRbVvGNDzzptBbJ5S7imv5T55l6x/SqgnxKreg==, tarball: https://registry.npmmirror.com/vue3-seamless-scroll/-/vue3-seamless-scroll-2.0.1.tgz}
+    dependencies:
+      throttle-debounce: 5.0.0
+    dev: false
+
   /vue@3.4.19(typescript@5.3.3):
     resolution: {integrity: sha512-W/7Fc9KUkajFU8dBeDluM4sRGc/aa4YJnOYck8dkjgZoXtVsn3OeTGni66FV1l3+nvPA7VBFYtPioaGKUmEADw==}
     peerDependencies:
@@ -13623,23 +13632,22 @@ packages:
       vue: 3.4.19(typescript@5.3.3)
     dev: false
 
-  /vxe-table-plugin-export-xlsx@4.0.1(vxe-table@4.5.21):
+  /vxe-table-plugin-export-xlsx@4.0.1(vxe-table@4.6.5):
     resolution: {integrity: sha512-puUOUfptu5ciEiFqTlVni3twLICSbkl87uXOsjZzrEyXJHJS9dYu7ZTD7/DRMqyuWyU3Idg7AekfcdcslP4Y/A==}
     peerDependencies:
       vxe-table: ^4.5.0
     dependencies:
-      vxe-table: 4.5.21(vue@3.4.19)(xe-utils@3.5.20)
+      vxe-table: 4.6.5(vue@3.4.19)
     dev: false
 
-  /vxe-table@4.5.21(vue@3.4.19)(xe-utils@3.5.20):
-    resolution: {integrity: sha512-yp+BNGCy61lk7ayf0LI3UNcR2fRmipGSiIAh3lNOIdyW1nAobf/GwIx3rXghjzFb0a6NNJeYxv2NM+gwXxtmww==, tarball: https://registry.npmmirror.com/vxe-table/-/vxe-table-4.5.21.tgz}
+  /vxe-table@4.6.5(vue@3.4.19):
+    resolution: {integrity: sha512-XvnDkKzAnDUsFD7sFVRehRunCz4PEtxGf5TABjJE/vPI1vL0FXpfwBHt0yX7eNteKlOXepDvzF4XO3rqCQLTag==, tarball: https://registry.npmmirror.com/vxe-table/-/vxe-table-4.6.5.tgz}
     peerDependencies:
       vue: ^3.2.28
-      xe-utils: ^3.5.0
     dependencies:
-      dom-zindex: 1.0.1
+      dom-zindex: 1.0.2
       vue: 3.4.19(typescript@5.3.3)
-      xe-utils: 3.5.20
+      xe-utils: 3.5.25
     dev: false
 
   /w3c-hr-time@1.0.2:
@@ -13941,6 +13949,10 @@ packages:
 
   /xe-utils@3.5.20:
     resolution: {integrity: sha512-dZewCp04O0xQ4JnUxlvRfxsBlV1vxrA9LCazGAFFeRWoTj0DU70OpqUNd8is1GnJXUL4ineZ4nywrEq/3Mbybg==}
+    dev: false
+
+  /xe-utils@3.5.25:
+    resolution: {integrity: sha512-d/ty5eo4hXtho/3195XAvqereIoSYJ+XfC52f3ZEPxTaCeyLFivDZTyX6gTdsR65ISH1Irvn85H0bSL60dUhSQ==, tarball: https://registry.npmmirror.com/xe-utils/-/xe-utils-3.5.25.tgz}
     dev: false
 
   /xhr@2.4.0:

@@ -19,6 +19,10 @@ export interface MqttState {
   changeNewInfoKey: Nullable<String>;
   //查看服务配置的主题
   lookConfig: Nullable<String>;
+  //查看日志目录的主题
+  lookLog: Nullable<String>;
+  //下载日志文件
+  downLog: Nullable<String>;
   //主题替换后缀
   monitorClient: Nullable<String>;
 
@@ -47,10 +51,11 @@ export const useMqttStore = defineStore({
     isInitAlarmData: false,
     newServicConfig: null,
     lookConfig: null,
+    lookLog: null,
+    downLog: null,
     monitorClient: '',
     //最新日志目录信息内容
     newServiceLogShowDirectory: null,
-    //是否打开了通话录音播放弹框
     //最新播放通话记录录音文件地址
     newCallRecordPlayFile: null,
     callRecordChange: null,
@@ -165,9 +170,7 @@ export const useMqttStore = defineStore({
     publish(topic, msg, back: Function) {
       if (this.mqttClient && this.mqttClient.connected) {
         this.mqttClient.publish(topic, msg, { qos: 1, retain: false }, (error) => {
-          if (error != null) {
-            back(error);
-          }
+          back(error);
         });
       } else {
         back('mqtt未连接，同步失败');

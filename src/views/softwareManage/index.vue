@@ -226,10 +226,55 @@
       :footer-style="{ textAlign: 'right' }"
       @close="closeLog"
     >
-      日志
+      <vxe-table
+        :class="`${prefixCls}logTable`"
+        ref="logTableRef"
+        :loading="isRunGetLog"
+        :data="logCollectionData"
+        border="none"
+        :show-header="true"
+        :show-overflow="true"
+        :show-footer="false"
+        :menu-config="logMenuConfig"
+        :checkbox-config="checkboxConfig"
+        @menu-click="contextMenuClickEvent"
+        :row-config="{ isCurrent: true, isHover: true }"
+      >
+        <vxe-column type="checkbox" width="60" />
+        <vxe-column field="Name" title="名称">
+          <template #default="{ row }">
+            <span @dblclick="logNamedblclick(row)" class="name">
+              <IconFontClass
+                :title="row.IsBack ? '返回上一层目录' : row.Name"
+                :name="
+                  row.IsBack
+                    ? 'icon-baseui-fanhuishangyiji'
+                    : row.Size == -1
+                      ? 'icon-baseui-wenjianjia'
+                      : row.Name.lastIndexOf('.') == -1
+                        ? 'icon-baseui-weizhiwenjian'
+                        : ['txt', 'log'].includes(
+                              row.Name.substring(row.Name.lastIndexOf('.') + 1).toLowerCase(),
+                            )
+                          ? 'icon-baseui-wenben1'
+                          : 'icon-baseui-weizhiwenjian'
+                "
+              />
+              {{ row.Name }}
+            </span>
+          </template>
+        </vxe-column>
+        <vxe-column field="Size" title="大小(KB)">
+          <template #default="{ row }">
+            {{ row.Size != -1 ? row.Size : '' }}
+          </template>
+        </vxe-column>
+        <vxe-column field="Time" title="上次修改时间" />
+      </vxe-table>
       <template #footer>
         <a-spin :spinning="fromSpinning">
           <a-button style="margin-left: 8px" @click="closeLog">关闭</a-button>
+          <a-button style="margin-left: 8px" type="primary" @click="downLogMqtt">下载</a-button>
         </a-spin>
       </template>
     </a-drawer>
@@ -242,7 +287,14 @@
   import myCommon from '@/utils/MyCommon/common';
   import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
-  import { VxeGrid, VxeGridProps } from 'vxe-table';
+  import {
+    VxeGrid,
+    VxeGridProps,
+    VXETable,
+    VxeTablePropTypes,
+    VxeColumnPropTypes,
+    VxeTableEvents,
+  } from 'vxe-table';
   import softwareApi from '@/api/software';
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
@@ -404,16 +456,50 @@
   const refreshTime = ref(10);
   let refreshTimeId;
 
+  //配置信息
   const isRunGetConfig = ref(false);
   const isShowConfig = ref(false);
-  const isShowLog = ref(false);
-
   const codemirrorRef = ref(null);
   const codemirrorLanguage = ref('json');
   const modelValue = ref('');
+
+  //公用
   let newServerCode = null;
   let isShowContent = false;
 
+  //日志信息
+  const isShowLog = ref(false);
+  const isRunGetLog = ref(false);
+  const logCollectionData = ref([]);
+  const logTableRef = ref(null);
+  let LogDirectoryBase = null;
+  const LogDirectoryAll = ref(null);
+  const logTableStepData = [];
+  let logTableStepDataRowIndex = [];
+  let logTableStep = 0;
+  const logMenuConfig = reactive({
+    className: prefixCls + 'logTtable',
+    body: {
+      options: [
+        [
+          {
+            code: 'down',
+            name: '下载',
+            prefixIcon: 'iconfont icon-baseui-xiazai',
+            className: prefixCls + 'logTtable-xiazai-item  sssssss',
+          },
+        ],
+      ],
+    },
+  });
+  const checkboxConfig = reactive({
+    checkMethod: ({ row }) => {
+      return !row.IsBack;
+    },
+    visibleMethod({ row }) {
+      return !row.IsBack;
+    },
+  });
   getSoftwares(true);
 
   function showFrom(row) {
@@ -596,6 +682,7 @@
 
   //显示查看服务配置
   function showConfig(row) {
+    stopRefresh();
     isShowConfig.value = true;
     newServerCode = row.serviceCode;
     isRunGetConfig.value = true;
@@ -608,29 +695,99 @@
       }),
       function (msg) {
         isRunGetConfig.value = false;
-        message.error(msg);
+        msg ? message.error(msg) : message.success('请求已发送');
       },
     );
   }
 
   //关闭查看服务配置
   function closeConfig() {
+    logCollectionData.value.valiue = [];
     isRunGetConfig.value = false;
     isShowConfig.value = false;
     isShowContent = false;
     modelValue.value = '';
     newServerCode = null;
+    refresh.value = 'yes';
   }
 
   //显示查看服务日志
   function showLog(row) {
+    stopRefresh();
     isShowLog.value = true;
-    newServerCode = null;
+    newServerCode = row.serviceCode;
+    isRunGetLog.value = true;
+    mqttStore.publish(
+      mqttStore.lookLog.replace(mqttStore.monitorClient, '/' + row.serviceCode),
+      JSON.stringify({
+        ServiceCode: row.serviceCode,
+        ClientId: mqttStore.mqttClient.options.clientId,
+        UserId: userStore.getUserInfo.userId,
+        LogLevel: 0,
+      }),
+      function (msg) {
+        isRunGetLog.value = false;
+        msg ? message.error(msg) : message.success('请求已发送');
+      },
+    );
   }
 
   //关闭查看服务日志
   function closeLog() {
     isShowLog.value = false;
+  }
+
+  //表格右键事件
+  function contextMenuClickEvent({ menu, row, column }) {
+    switch (menu.code) {
+      case 'down':
+        downLogMqtt();
+        break;
+    }
+  }
+  //发送下载通信
+  function downLogMqtt() {
+    const checkDatas = logTableRef.value.getCheckboxRecords(false);
+    if (checkDatas && checkDatas.length > 0) {
+      const LogFileCollection = [];
+      checkDatas.forEach((m) => {
+        LogFileCollection.push(`${LogDirectoryBase}\\${m.Name}`);
+      });
+      mqttStore.publish(
+        mqttStore.downLog.replace(mqttStore.monitorClient, '/' + newServerCode),
+        JSON.stringify({
+          ServiceCode: newServerCode,
+          ClientId: mqttStore.mqttClient.options.clientId,
+          UserId: userStore.getUserInfo.userId,
+          LogFileCollection: LogFileCollection,
+        }),
+        function (msg) {
+          isRunGetLog.value = false;
+          msg ? message.error(msg) : message.success('请求已发送');
+        },
+      );
+    } else {
+      message.info('请先选中要下载的文件');
+    }
+  }
+
+  //双击日志名称
+  function logNamedblclick(row) {
+    if (row.IsBack) {
+      logTableStep--;
+      logCollectionData.value = logTableStepData[logTableStep];
+      logTableStepData.splice(logTableStep + 1);
+      nextTick(() => {
+        logTableRef.value.scrollToRow(logTableStepDataRowIndex[logTableStep - 1]);
+        logTableStepDataRowIndex.splice(logTableStep);
+      });
+    } else if (row.Size == -1) {
+      logTableStep++;
+      logTableStepData.push(row.SubCollection);
+      logCollectionData.value = row.SubCollection;
+      LogDirectoryAll.value += `\\${row.Name}`;
+      logTableStepDataRowIndex.push(row);
+    }
   }
 
   //监控是否开启自动刷新
@@ -654,11 +811,48 @@
         newServerCode == mqttStore.newServicConfig.ServiceCode &&
         !isShowContent
       ) {
+        isShowContent = true;
         isRunGetConfig.value = false;
         nextTick(() => {
-          isShowContent = true;
           codemirrorLanguage.value = mqttStore.newServicConfig.ContentType;
           modelValue.value = mqttStore.newServicConfig.Content;
+        });
+      }
+    },
+  );
+
+  watch(
+    () => mqttStore.newServiceLogShowDirectory,
+    () => {
+      if (
+        mqttStore.newServiceLogShowDirectory != null &&
+        isShowLog.value == true &&
+        newServerCode == mqttStore.newServiceLogShowDirectory.ServiceCode &&
+        !isShowContent
+      ) {
+        isShowContent = true;
+        isRunGetLog.value = false;
+        nextTick(() => {
+          logCollectionData.value = mqttStore.newServiceLogShowDirectory.LogCollection;
+          LogDirectoryBase = mqttStore.newServiceLogShowDirectory.LogDirectoryBase;
+          LogDirectoryAll.value = LogDirectoryBase;
+          logTableStepData.push(logCollectionData.value);
+        });
+      }
+    },
+  );
+
+  watch(
+    () => LogDirectoryAll.value,
+    () => {
+      if (LogDirectoryAll.value != LogDirectoryBase) {
+        nextTick(() => {
+          logTableRef.value.insert({
+            Name: '...',
+            IsBack: true,
+            Size: -1,
+            Time: '',
+          });
         });
       }
     },
@@ -678,5 +872,40 @@
 
   .tableBtn {
     width: 100%;
+  }
+</style>
+<style lang="less">
+  @prefixCls: ~'@{namespace}-softwareManage-';
+
+  .@{prefixCls}logTtable-xiazai-item {
+    width: 110px !important;
+  }
+
+  .@{prefixCls}logTable {
+    user-select: none;
+
+    .name {
+      cursor: pointer;
+    }
+
+    .icon-baseui-xiazai {
+      top: 0 !important;
+    }
+
+    .icon-baseui-wenjianjia {
+      color: #ffb100;
+    }
+
+    .icon-baseui-wenben1 {
+      color: #adadad;
+    }
+
+    .icon-baseui-weizhiwenjian {
+      color: #0a61bd;
+    }
+
+    .icon-baseui-fanhuishangyiji {
+      color: green;
+    }
   }
 </style>

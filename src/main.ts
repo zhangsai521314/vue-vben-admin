@@ -142,8 +142,10 @@ async function mqttInit() {
         protocolVersion: 3, // 版本
         reconnectPeriod: mqttConfig.ReconnectPeriod * 1000, //设置多长时间进行重新连接 单位毫秒 两次重新连接之间的时间间隔。通过将设置为，禁用自动重新连接0
       });
+      mqttStore.lookLog = mqttConfig.LookLog;
       mqttStore.lookConfig = mqttConfig.LookConfig;
       mqttStore.monitorClient = mqttConfig.MonitorClient;
+      mqttStore.downLog = mqttConfig.DownLog;
       //连接成功
       client.on('connect', function () {
         mqttStore.updateMqttStatus(1);
@@ -210,6 +212,7 @@ async function mqttInit() {
             mqttConfig.LookLogBack.replace(mqttConfig.MonitorClient, '/' + client.options.clientId)
           ) {
             //日志目录内容
+            mqttStore.setNewServiceLogShowDirectory(msg);
           } else if (
             topic ==
             mqttConfig.WebDownLog.replace(mqttConfig.MonitorClient, '/' + client.options.clientId)

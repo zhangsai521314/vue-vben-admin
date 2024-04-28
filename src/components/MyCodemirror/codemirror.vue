@@ -50,7 +50,8 @@
   const emits = defineEmits(['change']);
   const { modelValue, disabled, style } = toRefs(props);
   const code = ref(modelValue);
-  const extensions = ref([getLang()(), oneDark]);
+  // const extensions = ref([getLang()(), oneDark]);
+  const extensions = ref([getLang()()]);
 
   function getLang() {
     return { javascript, xml, json }[props.language];

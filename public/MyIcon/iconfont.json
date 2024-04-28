@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "21825604",
+      "name": "返回上一级",
+      "font_class": "fanhuishangyiji",
+      "unicode": "e6f5",
+      "unicode_decimal": 59125
+    },
+    {
+      "icon_id": "6667170",
+      "name": "未知文件",
+      "font_class": "weizhiwenjian",
+      "unicode": "e6f3",
+      "unicode_decimal": 59123
+    },
+    {
+      "icon_id": "20782265",
+      "name": "文件夹",
+      "font_class": "wenjianjia",
+      "unicode": "e6f4",
+      "unicode_decimal": 59124
+    },
+    {
       "icon_id": "5203307",
       "name": "文本",
       "font_class": "wenben1",

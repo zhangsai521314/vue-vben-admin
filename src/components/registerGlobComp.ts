@@ -86,9 +86,9 @@ export function registerGlobComp(app: App) {
       tooltipConfig: {
         enterable: true,
       },
-      menuConfig: {
-        visibleMethod() {},
-      },
+      // menuConfig: {
+      //   visibleMethod() {},
+      // },
       editConfig: {
         mode: 'cell',
         showAsterisk: true,

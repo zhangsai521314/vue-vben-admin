@@ -20,6 +20,8 @@ import { useUserStoreWithOut } from '@/store/modules/user';
 import { AxiosRetry } from '@/utils/http/axios/axiosRetry';
 import axios from 'axios';
 import { getAppEnvConfig } from '@/utils/env';
+import { router } from '@/router';
+import { PageEnum } from '@/enums/pageEnum';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
@@ -45,6 +47,10 @@ const transform: AxiosTransform = {
       //等待处理
     }
     if (!success) {
+      if (message == '401 登录已过期，请重新登录') {
+        // 直接回登陆页
+        router.replace(PageEnum.BASE_LOGIN);
+      }
       // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
       // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
       if (options.errorMessageMode === 'modal') {
