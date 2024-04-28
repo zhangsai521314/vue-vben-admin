@@ -11,7 +11,7 @@
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style="line-height: 50px; margin-left: 5px">
+          <a-space direction="horizontal" size="small" style="margin-left: 5px; line-height: 50px">
             <AuthDom auth="software_query">
               <div class="row-div">
                 <a-space direction="horizontal" size="small" :wrap="true">
@@ -46,6 +46,22 @@
       </template>
       <template #default="{ row }">
         <div :class="`tableOption`">
+          <AuthDom auth="software_table_showconfig">
+            <IconFontClass
+              name="icon-baseui-wenben1"
+              @click="showConfig(row)"
+              style="color: #0fc10e"
+              title="查看配置"
+            />
+          </AuthDom>
+          <AuthDom auth="software_table_showlog">
+            <IconFontClass
+              name="icon-baseui-flowcontrol-log"
+              @click="showLog(row)"
+              style="color: #0fc10e"
+              title="查看日志"
+            />
+          </AuthDom>
           <AuthDom auth="software_table_edit">
             <IconFontClass
               name="icon-baseui-edit-fill"
@@ -178,9 +194,49 @@
         </a-spin>
       </template>
     </a-drawer>
+    <a-drawer
+      :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+      :width="700"
+      :visible="isShowConfig"
+      title="服务配置"
+      :footer-style="{ textAlign: 'right' }"
+      @close="closeConfig"
+    >
+      <div :class="`${prefixCls}codemirror`">
+        <a-spin :spinning="isRunGetConfig" tip="正在获取配置...">
+          <codemirror
+            ref="codemirrorRef"
+            :modelValue="modelValue"
+            :style="{ height: '100%', overflow: 'auto' }"
+            :language="codemirrorLanguage"
+          />
+        </a-spin>
+      </div>
+      <template #footer>
+        <a-spin :spinning="fromSpinning">
+          <a-button style="margin-left: 8px" @click="closeConfig">关闭</a-button>
+        </a-spin>
+      </template>
+    </a-drawer>
+    <a-drawer
+      :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+      :width="700"
+      :visible="isShowLog"
+      title="服务日志"
+      :footer-style="{ textAlign: 'right' }"
+      @close="closeLog"
+    >
+      日志
+      <template #footer>
+        <a-spin :spinning="fromSpinning">
+          <a-button style="margin-left: 8px" @click="closeLog">关闭</a-button>
+        </a-spin>
+      </template>
+    </a-drawer>
   </MyContent>
 </template>
 <script setup lang="tsx">
+  import codemirror from '/@/components/MyCodemirror/codemirror.vue';
   import formValidator from '@/utils/MyCommon/formValidator';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import myCommon from '@/utils/MyCommon/common';
@@ -193,9 +249,13 @@
   import dictionariesApi from '@/api/dictionaries';
   import equipmentApi from '@/api/equipment';
   import { tryOnUnmounted } from '@vueuse/core';
+  import { useMqttStoreWithOut } from '@/store/modules/mqtt';
+  import { useUserStore } from '@/store/modules/user';
 
-  defineOptions({ name: 'softwareManage' });
+  defineOptions({ name: 'SoftwareManage' });
   const { prefixCls } = useDesign('softwareManage-');
+  const mqttStore = useMqttStoreWithOut();
+  const userStore = useUserStore();
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
@@ -344,6 +404,16 @@
   const refreshTime = ref(10);
   let refreshTimeId;
 
+  const isRunGetConfig = ref(false);
+  const isShowConfig = ref(false);
+  const isShowLog = ref(false);
+
+  const codemirrorRef = ref(null);
+  const codemirrorLanguage = ref('json');
+  const modelValue = ref('');
+  let newServerCode = null;
+  let isShowContent = false;
+
   getSoftwares(true);
 
   function showFrom(row) {
@@ -387,6 +457,7 @@
   //关闭表单
   function formClose() {
     isShowForm.value = false;
+    newServerCode = null;
     formRef.value.clearValidate();
   }
 
@@ -481,6 +552,7 @@
       });
   }
 
+  //获取设备
   function getEquipments() {
     equipmentApi
       .GetEquipmentSimple({
@@ -496,6 +568,7 @@
       });
   }
 
+  //刷新数据
   function refreshData() {
     if (refresh.value == 'yes') {
       refreshTimeId = setTimeout(() => {
@@ -514,12 +587,53 @@
     }
   }
 
+  //停止刷新数据
   function stopRefresh() {
     clearTimeout(refreshTimeId);
     refresh.value = 'no';
     refreshTime.value = 10;
   }
 
+  //显示查看服务配置
+  function showConfig(row) {
+    isShowConfig.value = true;
+    newServerCode = row.serviceCode;
+    isRunGetConfig.value = true;
+    mqttStore.publish(
+      mqttStore.lookConfig.replace(mqttStore.monitorClient, '/' + row.serviceCode),
+      JSON.stringify({
+        ServiceCode: row.serviceCode,
+        ClientId: mqttStore.mqttClient.options.clientId,
+        UserId: userStore.getUserInfo.userId,
+      }),
+      function (msg) {
+        isRunGetConfig.value = false;
+        message.error(msg);
+      },
+    );
+  }
+
+  //关闭查看服务配置
+  function closeConfig() {
+    isRunGetConfig.value = false;
+    isShowConfig.value = false;
+    isShowContent = false;
+    modelValue.value = '';
+    newServerCode = null;
+  }
+
+  //显示查看服务日志
+  function showLog(row) {
+    isShowLog.value = true;
+    newServerCode = null;
+  }
+
+  //关闭查看服务日志
+  function closeLog() {
+    isShowLog.value = false;
+  }
+
+  //监控是否开启自动刷新
   watch(
     () => refresh.value,
     () => {
@@ -531,6 +645,25 @@
     },
   );
 
+  watch(
+    () => mqttStore.newServicConfig,
+    () => {
+      if (
+        mqttStore.newServicConfig != null &&
+        isShowConfig.value == true &&
+        newServerCode == mqttStore.newServicConfig.ServiceCode &&
+        !isShowContent
+      ) {
+        isRunGetConfig.value = false;
+        nextTick(() => {
+          isShowContent = true;
+          codemirrorLanguage.value = mqttStore.newServicConfig.ContentType;
+          modelValue.value = mqttStore.newServicConfig.Content;
+        });
+      }
+    },
+  );
+
   //页面卸载后
   tryOnUnmounted(() => {
     stopRefresh();
@@ -538,6 +671,10 @@
 </script>
 <style lang="less" scoped>
   @prefixCls: ~'@{namespace}-softwareManage-';
+
+  .@{prefixCls}codemirror {
+    height: 100%;
+  }
 
   .tableBtn {
     width: 100%;

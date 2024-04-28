@@ -17,15 +17,17 @@ export interface MqttState {
   newInfo: object;
   //当前newInfo变更的键
   changeNewInfoKey: Nullable<String>;
+  //查看服务配置的主题
+  lookConfig: Nullable<String>;
+  //主题替换后缀
+  monitorClient: Nullable<String>;
+
   //是否已初始加载完告警信息
   isInitAlarmData: Boolean;
-  //是否打开了日志目录弹框
-
+  //最新服务的的配置信息
+  newServicConfig: Nullable<object>;
   //最新日志目录信息内容
-  newLogShowDirectory: Nullable<String>;
-  //最新下载的日志文件地址
-  newLogDownFilePath: Nullable<String>;
-  //是否打开了通话录音播放弹框
+  newServiceLogShowDirectory: Nullable<object>;
   //最新播放通话记录录音文件地址
   newCallRecordPlayFile: Nullable<object>;
   //录音文件在网管系统服务器上的状态发生改变
@@ -43,10 +45,11 @@ export const useMqttStore = defineStore({
     newInfo: {},
     changeNewInfoKey: null,
     isInitAlarmData: false,
+    newServicConfig: null,
+    lookConfig: null,
+    monitorClient: '',
     //最新日志目录信息内容
-    newLogShowDirectory: null,
-    //最新下载的日志文件地址
-    newLogDownFilePath: null,
+    newServiceLogShowDirectory: null,
     //是否打开了通话录音播放弹框
     //最新播放通话记录录音文件地址
     newCallRecordPlayFile: null,
@@ -54,14 +57,14 @@ export const useMqttStore = defineStore({
   }),
   getters: {},
   actions: {
+    setNewServicConfig(data) {
+      this.newServicConfig = data;
+    },
     setCallRecordChange(data) {
       this.callRecordChange = data;
     },
-    setNewLogShowDirectory(data) {
-      this.newLogShowDirectory = data;
-    },
-    setNewLogDownFilePath(data) {
-      this.newLogDownFilePath = data;
+    setNewServiceLogShowDirectory(data) {
+      this.newServiceLogShowDirectory = data;
     },
     setNewCallRecordPlayFile(data) {
       this.newCallRecordPlayFile = data;
@@ -161,7 +164,11 @@ export const useMqttStore = defineStore({
     //发布消息
     publish(topic, msg, back: Function) {
       if (this.mqttClient && this.mqttClient.connected) {
-        this.mqttClient.publish(topic, msg, { qos: 1, retain: false }, (error) => back(error));
+        this.mqttClient.publish(topic, msg, { qos: 1, retain: false }, (error) => {
+          if (error != null) {
+            back(error);
+          }
+        });
       } else {
         back('mqtt未连接，同步失败');
       }
