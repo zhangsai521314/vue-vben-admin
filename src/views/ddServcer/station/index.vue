@@ -18,7 +18,7 @@
             <a-space
               direction="horizontal"
               size="small"
-              style="line-height: 50px; margin-left: 5px"
+              style=" margin-left: 5px;line-height: 50px"
             >
               <AuthDom auth="line_query">
                 <a-space direction="horizontal" size="small">
@@ -275,8 +275,8 @@
   import formValidator from '@/utils/MyCommon/formValidator';
   import { ref, reactive, createVNode, nextTick, watch, unref } from 'vue';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
-  import { Line as lineApi } from '@/api/ddServcer';
-  import { Station as stationApi } from '@/api/ddServcer';
+  import { Line as lineApi, Station as stationApi } from '@/api/ddServcer';
+
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 
@@ -287,6 +287,7 @@
     height: 'auto',
     columns: [
       //基础
+      { type: 'seq', title: '序号', width: 50 },
       {
         field: 'id',
         title: '车站ID',
@@ -620,7 +621,7 @@
   @prefixCls: ~'@{namespace}-DDServcerStation-';
 
   .fanZhun {
-    transform: rotateX(180deg);
     display: inline-block;
+    transform: rotateX(180deg);
   }
 </style>

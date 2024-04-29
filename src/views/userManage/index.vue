@@ -15,7 +15,7 @@
             <a-space
               direction="horizontal"
               size="small"
-              style="line-height: 50px; margin-left: 5px"
+              style=" margin-left: 5px;line-height: 50px"
             >
               <AuthDom auth="userManage_query">
                 <a-space direction="horizontal" size="small">
@@ -239,7 +239,7 @@
                 name="icon-baseui-zhankai"
                 :title="isShowPwd ? '不修改密码' : '修改密码'"
                 @click="zhanKaiClick"
-                style="position: absolute; left: 16%; top: -2px; cursor: pointer"
+                style="position: absolute; top: -2px; left: 16%; cursor: pointer"
                 :class="{
                   fanZhun: isShowPwd,
                 }"
@@ -320,6 +320,7 @@
     height: 'auto',
     columns: [
       //基础
+      { type: 'seq', title: '序号', width: 50 },
       {
         field: 'userId',
         title: '用户ID',
@@ -332,7 +333,6 @@
         title: '用户名称',
         showOverflow: true,
         showHeaderOverflow: true,
-        fixed: 'left',
       },
       {
         field: 'userAccount',
@@ -744,7 +744,7 @@
   @prefixCls: ~'@{namespace}-userManage-';
 
   .fanZhun {
-    transform: rotateX(180deg);
     display: inline-block;
+    transform: rotateX(180deg);
   }
 </style>

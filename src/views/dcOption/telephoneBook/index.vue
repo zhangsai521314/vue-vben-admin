@@ -140,6 +140,7 @@
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
     columns: [
+      { type: 'seq', title: '序号', width: 50 },
       //基础
       {
         field: 'phoneId',
@@ -153,7 +154,6 @@
         title: '联系名称',
         showOverflow: true,
         showHeaderOverflow: true,
-        fixed: 'left',
         sortable: true,
       },
       {

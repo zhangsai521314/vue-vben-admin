@@ -44,6 +44,7 @@
             :tree-config="{ transform: true, rowField: 'dictionariesId', parentField: 'parentId' }"
             :data="tableConfigData"
           >
+            <vxe-column type="seq" title="序号" width="60" />
             <vxe-column field="dictionariesId" title="字典键值" :visible="false" />
             <vxe-column field="dictionariesName" title="显示名称" tree-node />
             <vxe-column field="dictionariesClass" title="字典类型">

@@ -225,9 +225,17 @@
     height: 'auto',
     columns: [
       //基础
+      { type: 'seq', title: '序号', width: 50 },
       {
         field: 'callId',
         title: '主键ID',
+        visible: false,
+        showOverflow: true,
+        showHeaderOverflow: true,
+      },
+      {
+        field: 'serviceCode',
+        title: '服务编号',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,

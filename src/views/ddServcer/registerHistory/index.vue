@@ -13,7 +13,7 @@
         <div :class="`tableBtn`">
           <a-space direction="horizontal" size="small" style="margin-left: 5px">
             <AuthDom auth="message_query">
-              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0px">
+              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>FN:</label>
@@ -83,10 +83,12 @@
   import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
-  import { RegisterHistory as registerHistoryApi } from '@/api/ddServcer';
+  import {
+    RegisterHistory as registerHistoryApi,
+    Line as lineApi,
+    Station as stationApi,
+  } from '@/api/ddServcer';
   import { tryOnUnmounted } from '@vueuse/core';
-  import { Line as lineApi } from '@/api/ddServcer';
-  import { Station as stationApi } from '@/api/ddServcer';
 
   defineOptions({ name: 'DDServcerRegisterHistory' });
   const { prefixCls } = useDesign('DDServcerRegisterHistory-');
@@ -95,6 +97,7 @@
     height: 'auto',
     columns: [
       //基础
+      { type: 'seq', title: '序号', width: 50 },
       {
         field: 'id',
         title: '状态id',

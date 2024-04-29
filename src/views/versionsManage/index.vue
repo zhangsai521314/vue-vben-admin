@@ -10,7 +10,7 @@
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style="line-height: 50px; margin-left: 5px">
+          <a-space direction="horizontal" size="small" style=" margin-left: 5px;line-height: 50px">
             <AuthDom auth="versionsManage_query">
               <a-space direction="horizontal" size="small">
                 <a-button @click="getVersions" type="primary">查询</a-button>
@@ -141,13 +141,14 @@
   import his from './his.vue';
   import { useDesign } from '@/hooks/web/useDesign';
 
-  defineOptions({ name: 'versionsManage' });
+  defineOptions({ name: 'VersionsManage' });
   const { prefixCls } = useDesign('versionsManage-');
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
     columns: [
       //基础
+      { type: 'seq', title: '序号', width: 50 },
       {
         field: 'versionId',
         title: '软件包类型ID',

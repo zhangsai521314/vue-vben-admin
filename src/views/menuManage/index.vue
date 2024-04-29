@@ -7,7 +7,7 @@
             <a-space
               direction="horizontal"
               size="small"
-              style="line-height: 50px; margin-left: 5px"
+              style="margin-left: 5px; line-height: 50px"
             >
               <AuthDom auth="menuManage_query">
                 <a-space direction="horizontal" size="small">
@@ -31,6 +31,7 @@
             max-height="100%"
             ref="tableRef"
             show-overflow
+            :custom-config="{ storage: true }"
             :row-config="{ isHover: true, useKey: true, keyField: 'menuId' }"
             :column-config="{ resizable: true }"
             :tree-config="{ transform: true, rowField: 'menuId', parentField: 'parentId' }"
@@ -273,8 +274,8 @@
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 
-  defineOptions({ name: 'menuManage' });
-  const { prefixCls } = useDesign('suitManage-');
+  defineOptions({ name: 'MenuManage' });
+  const { prefixCls } = useDesign('menuManage-');
   const loading = ref(true);
   const tableConfigData = ref([]);
   const defFromData = reactive({
@@ -470,7 +471,7 @@
   });
 </script>
 <style lang="less" scoped>
-  @prefixCls: ~'@{namespace}-suitManage-';
+  @prefixCls: ~'@{namespace}-menuManage-';
 
   .@{prefixCls} {
     .@{prefixCls}tableBtn {
@@ -478,16 +479,17 @@
     }
 
     .defMenu {
+      padding: 0 8px;
+      border-radius: 3px;
       background-color: #e7eef5;
       color: #11559c;
+    }
+
+    .menuBtn {
       padding: 0 8px;
       border-radius: 3px;
-    }
-    .menuBtn {
       background-color: #f4f4f5;
       color: #909399;
-      padding: 0 8px;
-      border-radius: 3px;
     }
   }
 </style>

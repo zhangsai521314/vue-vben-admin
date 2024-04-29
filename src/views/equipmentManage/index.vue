@@ -11,7 +11,7 @@
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style="line-height: 50px; margin-left: 5px">
+          <a-space direction="horizontal" size="small" style=" margin-left: 5px;line-height: 50px">
             <AuthDom auth="equipment_query">
               <a-space direction="horizontal" size="small">
                 <a-input
@@ -161,13 +161,14 @@
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import dictionariesApi from '@/api/dictionaries';
 
-  defineOptions({ name: 'equipmentManage' });
+  defineOptions({ name: 'EquipmentManage' });
   const { prefixCls } = useDesign('equipment-');
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
     columns: [
       //基础
+      { type: 'seq', title: '序号', width: 50 },
       {
         field: 'equipmentId',
         title: '设备ID',

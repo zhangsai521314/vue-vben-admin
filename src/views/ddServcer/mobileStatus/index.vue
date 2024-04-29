@@ -13,7 +13,7 @@
         <div :class="`tableBtn`">
           <a-space direction="horizontal" size="small" style="margin-left: 5px">
             <AuthDom auth="message_query">
-              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0px">
+              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>车站名称：</label>
@@ -85,11 +85,13 @@
   import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
-  import { MobileStatus as mobileStatusApi } from '@/api/ddServcer';
+  import {
+    MobileStatus as mobileStatusApi,
+    Line as lineApi,
+    Station as stationApi,
+    Lacci as lacciApi,
+  } from '@/api/ddServcer';
   import { tryOnUnmounted } from '@vueuse/core';
-  import { Line as lineApi } from '@/api/ddServcer';
-  import { Station as stationApi } from '@/api/ddServcer';
-  import { Lacci as lacciApi } from '@/api/ddServcer';
 
   defineOptions({ name: 'DDServcerMobileStatus' });
   const { prefixCls } = useDesign('DDServcerMobileStatus-');
@@ -98,6 +100,7 @@
     height: 'auto',
     columns: [
       //基础
+      { type: 'seq', title: '序号', width: 50 },
       {
         field: 'id',
         title: '状态id',

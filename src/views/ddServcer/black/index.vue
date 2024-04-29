@@ -18,7 +18,7 @@
             <a-space
               direction="horizontal"
               size="small"
-              style="line-height: 50px; margin-left: 5px"
+              style=" margin-left: 5px;line-height: 50px"
             >
               <AuthDom auth="black_query">
                 <a-space direction="horizontal" size="small">
@@ -128,6 +128,7 @@
     height: 'auto',
     columns: [
       //基础
+      { type: 'seq', title: '序号', width: 50 },
       {
         field: 'id',
         title: '黑名单ID',
@@ -140,7 +141,6 @@
         title: 'IP',
         showOverflow: true,
         showHeaderOverflow: true,
-        fixed: 'left',
         sortable: true,
       },
       {
@@ -336,7 +336,7 @@
   @prefixCls: ~'@{namespace}-ddServcerblack-';
 
   .fanZhun {
-    transform: rotateX(180deg);
     display: inline-block;
+    transform: rotateX(180deg);
   }
 </style>

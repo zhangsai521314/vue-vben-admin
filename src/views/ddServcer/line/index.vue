@@ -18,7 +18,7 @@
             <a-space
               direction="horizontal"
               size="small"
-              style="line-height: 50px; margin-left: 5px"
+              style=" margin-left: 5px;line-height: 50px"
             >
               <AuthDom auth="line_query">
                 <a-space direction="horizontal" size="small">
@@ -262,6 +262,7 @@
     height: 'auto',
     columns: [
       //基础
+      { type: 'seq', title: '序号', width: 50 },
       {
         field: 'id',
         title: '线路ID',
@@ -543,7 +544,7 @@
   @prefixCls: ~'@{namespace}-DDServcerLine-';
 
   .fanZhun {
-    transform: rotateX(180deg);
     display: inline-block;
+    transform: rotateX(180deg);
   }
 </style>

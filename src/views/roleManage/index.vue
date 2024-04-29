@@ -11,7 +11,7 @@
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style="line-height: 50px; margin-left: 5px">
+          <a-space direction="horizontal" size="small" style=" margin-left: 5px;line-height: 50px">
             <AuthDom auth="roleManage_query">
               <a-space direction="horizontal" size="small">
                 <a-input
@@ -124,12 +124,13 @@
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import AssignPower from '@/components/MyAssignPower/index.vue';
 
-  defineOptions({ name: 'roleManage' });
+  defineOptions({ name: 'RoleManage' });
   const { prefixCls } = useDesign('roleManage-');
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
     columns: [
+      { type: 'seq', title: '序号', width: 50 },
       //基础
       {
         field: 'roleId',

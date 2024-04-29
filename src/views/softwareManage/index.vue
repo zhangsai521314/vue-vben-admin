@@ -313,6 +313,7 @@
     height: 'auto',
     columns: [
       //基础
+      { type: 'seq', title: '序号', width: 50 },
       {
         field: 'serviceId',
         title: '软件ID',

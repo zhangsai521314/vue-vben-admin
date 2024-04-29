@@ -11,7 +11,7 @@
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style="line-height: 50px; margin-left: 5px">
+          <a-space direction="horizontal" size="small" style=" margin-left: 5px;line-height: 50px">
             <AuthDom auth="versionsManage_his_query">
               <a-space direction="horizontal" size="small">
                 <a-button @click="getVersionsHis" type="primary">查询</a-button>
@@ -165,6 +165,7 @@
     height: 'auto',
     columns: [
       //基础
+      { type: 'seq', title: '序号', width: 50 },
       {
         field: 'hisId',
         title: '版本id',

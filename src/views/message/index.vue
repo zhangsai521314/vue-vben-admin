@@ -177,6 +177,7 @@
     height: 'auto',
     columns: [
       //基础
+      { type: 'seq', title: '序号', width: 50 },
       {
         field: 'msgId',
         title: '信息ID',

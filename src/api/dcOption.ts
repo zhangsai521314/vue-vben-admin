@@ -56,5 +56,22 @@ const CallRecord = {
     });
   },
 };
-
-export { TelephoneBook, CallRecord };
+const KeypadRecord = {
+  //获取列表
+  GetDCOptionKeypadRecords: function (params) {
+    return defHttp.post({
+      url: '/DCOptionKeypadRecord/GetDCOptionKeypadRecords',
+      params,
+    });
+  },
+};
+const ServiceTest = {
+  //获取树列表
+  GetDCOptionServiceTests: function (params) {
+    return defHttp.post({
+      url: '/DCOptionServiceTest/GetDCOptionServiceTests',
+      params,
+    });
+  },
+};
+export { TelephoneBook, CallRecord, KeypadRecord, ServiceTest };

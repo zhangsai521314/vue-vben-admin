@@ -29,6 +29,22 @@ const dcOption: AppRouteModule = {
         title: '通话记录',
       },
     },
+    {
+      path: 'keypadRecord',
+      name: 'DCOptionKeypadRecord',
+      component: () => import('/@/views/dcOption/keypadRecord/index.vue'),
+      meta: {
+        title: '按键记录',
+      },
+    },
+    {
+      path: 'serviceTest',
+      name: 'DCOptionServiceTest',
+      component: () => import('/@/views/dcOption/serviceTest/index.vue'),
+      meta: {
+        title: '服务自检',
+      },
+    },
   ],
 };
 export default dcOption;
