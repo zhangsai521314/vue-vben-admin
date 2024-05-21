@@ -5,13 +5,13 @@
       id="mytable"
       ref="tableRef"
       :loading="loading"
-      :row-config="{ keyField: 'roleId' }"
+      :row-config="{ keyField: 'versionId' }"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style=" margin-left: 5px;line-height: 50px">
+          <a-space direction="horizontal" size="small" style="margin-left: 5px; line-height: 50px">
             <AuthDom auth="versionsManage_his_query">
               <a-space direction="horizontal" size="small">
                 <a-button @click="getVersionsHis" type="primary">查询</a-button>
@@ -159,13 +159,13 @@
   const token = 'Bearer ' + userStore.getToken;
   const { VITE_GLOB_API_URL, VITE_GLOB_API_URL_PREFIX } = getAppEnvConfig();
   const upUrl = `${VITE_GLOB_API_URL}${VITE_GLOB_API_URL_PREFIX}/User/UpdateUserAvatar`;
-  const { prefixCls } = useDesign('versionsManage-');
+  const { prefixCls } = useDesign('versionsManage-his');
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50 },
+      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'hisId',
         title: '版本id',
@@ -289,17 +289,19 @@
 
   //获取软件包列表
   function getVersionsHis() {
-    loading.value = true;
-    versionsApi
-      .GetVersionsHis(props.versionId)
-      .then((data) => {
-        loading.value = false;
-        tableConfig.data = data;
-      })
-      .catch(() => {
-        loading.value = false;
-        tableConfig.data = [];
-      });
+    if (props.versionId) {
+      loading.value = true;
+      versionsApi
+        .GetVersionsHis(props.versionId)
+        .then((data) => {
+          loading.value = false;
+          tableConfig.data = data;
+        })
+        .catch(() => {
+          loading.value = false;
+          tableConfig.data = [];
+        });
+    }
   }
 
   //拖拽文件不符合 accept 类型时的回调
@@ -369,7 +371,7 @@
   );
 </script>
 <style lang="less" scoped>
-  @prefixCls: ~'@{namespace}-versionsManage-';
+  @prefixCls: ~'@{namespace}-versionsManage-his-';
 
   .tableBtn {
     width: 100%;

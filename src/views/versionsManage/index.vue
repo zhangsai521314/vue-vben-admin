@@ -10,7 +10,7 @@
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style=" margin-left: 5px;line-height: 50px">
+          <a-space direction="horizontal" size="small" style="margin-left: 5px; line-height: 50px">
             <AuthDom auth="versionsManage_query">
               <a-space direction="horizontal" size="small">
                 <a-button @click="getVersions" type="primary">查询</a-button>
@@ -148,7 +148,7 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50 },
+      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'versionId',
         title: '软件包类型ID',
@@ -164,7 +164,7 @@
       },
       {
         field: 'runNumber',
-        title: '运行版本号',
+        title: '当前运行版本号',
         showOverflow: true,
         showHeaderOverflow: true,
         slots: {
@@ -304,6 +304,7 @@
   //关闭his
   function formCloseHis() {
     isShowVis.value = false;
+    tableConfig.data = [];
     getVersions();
   }
 

@@ -76,6 +76,11 @@
         />
       </template>
       <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? ':' + row.port : '' }} </template>
+      <template #regStatusName="{ row }">
+        <span :style="{ color: row.regStatusName == '启用' ? 'green' : 'red' }"
+          >{{ row.regStatusName }}
+        </span></template
+      >
     </vxe-grid>
   </MyContent>
 </template>
@@ -94,7 +99,7 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50 },
+      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'id',
         title: '状态id',
@@ -105,6 +110,14 @@
       {
         field: 'lineName',
         title: '线路名称',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        visible: false,
+        sortable: true,
+      },
+      {
+        field: 'stationCode',
+        title: '车站号码',
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -132,18 +145,14 @@
         sortable: true,
       },
       {
-        field: 'longitude',
-        title: '经度',
+        field: 'regStatusName',
+        title: '注册状态',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-      },
-      {
-        field: 'latitude',
-        title: '纬度',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
+        slots: {
+          default: 'regStatusName',
+        },
       },
       {
         field: 'ip',
@@ -157,7 +166,7 @@
       },
       {
         field: 'loginTime',
-        title: 'loginTime',
+        title: '登录时间',
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,

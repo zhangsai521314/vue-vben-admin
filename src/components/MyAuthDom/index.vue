@@ -3,6 +3,7 @@
   import { getSlot } from '@/utils/helper/tsxHelper';
   import { usePermissionStoreWithOut } from '@/store/modules/permission';
   import { useUserStore } from '@/store/modules/user';
+
   export default defineComponent({
     name: 'AuthDom',
     props: {
@@ -26,7 +27,7 @@
             } else {
               mySlots[0].props['class'] = 'auth';
             }
-            const domAuth = permissionStore.getDomAuthList.find((m) => m.authName == auth);
+            const domAuth = permissionStore.getDomAuthList?.find((m) => m.authName == auth);
             if (domAuth && domAuth.powerType != '') {
               //判断权限
               if (

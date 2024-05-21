@@ -140,7 +140,7 @@
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
     columns: [
-      { type: 'seq', title: '序号', width: 50 },
+      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       //基础
       {
         field: 'phoneId',

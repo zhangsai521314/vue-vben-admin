@@ -14,8 +14,11 @@
 
   import { useDarkModeTheme } from '@/hooks/setting/useDarkModeTheme';
   import 'dayjs/locale/zh-cn';
-  import { computed } from 'vue';
+  import { computed, ref, onMounted, onUnmounted } from 'vue';
+  import { useMqttStoreWithOut } from '@/store/modules/mqtt';
 
+  const mqttStore = useMqttStoreWithOut();
+  mqttStore.msgAudioOb = new Audio('/src/assets/audio/gaojin2.mp3'); // 替换为你的音频文件路径
   // support Multi-language
   const { getAntdLocale } = useLocale();
 

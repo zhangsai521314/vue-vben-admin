@@ -1,6 +1,7 @@
 import type { AppRouteModule } from '@/router/types';
 
 import { LAYOUT } from '@/router/constant';
+
 const IFRAME = () => import('/@/views/sys/iframe/FrameBlank.vue');
 const reportDesign: AppRouteModule = {
   path: '/demo',
@@ -50,7 +51,7 @@ const reportDesign: AppRouteModule = {
       component: IFRAME,
       meta: {
         frameSrc: 'http://analysis.datains.cn/finance-admin/index.html#/chartLib/all',
-        title: "内嵌",
+        title: '内嵌',
       },
     },
     {
@@ -60,7 +61,7 @@ const reportDesign: AppRouteModule = {
       meta: {
         title: '外链',
       },
-    }
+    },
   ],
 };
 

@@ -17,6 +17,7 @@ import { PAGE_NOT_FOUND_ROUTE } from '@/router/routes/basic';
 import { isArray } from '@/utils/is';
 import { h } from 'vue';
 import { useAppStore } from '@/store/modules/app';
+import { useMqttStoreWithOut } from '@/store/modules/mqtt';
 
 interface UserState {
   userInfo: Nullable<UserInfo>;
@@ -43,6 +44,9 @@ export const useUserStore = defineStore({
     lastUpdateTime: 0,
   }),
   getters: {
+    getUserMqTopic(state) {
+      return state.userInfo?.userMqTopic;
+    },
     getUserInfo(state): UserInfo {
       return state.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
     },
@@ -118,7 +122,14 @@ export const useUserStore = defineStore({
       if (!this.getToken) return null;
       // get user info
       const userInfo = await this.getUserInfoAction();
-
+      setTimeout(() => {
+        try {
+          const mqttStore = useMqttStoreWithOut();
+          userInfo?.userMqTopic.forEach((m) => {
+            mqttStore.subscribe(m.topic);
+          });
+        } catch (error) {}
+      });
       const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {
         this.setSessionTimeout(false);

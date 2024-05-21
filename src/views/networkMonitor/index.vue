@@ -62,29 +62,29 @@
             >
           </template>
         </vxe-column>
-        <vxe-column field="alarmStartTime" title="告警开始时间" width="150">
+        <vxe-column field="msgStartTime" title="告警开始时间" width="150">
           <template #default="{ row }">
-            {{ row.alarmStartTime ? dayjs(row.alarmStartTime).format('YYYY-MM-DD HH:mm:ss') : '' }}
+            {{ row.msgStartTime ? dayjs(row.msgStartTime).format('YYYY-MM-DD HH:mm:ss') : '' }}
           </template>
         </vxe-column>
-        <vxe-column field="alarmEndTime" title="告警结束时间" width="150">
+        <vxe-column field="msgEndTime" title="告警结束时间" width="150">
           <template #default="{ row }">
-            {{ row.alarmEndTime ? dayjs(row.alarmEndTime).format('YYYY-MM-DD HH:mm:ss') : '' }}
+            {{ row.msgEndTime ? dayjs(row.msgEndTime).format('YYYY-MM-DD HH:mm:ss') : '' }}
           </template>
         </vxe-column>
-        <vxe-column field="alarmDuration" title="告警持续时间" width="120">
+        <vxe-column field="msgDuration" title="告警持续时间" width="120">
           <template #default="{ row }">
             {{
-              row.alarmDuration == null
+              row.msgDuration == null
                 ? ''
-                : row.alarmDuration >= 0 && row.alarmDuration <= 60
-                  ? `${parseInt(row.alarmDuration)}秒`
-                  : row.alarmDuration > 60 && row.alarmDuration <= 360
-                    ? `${parseInt(row.alarmDuration / 60)}分`
-                    : row.alarmDuration > 360 && row.alarmDuration <= 86400
-                      ? `${parseInt(row.alarmDuration / 60 / 60)}时`
-                      : row.alarmDuration > 86400
-                        ? `${parseInt(row.alarmDuration / 60 / 60 / 24)}天`
+                : row.msgDuration >= 0 && row.msgDuration <= 60
+                  ? `${parseInt(row.msgDuration)}秒`
+                  : row.msgDuration > 60 && row.msgDuration <= 360
+                    ? `${parseInt(row.msgDuration / 60)}分`
+                    : row.msgDuration > 360 && row.msgDuration <= 86400
+                      ? `${parseInt(row.msgDuration / 60 / 60)}时`
+                      : row.msgDuration > 86400
+                        ? `${parseInt(row.msgDuration / 60 / 60 / 24)}天`
                         : ''
             }}
           </template>

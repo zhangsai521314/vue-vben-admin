@@ -168,7 +168,7 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50 },
+      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'equipmentId',
         title: '设备ID',

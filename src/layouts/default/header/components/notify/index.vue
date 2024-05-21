@@ -1,20 +1,43 @@
 <template>
-  <div :class="prefixCls">
+  <div :class="prefixCls" id="zs_notify">
     <Popover title="" trigger="click" :overlayClassName="`${prefixCls}__overlay`">
-      <Badge :count="count" dot :numberStyle="numberStyle">
-        <BellOutlined />
+      <Badge
+        :count="mqttStore.getUnreadalarmData.length"
+        :overflowCount="99"
+        :numberStyle="{ top: '14px' }"
+      >
+        <IconFontClass
+          :class="{ blinking: mqttStore.getUnreadalarmData.length > 0 }"
+          v-if="mqttStore.msgIsMute"
+          name="icon-baseui-xiaoxijinyin"
+          style="font-size: 38px"
+        />
+        <IconFontClass
+          v-else
+          :class="{ blinking: mqttStore.getUnreadalarmData.length > 0 }"
+          name="icon-baseui-xiaoxi"
+          style="font-size: 38px"
+        />
+        <!-- <BellOutlined /> -->
       </Badge>
       <template #content>
-        <Tabs>
-          <template v-for="item in listData" :key="item.key">
-            <Tabs.TabPane>
+        <Tabs style="width: 360px">
+          <template v-for="item in tabsName" :key="item.key">
+            <Tabs.TabPane style="width: 360px">
               <template #tab>
-                {{ item.name }}
-                <span v-if="item.list.length !== 0">({{ item.list.length }})</span>
+                {{ item }}
+                <span v-if="item == '告警'">({{ mqttStore.getAlarmData.length }})</span>
               </template>
               <!-- 绑定title-click事件的通知列表中标题是“可点击”的-->
-              <NoticeList :list="item.list" v-if="item.key === '1'" @title-click="onNoticeClick" />
-              <NoticeList :list="item.list" v-else />
+              <a-space style="margin-bottom: 2px">
+                <a-button @click="controlSound"
+                  >{{ mqttStore.msgIsMute ? '开启' : '关闭' }}声音提示</a-button
+                >
+                <a-button @click="allRead">全部已读</a-button>
+              </a-space>
+              <div style="height: 690px; overflow: hidden">
+                <NoticeList :list="mqttStore.getAlarmData" @title-click="onNoticeClick" />
+              </div>
             </Tabs.TabPane>
           </template>
         </Tabs>
@@ -23,51 +46,91 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
-  import { Popover, Tabs, Badge } from 'ant-design-vue';
+  import { tryOnUnmounted } from '@vueuse/core';
+  import { computed, ref, onMounted } from 'vue';
+  import { Popover, Tabs, Badge, notification } from 'ant-design-vue';
   import { BellOutlined } from '@ant-design/icons-vue';
-  import { tabListData, ListItem } from './data';
   import NoticeList from './NoticeList.vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { useMessage } from '@/hooks/web/useMessage';
+  import { useMqttStoreWithOut } from '@/store/modules/mqtt';
+  import type { MsgData } from '#/store';
+  import { useGo, useRedo } from '/@/hooks/web/usePage';
 
+  const mqttStore = useMqttStoreWithOut();
+  mqttStore.msgAudioIsShow = true;
   const { prefixCls } = useDesign('header-notify');
-  const { createMessage } = useMessage();
-  const listData = ref(tabListData);
-  const numberStyle = {};
+  const tabsName = ['告警'];
+  const go = useGo();
+  function onNoticeClick(record: MsgData) {
+    mqttStore.readMsg(record);
 
-  const count = computed(() => {
-    let count = 0;
-    for (let i = 0; i < tabListData.length; i++) {
-      count += tabListData[i].list.length;
-    }
-    return count;
-  });
-
-  function onNoticeClick(record: ListItem) {
-    createMessage.success('你点击了通知，ID=' + record.id);
-    // 可以直接将其标记为已读（为标题添加删除线）,此处演示的代码会切换删除线状态
-    record.titleDelete = !record.titleDelete;
+    go(`/message/index/${record.msgId}`);
   }
+
+  //控制声音
+  function controlSound() {
+    mqttStore.setMsgIsMute(!mqttStore.msgIsMute);
+  }
+
+  function openNotification() {
+    notification.open({
+      message: '',
+      description: '点击任意区域交互-以开启信息声音提示',
+      placement: 'top',
+      style: {
+        width: '300px',
+        top: '20px',
+        border: '1px solid red',
+      },
+      duration: 10,
+      class: 'notification-custom-class',
+    });
+  }
+
+  function allRead() {
+    mqttStore.allRead();
+  }
+
+  onMounted(() => {
+    if (!mqttStore.msgAudioIsAlert) {
+      mqttStore.msgAudioIsAlert = false;
+      openNotification();
+    }
+  });
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-header-notify';
+
+  @keyframes blink {
+    0% {
+      opacity: 1; /* 完全不透明 */
+    }
+
+    50% {
+      opacity: 0; /* 完全透明 */
+    }
+
+    100% {
+      opacity: 1; /* 再次不透明 */
+    }
+  }
 
   .@{prefix-cls} {
     padding-bottom: 1px;
 
     &__overlay {
-      max-width: 360px;
+      max-width: 380px;
     }
 
     .ant-tabs-content {
-      width: 300px;
+      width: 330px;
     }
 
     .ant-badge {
       display: flex;
       align-items: center;
-      font-size: 18px;
+      font-size: 40px;
 
       .ant-badge-multiple-words {
         padding: 0 4px;
@@ -77,5 +140,15 @@
         width: 0.9em;
       }
     }
+  }
+
+  .ant-tabs-nav {
+    margin-bottom: 14px !important;
+  }
+
+  /* 应用动画到想要闪烁的元素 */
+  .blinking {
+    animation: blink 1s infinite; /* 每1秒闪烁一次，无限次数 */
+    color: #ff0404;
   }
 </style>

@@ -61,6 +61,8 @@ export interface UserInfo {
 
   desc?: string;
   roles: RoleInfo[];
+  //用户自己定义的mq主题
+  userMqTopic: Array<object>[];
 }
 
 export interface BeforeMiniState {
@@ -79,17 +81,23 @@ export interface TableSetting {
 
 //信息
 export interface MsgData {
+  serviceId: string;
+  serverName: string;
   msgId: string;
   joinId: string;
+  msgCategory?: number;
+  msgClass?: number;
   msgType?: string;
   msgStatus?: number;
   msgTitle?: string;
-  msgContnet?: string;
-  alarmStartTime?: string;
-  alarmEndTime?: string;
-  alarmDuration?: number;
+  msgContent?: string;
+  msgStartTime?: string;
+  msgEndTime?: string;
+  msgDuration?: number;
   createTime?: string;
   remark?: string;
   confirmTime?: string;
   confirmUser?: string;
+  isRead?: boolean;
+  msgIcon?: string;
 }

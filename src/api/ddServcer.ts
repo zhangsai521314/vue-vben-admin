@@ -53,7 +53,7 @@ const DCStatus = {
   //获取列表
   GetDDCirStatus: function (params) {
     return defHttp.post({
-      url: '/DDServerCirStatus/GetDDCirStatus',
+      url: '/DDServerDCStatus/GetDDServerDCStatus',
       params,
     });
   },

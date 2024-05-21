@@ -16,11 +16,11 @@
         class="fix-auto-fill"
       />
     </FormItem>
-    <FormItem name="password" class="enter-x">
+    <FormItem name="passWord" class="enter-x">
       <InputPassword
         size="large"
         visibilityToggle
-        v-model:value="formData.password"
+        v-model:value="formData.passWord"
         :placeholder="t('sys.login.password')"
       />
     </FormItem>
@@ -115,6 +115,10 @@
   import commonApi from '@/api/common';
 
   import { sm2 } from 'sm-crypto-v2';
+  import { useMqttStoreWithOut } from '@/store/modules/mqtt';
+  import { LoginParams } from '@/api/sys/model/userModel';
+
+  const mqttStore = useMqttStoreWithOut();
 
   const ls = createLocalStorage();
   //是否是非法改变导致的返回登录
@@ -136,9 +140,9 @@
   const loading = ref(false);
   const rememberMe = ref(false);
 
-  const formData = reactive({
+  const formData = reactive<LoginParams>({
     account: '',
-    password: '',
+    passWord: '',
     //不要默认的错误提示
     mode: 'none',
   });
@@ -150,6 +154,7 @@
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
 
   async function handleLogin() {
+    mqttStore.msgAudioIsAlert = true;
     // zs更改;
     const data = await validForm();
     if (!data) return;
@@ -157,13 +162,12 @@
     try {
       loading.value = true;
       const p_data = _.cloneDeep(formData);
-      p_data.password = sm2.doEncrypt(
-        p_data.password,
+      p_data.passWord = sm2.doEncrypt(
+        p_data.passWord,
         myCommon.getCryptogramKey().sm2.publicKey,
         1,
       );
       const userInfo = await userStore.login(p_data);
-      debugger;
       if (userInfo) {
         notification.success({
           message: t('sys.login.loginSuccessTitle'),

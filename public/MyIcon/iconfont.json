@@ -6,6 +6,125 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "5769241",
+      "name": "工单确认",
+      "font_class": "queren",
+      "unicode": "ec36",
+      "unicode_decimal": 60470
+    },
+    {
+      "icon_id": "4627408",
+      "name": "消息",
+      "font_class": "xiaoxijinyin",
+      "unicode": "e703",
+      "unicode_decimal": 59139
+    },
+    {
+      "icon_id": "10036619",
+      "name": "消息",
+      "font_class": "xiaoxi",
+      "unicode": "e704",
+      "unicode_decimal": 59140
+    },
+    {
+      "icon_id": "2415610",
+      "name": "查看磁盘使用率",
+      "font_class": "cipanshiyonlv",
+      "unicode": "e6ff",
+      "unicode_decimal": 59135
+    },
+    {
+      "icon_id": "2415630",
+      "name": "查看cpu使用率",
+      "font_class": "neicunshiyonlv",
+      "unicode": "e700",
+      "unicode_decimal": 59136
+    },
+    {
+      "icon_id": "2415631",
+      "name": "查看内存使用率",
+      "font_class": "neicunshiyonglv",
+      "unicode": "e702",
+      "unicode_decimal": 59138
+    },
+    {
+      "icon_id": "9687570",
+      "name": "火车站",
+      "font_class": "huochezhan",
+      "unicode": "e6fc",
+      "unicode_decimal": 59132
+    },
+    {
+      "icon_id": "7714441",
+      "name": "区域分割",
+      "font_class": "quyufenge",
+      "unicode": "e6fa",
+      "unicode_decimal": 59130
+    },
+    {
+      "icon_id": "35054479",
+      "name": "在线状态",
+      "font_class": "wifi",
+      "unicode": "e6fb",
+      "unicode_decimal": 59131
+    },
+    {
+      "icon_id": "6218268",
+      "name": "按键",
+      "font_class": "anjian",
+      "unicode": "e6f6",
+      "unicode_decimal": 59126
+    },
+    {
+      "icon_id": "6435028",
+      "name": "火车",
+      "font_class": "huoche",
+      "unicode": "e71f",
+      "unicode_decimal": 59167
+    },
+    {
+      "icon_id": "7567756",
+      "name": "24gl-phoneBook",
+      "font_class": "phoneBook",
+      "unicode": "e94c",
+      "unicode_decimal": 59724
+    },
+    {
+      "icon_id": "8116951",
+      "name": "UI_icon_线路2",
+      "font_class": "guidao",
+      "unicode": "e6f7",
+      "unicode_decimal": 59127
+    },
+    {
+      "icon_id": "9704640",
+      "name": "黑名单",
+      "font_class": "heimingdan",
+      "unicode": "e6f8",
+      "unicode_decimal": 59128
+    },
+    {
+      "icon_id": "10048296",
+      "name": "自检日志",
+      "font_class": "zijianrizhi",
+      "unicode": "e6f9",
+      "unicode_decimal": 59129
+    },
+    {
+      "icon_id": "12588497",
+      "name": "区域",
+      "font_class": "quyu",
+      "unicode": "e79b",
+      "unicode_decimal": 59291
+    },
+    {
+      "icon_id": "39585127",
+      "name": "通话记录",
+      "font_class": "tonghuajilu",
+      "unicode": "e82a",
+      "unicode_decimal": 59434
+    },
+    {
       "icon_id": "21825604",
       "name": "返回上一级",
       "font_class": "fanhuishangyiji",

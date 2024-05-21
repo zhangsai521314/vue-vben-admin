@@ -3,11 +3,11 @@ import type { AppRouteModule } from '@/router/types';
 import { LAYOUT } from '@/router/constant';
 import { t } from '@/hooks/web/useI18n';
 
-const menuManage: AppRouteModule = {
-  path: '/menuManage',
-  name: 'menuManage',
+const performance: AppRouteModule = {
+  path: '/performance',
+  name: 'performance',
   component: LAYOUT,
-  redirect: '/menuManage/index',
+  redirect: '/performance/index',
   meta: {
     // 隐藏所有子菜单
     hideChildrenInMenu: true,
@@ -15,19 +15,19 @@ const menuManage: AppRouteModule = {
     orderNo: 1,
     icon: 'ion:grid-outline',
     //配置名称，可直接输入字符串，也可使用
-    title: '菜单管理',
+    title: '性能监测',
   },
   children: [
     {
       path: 'index',
-      name: 'MenuManage',
-      component: () => import('/@/views/menuManage/index.vue'),
+      name: 'performance',
+      component: () => import('/@/views/performance/index.vue'),
       meta: {
-        title: '菜单管理',
+        title: '性能监测',
         hideMenu: true,
       },
     },
   ],
 };
 
-export default menuManage;
+export default performance;

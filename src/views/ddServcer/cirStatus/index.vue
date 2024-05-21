@@ -133,7 +133,7 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50 },
+      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'id',
         title: '状态id',
@@ -144,6 +144,14 @@
       {
         field: 'lineName',
         title: '线路名称',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        visible: false,
+        sortable: true,
+      },
+      {
+        field: 'stationCode',
+        title: '车站号码',
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,

@@ -73,7 +73,15 @@
                     defStatus: row.testStatus == 1,
                     errorStatus: row.testStatus != 1,
                   }"
-                  >{{ row.testStatus == 1 ? '通过' : '失败' }}</span
+                  >{{
+                    row.testStatus == 0
+                      ? '未自检'
+                      : row.testStatus == 1
+                        ? '通过'
+                        : row.testStatus == 2
+                          ? '跳过'
+                          : '失败'
+                  }}</span
                 >
               </template>
             </vxe-column>

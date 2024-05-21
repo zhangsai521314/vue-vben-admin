@@ -1,147 +1,157 @@
 <template>
-  <div>
-    <vxe-table
-      border
-      show-footer
-      :row-config="{ isCurrent: true }"
-      :column-config="{ isCurrent: true }"
-      :footer-method="footerMethod"
-      :data="tableData"
-      :menu-config="menuConfig"
-      @menu-click="contextMenuClickEvent"
-    >
-      <vxe-column type="seq" width="60" />
-      <vxe-column field="name" title="Name" sortable />
-      <vxe-column field="sex" title="Sex" />
-      <vxe-column field="age" title="Age" />
-      <vxe-column field="address" title="Address" />
-    </vxe-table>
-  </div>
+  <MyContent>
+    <div class="title">虚拟滚动记账本</div>
+    <div class="account-list-outer" ref="outContainer">
+      <div class="account-list-inner">
+        <div class="account-box" v-for="(item, index) in viewData" :key="index">
+          <p
+            class="date"
+            :style="{
+              backgroundColor: item.state ? '#f2ddde' : '#dff1d8',
+              color: item.state ? '#ae8286' : '#8ea189',
+            }"
+            >{{ item.date }}</p
+          >
+          <div class="info">
+            <p class="detail">{{ item.detail }}</p>
+            <p class="state"><span v-if="item.state">支出</span><span v-else>收入</span></p>
+            <p class="money">{{ item.money }}元</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </MyContent>
 </template>
-
 <script lang="ts" setup>
-  import { ref, reactive } from 'vue';
-  import { VXETable, VxeTablePropTypes, VxeColumnPropTypes, VxeTableEvents } from 'vxe-table';
+  import { ref, reactive, onMounted } from 'vue';
 
-  interface RowVO {
-    id: number;
-    name: string;
-    role: string;
-    sex: string;
-    age: number;
-    address: string;
+  interface AccountDataItem {
+    date: string; //日期
+    state: number; //收支状态 0为收入 1为支出
+    detail: string; //详情
+    money: number; //花费或收入
   }
+  //原始数据
+  const accountData: AccountDataItem[] = [];
+  // 最终展示数据
+  const viewData: AccountDataItem[] = reactive([]);
+  // 外部容器dom元素
+  const outContainer = ref();
+  // 内部容器padding-top
+  const paddingTop = ref('0px');
+  // 内部容器padding-bottom
+  const paddingBottom = ref('0px');
+  //单行高度 可少不可多
+  const itemHeight = 70;
 
-  const tableData = ref<RowVO[]>([
-    { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
-    { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-    { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-    { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 36, address: 'Guangzhou' },
-    { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 24, address: 'Shanghai' },
-    { id: 10006, name: 'Test6', role: 'Designer', sex: 'Man', age: 34, address: 'test abc' },
-  ]);
-
-  const menuConfig = reactive<VxeTablePropTypes.MenuConfig<RowVO>>({
-    className: 'my-menus',
-    header: {
-      options: [[{ code: 'exportAll', name: '导出所有.csv' }]],
-    },
-    body: {
-      options: [
-        [{ code: 'copy', name: '复制', prefixIcon: 'vxe-icon-copy', className: 'my-copy-item' }],
-        [
-          { code: 'remove', name: '删除', prefixIcon: 'vxe-icon-delete-fill color-red' },
-          {
-            name: '筛选',
-            children: [
-              { code: 'clearFilter', name: '清除筛选' },
-              { code: 'filterSelect', name: '按所选单元格的值筛选' },
-            ],
-          },
-          {
-            code: 'sort',
-            name: '排序',
-            prefixIcon: 'vxe-icon-sort color-blue',
-            children: [
-              { code: 'clearSort', name: '清除排序' },
-              { code: 'sortAsc', name: '升序', prefixIcon: 'vxe-icon-sort-alpha-asc color-orange' },
-              {
-                code: 'sortDesc',
-                name: '倒序',
-                prefixIcon: 'vxe-icon-sort-alpha-desc color-orange',
-              },
-            ],
-          },
-          { code: 'print', name: '打印', disabled: true },
-        ],
-      ],
-    },
-    footer: {
-      options: [[{ code: 'clearAll', name: '清空数据' }]],
-    },
-  });
-
-  const contextMenuClickEvent: VxeTableEvents.MenuClick<RowVO> = ({ menu, row, column }) => {
-    switch (menu.code) {
-      case 'copy':
-        // 示例
-        if (row && column) {
-          if (XEClipboard.copy(row[column.field])) {
-            VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' });
-          }
-        }
-        break;
-      default:
-        VXETable.modal.alert(`点击了 ${menu.name} 选项`);
+  //获取原始数据
+  const getData = () => {
+    //两万条数据 测试直接渲染卡顿大概1s左右
+    for (let i = 0; i < 10000; i++) {
+      accountData.push(
+        {
+          date: `2023-03-28`,
+          state: 0,
+          detail: `2月份工资`,
+          money: 1800,
+        },
+        {
+          date: `2023-03-29`,
+          state: 1,
+          detail: '抽烟 喝酒 烫头',
+          money: 2000,
+        },
+      );
     }
   };
-
-  const meanNum = (list: RowVO[], field: VxeColumnPropTypes.Field) => {
-    let count = 0;
-    list.forEach((item) => {
-      count += Number(item[field]);
-    });
-    return count / list.length;
+  //创建虚拟列表
+  const createVirtualList = () => {
+    //外部容器高度
+    const outContainerHeight = outContainer.value.clientHeight;
+    //滚动轴滚动长度
+    const scrollTop = outContainer.value.scrollTop;
+    const startIndex = Math.floor(scrollTop / itemHeight);
+    const endIndex = startIndex + Math.floor(outContainerHeight / itemHeight);
+    paddingTop.value = (startIndex * itemHeight).toString() + 'px';
+    // accountData.length---总数据的长度
+    paddingBottom.value = ((accountData.length - endIndex) * itemHeight).toString() + 'px';
+    // 清空viewData数据
+    viewData.splice(0, viewData.length);
+    // 添加可视片段上的数据
+    viewData.push(...accountData.slice(startIndex, endIndex + 1));
   };
-
-  const footerMethod: VxeTablePropTypes.FooterMethod<RowVO> = ({ columns, data }) => {
-    return [
-      columns.map((column, columnIndex) => {
-        if (columnIndex === 0) {
-          return '平均';
-        }
-        if (['age', 'rate'].includes(column.field)) {
-          return meanNum(data, column.field);
-        }
-        return null;
-      }),
-    ];
-  };
+  // 需要获取dom元素 所以要在onMounted钩子中进行
+  onMounted(async () => {
+    // 获取原始数据(总数据)
+    await getData();
+    // 初始化创建虚拟列表
+    createVirtualList();
+    // 添加事件监听
+    outContainer.value.addEventListener('scroll', createVirtualList);
+  });
 </script>
-
-<style lang="scss">
-  .my-menus {
-    background-color: #f8f8f9;
+<style scoped lang="less">
+  p {
+    margin: 0;
+    padding: 0;
   }
 
-  .my-menus .vxe-ctxmenu--link {
-    width: 200px;
+  #main-bg {
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px 10px 0;
   }
 
-  .my-copy-item {
-    font-style: oblique;
-    font-weight: 700;
+  .title {
+    width: 100%;
+    padding-bottom: 10px;
+    border-bottom: 1px #eee solid;
+    font-family: cursive;
+    font-size: 24px;
+    font-weight: 800;
+    text-align: left;
   }
 
-  .color-red {
-    color: red;
-  }
+  .account-list-outer {
+    height: calc(100% - 58px);
+    overflow-y: scroll;
 
-  .color-blue {
-    color: blue;
-  }
+    .account-list-inner {
+      padding-top: v-bind('paddingTop');
+      padding-bottom: v-bind('paddingBottom');
 
-  .color-orange {
-    color: orange;
+      .account-box {
+        margin: 10px 0;
+        border: 1px #eee solid;
+        border-radius: 8px;
+
+        .date {
+          padding: 10px;
+          font-size: 14px;
+          line-height: 14px;
+          text-align: left;
+        }
+
+        .info {
+          display: flex;
+          padding: 10px 15px;
+          font-size: 15px;
+          line-height: 15px;
+          text-align: left;
+
+          .detail {
+            width: 60%;
+          }
+
+          .state {
+            width: 10%;
+          }
+
+          .monry {
+            width: 30%;
+          }
+        }
+      }
+    }
   }
 </style>

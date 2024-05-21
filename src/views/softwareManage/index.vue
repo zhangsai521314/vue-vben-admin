@@ -97,23 +97,29 @@
         ref="formRef"
         :model="formData"
       >
-        <a-form-item label="服务类型" name="serviceType">
+        <a-form-item
+          label="服务类型"
+          name="serviceType"
+          :rules="[{ required: true, message: '请选择软件类型' }]"
+        >
           <a-select
             show-search
             :filter-option="AntVueCommon.filterOption"
             placeholder="请选择服务类型"
-            :rules="[{ required: true, message: '请选择软件类型' }]"
             v-model:value="formData.serviceType"
             :options="dictionariesData.filter((m) => m.dictionariesClass == 'serviceType')"
           />
         </a-form-item>
-        <a-form-item label="所属设备" name="equipmentId">
+        <a-form-item
+          label="所属设备"
+          name="equipmentId"
+          :rules="[{ required: true, message: '请选择所属设备' }]"
+        >
           <a-select
             allowClear
             show-search
             :filter-option="AntVueCommon.filterOption"
             placeholder="请选择所属设备"
-            :rules="[{ required: true, message: '请选择所属设备' }]"
             v-model:value="formData.equipmentId"
             :options="equipmentData"
           />
@@ -161,6 +167,13 @@
         </a-form-item>
         <a-form-item name="port" label="运行端口" :rules="[{ max: 250, message: '运行端口过长' }]">
           <a-input placeholder="请输入运行端口" v-model:value="formData.port" autocomplete="off" />
+        </a-form-item>
+        <a-form-item
+          name="isUpPerformance"
+          label="性能上报"
+          :rules="[{ required: true, message: '请选择是否开启性能上报' }]"
+        >
+          <a-switch v-model:checked="formData.isUpPerformance" />
         </a-form-item>
         <a-form-item
           name="orderIndex"
@@ -249,7 +262,7 @@
                 :name="
                   row.IsBack
                     ? 'icon-baseui-fanhuishangyiji'
-                    : row.Size == -1
+                    : row.IsParent
                       ? 'icon-baseui-wenjianjia'
                       : row.Name.lastIndexOf('.') == -1
                         ? 'icon-baseui-weizhiwenjian'
@@ -264,12 +277,16 @@
             </span>
           </template>
         </vxe-column>
-        <vxe-column field="Size" title="大小(KB)">
+        <vxe-column field="Size" title="大小(KB)" align="right">
           <template #default="{ row }">
             {{ row.Size != -1 ? row.Size : '' }}
           </template>
         </vxe-column>
-        <vxe-column field="Time" title="上次修改时间" />
+        <vxe-column field="Time" title="上次修改时间" align="right">
+          <template #default="{ row }">
+            {{ row.Time ? dayjs(row.Time).format('YYYY-MM-DD HH:mm:ss') : '' }}
+          </template>
+        </vxe-column>
       </vxe-table>
       <template #footer>
         <a-spin :spinning="fromSpinning">
@@ -287,6 +304,7 @@
   import myCommon from '@/utils/MyCommon/common';
   import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
+  import dayjs from 'dayjs';
   import {
     VxeGrid,
     VxeGridProps,
@@ -313,7 +331,7 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50 },
+      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'serviceId',
         title: '软件ID',
@@ -441,6 +459,7 @@
     filePath: '',
     runStatus: '运行',
     serviceCode: '',
+    isUpPerformance: false,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);
@@ -473,9 +492,11 @@
   const isRunGetLog = ref(false);
   const logCollectionData = ref([]);
   const logTableRef = ref(null);
-  let LogDirectoryBase = null;
-  const LogDirectoryAll = ref(null);
-  const logTableStepData = [];
+  let LogDirectory = null;
+  //每一步的数据
+  let logTableStepData = [];
+  //每一步的文件夹名称
+  const logTableStepName = ref([]);
   let logTableStepDataRowIndex = [];
   let logTableStep = 0;
   const logMenuConfig = reactive({
@@ -703,13 +724,13 @@
 
   //关闭查看服务配置
   function closeConfig() {
-    logCollectionData.value.valiue = [];
     isRunGetConfig.value = false;
     isShowConfig.value = false;
     isShowContent = false;
     modelValue.value = '';
     newServerCode = null;
     refresh.value = 'yes';
+    mqttStore.setNewServicConfig(null);
   }
 
   //显示查看服务日志
@@ -735,7 +756,14 @@
 
   //关闭查看服务日志
   function closeLog() {
+    logCollectionData.value = [];
     isShowLog.value = false;
+    logTableStepName.value = [];
+    logTableStepData = [];
+    logTableStepDataRowIndex = [];
+    logTableStep = 0;
+    isShowContent = false;
+    mqttStore.setNewServiceLogShowDirectory(null);
   }
 
   //表格右键事件
@@ -746,13 +774,15 @@
         break;
     }
   }
-  //发送下载通信
+  //发送下载日志文件
   function downLogMqtt() {
     const checkDatas = logTableRef.value.getCheckboxRecords(false);
     if (checkDatas && checkDatas.length > 0) {
       const LogFileCollection = [];
+      let name = logTableStepName.value.join('\\');
+      name = name != '' ? '\\' + name : '';
       checkDatas.forEach((m) => {
-        LogFileCollection.push(`${LogDirectoryBase}\\${m.Name}`);
+        LogFileCollection.push({ Name: `${LogDirectory}${name}\\${m.Name}`, IsParent: m.IsParent });
       });
       mqttStore.publish(
         mqttStore.downLog.replace(mqttStore.monitorClient, '/' + newServerCode),
@@ -778,15 +808,16 @@
       logTableStep--;
       logCollectionData.value = logTableStepData[logTableStep];
       logTableStepData.splice(logTableStep + 1);
+      logTableStepName.value.splice(logTableStep);
       nextTick(() => {
         logTableRef.value.scrollToRow(logTableStepDataRowIndex[logTableStep - 1]);
         logTableStepDataRowIndex.splice(logTableStep);
       });
-    } else if (row.Size == -1) {
+    } else if (row.IsParent) {
       logTableStep++;
       logTableStepData.push(row.SubCollection);
+      logTableStepName.value.push(row.Name);
       logCollectionData.value = row.SubCollection;
-      LogDirectoryAll.value += `\\${row.Name}`;
       logTableStepDataRowIndex.push(row);
     }
   }
@@ -808,7 +839,7 @@
     () => {
       if (
         mqttStore.newServicConfig != null &&
-        isShowConfig.value == true &&
+        isShowConfig.value &&
         newServerCode == mqttStore.newServicConfig.ServiceCode &&
         !isShowContent
       ) {
@@ -827,7 +858,7 @@
     () => {
       if (
         mqttStore.newServiceLogShowDirectory != null &&
-        isShowLog.value == true &&
+        isShowLog.value &&
         newServerCode == mqttStore.newServiceLogShowDirectory.ServiceCode &&
         !isShowContent
       ) {
@@ -835,8 +866,7 @@
         isRunGetLog.value = false;
         nextTick(() => {
           logCollectionData.value = mqttStore.newServiceLogShowDirectory.LogCollection;
-          LogDirectoryBase = mqttStore.newServiceLogShowDirectory.LogDirectoryBase;
-          LogDirectoryAll.value = LogDirectoryBase;
+          LogDirectory = mqttStore.newServiceLogShowDirectory.LogDirectory;
           logTableStepData.push(logCollectionData.value);
         });
       }
@@ -844,12 +874,12 @@
   );
 
   watch(
-    () => LogDirectoryAll.value,
+    () => logTableStepName.value,
     () => {
-      if (LogDirectoryAll.value != LogDirectoryBase) {
+      if (logTableStepName.value.length > 0) {
         nextTick(() => {
           logTableRef.value.insert({
-            Name: '...',
+            Name: '...\\' + logTableStepName.value.join('\\'),
             IsBack: true,
             Size: -1,
             Time: '',
@@ -857,6 +887,7 @@
         });
       }
     },
+    { deep: true },
   );
 
   //页面卸载后

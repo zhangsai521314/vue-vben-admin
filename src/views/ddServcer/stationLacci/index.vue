@@ -18,7 +18,7 @@
             <a-space
               direction="horizontal"
               size="small"
-              style=" margin-left: 5px;line-height: 50px"
+              style="margin-left: 5px; line-height: 50px"
             >
               <AuthDom auth="line_query">
                 <a-space direction="horizontal" size="small">
@@ -166,14 +166,14 @@
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 
-  defineOptions({ name: 'DDServcerLacci' });
+  defineOptions({ name: 'DDServcerStationLacci' });
   const isRunGet = ref(false);
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50 },
+      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'lineName',
         title: '线路名称',
@@ -200,14 +200,12 @@
         title: '小区名称',
         showOverflow: true,
         showHeaderOverflow: true,
-        sortable: true,
       },
       {
         field: 'laccis',
-        title: 'Laccis',
+        title: '小区编号',
         showOverflow: true,
         showHeaderOverflow: true,
-        sortable: true,
       },
       {
         title: '操作',

@@ -5,6 +5,7 @@
       id="mytable"
       ref="tableRef"
       :loading="loading"
+      :row-config="{ keyField: 'msgId' }"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"
     >
@@ -34,7 +35,7 @@
                       allow-clear
                       show-search
                       :filter-option="AntVueCommon.filterOption"
-                      v-model:value="seacthContent.joinId"
+                      v-model:value="seacthContent.serviceId"
                       :options="serviceData"
                     />
                   </a-space>
@@ -111,6 +112,25 @@
           @page-change="handlePageChange"
         />
       </template>
+      <template #strongPrompting="{ row }">
+        <span
+          v-if="
+            mqttStore.msgStrongPromptingTime[
+              `${row.serviceId}_${row.msgCategory}_${row.msgClass}_${row.msgStatus}`
+            ] != null &&
+            mqttStore.msgStrongPromptingTime[
+              `${row.serviceId}_${row.msgCategory}_${row.msgClass}_${row.msgStatus}`
+            ].time.isAfter(dayjs())
+          "
+          style="color: red"
+          >否.{{
+            mqttStore.msgStrongPromptingTime[
+              `${row.serviceId}_${row.msgCategory}_${row.msgClass}_${row.msgStatus}`
+            ].time.format('YYYY-MM-DD HH:mm:ss')
+          }}</span
+        >
+        <span v-else style="color: green">是</span>
+      </template>
       <template #msgStatus="{ row }">
         <span
           :style="{
@@ -126,40 +146,108 @@
           >{{ row.msgStatus }}</span
         >
       </template>
-      <template #alarmDuration="{ row }">
+      <template #read="{ row }">
+        <a-tag style="width: 38px; margin: 0" :color="row.isRead ? '' : 'red'">{{
+          row.isRead ? '已读' : '未读'
+        }}</a-tag>
+      </template>
+      <template #msgDuration="{ row }">
         {{
-          row.alarmDuration == null
+          row.msgDuration == null
             ? ''
-            : row.alarmDuration >= 0 && row.alarmDuration <= 60
-              ? `${parseInt(row.alarmDuration)} 秒`
-              : row.alarmDuration > 60 && row.alarmDuration <= 3600
-                ? `${parseFloat(row.alarmDuration / 60).toFixed(1)} 分`
-                : row.alarmDuration > 360 && row.alarmDuration <= 86400
-                  ? `${parseFloat(row.alarmDuration / 60 / 60).toFixed(1)} 时`
-                  : row.alarmDuration > 86400
-                    ? `${parseFloat(row.alarmDuration / 60 / 60 / 24).toFixed(1)} 天`
+            : row.msgDuration >= 0 && row.msgDuration <= 60
+              ? `${parseInt(row.msgDuration)} 秒`
+              : row.msgDuration > 60 && row.msgDuration <= 3600
+                ? `${parseFloat(row.msgDuration / 60).toFixed(1)} 分`
+                : row.msgDuration > 360 && row.msgDuration <= 86400
+                  ? `${parseFloat(row.msgDuration / 60 / 60).toFixed(1)} 时`
+                  : row.msgDuration > 86400
+                    ? `${parseFloat(row.msgDuration / 60 / 60 / 24).toFixed(1)} 天`
                     : ''
         }}
       </template>
-      <!-- <template #default="{ row }">
+      <template #default="{ row }">
         <div :class="`tableOption`">
-          <AuthDom auth="message.edit">
+          <AuthDom auth="message.msg_queren">
+            <IconFontClass
+              name="icon-baseui-queren"
+              @click="okMsg(row)"
+              style="color: #0749df"
+              title="确认告警"
+            />
+          </AuthDom>
+          <AuthDom auth="message.show_detail">
             <IconFontClass
               name="icon-baseui-show"
-              @click="showFrom(row)"
+              @click="showMgsHis(row)"
               style="color: #0fc10e"
               title="查看告警记录"
             />
           </AuthDom>
+          <!-- <AuthDom auth="message.show_read">
+            <IconFontClass
+              name="icon-baseui-zijianrizhi"
+              @click="showFrom(row)"
+              style="color: #0fc10e"
+              title="查看消息已读"
+            />
+          </AuthDom> -->
+          <div>
+            <a-select
+              placeholder="信息强提示设置"
+              @change="(value) => changeStrongPrompting(value, row)"
+              style="width: 100%"
+              v-if="
+                mqttStore.msgStrongPromptingTime[
+                  `${row.serviceId}_${row.msgCategory}_${row.msgClass}_${row.msgStatus}`
+                ] != null &&
+                mqttStore.msgStrongPromptingTime[
+                  `${row.serviceId}_${row.msgCategory}_${row.msgClass}_${row.msgStatus}`
+                ].time.isAfter(dayjs())
+              "
+              :value="
+                mqttStore.msgStrongPromptingTime[
+                  `${row.serviceId}_${row.msgCategory}_${row.msgClass}_${row.msgStatus}`
+                ].timeFrequency
+              "
+            >
+              <a-select-option value="">立即提示</a-select-option>
+              <a-select-option :value="10">10分钟后提示</a-select-option>
+              <a-select-option :value="30">30分钟后提示</a-select-option>
+              <a-select-option :value="60">1小时后提示</a-select-option>
+            </a-select>
+            <a-select
+              v-else
+              placeholder="信息强提示设置"
+              style="width: 100%"
+              @change="(value) => changeStrongPrompting(value, row)"
+            >
+              <a-select-option value="">立即提示</a-select-option>
+              <a-select-option :value="10">10分钟后提示</a-select-option>
+              <a-select-option :value="30">30分钟后提示</a-select-option>
+              <a-select-option :value="60">1小时后提示</a-select-option>
+            </a-select>
+          </div>
         </div>
-      </template> -->
+      </template>
     </vxe-grid>
+    <a-drawer
+      :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+      :width="1000"
+      :visible="isShowVis"
+      title="消息历史"
+      :footer-style="{ textAlign: 'right' }"
+      @close="closeHis"
+    >
+      <his :msgId="hisId" />
+    </a-drawer>
   </MyContent>
 </template>
 <script setup lang="tsx">
+  import his from './his.vue';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import myCommon from '@/utils/MyCommon/common';
-  import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
+  import { ref, reactive, createVNode, nextTick, watch, onMounted, unref } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import messageApi from '@/api/message';
@@ -169,15 +257,26 @@
   import dayjs from 'dayjs';
   import 'dayjs/locale/zh-cn';
   import { tryOnUnmounted } from '@vueuse/core';
+  import { useMqttStoreWithOut } from '@/store/modules/mqtt';
+  import { useRouter } from 'vue-router';
+  import { message, Modal } from 'ant-design-vue';
+  import { useUserStore } from '@/store/modules/user';
 
   defineOptions({ name: 'Message' });
+  const userStore = useUserStore();
+  const userData = ref(_.cloneDeep(userStore.getUserInfo));
+  const mqttStore = useMqttStoreWithOut();
+  const { currentRoute } = useRouter();
+  //获取url参数
+  let { msgId } = unref(currentRoute).params;
+  msgId = msgId ? msgId : null;
   const { prefixCls } = useDesign('message-');
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50 },
+      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'msgId',
         title: '信息ID',
@@ -191,24 +290,28 @@
         showOverflow: true,
         visible: false,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'serviceName',
         title: '服务名称',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'msgType',
         title: '信息类型',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'msgStatus',
         title: '信息状态',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
         slots: {
           default: 'msgStatus',
         },
@@ -226,26 +329,26 @@
         showHeaderOverflow: true,
       },
       {
-        field: 'alarmStartTime',
+        field: 'msgStartTime',
         title: '告警开始时间',
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
       },
       {
-        field: 'alarmEndTime',
+        field: 'msgEndTime',
         title: '告警结束时间',
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
       },
       {
-        field: 'alarmDuration',
+        field: 'msgDuration',
         title: '告警持续时长',
         showOverflow: true,
         showHeaderOverflow: true,
         slots: {
-          default: 'alarmDuration',
+          default: 'msgDuration',
         },
       },
       {
@@ -276,16 +379,33 @@
         showHeaderOverflow: true,
         visible: false,
       },
+      {
+        title: '告警强提示',
+        width: 180,
+        slots: {
+          default: 'strongPrompting',
+        },
+        showOverflow: true,
+        showHeaderOverflow: true,
+        visible: false,
+      },
       // {
-      //   title: '操作',
-      //   width: 140,
+      //   title: '是否已读',
       //   slots: {
-      //     default: 'default',
+      //     default: 'read',
       //   },
-      //   showOverflow: true,
       //   showHeaderOverflow: true,
       //   fixed: 'right',
       // },
+      {
+        title: '操作',
+        width: 160,
+        slots: {
+          default: 'default',
+        },
+        showHeaderOverflow: true,
+        fixed: 'right',
+      },
     ],
     toolbarConfig: {
       custom: true,
@@ -298,7 +418,7 @@
   const tableRef = ref({});
   const myContentRef = ref({});
   const seacthContent = ref({
-    joinId: null,
+    serviceId: null,
     msgType: '',
     msgStatus: null,
     msgTitle: '',
@@ -321,6 +441,8 @@
   const refresh = ref('yes');
   const refreshTime = ref(10);
   let refreshTimeId;
+  const hisId = ref('');
+  const isShowVis = ref(false);
 
   getMessages(true);
   getDictionaries();
@@ -338,11 +460,13 @@
       timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
     messageApi
       .GetMessages({
+        msgId,
         PageIndex: page.current,
         PageSize: page.size,
         ...seacthContent.value,
         execompleteBefore: () => {
           loading.value = false;
+          msgId = null;
         },
       })
       .then((data) => {
@@ -360,7 +484,7 @@
   //重置搜索条件
   function resetSeacth() {
     seacthContent.value = {
-      joinId: null,
+      serviceId: null,
       msgType: '',
       msgStatus: null,
       msgTitle: '',
@@ -369,10 +493,7 @@
       endTime: null,
     };
 
-    timeValue.value = [
-      // dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
-      // dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
-    ];
+    timeValue.value = null;
   }
 
   //获取字典
@@ -401,10 +522,12 @@
       });
   }
 
+  //分页切换
   function handlePageChange() {
     getMessages();
   }
 
+  //刷新数据
   function refreshData() {
     if (refresh.value == 'yes') {
       refreshTimeId = setTimeout(() => {
@@ -423,10 +546,49 @@
     }
   }
 
+  //停止刷新数据
   function stopRefresh() {
     clearTimeout(refreshTimeId);
     refresh.value = 'no';
     refreshTime.value = 10;
+  }
+
+  //强提示频率改变
+  function changeStrongPrompting(timeFrequency, row) {
+    if (timeFrequency == '') {
+      mqttStore.clearMsgStrongPromptingTime(row);
+    } else {
+      mqttStore.addMsgStrongPromptingTime(row, timeFrequency);
+    }
+  }
+
+  function showMgsHis(row) {
+    hisId.value = row.msgId;
+    isShowVis.value = true;
+  }
+
+  //关闭his
+  function closeHis() {
+    isShowVis.value = false;
+    hisId.value = '';
+  }
+
+  function okMsg(row) {
+    if (!row.confirmTime && !row.confirmUser) {
+      messageApi
+        .OkMsg(row.msgId)
+        .then((data) => {
+          message.success('确认告警成功');
+          const oldData = tableRef.value.getRowById(data.msgId);
+          oldData.confirmTime = data.confirmTime;
+          oldData.confirmUser = userData.value.userName;
+        })
+        .catch(() => {
+          message.error('确认告警失败');
+        });
+    } else {
+      message.info('该告警已被确认');
+    }
   }
 
   watch(

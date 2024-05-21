@@ -33,7 +33,9 @@ import App from './App.vue';
 import { getAppEnvConfig } from '@/utils/env';
 import { useMqttStoreWithOut } from '@/store/modules/mqtt';
 import messageApi from '@/api/message';
-import type { AlarmData } from '#/store';
+import dayjs from 'dayjs';
+import { useUserStore } from '@/store/modules/user';
+import { createLocalStorage } from '@/utils/cache';
 
 async function bootstrap() {
   const app = createApp(App);
@@ -82,7 +84,7 @@ async function mqttInit() {
   const mqttStore = useMqttStoreWithOut();
   let timeId;
   let isDingYue = false;
-  const errTopic = [];
+  const errTopic: Array<string> = [];
   //初始化数据仓库
   dataInit();
 
@@ -94,7 +96,7 @@ async function mqttInit() {
       .then((rdata) => {
         mqttStore.updateMqttStatus(7);
         rdata[0].forEach((m) => {
-          mqttStore.addAlarmData(m);
+          mqttStore.addMsgData(m);
         });
         mqttStore.isInitAlarmData = true;
         mqttStore.updateMqttStatus(8);
@@ -114,6 +116,7 @@ async function mqttInit() {
   }
 
   function init() {
+    const userStore = useUserStore();
     const { VITE_GLOB_MQTT } = getAppEnvConfig();
     const mqttConfig = JSON.parse(VITE_GLOB_MQTT);
     mqttStore.setMqttConfig(mqttConfig);
@@ -125,11 +128,17 @@ async function mqttInit() {
         mqttConfig.WebDownLog,
         mqttConfig.WebPlayCallRecord,
         mqttConfig.WebDownCallRecord,
-        mqttConfig.UpPerformance,
+        // mqttConfig.UpPerformance,
         mqttConfig.LookConfigBack,
         mqttConfig.LookLogBack,
         mqttConfig.WebCallRecordChange,
       ];
+      if (userStore) {
+        const t = userStore.getUserInfo.userMqTopic.map((m) => m.topic);
+        if (t) {
+          topics.concat(t);
+        }
+      }
       mqttStore.updateMqttStatus(2);
       const client = mqtt.connect(mqttConfig.ServerAddress, {
         clientId: mqttConfig.ClientIdPrefix + myCommon.uniqueId(),
@@ -149,19 +158,19 @@ async function mqttInit() {
       //连接成功
       client.on('connect', function () {
         mqttStore.updateMqttStatus(1);
-        Array.from(topics).forEach((topic) => {
-          client.subscribe(
-            topic.replace(mqttConfig.MonitorClient, '/' + client.options.clientId),
-            { qos: 1 },
-            function (err) {
+        Array.from(topics).forEach((topic: string) => {
+          const tt = topic.replace(mqttConfig.MonitorClient, '/' + client.options.clientId);
+          if (!mqttStore.alreadyTopic.includes(tt)) {
+            client.subscribe(tt, { qos: 1 }, function (err) {
               if (!err) {
+                mqttStore.alreadyTopic.push(tt);
                 console.log(`订阅mqtt主题${topic}成功`);
               } else {
                 errTopic.push(topic);
                 console.log(`订阅mqtt主题${topic}失败`);
               }
-            },
-          );
+            });
+          }
         });
         isDingYue = true;
       });
@@ -175,15 +184,15 @@ async function mqttInit() {
         if (!myCommon.isnull(msg)) {
           try {
             msg = JSON.parse(msg);
-          } catch (error) {}
+          } catch (error) {
+            console.error('mqtt转换json失败', msg);
+          }
           if (topic == mqttConfig.WebAlarmInsert) {
             //告警插入
-            mqttStore.addAlarmData(msg);
+            mqttStore.addMsgData(msg);
           } else if (topic == mqttConfig.WebAlarmUpdate) {
             //告警更新
-            mqttStore.updateAlarmData(msg);
-          } else if (topic == mqttConfig.UpPerformance) {
-            //性能监测数据
+            mqttStore.updateMsgData(msg);
           } else if (
             topic ==
             mqttConfig.WebPlayCallRecord.replace(
@@ -228,6 +237,9 @@ async function mqttInit() {
           ) {
             //终端配置文件内容
             mqttStore.setNewServicConfig(msg);
+          } else if (topic.indexOf(mqttConfig.UpPerformance.replace('/+', '')) != -1) {
+            //性能监测数据
+            mqttStore.addUserTopicPerformanceNewValue(topic, msg);
           } else {
             console.warn(`mqtt_${topic}_非匹配主题_丢弃`);
           }
@@ -255,7 +267,7 @@ async function mqttInit() {
       });
       //当客户端接收到任何数据包时发出。这包括来自订阅主题的信息包以及MQTT用于管理订阅和连接的信息包
       client.on('packetreceive', (packet) => {
-        console.log('packetreceive', packet);
+        // console.log('packetreceive', packet);
       });
       mqttStore.setMqttClient(client);
       //订阅失败处理
@@ -299,6 +311,15 @@ async function mqttInit() {
     //   reject('reject');
     // });
   }
+
+  //定时判断是否强提示
+  setInterval(() => {
+    for (const key in mqttStore.msgStrongPromptingTime) {
+      if (mqttStore.msgStrongPromptingTime[key].time.isBefore(dayjs())) {
+        delete mqttStore.msgStrongPromptingTime[key];
+      }
+    }
+  }, 3000);
 }
 
 bootstrap();

@@ -237,7 +237,7 @@
           <a-textarea
             placeholder="请输入备注信息"
             :rows="3"
-            v-model:value="formData.remark"
+            v-model:value="formData.other"
             autocomplete="off"
           />
         </a-form-item>

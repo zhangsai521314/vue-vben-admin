@@ -62,9 +62,9 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-input v-model:value="callTimeSpan" style="width: 260px">
+                    <a-input v-model:value="duration" style="width: 260px">
                       <template #addonBefore>
-                        <a-select v-model:value="callTimeSpanQueryType" style="width: 130px">
+                        <a-select v-model:value="durationQueryType" style="width: 130px">
                           <a-select-option :value="3">{{ '通话时长 >=' }}</a-select-option>
                           <a-select-option :value="5">{{ '通话时长 <=' }}</a-select-option>
                         </a-select>
@@ -120,18 +120,18 @@
           }}</span
         >
       </template>
-      <template #callTimeSpan="{ row }">
+      <template #duration="{ row }">
         {{
-          row.callTimeSpan == null
+          row.duration == null
             ? ''
-            : row.callTimeSpan >= 0 && row.callTimeSpan <= 60
-              ? `${parseInt(row.callTimeSpan)} 秒`
-              : row.callTimeSpan > 60 && row.callTimeSpan <= 3600
-                ? `${parseFloat(row.callTimeSpan / 60).toFixed(1)} 分`
-                : row.callTimeSpan > 360 && row.callTimeSpan <= 86400
-                  ? `${parseFloat(row.callTimeSpan / 60 / 60).toFixed(1)} 时`
-                  : row.callTimeSpan > 86400
-                    ? `${parseFloat(row.callTimeSpan / 60 / 60 / 24).toFixed(1)} 天`
+            : row.duration >= 0 && row.duration <= 60
+              ? `${parseInt(row.duration)} 秒`
+              : row.duration > 60 && row.duration <= 3600
+                ? `${parseFloat(row.duration / 60).toFixed(1)} 分`
+                : row.duration > 360 && row.duration <= 86400
+                  ? `${parseFloat(row.duration / 60 / 60).toFixed(1)} 时`
+                  : row.duration > 86400
+                    ? `${parseFloat(row.duration / 60 / 60 / 24).toFixed(1)} 天`
                     : ''
         }}
       </template>
@@ -225,7 +225,7 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50 },
+      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'callId',
         title: '主键ID',
@@ -279,12 +279,12 @@
         showHeaderOverflow: true,
       },
       {
-        field: 'callTimeSpan',
+        field: 'duration',
         title: '持续时长',
         showOverflow: true,
         showHeaderOverflow: true,
         slots: {
-          default: 'callTimeSpan',
+          default: 'duration',
         },
       },
       {
@@ -363,9 +363,9 @@
     endTime: null,
     SearchParameters: [],
   });
-  const callTimeSpanQueryType = ref(5);
-  const callTimeSpanUnit = ref('MM');
-  const callTimeSpan = ref(null);
+  const durationQueryType = ref(5);
+  const durationUnit = ref('MM');
+  const duration = ref(null);
 
   const timeValue = ref(null);
   //   [
@@ -452,12 +452,12 @@
       timeValue.value == null ? null : timeValue.value[0].format('YYYY-MM-DD HH:mm:ss');
     seacthContent.value.endTime =
       timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
-    if (!myCommon.isnull(callTimeSpan.value)) {
+    if (!myCommon.isnull(duration.value)) {
       seacthContent.value.SearchParameters = [
         {
-          FieldName: 'callTimeSpan',
-          ConditionalType: callTimeSpanQueryType.value,
-          FieldValue: callTimeSpanUnit.value == 'MM' ? callTimeSpan.value * 60 : null,
+          FieldName: 'duration',
+          ConditionalType: durationQueryType.value,
+          FieldValue: durationUnit.value == 'MM' ? duration.value * 60 : null,
         },
       ];
     } else {
@@ -493,16 +493,16 @@
       SearchParameters: [],
     };
     timeValue.value = null;
-    callTimeSpanQueryType.value = 5;
-    callTimeSpanUnit.value = 'MM';
-    callTimeSpan.value = null;
+    durationQueryType.value = 5;
+    durationUnit.value = 'MM';
+    duration.value = null;
   }
 
   //获取字典
   function getDictionaries() {
     dictionariesApi
       .GetDictionariesimple({
-        dictionariesclass: ['alarmType'],
+        dictionariesclass: ['msgType'],
       })
       .then((data) => {
         dictionariesData.value = data;

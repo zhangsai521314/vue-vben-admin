@@ -2,7 +2,9 @@ import type { MsgData } from '#/store';
 import { defineStore } from 'pinia';
 import { store } from '@/store';
 import dayjs from 'dayjs';
-import { update } from 'lodash-es';
+import messageApi from '@/api/message';
+import { message } from 'ant-design-vue';
+import { useUserStore } from '@/store/modules/user';
 
 export interface MqttState {
   //系统mqtt全部配置信息
@@ -25,7 +27,14 @@ export interface MqttState {
   downLog: Nullable<String>;
   //主题替换后缀
   monitorClient: Nullable<String>;
-
+  //消息提示播放对象
+  msgAudioOb: Nullable<object>;
+  //提示是否静音
+  msgIsMute: boolean;
+  //弹出提示开启了声音提示（主要用户刷新状态下不操作页面，浏览器安全特性不允许放音）
+  msgAudioIsAlert: boolean;
+  //声音提示是否可以开启
+  msgAudioIsShow: boolean;
   //是否已初始加载完告警信息
   isInitAlarmData: Boolean;
   //最新服务的的配置信息
@@ -36,6 +45,12 @@ export interface MqttState {
   newCallRecordPlayFile: Nullable<object>;
   //录音文件在网管系统服务器上的状态发生改变
   callRecordChange: Nullable<object>;
+  //消息是强提示时间限制,键是消息的serviceId_msgCategory_msgClass_msgType_msgStatus，值是时间和频率。当前时间大于值时可以强提示
+  msgStrongPromptingTime: object;
+  //已订阅的主题
+  alreadyTopic: Array<string>;
+  //用户订阅设备性能数据的最新值
+  userTopicPerformanceNewValue: object;
 }
 
 //mqtt数据存储类
@@ -54,14 +69,64 @@ export const useMqttStore = defineStore({
     lookLog: null,
     downLog: null,
     monitorClient: '',
-    //最新日志目录信息内容
     newServiceLogShowDirectory: null,
-    //最新播放通话记录录音文件地址
     newCallRecordPlayFile: null,
     callRecordChange: null,
+    msgStrongPromptingTime: {},
+    msgAudioOb: null,
+    msgIsMute: false,
+    msgAudioIsAlert: false,
+    msgAudioIsShow: false,
+    alreadyTopic: [],
+    userTopicPerformanceNewValue: {},
   }),
-  getters: {},
+  getters: {
+    //获取所有信息
+    getAllMsgData(state) {
+      return state.msgData;
+    },
+    //获取未读的报警信息
+    getUnreadalarmData(state) {
+      return state.msgData.filter((m) => !m.isRead && m.msgCategory == 2 && m.msgTitle);
+    },
+    //获取报警信息
+    getAlarmData(state) {
+      return state.msgData.filter((m) => m.msgCategory == 2 && m.msgTitle);
+      // const f = [];
+      // state.msgData[0].serviceId = '522045728034891';
+      // state.msgData[0].serverName = '科里巴-车站值班台addadadadggwe你看发了你发';
+      // for (let index = 0; index < 500; index++) {
+      //   f.push(state.msgData[0]);
+      // }
+      // return f;
+    },
+  },
   actions: {
+    clearAllMsgStrongPromptingTime() {
+      this.msgStrongPromptingTime = {};
+    },
+    clearMsgStrongPromptingTimeKey(key) {
+      delete this.msgStrongPromptingTime[key];
+    },
+    clearMsgStrongPromptingTime(item: MsgData) {
+      delete this.msgStrongPromptingTime[
+        `${item.serviceId}_${item.msgCategory}_${item.msgClass}_${item.msgStatus}`
+      ];
+    },
+    addMsgStrongPromptingTime(item: MsgData, timeFrequency) {
+      this.msgStrongPromptingTime[
+        `${item.serviceId}_${item.msgCategory}_${item.msgClass}_${item.msgStatus}`
+      ] = {
+        time: dayjs().add(timeFrequency, 'minute'),
+        timeFrequency,
+      };
+    },
+    addUserTopicPerformanceNewValue(topic, data) {
+      this.userTopicPerformanceNewValue[topic] = data;
+    },
+    setMsgIsMute(data) {
+      this.msgIsMute = data;
+    },
     setNewServicConfig(data) {
       this.newServicConfig = data;
     },
@@ -78,11 +143,67 @@ export const useMqttStore = defineStore({
     setMqttConfig(config) {
       this.mqttConfig = config;
     },
-    //增加报警信息
-    addAlarmData(item: MsgData) {
+    readMsg(data: MsgData) {
+      this.sumitReadData([data.msgId])
+        .then(() => {
+          data['isRead'] = true;
+        })
+        .catch(() => {
+          message.error('已读失败');
+        });
+    },
+    //全部已读
+    allRead() {
+      const _this = this;
+      const ids: Array<string> = [];
+      this.msgData
+        .filter((m) => !m.isRead)
+        .forEach((m) => {
+          ids.push(m.msgId);
+        });
+      this.sumitReadData(ids)
+        .then(() => {
+          ids.forEach((id) => {
+            const d = _this.msgData.find((m) => m.msgId == id);
+            if (d) {
+              d['isRead'] = true;
+            }
+          });
+        })
+        .catch(() => {
+          message.error('已读失败');
+        });
+    },
+    //提交已读
+    sumitReadData(msgIds) {
+      return messageApi.ReadMsg(msgIds);
+    },
+    //播放信息提示音
+    playMsgAudio(row: MsgData) {
+      if (!this.msgIsMute && this.msgAudioIsShow) {
+        //播放告警提示音
+        try {
+          if (
+            (row.msgClass == 1 || (row.msgClass == 2 && row.msgStatus == 1)) &&
+            (this.msgStrongPromptingTime[
+              `${row.serviceId}_${row.msgCategory}_${row.msgClass}_${row.msgStatus}`
+            ] == null ||
+              this.msgStrongPromptingTime[
+                `${row.serviceId}_${row.msgCategory}_${row.msgClass}_${row.msgStatus}`
+              ].time.isBefore(dayjs()))
+          ) {
+            this.msgAudioOb?.play();
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    },
+    //增加信息
+    addMsgData(item: MsgData) {
       if (
         !this.newInfo[item.joinId] ||
-        dayjs(this.newInfo[item.joinId].alarmStartTime) <= dayjs(item.alarmStartTime)
+        dayjs(this.newInfo[item.joinId].msgStartTime) <= dayjs(item.msgStartTime)
       ) {
         this.newInfo[item.joinId] = item;
       }
@@ -92,14 +213,15 @@ export const useMqttStore = defineStore({
         if (this.msgData.length > 500) {
           this.msgData.splice(this.msgData.length - 1, 1);
         }
-        this.msgData = _.orderBy(this.msgData, ['alarmStartTime'], ['desc']);
+        this.msgData = _.orderBy(this.msgData, ['msgStartTime'], ['desc']);
       }
+      this.playMsgAudio(item);
     },
-    //更改报警信息
-    updateAlarmData(item: MsgData) {
+    //更改信息
+    updateMsgData(item: MsgData) {
       if (
         !this.newInfo[item.joinId] ||
-        dayjs(this.newInfo[item.joinId].alarmStartTime) <= dayjs(item.alarmStartTime)
+        dayjs(this.newInfo[item.joinId].msgStartTime) <= dayjs(item.msgStartTime)
       ) {
         this.newInfo[item.joinId] = item;
       }
@@ -107,7 +229,8 @@ export const useMqttStore = defineStore({
       const data = this.msgData?.find((m) => m.msgId == item.msgId);
       if (data) {
         myCommon.objectReplace(data, item);
-        this.msgData = _.orderBy(this.msgData, ['alarmStartTime'], ['desc']);
+        this.msgData = _.orderBy(this.msgData, ['msgStartTime'], ['desc']);
+        this.playMsgAudio(data);
       }
     },
     //更改mqtt连接状态
@@ -176,9 +299,26 @@ export const useMqttStore = defineStore({
         back('mqtt未连接，同步失败');
       }
     },
+    //订阅
+    subscribe(topic) {
+      if (!this.alreadyTopic.includes(topic)) {
+        const _this = this;
+        this.mqttClient.subscribe(topic, { qos: 1 }, function (err) {
+          if (!err) {
+            _this.alreadyTopic.push(topic);
+            console.log(`订阅mqtt主题${topic}成功`);
+          } else {
+            console.log(`订阅mqtt主题${topic}失败`);
+          }
+        });
+      }
+    },
     // 取消订阅
     unSubScribe(topic, back: Function) {
       if (this.mqttClient && this.mqttClient.connected) {
+        this.alreadyTopic = this.alreadyTopic.filter(function (value) {
+          return value !== topic;
+        });
         this.mqttClient.unsubscribe(topic, (error) => back(error));
       }
     },
