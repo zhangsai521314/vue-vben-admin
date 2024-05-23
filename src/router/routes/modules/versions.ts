@@ -20,7 +20,7 @@ const versionsManage: AppRouteModule = {
   children: [
     {
       path: 'index',
-      name: 'versionsManage',
+      name: 'VersionsManage',
       component: () => import('/@/views/versionsManage/index.vue'),
       meta: {
         title: '版本管理',

@@ -90,6 +90,7 @@
   import echarts from './echarts.vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { ref, reactive, watch } from 'vue';
+  import dayjs from 'dayjs';
 
   const props = defineProps({
     //最新数据
@@ -141,11 +142,17 @@
         if (cpuData.value.length > 100) {
           cpuData.value.shift();
         }
-        cpuData.value.push([props.newDataInfo.DataTime, props.newDataInfo.CpuUsage]);
+        cpuData.value.push([
+          dayjs(props.newDataInfo.DataTime).format('YYYY-MM-DD HH:mm:ss'),
+          props.newDataInfo.CpuUsage,
+        ]);
         if (memoryData.value.length > 100) {
           memoryData.value.shift();
         }
-        memoryData.value.push([props.newDataInfo.DataTime, props.newDataInfo.MemoryUsage]);
+        memoryData.value.push([
+          dayjs(props.newDataInfo.DataTime).format('YYYY-MM-DD HH:mm:ss'),
+          props.newDataInfo.MemoryUsage,
+        ]);
         props.newDataInfo.DiskList.forEach((m, i) => {
           if (!diskData[`a${i}`]) {
             diskData[`a${i}`] = [];
@@ -153,7 +160,10 @@
           if (diskData[`a${i}`].length > 100) {
             diskData[`a${i}`].shift();
           }
-          diskData[`a${i}`].push([props.newDataInfo.DataTime, m.DiskUsage]);
+          diskData[`a${i}`].push([
+            dayjs(props.newDataInfo.DataTime).format('YYYY-MM-DD HH:mm:ss'),
+            m.DiskUsage,
+          ]);
         });
         changeMaxEchart(selectedMaxShowName.value, diskIndex);
       }

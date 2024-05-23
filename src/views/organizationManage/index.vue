@@ -7,7 +7,7 @@
             <a-space
               direction="horizontal"
               size="small"
-              style="line-height: 50px; margin-left: 5px"
+              style="margin-left: 5px; line-height: 50px"
             >
               <AuthDom auth="organizationManage_query">
                 <a-space direction="horizontal" size="small">
@@ -138,7 +138,7 @@
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 
-  defineOptions({ name: 'organizationManage' });
+  defineOptions({ name: 'OrganizationManage' });
   const { prefixCls } = useDesign('organizationManage-');
   const loading = ref(true);
   const tableConfigData = ref([]);

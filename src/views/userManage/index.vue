@@ -9,13 +9,14 @@
         :row-config="{ keyField: 'userId' }"
         :column-config="{ resizable: true }"
         :custom-config="{ storage: true }"
+        @sort-change="onSortChange"
       >
         <template #toolbar_buttons>
           <div :class="`tableBtn`">
             <a-space
               direction="horizontal"
               size="small"
-              style=" margin-left: 5px;line-height: 50px"
+              style="margin-left: 5px; line-height: 50px"
             >
               <AuthDom auth="userManage_query">
                 <a-space direction="horizontal" size="small">
@@ -333,30 +334,35 @@
         title: '用户名称',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'userAccount',
         title: '用户账号',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'orgName',
         title: '部门名称',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'roleName',
         title: '角色名称',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'adminType',
         title: '账户类型',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
         slots: {
           default: ({ row }) => {
             return row.adminType == 1 ? '超级管理员' : row.adminType == 2 ? '管理员' : '普通账号';
@@ -368,6 +374,7 @@
         title: '状态',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
         slots: {
           default: ({ row }) => {
             return row.status == 1 ? '正常' : row.status == 2 ? '停用' : '删除';
@@ -380,6 +387,7 @@
         width: 130,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'email',
@@ -387,6 +395,7 @@
         width: 180,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'lastLoginTime',
@@ -394,12 +403,14 @@
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'lastLoginIp',
         title: '最后登录IP',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
         visible: false,
       },
       {
@@ -408,6 +419,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'lastLoginBrowser',
@@ -415,6 +427,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'createTime',
@@ -423,6 +436,7 @@
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'createUser',
@@ -430,6 +444,7 @@
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'modifyTime',
@@ -438,6 +453,7 @@
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'modifyUser',
@@ -445,6 +461,7 @@
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         title: '操作',
@@ -495,6 +512,7 @@
     current: 1,
     size: 20,
     total: 0,
+    sortlist: ['modifyTime desc', 'createTime desc'],
   });
   const admintypeOptions = [
     {
@@ -504,6 +522,11 @@
     {
       value: 3,
       label: '普通用户',
+    },
+    {
+      value: 1,
+      label: '超级管理员',
+      disabled: true,
     },
   ];
   const statusOptions = [
@@ -516,7 +539,7 @@
       label: '停用',
     },
   ];
-  const fullSort = ref('user_account asc');
+
   const seacthContent = ref({
     userName: '',
     usersource: '',
@@ -641,10 +664,32 @@
       page.total = data.totalCount;
     });
   }
+  /**
+   * 排序条件改变
+   */
+  function onSortChange({ field, order, sortList, column, property, $event }) {
+    page.sortlist = [];
+    sortList.forEach((item) => {
+      var tempstr = item.field + ' ' + item.order;
+      page.sortlist.push(tempstr);
+    });
+    getUsers_();
+  }
+  /**
+   * 获取排序条件
+   */
+  function getFullSort() {
+    let fullsort = '';
+    page.sortlist.forEach((item) => {
+      fullsort += item + ',';
+    });
+    return fullsort.substring(0, fullsort.length - 1);
+  }
+
   function getUsers_() {
     return userApi.GetUsers({
       ...seacthContent.value,
-      FullSort: fullSort.value,
+      FullSort: getFullSort(),
       execompleteBefore: () => {
         loading.value = false;
       },

@@ -46,8 +46,8 @@
       //   },
       // ],
       tooltip: {
-        // trigger: 'axis',
-        show: false,
+        trigger: 'axis',
+        // show: false,
       },
       title: {
         // align: 'left',
@@ -87,6 +87,7 @@
           areaStyle: {},
           data: props.allData ? props.allData : [],
           color: props.color,
+          // smooth: 0.2,
         },
       ],
     };

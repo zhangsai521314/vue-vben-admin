@@ -170,6 +170,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'createUser',
@@ -178,6 +179,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'modifyTime',
@@ -186,6 +188,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'modifyUser',
@@ -194,6 +197,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         title: '操作',
@@ -229,7 +233,7 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['userName asc', 'modifyTime desc'],
+    sortlist: ['modifyTime desc'],
   });
   const seacthContent = ref({
     userName: '',

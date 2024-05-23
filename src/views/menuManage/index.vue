@@ -38,7 +38,7 @@
             :data="tableConfigData"
           >
             <vxe-column field="menuId" title="菜单id" :visible="false" />
-            <vxe-column field="menuName" title="菜单名称" tree-node>
+            <vxe-column field="menuName" title="菜单名称" tree-node :sortable="true">
               <template #default="{ row }">
                 <span>
                   <template v-if="row.menuType != 7">
@@ -48,7 +48,7 @@
                 </span>
               </template>
             </vxe-column>
-            <vxe-column field="menuType" title="菜单类型">
+            <vxe-column field="menuType" title="菜单类型" :sortable="true">
               <template #default="{ row }">
                 <span
                   :class="{
@@ -59,8 +59,8 @@
                 >
               </template>
             </vxe-column>
-            <vxe-column field="menuUrl" title="访问地址" />
-            <vxe-column field="authName" title="权限标识" />
+            <vxe-column field="menuUrl" title="访问地址" :sortable="true" />
+            <vxe-column field="authName" title="权限标识" :sortable="true" />
             <vxe-column field="isValid" title="是否启用">
               <template #default="{ row }">
                 <span :style="{ color: row.isValid ? 'green' : 'red' }">{{
@@ -68,11 +68,11 @@
                 }}</span>
               </template>
             </vxe-column>
-            <vxe-column field="orderIndex" title="菜单排序" :visible="false" />
-            <vxe-column field="createTime" title="创建时间" :visible="false" />
-            <vxe-column field="createUser" title="创建人" :visible="false" />
-            <vxe-column field="modifyTime" title="修改时间" :visible="false" />
-            <vxe-column field="modifyUser" title="修改人" :visible="false" />
+            <vxe-column field="orderIndex" title="菜单排序" :visible="false" :sortable="true" />
+            <vxe-column field="createTime" title="创建时间" :visible="false" :sortable="true" />
+            <vxe-column field="createUser" title="创建人" :visible="false" :sortable="true" />
+            <vxe-column field="modifyTime" title="修改时间" :visible="false" :sortable="true" />
+            <vxe-column field="modifyUser" title="修改人" :visible="false" :sortable="true" />
             <vxe-column title="操作" width="140">
               <template #default="{ row }">
                 <div :class="`tableStyle`">

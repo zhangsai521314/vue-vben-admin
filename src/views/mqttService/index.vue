@@ -11,7 +11,7 @@
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style=" margin-left: 5px;line-height: 50px">
+          <a-space direction="horizontal" size="small" style="margin-left: 5px; line-height: 50px">
             <AuthDom auth="mqttService_query">
               <a-space direction="horizontal" size="small">
                 <a-button @click="getMqtts" type="primary">查询</a-button>
@@ -164,12 +164,14 @@
         title: '服务类型名称',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'mqttIp',
         title: 'MQTT地址',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
         slots: {
           default: 'ipport',
         },
@@ -179,6 +181,7 @@
         title: 'MQTT用户名',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'mqttPwd',
@@ -192,6 +195,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'createTime',
@@ -199,6 +203,7 @@
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'createUser',
@@ -206,6 +211,7 @@
         width: 130,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'modifyTime',
@@ -214,6 +220,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'modifyUser',
@@ -222,6 +229,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         title: '操作',

@@ -46,18 +46,18 @@
           >
             <vxe-column type="seq" title="序号" width="60" />
             <vxe-column field="dictionariesId" title="字典键值" :visible="false" />
-            <vxe-column field="dictionariesName" title="显示名称" tree-node />
-            <vxe-column field="dictionariesClass" title="字典类型">
+            <vxe-column field="dictionariesName" title="显示名称" tree-node :sortable="true" />
+            <vxe-column field="dictionariesClass" title="字典类型" :sortable="true">
               <template #default="{ row }">
                 <span>{{
                   row.dictionariesClass == 'equipmentType'
-                    ? '设备类型'
+                    ? '硬件设备'
                     : row.dictionariesClass == 'systemType'
-                      ? '系统类型'
+                      ? '操作系统'
                       : row.dictionariesClass == 'serviceType'
-                        ? '服务类型'
+                        ? '软件服务'
                         : row.dictionariesClass == 'msgType'
-                          ? '信息类型'
+                          ? '信息提示'
                           : row.dictionariesClass == 'performanceAlarmType'
                             ? '设备性能告警阈值'
                             : row.dictionariesClass == 'collectionFrequency'
@@ -75,7 +75,7 @@
                 }}</span>
               </template>
             </vxe-column>
-            <vxe-column field="dictionariesKey" title="自定义主键值" />
+            <vxe-column field="dictionariesKey" title="自定义主键值" :sortable="true" />
             <vxe-column field="isSystem" title="是否系统">
               <template #default="{ row }">
                 <span :style="{ color: row.isSystem ? 'green' : 'red' }">{{
@@ -93,14 +93,14 @@
                 <span v-else style="color: green">无需同步</span>
               </template>
             </vxe-column>
-            <vxe-column field="synTime" title="同步时间" :visible="false" />
-            <vxe-column field="orderIndex" title="排序" :visible="false" />
-            <vxe-column field="other" title="附属信息" :showOverflow="true" />
-            <vxe-column field="remark" title="备注" :showOverflow="true" />
-            <vxe-column field="createTime" title="创建时间" :visible="false" />
-            <vxe-column field="createUser" title="创建人" :visible="false" />
-            <vxe-column field="modifyTime" title="修改时间" :visible="false" />
-            <vxe-column field="modifyUser" title="修改人" :visible="false" />
+            <vxe-column field="synTime" title="同步时间" :visible="false" :sortable="true" />
+            <vxe-column field="orderIndex" title="排序" :visible="false" :sortable="true" />
+            <vxe-column field="other" title="附属信息" :showOverflow="true" :sortable="true" />
+            <vxe-column field="remark" title="备注" :showOverflow="true" :sortable="true" />
+            <vxe-column field="createTime" title="创建时间" :visible="false" :sortable="true" />
+            <vxe-column field="createUser" title="创建人" :visible="false" :sortable="true" />
+            <vxe-column field="modifyTime" title="修改时间" :visible="false" :sortable="true" />
+            <vxe-column field="modifyUser" title="修改人" :visible="false" :sortable="true" />
             <vxe-column title="操作" width="140">
               <template #default="{ row }">
                 <div :class="`tableStyle`">
@@ -183,7 +183,12 @@
             :disabled="dictionariesClass_disabled"
             :title="dictionariesClass_disabled ? '跟随父级，不可修改' : ''"
           >
-            <a-select-option value="1">测试</a-select-option>
+            <a-select-option value="equipmentType">硬件设备</a-select-option>
+            <a-select-option value="systemType">操作系统</a-select-option>
+            <a-select-option value="serviceType">软件服务</a-select-option>
+            <a-select-option value="msgType">信息提示</a-select-option>
+            <a-select-option value="performanceType">性能数据性能</a-select-option>
+            <a-select-option value="commonConfig">通用配置</a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item

@@ -8,6 +8,7 @@
       :row-config="{ keyField: 'callId' }"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"
+      @sort-change="onSortChange"
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
@@ -239,6 +240,7 @@
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'callState',
@@ -246,6 +248,7 @@
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'serviceName',
@@ -253,36 +256,42 @@
         showOverflow: true,
         visible: false,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'callDirectionDescription',
         title: '呼叫方向',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'mainCallName',
         title: '主叫名称',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'calledName',
         title: '被叫名称',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'callTypeDescription',
         title: '呼叫类型',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'duration',
         title: '持续时长',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
         slots: {
           default: 'duration',
         },
@@ -293,6 +302,7 @@
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'endTime',
@@ -300,30 +310,35 @@
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'remoteName',
         title: '对端用户名',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'remoteNumber',
         title: '对端ISDN号',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'recordStateDescription',
         title: '录音状态',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'recordFileStatus',
         title: '录音文件',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
         slots: {
           default: 'recordFileStatus',
         },
@@ -334,6 +349,7 @@
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         title: '操作',
@@ -378,6 +394,7 @@
     current: 1,
     size: 20,
     total: 0,
+    sortlist: ['endTime desc', 'startTime desc'],
   });
   const modelShow = ref(false);
   //正在或将要播放的记录id
@@ -445,6 +462,28 @@
     }
   }
 
+  /**
+   * 排序条件改变
+   */
+  function onSortChange({ field, order, sortList, column, property, $event }) {
+    page.sortlist = [];
+    sortList.forEach((item) => {
+      var tempstr = item.field + ' ' + item.order;
+      page.sortlist.push(tempstr);
+    });
+    getDCOptionCallRecords();
+  }
+  /**
+   * 获取排序条件
+   */
+  function getFullSort() {
+    let fullsort = '';
+    page.sortlist.forEach((item) => {
+      fullsort += item + ',';
+    });
+    return fullsort.substring(0, fullsort.length - 1);
+  }
+
   //获取列表
   function getDCOptionCallRecords() {
     loading.value = true;
@@ -468,6 +507,7 @@
         PageIndex: page.current,
         PageSize: page.size,
         ...seacthContent.value,
+        fullSort: getFullSort(),
         execompleteBefore: () => {
           loading.value = false;
         },

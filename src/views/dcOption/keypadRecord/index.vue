@@ -8,6 +8,7 @@
       :row-config="{ keyField: 'keyId' }"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"
+      @sort-change="onSortChange"
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
@@ -75,7 +76,7 @@
   import 'dayjs/locale/zh-cn';
   import { message, Modal } from 'ant-design-vue';
 
-  defineOptions({ name: 'KeypadRecord' });
+  defineOptions({ name: 'DCOptionKeypadRecord' });
   const { prefixCls } = useDesign('keypadRecord-');
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
@@ -95,6 +96,7 @@
         title: '服务名称',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'serviceCode',
@@ -102,12 +104,14 @@
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'content',
         title: '按键内容',
         showOverflow: false,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'startTime',
@@ -115,6 +119,7 @@
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'endTime',
@@ -122,6 +127,7 @@
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
     ],
     toolbarConfig: {
@@ -148,10 +154,33 @@
     current: 1,
     size: 20,
     total: 0,
+    sortlist: ['endTime desc'],
   });
 
   getDCOptionCallRecords();
   getServices();
+
+  /**
+   * 排序条件改变
+   */
+  function onSortChange({ field, order, sortList, column, property, $event }) {
+    page.sortlist = [];
+    sortList.forEach((item) => {
+      var tempstr = item.field + ' ' + item.order;
+      page.sortlist.push(tempstr);
+    });
+    getDCOptionCallRecords();
+  }
+  /**
+   * 获取排序条件
+   */
+  function getFullSort() {
+    let fullsort = '';
+    page.sortlist.forEach((item) => {
+      fullsort += item + ',';
+    });
+    return fullsort.substring(0, fullsort.length - 1);
+  }
 
   //获取列表
   function getDCOptionCallRecords() {
@@ -165,6 +194,7 @@
         PageIndex: page.current,
         PageSize: page.size,
         ...seacthContent.value,
+        fullSort: getFullSort(),
         execompleteBefore: () => {
           loading.value = false;
         },

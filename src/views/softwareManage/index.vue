@@ -344,42 +344,49 @@
         title: '服务类型',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'equipmentName',
         title: '所属设备',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'serviceName',
         title: '软件名称',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'serviceCode',
         title: '唯一编号',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'filePath',
         title: '部署路径',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'port',
         title: '运行端口',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'runStatus',
         title: '软件状态',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
         slots: {
           default: 'runStatus',
         },
@@ -390,12 +397,14 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'remark',
         title: '信息备注',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'createTime',
@@ -404,6 +413,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'createUser',
@@ -412,6 +422,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'modifyTime',
@@ -420,6 +431,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'modifyUser',
@@ -428,6 +440,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         title: '操作',

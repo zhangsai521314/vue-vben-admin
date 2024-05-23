@@ -11,7 +11,7 @@
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style=" margin-left: 5px;line-height: 50px">
+          <a-space direction="horizontal" size="small" style="margin-left: 5px; line-height: 50px">
             <AuthDom auth="equipment_query">
               <a-space direction="horizontal" size="small">
                 <a-input
@@ -80,22 +80,28 @@
             autocomplete="off"
           />
         </a-form-item>
-        <a-form-item label="设备类型" name="equipmentType">
+        <a-form-item
+          label="设备类型"
+          name="equipmentType"
+          :rules="[{ required: true, message: '请选择设备类型' }]"
+        >
           <a-select
             placeholder="请选择设备类型"
             show-search
             :filter-option="AntVueCommon.filterOption"
-            :rules="[{ required: true, message: '请选择设备类型' }]"
             v-model:value="formData.equipmentType"
             :options="dictionariesData.filter((m) => m.dictionariesClass == 'equipmentType')"
           />
         </a-form-item>
-        <a-form-item label="系统类型" name="systemType">
+        <a-form-item
+          label="系统类型"
+          name="systemType"
+          :rules="[{ required: true, message: '请选择系统类型' }]"
+        >
           <a-select
             show-search
             :filter-option="AntVueCommon.filterOption"
             placeholder="请选择系统类型"
-            :rules="[{ required: true, message: '请选择系统类型' }]"
             v-model:value="formData.systemType"
             :options="dictionariesData.filter((m) => m.dictionariesClass == 'systemType')"
           />
@@ -181,24 +187,28 @@
         title: '设备名称',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'equipmentType',
         title: '硬件类型',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'systemType',
         title: '系统类型',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'address',
         title: '地址',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'orderIndex',
@@ -206,12 +216,14 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'remark',
         title: '信息备注',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'createTime',
@@ -220,6 +232,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'createUser',
@@ -228,6 +241,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'modifyTime',
@@ -236,6 +250,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'modifyUser',
@@ -244,6 +259,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         title: '操作',

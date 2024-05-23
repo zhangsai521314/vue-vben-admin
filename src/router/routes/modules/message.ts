@@ -20,7 +20,7 @@ const message: AppRouteModule = {
   children: [
     {
       path: 'index',
-      name: 'message',
+      name: 'Message',
       component: () => import('/@/views/message/index.vue'),
       meta: {
         title: '告警管理',

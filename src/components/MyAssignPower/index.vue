@@ -9,7 +9,7 @@
     :footer-style="{ textAlign: 'right' }"
     @close="formClose"
   >
-    <div style="width: 100px; height: 100px; display: none" id="dadadaddaad"></div>
+    <div style=" display: none;width: 100px; height: 100px" id="dadadaddaad"></div>
     <a-spin :tip="lodingTile" :spinning="isGetTree">
       <a-tabs
         tab-position="left"
@@ -89,7 +89,7 @@
     </a-spin>
     <template #footer>
       <div style="position: relative">
-        <span style="position: absolute; left: 25px; color: red; top: 5px"
+        <span style="position: absolute; top: 5px; left: 25px; color: red"
           >注意：所有权限均带有“显示”权限</span
         >
         <a-spin tip="正在保存..." :spinning="isGetTree">
@@ -110,6 +110,7 @@
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import { forEach } from 'lodash-es';
+
   const props = defineProps({
     isShow: {
       type: Boolean,
@@ -873,7 +874,7 @@
     if (!isChange) {
       for (let i = 0; i < treeData.length; i++) {
         const oldNode = oldData.find((m) => m.key == treeData[i].key);
-        debugger
+        debugger;
         if (oldNode && oldNode.powerType != treeData[i].powerType) {
           isChange = true;
           break;
@@ -1098,7 +1099,6 @@
 
   //动态解决tree100%
   function size() {
-    debugger;
     let height = $(`#${id}`).height() - 32;
     if (treeHeight.value != height) {
       treeHeight.value = height;
@@ -1169,9 +1169,11 @@
 
   :deep(.ant-checkbox-group-item) {
     margin-left: 0;
+
     span:first-child {
       font-size: 12px;
     }
+
     span:last-child {
       font-size: 12px;
       font-variant: tabular-nums;
@@ -1182,6 +1184,7 @@
   :deep(.ant-checkbox-group) {
     padding-left: 8px;
     background-color: #f7f7f7;
+
     span:last-child {
       font-size: 12px;
       font-variant: tabular-nums;

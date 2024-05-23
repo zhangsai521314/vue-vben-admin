@@ -52,6 +52,7 @@
         </vxe-toolbar>
         <div style="width: 100%; height: calc(100% - 80px)">
           <vxe-table
+            id="serviceTest"
             :border="true"
             max-height="100%"
             ref="tableRef"
@@ -61,12 +62,13 @@
             :column-config="{ resizable: true }"
             :tree-config="{ transform: true, rowField: 'testId', parentField: 'parentId' }"
             :data="tableConfigData"
+            @sort-change="onSortChange"
           >
             <vxe-column field="testId" title="主键id" :visible="false" />
-            <vxe-column field="serviceCode" title="服务编号" :visible="false" />
-            <vxe-column field="serviceName" title="服务名称" />
-            <vxe-column field="testStepName" title="自检名称" tree-node />
-            <vxe-column field="testStatus" title="自检状态">
+            <vxe-column field="serviceCode" title="服务编号" :visible="false" :sortable="true" />
+            <vxe-column field="serviceName" title="服务名称" :sortable="true" />
+            <vxe-column field="testStepName" title="自检名称" tree-node :sortable="true" />
+            <vxe-column field="testStatus" title="自检状态" :sortable="true">
               <template #default="{ row }">
                 <span
                   :class="{
@@ -85,8 +87,8 @@
                 >
               </template>
             </vxe-column>
-            <vxe-column field="testStep" title="自检步骤(总数)" />
-            <vxe-column field="testTime" title="自检时间" />
+            <vxe-column field="testStep" title="自检步骤(总数)" :sortable="true" />
+            <vxe-column field="testTime" title="自检时间" :sortable="true" />
           </vxe-table>
           <vxe-pager
             background
@@ -124,6 +126,7 @@
     current: 1,
     size: 20,
     total: 0,
+    sortlist: ['testTime desc'],
   });
 
   getDCOptionServiceTests();
@@ -141,6 +144,7 @@
         ...seacthContent.value,
         PageIndex: page.current,
         PageSize: page.size,
+        fullSort: getFullSort(),
         execompleteBefore: () => {
           loading.value = false;
         },
@@ -157,6 +161,28 @@
 
   function handlePageChange() {
     getDCOptionServiceTests();
+  }
+
+  /**
+   * 排序条件改变
+   */
+  function onSortChange({ field, order, sortList, column, property, $event }) {
+    page.sortlist = [];
+    sortList.forEach((item) => {
+      var tempstr = item.field + ' ' + item.order;
+      page.sortlist.push(tempstr);
+    });
+    getDCOptionServiceTests();
+  }
+  /**
+   * 获取排序条件
+   */
+  function getFullSort() {
+    let fullsort = '';
+    page.sortlist.forEach((item) => {
+      fullsort += item + ',';
+    });
+    return fullsort.substring(0, fullsort.length - 1);
   }
 
   //获取服务列表

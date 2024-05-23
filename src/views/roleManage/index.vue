@@ -11,7 +11,7 @@
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style=" margin-left: 5px;line-height: 50px">
+          <a-space direction="horizontal" size="small" style="margin-left: 5px; line-height: 50px">
             <AuthDom auth="roleManage_query">
               <a-space direction="horizontal" size="small">
                 <a-input
@@ -144,6 +144,7 @@
         title: '角色名称',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'isValid',
@@ -151,6 +152,7 @@
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
         cellRender: { name: 'render_isno' },
       },
       {
@@ -159,6 +161,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'createTime',
@@ -166,6 +169,7 @@
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'createUser',
@@ -173,6 +177,7 @@
         width: 130,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'modifyTime',
@@ -180,6 +185,7 @@
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'modifyUser',
@@ -187,6 +193,7 @@
         width: 130,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         title: '操作',

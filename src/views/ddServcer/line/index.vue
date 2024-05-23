@@ -18,7 +18,7 @@
             <a-space
               direction="horizontal"
               size="small"
-              style=" margin-left: 5px;line-height: 50px"
+              style="margin-left: 5px; line-height: 50px"
             >
               <AuthDom auth="line_query">
                 <a-space direction="horizontal" size="small">
@@ -347,6 +347,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'updateTime',

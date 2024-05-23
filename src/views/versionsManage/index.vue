@@ -161,12 +161,14 @@
         title: '服务类型名称',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'runNumber',
         title: '当前运行版本号',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
         slots: {
           default: 'runNumber',
         },
@@ -177,6 +179,7 @@
         width: 140,
         showOverflow: true,
         showHeaderOverflow: true,
+        // sortable: true,
         cellRender: { name: 'render_isno' },
       },
       {
@@ -185,6 +188,7 @@
         width: 160,
         showOverflow: true,
         showHeaderOverflow: true,
+        // sortable: true,
         slots: {
           default: 'isSync',
         },
@@ -194,6 +198,7 @@
         title: '同步时间',
         width: 150,
         showOverflow: true,
+        sortable: true,
         showHeaderOverflow: true,
       },
       {
@@ -202,6 +207,7 @@
         width: 130,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'orderIndex',
@@ -209,6 +215,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'createTime',
@@ -216,6 +223,7 @@
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'createUser',
@@ -223,6 +231,7 @@
         width: 130,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         title: '操作',

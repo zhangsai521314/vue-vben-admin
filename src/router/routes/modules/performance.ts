@@ -20,10 +20,19 @@ const performance: AppRouteModule = {
   children: [
     {
       path: 'index',
-      name: 'performance',
+      name: 'Performance',
       component: () => import('/@/views/performance/index.vue'),
       meta: {
         title: '性能监测',
+        hideMenu: true,
+      },
+    },
+    {
+      path: 'his',
+      name: 'PerformanceHis',
+      component: () => import('/@/views/performance/his.vue'),
+      meta: {
+        title: '性能监测历史',
         hideMenu: true,
       },
     },

@@ -8,6 +8,7 @@
       :row-config="{ keyField: 'msgId' }"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"
+      @sort-change="onSortChange"
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
@@ -321,12 +322,14 @@
         title: '信息标题',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'msgContent',
         title: '信息内容',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'msgStartTime',
@@ -334,6 +337,7 @@
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'msgEndTime',
@@ -341,12 +345,14 @@
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'msgDuration',
         title: '告警持续时长',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
         slots: {
           default: 'msgDuration',
         },
@@ -356,6 +362,7 @@
         title: '确认人员',
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'confirmTime',
@@ -363,6 +370,7 @@
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'remark',
@@ -370,6 +378,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'createTime',
@@ -378,6 +387,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         title: '告警强提示',
@@ -437,6 +447,7 @@
     current: 1,
     size: 20,
     total: 0,
+    sortlist: ['msgStartTime desc'],
   });
   const refresh = ref('yes');
   const refreshTime = ref(10);
@@ -464,6 +475,7 @@
         PageIndex: page.current,
         PageSize: page.size,
         ...seacthContent.value,
+        fullSort: getFullSort(),
         execompleteBefore: () => {
           loading.value = false;
           msgId = null;
@@ -479,6 +491,28 @@
         page.total = 0;
         refreshData();
       });
+  }
+
+  /**
+   * 排序条件改变
+   */
+  function onSortChange({ field, order, sortList, column, property, $event }) {
+    page.sortlist = [];
+    sortList.forEach((item) => {
+      var tempstr = item.field + ' ' + item.order;
+      page.sortlist.push(tempstr);
+    });
+    getMessages();
+  }
+  /**
+   * 获取排序条件
+   */
+  function getFullSort() {
+    let fullsort = '';
+    page.sortlist.forEach((item) => {
+      fullsort += item + ',';
+    });
+    return fullsort.substring(0, fullsort.length - 1);
   }
 
   //重置搜索条件
