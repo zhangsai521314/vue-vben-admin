@@ -12,8 +12,24 @@
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
           <a-space direction="horizontal" size="small" style="margin-left: 5px">
-            <AuthDom auth="ddServcer_cirStatus_query">
+            <AuthDom auth="equipmentManage_query">
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>所属部门：</label>
+                    <a-tree-select
+                      v-model:value="seacthContent.orgId"
+                      show-search
+                      style="width: 170px"
+                      :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                      placeholder="请选择所属部门："
+                      allow-clear
+                      show-arrow
+                      :filterTreeNode="AntVueCommon.filterTreeNode"
+                      :tree-data="organizationDatas"
+                    />
+                  </a-space>
+                </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>设备名称：</label>
@@ -27,11 +43,12 @@
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <a-button @click="getEquipments" type="primary">查询</a-button>
+                    <a-button @click="resetSeacth">重置表单</a-button>
                   </a-space>
                 </div>
               </a-space>
             </AuthDom>
-            <AuthDom auth="equipment_add">
+            <AuthDom auth="equipmentManage_add">
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
@@ -45,7 +62,7 @@
       </template>
       <template #default="{ row }">
         <div :class="`tableOption`">
-          <AuthDom auth="equipment_table_edit">
+          <AuthDom auth="equipmentManage_table_edit">
             <IconFontClass
               name="icon-baseui-edit-fill"
               @click="showFrom(row)"
@@ -53,7 +70,7 @@
               title="编辑"
             />
           </AuthDom>
-          <AuthDom auth="equipment_table_delete">
+          <AuthDom auth="equipmentManage_table_delete">
             <IconFontClass
               name="icon-baseui-guanbicuowu"
               @click="remove(row)"
@@ -80,6 +97,23 @@
         ref="formRef"
         :model="formData"
       >
+        <a-form-item
+          :rules="[{ required: true, message: '请选择所属部门' }]"
+          label="所属部门"
+          name="orgId"
+        >
+          <a-tree-select
+            v-model:value="formData.orgId"
+            show-search
+            style="width: 100%"
+            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+            placeholder="请选择所属部门"
+            allow-clear
+            show-arrow
+            :filterTreeNode="AntVueCommon.filterTreeNode"
+            :tree-data="organizationDatas"
+          />
+        </a-form-item>
         <a-form-item
           name="equipmentName"
           label="设备名称"
@@ -181,6 +215,7 @@
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import dictionariesApi from '@/api/dictionaries';
+  import organizationApi from '@/api/organization';
 
   defineOptions({ name: 'EquipmentManage' });
   const { prefixCls } = useDesign('equipment-');
@@ -196,6 +231,13 @@
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+      },
+      {
+        field: 'orgName',
+        title: '所属部门',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'equipmentName',
@@ -303,6 +345,7 @@
     address: '',
     remark: '',
     orderIndex: null,
+    orgId: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);
@@ -312,12 +355,25 @@
   let saveType = 'add';
   const dictionariesData = ref([]);
   const seacthContent = ref({
+    orgId: null,
     equipmentName: '',
   });
+  const organizationDatas = ref([]);
+  let _organizationDatas = [];
 
+  getOrganization();
   getEquipments();
 
+  //重置搜索条件
+  function resetSeacth() {
+    seacthContent.value = {
+      orgId: null,
+      equipmentName: '',
+    };
+  }
+
   function showFrom(row) {
+    getOrganization();
     getDictionaries();
     if (myCommon.isnull(row)) {
       formData.value = _.cloneDeep(defFromData);
@@ -426,6 +482,7 @@
             (m) => m.key == data.equipmentType,
           )?.label;
           oldData.systemType = dictionariesData.value.find((m) => m.key == data.systemType)?.label;
+          oldData.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
           formClose();
           message.success('更新设备信息成功');
         });
@@ -446,6 +503,20 @@
       })
       .catch(() => {
         dictionariesData.value = [];
+      });
+  }
+
+  //获取部门
+  function getOrganization() {
+    organizationApi
+      .GetOrganizationTree({})
+      .then((data) => {
+        organizationDatas.value = data;
+        myCommon.generateList(_organizationDatas, organizationDatas.value, 'children');
+      })
+      .catch(() => {
+        loading.value = false;
+        _organizationDatas = [];
       });
   }
 </script>

@@ -773,7 +773,6 @@
         dictionariesclass: ['msgType'],
       })
       .then((data) => {
-        debugger;
         dictionariesData.value = data;
       })
       .catch(() => {

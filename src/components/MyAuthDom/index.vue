@@ -20,27 +20,31 @@
         if (!userStore.userInfo?.isAdmin) {
           const { auth } = props;
           if (auth) {
-            const mySlots = getSlot(slots);
-            mySlots[0].props['auth'] = auth;
-            if (mySlots[0].props.hasOwnProperty('class')) {
-              mySlots[0].props['class'] = `${mySlots[0].props['class']} auth`;
-            } else {
-              mySlots[0].props['class'] = 'auth';
-            }
-            const domAuth = permissionStore.getDomAuthList?.find((m) => m.authName == auth);
-            if (domAuth && domAuth.powerType != '') {
-              //判断权限
-              if (
-                domAuth.powerType.split(',').indexOf('1') == -1 &&
-                domAuth.powerType.split(',').indexOf('9') == -1
-              ) {
-                //只读
-                mySlots[0].props['class'] = `${mySlots[0].props['class']} not-click`;
-                console.log('只读', mySlots[0].props['class']);
+            try {
+              const mySlots = getSlot(slots);
+              mySlots[0].props['auth'] = auth;
+              if (mySlots[0].props.hasOwnProperty('class')) {
+                mySlots[0].props['class'] = `${mySlots[0].props['class']} auth`;
+              } else {
+                mySlots[0].props['class'] = 'auth';
               }
-              return mySlots;
-            } else {
-              return null;
+              const domAuth = permissionStore.getDomAuthList?.find((m) => m.authName == auth);
+              if (domAuth && domAuth.powerType != '') {
+                //判断权限
+                if (
+                  domAuth.powerType.split(',').indexOf('1') == -1 &&
+                  domAuth.powerType.split(',').indexOf('9') == -1
+                ) {
+                  //只读
+                  mySlots[0].props['class'] = `${mySlots[0].props['class']} not-click`;
+                  console.log('只读', mySlots[0].props['class']);
+                }
+                return mySlots;
+              } else {
+                return null;
+              }
+            } catch (error) {
+              console.error(`按钮权限解析错误：${error}`);
             }
           } else {
             return getSlot(slots);

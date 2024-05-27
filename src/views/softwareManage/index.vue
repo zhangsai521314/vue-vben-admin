@@ -16,6 +16,22 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>所属部门：</label>
+                    <a-tree-select
+                      v-model:value="seacthContent.orgId"
+                      show-search
+                      style="width: 170px"
+                      :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                      placeholder="请选择用户部门"
+                      allow-clear
+                      show-arrow
+                      :filterTreeNode="AntVueCommon.filterTreeNode"
+                      :tree-data="organizationDatas"
+                    />
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
                     <label>软件名称：</label>
                     <a-input
                       @press-enter="getSoftwares()"
@@ -27,6 +43,7 @@
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <a-button @click="getSoftwares()" type="primary">查询</a-button>
+                    <a-button @click="resetSeacth">重置表单</a-button>
                     <a-radio-group v-model:value="refresh" button-style="solid">
                       <a-radio-button value="yes">开启自动刷新</a-radio-button>
                       <a-radio-button value="no">关闭自动刷新</a-radio-button>
@@ -36,7 +53,7 @@
                 </div>
               </a-space>
             </AuthDom>
-            <AuthDom auth="software_add">
+            <AuthDom auth="softwareManage_add">
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
@@ -59,7 +76,7 @@
       </template>
       <template #default="{ row }">
         <div :class="`tableOption`">
-          <AuthDom auth="software_table_showconfig">
+          <AuthDom auth="softwareManage_table_showconfig">
             <IconFontClass
               name="icon-baseui-wenben1"
               @click="showConfig(row)"
@@ -67,7 +84,7 @@
               title="查看配置"
             />
           </AuthDom>
-          <AuthDom auth="software_table_showlog">
+          <AuthDom auth="softwareManage_table_showlog">
             <IconFontClass
               name="icon-baseui-flowcontrol-log"
               @click="showLog(row)"
@@ -75,7 +92,7 @@
               title="查看日志"
             />
           </AuthDom>
-          <AuthDom auth="software_table_edit">
+          <AuthDom auth="softwareManage_table_edit">
             <IconFontClass
               name="icon-baseui-edit-fill"
               @click="showFrom(row)"
@@ -83,7 +100,7 @@
               title="编辑"
             />
           </AuthDom>
-          <AuthDom auth="software_table_delete">
+          <AuthDom auth="softwareManage_table_delete">
             <IconFontClass
               name="icon-baseui-guanbicuowu"
               @click="remove(row)"
@@ -110,6 +127,23 @@
         ref="formRef"
         :model="formData"
       >
+        <a-form-item
+          :rules="[{ required: true, message: '请选择所属部门' }]"
+          label="所属部门"
+          name="orgId"
+        >
+          <a-tree-select
+            v-model:value="formData.orgId"
+            show-search
+            style="width: 100%"
+            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+            placeholder="请选择所属部门"
+            allow-clear
+            show-arrow
+            :filterTreeNode="AntVueCommon.filterTreeNode"
+            :tree-data="organizationDatas"
+          />
+        </a-form-item>
         <a-form-item
           label="服务类型"
           name="serviceType"
@@ -334,6 +368,7 @@
   import { tryOnUnmounted } from '@vueuse/core';
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
   import { useUserStore } from '@/store/modules/user';
+  import organizationApi from '@/api/organization';
 
   defineOptions({ name: 'SoftwareManage' });
   const { prefixCls } = useDesign('softwareManage-');
@@ -353,8 +388,8 @@
         showHeaderOverflow: true,
       },
       {
-        field: 'serviceType',
-        title: '服务类型',
+        field: 'orgName',
+        title: '所属部门',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -362,6 +397,13 @@
       {
         field: 'equipmentName',
         title: '所属设备',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'serviceType',
+        title: '服务类型',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -486,6 +528,7 @@
     runStatus: '运行',
     serviceCode: '',
     isUpPerformance: false,
+    orgId: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);
@@ -496,6 +539,7 @@
   const dictionariesData = ref([]);
   const equipmentData = ref([]);
   const seacthContent = ref({
+    orgId: null,
     serviceName: '',
   });
   const refresh = ref('yes');
@@ -548,10 +592,24 @@
       return !row.IsBack;
     },
   });
+
+  const organizationDatas = ref([]);
+  let _organizationDatas = [];
+
+  getOrganization();
   getSoftwares(true);
+
+  //重置搜索条件
+  function resetSeacth() {
+    seacthContent.value = {
+      orgId: null,
+      serviceName: '',
+    };
+  }
 
   function showFrom(row) {
     stopRefresh();
+    getOrganization();
     getDictionaries();
     getEquipments();
     if (myCommon.isnull(row)) {
@@ -665,6 +723,7 @@
             (m) => m.key == data.serviceType,
           )?.label;
           oldData.equipmentName = equipmentData.value.find((m) => m.key == data.equipmentId)?.label;
+          oldData.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
           formClose();
           message.success('更新软件信息成功');
         });
@@ -846,6 +905,20 @@
       logCollectionData.value = row.SubCollection;
       logTableStepDataRowIndex.push(row);
     }
+  }
+
+  //获取部门
+  function getOrganization() {
+    organizationApi
+      .GetOrganizationTree({})
+      .then((data) => {
+        organizationDatas.value = data;
+        myCommon.generateList(_organizationDatas, organizationDatas.value, 'children');
+      })
+      .catch(() => {
+        loading.value = false;
+        _organizationDatas = [];
+      });
   }
 
   //监控是否开启自动刷新

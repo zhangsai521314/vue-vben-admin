@@ -28,13 +28,13 @@
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>部门名称：</label>
+                      <label>所属部门：</label>
                       <a-tree-select
                         v-model:value="seacthContent.orgId"
                         show-search
                         style="width: 170px"
                         :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                        placeholder="请选择用户部门"
+                        placeholder="请选择所属部门："
                         allow-clear
                         show-arrow
                         :filterTreeNode="AntVueCommon.filterTreeNode"
@@ -203,8 +203,8 @@
             />
           </a-form-item>
           <a-form-item
-            :rules="[{ required: true, message: '请选择用户部门' }]"
-            label="用户部门"
+            :rules="[{ required: true, message: '请选择所属部门' }]"
+            label="所属部门"
             name="orgId"
           >
             <a-tree-select
@@ -212,7 +212,7 @@
               show-search
               style="width: 100%"
               :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-              placeholder="请选择用户部门"
+              placeholder="请选择所属部门"
               allow-clear
               show-arrow
               :filterTreeNode="AntVueCommon.filterTreeNode"
@@ -588,9 +588,8 @@
   });
 
   const organizationDatas = ref([]);
-
+  let _organizationDatas = [];
   getOrganization();
-  getRoles();
   getUsers();
 
   let validate_pwd = async (_rule, value) => {
@@ -807,19 +806,14 @@
           const oldData = tableRef.value.getRowById(data.userId);
           myCommon.objectReplace(oldData, formData.value);
           const r = roles.value.find((m) => m.value == oldData.roleId);
-          const o = organizationDatas.value.find((m) => m.value == oldData.orgId);
           if (r) {
             oldData.roleName = r.label;
           } else {
             oldData.roleName = null;
           }
-          if (o) {
-            oldData.orgName = o.label;
-          } else {
-            oldData.orgName = null;
-          }
           oldData.modifyTime = data.modifyTime;
           oldData.modifyUser = data.modifyUser;
+          oldData.orgName = _organizationDatas.find((m) => m.key == oldData.orgId)?.label;
           formClose();
           message.success('更新用户信息成功');
         });
@@ -833,9 +827,11 @@
       .GetOrganizationTree({})
       .then((data) => {
         organizationDatas.value = data;
+        myCommon.generateList(_organizationDatas, organizationDatas.value, 'children');
       })
       .catch(() => {
         loading.value = false;
+        _organizationDatas = [];
       });
   }
 </script>

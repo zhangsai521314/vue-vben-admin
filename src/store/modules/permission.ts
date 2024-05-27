@@ -83,6 +83,9 @@ export const usePermissionStore = defineStore({
     getIsDynamicAddedRoute(state): boolean {
       return state.isDynamicAddedRoute;
     },
+    getDomAuthList(state) {
+      return state.domAuthList;
+    },
   },
   actions: {
     setPermCodeList(codeList: string[]) {

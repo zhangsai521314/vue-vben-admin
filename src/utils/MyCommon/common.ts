@@ -108,6 +108,15 @@ const Common = {
     }
     return data;
   },
+  //把父子级转换为不是父子级
+  generateList(allList, treeList, chaildrenKey) {
+    for (let i = 0; i < treeList.length; i++) {
+      allList.push(treeList[i]);
+      if (treeList[i][chaildrenKey] && treeList[i][chaildrenKey].length > 0) {
+        this.generateList(allList, treeList[i].children, chaildrenKey);
+      }
+    }
+  },
   //获取随机数num表示获取随机数的个数
   getRandomNumber(min, max, nums) {
     min = parseInt(min);
