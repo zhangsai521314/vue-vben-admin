@@ -15,23 +15,34 @@
       >
         <template #toolbar_buttons>
           <div :class="`tableBtn`">
-            <a-space
-              direction="horizontal"
-              size="small"
-              style="margin-left: 5px; line-height: 50px"
-            >
-              <AuthDom auth="black_query">
-                <a-space direction="horizontal" size="small">
-                  <a-input
-                    @press-enter="getDCOptionTelephoneBooks"
-                    v-model:value="seacthContent.userName"
-                    placeholder="输入联系名称查询"
-                  />
-                  <a-button @click="getDCOptionTelephoneBooks" type="primary">查询</a-button>
+            <a-space direction="horizontal" size="small" style="margin-left: 5px">
+              <AuthDom auth="dcOption_telephoneBook_query">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>联系名称：</label>
+                      <a-input
+                        @press-enter="getDCOptionTelephoneBooks"
+                        v-model:value="seacthContent.userName"
+                        placeholder="输入联系名称查询"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button @click="getDCOptionTelephoneBooks" type="primary">查询</a-button>
+                    </a-space>
+                  </div>
                 </a-space>
               </AuthDom>
-              <AuthDom auth="black_add">
-                <a-button class="ant-btn" @click="showFrom()">新增电话</a-button>
+              <AuthDom auth="dcOption_telephoneBook_add">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button class="ant-btn" @click="showFrom()">新增电话</a-button>
+                    </a-space>
+                  </div>
+                </a-space>
               </AuthDom>
             </a-space>
           </div>
@@ -94,12 +105,12 @@
             />
           </a-form-item>
           <a-form-item
-            label="号码"
+            label="联系号码"
             name="phoneNumber"
             :rules="[{ required: true, message: '请输入号码' }]"
           >
             <a-input
-              placeholder="请输入号码"
+              placeholder="请输入联系号码"
               v-model:value="formData.phoneNumber"
               autocomplete="off"
             />
@@ -158,7 +169,7 @@
       },
       {
         field: 'phoneNumber',
-        title: '号码',
+        title: '联系号码',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

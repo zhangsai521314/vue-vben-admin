@@ -4,39 +4,64 @@
       <div style="width: 100%; height: 100%">
         <vxe-toolbar ref="toolbarRef" custom>
           <template #buttons>
-            <a-space
-              direction="horizontal"
-              size="small"
-              style="margin-left: 5px; line-height: 50px"
-            >
-              <AuthDom auth="menuManage_query">
-                <a-space direction="horizontal" size="small">
-                  <a-input
-                    @press-enter="getMenus"
-                    v-model:value="seacthContent.menuName"
-                    placeholder="输入名称查询"
-                  />
-                  <a-button @click="getMenus" type="primary">查询</a-button>
-                </a-space>
-              </AuthDom>
-              <AuthDom auth="menuManage_add">
-                <a-button class="ant-btn" @click="showFrom('add', null)">新增</a-button>
-              </AuthDom>
-            </a-space>
+            <div :class="`tableBtn`">
+              <a-space direction="horizontal" size="small" style="margin-left: 5px">
+                <AuthDom auth="menuManage_query">
+                  <a-space
+                    direction="horizontal"
+                    size="small"
+                    :wrap="true"
+                    style="margin-bottom: 0"
+                  >
+                    <div class="row-div">
+                      <a-space direction="horizontal" size="small" :wrap="true">
+                        <label>菜单名称：</label>
+                        <a-input
+                          @press-enter="getMenus"
+                          v-model:value="seacthContent.menuName"
+                          placeholder="输入名称查询"
+                        />
+                      </a-space>
+                    </div>
+                    <div class="row-div">
+                      <a-space direction="horizontal" size="small" :wrap="true">
+                        <a-button @click="getMenus" type="primary">查询</a-button>
+                      </a-space>
+                    </div>
+                  </a-space>
+                </AuthDom>
+                <AuthDom auth="menuManage_add">
+                  <a-space
+                    direction="horizontal"
+                    size="small"
+                    :wrap="true"
+                    style="margin-bottom: 0"
+                  >
+                    <div class="row-div">
+                      <a-space direction="horizontal" size="small" :wrap="true">
+                        <a-button class="ant-btn" @click="showFrom('add', null)">新增菜单</a-button>
+                      </a-space>
+                    </div>
+                  </a-space>
+                </AuthDom>
+              </a-space>
+            </div>
           </template>
         </vxe-toolbar>
         <div style="width: 100%; height: calc(100% - 60px)">
           <vxe-table
             :border="true"
-            max-height="100%"
             ref="tableRef"
+            max-height="100%"
             show-overflow
             :custom-config="{ storage: true }"
             :row-config="{ isHover: true, useKey: true, keyField: 'menuId' }"
             :column-config="{ resizable: true }"
             :tree-config="{ transform: true, rowField: 'menuId', parentField: 'parentId' }"
             :data="tableConfigData"
+            :scroll-y="{ enabled: false }"
           >
+            >
             <vxe-column field="menuId" title="菜单id" :visible="false" />
             <vxe-column field="menuName" title="菜单名称" tree-node :sortable="true">
               <template #default="{ row }">
@@ -68,7 +93,7 @@
                 }}</span>
               </template>
             </vxe-column>
-            <vxe-column field="orderIndex" title="菜单排序" :visible="false" :sortable="true" />
+            <vxe-column field="orderIndex" title="菜单排序" :sortable="true" />
             <vxe-column field="createTime" title="创建时间" :visible="false" :sortable="true" />
             <vxe-column field="createUser" title="创建人" :visible="false" :sortable="true" />
             <vxe-column field="modifyTime" title="修改时间" :visible="false" :sortable="true" />
@@ -235,6 +260,7 @@
           />
         </a-form-item>
         <a-form-item
+          v-if="formData.menuType != 7"
           name="isValid"
           label="是否启用"
           placeholder="请选择是否启用"
@@ -299,28 +325,6 @@
   });
   const menuTreeDatas = ref([]);
   let saveType = 'add';
-  const options = ref([
-    {
-      value: 'china',
-      label: 'China (中国)',
-      icon: '🇨🇳',
-    },
-    {
-      value: 'usa',
-      label: 'USA (美国)',
-      icon: '🇺🇸',
-    },
-    {
-      value: 'japan',
-      label: 'Japan (日本)',
-      icon: '🇯🇵',
-    },
-    {
-      value: 'korea',
-      label: 'Korea (韩国)',
-      icon: '🇨🇰',
-    },
-  ]);
   const iconDatas = ref([]);
 
   getMenus();
@@ -402,6 +406,11 @@
       })
       .then((data) => {
         tableConfigData.value = data;
+        nextTick(() => {
+          !myCommon.isnull(seacthContent.value.menuName)
+            ? tableRef.value.setAllTreeExpand(true)
+            : tableRef.value.clearTreeExpand();
+        });
       })
       .catch(() => {
         tableConfigData.value = [];

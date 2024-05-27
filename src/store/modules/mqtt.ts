@@ -94,7 +94,7 @@ export const useMqttStore = defineStore({
       return state.msgData.filter((m) => m.msgCategory == 2 && m.msgTitle);
       // const f = [];
       // state.msgData[0].serviceId = '522045728034891';
-      // state.msgData[0].serverName = '科里巴-车站值班台addadadadggwe你看发了你发';
+      // state.msgData[0].serviceName = '科里巴-车站值班台addadadadggwe你看发了你发';
       // for (let index = 0; index < 500; index++) {
       //   f.push(state.msgData[0]);
       // }
@@ -207,7 +207,11 @@ export const useMqttStore = defineStore({
       ) {
         this.newInfo[item.joinId] = item;
       }
-      this.changeNewInfoKey = `${item.joinId}_${item.msgStatus}`;
+      if (item.msgCategory == 1) {
+        this.changeNewInfoKey = `${item.joinId}_${item.msgStatus}`;
+      } else {
+        this.changeNewInfoKey = `${item.serviceId}_${item.msgStatus}`;
+      }
       if (!this.msgData?.find((m) => m.msgId == item.msgId)) {
         this.msgData = [item, ...(this.msgData || [])];
         if (this.msgData.length > 500) {
@@ -225,7 +229,11 @@ export const useMqttStore = defineStore({
       ) {
         this.newInfo[item.joinId] = item;
       }
-      this.changeNewInfoKey = `${item.joinId}_${item.msgStatus}`;
+      if (item.msgCategory == 1) {
+        this.changeNewInfoKey = `${item.joinId}_${item.msgStatus}`;
+      } else {
+        this.changeNewInfoKey = `${item.serviceId}_${item.msgStatus}`;
+      }
       const data = this.msgData?.find((m) => m.msgId == item.msgId);
       if (data) {
         myCommon.objectReplace(data, item);

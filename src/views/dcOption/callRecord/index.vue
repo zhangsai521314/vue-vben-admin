@@ -13,7 +13,7 @@
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
           <a-space direction="horizontal" size="small" style="margin-left: 5px">
-            <AuthDom auth="message_query">
+            <AuthDom auth="dcOption_callRecord_query">
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
@@ -32,6 +32,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>通话来源：</label>
                     <a-select
+                      placeholder="请选择通话来源"
                       style="width: 170px"
                       allow-clear
                       show-search
@@ -63,7 +64,7 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-input v-model:value="duration" style="width: 260px">
+                    <a-input v-model:value="duration" style="width: 260px" placeholder="分钟">
                       <template #addonBefore>
                         <a-select v-model:value="durationQueryType" style="width: 130px">
                           <a-select-option :value="3">{{ '通话时长 >=' }}</a-select-option>
@@ -559,7 +560,7 @@
   //获取服务列表
   function getServices() {
     serviceApi
-      .GetServicesSimple({})
+      .GetServicesSimple({ serviceType: ['DCOption'] })
       .then((data) => {
         serviceData.value = data;
       })

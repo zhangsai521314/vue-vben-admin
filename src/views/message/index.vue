@@ -169,7 +169,7 @@
       </template>
       <template #default="{ row }">
         <div :class="`tableOption`">
-          <AuthDom auth="message.msg_queren">
+          <AuthDom auth="message_msg_queren">
             <IconFontClass
               name="icon-baseui-queren"
               @click="okMsg(row)"
@@ -177,7 +177,7 @@
               title="确认告警"
             />
           </AuthDom>
-          <AuthDom auth="message.show_detail">
+          <AuthDom auth="message_show_detail">
             <IconFontClass
               name="icon-baseui-show"
               @click="showMgsHis(row)"
@@ -185,7 +185,7 @@
               title="查看告警记录"
             />
           </AuthDom>
-          <!-- <AuthDom auth="message.show_read">
+          <!-- <AuthDom auth="message_show_read">
             <IconFontClass
               name="icon-baseui-zijianrizhi"
               @click="showFrom(row)"
@@ -306,6 +306,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'msgStatus',
@@ -327,7 +328,7 @@
       {
         field: 'msgContent',
         title: '信息内容',
-        showOverflow: true,
+        showOverflow: false,
         showHeaderOverflow: true,
         sortable: true,
       },
@@ -643,10 +644,6 @@
 </script>
 <style lang="less" scoped>
   @prefixCls: ~'@{namespace}-message-';
-
-  .row-div {
-    height: 30px;
-  }
 
   .tableBtn {
     width: 100%;

@@ -4,23 +4,36 @@
       <div style="width: 100%; height: 100%">
         <vxe-toolbar ref="toolbarRef" custom>
           <template #buttons>
-            <a-space
-              direction="horizontal"
-              size="small"
-              style="margin-left: 5px; line-height: 50px"
-            >
+            <a-space direction="horizontal" size="small" style="margin-left: 5px">
               <AuthDom auth="organizationManage_query">
-                <a-space direction="horizontal" size="small">
-                  <a-input
-                    @press-enter="getOrganizations"
-                    v-model:value="seacthContent.orgName"
-                    placeholder="输入名称查询"
-                  />
-                  <a-button @click="getOrganizations" type="primary">查询</a-button>
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>部门名称：</label>
+                      <a-input
+                        @press-enter="getOrganizations"
+                        v-model:value="seacthContent.orgName"
+                        placeholder="输入名称查询"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button @click="getOrganizations" type="primary">查询</a-button>
+                    </a-space>
+                  </div>
                 </a-space>
               </AuthDom>
               <AuthDom auth="organizationManage_add">
-                <a-button class="ant-btn" @click="showFrom('add', null, 0)">新增顶级部门</a-button>
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button class="ant-btn" @click="showFrom('add', null, 0)"
+                        >新增顶级部门</a-button
+                      >
+                    </a-space>
+                  </div>
+                </a-space>
               </AuthDom>
             </a-space>
           </template>
@@ -234,6 +247,9 @@
       })
       .then((data) => {
         tableConfigData.value = data;
+        nextTick(() => {
+          tableRef.value.setAllTreeExpand(true);
+        });
       })
       .catch(() => {
         tableConfigData.value = [];

@@ -15,35 +15,20 @@
         :data="mqttStore.msgData"
       >
         <vxe-column field="msgId" title="告警id" :visible="false" />
-        <vxe-column field="serviceCode" title="服务编号" :visible="false">
+        <vxe-column field="serviceId" title="服务id" :visible="false" />
+        <vxe-column field="serviceCode" title="服务编号" :visible="false" />
+        <vxe-column field="serviceName" title="服务名称" />
+        <vxe-column field="msgType" title="信息类型" :visible="false">
           <template #default="{ row }">
             {{
-              serviceData.find((m) => row.joinId == m.key)
-                ? serviceData.find((m) => row.joinId == m.key).serviceCode
-                : ''
-            }}
-          </template></vxe-column
-        >
-        <vxe-column field="serviceName" title="服务名称">
-          <template #default="{ row }">
-            {{
-              serviceData.find((m) => row.joinId == m.key)
-                ? serviceData.find((m) => row.joinId == m.key).label
-                : ''
-            }}
-          </template>
-        </vxe-column>
-        <vxe-column field="msgType" title="信息类型">
-          <template #default="{ row }">
-            {{
-              dictionariesData.find((m) => row.msgType == m.dictionarieskey)
-                ? dictionariesData.find((m) => row.msgType == m.dictionarieskey).label
+              dictionariesData.find((m) => row.msgType == m.dictionariesKey)
+                ? dictionariesData.find((m) => row.msgType == m.dictionariesKey).label
                 : row.msgType
             }}
           </template>
         </vxe-column>
         <vxe-column field="msgTitle" title="信息标题" />
-        <vxe-column field="msgContent" title="信息内容" />
+        <vxe-column field="msgContent" title="信息内容" :showOverflow="false" />
         <vxe-column field="msgStatus" title="信息状态" width="80">
           <template #default="{ row }">
             <span
@@ -58,7 +43,15 @@
                         : '',
               }"
             >
-              {{ row.msgStatus == 1 ? '故障' : row.msgStatus == 2 ? '恢复' : '' }}</span
+              {{
+                row.msgClass == 1
+                  ? '提示'
+                  : row.msgStatus == 1
+                    ? '故障'
+                    : row.msgStatus == 2
+                      ? '恢复'
+                      : ''
+              }}</span
             >
           </template>
         </vxe-column>
@@ -122,7 +115,6 @@
   const mountRef = ref<HTMLElement>();
 
   getDictionaries();
-  getServices();
 
   function g6() {
     //https://g6-next.antv.antgroup.com/apis/item/node/image-node
@@ -161,7 +153,7 @@
       data: {
         nodes: [
           {
-            id: '517830229491787',
+            id: '521994196049995',
             data: {
               type: 'rect-node',
               parentId: 'combo_fuwuqi',
@@ -177,61 +169,26 @@
                 fontFamily: 'iconfont',
                 fill: 'green',
                 show: true,
-                text: '\ue6ec', //text属性 为 iconfont.css 中的content ，记得在斜线后加u
+                text: '\ue6e5', //text属性 为 iconfont.css 中的content ，记得在斜线后加u
                 width: 50,
                 height: 50,
                 offsetY: -15,
               },
               labelShape: {
-                text: '调度服务器(主)',
-                fontSize: 20,
+                text: '智能网服务器',
+                fontSize: 18,
                 offsetY: 25,
                 position: 'center',
                 maxWidth: '300%',
-                fill: 'green',
+                maxLines: 2,
                 font: 'normal normal normal 12px "PingFang SC"',
                 fontFamily: '"PingFang SC"',
-                // maxLines: 2,
+                fill: 'green',
               },
             },
           },
           {
-            id: '521994003796043',
-            data: {
-              type: 'rect-node',
-              parentId: 'combo_fuwuqi',
-              x: 860,
-              //y: 30,
-              keyShape: {
-                width: 200,
-                height: 120,
-                fill: '',
-              },
-              iconShape: {
-                // 自定义字体名称需要设置不然iconfont显示不了，fontFamily 必须和 iconfont.css 里面的 font-family 保持一致！！！！！！！！！
-                fontFamily: 'iconfont',
-                fill: 'green',
-                show: true,
-                text: '\ue6ec', //text属性 为 iconfont.css 中的content ，记得在斜线后加u
-                width: 50,
-                height: 50,
-                offsetY: -15,
-              },
-              labelShape: {
-                text: '调度服务器(备)',
-                fontSize: 20,
-                offsetY: 25,
-                position: 'center',
-                maxWidth: '300%',
-                fill: 'green',
-                font: 'normal normal normal 12px "PingFang SC"',
-                fontFamily: '"PingFang SC"',
-                // maxLines: 2,
-              },
-            },
-          },
-          {
-            id: '521994196049995',
+            id: '517830229491787',
             data: {
               type: 'rect-node',
               parentId: 'combo_fuwuqi',
@@ -247,57 +204,21 @@
                 fontFamily: 'iconfont',
                 fill: 'green',
                 show: true,
-                text: '\ue6e5', //text属性 为 iconfont.css 中的content ，记得在斜线后加u
+                text: '\ue6ec', //text属性 为 iconfont.css 中的content ，记得在斜线后加u
                 width: 50,
                 height: 50,
                 offsetY: -15,
               },
               labelShape: {
-                text: '智能网服务器(主)',
-                fontSize: 18,
+                text: '调度服务器',
+                fontSize: 20,
                 offsetY: 25,
                 position: 'center',
                 maxWidth: '300%',
-                maxLines: 2,
+                fill: 'green',
                 font: 'normal normal normal 12px "PingFang SC"',
                 fontFamily: '"PingFang SC"',
-                fill: 'green',
-              },
-            },
-          },
-          {
-            id: '521999945547851',
-            data: {
-              type: 'rect-node',
-              parentId: 'combo_fuwuqi',
-              x: 1420,
-              //y: 30,
-              keyShape: {
-                offsetY: -110,
-                width: 200,
-                height: 120,
-                fill: '',
-              },
-              iconShape: {
-                // 自定义字体名称需要设置不然iconfont显示不了，fontFamily 必须和 iconfont.css 里面的 font-family 保持一致！！！！！！！！！
-                fontFamily: 'iconfont',
-                fill: 'green',
-                show: true,
-                text: '\ue6e5', //text属性 为 iconfont.css 中的content ，记得在斜线后加u
-                width: 50,
-                height: 50,
-                offsetY: -15,
-              },
-              labelShape: {
-                text: '智能网服务器(备)',
-                fontSize: 18,
-                offsetY: 25,
-                position: 'center',
-                maxWidth: '300%',
-                maxLines: 2,
-                font: 'normal normal normal 12px "PingFang SC"',
-                fontFamily: '"PingFang SC"',
-                fill: 'green',
+                // maxLines: 2,
               },
             },
           },
@@ -336,9 +257,8 @@
               },
             },
           },
-
           {
-            id: '522045670068299',
+            id: '1',
             data: {
               type: 'rect-node',
               parentId: 'combo_diaodutai',
@@ -374,7 +294,7 @@
           },
 
           {
-            id: '522045728026699',
+            id: '522045670068299',
             data: {
               type: 'rect-node',
               parentId: 'combo_diaodutai',
@@ -409,7 +329,7 @@
             },
           },
           {
-            id: '522045728034891',
+            id: '522045728026699',
             data: {
               type: 'rect-node',
               parentId: 'combo_diaodutai',
@@ -444,7 +364,7 @@
             },
           },
           {
-            id: '522045728038987',
+            id: '522045728034891',
             data: {
               type: 'rect-node',
               parentId: 'combo_diaodutai',
@@ -480,7 +400,7 @@
             },
           },
           {
-            id: '522045728059467',
+            id: '522045728038987',
             data: {
               type: 'rect-node',
               parentId: 'combo_diaodutai',
@@ -515,7 +435,7 @@
             },
           },
           {
-            id: '522045728067659',
+            id: '522045728059467',
             data: {
               type: 'rect-node',
               parentId: 'combo_diaodutai',
@@ -550,7 +470,7 @@
             },
           },
           {
-            id: '522045728075851',
+            id: '522045728067659',
             data: {
               type: 'rect-node',
               parentId: 'combo_diaodutai',
@@ -584,9 +504,8 @@
               },
             },
           },
-
           {
-            id: '522045728092235',
+            id: '522045728075851',
             data: {
               type: 'rect-node',
               parentId: 'combo_diaodutai',
@@ -623,7 +542,7 @@
             },
           },
           {
-            id: '522045819396171',
+            id: '522045728092235',
             data: {
               type: 'rect-node',
               parentId: 'combo_diaodutai',
@@ -658,7 +577,7 @@
             },
           },
           {
-            id: '522045819404363',
+            id: '522045819396171',
             data: {
               type: 'rect-node',
               parentId: 'combo_diaodutai',
@@ -693,7 +612,7 @@
             },
           },
           {
-            id: '522045819408459',
+            id: '522045819404363',
             data: {
               type: 'rect-node',
               parentId: 'combo_diaodutai',
@@ -728,7 +647,7 @@
             },
           },
           {
-            id: '522045819412555',
+            id: '522045819408459',
             data: {
               type: 'rect-node',
               parentId: 'combo_diaodutai',
@@ -763,7 +682,7 @@
             },
           },
           {
-            id: '522045819416651',
+            id: '522045819412555',
             data: {
               type: 'rect-node',
               parentId: 'combo_diaodutai',
@@ -854,22 +773,11 @@
         dictionariesclass: ['msgType'],
       })
       .then((data) => {
+        debugger;
         dictionariesData.value = data;
       })
       .catch(() => {
         dictionariesData.value = [];
-      });
-  }
-
-  //获取服务列表
-  function getServices() {
-    serviceApi
-      .GetServicesSimple({})
-      .then((data) => {
-        serviceData.value = data;
-      })
-      .catch(() => {
-        serviceData.value = [];
       });
   }
 
@@ -916,7 +824,11 @@
     setTimeout(() => {
       if (mqttStore.isInitAlarmData) {
         for (let i = mqttStore.msgData.length - 1; i >= 0; i--) {
-          changeStatus(`${mqttStore.msgData[i].joinId}_${mqttStore.msgData[i].msgStatus}`);
+          let keyId = mqttStore.msgData[i].serviceId;
+          if (mqttStore.msgData[i].msgCategory == 1) {
+            keyId == mqttStore.msgData[i].joinId;
+          }
+          changeStatus(`${keyId}_${mqttStore.msgData[i].msgStatus}`);
         }
         watch(
           () => mqttStore.changeNewInfoKey,

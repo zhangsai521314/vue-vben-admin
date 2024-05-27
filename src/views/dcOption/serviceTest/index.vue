@@ -6,7 +6,7 @@
           <template #buttons>
             <div :class="`tableBtn`">
               <a-space direction="horizontal" size="small" style="margin-left: 5px">
-                <AuthDom auth="message_query">
+                <AuthDom auth="dcOption_serviceTest_query">
                   <a-space
                     direction="horizontal"
                     size="small"
@@ -30,6 +30,7 @@
                       <a-space direction="horizontal" size="small" :wrap="true">
                         <label>服务名称：</label>
                         <a-select
+                          placeholder="请选择服务名称"
                           style="width: 170px"
                           allow-clear
                           show-search
@@ -188,7 +189,7 @@
   //获取服务列表
   function getServices() {
     serviceApi
-      .GetServicesSimple({})
+      .GetServicesSimple({ serviceType: ['DCOption'] })
       .then((data) => {
         serviceData.value = data;
       })

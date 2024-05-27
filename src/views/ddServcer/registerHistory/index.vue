@@ -12,21 +12,34 @@
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
           <a-space direction="horizontal" size="small" style="margin-left: 5px">
-            <AuthDom auth="message_query">
+            <AuthDom auth="ddServcer_registerHistory_query">
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>FN:</label>
+                    <label>时间：</label>
+                    <a-config-provider :locale="zhCN">
+                      <a-range-picker
+                        allowClear
+                        v-model:value="timeValue"
+                        :showTime="true"
+                        format="YYYY-MM-DD HH:mm:ss"
+                      />
+                    </a-config-provider>
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>功能号：</label>
                     <a-input
                       @press-enter="getStatus()"
                       v-model:value="seacthContent.fn"
-                      placeholder="输入FN号查询"
+                      placeholder="输入功能号查询"
                     />
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>ISDN:</label>
+                    <label>ISDN：</label>
                     <a-input
                       @press-enter="getStatus()"
                       v-model:value="seacthContent.isdn"
@@ -36,16 +49,47 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>状态：</label>
+                    <label>注册状态：</label>
                     <a-select
+                      placeholder="请选择注册状态"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.regStatus"
                     >
                       <a-select-option :value="1">注册</a-select-option>
                       <a-select-option :value="2">注销</a-select-option>
+                      <a-select-option :value="0">手动注销</a-select-option>
+                      <a-select-option :value="2">超时注销</a-select-option>
                       <a-select-option :value="3">强制注销</a-select-option>
-                      <a-select-option :value="4">超时注销</a-select-option>
+                    </a-select>
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>类型：</label>
+                    <a-select
+                      placeholder="请选择类型"
+                      style="width: 170px"
+                      allow-clear
+                      v-model:value="seacthContent.regType"
+                    >
+                      <a-select-option :value="91">调度功能号</a-select-option>
+                      <a-select-option :value="2">机车功能号</a-select-option>
+                      <a-select-option :value="3">车次功能号</a-select-option>
+                    </a-select>
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>注册结果：</label>
+                    <a-select
+                      placeholder="请选择注册结果"
+                      style="width: 170px"
+                      allow-clear
+                      v-model:value="seacthContent.regResult"
+                    >
+                      <a-select-option :value="0">成功</a-select-option>
+                      <a-select-option :value="1">失败</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
@@ -89,6 +133,8 @@
     Station as stationApi,
   } from '@/api/ddServcer';
   import { tryOnUnmounted } from '@vueuse/core';
+  import zhCN from 'ant-design-vue/es/locale/zh_CN';
+  import 'dayjs/locale/zh-cn';
 
   defineOptions({ name: 'DDServcerRegisterHistory' });
   const { prefixCls } = useDesign('DDServcerRegisterHistory-');
@@ -107,7 +153,7 @@
       },
       {
         field: 'fn',
-        title: 'fn',
+        title: '功能号',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -134,8 +180,8 @@
         sortable: true,
       },
       {
-        field: 'regResult',
-        title: 'regResult',
+        field: 'regResultName',
+        title: '注册结果',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -169,10 +215,15 @@
   });
   const tableRef = ref({});
   const myContentRef = ref({});
+  const timeValue = ref(null);
   const seacthContent = ref({
     isdn: null,
     fn: null,
     regStatus: null,
+    regType: null,
+    regResult: null,
+    startTime: null,
+    endTime: null,
   });
   const page = reactive({
     current: 1,
@@ -195,6 +246,10 @@
     if (!isAuto) {
       refresh.value = 'no';
     }
+    seacthContent.value.startTime =
+      timeValue.value == null ? null : timeValue.value[0].format('YYYY-MM-DD HH:mm:ss');
+    seacthContent.value.endTime =
+      timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
     loading.value = true;
     registerHistoryApi
       .GetDDServerRegisterHistorys({
@@ -224,7 +279,12 @@
       isdn: null,
       fn: null,
       regStatus: null,
+      regType: null,
+      regResult: null,
+      startTime: null,
+      endTime: null,
     };
+    timeValue.value = null;
   }
 
   function handlePageChange() {

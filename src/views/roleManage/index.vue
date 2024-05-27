@@ -11,19 +11,34 @@
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style="margin-left: 5px; line-height: 50px">
+          <a-space direction="horizontal" size="small" style="margin-left: 5px">
             <AuthDom auth="roleManage_query">
-              <a-space direction="horizontal" size="small">
-                <a-input
-                  @press-enter="getRoles"
-                  v-model:value="seacthContent.name"
-                  placeholder="输入名称查询"
-                />
-                <a-button @click="getRoles" type="primary">查询</a-button>
+              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>角色名称：</label>
+                    <a-input
+                      @press-enter="getRoles"
+                      v-model:value="seacthContent.name"
+                      placeholder="输入名称查询"
+                    />
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <a-button @click="getRoles" type="primary">查询</a-button>
+                  </a-space>
+                </div>
               </a-space>
             </AuthDom>
             <AuthDom auth="roleManage_add">
-              <a-button class="ant-btn" @click="showFrom()">新增角色</a-button>
+              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <a-button class="ant-btn" @click="showFrom()">新增角色</a-button>
+                  </a-space>
+                </div>
+              </a-space>
             </AuthDom>
           </a-space>
         </div>

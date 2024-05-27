@@ -5,32 +5,68 @@
         <!-- :refresh="{ queryMethod: getDictionariess }" -->
         <vxe-toolbar ref="toolbarRef" custom>
           <template #buttons>
-            <a-space
-              direction="horizontal"
-              size="small"
-              style="margin-left: 5px; line-height: 50px"
-            >
-              <AuthDom auth="dictionariesManage_query">
-                <a-space direction="horizontal" size="small">
-                  <a-input
-                    @press-enter="getDictionariess"
-                    v-model:value="seacthContent.dictionariesName"
-                    placeholder="输入名称查询"
-                  />
-                  <a-button @click="getDictionariess" type="primary">查询</a-button>
-                </a-space>
-              </AuthDom>
-              <AuthDom auth="dictionariesManage_add">
-                <a-button class="ant-btn" @click="showFrom('add', null, 0)">新增顶级字典</a-button>
-              </AuthDom>
-              <AuthDom auth="dictionariesManage_sync_performance">
-                <a-spin :spinning="syncMqttPerformance">
-                  <a-button class="ant-btn" @click="syncPerformance('collectionFrequency')"
-                    >同步设备性能上报频率</a-button
+            <div :class="`tableBtn`">
+              <a-space direction="horizontal" size="small" style="margin-left: 5px">
+                <AuthDom auth="dictionariesManage_query">
+                  <a-space
+                    direction="horizontal"
+                    size="small"
+                    :wrap="true"
+                    style="margin-bottom: 0"
                   >
-                </a-spin>
-              </AuthDom>
-            </a-space>
+                    <div class="row-div">
+                      <a-space direction="horizontal" size="small" :wrap="true">
+                        <label>字典名称：</label>
+                        <a-input
+                          @press-enter="getDictionariess"
+                          v-model:value="seacthContent.dictionariesName"
+                          placeholder="输入名称查询"
+                        />
+                      </a-space>
+                    </div>
+                    <div class="row-div">
+                      <a-space direction="horizontal" size="small" :wrap="true">
+                        <a-button @click="getDictionariess" type="primary">查询</a-button>
+                      </a-space>
+                    </div>
+                  </a-space>
+                </AuthDom>
+                <AuthDom auth="dictionariesManage_add">
+                  <a-space
+                    direction="horizontal"
+                    size="small"
+                    :wrap="true"
+                    style="margin-bottom: 0"
+                  >
+                    <div class="row-div">
+                      <a-space direction="horizontal" size="small" :wrap="true">
+                        <a-button class="ant-btn" @click="showFrom('add', null, 0)"
+                          >新增顶级字典</a-button
+                        >
+                      </a-space>
+                    </div>
+                  </a-space>
+                </AuthDom>
+                <AuthDom auth="dictionariesManage_sync_performance">
+                  <a-space
+                    direction="horizontal"
+                    size="small"
+                    :wrap="true"
+                    style="margin-bottom: 0"
+                  >
+                    <div class="row-div">
+                      <a-space direction="horizontal" size="small" :wrap="true">
+                        <a-spin :spinning="syncMqttPerformance">
+                          <a-button class="ant-btn" @click="syncPerformance('collectionFrequency')"
+                            >同步设备性能上报频率</a-button
+                          >
+                        </a-spin>
+                      </a-space>
+                    </div>
+                  </a-space>
+                </AuthDom>
+              </a-space>
+            </div>
           </template>
         </vxe-toolbar>
         <div style="width: 100%; height: calc(100% - 62px)">

@@ -18,9 +18,9 @@
             <a-space
               direction="horizontal"
               size="small"
-              style=" margin-left: 5px;line-height: 50px"
+              style="margin-left: 5px; line-height: 50px"
             >
-              <AuthDom auth="line_query">
+              <AuthDom auth="ddServcer_station_query">
                 <a-space direction="horizontal" size="small">
                   <a-input
                     @press-enter="getDDServerStations"
@@ -30,7 +30,7 @@
                   <a-button @click="getDDServerStations" type="primary">查询</a-button>
                 </a-space>
               </AuthDom>
-              <AuthDom auth="line_add">
+              <AuthDom auth="ddServcer_station_add">
                 <a-button class="ant-btn" @click="showFrom()">新增线路</a-button>
               </AuthDom>
             </a-space>
@@ -47,7 +47,7 @@
         </template>
         <template #default="{ row }">
           <div :class="`tableOption`">
-            <AuthDom auth="line_table_edit">
+            <AuthDom auth="ddServcer_station_table_edit">
               <IconFontClass
                 name="icon-baseui-edit-fill"
                 @click="showFrom(row)"
@@ -55,7 +55,7 @@
                 title="编辑"
               />
             </AuthDom>
-            <AuthDom auth="line_table_delete">
+            <AuthDom auth="ddServcer_station_table_delete">
               <IconFontClass
                 name="icon-baseui-guanbicuowu"
                 @click="remove(row)"
@@ -88,10 +88,10 @@
             name="lineId"
           >
             <a-select
+              placeholder="请选择所属线路"
               v-model:value="formData.lineId"
               :options="lineDatas"
               :allowClear="true"
-              placeholder="请选择所属线路"
             />
           </a-form-item>
           <a-form-item
@@ -235,7 +235,7 @@
             :rules="[{ max: 250, message: '起始公里标过长' }]"
           >
             <a-input
-              placeholder="请输入起始公里标过长"
+              placeholder="请输入起始公里标"
               v-model:value="formData.startGlb"
               autocomplete="off"
             />
@@ -301,6 +301,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'name',
@@ -427,7 +428,7 @@
     data: [],
   });
   const defFromData = reactive({
-    lineId: '',
+    lineId: null,
     remark: null,
     name: null,
     code: null,

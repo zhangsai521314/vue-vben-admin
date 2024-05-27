@@ -15,23 +15,44 @@
       >
         <template #toolbar_buttons>
           <div :class="`tableBtn`">
-            <a-space
-              direction="horizontal"
-              size="small"
-              style="margin-left: 5px; line-height: 50px"
-            >
-              <AuthDom auth="line_query">
-                <a-space direction="horizontal" size="small">
-                  <a-input
-                    @press-enter="getDDServerTLaccis"
-                    v-model:value="seacthContent.name"
-                    placeholder="输入车站查询"
-                  />
-                  <a-button @click="getDDServerTLaccis" type="primary">查询</a-button>
+            <a-space direction="horizontal" size="small" style="margin-left: 5px">
+              <AuthDom auth="ddServcer_lacci_query">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>小区名称：</label>
+                      <a-input
+                        @press-enter="getDDServerTLaccis"
+                        v-model:value="seacthContent.name"
+                        placeholder="输入小区名称查询"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>lacci：</label>
+                      <a-input
+                        @press-enter="getDDServerTLaccis()"
+                        v-model:value="seacthContent.lacci"
+                        placeholder="输入lacci查询"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button @click="getDDServerTLaccis" type="primary">查询</a-button>
+                    </a-space>
+                  </div>
                 </a-space>
               </AuthDom>
-              <AuthDom auth="line_add">
-                <a-button class="ant-btn" @click="showFrom()">新增小区</a-button>
+              <AuthDom auth="ddServcer_lacci_add">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button class="ant-btn" @click="showFrom()">新增小区</a-button>
+                    </a-space>
+                  </div>
+                </a-space>
               </AuthDom>
             </a-space>
           </div>
@@ -47,7 +68,7 @@
         </template>
         <template #default="{ row }">
           <div :class="`tableOption`">
-            <AuthDom auth="line_table_edit">
+            <AuthDom auth="ddServcer_lacci_table_edit">
               <IconFontClass
                 name="icon-baseui-edit-fill"
                 @click="showFrom(row)"
@@ -55,7 +76,7 @@
                 title="编辑"
               />
             </AuthDom>
-            <AuthDom auth="line_table_delete">
+            <AuthDom auth="ddServcer_lacci_table_delete">
               <IconFontClass
                 name="icon-baseui-guanbicuowu"
                 @click="remove(row)"
@@ -259,6 +280,7 @@
   });
   const seacthContent = ref({
     name: '',
+    lacci: '',
   });
   getDDServerTLaccis();
 

@@ -74,6 +74,7 @@
         title: '信息类型',
         showOverflow: true,
         showHeaderOverflow: true,
+        visible: false,
       },
       {
         field: 'msgStatus',
@@ -93,6 +94,7 @@
       {
         field: 'msgContent',
         title: '信息内容',
+        showOverflow: false,
       },
       {
         field: 'msgStartTime',

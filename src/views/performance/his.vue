@@ -5,7 +5,7 @@
       size="small"
       style="width: 100%; height: 48px; padding-left: 5px; background-color: #fff"
     >
-      <AuthDom auth="message_query">
+      <AuthDom auth="performance_his_query">
         <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
           <div class="row-div">
             <a-space direction="horizontal" size="small" :wrap="true">
@@ -34,11 +34,9 @@
             </a-space>
           </div>
           <div class="row-div">
-            <AuthDom auth="vperformance_his_query">
-              <a-space direction="horizontal" size="small" :wrap="true">
-                <a-button @click="getPerformances()" type="primary">查询</a-button>
-              </a-space>
-            </AuthDom>
+            <a-space direction="horizontal" size="small" :wrap="true">
+              <a-button @click="getPerformances()" type="primary">查询</a-button>
+            </a-space>
           </div>
         </a-space>
       </AuthDom>

@@ -20,7 +20,7 @@
               size="small"
               style="margin-left: 5px; line-height: 50px"
             >
-              <AuthDom auth="line_query">
+              <AuthDom auth="ddServcer_line_query">
                 <a-space direction="horizontal" size="small">
                   <a-input
                     @press-enter="getDDServerLines"
@@ -30,7 +30,7 @@
                   <a-button @click="getDDServerLines" type="primary">查询</a-button>
                 </a-space>
               </AuthDom>
-              <AuthDom auth="line_add">
+              <AuthDom auth="ddServcer_line_add">
                 <a-button class="ant-btn" @click="showFrom()">新增线路</a-button>
               </AuthDom>
             </a-space>
@@ -47,7 +47,7 @@
         </template>
         <template #default="{ row }">
           <div :class="`tableOption`">
-            <AuthDom auth="line_table_edit">
+            <AuthDom auth="ddServcer_line_table_edit">
               <IconFontClass
                 name="icon-baseui-edit-fill"
                 @click="showFrom(row)"
@@ -55,7 +55,7 @@
                 title="编辑"
               />
             </AuthDom>
-            <AuthDom auth="line_table_delete">
+            <AuthDom auth="ddServcer_line_table_delete">
               <IconFontClass
                 name="icon-baseui-guanbicuowu"
                 @click="remove(row)"
@@ -114,12 +114,12 @@
           </a-form-item>
           <a-form-item
             name="dcFn"
-            label="dcFn"
+            label="功能号"
             :rules="[
               { required: true, message: '' },
-              { max: 250, message: 'dcFn名称过长' },
-              { validator: formValidator.positiveInteger, message: 'dcFn格式为正整数' },
-              { validator: formValidator.empty, message: '请输入dcFn' },
+              { max: 250, message: '功能号名称过长' },
+              { validator: formValidator.positiveInteger, message: '功能号格式为正整数' },
+              { validator: formValidator.empty, message: '请输入功能号' },
             ]"
           >
             <a-input placeholder="请输入dcFn" v-model:value="formData.dcFn" autocomplete="off" />
@@ -134,7 +134,7 @@
               { validator: formValidator.empty, message: '请输入调度台ISDN' },
             ]"
           >
-            <a-input placeholder="请输入dcFn" v-model:value="formData.dcIsdn" autocomplete="off" />
+            <a-input placeholder="请输入ISDN" v-model:value="formData.dcIsdn" autocomplete="off" />
           </a-form-item>
           <a-form-item
             name="groupAllCirNumber"
@@ -170,7 +170,7 @@
             label="全呼CIR组呼号"
             :rules="[
               { required: true, message: '' },
-              { max: 250, message: '全呼调度台组呼号过长' },
+              { max: 250, message: '全呼CIR组呼号过长' },
               { validator: formValidator.positiveInteger, message: '全呼调度台组呼号格式为正整数' },
               { validator: formValidator.empty, message: '请输入全呼调度台组呼号' },
             ]"
@@ -209,7 +209,7 @@
             ]"
           >
             <a-input
-              placeholder="请输入线路广播组呼号过长"
+              placeholder="请输入线路广播组呼号"
               v-model:value="formData.groupAllBroadcastNumber"
               autocomplete="off"
             />
@@ -286,7 +286,7 @@
       },
       {
         field: 'dcFn',
-        title: 'dc_fn',
+        title: '功能号',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

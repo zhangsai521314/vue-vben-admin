@@ -10,14 +10,24 @@
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style="margin-left: 5px; line-height: 50px">
+          <a-space direction="horizontal" size="small" style="margin-left: 5px">
             <AuthDom auth="versionsManage_query">
-              <a-space direction="horizontal" size="small">
-                <a-button @click="getVersions" type="primary">查询</a-button>
+              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <a-button @click="getVersions" type="primary">查询</a-button>
+                  </a-space>
+                </div>
               </a-space>
             </AuthDom>
             <AuthDom auth="versionsManage_add">
-              <a-button class="ant-btn" @click="showFrom()">新增软件包类型</a-button>
+              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <a-button class="ant-btn" @click="showFrom()">新增软件包类型</a-button>
+                  </a-space>
+                </div>
+              </a-space>
             </AuthDom>
           </a-space>
         </div>

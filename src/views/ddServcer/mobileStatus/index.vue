@@ -12,12 +12,13 @@
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
           <a-space direction="horizontal" size="small" style="margin-left: 5px">
-            <AuthDom auth="message_query">
+            <AuthDom auth="ddServcer_mobileStatus_query">
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>车站名称：</label>
                     <a-select
+                      placeholder="请选择车站名称"
                       style="width: 170px"
                       allow-clear
                       show-search
@@ -43,7 +44,7 @@
                 </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>ISDN:</label>
+                    <label>ISDN：</label>
                     <a-input
                       @press-enter="getStatus()"
                       v-model:value="seacthContent.isdn"
@@ -174,7 +175,7 @@
       },
       {
         field: 'ip',
-        title: 'ip+port',
+        title: 'Ip+端口号',
         showOverflow: true,
         showHeaderOverflow: true,
         width: 154,

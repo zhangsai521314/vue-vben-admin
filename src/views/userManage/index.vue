@@ -13,23 +13,63 @@
       >
         <template #toolbar_buttons>
           <div :class="`tableBtn`">
-            <a-space
-              direction="horizontal"
-              size="small"
-              style="margin-left: 5px; line-height: 50px"
-            >
+            <a-space direction="horizontal" size="small" style="margin-left: 5px">
               <AuthDom auth="userManage_query">
-                <a-space direction="horizontal" size="small">
-                  <a-input
-                    @press-enter="getUsers"
-                    v-model:value="seacthContent.userName"
-                    placeholder="输入用户名称查询"
-                  />
-                  <a-button @click="getUsers" type="primary">查询</a-button>
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>用户名称：</label>
+                      <a-input
+                        @press-enter="getUsers"
+                        v-model:value="seacthContent.userName"
+                        placeholder="输入用户名称查询"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>部门名称：</label>
+                      <a-tree-select
+                        v-model:value="seacthContent.orgId"
+                        show-search
+                        style="width: 170px"
+                        :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                        placeholder="请选择用户部门"
+                        allow-clear
+                        show-arrow
+                        :filterTreeNode="AntVueCommon.filterTreeNode"
+                        :tree-data="organizationDatas"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>角色名称：</label>
+                      <a-select
+                        style="width: 170px"
+                        v-model:value="seacthContent.roleId"
+                        :options="roles"
+                        :allowClear="true"
+                        placeholder="请选择用户角色"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button @click="getUsers" type="primary">查询</a-button>
+                      <a-button @click="resetSeacth">重置表单</a-button>
+                    </a-space>
+                  </div>
                 </a-space>
               </AuthDom>
               <AuthDom auth="userManage_add">
-                <a-button class="ant-btn" @click="showFrom()">新增用户</a-button>
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button class="ant-btn" @click="showFrom()">新增用户</a-button>
+                    </a-space>
+                  </div>
+                </a-space>
               </AuthDom>
             </a-space>
           </div>
@@ -543,10 +583,14 @@
   const seacthContent = ref({
     userName: '',
     usersource: '',
+    orgId: null,
+    roleId: null,
   });
 
   const organizationDatas = ref([]);
 
+  getOrganization();
+  getRoles();
   getUsers();
 
   let validate_pwd = async (_rule, value) => {
@@ -654,6 +698,16 @@
           message.error('获取用户信息失败');
         }
       });
+  }
+
+  //重置搜索条件
+  function resetSeacth() {
+    seacthContent.value = {
+      userName: '',
+      usersource: '',
+      orgId: null,
+      roleId: null,
+    };
   }
 
   //获取用户列表

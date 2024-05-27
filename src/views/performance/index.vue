@@ -2,7 +2,7 @@
   <MyContent :class="prefixCls">
     <a-spin :spinning="loadingEquipment">
       <div style="width: 100%; padding: 6px; background-color: #fff">
-        <AuthDom auth="message_query">
+        <AuthDom auth="performance_query">
           <label>监测设备：</label>
           <a-select
             style="width: calc(100% - 80px)"

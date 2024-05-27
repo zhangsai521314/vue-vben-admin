@@ -12,8 +12,21 @@
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
           <a-space direction="horizontal" size="small" style="margin-left: 5px">
-            <AuthDom auth="message_query">
+            <AuthDom auth="ddServcer_cirStatus_query">
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>时间：</label>
+                    <a-config-provider :locale="zhCN">
+                      <a-range-picker
+                        allowClear
+                        v-model:value="timeValue"
+                        :showTime="true"
+                        format="YYYY-MM-DD HH:mm:ss"
+                      />
+                    </a-config-provider>
+                  </a-space>
+                </div>
                 <!-- <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>线路名称：</label>
@@ -31,6 +44,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>车站名称：</label>
                     <a-select
+                      placeholder="请选择车站名称"
                       style="width: 170px"
                       allow-clear
                       show-search
@@ -56,7 +70,7 @@
                 </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>ISDN:</label>
+                    <label>ISDN：</label>
                     <a-input
                       @press-enter="getStatus()"
                       v-model:value="seacthContent.isdn"
@@ -76,12 +90,60 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>机车状态：</label>
+                    <a-select
+                      placeholder="请选择机车状态"
+                      style="width: 170px"
+                      allow-clear
+                      v-model:value="seacthContent.JcFnStatus"
+                    >
+                      <a-select-option :value="1">注册</a-select-option>
+                      <a-select-option :value="2">注销</a-select-option>
+                      <a-select-option :value="0">手动注销</a-select-option>
+                      <a-select-option :value="2">超时注销</a-select-option>
+                      <a-select-option :value="3">强制注销</a-select-option>
+                    </a-select>
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
                     <label>车次功能号：</label>
                     <a-input
                       @press-enter="getStatus()"
                       v-model:value="seacthContent.ccFn"
-                      placeholder="输入车次功能号：查询"
+                      placeholder="输入车次功能号查询"
                     />
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>车次状态：</label>
+                    <a-select
+                      placeholder="请选择车次状态"
+                      style="width: 170px"
+                      allow-clear
+                      v-model:value="seacthContent.CcFnStatus"
+                    >
+                      <a-select-option :value="1">注册</a-select-option>
+                      <a-select-option :value="2">注销</a-select-option>
+                      <a-select-option :value="0">手动注销</a-select-option>
+                      <a-select-option :value="2">超时注销</a-select-option>
+                      <a-select-option :value="3">强制注销</a-select-option>
+                    </a-select>
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>登录状态：</label>
+                    <a-select
+                      placeholder="请选择登录状态"
+                      style="width: 170px"
+                      allow-clear
+                      v-model:value="seacthContent.LoginStatus"
+                    >
+                      <a-select-option :value="0">成功</a-select-option>
+                      <a-select-option :value="1">失败</a-select-option>
+                    </a-select>
                   </a-space>
                 </div>
                 <div class="row-div">
@@ -125,6 +187,8 @@
     Lacci as lacciApi,
   } from '@/api/ddServcer';
   import { tryOnUnmounted } from '@vueuse/core';
+  import zhCN from 'ant-design-vue/es/locale/zh_CN';
+  import 'dayjs/locale/zh-cn';
 
   defineOptions({ name: 'DDServcerCirStatus' });
   const { prefixCls } = useDesign('DDServcerCirStatus-');
@@ -180,7 +244,7 @@
       },
       {
         field: 'jCFnStatusName',
-        title: '机车功能号注册状态',
+        title: '机车状态',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -194,7 +258,7 @@
       },
       {
         field: 'cCFnStatusName',
-        title: '车次功能号注册状态',
+        title: '车次状态',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -207,11 +271,19 @@
         sortable: true,
       },
       {
+        field: 'glb',
+        title: '公里标',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
         field: 'lacci',
         title: '小区号',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'lacciName',
@@ -219,6 +291,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'stationLocationName',
@@ -226,20 +299,15 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'operatorUser',
-        title: 'operatorUser',
+        title: '操作员',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-      },
-      {
-        field: 'glb',
-        title: 'glb',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
+        visible: false,
       },
       {
         field: 'longitude',
@@ -247,6 +315,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'latitude',
@@ -254,16 +323,26 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'ip',
-        title: 'ip+port',
+        title: 'Ip+端口号',
         showOverflow: true,
         showHeaderOverflow: true,
         width: 154,
+        visible: false,
         slots: {
           default: 'ipport',
         },
+      },
+      {
+        field: 'updateTime',
+        title: '时间',
+        width: 150,
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
       },
       // {
       //   title: '操作',
@@ -286,6 +365,7 @@
   });
   const tableRef = ref({});
   const myContentRef = ref({});
+  const timeValue = ref(null);
   const seacthContent = ref({
     lineCode: null,
     stationCode: null,
@@ -293,6 +373,11 @@
     isdn: null,
     jcFn: null,
     ccFn: null,
+    JcFnStatus: null,
+    CcFnStatus: null,
+    LoginStatus: null,
+    startTime: null,
+    endTime: null,
   });
   const page = reactive({
     current: 1,
@@ -315,6 +400,10 @@
     if (!isAuto) {
       refresh.value = 'no';
     }
+    seacthContent.value.startTime =
+      timeValue.value == null ? null : timeValue.value[0].format('YYYY-MM-DD HH:mm:ss');
+    seacthContent.value.endTime =
+      timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
     loading.value = true;
     cirStatusApi
       .GetDDCirStatus({
@@ -347,7 +436,13 @@
       isdn: null,
       jcFn: null,
       ccFn: null,
+      JcFnStatus: null,
+      CcFnStatus: null,
+      LoginStatus: null,
+      startTime: null,
+      endTime: null,
     };
+    timeValue.value = null;
   }
 
   function handlePageChange() {

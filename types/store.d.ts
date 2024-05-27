@@ -82,7 +82,8 @@ export interface TableSetting {
 //信息
 export interface MsgData {
   serviceId: string;
-  serverName: string;
+  serviceName: string;
+  serviceCode: string;
   msgId: string;
   joinId: string;
   msgCategory?: number;

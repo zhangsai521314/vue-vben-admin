@@ -74,9 +74,8 @@
             <a-select-option :value="60">1小时后提示</a-select-option>
           </a-select>
         </div>
-        <div style="padding-left: 8px">
+        <div style="padding-left: 8px" @click="handleTitleClick(row)" title="点击查看详情">
           <div
-            @click="handleTitleClick(row)"
             style="
               display: -webkit-box;
               overflow: hidden;
@@ -87,12 +86,11 @@
               -webkit-line-clamp: 1; /* 限制为1行 */
               cursor: pointer;
             "
-            v-if="row.serverName"
+            v-if="row.serviceName"
           >
-            {{ row.serverName }}</div
+            {{ row.serviceName }}</div
           >
           <div
-            @click="handleTitleClick(row)"
             style="
               display: -webkit-box;
               overflow: hidden;
@@ -109,7 +107,6 @@
             {{ row.msgTitle }}</div
           >
           <div
-            @click="handleTitleClick(row)"
             style="
               display: -webkit-box;
               overflow: hidden;

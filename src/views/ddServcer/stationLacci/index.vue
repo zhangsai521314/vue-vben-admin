@@ -15,27 +15,48 @@
       >
         <template #toolbar_buttons>
           <div :class="`tableBtn`">
-            <a-space
-              direction="horizontal"
-              size="small"
-              style="margin-left: 5px; line-height: 50px"
-            >
-              <AuthDom auth="line_query">
-                <a-space direction="horizontal" size="small">
-                  <label>车站名称：</label>
-                  <a-select
-                    style="width: 170px"
-                    allow-clear
-                    show-search
-                    :filter-option="AntVueCommon.filterOption"
-                    v-model:value="seacthContent.stationId"
-                    :options="stationDatas"
-                  />
-                  <a-button @click="getDDServerStationTLaccis" type="primary">查询</a-button>
+            <a-space direction="horizontal" size="small" style="margin-left: 5px">
+              <AuthDom auth="ddServcer_stationLacci_query">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>车站名称：</label>
+                      <a-select
+                        placeholder="请选择车站名称"
+                        style="width: 170px"
+                        allow-clear
+                        show-search
+                        :filter-option="AntVueCommon.filterOption"
+                        v-model:value="seacthContent.stationId"
+                        :options="stationDatas"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>lacci：</label>
+                      <a-input
+                        @press-enter="getDDServerStationTLaccis()"
+                        v-model:value="seacthContent.lacci"
+                        placeholder="输入lacci查询"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button @click="getDDServerStationTLaccis" type="primary">查询</a-button>
+                    </a-space>
+                  </div>
                 </a-space>
               </AuthDom>
-              <AuthDom auth="line_add">
-                <a-button class="ant-btn" @click="showFrom()">新增车站小区关系</a-button>
+              <AuthDom auth="ddServcer_stationLacci_add">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button class="ant-btn" @click="showFrom()">新增车站小区关系</a-button>
+                    </a-space>
+                  </div>
+                </a-space>
               </AuthDom>
             </a-space>
           </div>
@@ -51,7 +72,7 @@
         </template>
         <template #default="{ row }">
           <div :class="`tableOption`">
-            <AuthDom auth="line_table_edit">
+            <AuthDom auth="ddServcer_stationLacci_table_edit">
               <IconFontClass
                 name="icon-baseui-edit-fill"
                 @click="showFrom(row)"
@@ -59,7 +80,7 @@
                 title="编辑"
               />
             </AuthDom>
-            <AuthDom auth="line_table_delete">
+            <AuthDom auth="ddServcer_stationLacci_table_delete">
               <IconFontClass
                 name="icon-baseui-guanbicuowu"
                 @click="remove(row)"
@@ -180,6 +201,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'stationName',
@@ -203,7 +225,7 @@
       },
       {
         field: 'laccis',
-        title: '小区编号',
+        title: 'lacci集合',
         showOverflow: true,
         showHeaderOverflow: true,
       },
@@ -243,10 +265,10 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['lineName asc', 'lineName asc'],
+    sortlist: ['lineName asc'],
   });
   const seacthContent = ref({
-    name: '',
+    lacci: '',
     stationId: null,
   });
   const lacciDatas = ref([]);

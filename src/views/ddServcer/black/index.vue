@@ -15,23 +15,34 @@
       >
         <template #toolbar_buttons>
           <div :class="`tableBtn`">
-            <a-space
-              direction="horizontal"
-              size="small"
-              style=" margin-left: 5px;line-height: 50px"
-            >
-              <AuthDom auth="black_query">
-                <a-space direction="horizontal" size="small">
-                  <a-input
-                    @press-enter="getDDServerBlacks"
-                    v-model:value="seacthContent.ip"
-                    placeholder="输入IP查询"
-                  />
-                  <a-button @click="getDDServerBlacks" type="primary">查询</a-button>
+            <a-space direction="horizontal" size="small" style="margin-left: 5px">
+              <AuthDom auth="ddServcer_black_query">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>IP：</label>
+                      <a-input
+                        @press-enter="getDDServerBlacks"
+                        v-model:value="seacthContent.ip"
+                        placeholder="输入IP查询"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button @click="getDDServerBlacks" type="primary">查询</a-button>
+                    </a-space>
+                  </div>
                 </a-space>
               </AuthDom>
-              <AuthDom auth="black_add">
-                <a-button class="ant-btn" @click="showFrom()">新增黑名单</a-button>
+              <AuthDom auth="ddServcer_black_add">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button class="ant-btn" @click="showFrom()">新增黑名单</a-button>
+                    </a-space>
+                  </div>
+                </a-space>
               </AuthDom>
             </a-space>
           </div>
@@ -47,7 +58,7 @@
         </template>
         <template #default="{ row }">
           <div :class="`tableOption`">
-            <AuthDom auth="black_table_edit">
+            <AuthDom auth="ddServcer_black_table_edit">
               <IconFontClass
                 name="icon-baseui-edit-fill"
                 @click="showFrom(row)"
@@ -55,7 +66,7 @@
                 title="编辑"
               />
             </AuthDom>
-            <AuthDom auth="black_table_delete">
+            <AuthDom auth="ddServcer_black_table_delete">
               <IconFontClass
                 name="icon-baseui-guanbicuowu"
                 @click="remove(row)"
@@ -91,7 +102,7 @@
               { validator: formValidator.empty, message: '请输入IP' },
             ]"
           >
-            <a-input placeholder="请输入黑名单名" v-model:value="formData.ip" autocomplete="off" />
+            <a-input placeholder="请输入黑名单IP" v-model:value="formData.ip" autocomplete="off" />
           </a-form-item>
           <a-form-item name="remark" label="备注" :rules="[{ max: 250, message: '备注过长' }]">
             <a-textarea

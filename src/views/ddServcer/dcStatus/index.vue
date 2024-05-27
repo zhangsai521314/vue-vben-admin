@@ -12,7 +12,7 @@
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
           <a-space direction="horizontal" size="small" style="margin-left: 5px">
-            <AuthDom auth="message_query">
+            <AuthDom auth="ddServcer_dcStatus_query">
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <!-- <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
@@ -29,8 +29,22 @@
                   </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>注册时间：</label>
+                    <a-config-provider :locale="zhCN">
+                      <a-range-picker
+                        allowClear
+                        v-model:value="timeValue"
+                        :showTime="true"
+                        format="YYYY-MM-DD HH:mm:ss"
+                      />
+                    </a-config-provider>
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
                     <label>车站名称：</label>
                     <a-select
+                      placeholder="请选择车站名称"
                       style="width: 170px"
                       allow-clear
                       show-search
@@ -42,12 +56,42 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>ISDN:</label>
+                    <label>ISDN：</label>
                     <a-input
                       @press-enter="getStatus()"
                       v-model:value="seacthContent.isdn"
                       placeholder="输入ISDN号查询"
                     />
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>类型：</label>
+                    <a-select
+                      placeholder="请选择类型"
+                      style="width: 170px"
+                      allow-clear
+                      v-model:value="seacthContent._type"
+                    >
+                      <a-select-option :value="1">调度台</a-select-option>
+                      <a-select-option :value="2">车站值班台</a-select-option>
+                    </a-select>
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>注册状态：</label>
+                    <a-select
+                      placeholder="请选择注册状态"
+                      style="width: 170px"
+                      allow-clear
+                      v-model:value="seacthContent.regStatus"
+                    >
+                      <a-select-option :value="1">注册</a-select-option>
+                      <a-select-option :value="2">手动注销</a-select-option>
+                      <a-select-option :value="3">超时注销</a-select-option>
+                      <a-select-option :value="4">强制注销</a-select-option>
+                    </a-select>
                   </a-space>
                 </div>
                 <div class="row-div">
@@ -91,6 +135,8 @@
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import { DCStatus as dcStatusApi, Line as lineApi, Station as stationApi } from '@/api/ddServcer';
   import { tryOnUnmounted } from '@vueuse/core';
+  import zhCN from 'ant-design-vue/es/locale/zh_CN';
+  import 'dayjs/locale/zh-cn';
 
   defineOptions({ name: 'DDServcerDCStatus' });
   const { prefixCls } = useDesign('DDServcerDCStatus-');
@@ -150,13 +196,13 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        slots: {
-          default: 'regStatusName',
-        },
+        // slots: {
+        //   default: 'regStatusName',
+        // },
       },
       {
         field: 'ip',
-        title: 'ip+port',
+        title: 'Ip+端口号',
         showOverflow: true,
         showHeaderOverflow: true,
         width: 150,
@@ -166,7 +212,7 @@
       },
       {
         field: 'loginTime',
-        title: '登录时间',
+        title: '注册时间',
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -201,16 +247,21 @@
   });
   const tableRef = ref({});
   const myContentRef = ref({});
+  const timeValue = ref(null);
   const seacthContent = ref({
     lineCode: null,
     stationCode: null,
     isdn: null,
+    startTime: null,
+    endTime: null,
+    _type: null,
+    regStatus: null,
   });
   const page = reactive({
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['update_time desc'],
+    sortlist: ['loginTime desc'],
   });
   const refresh = ref('yes');
   const refreshTime = ref(10);
@@ -227,6 +278,10 @@
     if (!isAuto) {
       refresh.value = 'no';
     }
+    seacthContent.value.startTime =
+      timeValue.value == null ? null : timeValue.value[0].format('YYYY-MM-DD HH:mm:ss');
+    seacthContent.value.endTime =
+      timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
     loading.value = true;
     dcStatusApi
       .GetDDCirStatus({
@@ -256,7 +311,12 @@
       lineCode: null,
       stationCode: null,
       isdn: null,
+      startTime: null,
+      endTime: null,
+      _type: null,
+      regStatus: null,
     };
+    timeValue.value = null;
   }
 
   function handlePageChange() {

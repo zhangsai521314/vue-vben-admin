@@ -11,26 +11,39 @@
     >
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style="margin-left: 5px; line-height: 50px">
-            <AuthDom auth="software_query">
-              <div class="row-div">
-                <a-space direction="horizontal" size="small" :wrap="true">
-                  <a-input
-                    @press-enter="getSoftwares()"
-                    v-model:value="seacthContent.serviceName"
-                    placeholder="输入软件名称查询"
-                  />
-                  <a-button @click="getSoftwares()" type="primary">查询</a-button>
-                  <a-radio-group v-model:value="refresh" button-style="solid">
-                    <a-radio-button value="yes">开启自动刷新</a-radio-button>
-                    <a-radio-button value="no">关闭自动刷新</a-radio-button>
-                    <a-radio-button value="time" disabled>{{ refreshTime }}秒</a-radio-button>
-                  </a-radio-group>
-                </a-space>
-              </div>
+          <a-space direction="horizontal" size="small" style="margin-left: 5px">
+            <AuthDom auth="softwareManage_query">
+              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>软件名称：</label>
+                    <a-input
+                      @press-enter="getSoftwares()"
+                      v-model:value="seacthContent.serviceName"
+                      placeholder="输入软件名称查询"
+                    />
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <a-button @click="getSoftwares()" type="primary">查询</a-button>
+                    <a-radio-group v-model:value="refresh" button-style="solid">
+                      <a-radio-button value="yes">开启自动刷新</a-radio-button>
+                      <a-radio-button value="no">关闭自动刷新</a-radio-button>
+                      <a-radio-button value="time" disabled>{{ refreshTime }}秒</a-radio-button>
+                    </a-radio-group>
+                  </a-space>
+                </div>
+              </a-space>
             </AuthDom>
             <AuthDom auth="software_add">
-              <a-button class="ant-btn" @click="showFrom()">新增软件</a-button>
+              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <a-button class="ant-btn" @click="showFrom()">新增软件</a-button>
+                  </a-space>
+                </div>
+              </a-space>
             </AuthDom>
           </a-space>
         </div>
