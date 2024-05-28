@@ -337,8 +337,8 @@
       </vxe-table>
       <template #footer>
         <a-spin :spinning="fromSpinning">
-          <a-button style="margin-left: 8px" @click="closeLog">关闭</a-button>
           <a-button style="margin-left: 8px" type="primary" @click="downLogMqtt">下载</a-button>
+          <a-button style="margin-left: 8px" @click="closeLog">关闭</a-button>
         </a-spin>
       </template>
     </a-drawer>
