@@ -58,7 +58,7 @@
         </template>
         <template #default="{ row }">
           <div :class="`tableOption`">
-            <AuthDom auth="black_table_edit">
+            <AuthDom auth="dcOption_telephoneBook_table_edit">
               <IconFontClass
                 name="icon-baseui-edit-fill"
                 @click="showFrom(row)"
@@ -66,7 +66,7 @@
                 title="编辑"
               />
             </AuthDom>
-            <AuthDom auth="black_table_delete">
+            <AuthDom auth="dcOption_telephoneBook_delete">
               <IconFontClass
                 name="icon-baseui-guanbicuowu"
                 @click="remove(row)"
@@ -369,7 +369,7 @@
       };
       if (saveType.value == 'add') {
         telephoneBookApi.AddDCOptionTelephoneBook(formData.value).then((data) => {
-          tableRef.value.insert(data);
+          tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增电话成功');
         });

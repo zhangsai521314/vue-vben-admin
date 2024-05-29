@@ -279,7 +279,7 @@
           .DeleteRole(row.roleId)
           .then(() => {
             loading.value = false;
-            tableRef.value.remove(row);
+            tableConfig.data = tableConfig.data?.filter((m) => m.roleId != row.roleId);
             message.success('删除角色信息成功');
           })
           .catch(() => {
@@ -344,7 +344,7 @@
       formData.value['execompleteBefore'] = execompleteBefore;
       if (saveType == 'add') {
         roleApi.AddRole(formData.value).then((data) => {
-          tableRef.value.insert(data);
+          tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增角色成功');
         });

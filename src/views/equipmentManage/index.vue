@@ -398,7 +398,7 @@
           .DeleteEquipment(row.equipmentId)
           .then(() => {
             loading.value = false;
-            tableRef.value.remove(row);
+            tableConfig.data = tableConfig.data?.filter((m) => m.equipmentId != row.equipmentId);
             message.success('删除设备信息成功');
           })
           .catch(() => {
@@ -467,7 +467,8 @@
             (m) => m.key == data.equipmentType,
           )?.label;
           data.systemType = dictionariesData.value.find((m) => m.key == data.systemType)?.label;
-          tableRef.value.insert(data);
+          data.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
+          tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增设备成功');
         });

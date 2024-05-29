@@ -31,7 +31,7 @@
                 </a-space>
               </AuthDom>
               <AuthDom auth="ddServcer_station_add">
-                <a-button class="ant-btn" @click="showFrom()">新增线路</a-button>
+                <a-button class="ant-btn" @click="showFrom(null)">新增线路</a-button>
               </AuthDom>
             </a-space>
           </div>
@@ -229,22 +229,14 @@
             />
           </a-form-item>
 
-          <a-form-item
-            name="startGlb"
-            label="起始公里标"
-            :rules="[{ max: 250, message: '起始公里标过长' }]"
-          >
+          <a-form-item name="startGlb" label="起始公里标">
             <a-input
               placeholder="请输入起始公里标"
               v-model:value="formData.startGlb"
               autocomplete="off"
             />
           </a-form-item>
-          <a-form-item
-            name="endGlb"
-            label="终止公里标"
-            :rules="[{ max: 250, message: '终止公里标过长' }]"
-          >
+          <a-form-item name="endGlb" label="终止公里标">
             <a-input
               placeholder="请输入终止公里标"
               v-model:value="formData.endGlb"
@@ -440,6 +432,16 @@
     groupAllDcPriority: null,
     groupAllBroadcastNumber: null,
     groupAllBroadcastPriority: null,
+    startGlb: null,
+    endGlb: null,
+    tempCallPriority: null,
+    tempCallNumber: null,
+    groupCallPriority: null,
+    groupCallNumber: null,
+    prevStationId: null,
+    nextStationId: null,
+    latitude: null,
+    longitude: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);
@@ -583,7 +585,7 @@
           data.lineName = lineDatas.value.find((m) => m.key == data.lineId).label;
           data.prevStationName = stationDatas.value.find((m) => m.key == data.prevStationId)?.label;
           data.nextStationName = stationDatas.value.find((m) => m.key == data.nextStationId)?.label;
-          tableRef.value.insert(data);
+          tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增线路成功');
         });

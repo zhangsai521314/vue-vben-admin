@@ -87,7 +87,7 @@
             name="name"
             :rules="[
               { required: true, message: '' },
-              { max: 50, message: '线路名称过长' },
+              // { max: 50, message: '线路名称过长' },
               { validator: formValidator.empty, message: '请输入线路名称' },
             ]"
           >
@@ -102,7 +102,7 @@
             name="code"
             :rules="[
               { required: true, message: '' },
-              { max: 50, message: '线路编码过长' },
+              // { max: 50, message: '线路编码过长' },
               { validator: formValidator.empty, message: '请输入线路编码' },
             ]"
           >
@@ -117,7 +117,7 @@
             label="功能号"
             :rules="[
               { required: true, message: '' },
-              { max: 250, message: '功能号名称过长' },
+              // { max: 250, message: '功能号名称过长' },
               { validator: formValidator.positiveInteger, message: '功能号格式为正整数' },
               { validator: formValidator.empty, message: '请输入功能号' },
             ]"
@@ -129,7 +129,7 @@
             label="调度台ISDN"
             :rules="[
               { required: true, message: '' },
-              { max: 250, message: '调度台ISDN名称过长' },
+              // { max: 250, message: '调度台ISDN名称过长' },
               { validator: formValidator.positiveInteger, message: '调度台ISDN格式为正整数' },
               { validator: formValidator.empty, message: '请输入调度台ISDN' },
             ]"
@@ -141,7 +141,7 @@
             label="全呼CIR组呼号"
             :rules="[
               { required: true, message: '' },
-              { max: 250, message: '全呼CIR组呼号过长' },
+              // { max: 250, message: '全呼CIR组呼号过长' },
               { validator: formValidator.positiveInteger, message: '全呼CIR组呼号格式为正整数' },
               { validator: formValidator.empty, message: '请输入全呼CIR组呼号' },
             ]"
@@ -170,7 +170,7 @@
             label="全呼CIR组呼号"
             :rules="[
               { required: true, message: '' },
-              { max: 250, message: '全呼CIR组呼号过长' },
+              // { max: 250, message: '全呼CIR组呼号过长' },
               { validator: formValidator.positiveInteger, message: '全呼调度台组呼号格式为正整数' },
               { validator: formValidator.empty, message: '请输入全呼调度台组呼号' },
             ]"
@@ -200,12 +200,12 @@
             label="线路广播组呼号"
             :rules="[
               { required: true, message: '' },
-              { max: 250, message: '线路广播组呼号过长' },
+              // { max: 250, message: '线路广播组呼号过长' },
               {
                 validator: formValidator.positiveInteger,
-                message: '线路广播组呼号过长格式为正整数',
+                message: '线路广播组呼号格式为正整数',
               },
-              { validator: formValidator.empty, message: '请输入线路广播组呼号过长' },
+              { validator: formValidator.empty, message: '请输入线路广播组呼号' },
             ]"
           >
             <a-input
@@ -227,7 +227,7 @@
               v-model:value="formData.groupAllBroadcastPriority"
             />
           </a-form-item>
-          <a-form-item name="reamrk" label="备注" :rules="[{ max: 250, message: '备注过长' }]">
+          <a-form-item name="reamrk" label="备注">
             <a-textarea
               placeholder="请输入备注"
               :rows="3"
@@ -525,7 +525,7 @@
       };
       if (saveType.value == 'add') {
         lineApi.AddDDServerLine(formData.value).then((data) => {
-          tableRef.value.insert(data);
+          tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增线路成功');
         });

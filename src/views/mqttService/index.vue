@@ -35,7 +35,7 @@
       </template>
       <template #default="{ row }">
         <div :class="`tableOption`">
-          <AuthDom auth="mqttService_table_version">
+          <AuthDom auth="mqttService_table_edit">
             <IconFontClass
               name="icon-baseui-edit-fill"
               @click="showFrom(row)"
@@ -81,7 +81,7 @@
             placeholder="请选择服务类型"
             :rules="[{ required: true, message: '请选择软件类型' }]"
             v-model:value="formData.serviceType"
-            :options="dictionariesData.filter((m) => m.dictionariesClass == 'serviceType')"
+            :options="dictionariesData"
           />
         </a-form-item>
         <a-space>
@@ -274,9 +274,7 @@
   const isShowForm = ref(false);
   const fromSpinning = ref(false);
   let saveType = 'add';
-  const isShowVis = ref(false);
   const dictionariesData = ref([]);
-  const versionId = ref('');
 
   getMqtts();
 
@@ -287,13 +285,13 @@
       saveType = 'add';
       isShowForm.value = true;
     } else {
-      getServerTypes(row.dictionariesId);
+      getServerTypes(row.serviceType);
       //编辑
       getByid(row.mqttId);
     }
   }
 
-  //删除软件包信息
+  //删除通信类型信息
   function remove(row) {
     Modal.confirm({
       maskClosable: true,
@@ -303,11 +301,11 @@
       onOk() {
         loading.value = true;
         mqttApi
-          .DeleteMqtt(row.versionId)
+          .DeleteMqtt(row.mqttId)
           .then(() => {
             loading.value = false;
-            tableRef.value.remove(row);
-            message.success('删除软件版本包成功');
+            tableConfig.data = tableConfig.data?.filter((m) => m.mqttId != row.mqttId);
+            message.success('删除通信配置成功');
           })
           .catch(() => {
             loading.value = false;
@@ -323,7 +321,7 @@
     formRef.value.clearValidate();
   }
 
-  //获取软件包列表
+  //获取通信列表
   function getMqtts() {
     loading.value = true;
     mqttApi
@@ -350,13 +348,15 @@
       formData.value['execompleteBefore'] = execompleteBefore;
       if (saveType == 'add') {
         mqttApi.AddMqtt(formData.value).then((data) => {
-          data.serviceName = dictionariesData.value.find((m) => m.key == data.serviceType).label;
-          tableRef.value.insert(data);
+          debugger;
+          data.serviceName = dictionariesData.value.find((m) => m.key == data.serviceType)?.label;
+          tableConfig.data?.splice(0, 0, data);
           formClose();
-          message.success('新增软件包类型成功');
+          message.success('新增通信类型配置成功');
         });
       } else {
         mqttApi.UpdateMqtt(formData.value).then((data) => {
+          debugger;
           const oldData = tableRef.value.getRowById(data.mqttId);
           myCommon.objectReplace(oldData, data);
           delete formData.value.createUser;
@@ -377,9 +377,11 @@
     mqttApi
       .GetServerTypes(dictionariesId)
       .then((data) => {
+        debugger;
         dictionariesData.value = data;
       })
       .catch(() => {
+        debugger;
         dictionariesData.value = [];
       });
   }

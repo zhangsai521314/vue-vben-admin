@@ -327,7 +327,7 @@
       };
       if (saveType.value == 'add') {
         blackApi.AddDDServerBlack(formData.value).then((data) => {
-          tableRef.value.insert(data);
+          tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增黑名单成功');
         });

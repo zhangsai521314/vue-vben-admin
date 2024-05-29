@@ -108,7 +108,6 @@
             name="name"
             :rules="[
               { required: true, message: '' },
-              { max: 50, message: '小区名称过长' },
               { validator: formValidator.empty, message: '请输入小区名称' },
             ]"
           >
@@ -123,7 +122,6 @@
             name="lacci"
             :rules="[
               { required: true, message: '' },
-              { max: 50, message: 'lacci过长' },
               { validator: formValidator.empty, message: '请输入lacci' },
             ]"
           >
@@ -159,7 +157,7 @@
               autocomplete="off"
             />
           </a-form-item>
-          <a-form-item name="remark" label="备注" :rules="[{ max: 250, message: '备注过长' }]">
+          <a-form-item name="remark" label="备注">
             <a-textarea
               placeholder="请输入备注"
               :rows="3"
@@ -401,7 +399,7 @@
       };
       if (saveType.value == 'add') {
         lacciApi.AddDDServerTLacci(formData.value).then((data) => {
-          tableRef.value.insert(data);
+          tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增小区成功');
         });

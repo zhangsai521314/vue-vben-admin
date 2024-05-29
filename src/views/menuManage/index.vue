@@ -355,7 +355,7 @@
           .DeleteMenu(row.menuId)
           .then(() => {
             loading.value = false;
-            tableRef.value.remove(row);
+            tableConfigData.value = tableConfigData.value?.filter((m) => m.menuId != row.menuId);
             message.success('删除菜单信息成功');
           })
           .catch(() => {
@@ -428,7 +428,7 @@
       d.parentId = d.parentId == null ? 0 : d.parentId;
       if (saveType == 'add') {
         menuApi.AddMenu(d).then((data) => {
-          tableRef.value.insert(data);
+          tableConfigData.value.splice(0, 0, data);
           formClose();
           message.success('新增菜单成功');
         });

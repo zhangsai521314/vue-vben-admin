@@ -447,6 +447,13 @@
         },
       },
       {
+        field: 'isUpPerformance',
+        title: '性能上报',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        cellRender: { name: 'render_isno' },
+      },
+      {
         field: 'orderIndex',
         title: '排序',
         showOverflow: true,
@@ -635,7 +642,7 @@
           .DeleteService(row.serviceId)
           .then(() => {
             loading.value = false;
-            tableRef.value.remove(row);
+            tableConfig.data = tableConfig.data?.filter((m) => m.serviceId != row.serviceId);
             message.success('删除软件信息成功');
           })
           .catch(() => {
@@ -708,7 +715,8 @@
         softwareApi.AddService(formData.value).then((data) => {
           data.serviceType = dictionariesData.value.find((m) => m.key == data.serviceType)?.label;
           data.equipmentName = equipmentData.value.find((m) => m.key == data.equipmentId)?.label;
-          tableRef.value.insert(data);
+          data.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
+          tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增软件成功');
         });

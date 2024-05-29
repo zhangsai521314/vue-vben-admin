@@ -197,7 +197,7 @@
           .DeleteOrganization(row.orgId)
           .then(() => {
             loading.value = false;
-            tableRef.value.remove(row);
+            tableConfigData.value = tableConfigData.value?.filter((m) => m.orgId != row.orgId);
             message.success('删除部门信息成功');
           })
           .catch(() => {
@@ -265,7 +265,7 @@
       };
       if (saveType == 'add') {
         organizationApi.AddOrganization(formData.value).then((data) => {
-          tableRef.value.insert(data);
+          tableConfigData.value.splice(0, 0, data);
           formClose();
           message.success('新增部门成功');
         });

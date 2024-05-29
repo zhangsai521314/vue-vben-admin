@@ -375,7 +375,9 @@
           .DeleteDictionaries(row.dictionariesId)
           .then(() => {
             loading.value = false;
-            tableRef.value.remove(row);
+            tableConfigData.value = tableConfigData.value?.filter(
+              (m) => m.dictionariesId != row.dictionariesId,
+            );
             message.success('删除字典信息成功');
           })
           .catch(() => {
@@ -440,7 +442,7 @@
       };
       if (saveType == 'add') {
         dictionariesApi.AddDictionaries(formData.value).then((data) => {
-          tableRef.value.insert(data);
+          tableConfigData.value.splice(0, 0, data);
           formClose();
           message.success('新增字典成功');
         });

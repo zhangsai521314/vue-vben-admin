@@ -270,6 +270,13 @@ export const usePermissionStore = defineStore({
     },
     //zs更改（添加）
     checkMenuPower(url, isShowMsg = true) {
+      url = decodeURIComponent(url).replace('/redirect/', '');
+      if (url.length >= 10 && url.substring(0, 10) == '/redirect/') {
+        url = url.substring(10);
+      }
+      if (url.split('/').length > 0 && url.split('/')[url.split('/').length - 1] == 'path') {
+        url = url.substring(0, url.lastIndexOf('/'));
+      }
       const userStore = useUserStore();
       const userData = userStore.getUserInfo;
       if (!userData.isAdmin) {
@@ -283,9 +290,9 @@ export const usePermissionStore = defineStore({
           '/nopower/index',
         ];
         if (!whiteList.includes(url.toLowerCase())) {
-          let menuList = [];
+          const menuList = [];
           if (this.backMenuList.length == 0) {
-            menuList = getAuthCache(POWER_MENU_KEY);
+            myCommon.generateList(menuList, getAuthCache(POWER_MENU_KEY), 'children');
           } else {
             myCommon.generateList(menuList, this.backMenuList, 'children');
           }

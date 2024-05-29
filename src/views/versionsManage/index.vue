@@ -303,7 +303,7 @@
           .DeleteVersions(row.versionId)
           .then(() => {
             loading.value = false;
-            tableRef.value.remove(row);
+            tableConfig.data = tableConfig.data?.filter((m) => m.versionId != row.versionId);
             message.success('删除软件版本包成功');
           })
           .catch(() => {
@@ -357,7 +357,8 @@
           data.serviceName = dictionariesData_add.value.find(
             (m) => m.key == data.serviceType,
           ).label;
-          tableRef.value.insert(data);
+          debugger;
+          tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增软件包类型成功');
         });

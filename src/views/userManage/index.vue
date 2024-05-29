@@ -247,7 +247,7 @@
             name="mobile"
             :rules="[
               { required: true, message: '请输入联系电话' },
-              { validator: formValidator.phoneOrTele },
+              // { validator: formValidator.phoneOrTele },
             ]"
           >
             <a-input
@@ -262,7 +262,7 @@
             style="margin-bottom: 0"
             :rules="[
               { required: true, message: '请输入联系邮箱' },
-              { type: 'email', message: '联系邮箱格式不正确' },
+              // { type: 'email', message: '联系邮箱格式不正确' },
             ]"
           >
             <a-input
@@ -589,6 +589,8 @@
 
   const organizationDatas = ref([]);
   let _organizationDatas = [];
+
+  getRoles();
   getOrganization();
   getUsers();
 
@@ -774,22 +776,9 @@
           1,
         );
         userApi.AddUser(p_data).then((data) => {
-          tableRef.value.insert({
-            userId: data.userId,
-            userName: formData.value.userName,
-            userAccount: formData.value.userAccount,
-            mobile: formData.value.mobile,
-            email: formData.value.email,
-            adminType: formData.value.adminType,
-            roleId: formData.value.roleId,
-            status: formData.value.status,
-            userpwd: '',
-            checkpass: '',
-            createTime: data.createTime,
-            createUser: data.createUser,
-            modifyTime: null,
-            modifyUser: null,
-          });
+          data.roleName = roles.value.find((m) => m.value == data.roleId)?.label;
+          data.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
+          tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增用户成功');
         });
@@ -805,12 +794,7 @@
         userApi.UpdateUser(p_data).then((data) => {
           const oldData = tableRef.value.getRowById(data.userId);
           myCommon.objectReplace(oldData, formData.value);
-          const r = roles.value.find((m) => m.value == oldData.roleId);
-          if (r) {
-            oldData.roleName = r.label;
-          } else {
-            oldData.roleName = null;
-          }
+          oldData.roleName = roles.value.find((m) => m.value == oldData.roleId)?.label;
           oldData.modifyTime = data.modifyTime;
           oldData.modifyUser = data.modifyUser;
           oldData.orgName = _organizationDatas.find((m) => m.key == oldData.orgId)?.label;
