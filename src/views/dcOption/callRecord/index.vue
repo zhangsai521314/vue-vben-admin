@@ -335,6 +335,13 @@
         sortable: true,
       },
       {
+        field: 'isOnline',
+        title: '是否在线',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        cellRender: { name: 'render_isno' },
+      },
+      {
         field: 'recordFileStatus',
         title: '录音文件',
         showOverflow: true,
@@ -351,6 +358,9 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        formatter: ({ cellValue }) => {
+          return cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : '';
+        },
       },
       {
         title: '操作',
@@ -412,7 +422,6 @@
 
   //播放
   function getCallRecordFilePath(row, OperationType) {
-    console.log(mqttStore);
     if (!myCommon.isnull(row.recordFile)) {
       if (OperationType == 'play') {
         isRunPlay.value = true;

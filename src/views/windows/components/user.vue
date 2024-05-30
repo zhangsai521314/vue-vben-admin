@@ -58,8 +58,8 @@
         label="联系电话"
         userName="mobile"
         :rules="[
-          { required: true, message: '请输入电话' },
-          { validator: formValidator.phoneOrTele },
+          { required: true, message: '请输入联系电话' },
+          // { validator: formValidator.phoneOrTele },
         ]"
       >
         <a-input v-model:value="userData.mobile" autocomplete="off" />
@@ -68,8 +68,8 @@
         label="联系邮箱"
         userName="email"
         :rules="[
-          { required: true, message: '请输入邮箱' },
-          { type: 'email', message: '邮箱格式不正确' },
+          { required: true, message: '请输入联系邮箱' },
+          // { type: 'email', message: '邮箱格式不正确' },
         ]"
       >
         <a-input v-model:value="userData.email" autocomplete="off" />
@@ -88,7 +88,7 @@
           name="icon-baseui-zhankai"
           :title="isShowPwd ? '不修改密码' : '修改密码'"
           @click="zhanKaiClick"
-          style="position: absolute; left: 16%; top: -2px; cursor: pointer"
+          style="position: absolute; top: -2px; left: 16%; cursor: pointer"
           :class="{
             fanZhun: isShowPwd,
           }"
@@ -289,22 +289,22 @@
   .@{prefixCls}content {
     width: 100%;
     height: 100%;
-    background-color: #fff;
     overflow-y: auto;
+    background-color: #fff;
 
     .fanZhun {
-      transform: rotateX(180deg);
       display: inline-block;
+      transform: rotateX(180deg);
     }
 
     .@{prefixCls}userLogo {
-      float: left;
       width: 322px;
       height: 159px;
       margin-top: 115px;
       padding: 20px;
+      float: left;
       border-radius: 2px;
-      background-color: v-bind(backgroundColor);
+      background-color: v-bind(backgroundcolor);
     }
   }
 </style>

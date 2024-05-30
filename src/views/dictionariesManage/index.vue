@@ -97,7 +97,7 @@
                           : row.dictionariesClass == 'performanceAlarmType'
                             ? '设备性能告警阈值'
                             : row.dictionariesClass == 'collectionFrequency'
-                              ? '设备性能采集频率'
+                              ? '数据频率'
                               : row.dictionariesClass == 'commonConfig'
                                 ? '通用配置'
                                 : ''

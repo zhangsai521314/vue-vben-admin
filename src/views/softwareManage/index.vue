@@ -68,7 +68,12 @@
       <template #runStatus="{ row }">
         <span
           :style="{
-            color: row.runStatus == '故障' ? 'red' : row.runStatus == '正常运行' ? 'green' : '',
+            color:
+              row.runStatus == '故障' || row.runStatus == '中断'
+                ? 'red'
+                : row.runStatus == '正常运行'
+                  ? 'green'
+                  : '',
           }"
         >
           {{ row.runStatus }}</span
@@ -797,22 +802,26 @@
 
   //显示查看服务配置
   function showConfig(row) {
-    stopRefresh();
-    isShowConfig.value = true;
-    newServerCode = row.serviceCode;
-    isRunGetConfig.value = true;
-    mqttStore.publish(
-      mqttStore.lookConfig.replace(mqttStore.monitorClient, '/' + row.serviceCode),
-      JSON.stringify({
-        ServiceCode: row.serviceCode,
-        ClientId: mqttStore.mqttClient.options.clientId,
-        UserId: userStore.getUserInfo.userId,
-      }),
-      function (msg) {
-        isRunGetConfig.value = false;
-        msg ? message.error(msg) : message.success('请求已发送');
-      },
-    );
+    if (row.isOnline) {
+      stopRefresh();
+      isShowConfig.value = true;
+      newServerCode = row.serviceCode;
+      isRunGetConfig.value = true;
+      mqttStore.publish(
+        mqttStore.lookConfig.replace(mqttStore.monitorClient, '/' + row.serviceCode),
+        JSON.stringify({
+          ServiceCode: row.serviceCode,
+          ClientId: mqttStore.mqttClient.options.clientId,
+          UserId: userStore.getUserInfo.userId,
+        }),
+        function (msg) {
+          isRunGetConfig.value = false;
+          msg ? message.error(msg) : message.success('请求已发送');
+        },
+      );
+    } else {
+      message.info('服务中断，不可获取');
+    }
   }
 
   //关闭查看服务配置
@@ -828,23 +837,27 @@
 
   //显示查看服务日志
   function showLog(row) {
-    stopRefresh();
-    isShowLog.value = true;
-    newServerCode = row.serviceCode;
-    isRunGetLog.value = true;
-    mqttStore.publish(
-      mqttStore.lookLog.replace(mqttStore.monitorClient, '/' + row.serviceCode),
-      JSON.stringify({
-        ServiceCode: row.serviceCode,
-        ClientId: mqttStore.mqttClient.options.clientId,
-        UserId: userStore.getUserInfo.userId,
-        LogLevel: 0,
-      }),
-      function (msg) {
-        isRunGetLog.value = false;
-        msg ? message.error(msg) : message.success('请求已发送');
-      },
-    );
+    if (row.isOnline) {
+      stopRefresh();
+      isShowLog.value = true;
+      newServerCode = row.serviceCode;
+      isRunGetLog.value = true;
+      mqttStore.publish(
+        mqttStore.lookLog.replace(mqttStore.monitorClient, '/' + row.serviceCode),
+        JSON.stringify({
+          ServiceCode: row.serviceCode,
+          ClientId: mqttStore.mqttClient.options.clientId,
+          UserId: userStore.getUserInfo.userId,
+          LogLevel: 0,
+        }),
+        function (msg) {
+          isRunGetLog.value = false;
+          msg ? message.error(msg) : message.success('请求已发送');
+        },
+      );
+    } else {
+      message.info('服务中断，不可获取');
+    }
   }
 
   //关闭查看服务日志
