@@ -319,6 +319,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'remoteNumber',
@@ -326,6 +327,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'recordStateDescription',
@@ -340,6 +342,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         cellRender: { name: 'render_isno' },
+        visible: false,
       },
       {
         field: 'recordFileStatus',

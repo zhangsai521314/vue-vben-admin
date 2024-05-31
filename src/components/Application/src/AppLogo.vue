@@ -7,14 +7,14 @@
     class="anticon"
     :class="getAppLogoClass"
     @click="goHome"
-    style="position: absolute; top: 38px; height: 30px; padding-left: 0px"
+    style="position: absolute; top: 38px; height: 30px; padding-left: 0"
   >
     <!-- <img src="../../../assets/images/logo.png" />
     <div class="ml-2 truncate md:opacity-100" :class="getTitleClass" v-show="showTitle">
       {{ company }}
     </div> -->
     <!-- <div v-show="showTitle" style="margin: 9px 0 0 2px; color: #fff">{{ version }}</div> -->
-    <img src="../../../assets/images/logo.png" style="height: auto; width: auto" />
+    <img src="../../../assets/images/logo.png" style=" width: auto;height: auto" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -62,6 +62,7 @@
   ]);
 
   function goHome() {
+    debugger;
     go(userStore.getUserInfo.homePath || PageEnum.BASE_HOME);
   }
 </script>

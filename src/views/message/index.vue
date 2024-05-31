@@ -62,9 +62,22 @@
                       allow-clear
                       v-model:value="seacthContent.msgStatus"
                     >
+                      <a-select-option :value="3">提示</a-select-option>
                       <a-select-option :value="1">故障</a-select-option>
                       <a-select-option :value="2">恢复</a-select-option>
-                      <a-select-option :value="3">确认</a-select-option>
+                    </a-select>
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>确认状态：</label>
+                    <a-select
+                      style="width: 170px"
+                      allow-clear
+                      v-model:value="seacthContent.isConfirm"
+                    >
+                      <a-select-option :value="true">已确认</a-select-option>
+                      <a-select-option :value="false">未确认</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
@@ -436,6 +449,7 @@
     msgContent: '',
     startTime: null,
     endTime: null,
+    isConfirm: null,
   });
   const timeValue = ref(null);
   //   [
@@ -526,6 +540,7 @@
       msgContent: '',
       startTime: null,
       endTime: null,
+      isConfirm: null,
     };
 
     timeValue.value = null;

@@ -24,7 +24,7 @@ const networkMonitor: AppRouteModule = {
       component: () => import('/@/views/networkMonitor/index.vue'),
       meta: {
         // 是否固定标签
-        affix: true,
+        // affix: true,
         title: '网元监控',
         hideMenu: true,
       },

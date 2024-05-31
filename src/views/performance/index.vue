@@ -103,12 +103,6 @@
       });
   }
 
-  //监控订阅设备的最新性能值
-  watch(
-    () => mqttStore.userTopicPerformanceNewValue,
-    () => {},
-  );
-
   //监控订阅设备
   watch(
     () => subscribeEquipment.value,
