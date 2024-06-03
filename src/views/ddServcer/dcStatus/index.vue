@@ -78,7 +78,7 @@
                     </a-select>
                   </a-space>
                 </div>
-                <div class="row-div">
+                <!-- <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>注册状态：</label>
                     <a-select
@@ -93,7 +93,7 @@
                       <a-select-option :value="4">强制注销</a-select-option>
                     </a-select>
                   </a-space>
-                </div>
+                </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <a-button @click="getStatus()" type="primary">查询</a-button>
@@ -190,16 +190,17 @@
         showHeaderOverflow: true,
         sortable: true,
       },
-      {
-        field: 'regStatusName',
-        title: '注册状态',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-        // slots: {
-        //   default: 'regStatusName',
-        // },
-      },
+      //20240603-郭彦军指示不显示
+      // {
+      //   field: 'regStatusName',
+      //   title: '注册状态',
+      //   showOverflow: true,
+      //   showHeaderOverflow: true,
+      //   sortable: true,
+      //   // slots: {
+      //   //   default: 'regStatusName',
+      //   // },
+      // },
       {
         field: 'ip',
         title: 'Ip+端口号',

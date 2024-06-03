@@ -357,7 +357,6 @@
           data.serviceName = dictionariesData_add.value.find(
             (m) => m.key == data.serviceType,
           ).label;
-          debugger;
           tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增软件包类型成功');

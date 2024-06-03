@@ -320,9 +320,9 @@
   }
   //上传之前
   function beforeUpload(file) {
+    fileList.value = [];
     const isLt5M = file.size / 1024 / 1024 < 100;
     if (!isLt5M) {
-      fileList.value = [];
       file['remove'] = true;
       message.error('软件包不可超过100MB');
     } else {
@@ -333,8 +333,8 @@
 
   //保存
   function saveFrom() {
-    fromSpinning.value = true;
     if (fileList.value.length > 0) {
+      fromSpinning.value = true;
       let _formData = new FormData();
       _formData.append('file', fileList.value[0]);
       for (const key in formData.value) {
@@ -385,5 +385,9 @@
 
   .tableBtn {
     width: 100%;
+  }
+
+  :deep(.ant-upload-list-item-actions) {
+    display: none;
   }
 </style>

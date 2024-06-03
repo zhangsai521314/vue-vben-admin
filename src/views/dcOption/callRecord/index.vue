@@ -30,9 +30,9 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>通话来源：</label>
+                    <label>服务名称：</label>
                     <a-select
-                      placeholder="请选择通话来源"
+                      placeholder="请选择服务名称"
                       style="width: 170px"
                       allow-clear
                       show-search
@@ -130,7 +130,7 @@
               ? `${parseInt(row.duration)} 秒`
               : row.duration > 60 && row.duration <= 3600
                 ? `${parseFloat(row.duration / 60).toFixed(1)} 分`
-                : row.duration > 360 && row.duration <= 86400
+                : row.duration > 3600 && row.duration <= 86400
                   ? `${parseFloat(row.duration / 60 / 60).toFixed(1)} 时`
                   : row.duration > 86400
                     ? `${parseFloat(row.duration / 60 / 60 / 24).toFixed(1)} 天`
@@ -255,7 +255,6 @@
         field: 'serviceName',
         title: '服务名称',
         showOverflow: true,
-        visible: false,
         showHeaderOverflow: true,
         sortable: true,
       },

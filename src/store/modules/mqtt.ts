@@ -17,7 +17,7 @@ export interface MqttState {
   msgData: MsgData[];
   //通过mqtt存储的最新信息
   newInfo: object;
-  //当前newInfo变更的键
+  //当前newInfo变更的键和最新状态
   changeNewInfoKey: Nullable<String>;
   //查看服务配置的主题
   lookConfig: Nullable<String>;
@@ -201,17 +201,14 @@ export const useMqttStore = defineStore({
     },
     //增加信息
     addMsgData(item: MsgData) {
+      const keyId = item.joinId ? item.joinId : item.serviceId;
       if (
-        !this.newInfo[item.joinId] ||
-        dayjs(this.newInfo[item.joinId].msgStartTime) <= dayjs(item.msgStartTime)
+        !this.newInfo[keyId] ||
+        dayjs(this.newInfo[keyId].msgStartTime) <= dayjs(item.msgStartTime)
       ) {
-        this.newInfo[item.joinId] = item;
+        this.newInfo[keyId] = item;
       }
-      if (item.msgCategory == 1) {
-        this.changeNewInfoKey = `${item.joinId}_${item.msgStatus}`;
-      } else {
-        this.changeNewInfoKey = `${item.serviceId}_${item.msgStatus}`;
-      }
+      this.changeNewInfoKey = `${keyId}_${item.msgStatus}`;
       if (!this.msgData?.find((m) => m.msgId == item.msgId)) {
         this.msgData = [item, ...(this.msgData || [])];
         if (this.msgData.length > 500) {
@@ -223,17 +220,14 @@ export const useMqttStore = defineStore({
     },
     //更改信息
     updateMsgData(item: MsgData) {
+      const keyId = item.joinId ? item.joinId : item.serviceId;
       if (
-        !this.newInfo[item.joinId] ||
-        dayjs(this.newInfo[item.joinId].msgStartTime) <= dayjs(item.msgStartTime)
+        !this.newInfo[keyId] ||
+        dayjs(this.newInfo[keyId].msgStartTime) <= dayjs(item.msgStartTime)
       ) {
-        this.newInfo[item.joinId] = item;
+        this.newInfo[keyId] = item;
       }
-      if (item.msgCategory == 1) {
-        this.changeNewInfoKey = `${item.joinId}_${item.msgStatus}`;
-      } else {
-        this.changeNewInfoKey = `${item.serviceId}_${item.msgStatus}`;
-      }
+      this.changeNewInfoKey = `${keyId}_${item.msgStatus}`;
       const data = this.msgData?.find((m) => m.msgId == item.msgId);
       if (data) {
         myCommon.objectReplace(data, item);

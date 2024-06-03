@@ -83,11 +83,11 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>信息名称：</label>
+                    <label>信息标题：</label>
                     <a-input
                       @press-enter="getMessages()"
                       v-model:value="seacthContent.msgTitle"
-                      placeholder="输入告警名称查询"
+                      placeholder="输入信息标题查询"
                     />
                   </a-space>
                 </div>
@@ -97,7 +97,7 @@
                     <a-input
                       @press-enter="getMessages()"
                       v-model:value="seacthContent.msgContent"
-                      placeholder="输入告警信息查询"
+                      placeholder="输入信息内容查询"
                     />
                   </a-space>
                 </div>
@@ -173,7 +173,7 @@
               ? `${parseInt(row.msgDuration)} 秒`
               : row.msgDuration > 60 && row.msgDuration <= 3600
                 ? `${parseFloat(row.msgDuration / 60).toFixed(1)} 分`
-                : row.msgDuration > 360 && row.msgDuration <= 86400
+                : row.msgDuration > 3600 && row.msgDuration <= 86400
                   ? `${parseFloat(row.msgDuration / 60 / 60).toFixed(1)} 时`
                   : row.msgDuration > 86400
                     ? `${parseFloat(row.msgDuration / 60 / 60 / 24).toFixed(1)} 天`
@@ -347,7 +347,7 @@
       },
       {
         field: 'msgStartTime',
-        title: '告警开始时间',
+        title: '开始时间',
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -355,7 +355,7 @@
       },
       {
         field: 'msgEndTime',
-        title: '告警结束时间',
+        title: '结束时间',
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -363,7 +363,7 @@
       },
       {
         field: 'msgDuration',
-        title: '告警持续时长',
+        title: '持续时长',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

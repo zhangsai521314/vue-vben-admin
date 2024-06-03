@@ -74,7 +74,8 @@
                 <span
                   :class="{
                     defStatus: row.testStatus == 1,
-                    errorStatus: row.testStatus != 1,
+                    jinGaoStatus: row.testStatus == 2,
+                    errorStatus: row.testStatus != 2 && row.testStatus != 1,
                   }"
                   >{{
                     row.testStatus == 0
@@ -223,5 +224,9 @@
 
   .errorStatus {
     color: red;
+  }
+
+  .jinGaoStatus {
+    color: #efa924;
   }
 </style>

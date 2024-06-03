@@ -72,12 +72,12 @@
                 ? ''
                 : row.msgDuration >= 0 && row.msgDuration <= 60
                   ? `${parseInt(row.msgDuration)}秒`
-                  : row.msgDuration > 60 && row.msgDuration <= 360
-                    ? `${parseInt(row.msgDuration / 60)}分`
-                    : row.msgDuration > 360 && row.msgDuration <= 86400
-                      ? `${parseInt(row.msgDuration / 60 / 60)}时`
+                  : row.msgDuration > 60 && row.msgDuration <= 3600
+                    ? `${parseFloat(row.msgDuration / 60).toFixed(1)}分`
+                    : row.msgDuration > 3600 && row.msgDuration <= 86400
+                      ? `${parseFloat(row.msgDuration / 60 / 60).toFixed(1)}时`
                       : row.msgDuration > 86400
-                        ? `${parseInt(row.msgDuration / 60 / 60 / 24)}天`
+                        ? `${parseFloat(row.msgDuration / 60 / 60 / 24).toFixed(1)}天`
                         : ''
             }}
           </template>
@@ -823,10 +823,9 @@
     setTimeout(() => {
       if (mqttStore.isInitAlarmData) {
         for (let i = mqttStore.msgData.length - 1; i >= 0; i--) {
-          let keyId = mqttStore.msgData[i].serviceId;
-          if (mqttStore.msgData[i].msgCategory == 1) {
-            keyId == mqttStore.msgData[i].joinId;
-          }
+          const keyId = mqttStore.msgData[i].joinId
+            ? mqttStore.msgData[i].joinId
+            : mqttStore.msgData[i].serviceId;
           changeStatus(`${keyId}_${mqttStore.msgData[i].msgStatus}`);
         }
         watch(
