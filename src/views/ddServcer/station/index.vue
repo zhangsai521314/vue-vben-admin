@@ -23,11 +23,11 @@
               <AuthDom auth="ddServcer_station_query">
                 <a-space direction="horizontal" size="small">
                   <a-input
-                    @press-enter="getDDServerStations"
+                    @press-enter="initPage"
                     v-model:value="seacthContent.name"
                     placeholder="输入车站查询"
                   />
-                  <a-button @click="getDDServerStations" type="primary">查询</a-button>
+                  <a-button @click="initPage" type="primary">查询</a-button>
                 </a-space>
               </AuthDom>
               <AuthDom auth="ddServcer_station_add">
@@ -137,6 +137,8 @@
               placeholder="请输入经度"
               v-model:value="formData.longitude"
               autocomplete="off"
+              min="-999999999"
+              max="999999999"
             />
           </a-form-item>
           <a-form-item
@@ -152,6 +154,8 @@
               placeholder="请输入纬度"
               v-model:value="formData.latitude"
               autocomplete="off"
+              min="-999999999"
+              max="999999999"
             />
           </a-form-item>
           <a-form-item label="上一车站" name="prevStationId">
@@ -176,7 +180,7 @@
             :rules="[
               { required: true, message: '' },
               { max: 250, message: '全呼车站号码过长' },
-              { validator: formValidator.positiveInteger, message: '全呼车站号码格式为正整数' },
+              { validator: formValidator.positiveInteger, message: '全呼车站号码格式为自然数' },
               { validator: formValidator.empty, message: '请输入全呼车站号码' },
             ]"
           >
@@ -195,6 +199,7 @@
               placeholder="请输入全呼车站优先级"
               style="width: 262px"
               min="1"
+              max="999999999"
               :precision="0"
               v-model:value="formData.groupCallPriority"
             />
@@ -205,7 +210,7 @@
             :rules="[
               { required: true, message: '' },
               { max: 250, message: '邻站组呼号码过长' },
-              { validator: formValidator.positiveInteger, message: '邻站组呼号码格式为正整数' },
+              { validator: formValidator.positiveInteger, message: '邻站组呼号码格式为自然数' },
               { validator: formValidator.empty, message: '请输入邻站组呼号码' },
             ]"
           >
@@ -224,20 +229,21 @@
               placeholder="请输入邻站组呼优先级"
               style="width: 262px"
               min="1"
+              max="999999999"
               :precision="0"
               v-model:value="formData.tempCallPriority"
             />
           </a-form-item>
 
           <a-form-item name="startGlb" label="起始公里标">
-            <a-input
+            <a-input-number
               placeholder="请输入起始公里标"
               v-model:value="formData.startGlb"
               autocomplete="off"
             />
           </a-form-item>
           <a-form-item name="endGlb" label="终止公里标">
-            <a-input
+            <a-input-number
               placeholder="请输入终止公里标"
               v-model:value="formData.endGlb"
               autocomplete="off"
@@ -262,7 +268,7 @@
     </a-spin>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import myCommon from '@/utils/MyCommon/common';
   import formValidator from '@/utils/MyCommon/formValidator';
   import { ref, reactive, createVNode, nextTick, watch, unref } from 'vue';
@@ -606,6 +612,12 @@
         });
       }
     });
+  }
+
+  function initPage() {
+    page.current = 1;
+    page.total = 0;
+    getDDServerStations();
   }
 
   function getDDServerStationSimple() {

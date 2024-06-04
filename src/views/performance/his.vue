@@ -35,7 +35,7 @@
           </div>
           <div class="row-div">
             <a-space direction="horizontal" size="small" :wrap="true">
-              <a-button @click="getPerformances()" type="primary">查询</a-button>
+              <a-button @click="initPage()" type="primary">查询</a-button>
             </a-space>
           </div>
         </a-space>
@@ -87,7 +87,7 @@
     </a-tabs>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import myCommon from '@/utils/MyCommon/common';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import { ref, reactive, createVNode, nextTick, onMounted, watch, unref } from 'vue';
@@ -153,6 +153,13 @@
     });
     getPerformances();
   }
+
+  function initPage() {
+    page.current = 1;
+    page.total = 0;
+    getPerformances();
+  }
+
   /**
    * 获取排序条件
    */

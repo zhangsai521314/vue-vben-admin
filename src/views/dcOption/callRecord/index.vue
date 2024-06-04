@@ -46,7 +46,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>主叫名称：</label>
                     <a-input
-                      @press-enter="getDCOptionCallRecords()"
+                      @press-enter="initPage()"
                       v-model:value="seacthContent.mainCallName"
                       placeholder="输入主叫名称查询"
                     />
@@ -56,7 +56,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>被叫名称：</label>
                     <a-input
-                      @press-enter="getDCOptionCallRecords()"
+                      @press-enter="initPage()"
                       v-model:value="seacthContent.calledName"
                       placeholder="输入被叫名称查询"
                     />
@@ -79,7 +79,7 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="getDCOptionCallRecords()" type="primary">查询</a-button>
+                    <a-button @click="initPage()" type="primary">查询</a-button>
                     <a-button @click="resetSeacth">重置表单</a-button>
                   </a-space>
                 </div>
@@ -201,7 +201,7 @@
     </a-modal>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import MyPlay from '@/components/MyPlay/index.vue';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import myCommon from '@/utils/MyCommon/common';
@@ -590,6 +590,12 @@
     isRunPlay.value = false;
   }
 
+  function initPage() {
+    page.current = 1;
+    page.total = 0;
+    getDCOptionCallRecords();
+  }
+
   //页面卸载后
   tryOnUnmounted(() => {
     if (playRef.value != null) {
@@ -625,6 +631,10 @@
         playCallId == mqttStore.newCallRecordPlayFile.callId &&
         !isRunPlay.value
       ) {
+        const oldData = tableRef.value.getRowById(mqttStore.callRecordChange.callId);
+        if (oldData) {
+          myCommon.objectReplace(oldData, mqttStore.newCallRecordPlayFile);
+        }
         nextTick(() => {
           playFileStatus.value = mqttStore.newCallRecordPlayFile.recordFileStatus;
           isRunPlay.value = true;

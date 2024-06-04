@@ -115,6 +115,8 @@
             placeholder="请输入角色排序"
             style="width: 300px"
             :precision="3"
+            :min="-99999"
+            :max="99999"
             v-model:value="formData.orderIndex"
           />
         </a-form-item>
@@ -129,7 +131,7 @@
     <AssignPower v-if="isShowAssignPower" :isShow="isShowAssignPower" :roleId="assignPowerRoleId" />
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import formValidator from '@/utils/MyCommon/formValidator';
   import { ref, reactive, createVNode, nextTick, watch } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';

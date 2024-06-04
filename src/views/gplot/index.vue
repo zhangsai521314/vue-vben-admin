@@ -2,7 +2,7 @@
   <MyContent :class="prefixCls">gplot</MyContent>
 </template>
 
-<script setup lang="tsx">
+<script setup lang="ts">
   import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';

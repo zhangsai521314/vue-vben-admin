@@ -26,7 +26,7 @@
     </vxe-grid>
   </div>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import { ref, reactive, createVNode, nextTick, watch } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';

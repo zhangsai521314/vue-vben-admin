@@ -51,7 +51,7 @@
     </a-spin>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import content from './content.vue';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import { useDesign } from '@/hooks/web/useDesign';

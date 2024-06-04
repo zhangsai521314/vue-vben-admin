@@ -42,11 +42,11 @@ const FormValidator = {
   },
   //正整数校验
   positiveInteger: async (rule, value, callback) => {
-    const number_int = /^[0-9]*[1-9][0-9]*$/;
+    const number_int = /^[0-9]*$/;
     if (myCommon.isnull(value) || number_int.test(value)) {
       return Promise.resolve();
     } else {
-      return Promise.reject('不是正整数');
+      return Promise.reject('不是自然数');
     }
   },
 };

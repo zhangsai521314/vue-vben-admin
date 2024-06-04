@@ -16,11 +16,11 @@
         class="fix-auto-fill"
       />
     </FormItem>
-    <FormItem name="passWord" class="enter-x">
+    <FormItem name="password" class="enter-x">
       <InputPassword
         size="large"
         visibilityToggle
-        v-model:value="formData.passWord"
+        v-model:value="formData.password"
         :placeholder="t('sys.login.password')"
       />
     </FormItem>
@@ -142,7 +142,7 @@
 
   const formData = reactive<LoginParams>({
     account: '',
-    passWord: '',
+    password: '',
     //不要默认的错误提示
     mode: 'none',
   });
@@ -162,8 +162,8 @@
     try {
       loading.value = true;
       const p_data = _.cloneDeep(formData);
-      p_data.passWord = sm2.doEncrypt(
-        p_data.passWord,
+      p_data.password = sm2.doEncrypt(
+        p_data.password,
         myCommon.getCryptogramKey().sm2.publicKey,
         1,
       );

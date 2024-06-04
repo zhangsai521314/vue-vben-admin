@@ -3,7 +3,7 @@
  */
 export interface LoginParams {
   account: string;
-  passWord: string;
+  password: string;
 }
 
 export interface RoleInfo {

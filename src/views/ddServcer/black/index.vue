@@ -22,7 +22,7 @@
                     <a-space direction="horizontal" size="small" :wrap="true">
                       <label>IP：</label>
                       <a-input
-                        @press-enter="getDDServerBlacks"
+                        @press-enter="initPage"
                         v-model:value="seacthContent.ip"
                         placeholder="输入IP查询"
                       />
@@ -30,7 +30,7 @@
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button @click="getDDServerBlacks" type="primary">查询</a-button>
+                      <a-button @click="initPage" type="primary">查询</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -123,7 +123,7 @@
     </a-spin>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import myCommon from '@/utils/MyCommon/common';
   import formValidator from '@/utils/MyCommon/formValidator';
   import { ref, reactive, createVNode, nextTick, watch } from 'vue';
@@ -341,6 +341,12 @@
         });
       }
     });
+  }
+
+  function initPage() {
+    page.current = 1;
+    page.total = 0;
+    getDDServerBlacks();
   }
 </script>
 <style lang="less" scoped>

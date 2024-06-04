@@ -144,7 +144,7 @@
     </a-drawer>
   </div>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import formValidator from '@/utils/MyCommon/formValidator';
   import { useUserStore } from '@/store/modules/user';
   import { ref, reactive, createVNode, nextTick, watch } from 'vue';

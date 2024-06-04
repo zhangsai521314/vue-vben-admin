@@ -22,7 +22,7 @@
                     <a-space direction="horizontal" size="small" :wrap="true">
                       <label>联系名称：</label>
                       <a-input
-                        @press-enter="getDCOptionTelephoneBooks"
+                        @press-enter="initPage"
                         v-model:value="seacthContent.userName"
                         placeholder="输入联系名称查询"
                       />
@@ -30,7 +30,7 @@
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button @click="getDCOptionTelephoneBooks" type="primary">查询</a-button>
+                      <a-button @click="initPage" type="primary">查询</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -107,7 +107,11 @@
           <a-form-item
             label="联系号码"
             name="phoneNumber"
-            :rules="[{ required: true, message: '请输入号码' }]"
+            :rules="[
+              { required: true, message: '请输入号码' },
+              { max: 30, message: '联系号码过长' },
+              { validator: formValidator.positiveInteger, message: '联系号码格式为自然数' },
+            ]"
           >
             <a-input
               placeholder="请输入联系号码"
@@ -134,7 +138,7 @@
     </a-spin>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import myCommon from '@/utils/MyCommon/common';
   import formValidator from '@/utils/MyCommon/formValidator';
   import { ref, reactive, createVNode, nextTick, watch } from 'vue';
@@ -268,6 +272,13 @@
     });
     getDCOptionTelephoneBooks();
   }
+
+  function initPage() {
+    page.current = 1;
+    page.total = 0;
+    getDCOptionTelephoneBooks();
+  }
+
   /**
    * 获取排序条件
    */
@@ -376,8 +387,8 @@
       } else {
         telephoneBookApi.UpdateDCOptionTelephoneBook(formData.value).then((data) => {
           const oldData = tableRef.value.getRowById(data.phoneId);
-          myCommon.objectReplace(oldData, formData.value);
           delete formData.value.createUser;
+          myCommon.objectReplace(oldData, formData.value);
           oldData.modifyTime = data.modifyTime;
           oldData.modifyUser = data.modifyUser;
           formClose();

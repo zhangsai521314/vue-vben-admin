@@ -32,7 +32,7 @@
                     <a-space direction="horizontal" size="small" :wrap="true">
                       <label>lacci：</label>
                       <a-input
-                        @press-enter="getDDServerTLaccis()"
+                        @press-enter="initPage()"
                         v-model:value="seacthContent.lacci"
                         placeholder="输入lacci查询"
                       />
@@ -40,7 +40,7 @@
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button @click="getDDServerTLaccis" type="primary">查询</a-button>
+                      <a-button @click="initPage" type="primary">查询</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -140,6 +140,8 @@
               placeholder="请输入经度"
               v-model:value="formData.longitude"
               autocomplete="off"
+              min="-999999999"
+              max="999999999"
             />
           </a-form-item>
           <a-form-item
@@ -155,6 +157,8 @@
               placeholder="请输入纬度"
               v-model:value="formData.latitude"
               autocomplete="off"
+              min="-999999999"
+              max="999999999"
             />
           </a-form-item>
           <a-form-item name="remark" label="备注">
@@ -176,7 +180,7 @@
     </a-spin>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import myCommon from '@/utils/MyCommon/common';
   import formValidator from '@/utils/MyCommon/formValidator';
   import { ref, reactive, createVNode, nextTick, watch, unref } from 'vue';
@@ -263,6 +267,8 @@
     remark: null,
     name: null,
     lacci: null,
+    latitude: null,
+    longitude: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);
@@ -388,6 +394,12 @@
         tableConfig.data = data.source;
         page.total = data.totalCount;
       });
+  }
+
+  function initPage() {
+    page.current = 1;
+    page.total = 0;
+    getDDServerTLaccis();
   }
 
   //新增和编辑

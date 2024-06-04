@@ -56,7 +56,7 @@
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button @click="getUsers" type="primary">查询</a-button>
+                      <a-button @click="initPage" type="primary">查询</a-button>
                       <a-button @click="resetSeacth">重置表单</a-button>
                     </a-space>
                   </div>
@@ -247,7 +247,9 @@
             name="mobile"
             :rules="[
               { required: true, message: '请输入联系电话' },
-              // { validator: formValidator.phoneOrTele },
+              { max: 250, message: '联系电话过长' },
+              { validator: formValidator.positiveInteger, message: '联系电话格式为自然数' },
+              { validator: formValidator.empty, message: '请输入联系电话' },
             ]"
           >
             <a-input
@@ -262,7 +264,7 @@
             style="margin-bottom: 0"
             :rules="[
               { required: true, message: '请输入联系邮箱' },
-              // { type: 'email', message: '联系邮箱格式不正确' },
+              { type: 'email', message: '联系邮箱格式不正确' },
             ]"
           >
             <a-input
@@ -338,7 +340,7 @@
     </a-spin>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import myCommon from '@/utils/MyCommon/common';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import formValidator from '@/utils/MyCommon/formValidator';
@@ -728,7 +730,7 @@
       var tempstr = item.field + ' ' + item.order;
       page.sortlist.push(tempstr);
     });
-    getUsers_();
+    getUsers();
   }
   /**
    * 获取排序条件
@@ -739,6 +741,12 @@
       fullsort += item + ',';
     });
     return fullsort.substring(0, fullsort.length - 1);
+  }
+
+  function initPage() {
+    page.current = 1;
+    page.total = 0;
+    getUsers();
   }
 
   function getUsers_() {

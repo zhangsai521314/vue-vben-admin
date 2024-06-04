@@ -217,8 +217,14 @@
             autocomplete="off"
           />
         </a-form-item>
-        <a-form-item name="port" label="运行端口" :rules="[{ max: 250, message: '运行端口过长' }]">
-          <a-input placeholder="请输入运行端口" v-model:value="formData.port" autocomplete="off" />
+        <a-form-item name="port" label="运行端口">
+          <a-input
+            placeholder="请输入运行端口"
+            v-model:value="formData.port"
+            autocomplete="off"
+            :min="0"
+            :max="9999999999"
+          />
         </a-form-item>
         <a-form-item
           name="isUpPerformance"
@@ -235,6 +241,8 @@
           <a-input-number
             placeholder="请输入软件排序"
             :precision="3"
+            :min="-99999"
+            :max="99999"
             style="width: 300px"
             v-model:value="formData.orderIndex"
           />
@@ -349,7 +357,7 @@
     </a-drawer>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import codemirror from '/@/components/MyCodemirror/codemirror.vue';
   import formValidator from '@/utils/MyCommon/formValidator';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';

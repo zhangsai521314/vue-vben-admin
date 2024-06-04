@@ -85,7 +85,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>信息标题：</label>
                     <a-input
-                      @press-enter="getMessages()"
+                      @press-enter="initPage()"
                       v-model:value="seacthContent.msgTitle"
                       placeholder="输入信息标题查询"
                     />
@@ -95,7 +95,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>信息内容：</label>
                     <a-input
-                      @press-enter="getMessages()"
+                      @press-enter="initPage()"
                       v-model:value="seacthContent.msgContent"
                       placeholder="输入信息内容查询"
                     />
@@ -103,7 +103,7 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="getMessages()" type="primary">查询</a-button>
+                    <a-button @click="initPage()" type="primary">查询</a-button>
                     <a-button @click="resetSeacth">重置表单</a-button>
                     <a-radio-group v-model:value="refresh" button-style="solid">
                       <a-radio-button value="yes">开启自动刷新</a-radio-button>
@@ -257,7 +257,7 @@
     </a-drawer>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import his from './his.vue';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import myCommon from '@/utils/MyCommon/common';
@@ -506,6 +506,12 @@
         page.total = 0;
         refreshData();
       });
+  }
+
+  function initPage() {
+    page.current = 1;
+    page.total = 0;
+    getMessages();
   }
 
   /**

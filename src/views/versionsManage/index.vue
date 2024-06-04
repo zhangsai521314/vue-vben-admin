@@ -118,6 +118,8 @@
             placeholder="请输入软件包排序"
             style="width: 300px"
             :precision="3"
+            :min="-99999"
+            :max="99999"
             v-model:value="formData.orderIndex"
           />
         </a-form-item>
@@ -141,7 +143,7 @@
     </a-drawer>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import { ref, reactive, createVNode } from 'vue';
   import { VxeGrid, VxeGridProps } from 'vxe-table';

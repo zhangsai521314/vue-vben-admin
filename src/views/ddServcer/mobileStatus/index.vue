@@ -46,7 +46,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>ISDN：</label>
                     <a-input
-                      @press-enter="getStatus()"
+                      @press-enter="initPage()"
                       v-model:value="seacthContent.isdn"
                       placeholder="输入ISDN号查询"
                     />
@@ -54,7 +54,7 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="getStatus()" type="primary">查询</a-button>
+                    <a-button @click="initPage()" type="primary">查询</a-button>
                     <a-button @click="resetSeacth">重置表单</a-button>
                     <a-radio-group v-model:value="refresh" button-style="solid">
                       <a-radio-button value="yes">开启自动刷新</a-radio-button>
@@ -81,7 +81,7 @@
     </vxe-grid>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
@@ -252,6 +252,12 @@
         page.total = 0;
         refreshData();
       });
+  }
+
+  function initPage() {
+    page.current = 1;
+    page.total = 0;
+    getStatus();
   }
 
   //重置搜索条件

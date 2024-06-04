@@ -72,7 +72,7 @@
     </div>
   </div>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import { ref, reactive, createVNode, nextTick, onMounted, watch, onUpdated } from 'vue';
   import WaveSurfer from 'wavesurfer.js';
   import Timeline from 'wavesurfer.js/dist/plugins/timeline';

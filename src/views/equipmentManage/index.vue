@@ -179,6 +179,8 @@
             placeholder="请输入设备排序"
             style="width: 300px"
             :precision="3"
+            :min="-99999"
+            :max="99999"
             v-model:value="formData.orderIndex"
           />
         </a-form-item>
@@ -204,7 +206,7 @@
     </a-drawer>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import formValidator from '@/utils/MyCommon/formValidator';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import myCommon from '@/utils/MyCommon/common';

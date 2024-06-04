@@ -44,7 +44,7 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="getDCOptionCallRecords()" type="primary">查询</a-button>
+                    <a-button @click="initPage()" type="primary">查询</a-button>
                   </a-space>
                 </div>
               </a-space>
@@ -64,7 +64,7 @@
     </vxe-grid>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import myCommon from '@/utils/MyCommon/common';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import { ref, reactive, createVNode, nextTick, onMounted, watch, unref } from 'vue';
@@ -158,7 +158,7 @@
     sortlist: ['endTime desc'],
   });
 
-  getDCOptionCallRecords();
+  getDCOptionKeyRecords();
   getServices();
 
   /**
@@ -170,7 +170,7 @@
       var tempstr = item.field + ' ' + item.order;
       page.sortlist.push(tempstr);
     });
-    getDCOptionCallRecords();
+    getDCOptionKeyRecords();
   }
   /**
    * 获取排序条件
@@ -184,7 +184,7 @@
   }
 
   //获取列表
-  function getDCOptionCallRecords() {
+  function getDCOptionKeyRecords() {
     loading.value = true;
     seacthContent.value.startTime =
       timeValue.value == null ? null : timeValue.value[0].format('YYYY-MM-DD HH:mm:ss');
@@ -210,8 +210,14 @@
       });
   }
 
+  function initPage() {
+    page.current = 1;
+    page.total = 0;
+    getDCOptionKeyRecords();
+  }
+
   function handlePageChange() {
-    getDCOptionCallRecords();
+    getDCOptionKeyRecords();
   }
 
   //获取服务列表

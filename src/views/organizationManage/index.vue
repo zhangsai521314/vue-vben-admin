@@ -131,6 +131,9 @@
             v-model:value="formData.orderIndex"
             placeholder="请输入部门排序"
             autocomplete="off"
+            :precision="3"
+            :min="-99999"
+            :max="99999"
           />
         </a-form-item>
       </a-form>
@@ -143,7 +146,7 @@
     </a-drawer>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import formValidator from '@/utils/MyCommon/formValidator';
   import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';

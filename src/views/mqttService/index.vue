@@ -98,7 +98,13 @@
             name="mqttPort"
             :rules="[{ required: true, message: '请输入通信地址端口' }]"
           >
-            <a-input placeholder="端口号" v-model:value="formData.mqttPort" style="width: 134px" />
+            <a-input
+              placeholder="端口号"
+              v-model:value="formData.mqttPort"
+              style="width: 134px"
+              :min="0"
+              :max="9999999999"
+            />
           </a-form-item>
         </a-space>
         <a-form-item
@@ -132,6 +138,8 @@
             placeholder="请输入排序"
             style="width: 300px"
             :precision="3"
+            :min="-99999"
+            :max="99999"
             v-model:value="formData.orderIndex"
           />
         </a-form-item>
@@ -145,7 +153,7 @@
     </a-drawer>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import { ref, reactive, createVNode } from 'vue';
   import { VxeGrid, VxeGridProps } from 'vxe-table';

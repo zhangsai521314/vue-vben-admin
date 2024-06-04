@@ -36,7 +36,7 @@
                     <a-space direction="horizontal" size="small" :wrap="true">
                       <label>lacci：</label>
                       <a-input
-                        @press-enter="getDDServerStationTLaccis()"
+                        @press-enter="initPage()"
                         v-model:value="seacthContent.lacci"
                         placeholder="输入lacci查询"
                       />
@@ -44,7 +44,7 @@
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button @click="getDDServerStationTLaccis" type="primary">查询</a-button>
+                      <a-button @click="initPage" type="primary">查询</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -173,7 +173,7 @@
     </a-spin>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import myCommon from '@/utils/MyCommon/common';
   import { ref, reactive, createVNode, nextTick, watch, unref } from 'vue';
@@ -303,6 +303,12 @@
       fullsort += item + ',';
     });
     return fullsort.substring(0, fullsort.length - 1);
+  }
+
+  function initPage() {
+    page.current = 1;
+    page.total = 0;
+    getDDServerStationTLaccis();
   }
 
   //显示表单

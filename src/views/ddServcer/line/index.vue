@@ -23,11 +23,11 @@
               <AuthDom auth="ddServcer_line_query">
                 <a-space direction="horizontal" size="small">
                   <a-input
-                    @press-enter="getDDServerLines"
+                    @press-enter="initPage"
                     v-model:value="seacthContent.name"
                     placeholder="输入线路名称"
                   />
-                  <a-button @click="getDDServerLines" type="primary">查询</a-button>
+                  <a-button @click="initPage" type="primary">查询</a-button>
                 </a-space>
               </AuthDom>
               <AuthDom auth="ddServcer_line_add">
@@ -117,8 +117,8 @@
             label="功能号"
             :rules="[
               { required: true, message: '' },
-              // { max: 250, message: '功能号名称过长' },
-              { validator: formValidator.positiveInteger, message: '功能号格式为正整数' },
+              { max: 250, message: '功能号名称过长' },
+              { validator: formValidator.positiveInteger, message: '功能号格式为自然数' },
               { validator: formValidator.empty, message: '请输入功能号' },
             ]"
           >
@@ -129,8 +129,8 @@
             label="调度台ISDN"
             :rules="[
               { required: true, message: '' },
-              // { max: 250, message: '调度台ISDN名称过长' },
-              { validator: formValidator.positiveInteger, message: '调度台ISDN格式为正整数' },
+              { max: 250, message: '调度台ISDN名称过长' },
+              { validator: formValidator.positiveInteger, message: '调度台ISDN格式为自然数' },
               { validator: formValidator.empty, message: '请输入调度台ISDN' },
             ]"
           >
@@ -141,8 +141,8 @@
             label="全呼CIR组呼号"
             :rules="[
               { required: true, message: '' },
-              // { max: 250, message: '全呼CIR组呼号过长' },
-              { validator: formValidator.positiveInteger, message: '全呼CIR组呼号格式为正整数' },
+              { max: 250, message: '全呼CIR组呼号过长' },
+              { validator: formValidator.positiveInteger, message: '全呼CIR组呼号格式为自然数' },
               { validator: formValidator.empty, message: '请输入全呼CIR组呼号' },
             ]"
           >
@@ -161,6 +161,7 @@
               placeholder="请输入全呼CIR组呼优先级"
               style="width: 262px"
               min="1"
+              max="999999999"
               :precision="0"
               v-model:value="formData.groupAllCirPriority"
             />
@@ -170,7 +171,7 @@
             label="全呼CIR组呼号"
             :rules="[
               { required: true, message: '' },
-              // { max: 250, message: '全呼CIR组呼号过长' },
+              { max: 250, message: '全呼CIR组呼号过长' },
               { validator: formValidator.positiveInteger, message: '全呼调度台组呼号格式为正整数' },
               { validator: formValidator.empty, message: '请输入全呼调度台组呼号' },
             ]"
@@ -190,6 +191,7 @@
               placeholder="请输入全呼调度台组优先级"
               style="width: 262px"
               min="1"
+              max="999999999"
               :precision="0"
               v-model:value="formData.groupAllDcPriority"
             />
@@ -200,10 +202,10 @@
             label="线路广播组呼号"
             :rules="[
               { required: true, message: '' },
-              // { max: 250, message: '线路广播组呼号过长' },
+              { max: 250, message: '线路广播组呼号过长' },
               {
                 validator: formValidator.positiveInteger,
-                message: '线路广播组呼号格式为正整数',
+                message: '线路广播组呼号格式为自然数',
               },
               { validator: formValidator.empty, message: '请输入线路广播组呼号' },
             ]"
@@ -223,6 +225,7 @@
               placeholder="请输入线路广播组呼优先级"
               style="width: 262px"
               min="1"
+              max="999999999"
               :precision="0"
               v-model:value="formData.groupAllBroadcastPriority"
             />
@@ -246,7 +249,7 @@
     </a-spin>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import myCommon from '@/utils/MyCommon/common';
   import formValidator from '@/utils/MyCommon/formValidator';
   import { ref, reactive, createVNode, nextTick, watch, unref } from 'vue';
@@ -433,6 +436,12 @@
       fullsort += item + ',';
     });
     return fullsort.substring(0, fullsort.length - 1);
+  }
+
+  function initPage() {
+    page.current = 1;
+    page.total = 0;
+    getDDServerLines();
   }
 
   //显示表单

@@ -42,7 +42,7 @@
                     </div>
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
-                        <a-button @click="getDCOptionServiceTests()" type="primary">查询</a-button>
+                        <a-button @click="initPage()" type="primary">查询</a-button>
                       </a-space>
                     </div>
                   </a-space>
@@ -104,7 +104,7 @@
     </a-spin>
   </MyContent>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
@@ -176,6 +176,13 @@
     });
     getDCOptionServiceTests();
   }
+
+  function initPage() {
+    page.current = 1;
+    page.total = 0;
+    getDCOptionServiceTests();
+  }
+
   /**
    * 获取排序条件
    */
