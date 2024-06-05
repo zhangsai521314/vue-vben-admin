@@ -32,19 +32,18 @@
       </a-form-item>
       <a-form-item
         label="用户名"
-        userName="userName"
+        name="userName"
         :rules="[
-          { required: true, message: '' },
+          { required: true, message: '请输入用户名' },
           { max: 6, message: '用户名长度超限' },
           { min: 2, message: '用户名最少2位' },
-          { validator: formValidator.empty, message: '请输入用户名' },
         ]"
       >
         <a-input v-model:value="userData.userName" autocomplete="off" />
       </a-form-item>
       <a-form-item
         label="登录名"
-        userName="userAccount"
+        name="userAccount"
         :rules="[
           { required: true, message: '' },
           { max: 30, message: '登录名长度超限' },
@@ -66,21 +65,21 @@
       </a-form-item>
       <a-form-item
         label="联系邮箱"
-        userName="email"
+        name="email"
         :rules="[
           { required: true, message: '请输入联系邮箱' },
-          // { type: 'email', message: '邮箱格式不正确' },
+          { type: 'email', message: '邮箱格式不正确' },
         ]"
       >
         <a-input v-model:value="userData.email" autocomplete="off" />
       </a-form-item>
-      <a-form-item label="用户部门" userName="orgName">
+      <a-form-item label="用户部门" name="orgName">
         <a-input :disabled="true" v-model:value="userData.orgName" autocomplete="off" />
       </a-form-item>
-      <a-form-item label="用户角色" userName="roleName">
+      <a-form-item label="用户角色" name="roleName">
         <a-input :disabled="true" v-model:value="userData.roleName" autocomplete="off" />
       </a-form-item>
-      <a-form-item label="账户类型" userName="adminTypeName" style="margin-bottom: 0">
+      <a-form-item label="账户类型" name="adminTypeName" style="margin-bottom: 0">
         <a-input :disabled="true" v-model:value="userData.adminTypeName" autocomplete="off" />
       </a-form-item>
       <a-form-item :wrapper-col="{ span: 20, offset: 12 }" style="position: relative; height: 0">
@@ -97,11 +96,11 @@
       <template v-if="isShowPwd">
         <a-form-item
           label="旧密码"
-          userName="oldPwd"
+          name="oldPwd"
           :rules="[
             { required: true, message: '' },
             { max: 64, message: '密码长度超限' },
-            { min: 6, message: '登录名最少6位' },
+            { min: 5, message: '密码最少5位' },
             { validator: formValidator.empty, message: '请输入旧密码' },
           ]"
         >
@@ -109,7 +108,7 @@
         </a-form-item>
         <a-form-item
           label="新密码"
-          userName="userpwd"
+          name="userpwd"
           :rules="[
             { required: true, message: '请输入新密码' },
             { max: 30, message: '密码长度超限' },
@@ -121,7 +120,7 @@
         </a-form-item>
         <a-form-item
           label="确认密码"
-          userName="checkPass"
+          name="checkPass"
           :rules="[
             { required: true, message: '请输入确认密码' },
             { validator: validate_checkPass },

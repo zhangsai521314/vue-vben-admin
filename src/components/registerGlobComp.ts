@@ -153,16 +153,7 @@ export function registerGlobComp(app: App) {
       pagerCount: 7,
       pageSizes: [10, 20, 50, 100, 200, { label: '大量数据', value: 1000 }],
       //自定义布局顺序
-      layouts: [
-        'PrevJump',
-        'PrevPage',
-        'JumpNumber',
-        'NextPage',
-        'NextJump',
-        'Sizes',
-        'FullJump',
-        'Total',
-      ],
+      layouts: ['Home', 'PrevPage', 'JumpNumber', 'NextPage', 'End', 'Sizes', 'Total'],
     },
     // form: {
     //   preventSubmit: false

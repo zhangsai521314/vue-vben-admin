@@ -330,6 +330,7 @@
           tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增黑名单成功');
+          page.total = page.total + 1;
         });
       } else {
         blackApi.UpdateDDServerBlack(formData.value).then((data) => {

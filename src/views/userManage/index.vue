@@ -51,6 +51,8 @@
                         :options="roles"
                         :allowClear="true"
                         placeholder="请选择用户角色"
+                        show-search
+                        :filter-option="AntVueCommon.filterOption"
                       />
                     </a-space>
                   </div>
@@ -200,6 +202,8 @@
               placeholder="请选择用户状态"
               v-model:value="formData.status"
               :options="statusOptions"
+              show-search
+              :filter-option="AntVueCommon.filterOption"
             />
           </a-form-item>
           <a-form-item
@@ -229,6 +233,8 @@
               :options="roles"
               :allowClear="true"
               placeholder="请选择用户角色"
+              show-search
+              :filter-option="AntVueCommon.filterOption"
             />
           </a-form-item>
           <a-form-item
@@ -240,14 +246,16 @@
               placeholder="请选择账户类型"
               v-model:value="formData.adminType"
               :options="admintypeOptions"
+              show-search
+              :filter-option="AntVueCommon.filterOption"
             />
           </a-form-item>
           <a-form-item
             label="联系电话"
             name="mobile"
             :rules="[
-              { required: true, message: '请输入联系电话' },
-              { max: 250, message: '联系电话过长' },
+              { required: true, message: '' },
+              { max: 30, message: '联系电话过长' },
               { validator: formValidator.positiveInteger, message: '联系电话格式为自然数' },
               { validator: formValidator.empty, message: '请输入联系电话' },
             ]"
@@ -789,6 +797,7 @@
           tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增用户成功');
+          page.total = page.total + 1;
         });
       } else {
         p_data.IsUpdatePwd = isShowPwd.value;

@@ -376,12 +376,16 @@
         loading.value = true;
         dictionariesApi
           .DeleteDictionaries(row.dictionariesId)
-          .then(() => {
+          .then((data) => {
             loading.value = false;
-            tableConfigData.value = tableConfigData.value?.filter(
-              (m) => m.dictionariesId != row.dictionariesId,
-            );
-            message.success('删除字典信息成功');
+            try {
+              if (data) {
+                tableConfigData.value = tableConfigData.value?.filter(
+                  (m) => data.indexOf(m.dictionariesId) == -1,
+                );
+              }
+              message.success('删除字典信息成功');
+            } catch (error) {}
           })
           .catch(() => {
             loading.value = false;

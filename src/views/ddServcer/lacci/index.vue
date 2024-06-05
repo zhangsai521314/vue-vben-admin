@@ -414,6 +414,7 @@
           tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增小区成功');
+          page.total = page.total + 1;
         });
       } else {
         lacciApi.UpdateDDServerTLacci(formData.value).then((data) => {

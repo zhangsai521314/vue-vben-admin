@@ -62,6 +62,7 @@
             :scroll-y="{ enabled: false }"
           >
             >
+            <vxe-column type="seq" title="序号" width="60" />
             <vxe-column field="menuId" title="菜单id" :visible="false" />
             <vxe-column field="menuName" title="菜单名称" tree-node :sortable="true">
               <template #default="{ row }">
@@ -148,7 +149,11 @@
         ref="formRef"
         :model="formData"
       >
-        <a-form-item name="menuType" label="菜单类型">
+        <a-form-item
+          name="menuType"
+          label="菜单类型"
+          :rules="[{ required: true, message: '请选择菜单类型' }]"
+        >
           <a-select v-model:value="formData.menuType">
             <a-select-option :value="1">系统菜单</a-select-option>
             <a-select-option :value="7">操作按钮</a-select-option>
@@ -199,7 +204,7 @@
             { max: 250, message: formData.menuType == 7 ? '按钮名称过长' : '菜单名称过长' },
             {
               validator: formValidator.empty,
-              message: formData.menuType == 7 ? '按钮名称' : '菜单名称',
+              message: formData.menuType == 7 ? '请输入按钮名称' : '请输入菜单名称',
             },
           ]"
         >
@@ -221,10 +226,15 @@
               autocomplete="off"
             />
           </a-form-item>
-          <a-form-item name="menuIcon" label="菜单图标">
+          <a-form-item
+            name="menuIcon"
+            label="菜单图标"
+            :rules="[{ required: true, message: '请选择菜单图标' }]"
+          >
             <a-select
               allow-clear
               show-search
+              :filter-option="AntVueCommon.filterOption"
               v-model:value="formData.menuIcon"
               style="width: 100%"
               placeholder="请选择菜单图标"

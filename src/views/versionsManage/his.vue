@@ -5,7 +5,7 @@
       id="mytable"
       ref="tableRef"
       :loading="loading"
-      :row-config="{ keyField: 'versionId' }"
+      :row-config="{ keyField: 'hisId' }"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"
     >
@@ -175,7 +175,7 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', width: 50 },
       {
         field: 'hisId',
         title: '版本id',
@@ -334,24 +334,26 @@
   //保存
   function saveFrom() {
     if (fileList.value.length > 0) {
-      fromSpinning.value = true;
-      let _formData = new FormData();
-      _formData.append('file', fileList.value[0]);
-      for (const key in formData.value) {
-        _formData.append(key, formData.value[key]);
-      }
-      versionsApi
-        .AddVersionsHis(_formData)
-        .then(() => {
-          fileList.value = [];
-          fromSpinning.value = false;
-          formClose();
-          message.success('新增软件版本包成功');
-          getVersionsHis();
-        })
-        .catch((error) => {
-          fromSpinning.value = false;
-        });
+      formRef.value.validate().then(() => {
+        fromSpinning.value = true;
+        let _formData = new FormData();
+        _formData.append('file', fileList.value[0]);
+        for (const key in formData.value) {
+          _formData.append(key, formData.value[key]);
+        }
+        versionsApi
+          .AddVersionsHis(_formData)
+          .then(() => {
+            fileList.value = [];
+            fromSpinning.value = false;
+            formClose();
+            message.success('新增软件版本包成功');
+            getVersionsHis();
+          })
+          .catch((error) => {
+            fromSpinning.value = false;
+          });
+      });
     } else {
       message.warning('请先选择软件包');
     }

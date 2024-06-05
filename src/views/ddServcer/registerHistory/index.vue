@@ -180,7 +180,7 @@
       },
       {
         field: 'regResultName',
-        title: '注册结果',
+        title: '注册注销结果',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

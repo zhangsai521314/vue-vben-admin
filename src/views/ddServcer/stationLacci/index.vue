@@ -115,6 +115,8 @@
             <a-select
               :disabled="saveType != 'add'"
               v-model:value="formData.lineId"
+              show-search
+              :filter-option="AntVueCommon.filterOption"
               :options="lineDatas"
               :allowClear="true"
               @change="changeLine()"
@@ -132,10 +134,12 @@
               :options="stationDatas.filter((m) => m.lineId == formData.lineId)"
               :allowClear="true"
               placeholder="请选择所属车站"
+              show-search
+              :filter-option="AntVueCommon.filterOption"
             />
           </a-form-item>
           <a-form-item
-            :rules="[{ required: true, message: '关系类型' }]"
+            :rules="[{ required: true, message: '请选择关系类型' }]"
             label="关系类型"
             name="type"
           >
@@ -150,7 +154,7 @@
             </a-select>
           </a-form-item>
           <a-form-item
-            :rules="[{ required: true, message: '小区名称' }]"
+            :rules="[{ required: true, message: '请输入小区名称' }]"
             label="小区名称"
             name="lacciIds"
           >
@@ -159,6 +163,8 @@
               v-model:value="formData.lacciIds"
               :options="lacciDatas"
               :allowClear="true"
+              show-search
+              :filter-option="AntVueCommon.filterOption"
               placeholder="请选择小区名称"
             />
           </a-form-item>
@@ -409,6 +415,7 @@
           formClose();
           message.success('新增小区成功');
           getDDServerStationTLaccis();
+          page.total = page.total + 1;
         });
       } else {
         stationLacciApi.AUDDServerStationLacci(formData.value).then((data) => {

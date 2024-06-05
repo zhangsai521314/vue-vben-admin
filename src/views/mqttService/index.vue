@@ -73,13 +73,16 @@
         ref="formRef"
         :model="formData"
       >
-        <a-form-item label="服务类型" name="serviceType">
+        <a-form-item
+          label="服务类型"
+          name="serviceType"
+          :rules="[{ required: true, message: '请选择服务类型' }]"
+        >
           <a-select
             :disabled="saveType != 'add'"
             show-search
             :filter-option="AntVueCommon.filterOption"
             placeholder="请选择服务类型"
-            :rules="[{ required: true, message: '请选择软件类型' }]"
             v-model:value="formData.serviceType"
             :options="dictionariesData"
           />
@@ -96,7 +99,7 @@
           <a-form-item
             label=""
             name="mqttPort"
-            :rules="[{ required: true, message: '请输入通信地址端口' }]"
+            :rules="[{ required: true, message: '请输入端口' }]"
           >
             <a-input
               placeholder="端口号"

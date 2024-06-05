@@ -90,6 +90,8 @@
             <a-select
               placeholder="请选择所属线路"
               v-model:value="formData.lineId"
+              show-search
+              :filter-option="AntVueCommon.filterOption"
               :options="lineDatas"
               :allowClear="true"
             />
@@ -114,8 +116,10 @@
             name="code"
             :rules="[
               { required: true, message: '' },
-              { max: 50, message: '车站号码过长' },
+              { min: 1, message: '车站号码过短' },
+              { max: 5, message: '车站号码过长' },
               { validator: formValidator.empty, message: '请输入车站号码' },
+              { validator: formValidator.positiveInteger, message: '邻站组呼号码格式为自然数' },
             ]"
           >
             <a-input
@@ -161,6 +165,8 @@
           <a-form-item label="上一车站" name="prevStationId">
             <a-select
               v-model:value="formData.prevStationId"
+              show-search
+              :filter-option="AntVueCommon.filterOption"
               :options="stationDatas.filter((m) => m.key != formData.nextStationId)"
               :allowClear="true"
               placeholder="请选择上一车站"
@@ -169,6 +175,8 @@
           <a-form-item label="下一车站" name="nextStationId">
             <a-select
               v-model:value="formData.nextStationId"
+              show-search
+              :filter-option="AntVueCommon.filterOption"
               :options="stationDatas.filter((m) => m.key != formData.prevStationId)"
               :allowClear="true"
               placeholder="请选择下一车站"
@@ -176,16 +184,17 @@
           </a-form-item>
           <a-form-item
             name="groupCallNumber"
-            label="全呼车站号码"
+            label="站内组呼号码"
             :rules="[
               { required: true, message: '' },
-              { max: 250, message: '全呼车站号码过长' },
-              { validator: formValidator.positiveInteger, message: '全呼车站号码格式为自然数' },
-              { validator: formValidator.empty, message: '请输入全呼车站号码' },
+              { min: 3, message: '站内组呼号码过短' },
+              { max: 10, message: '站内组呼号码过长' },
+              { validator: formValidator.positiveInteger, message: '站内组呼号码格式为自然数' },
+              { validator: formValidator.empty, message: '请输入站内组呼号码' },
             ]"
           >
             <a-input
-              placeholder="请输入全呼车站号码"
+              placeholder="请输入站内组呼号码"
               v-model:value="formData.groupCallNumber"
               autocomplete="off"
             />
@@ -199,7 +208,7 @@
               placeholder="请输入全呼车站优先级"
               style="width: 262px"
               min="1"
-              max="999999999"
+              max="15"
               :precision="0"
               v-model:value="formData.groupCallPriority"
             />
@@ -209,7 +218,8 @@
             label="邻站组呼号码"
             :rules="[
               { required: true, message: '' },
-              { max: 250, message: '邻站组呼号码过长' },
+              { min: 3, message: '邻站组呼号码过短' },
+              { max: 10, message: '邻站组呼号码过长' },
               { validator: formValidator.positiveInteger, message: '邻站组呼号码格式为自然数' },
               { validator: formValidator.empty, message: '请输入邻站组呼号码' },
             ]"
@@ -229,21 +239,25 @@
               placeholder="请输入邻站组呼优先级"
               style="width: 262px"
               min="1"
-              max="999999999"
+              max="15"
               :precision="0"
               v-model:value="formData.tempCallPriority"
             />
           </a-form-item>
 
-          <a-form-item name="startGlb" label="起始公里标">
+          <a-form-item name="startGlb" label="起始公里标(米)">
             <a-input-number
+              min="-900000"
+              max="900000"
               placeholder="请输入起始公里标"
               v-model:value="formData.startGlb"
               autocomplete="off"
             />
           </a-form-item>
-          <a-form-item name="endGlb" label="终止公里标">
+          <a-form-item name="endGlb" label="终止公里标(米)">
             <a-input-number
+              min="-900000"
+              max="900000"
               placeholder="请输入终止公里标"
               v-model:value="formData.endGlb"
               autocomplete="off"
@@ -269,6 +283,7 @@
   </MyContent>
 </template>
 <script setup lang="ts">
+  import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import myCommon from '@/utils/MyCommon/common';
   import formValidator from '@/utils/MyCommon/formValidator';
   import { ref, reactive, createVNode, nextTick, watch, unref } from 'vue';
@@ -348,7 +363,7 @@
       },
       {
         field: 'groupCallNumber',
-        title: '全呼车站号码',
+        title: '站内组呼号码',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -594,6 +609,7 @@
           tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增线路成功');
+          page.total = page.total + 1;
         });
       } else {
         stationApi.UpdateDDServerStation(formData.value).then((data) => {

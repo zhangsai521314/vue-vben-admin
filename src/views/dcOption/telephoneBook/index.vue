@@ -105,16 +105,16 @@
             />
           </a-form-item>
           <a-form-item
-            label="联系号码"
+            label="联系电话"
             name="phoneNumber"
             :rules="[
-              { required: true, message: '请输入号码' },
-              { max: 30, message: '联系号码过长' },
-              { validator: formValidator.positiveInteger, message: '联系号码格式为自然数' },
+              { required: true, message: '请输入电话' },
+              { max: 30, message: '联系电话过长' },
+              { validator: formValidator.positiveInteger, message: '联系电话格式为自然数' },
             ]"
           >
             <a-input
-              placeholder="请输入联系号码"
+              placeholder="请输入联系电话"
               v-model:value="formData.phoneNumber"
               autocomplete="off"
             />
@@ -383,6 +383,7 @@
           tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增电话成功');
+          page.total = page.total + 1;
         });
       } else {
         telephoneBookApi.UpdateDCOptionTelephoneBook(formData.value).then((data) => {

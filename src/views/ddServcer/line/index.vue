@@ -537,6 +537,7 @@
           tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增线路成功');
+          page.total = page.total + 1;
         });
       } else {
         lineApi.UpdateDDServerLine(formData.value).then((data) => {

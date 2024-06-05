@@ -49,6 +49,7 @@
             :tree-config="{ transform: true, rowField: 'orgId', parentField: 'parentId' }"
             :data="tableConfigData"
           >
+            <vxe-column type="seq" title="序号" width="60" />
             <vxe-column field="orgId" title="部门id" :visible="false" />
             <vxe-column field="orgName" title="名称" tree-node />
             <vxe-column field="orderIndex" title="排序" :visible="false" />

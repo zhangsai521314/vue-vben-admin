@@ -340,15 +340,6 @@ const Common = {
   getJWTDate(timestamp: number) {
     return new Date(timestamp * 1000);
   },
-  //把父子级转换为不是父子级
-  generateList(allList, treeList, chaildrenKey) {
-    for (let i = 0; i < treeList.length; i++) {
-      allList.push(treeList[i]);
-      if (treeList[i][chaildrenKey] && treeList[i][chaildrenKey].length > 0) {
-        this.generateList(allList, treeList[i].children, chaildrenKey);
-      }
-    }
-  },
   //拷贝对象2中对象1存在的键给对象1
   objectToObject(obj, obj2) {
     for (const i in obj2) {

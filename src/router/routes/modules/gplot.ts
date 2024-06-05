@@ -20,7 +20,7 @@ const GplotRouter: AppRouteModule = {
       name: 'GplotManage',
       component: () => import('/@/views/gplot/manage.vue'),
       meta: {
-        title: t('网元配置'),
+        title: '拓扑配置',
         hideMenu: true,
       },
     },
