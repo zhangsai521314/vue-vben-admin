@@ -85,6 +85,30 @@ const ddServcer: AppRouteModule = {
         title: '车站管理',
       },
     },
+    {
+      path: 'addressingHis',
+      name: 'DDServcerAddressingHis',
+      component: () => import('/@/views/ddServcer/addressingHis/index.vue'),
+      meta: {
+        title: '功能号寻址记录',
+      },
+    },
+    {
+      path: 'lwLinkHis',
+      name: 'DDServcerLwLinkHis',
+      component: () => import('/@/views/ddServcer/lwLinkHis/index.vue'),
+      meta: {
+        title: '列尾寻址记录',
+      },
+    },
+    {
+      path: 'lwStatusHis',
+      name: 'DDServcerLwStatusHis',
+      component: () => import('/@/views/ddServcer/lwStatusHis/index.vue'),
+      meta: {
+        title: '列尾身份上报记录',
+      },
+    },
   ],
 };
 export default ddServcer;

@@ -242,6 +242,34 @@ const StationLacci = {
     });
   },
 };
+
+const AddressingHis = {
+  //获取列表
+  GetDDAddressingHis: function (params) {
+    return defHttp.post({
+      url: '/AddressingHis/GetDDAddressingHis',
+      params,
+    });
+  },
+};
+const LwLinkHis = {
+  //获取列表
+  GetDDLwLinkHis: function (params) {
+    return defHttp.post({
+      url: '/LwLinkHis/GetDDLwLinkHis',
+      params,
+    });
+  },
+};
+const LwStatusHis = {
+  //获取列表
+  GetDDLwStatusHis: function (params) {
+    return defHttp.post({
+      url: '/LwStatusHis/GetDDLwStatusHis',
+      params,
+    });
+  },
+};
 export {
   Black,
   CirStatus,
@@ -252,4 +280,7 @@ export {
   RegisterHistory,
   Station,
   StationLacci,
+  AddressingHis,
+  LwLinkHis,
+  LwStatusHis,
 };

@@ -359,7 +359,6 @@
       formData.value['execompleteBefore'] = execompleteBefore;
       if (saveType == 'add') {
         mqttApi.AddMqtt(formData.value).then((data) => {
-          debugger;
           data.serviceName = dictionariesData.value.find((m) => m.key == data.serviceType)?.label;
           tableConfig.data?.splice(0, 0, data);
           formClose();
@@ -367,10 +366,9 @@
         });
       } else {
         mqttApi.UpdateMqtt(formData.value).then((data) => {
-          debugger;
           const oldData = tableRef.value.getRowById(data.mqttId);
-          myCommon.objectReplace(oldData, data);
           delete formData.value.createUser;
+          myCommon.objectReplace(oldData, data);
           oldData.modifyTime = data.modifyTime;
           oldData.modifyUser = data.modifyUser;
           oldData.serviceName = dictionariesData.value.find(
