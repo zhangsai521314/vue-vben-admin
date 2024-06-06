@@ -196,7 +196,7 @@
           :labelCol="{ span: 7 }"
           :rules="[
             { required: true, message: '' },
-            { max: 250, message: '显示名称过长' },
+            { max: 50, message: '显示名称过长' },
             { validator: formValidator.empty, message: '请输入显示名称' },
           ]"
         >
@@ -246,7 +246,7 @@
           :labelCol="{ span: 7 }"
           :rules="[
             { required: true, message: '' },
-            { max: 250, message: '自定义主键值过长' },
+            { max: 50, message: '自定义主键值过长' },
             { validator: formValidator.empty, message: '请输入自定义主键值' },
           ]"
         >

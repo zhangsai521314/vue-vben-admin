@@ -167,7 +167,7 @@
           label="上级菜单"
           :rules="[
             { required: true, message: '' },
-            { max: 250, message: '菜单名称过长' },
+            { max: 50, message: '菜单名称过长' },
             { validator: formValidator.empty, message: '请输入菜单名称' },
           ]"
         >
@@ -201,7 +201,7 @@
           :label="formData.menuType == 7 ? '按钮名称' : '菜单名称'"
           :rules="[
             { required: true, message: '' },
-            { max: 250, message: formData.menuType == 7 ? '按钮名称过长' : '菜单名称过长' },
+            { max: 50, message: formData.menuType == 7 ? '按钮名称过长' : '菜单名称过长' },
             {
               validator: formValidator.empty,
               message: formData.menuType == 7 ? '请输入按钮名称' : '请输入菜单名称',
@@ -259,7 +259,7 @@
           label="权限标识"
           :rules="[
             { required: true, message: '' },
-            { max: 250, message: '权限标识过长' },
+            { max: 60, message: '权限标识过长' },
             { validator: formValidator.empty, message: '请输入权限标识' },
           ]"
         >
@@ -344,6 +344,10 @@
   getIconSimple();
 
   function showFrom(type, row, pid = null) {
+    if (row.saveType == 2) {
+      message.info('拓扑图菜单不可编辑和新增');
+      return;
+    }
     getMenuTreeDatas();
     saveType = type;
     if (type == 'add') {

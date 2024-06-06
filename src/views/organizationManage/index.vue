@@ -112,7 +112,7 @@
           label="名称"
           :rules="[
             { required: true, message: '' },
-            { max: 250, message: '部门名称过长' },
+            { max: 50, message: '部门名称过长' },
             { validator: formValidator.empty, message: '请输入部门名称' },
           ]"
         >

@@ -87,7 +87,7 @@
             name="name"
             :rules="[
               { required: true, message: '' },
-              // { max: 50, message: '线路名称过长' },
+              { max: 50, message: '线路名称过长' },
               { validator: formValidator.empty, message: '请输入线路名称' },
             ]"
           >
@@ -102,7 +102,8 @@
             name="code"
             :rules="[
               { required: true, message: '' },
-              // { max: 50, message: '线路编码过长' },
+              { max: 3, message: '线路编码过短' },
+              { max: 6, message: '线路编码过长' },
               { validator: formValidator.empty, message: '请输入线路编码' },
             ]"
           >
@@ -117,19 +118,21 @@
             label="功能号"
             :rules="[
               { required: true, message: '' },
-              { max: 250, message: '功能号名称过长' },
+              { min: 5, message: '功能号名称过短' },
+              { max: 9, message: '功能号名称过长' },
               { validator: formValidator.positiveInteger, message: '功能号格式为自然数' },
               { validator: formValidator.empty, message: '请输入功能号' },
             ]"
           >
-            <a-input placeholder="请输入dcFn" v-model:value="formData.dcFn" autocomplete="off" />
+            <a-input placeholder="请输入功能号" v-model:value="formData.dcFn" autocomplete="off" />
           </a-form-item>
           <a-form-item
             name="dcIsdn"
             label="调度台ISDN"
             :rules="[
               { required: true, message: '' },
-              { max: 250, message: '调度台ISDN名称过长' },
+              { min: 4, message: '调度台ISDN名称过短' },
+              { max: 11, message: '调度台ISDN名称过长' },
               { validator: formValidator.positiveInteger, message: '调度台ISDN格式为自然数' },
               { validator: formValidator.empty, message: '请输入调度台ISDN' },
             ]"
@@ -138,16 +141,17 @@
           </a-form-item>
           <a-form-item
             name="groupAllCirNumber"
-            label="全呼CIR组呼号"
+            label="全呼CIR组呼号码"
             :rules="[
               { required: true, message: '' },
-              { max: 250, message: '全呼CIR组呼号过长' },
-              { validator: formValidator.positiveInteger, message: '全呼CIR组呼号格式为自然数' },
-              { validator: formValidator.empty, message: '请输入全呼CIR组呼号' },
+              { min: 3, message: '全呼CIR组呼号码过短' },
+              { max: 10, message: '全呼CIR组呼号码过长' },
+              { validator: formValidator.positiveInteger, message: '全呼CIR组呼号码格式为自然数' },
+              { validator: formValidator.empty, message: '请输入全呼CIR组呼号码' },
             ]"
           >
             <a-input
-              placeholder="请输入全呼CIR组呼号"
+              placeholder="请输入全呼CIR组呼号码"
               v-model:value="formData.groupAllCirNumber"
               autocomplete="off"
             />
@@ -161,23 +165,27 @@
               placeholder="请输入全呼CIR组呼优先级"
               style="width: 262px"
               min="1"
-              max="999999999"
+              max="15"
               :precision="0"
               v-model:value="formData.groupAllCirPriority"
             />
           </a-form-item>
           <a-form-item
             name="groupAllDcNumber"
-            label="全呼CIR组呼号"
+            label="全呼CIR组呼号码"
             :rules="[
               { required: true, message: '' },
-              { max: 250, message: '全呼CIR组呼号过长' },
-              { validator: formValidator.positiveInteger, message: '全呼调度台组呼号格式为正整数' },
-              { validator: formValidator.empty, message: '请输入全呼调度台组呼号' },
+              { min: 3, message: '全呼CIR组呼号码过短' },
+              { max: 10, message: '全呼CIR组呼号码过长' },
+              {
+                validator: formValidator.positiveInteger,
+                message: '全呼调度台组呼号码格式为正整数',
+              },
+              { validator: formValidator.empty, message: '请输入全呼调度台组呼号码' },
             ]"
           >
             <a-input
-              placeholder="请输入全呼调度台组呼号"
+              placeholder="请输入全呼调度台组呼号码"
               v-model:value="formData.groupAllDcNumber"
               autocomplete="off"
             />
@@ -191,7 +199,7 @@
               placeholder="请输入全呼调度台组优先级"
               style="width: 262px"
               min="1"
-              max="999999999"
+              max="15"
               :precision="0"
               v-model:value="formData.groupAllDcPriority"
             />
@@ -199,19 +207,20 @@
 
           <a-form-item
             name="groupAllBroadcastNumber"
-            label="线路广播组呼号"
+            label="线路广播组呼号码"
             :rules="[
               { required: true, message: '' },
-              { max: 250, message: '线路广播组呼号过长' },
+              { min: 3, message: '线路广播组呼号码过短' },
+              { max: 10, message: '线路广播组呼号码过长' },
               {
                 validator: formValidator.positiveInteger,
-                message: '线路广播组呼号格式为自然数',
+                message: '线路广播组呼号码格式为自然数',
               },
-              { validator: formValidator.empty, message: '请输入线路广播组呼号' },
+              { validator: formValidator.empty, message: '请输入线路广播组呼号码' },
             ]"
           >
             <a-input
-              placeholder="请输入线路广播组呼号"
+              placeholder="请输入线路广播组呼号码"
               v-model:value="formData.groupAllBroadcastNumber"
               autocomplete="off"
             />
@@ -225,7 +234,7 @@
               placeholder="请输入线路广播组呼优先级"
               style="width: 262px"
               min="1"
-              max="999999999"
+              max="15"
               :precision="0"
               v-model:value="formData.groupAllBroadcastPriority"
             />

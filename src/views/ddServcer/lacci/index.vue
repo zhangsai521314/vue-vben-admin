@@ -108,6 +108,7 @@
             name="name"
             :rules="[
               { required: true, message: '' },
+              { max: 50, message: '小区名称过长' },
               { validator: formValidator.empty, message: '请输入小区名称' },
             ]"
           >
@@ -122,6 +123,8 @@
             name="lacci"
             :rules="[
               { required: true, message: '' },
+              { min: 4, message: 'lacci过短' },
+              { max: 8, message: 'lacci过长' },
               { validator: formValidator.empty, message: '请输入lacci' },
             ]"
           >

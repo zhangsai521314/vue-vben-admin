@@ -9,7 +9,7 @@
     :footer-style="{ textAlign: 'right' }"
     @close="formClose"
   >
-    <div style=" display: none;width: 100px; height: 100px" id="dadadaddaad"></div>
+    <div style="display: none; width: 100px; height: 100px" id="dadadaddaad"></div>
     <a-spin :tip="lodingTile" :spinning="isGetTree">
       <a-tabs
         tab-position="left"
@@ -874,7 +874,6 @@
     if (!isChange) {
       for (let i = 0; i < treeData.length; i++) {
         const oldNode = oldData.find((m) => m.key == treeData[i].key);
-        debugger;
         if (oldNode && oldNode.powerType != treeData[i].powerType) {
           isChange = true;
           break;

@@ -1,38 +1,29 @@
 <template>
   <div :class="`${prefixCls}`" :id="id">
-    <div
-      style="display: flex; flex-direction: row; justify-content: space-between; margin: 0 0 -1px 0"
-    >
+    <div style="display: flex; flex-direction: row; justify-content: space-between; padding: 5px">
       <a-input-search
+        size="small"
+        enter-button
         v-if="props.isShowSearch"
         v-model:value="searchContent"
         placeholder="搜索"
-        :style="{ width: '100%' }"
+        style="width: 100%"
       />
       <div
         style="
-          border: 1px solid #e5e7eb;
-          margin-left: -2px;
-          margin-bottom: 1px;
-          height: 32px;
-          overflow: hidden;
           display: flex;
           flex-direction: row;
           justify-content: space-between;
+          height: 25px;
+          padding-right: 2px;
+          overflow: hidden;
+          border: 1px solid rgb(229 231 235);
+          border-radius: 6px;
         "
       >
         <IconFontClass
-          v-if="props.isShowAllCheck"
           :class="{ show: isShowCheck }"
-          style="
-            font-size: 23px;
-            line-height: 31px;
-            height: 30px;
-            display: inline-block;
-            margin-top: 1px;
-            border-radius: 1px;
-            cursor: pointer;
-          "
+          style="display: inline-block; font-size: 29px; line-height: 25px; cursor: pointer"
           name="icon-baseui-yanjing"
           @click="showCheck()"
           title="查看选中"
@@ -106,6 +97,7 @@
   import myTreeCheck from '@/components/MyTreeCheck/index.vue';
   //定时器
   import { useTimeFn } from '@/hooks/core/useTime_';
+
   const props = defineProps({
     //是否显示图标
     showIcon: {
@@ -450,7 +442,6 @@
   );
 
   function size() {
-    debugger;
     let height = $(`#${id}`).height();
     if (props.isShowSearch) {
       height = height - 34;
@@ -502,13 +493,13 @@
     }
 
     :deep(.ant-tree-iconEle) {
-      margin-left: -14px;
       margin-top: -4px;
+      margin-left: -14px;
     }
 
     :deep(.ant-tree-title) {
-      margin-left: 3px;
       display: inline-block;
+      margin-left: 3px;
     }
   }
 </style>
