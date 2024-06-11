@@ -86,6 +86,7 @@
           :rules="[
             { required: true, message: '' },
             { validator: formValidator.empty, message: '请输入版本号' },
+            { max: 20, message: '版本号过长' },
           ]"
         >
           <a-input placeholder="请输入版本号" v-model:value="formData.vNumber" autocomplete="off" />
@@ -235,9 +236,10 @@
       },
       {
         field: 'remark',
-        title: '备注',
+        title: '备注信息',
         showOverflow: false,
         showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'createTime',

@@ -162,7 +162,14 @@ export const useUserStore = defineStore({
     },
     async getUserInfoAction(): Promise<UserInfo | null> {
       if (!this.getToken) return null;
-      const userInfo = await getUserInfo();
+      let userInfo;
+      try {
+        userInfo = await getUserInfo();
+      } catch (error) {
+        this.resetState();
+        router.replace(PageEnum.BASE_LOGIN);
+        return;
+      }
       const { roles = [] } = userInfo;
       if (isArray(roles)) {
         const roleList = roles.map((item) => item.value) as RoleEnum[];

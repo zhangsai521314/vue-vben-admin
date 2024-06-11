@@ -154,7 +154,7 @@
             </a-select>
           </a-form-item>
           <a-form-item
-            :rules="[{ required: true, message: '请输入小区名称' }]"
+            :rules="[{ required: true, message: '请选择小区名称' }]"
             label="小区名称"
             name="lacciIds"
           >

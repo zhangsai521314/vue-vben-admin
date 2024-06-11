@@ -182,6 +182,7 @@
         slots: {
           default: 'ipport',
         },
+        sortable: true,
       },
       // {
       //   title: '操作',

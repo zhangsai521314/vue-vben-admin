@@ -50,7 +50,7 @@
       //基础
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
-        field: 'msgId',
+        field: 'msgHisId',
         title: '信息ID',
         visible: false,
         showOverflow: true,
@@ -72,7 +72,6 @@
       {
         field: 'msgType',
         title: '信息类型',
-        showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
       },
@@ -80,6 +79,7 @@
         field: 'msgStatus',
         title: '信息状态',
         showOverflow: true,
+        width: 100,
         showHeaderOverflow: true,
         slots: {
           default: 'msgStatus',
@@ -88,7 +88,6 @@
       {
         field: 'msgTitle',
         title: '信息标题',
-        showOverflow: true,
         showHeaderOverflow: true,
       },
       {
@@ -109,10 +108,11 @@
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
-        field: 'createTime',
-        title: '创建时间',
+        field: 'mgStartTime',
+        title: '告警时间',
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,

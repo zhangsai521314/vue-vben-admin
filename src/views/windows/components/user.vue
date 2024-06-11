@@ -35,7 +35,7 @@
         name="userName"
         :rules="[
           { required: true, message: '请输入用户名' },
-          { max: 6, message: '用户名长度超限' },
+          { max: 30, message: '用户名长度超限' },
           { min: 2, message: '用户名最少2位' },
         ]"
       >
@@ -47,7 +47,7 @@
         :rules="[
           { required: true, message: '' },
           { max: 30, message: '登录名长度超限' },
-          { min: 2, message: '登录名最少2位' },
+          { min: 3, message: '登录名最少2位' },
           { validator: formValidator.empty, message: '请输入登录名' },
         ]"
       >
@@ -55,10 +55,12 @@
       </a-form-item>
       <a-form-item
         label="联系电话"
-        userName="mobile"
+        name="mobile"
         :rules="[
-          { required: true, message: '请输入联系电话' },
-          // { validator: formValidator.phoneOrTele },
+          { required: true, message: '' },
+          { max: 30, message: '联系电话过长' },
+          { validator: formValidator.positiveInteger, message: '联系电话格式为自然数' },
+          { validator: formValidator.empty, message: '请输入联系电话' },
         ]"
       >
         <a-input v-model:value="userData.mobile" autocomplete="off" />
@@ -99,7 +101,7 @@
           name="oldPwd"
           :rules="[
             { required: true, message: '' },
-            { max: 64, message: '密码长度超限' },
+            { max: 30, message: '密码长度超限' },
             { min: 5, message: '密码最少5位' },
             { validator: formValidator.empty, message: '请输入旧密码' },
           ]"

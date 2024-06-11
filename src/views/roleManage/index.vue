@@ -169,7 +169,6 @@
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
-        sortable: true,
         cellRender: { name: 'render_isno' },
       },
       {

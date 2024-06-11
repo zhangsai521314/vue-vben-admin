@@ -129,10 +129,10 @@
                 <span v-else style="color: green">无需同步</span>
               </template>
             </vxe-column>
-            <vxe-column field="synTime" title="同步时间" :visible="false" :sortable="true" />
+            <vxe-column field="syncTime" title="同步时间" :visible="false" :sortable="true" />
             <vxe-column field="orderIndex" title="排序" :visible="false" :sortable="true" />
             <vxe-column field="other" title="附属信息" :showOverflow="true" :sortable="true" />
-            <vxe-column field="remark" title="备注" :showOverflow="true" :sortable="true" />
+            <vxe-column field="remark" title="备注信息" :showOverflow="true" :sortable="true" />
             <vxe-column field="createTime" title="创建时间" :visible="false" :sortable="true" />
             <vxe-column field="createUser" title="创建人" :visible="false" :sortable="true" />
             <vxe-column field="modifyTime" title="修改时间" :visible="false" :sortable="true" />
@@ -279,7 +279,7 @@
           :rules="[{ max: 250, message: '附属息过长' }]"
         >
           <a-textarea
-            placeholder="请输入备注信息"
+            placeholder="请输入附属信息"
             :rows="3"
             v-model:value="formData.other"
             autocomplete="off"

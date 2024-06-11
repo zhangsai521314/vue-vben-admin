@@ -210,6 +210,7 @@
         slots: {
           default: 'ipport',
         },
+        sortable: true,
       },
       {
         field: 'loginTime',

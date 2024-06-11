@@ -407,10 +407,11 @@
       },
       {
         field: 'remark',
-        title: '备注',
+        title: '备注信息',
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
+        sortable: true,
       },
       {
         field: 'updateTime',

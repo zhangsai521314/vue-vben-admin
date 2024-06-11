@@ -17,7 +17,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>信息时间：</label>
+                    <label>开始时间：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         allowClear
@@ -206,7 +206,7 @@
               title="查看消息已读"
             />
           </AuthDom> -->
-          <div>
+          <!-- <div>
             <a-select
               placeholder="信息强提示设置"
               @change="(value) => changeStrongPrompting(value, row)"
@@ -241,7 +241,7 @@
               <a-select-option :value="30">30分钟后提示</a-select-option>
               <a-select-option :value="60">1小时后提示</a-select-option>
             </a-select>
-          </div>
+          </div> -->
         </div>
       </template>
     </vxe-grid>
@@ -312,14 +312,14 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        width: 150,
       },
       {
         field: 'msgType',
         title: '信息类型',
-        showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        visible: false,
+        width: 200,
       },
       {
         field: 'msgStatus',
@@ -327,6 +327,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        width: 100,
         slots: {
           default: 'msgStatus',
         },
@@ -334,9 +335,9 @@
       {
         field: 'msgTitle',
         title: '信息标题',
-        showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'msgContent',
@@ -344,6 +345,7 @@
         showOverflow: false,
         showHeaderOverflow: true,
         sortable: true,
+        width: '25%',
       },
       {
         field: 'msgStartTime',
@@ -370,6 +372,7 @@
         slots: {
           default: 'msgDuration',
         },
+        width: 100,
       },
       {
         field: 'confirmUser',
@@ -377,6 +380,8 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        visible: false,
+        width: 100,
       },
       {
         field: 'confirmTime',
@@ -423,12 +428,12 @@
       // },
       {
         title: '操作',
-        width: 160,
         slots: {
           default: 'default',
         },
         showHeaderOverflow: true,
         fixed: 'right',
+        minWidth: 50,
       },
     ],
     toolbarConfig: {

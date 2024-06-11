@@ -7,8 +7,10 @@
   >
     <div class="account-list-inner">
       <div class="account-box" v-for="(row, index) in viewData" :key="index">
-        <div style="width: 94px">
-          <div style="display: flex; align-items: center; justify-content: space-between">
+        <!-- <div style="width: 94px"> -->
+        <div style="width: 50px">
+          <!-- <div style="display: flex; align-items: center; justify-content: space-between"> -->
+          <div>
             <IconFontClass
               :title="
                 row.msgStatus == 1
@@ -33,11 +35,13 @@
                         : '',
               }"
             />
-            <a-tag style="width: 38px; margin: 0" :color="row.isRead ? '' : 'red'">{{
-              row.isRead ? '已读' : '未读'
-            }}</a-tag>
+            <a-tag
+              style="display: block; width: 38px; margin-left: 2px"
+              :color="row.isRead ? '' : 'red'"
+              >{{ row.isRead ? '已读' : '未读' }}</a-tag
+            >
           </div>
-          <a-select
+          <!-- <a-select
             size="small"
             placeholder="提示设置"
             @change="(value) => changeStrongPrompting(value, row)"
@@ -72,9 +76,10 @@
             <a-select-option :value="10">10分钟后提示</a-select-option>
             <a-select-option :value="30">30分钟后提示</a-select-option>
             <a-select-option :value="60">1小时后提示</a-select-option>
-          </a-select>
+          </a-select> -->
         </div>
-        <div style="padding-left: 8px" @click="handleTitleClick(row)" title="点击查看详情">
+        <!-- @click="handleTitleClick(row)" title="点击查看详情" -->
+        <div style="padding-left: 8px">
           <div
             style="
               display: -webkit-box;

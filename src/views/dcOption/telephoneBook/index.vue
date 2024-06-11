@@ -108,7 +108,7 @@
             label="联系电话"
             name="phoneNumber"
             :rules="[
-              { required: true, message: '请输入电话' },
+              { required: true, message: '请输入联系电话' },
               { max: 30, message: '联系电话过长' },
               { validator: formValidator.positiveInteger, message: '联系电话格式为自然数' },
             ]"

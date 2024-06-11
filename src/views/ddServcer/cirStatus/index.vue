@@ -333,6 +333,7 @@
         slots: {
           default: 'ipport',
         },
+        sortable: true,
       },
       {
         field: 'updateTime',

@@ -164,7 +164,7 @@
               max="999999999"
             />
           </a-form-item>
-          <a-form-item name="remark" label="备注">
+          <a-form-item name="remark" label="备注" :rules="[{ max: 250, message: '备注过长' }]">
             <a-textarea
               placeholder="请输入备注"
               :rows="3"
@@ -239,7 +239,7 @@
       },
       {
         field: 'remark',
-        title: '备注',
+        title: '备注信息',
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,

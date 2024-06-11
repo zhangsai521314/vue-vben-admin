@@ -37,5 +37,11 @@ const Gplot = {
       params,
     });
   },
+  //获取元素
+  GetGplotelements: function () {
+    return defHttp.get({
+      url: '/Gplot/GetGplotelements',
+    });
+  },
 };
 export default Gplot;

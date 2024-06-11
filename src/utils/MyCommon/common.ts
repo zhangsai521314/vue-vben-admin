@@ -110,10 +110,12 @@ const Common = {
   },
   //把父子级转换为不是父子级
   generateList(allList, treeList, chaildrenKey) {
-    for (let i = 0; i < treeList.length; i++) {
-      allList.push(treeList[i]);
-      if (treeList[i][chaildrenKey] && treeList[i][chaildrenKey].length > 0) {
-        this.generateList(allList, treeList[i].children, chaildrenKey);
+    if (treeList != null) {
+      for (let i = 0; i < treeList.length; i++) {
+        allList.push(treeList[i]);
+        if (treeList[i][chaildrenKey] && treeList[i][chaildrenKey].length > 0) {
+          this.generateList(allList, treeList[i].children, chaildrenKey);
+        }
       }
     }
   },

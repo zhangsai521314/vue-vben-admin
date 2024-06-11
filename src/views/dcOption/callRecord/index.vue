@@ -244,7 +244,7 @@
         sortable: true,
       },
       {
-        field: 'callState',
+        field: 'callStateDescription',
         title: '通话状态',
         visible: false,
         showOverflow: true,

@@ -344,7 +344,7 @@
   getIconSimple();
 
   function showFrom(type, row, pid = null) {
-    if (row.saveType == 2) {
+    if (row != null && row.menuType == 2) {
       message.info('拓扑图菜单不可编辑和新增');
       return;
     }

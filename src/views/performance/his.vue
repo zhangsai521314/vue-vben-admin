@@ -41,50 +41,46 @@
         </a-space>
       </AuthDom>
     </a-space>
-    <a-tabs
-      v-model:activeKey="activeKey"
-      type="card"
-      style="height: calc(100% - 48px)"
-      @change="tabsChange"
-      :class="`${prefixCls}tabs-content-bar`"
-    >
-      <a-tab-pane key="table" tab="表格查询">
-        <vxe-grid
-          id="performance_his_table"
-          v-bind="tableConfig"
-          ref="tableRef"
-          :loading="loading"
-          :row-config="{ keyField: 'keyId' }"
-          :column-config="{ resizable: true }"
-          :custom-config="{ storage: true }"
-          @sort-change="onSortChange"
-        >
-          <template #toolbar_buttons>
-            <div :class="`tableBtn`"> </div>
-          </template>
-          <template #pager>
-            <vxe-pager
-              background
-              v-model:current-page="page.current"
-              v-model:page-size="page.size"
-              :total="page.total"
-              @page-change="handlePageChange"
-            />
-          </template>
-        </vxe-grid>
-      </a-tab-pane>
-      <a-tab-pane key="echart" tab="历史曲线">
-        <div
-          v-show="dataSource.length > 0"
-          :class="prefixCls"
-          ref="chartRef"
-          style="height: 100%"
-        ></div>
-        <div style="height: 100%">
-          <div style="height: 30px; padding-top: 20%; text-align: center"> 暂无数据 </div>
-        </div>
-      </a-tab-pane>
-    </a-tabs>
+    <a-spin tip="加载中..." :spinning="loading">
+      <a-tabs
+        v-model:activeKey="activeKey"
+        type="card"
+        style="height: calc(100% - 48px)"
+        @change="tabsChange"
+        :class="`${prefixCls}tabs-content-bar`"
+      >
+        <a-tab-pane key="table" tab="表格查询">
+          <vxe-grid
+            id="performance_his_table"
+            v-bind="tableConfig"
+            ref="tableRef"
+            :row-config="{ keyField: 'keyId' }"
+            :column-config="{ resizable: true }"
+            :custom-config="{ storage: true }"
+            @sort-change="onSortChange"
+          >
+            <template #toolbar_buttons>
+              <div :class="`tableBtn`"> </div>
+            </template>
+            <template #pager>
+              <vxe-pager
+                background
+                v-model:current-page="page.current"
+                v-model:page-size="page.size"
+                :total="page.total"
+                @page-change="handlePageChange"
+              />
+            </template>
+          </vxe-grid>
+        </a-tab-pane>
+        <a-tab-pane key="echart" tab="历史曲线">
+          <div v-show="isDataSource" :class="prefixCls" ref="chartRef" style="height: 100%"></div>
+          <div style="height: 100%">
+            <div style="height: 30px; padding-top: 20%; text-align: center"> 暂无数据 </div>
+          </div>
+        </a-tab-pane>
+      </a-tabs>
+    </a-spin>
   </MyContent>
 </template>
 <script setup lang="ts">
@@ -101,11 +97,11 @@
   import { message, Modal } from 'ant-design-vue';
   import { useECharts } from '@/hooks/web/useECharts';
 
-  defineOptions({ name: 'DCOptionKeypadRecord' });
-  const { prefixCls } = useDesign('keypadRecord-');
+  defineOptions({ name: 'PerformanceHis' });
+  const { prefixCls } = useDesign('PerformanceHis-');
   const activeKey = ref('table');
   const loading = ref(false);
-  const dataSource = ref([]);
+  const isDataSource = ref(false);
   const chartRef = ref();
   let baseColumns = [];
   let baseColumnsChart = [];
@@ -263,13 +259,13 @@
         });
         delete m.diskList;
       });
-      dataSource.value = data.source;
-      tableConfig.data = dataSource.value;
+      isDataSource.value = true;
+      tableConfig.data = data.source;
       if (activeKey.value == 'echart') {
-        handleEchar();
+        handleEchar(data.source);
       }
     } else {
-      dataSource.value = [];
+      isDataSource.value = false;
       tableConfig.data = [];
       page.total = 0;
     }
@@ -284,9 +280,9 @@
     tableConfig.columns = baseColumns;
   }
 
-  function handleEchar() {
-    if (dataSource.value.length > 0) {
-      dataSource.value = _.sortBy(dataSource.value, (m) => m.dataTime);
+  function handleEchar(dataSource) {
+    if (dataSource.length > 0) {
+      dataSource = _.sortBy(dataSource, (m) => m.dataTime);
       const option = {
         backgroundColor: '#fff',
         tooltip: {
@@ -377,7 +373,7 @@
 
       baseColumnsChart.forEach((m) => {
         const data = option.series.find((n) => n.field == m);
-        dataSource.value.forEach((d) => {
+        dataSource.forEach((d) => {
           data.data.push([d.dataTime, d[m]]);
         });
       });
@@ -412,11 +408,15 @@
   }
 </script>
 <style lang="less" scoped>
-  @prefixCls: ~'@{namespace}-keypadRecord-';
+  @prefixCls: ~'@{namespace}-PerformanceHis-';
 
   .@{prefixCls} {
     .row-div {
       height: 30px;
+    }
+
+    :deep(.ant-spin-nested-loading) {
+      height: calc(100% - 30px);
     }
 
     .@{prefixCls}tabs-content-bar {
