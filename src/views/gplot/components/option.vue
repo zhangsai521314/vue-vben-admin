@@ -2,136 +2,111 @@
   <div :class="`${prefixCls}content-center`">
     <div :class="`${prefixCls}center-tool`">
       <div :class="`${prefixCls}tool-item`">
+        <div @click="props.graphObRef.groupGplot()"> 组合 </div>
+      </div>
+      <!-- <div :class="`${prefixCls}tool-item`">
         <div>
           <a-tooltip placement="top">
-            <template #title>撤销 Ctrl+Z</template>
-            <IconFontClass name="icon-iNeuOS-huotui" />
+            <template #title>后退 Ctrl+Z</template>
+            <IconFontClass name="icon-baseui-huotui" @click="gplotBack" />
           </a-tooltip>
         </div>
       </div>
       <div :class="`${prefixCls}tool-item`">
         <div>
           <a-tooltip placement="top">
-            <template #title>撤销 Ctrl+Y</template>
-            <IconFontClass name="icon-iNeuOS-huifu" />
+            <template #title>前进 Ctrl+Y</template>
+            <IconFontClass name="icon-baseui-huifu" @click="gplotAdvance" />
           </a-tooltip>
         </div>
-      </div>
+      </div> -->
       <!-- <div :class="`${prefixCls}tool-item`">
                 <div>
                     <a-tooltip placement="top">
                         <template #title>格式刷</template>
                         <IconFontClass
                             class="not-click"
-                            name="icon-iNeuOS-geshishua" />
+                            name="icon-baseui-geshishua" />
                     </a-tooltip>
                 </div>
             </div> -->
-      <div :class="`${prefixCls}tool-item`">
+      <!-- <div :class="`${prefixCls}tool-item`">
         <a-dropdown :class="`${prefixCls}menu-item`">
-          <IconFontClass name="icon-iNeuOS-zuoduiqi1" />
+          <IconFontClass name="icon-baseui-zuoduiqi1" />
           <template #overlay>
             <div style="padding: 10px; background-color: #fff">
               <IconFontClass
                 style="margin: 0 3px; font-size: 23px"
                 @click="selectedObSetConfig('alignment_top')"
-                name="icon-iNeuOS-shangduiqi"
+                name="icon-baseui-shangduiqi"
               />
               <IconFontClass
                 style="margin: 0 3px; font-size: 23px"
                 @click="selectedObSetConfig('alignment_bottom')"
-                name="icon-iNeuOS-xiaduiqi"
+                name="icon-baseui-xiaduiqi"
               />
               <IconFontClass
                 style="margin: 0 3px; font-size: 23px"
                 @click="selectedObSetConfig('alignment_left')"
-                name="icon-iNeuOS-zuoduiqi1"
+                name="icon-baseui-zuoduiqi1"
               />
               <IconFontClass
                 style="margin: 0 3px; font-size: 23px"
                 @click="selectedObSetConfig('alignment_right')"
-                name="icon-iNeuOS-youduiqi1"
+                name="icon-baseui-youduiqi1"
               />
               <IconFontClass
                 style="margin: 0 3px; font-size: 23px"
                 @click="selectedObSetConfig('alignment_horizontal')"
-                name="icon-iNeuOS-juzhongduiqi1"
+                name="icon-baseui-juzhongduiqi1"
               />
               <IconFontClass
                 style="margin: 0 3px; font-size: 23px"
                 @click="selectedObSetConfig('alignment_vertical')"
-                name="icon-iNeuOS-shuipingduiqi"
+                name="icon-baseui-shuipingduiqi"
               />
             </div>
           </template>
         </a-dropdown>
-      </div>
-      <div :class="`${prefixCls}tool-item`">
+      </div> -->
+      <!-- <div :class="`${prefixCls}tool-item`">
         <a-tooltip placement="top">
           <template #title>垂直翻转</template>
-          <IconFontClass @click="selectedObSetConfig('vertical')" name="icon-iNeuOS-vertical" />
+          <IconFontClass @click="selectedObSetConfig('vertical')" name="icon-baseui-vertical" />
         </a-tooltip>
       </div>
       <div :class="`${prefixCls}tool-item`">
         <a-tooltip placement="top">
           <template #title>水平翻转</template>
-          <IconFontClass @click="selectedObSetConfig('horizontal')" name="icon-iNeuOS-horizontal" />
+          <IconFontClass @click="selectedObSetConfig('horizontal')" name="icon-baseui-horizontal" />
         </a-tooltip>
       </div>
       <div :class="`${prefixCls}tool-item`">
         <a-tooltip placement="top">
           <template #title>置顶层</template>
-          <IconFontClass @click="levelOption('topLevel')" name="icon-iNeuOS-zhidingceng" />
+          <IconFontClass @click="levelOption('topLevel')" name="icon-baseui-zhidingceng" />
         </a-tooltip>
       </div>
       <div :class="`${prefixCls}tool-item`">
         <a-tooltip placement="top">
           <template #title>置底层</template>
-          <IconFontClass @click="levelOption('groundLevel')" name="icon-iNeuOS-zhidiceng" />
+          <IconFontClass @click="levelOption('groundLevel')" name="icon-baseui-zhidiceng" />
         </a-tooltip>
-      </div>
-      <div :class="`${prefixCls}tool-item`">
-        <a-tooltip placement="top">
-          <template #title>隐藏所有Dom</template>
-          <a-select
-            size="small"
-            style="width: 75px"
-            @change="(value) => showHideAll('dom', value)"
-            v-model:value="props.containerConfig.showAllDom"
-          >
-            <a-select-option :value="false">隐藏</a-select-option>
-            <a-select-option :value="true">显示</a-select-option>
-          </a-select>
-        </a-tooltip>
-      </div>
-      <div :class="`${prefixCls}tool-item`">
-        <a-tooltip placement="top">
-          <template #title>隐藏所有Canvas</template>
-          <a-select
-            size="small"
-            style="width: 75px"
-            @change="(value) => showHideAll('canvas', value)"
-            v-model:value="props.containerConfig.showAllCanvas"
-          >
-            <a-select-option :value="false">隐藏</a-select-option>
-            <a-select-option :value="true">显示</a-select-option>
-          </a-select>
-        </a-tooltip>
-      </div>
+      </div> -->
       <!-- <div :class="`${prefixCls}tool-item`">
                 <a-tooltip placement="top">
                     <template #title>锁定</template>
                     <IconFontClass
-                        name="icon-iNeuOS-suo1" />
+                        name="icon-baseui-suo1" />
                 </a-tooltip>
             </div> -->
     </div>
     <div :class="`${prefixCls}center-menu`">
       <div :class="`${prefixCls}menu-item`">
-        <div style="display: flex">
+        <!-- <div style="display: flex">
           <a-tooltip placement="top">
             <template #title>分享</template>
-            <IconFontClass @click="shareClick" isSvg="true" name="icon-iNeuOS-fenxiang" />
+            <IconFontClass @click="shareClick" isSvg="true" name="icon-baseui-fenxiang" />
           </a-tooltip>
           <div
             v-show="isShowShare"
@@ -162,19 +137,19 @@
               :width="280"
             />
           </div>
-        </div>
-        <div>
+        </div> -->
+        <!-- <div>
           <a-tooltip placement="top">
             <template #title>导出</template>
-            <IconFontClass @click="props.exportConfig" name="icon-iNeuOS-xiazai" />
+            <IconFontClass @click="props.exportConfig" name="icon-baseui-xiazai" />
           </a-tooltip>
-        </div>
+        </div> -->
         <div>
           <a-tooltip placement="top">
             <template #title>预览</template>
             <div style="float: right">
               <a-spin :spinning="isRunSavePreview">
-                <IconFontClass @click="previewClick" name="icon-iNeuOS-dapingzhanshi" />
+                <IconFontClass @click="previewClick" name="icon-baseui-dapingzhanshi" />
               </a-spin>
             </div>
           </a-tooltip>
@@ -199,11 +174,13 @@
   import { ref, watch } from 'vue';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { PlusOutlined } from '@ant-design/icons-vue';
+  import { useGplotStoreWithOut } from '@/store/modules/gplot';
 
+  const gplotStore = useGplotStoreWithOut();
   const props = defineProps({
-    //canvas对象
-    containerObArray: {
-      type: Array,
+    //拓扑对象
+    graphObRef: {
+      type: Object,
       default() {
         return null;
       },
@@ -311,7 +288,7 @@
     },
   });
 
-  const { prefixCls } = useDesign('modeling');
+  const { prefixCls } = useDesign('GplotManage');
   const previewInfo = ref({
     width: 600,
     height: 500,
@@ -354,7 +331,7 @@
 
   //层级设置
   function levelOption(runType) {
-    const containerOb = props.containerObArray.find(
+    const containerOb = props.graphObRef.find(
       (m) => m.canvasId == props.selectedOb.attribute.containerId,
     );
     if (containerOb) {
@@ -372,7 +349,7 @@
 
   //选中组件更改配置值
   function selectedObSetConfig(key, value, delay = false, way = 'equal') {
-    const containerOb = props.containerObArray.find(
+    const containerOb = props.graphObRef.find(
       (m) => m.canvasId == props.selectedOb.attribute.containerId,
     );
     if (delay) {
@@ -387,7 +364,7 @@
 
   //隐藏
   function showHideAll(type, type_) {
-    const containerOb = props.containerObArray.find(
+    const containerOb = props.graphObRef.find(
       (m) => m.canvasId == props.selectedOb.attribute.containerId,
     );
     containerOb.canvasOb.showHideAll(type, type_);
@@ -417,9 +394,30 @@
     myCommon.copyText(getShareUrl());
     message.success('链接复制成功');
   }
+
+  //前进
+  function gplotAdvance() {
+    if (gplotStore.renderSuccess) {
+      const history = gplotStore.gplotOb.getPluginInstance('history');
+      if (history.canRedo()) history.redo();
+    }
+  }
+
+  //后退
+  function gplotBack() {
+    if (gplotStore.renderSuccess) {
+      const history = gplotStore.gplotOb.getPluginInstance('history');
+      if (history.canUndo()) history.undo();
+    }
+  }
+
+  watch(
+    () => gplotStore.renderSuccess,
+    () => {},
+  );
 </script>
 <style lang="less" scoped>
-  @prefixCls: ~'@{namespace}-modeling';
+  @prefixCls: ~'@{namespace}-GplotManage';
 
   .@{prefixCls}center-tool {
     display: flex;

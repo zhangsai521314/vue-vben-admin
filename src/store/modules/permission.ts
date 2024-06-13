@@ -5,7 +5,7 @@ import { store } from '@/store';
 import { useI18n } from '@/hooks/web/useI18n';
 import { useUserStore } from './user';
 import { useAppStoreWithOut } from './app';
-import { toRaw } from 'vue';
+import { toRaw, unref } from 'vue';
 import { transformObjToRoute, flatMultiLevelRoutes } from '@/router/helper/routeHelper';
 import { transformRouteToMenu } from '@/router/helper/menuHelper';
 
@@ -270,12 +270,18 @@ export const usePermissionStore = defineStore({
     },
     //zs更改（添加）
     checkMenuPower(url, isShowMsg = true) {
-      url = decodeURIComponent(url).replace('/redirect/', '');
+      url = decodeURIComponent(unref(url)).replace('/redirect/', '');
       if (url.length >= 10 && url.substring(0, 10) == '/redirect/') {
         url = url.substring(10);
       }
       if (url.split('/').length > 0 && url.split('/')[url.split('/').length - 1] == 'path') {
         url = url.substring(0, url.lastIndexOf('/'));
+      }
+      if (
+        url.indexOf('/message/index') != -1 &&
+        url.substring(0, 14).toLowerCase() == '/message/index'
+      ) {
+        url = '/message/index';
       }
       const userStore = useUserStore();
       const userData = userStore.getUserInfo;

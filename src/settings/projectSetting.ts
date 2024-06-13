@@ -93,7 +93,7 @@ const setting: ProjectConfig = {
     //  是否固定住菜单
     fixed: true,
     // 菜单折叠
-    collapsed: true,
+    collapsed: false,
     //
     siderHidden: true,
     // 折叠菜单时候是否显示菜单名

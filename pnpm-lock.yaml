@@ -12,8 +12,8 @@ importers:
         specifier: ^7.0.1
         version: 7.0.1(vue@3.4.19)
       '@antv/g6':
-        specifier: 5.0.0-beta.28
-        version: 5.0.0-beta.28(workerize-loader@2.0.2)
+        specifier: 5.0.1
+        version: 5.0.1(workerize-loader@2.0.2)
       '@ckpack/vue-color':
         specifier: ^1.5.0
         version: 1.5.0(vue@3.4.19)
@@ -200,7 +200,7 @@ importers:
     devDependencies:
       '@commitlint/cli':
         specifier: ^18.6.1
-        version: 18.6.1(@types/node@20.14.1)(typescript@5.3.3)
+        version: 18.6.1(@types/node@20.14.2)(typescript@5.3.3)
       '@commitlint/config-conventional':
         specifier: ^18.6.2
         version: 18.6.2
@@ -293,7 +293,7 @@ importers:
         version: 2.0.0(typescript@5.3.3)
       vite:
         specifier: ^5.1.3
-        version: 5.1.3(@types/node@20.14.1)(less@4.2.0)(sass@1.71.0)
+        version: 5.1.3(@types/node@20.14.2)(less@4.2.0)(sass@1.71.0)
       vite-plugin-mock:
         specifier: ^2.9.6
         version: 2.9.8(mockjs@1.1.0)(vite@5.1.3)
@@ -384,7 +384,7 @@ importers:
         version: 2.29.1(@typescript-eslint/parser@7.0.1)(eslint@8.56.0)
       eslint-plugin-prettier:
         specifier: ^5.1.3
-        version: 5.1.3(eslint-config-prettier@9.1.0)(eslint@8.56.0)(prettier@3.3.0)
+        version: 5.1.3(eslint-config-prettier@9.1.0)(eslint@8.56.0)(prettier@3.3.1)
       eslint-plugin-simple-import-sort:
         specifier: ^12.0.0
         version: 12.0.0(eslint@8.56.0)
@@ -453,7 +453,7 @@ importers:
         version: 7.0.2
       vite:
         specifier: ^5.1.3
-        version: 5.1.3(@types/node@20.14.1)(less@4.2.0)(sass@1.71.0)
+        version: 5.1.3(@types/node@20.14.2)(less@4.2.0)(sass@1.71.0)
     devDependencies:
       '@types/fs-extra':
         specifier: ^11.0.4
@@ -499,7 +499,7 @@ importers:
         version: 0.5.1(vite@5.1.3)
       vite-plugin-dts:
         specifier: ^3.7.2
-        version: 3.7.2(@types/node@20.14.1)(rollup@3.29.4)(typescript@5.4.5)(vite@5.1.3)
+        version: 3.7.2(@types/node@20.14.2)(rollup@3.29.4)(typescript@5.4.5)(vite@5.1.3)
       vite-plugin-html:
         specifier: ^3.2.2
         version: 3.2.2(vite@5.1.3)
@@ -588,299 +588,167 @@ packages:
   /@antfu/utils@0.7.7:
     resolution: {integrity: sha512-gFPqTG7otEJ8uP6wrhDv6mqwGWYZKNvAcCq6u9hOj0c+IKCEsY4L1oC9trPq2SaWIzAfHvqfBDxF591JkMf+kg==}
 
-  /@antv/algorithm@0.1.26:
-    resolution: {integrity: sha512-DVhcFSQ8YQnMNW34Mk8BSsfc61iC1sAnmcfYoXTAshYHuU50p/6b7x3QYaGctDNKWGvi1ub7mPcSY0bK+aN0qg==, tarball: https://registry.npmmirror.com/@antv/algorithm/-/algorithm-0.1.26.tgz}
+  /@antv/component@2.0.1:
+    resolution: {integrity: sha512-VldsSv2O/JNjZYenFIzmtLeC+KD2RcpNARsCLKpi04Iz26joQ3uMtnwxM5W4bd/SCJYKp+eeQeMHMAbwaNR1pw==, tarball: https://registry.npmmirror.com/@antv/component/-/component-2.0.1.tgz}
     dependencies:
-      '@antv/util': 2.0.17
-      tslib: 2.6.3
-    dev: false
-
-  /@antv/dom-util@2.0.4:
-    resolution: {integrity: sha512-2shXUl504fKwt82T3GkuT4Uoc6p9qjCKnJ8gXGLSW4T1W37dqf9AV28aCfoVPHp2BUXpSsB+PAJX2rG/jLHsLQ==, tarball: https://registry.npmmirror.com/@antv/dom-util/-/dom-util-2.0.4.tgz}
-    dependencies:
-      tslib: 2.6.3
+      '@antv/g': 6.0.6
+      '@antv/scale': 0.4.16
+      '@antv/util': 3.3.7
+      svg-path-parser: 1.1.0
     dev: false
 
   /@antv/event-emitter@0.1.3:
     resolution: {integrity: sha512-4ddpsiHN9Pd4UIlWuKVK1C4IiZIdbwQvy9i7DUSI3xNJ89FPUFt8lxDYj8GzzfdllV0NkJTRxnG+FvLk0llidg==, tarball: https://registry.npmmirror.com/@antv/event-emitter/-/event-emitter-0.1.3.tgz}
     dev: false
 
-  /@antv/g-camera-api@1.2.25:
-    resolution: {integrity: sha512-h0ckza5y9YpMgj58VdMhKry0iEBTHVQtapM0XraLQr/XSr3GiP9WTSusjWaVLqN7WxtA94O1dd/AKOOqjDIrPA==, tarball: https://registry.npmmirror.com/@antv/g-camera-api/-/g-camera-api-1.2.25.tgz}
+  /@antv/g-camera-api@2.0.5:
+    resolution: {integrity: sha512-cU4eH5YGfdVM7XKAVcAXmVgkJMFJfhCFgSletNvYhzY1HTpBvcD9LIIP2TAomN+quAMuP0n48orUBr9S4iaOvw==, tarball: https://registry.npmmirror.com/@antv/g-camera-api/-/g-camera-api-2.0.5.tgz}
     dependencies:
-      '@antv/g-lite': 1.2.24
+      '@antv/g-lite': 2.0.5
       '@antv/util': 3.3.7
       gl-matrix: 3.4.3
       tslib: 2.6.3
     dev: false
 
-  /@antv/g-canvas@1.11.29:
-    resolution: {integrity: sha512-CEAAqMgGlqOY2pCXpD+peOfhcpdSCKt9HQpmxPN2crsoDHk7wD1yiYVSpc0+iX1S8SNCa9TrnjZX+oQyMkFY0A==, tarball: https://registry.npmmirror.com/@antv/g-canvas/-/g-canvas-1.11.29.tgz}
+  /@antv/g-canvas@2.0.7:
+    resolution: {integrity: sha512-tHa3Jq2B9EHDg8Icchxa+9z6TaTh4F0iVBqemj714XqPZfSf2cb+mr/AtqNsB25yCqosX31m8NsA+Ci18N2A1A==, tarball: https://registry.npmmirror.com/@antv/g-canvas/-/g-canvas-2.0.7.tgz}
     dependencies:
-      '@antv/g-lite': 1.2.24
-      '@antv/g-plugin-canvas-path-generator': 1.3.24
-      '@antv/g-plugin-canvas-picker': 1.10.26
-      '@antv/g-plugin-canvas-renderer': 1.9.26
-      '@antv/g-plugin-dom-interaction': 1.9.24
-      '@antv/g-plugin-html-renderer': 1.9.27
-      '@antv/g-plugin-image-loader': 1.3.24
+      '@antv/g-lite': 2.0.5
+      '@antv/g-plugin-canvas-path-generator': 2.0.5
+      '@antv/g-plugin-canvas-picker': 2.0.6
+      '@antv/g-plugin-canvas-renderer': 2.0.6
+      '@antv/g-plugin-dom-interaction': 2.0.5
+      '@antv/g-plugin-html-renderer': 2.0.6
+      '@antv/g-plugin-image-loader': 2.0.5
       '@antv/util': 3.3.7
       tslib: 2.6.3
     dev: false
 
-  /@antv/g-device-api@1.6.12:
-    resolution: {integrity: sha512-bOLA3MqvPFbTNNhrNyEpyYzAC8gHPioJHqKtPfAfdXBec+to2nciQoihGhRrosDwjAQLBLtVF+nc7zG2DnHgcg==, tarball: https://registry.npmmirror.com/@antv/g-device-api/-/g-device-api-1.6.12.tgz}
+  /@antv/g-dom-mutation-observer-api@2.0.5:
+    resolution: {integrity: sha512-0e86+x/2hcmt5SITzeZjSA8X2/j2Fms+FQX+Iuf7zSou/77kk3ZqUASlwDsf03MT2oGXAW7EcO2Xy8MqpUiseA==, tarball: https://registry.npmmirror.com/@antv/g-dom-mutation-observer-api/-/g-dom-mutation-observer-api-2.0.5.tgz}
     dependencies:
-      '@antv/util': 3.3.7
-      '@webgpu/types': 0.1.42
-      eventemitter3: 5.0.1
-      gl-matrix: 3.4.3
-      tslib: 2.6.3
+      '@antv/g-lite': 2.0.5
     dev: false
 
-  /@antv/g-dom-mutation-observer-api@1.2.24:
-    resolution: {integrity: sha512-TRfg6sI5ThdtxNBH/YXuNaO3bgV9tTbO4fcFZ3ZOWyEwH/PFFC2SIkxH/dk13sAj4ZC1ZIAmVktHnYbTvEeXsg==, tarball: https://registry.npmmirror.com/@antv/g-dom-mutation-observer-api/-/g-dom-mutation-observer-api-1.2.24.tgz}
+  /@antv/g-lite@2.0.5:
+    resolution: {integrity: sha512-IeD7L10MOofNg302Zrru09zjNczCyOAC6mFLjHQlkYCQRtcU04zn32pTxCDy7xRkLHlhAK1mlymBqzeRMkmrRg==, tarball: https://registry.npmmirror.com/@antv/g-lite/-/g-lite-2.0.5.tgz}
     dependencies:
-      '@antv/g-lite': 1.2.24
-    dev: false
-
-  /@antv/g-lite@1.2.24:
-    resolution: {integrity: sha512-7FfySdANOtn2zKq41gbRj30KJ0TpnWDfyvAENVQ6Hbfqmst3/LP14rKwBmFTavjl3POdruf/dh4w6JX2gR/rUA==, tarball: https://registry.npmmirror.com/@antv/g-lite/-/g-lite-1.2.24.tgz}
-    dependencies:
-      '@antv/g-math': 2.0.2
+      '@antv/g-math': 3.0.0
       '@antv/util': 3.3.7
-      d3-color: 1.4.1
+      d3-color: 3.1.0
       eventemitter3: 5.0.1
       gl-matrix: 3.4.3
       rbush: 3.0.1
       tslib: 2.6.3
     dev: false
 
-  /@antv/g-math@2.0.2:
-    resolution: {integrity: sha512-uqGU1C+70orjeSUoIzD3TuXjL5dRQCIyjZrBrTmm0FWd6VQJMWHyG5ypuZ2lMiI5MrRajVSE1w+3J4hiNBYSJg==, tarball: https://registry.npmmirror.com/@antv/g-math/-/g-math-2.0.2.tgz}
+  /@antv/g-math@3.0.0:
+    resolution: {integrity: sha512-AkmiNIEL1vgqTPeGY2wtsMdBBqKFwF7SKSgs+D1iOS/rqYMsXdhp/HvtuQ5tx/HdawE/ZzTiicIYopc520ADZw==, tarball: https://registry.npmmirror.com/@antv/g-math/-/g-math-3.0.0.tgz}
     dependencies:
       '@antv/util': 3.3.7
       gl-matrix: 3.4.3
       tslib: 2.6.3
     dev: false
 
-  /@antv/g-plugin-3d@1.9.36:
-    resolution: {integrity: sha512-cSnL87zZoTU5baeBuj6tl4CK9IkqXv230/MCERDBVr5034ciIFlSOGPriRDcDisw8AOBTpJAhawKog2WkYbQow==, tarball: https://registry.npmmirror.com/@antv/g-plugin-3d/-/g-plugin-3d-1.9.36.tgz}
+  /@antv/g-plugin-canvas-path-generator@2.0.5:
+    resolution: {integrity: sha512-O1TCCmrzJDWrA9BG2MfPb79zY23a2fOugygeAaj9CElc/rO5ZqZ4lO4NJe4UCHRInTTXJjGwPnIcmX24Gi6O/A==, tarball: https://registry.npmmirror.com/@antv/g-plugin-canvas-path-generator/-/g-plugin-canvas-path-generator-2.0.5.tgz}
     dependencies:
-      '@antv/g-device-api': 1.6.12
-      '@antv/g-lite': 1.2.24
-      '@antv/g-plugin-device-renderer': 1.9.36
-      '@antv/g-shader-components': 1.8.7
-      gl-matrix: 3.4.3
-      tslib: 2.6.3
-    dev: false
-
-  /@antv/g-plugin-canvas-path-generator@1.3.24:
-    resolution: {integrity: sha512-+85VyXQCdR/8uo3TEk95GyxT2tiyEmnPHtPETVTCVgzuSeN/NQzLgByse65VQSejJG7a5SXygOaTHOBLmqbWCA==, tarball: https://registry.npmmirror.com/@antv/g-plugin-canvas-path-generator/-/g-plugin-canvas-path-generator-1.3.24.tgz}
-    dependencies:
-      '@antv/g-lite': 1.2.24
-      '@antv/g-math': 2.0.2
+      '@antv/g-lite': 2.0.5
+      '@antv/g-math': 3.0.0
       '@antv/util': 3.3.7
       tslib: 2.6.3
     dev: false
 
-  /@antv/g-plugin-canvas-picker@1.10.26:
-    resolution: {integrity: sha512-xP71wHNuGknzI20B6Tk2qCsNsEb/DtpQTtIkBqsRiG+hT+IVBFp5yQ1KE+4dkZQ4/6UqQlKDLb1eIVm7I8fyWg==, tarball: https://registry.npmmirror.com/@antv/g-plugin-canvas-picker/-/g-plugin-canvas-picker-1.10.26.tgz}
+  /@antv/g-plugin-canvas-picker@2.0.6:
+    resolution: {integrity: sha512-QD9Z6YA29iJC36mQxd+qSX5tNlQZ41M4nGWY/iepKnOwAf9Rm+X4AgyIxKOrjg/rkRgUv2WR0Dp2eMfKUqm/Ng==, tarball: https://registry.npmmirror.com/@antv/g-plugin-canvas-picker/-/g-plugin-canvas-picker-2.0.6.tgz}
     dependencies:
-      '@antv/g-lite': 1.2.24
-      '@antv/g-math': 2.0.2
-      '@antv/g-plugin-canvas-path-generator': 1.3.24
-      '@antv/g-plugin-canvas-renderer': 1.9.26
+      '@antv/g-lite': 2.0.5
+      '@antv/g-math': 3.0.0
+      '@antv/g-plugin-canvas-path-generator': 2.0.5
+      '@antv/g-plugin-canvas-renderer': 2.0.6
       '@antv/util': 3.3.7
       gl-matrix: 3.4.3
       tslib: 2.6.3
     dev: false
 
-  /@antv/g-plugin-canvas-renderer@1.9.26:
-    resolution: {integrity: sha512-0rz1+7746MhQSJ/NJ7bbuxURv0A5/OvbM1SPXFh6w5geFJoU89uPK2dVG4IFz6x4kgcCkcjFdhXg7Oti3LOjNg==, tarball: https://registry.npmmirror.com/@antv/g-plugin-canvas-renderer/-/g-plugin-canvas-renderer-1.9.26.tgz}
+  /@antv/g-plugin-canvas-renderer@2.0.6:
+    resolution: {integrity: sha512-65uoJ2XJcUeGDYxnMxsGkdvaNNmEy79QEstr//as8hH+ssyUZJhBLgsDnhLqBQWYQGb7fXMPG0rUEesfjGOYkg==, tarball: https://registry.npmmirror.com/@antv/g-plugin-canvas-renderer/-/g-plugin-canvas-renderer-2.0.6.tgz}
     dependencies:
-      '@antv/g-lite': 1.2.24
-      '@antv/g-math': 2.0.2
-      '@antv/g-plugin-canvas-path-generator': 1.3.24
-      '@antv/g-plugin-image-loader': 1.3.24
+      '@antv/g-lite': 2.0.5
+      '@antv/g-math': 3.0.0
+      '@antv/g-plugin-canvas-path-generator': 2.0.5
+      '@antv/g-plugin-image-loader': 2.0.5
       '@antv/util': 3.3.7
       gl-matrix: 3.4.3
       tslib: 2.6.3
     dev: false
 
-  /@antv/g-plugin-control@1.9.24:
-    resolution: {integrity: sha512-FYb2O9M0OfIBuU6Fs+9vKMMplCXz+2qA4ZcIJvJAzXZVIjP958ohQ7bjm8r8fmP83WU511SOdVibemCvvTkP8g==, tarball: https://registry.npmmirror.com/@antv/g-plugin-control/-/g-plugin-control-1.9.24.tgz}
+  /@antv/g-plugin-dom-interaction@2.0.5:
+    resolution: {integrity: sha512-m4LeXM63d+MqQguCgmZU8TvvfuLlZ9zrtKWtRr6gYhi0+98o/3+pPrluIZhZHdgplH209+nN2JQ/ceoWp4OrZA==, tarball: https://registry.npmmirror.com/@antv/g-plugin-dom-interaction/-/g-plugin-dom-interaction-2.0.5.tgz}
     dependencies:
-      '@antv/g-lite': 1.2.24
-      hammerjs: 2.0.8
+      '@antv/g-lite': 2.0.5
       tslib: 2.6.3
     dev: false
 
-  /@antv/g-plugin-device-renderer@1.9.36:
-    resolution: {integrity: sha512-pWCO4FjkK2dm1ZTBSpYwfJ+kfv4lHtnlxlVYLqgvuBvK+VuxQOUyK1g1yuq022roXToUWdd2xHSGJj78vliSuw==, tarball: https://registry.npmmirror.com/@antv/g-plugin-device-renderer/-/g-plugin-device-renderer-1.9.36.tgz}
+  /@antv/g-plugin-dragndrop@2.0.5:
+    resolution: {integrity: sha512-Ow9BfL4w6er8OhJxilmU4FOQvFyEWSD6ScRWHBmXqY45/8zcMuhTWd2KcMAmxxPMNmtGch4WeJdPurb0beH8DQ==, tarball: https://registry.npmmirror.com/@antv/g-plugin-dragndrop/-/g-plugin-dragndrop-2.0.5.tgz}
     dependencies:
-      '@antv/g-device-api': 1.6.12
-      '@antv/g-lite': 1.2.24
-      '@antv/g-math': 2.0.2
-      '@antv/g-plugin-image-loader': 1.3.24
-      '@antv/g-shader-components': 1.8.7
-      '@antv/util': 3.3.7
-      '@webgpu/types': 0.1.42
-      earcut: 2.2.4
-      eventemitter3: 5.0.1
-      gl-matrix: 3.4.3
-      tslib: 2.6.3
-    dev: false
-
-  /@antv/g-plugin-dom-interaction@1.9.24:
-    resolution: {integrity: sha512-pBftZLmLCHvelUHCxZqYl1q2LGgVdwSI58Eek/XWjaZ4NV10TiJAJVBW83Iu4rKIlzMNLjF1QpY16WM01JbHJw==, tarball: https://registry.npmmirror.com/@antv/g-plugin-dom-interaction/-/g-plugin-dom-interaction-1.9.24.tgz}
-    dependencies:
-      '@antv/g-lite': 1.2.24
-      tslib: 2.6.3
-    dev: false
-
-  /@antv/g-plugin-dragndrop@1.8.24:
-    resolution: {integrity: sha512-muk2juDPnafWS6xYDVjQRnI+bOlG4k4jWOb8Fk6hKjDRxmXXiP1fz4lo8kn5QvsCKra9Gu08JlU7UNONFFBspQ==, tarball: https://registry.npmmirror.com/@antv/g-plugin-dragndrop/-/g-plugin-dragndrop-1.8.24.tgz}
-    dependencies:
-      '@antv/g-lite': 1.2.24
+      '@antv/g-lite': 2.0.5
       '@antv/util': 3.3.7
       tslib: 2.6.3
     dev: false
 
-  /@antv/g-plugin-html-renderer@1.9.27:
-    resolution: {integrity: sha512-sXdHH4qFlilAKmrdI5bIkP24uht7+d9Tej6GVuokFBu6KkGT89SROExHhssoybhcYY2KxTShEsaXF+yO6pBbeQ==, tarball: https://registry.npmmirror.com/@antv/g-plugin-html-renderer/-/g-plugin-html-renderer-1.9.27.tgz}
+  /@antv/g-plugin-html-renderer@2.0.6:
+    resolution: {integrity: sha512-dk0GHksBeuZlHFK/ARr6WRXQLuBQtsl7lboYQWXUVTlk+lIFq1n459hpukKokah89bRvnSAuqMVlBqEsyjn+nw==, tarball: https://registry.npmmirror.com/@antv/g-plugin-html-renderer/-/g-plugin-html-renderer-2.0.6.tgz}
     dependencies:
-      '@antv/g-lite': 1.2.24
+      '@antv/g-lite': 2.0.5
       '@antv/util': 3.3.7
       gl-matrix: 3.4.3
       tslib: 2.6.3
     dev: false
 
-  /@antv/g-plugin-image-loader@1.3.24:
-    resolution: {integrity: sha512-M0grJ/GiYxUsBexakQCL7Wr1Uyg8BTdzmjgjDNKPzcF7tb5DrSVisZAy5jE+eRIE4ZqWylg0IUdJq/RFeds9jQ==, tarball: https://registry.npmmirror.com/@antv/g-plugin-image-loader/-/g-plugin-image-loader-1.3.24.tgz}
+  /@antv/g-plugin-image-loader@2.0.5:
+    resolution: {integrity: sha512-TMpwOW4KibMtKOZZVMZHny+LOrWGjl1GP+i3N8sQx97oDaxIoNIB789XriuovKU/S71Y77ZTrqQdldknwWY24A==, tarball: https://registry.npmmirror.com/@antv/g-plugin-image-loader/-/g-plugin-image-loader-2.0.5.tgz}
     dependencies:
-      '@antv/g-lite': 1.2.24
+      '@antv/g-lite': 2.0.5
       '@antv/util': 3.3.7
       gl-matrix: 3.4.3
       tslib: 2.6.3
     dev: false
 
-  /@antv/g-plugin-svg-picker@1.9.28:
-    resolution: {integrity: sha512-nr+UW48r4VTNJtuhqtNUw/I/RGIzqHclDKVdcJuvygqNoTEKSSSeErnSVEWnKC/69IpOp8hZDa07WqPZPUC0Vg==, tarball: https://registry.npmmirror.com/@antv/g-plugin-svg-picker/-/g-plugin-svg-picker-1.9.28.tgz}
+  /@antv/g-web-animations-api@2.0.6:
+    resolution: {integrity: sha512-sDNkG0umxAgks14sCgumg9PoLkHXszS+T4RGMgFtlRYuXgM4OBZB3EYTa99www5Z4TaUM+Y/rvECn3FKv8Zo4Q==, tarball: https://registry.npmmirror.com/@antv/g-web-animations-api/-/g-web-animations-api-2.0.6.tgz}
     dependencies:
-      '@antv/g-lite': 1.2.24
-      '@antv/g-plugin-svg-renderer': 1.10.28
-      tslib: 2.6.3
-    dev: false
-
-  /@antv/g-plugin-svg-renderer@1.10.28:
-    resolution: {integrity: sha512-9W3yXsxE+73sWGORCINIeT88xu9Gh5LZh49RdFLxC6kvhJNA5c4zHUoduTSFecMGpCgG4U/GaABCxgwk9osFbg==, tarball: https://registry.npmmirror.com/@antv/g-plugin-svg-renderer/-/g-plugin-svg-renderer-1.10.28.tgz}
-    dependencies:
-      '@antv/g-lite': 1.2.24
-      '@antv/util': 3.3.7
-      gl-matrix: 3.4.3
-      tslib: 2.6.3
-    dev: false
-
-  /@antv/g-shader-components@1.8.7:
-    resolution: {integrity: sha512-RzU2FxGoN0hS5r3SYNY9Yt4AhgNGGto+rMJLSv7HOBMcg1a85jLCUEbYHxhCX3akgJ5NSC6DX+zX1QLq0/AXYw==, tarball: https://registry.npmmirror.com/@antv/g-shader-components/-/g-shader-components-1.8.7.tgz}
-    dev: false
-
-  /@antv/g-svg@1.10.28:
-    resolution: {integrity: sha512-ImvnG7FoRj6kbaclCU0rG8uIydRNpnSInBuxANTL50PTx91GqA/Q4KNuqqC74i7I0iJfZRhA8kwVASS2mfdtBg==, tarball: https://registry.npmmirror.com/@antv/g-svg/-/g-svg-1.10.28.tgz}
-    dependencies:
-      '@antv/g-lite': 1.2.24
-      '@antv/g-plugin-dom-interaction': 1.9.24
-      '@antv/g-plugin-svg-picker': 1.9.28
-      '@antv/g-plugin-svg-renderer': 1.10.28
+      '@antv/g-lite': 2.0.5
       '@antv/util': 3.3.7
       tslib: 2.6.3
     dev: false
 
-  /@antv/g-web-animations-api@1.2.25:
-    resolution: {integrity: sha512-N6PA59OwjMxxL5axoOZeYdWNxmqErBvnjEiOWKq7xUqjaoyzz7/jRBBg5CtJ+IA+NNIRHOnMMEPPl4p8YCljRg==, tarball: https://registry.npmmirror.com/@antv/g-web-animations-api/-/g-web-animations-api-1.2.25.tgz}
+  /@antv/g6@5.0.1(workerize-loader@2.0.2):
+    resolution: {integrity: sha512-++j83+ytG+WWTaOAovqZVB/qt6ADOTT221uezdPqwLu0oduXJLY4uGyp+q3uILQidGa3QlPAuIQfhEpG+N0WWw==, tarball: https://registry.npmmirror.com/@antv/g6/-/g6-5.0.1.tgz}
     dependencies:
-      '@antv/g-lite': 1.2.24
-      '@antv/util': 3.3.7
-      tslib: 2.6.3
-    dev: false
-
-  /@antv/g-webgl@1.9.39:
-    resolution: {integrity: sha512-DnOtichateWslBSSP631KeY3QrTGcyfUB4XKVFMksXVIHz7pVXJrLOA3Ynd1EeAWQH9GroA7q0GKvH2jpkrIFw==, tarball: https://registry.npmmirror.com/@antv/g-webgl/-/g-webgl-1.9.39.tgz}
-    dependencies:
-      '@antv/g-device-api': 1.6.12
-      '@antv/g-lite': 1.2.24
-      '@antv/g-plugin-device-renderer': 1.9.36
-      '@antv/g-plugin-dom-interaction': 1.9.24
-      '@antv/g-plugin-html-renderer': 1.9.27
-      '@antv/g-plugin-image-loader': 1.3.24
-      '@antv/util': 3.3.7
-      tslib: 2.6.3
-    dev: false
-
-  /@antv/g-webgpu-core@0.7.2:
-    resolution: {integrity: sha512-xUMmop7f3Rs34zFYKXLqHhDR1CQTeDl/7vI7Sn3X/73BqJc3X3HIIRvm83Fg2CjVACaOzw4WeLRXNaOCp9fz9w==, tarball: https://registry.npmmirror.com/@antv/g-webgpu-core/-/g-webgpu-core-0.7.2.tgz}
-    dependencies:
-      eventemitter3: 4.0.7
-      gl-matrix: 3.4.3
-      lodash: 4.17.21
-      probe.gl: 3.6.0
-    dev: false
-
-  /@antv/g-webgpu-engine@0.7.2:
-    resolution: {integrity: sha512-lx8Y93IW2cnJvdoDRKyMmTdYqSC1pOmF0nyG3PGGyA0NI9vBYVgO0KTF6hkyWjdTWVq7XDZyf/h8CJridLh3lg==, tarball: https://registry.npmmirror.com/@antv/g-webgpu-engine/-/g-webgpu-engine-0.7.2.tgz}
-    dependencies:
-      '@antv/g-webgpu-core': 0.7.2
-      gl-matrix: 3.4.3
-      lodash: 4.17.21
-      regl: 1.7.0
-    dev: false
-
-  /@antv/g-webgpu@0.7.2:
-    resolution: {integrity: sha512-kw+oYGsdvj5qeUfy5DPb/jztZBV+2fmqBd3Vv8NlKatfBmv8AirYX/CCW74AUSdWm99rEiLyxFB1VdRZ6b/wnQ==, tarball: https://registry.npmmirror.com/@antv/g-webgpu/-/g-webgpu-0.7.2.tgz}
-    dependencies:
-      '@antv/g-webgpu-core': 0.7.2
-      '@antv/g-webgpu-engine': 0.7.2
-      gl-matrix: 3.4.3
-      gl-vec2: 1.3.0
-      lodash: 4.17.21
-    dev: false
-
-  /@antv/g6@5.0.0-beta.28(workerize-loader@2.0.2):
-    resolution: {integrity: sha512-ioY6hStGL/evKfAU9f7j+FDPo22ffM2RBYy6uZYHdCk006jvBG+VYKcltbaX/ousx4M9qhaVrIo7m6D+2owDww==, tarball: https://registry.npmmirror.com/@antv/g6/-/g6-5.0.0-beta.28.tgz}
-    dependencies:
-      '@ant-design/colors': 7.0.2
-      '@antv/algorithm': 0.1.26
+      '@antv/component': 2.0.1
       '@antv/event-emitter': 0.1.3
-      '@antv/g': 5.18.27
-      '@antv/g-canvas': 1.11.29
-      '@antv/g-plugin-3d': 1.9.36
-      '@antv/g-plugin-control': 1.9.24
-      '@antv/g-plugin-dragndrop': 1.8.24
-      '@antv/g-svg': 1.10.28
-      '@antv/g-webgl': 1.9.39
+      '@antv/g': 6.0.6
+      '@antv/g-canvas': 2.0.7
+      '@antv/g-plugin-dragndrop': 2.0.5
       '@antv/graphlib': 2.0.2
-      '@antv/gui': 0.5.1-alpha.1(@antv/g@5.18.27)
       '@antv/hierarchy': 0.6.12
-      '@antv/layout': 1.2.13(workerize-loader@2.0.2)
-      '@antv/layout-gpu': 1.1.5(workerize-loader@2.0.2)
-      '@antv/layout-wasm': 1.3.1
+      '@antv/layout': 1.2.14-beta.4(workerize-loader@2.0.2)
       '@antv/util': 3.3.7
-      color: 4.2.3
-      gl-matrix: 3.4.3
-      insert-css: 2.0.0
-      tslib: 2.6.3
+      bubblesets-js: 2.3.3
+      hull.js: 1.0.6
     transitivePeerDependencies:
       - workerize-loader
     dev: false
 
-  /@antv/g@5.18.27:
-    resolution: {integrity: sha512-SgJ3l7kNfJp0df7g8UItuNk5K7ctzik4z4ZmrXvz9f4cD/s7zfpvRWcIIyBaJQtJCaXtKVqP4wapeqhL7c95zQ==, tarball: https://registry.npmmirror.com/@antv/g/-/g-5.18.27.tgz}
+  /@antv/g@6.0.6:
+    resolution: {integrity: sha512-LWXhBcgjYC/bcLVtNOwrToPosNVsL4ZErj5QexqXDMhqKg2fHMICeJt+1qV2+0bv1sM/vMfeTDRizRxg4OJ3zg==, tarball: https://registry.npmmirror.com/@antv/g/-/g-6.0.6.tgz}
     dependencies:
-      '@antv/g-camera-api': 1.2.25
-      '@antv/g-dom-mutation-observer-api': 1.2.24
-      '@antv/g-lite': 1.2.24
-      '@antv/g-web-animations-api': 1.2.25
+      '@antv/g-camera-api': 2.0.5
+      '@antv/g-dom-mutation-observer-api': 2.0.5
+      '@antv/g-lite': 2.0.5
+      '@antv/g-web-animations-api': 2.0.6
     dev: false
 
   /@antv/graphlib@2.0.2:
@@ -889,59 +757,12 @@ packages:
       '@antv/event-emitter': 0.1.3
     dev: false
 
-  /@antv/gui@0.5.1-alpha.1(@antv/g@5.18.27):
-    resolution: {integrity: sha512-t3IvpnMIgGrUvw9/DHpZmQ+jqBwhD1YtOj6eusEbiJlZMubSX3UgpuFiSbZWCxIqgCUANSibsD1L6s8/1bfH/g==, tarball: https://registry.npmmirror.com/@antv/gui/-/gui-0.5.1-alpha.1.tgz}
-    peerDependencies:
-      '@antv/g': ^5.14.1
-    dependencies:
-      '@antv/dom-util': 2.0.4
-      '@antv/g': 5.18.27
-      '@antv/scale': 0.4.16
-      '@antv/util': 3.3.7
-      svg-path-parser: 1.1.0
-    dev: false
-
   /@antv/hierarchy@0.6.12:
     resolution: {integrity: sha512-WvWT9WYtm2SvYunm1HtzrHazvOozeP4cPFDhJWsnLzmTGMX/tNhsoCD3O+DDB3aeDY8fyM+wfZDvLv7+/4lIeA==, tarball: https://registry.npmmirror.com/@antv/hierarchy/-/hierarchy-0.6.12.tgz}
     dev: false
 
-  /@antv/layout-gpu@1.1.5(workerize-loader@2.0.2):
-    resolution: {integrity: sha512-VA1X4XODgeFrJbhld37dWqPCVnKLEdlu3Hb7BMDh1XZRLg9rxHSu3gthFGJpnRR1iOPTZ1DuvzpzEUyfYKhpFQ==, tarball: https://registry.npmmirror.com/@antv/layout-gpu/-/layout-gpu-1.1.5.tgz}
-    dependencies:
-      '@antv/g-webgpu': 0.7.2
-      '@antv/layout': 1.2.4(workerize-loader@2.0.2)
-      '@antv/util': 3.3.7
-      tslib: 2.6.3
-    transitivePeerDependencies:
-      - workerize-loader
-    dev: false
-
-  /@antv/layout-wasm@1.3.1:
-    resolution: {integrity: sha512-79TAeBg8h/pyCFgdf+wuJ0oyrvIh82CvO6FiGJ0ekWF2eNueXodBscB5A8GvQStSlKTlBS2SvWzAmnhltpVoEw==, tarball: https://registry.npmmirror.com/@antv/layout-wasm/-/layout-wasm-1.3.1.tgz}
-    dependencies:
-      '@antv/layout': 1.2.1
-      '@antv/util': 3.3.7
-      comlink: 4.4.1
-      tslib: 2.6.3
-      wasm-feature-detect: 1.6.1
-    dev: false
-
-  /@antv/layout@1.2.1:
-    resolution: {integrity: sha512-hygGh1Fa2SbxMbR/Lku+TKsiSmdf8zvHS3+/txJ+powrXadtlrefV/oCZR4h0zvmQyMnl9txlIo1F8EYlGC8Dw==, tarball: https://registry.npmmirror.com/@antv/layout/-/layout-1.2.1.tgz}
-    dependencies:
-      '@antv/graphlib': 2.0.2
-      '@antv/util': 3.3.7
-      comlink: 4.4.1
-      d3-force: 3.0.0
-      d3-octree: 1.0.2
-      d3-quadtree: 3.0.1
-      eventemitter3: 4.0.7
-      ml-matrix: 6.11.0
-      tslib: 2.6.3
-    dev: false
-
-  /@antv/layout@1.2.13(workerize-loader@2.0.2):
-    resolution: {integrity: sha512-yoGeA+R/Sk2Z6dVzmGY80tLx4rPqPcZJHIQr6sNejP1KsGZXjIry/NZMTxXRWmQ+XIfE5VIhiCo5P+y7LVxvxA==, tarball: https://registry.npmmirror.com/@antv/layout/-/layout-1.2.13.tgz}
+  /@antv/layout@1.2.14-beta.4(workerize-loader@2.0.2):
+    resolution: {integrity: sha512-XrzjLHTRqafyfDk6aDJFuHDsKlO02+6lfwrFiEOyLaNtSMMv1CGG0sKN5EEhiFV3qz4ebriKenThbTqFf9v38Q==, tarball: https://registry.npmmirror.com/@antv/layout/-/layout-1.2.14-beta.4.tgz}
     dependencies:
       '@antv/event-emitter': 0.1.3
       '@antv/graphlib': 2.0.2
@@ -949,26 +770,11 @@ packages:
       '@naoak/workerize-transferable': 0.1.0(workerize-loader@2.0.2)
       comlink: 4.4.1
       d3-force: 3.0.0
+      d3-force-3d: 3.0.5
       d3-octree: 1.0.2
       d3-quadtree: 3.0.1
-      ml-matrix: 6.11.0
-      tslib: 2.6.3
-    transitivePeerDependencies:
-      - workerize-loader
-    dev: false
-
-  /@antv/layout@1.2.4(workerize-loader@2.0.2):
-    resolution: {integrity: sha512-reMxcNUnpl1MAx1Lo9cZXiZntIzjuTzcMgF3L+udeWekjJw8kIbqSbgJDHaDZtxquZiFN7jjKewNq3t+Q6XlJA==, tarball: https://registry.npmmirror.com/@antv/layout/-/layout-1.2.4.tgz}
-    dependencies:
-      '@antv/event-emitter': 0.1.3
-      '@antv/graphlib': 2.0.2
-      '@antv/util': 3.3.7
-      '@naoak/workerize-transferable': 0.1.0(workerize-loader@2.0.2)
-      comlink: 4.4.1
-      d3-force: 3.0.0
-      d3-octree: 1.0.2
-      d3-quadtree: 3.0.1
-      ml-matrix: 6.11.0
+      dagre: 0.8.5
+      ml-matrix: 6.11.1
       tslib: 2.6.3
     transitivePeerDependencies:
       - workerize-loader
@@ -982,13 +788,6 @@ packages:
       fecha: 4.2.3
     dev: false
 
-  /@antv/util@2.0.17:
-    resolution: {integrity: sha512-o6I9hi5CIUvLGDhth0RxNSFDRwXeywmt6ExR4+RmVAzIi48ps6HUy+svxOCayvrPBN37uE6TAc2KDofRo0nK9Q==, tarball: https://registry.npmmirror.com/@antv/util/-/util-2.0.17.tgz}
-    dependencies:
-      csstype: 3.1.3
-      tslib: 2.6.3
-    dev: false
-
   /@antv/util@3.3.7:
     resolution: {integrity: sha512-qqPg7rIPCsJyl7N56jAC25v/99mJ3ApVkgBsGijhiWrEeKvzXBPk1r5P77Pm9nCljpnn+hH8Z3t5AivbEoTJMg==, tarball: https://registry.npmmirror.com/@antv/util/-/util-3.3.7.tgz}
     dependencies:
@@ -997,11 +796,11 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@babel/code-frame@7.24.6:
-    resolution: {integrity: sha512-ZJhac6FkEd1yhG2AHOmfcXG4ceoLltoCVJjN5XsWN9BifBQr+cHJbWi0h68HZuSORq+3WtJ2z0hwF2NG1b5kcA==, tarball: https://registry.npmmirror.com/@babel/code-frame/-/code-frame-7.24.6.tgz}
+  /@babel/code-frame@7.24.7:
+    resolution: {integrity: sha512-BcYH1CVJBO9tvyIZ2jVeXgSIMvGZ2FDRvDdOIVQyuklNKSsx+eppDEBq/g47Ayw+RqNFE+URvOShmf+f/qwAlA==, tarball: https://registry.npmmirror.com/@babel/code-frame/-/code-frame-7.24.7.tgz}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/highlight': 7.24.6
+      '@babel/highlight': 7.24.7
       picocolors: 1.0.0
 
   /@babel/compat-data@7.23.5:
@@ -1013,7 +812,7 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@ampproject/remapping': 2.2.1
-      '@babel/code-frame': 7.24.6
+      '@babel/code-frame': 7.24.7
       '@babel/generator': 7.23.6
       '@babel/helper-compilation-targets': 7.23.6
       '@babel/helper-module-transforms': 7.23.3(@babel/core@7.23.9)
@@ -1112,7 +911,7 @@ packages:
       '@babel/helper-module-imports': 7.22.15
       '@babel/helper-simple-access': 7.22.5
       '@babel/helper-split-export-declaration': 7.22.6
-      '@babel/helper-validator-identifier': 7.24.6
+      '@babel/helper-validator-identifier': 7.24.7
 
   /@babel/helper-optimise-call-expression@7.22.5:
     resolution: {integrity: sha512-HBwaojN0xFRx4yIvpwGqxiV2tUfl7401jlok564NgB9EHS1y6QT17FmKWm4ztqjeVdXLuC4fSvHc5ePpQjoTbw==}
@@ -1157,8 +956,8 @@ packages:
     resolution: {integrity: sha512-803gmbQdqwdf4olxrX4AJyFBV/RTr3rSmOj0rKwesmzlfhYNDEs+/iOcznzpNWlJlIlTJC2QfPFcHB6DlzdVLQ==}
     engines: {node: '>=6.9.0'}
 
-  /@babel/helper-string-parser@7.24.6:
-    resolution: {integrity: sha512-WdJjwMEkmBicq5T9fm/cHND3+UlFa2Yj8ALLgmoSQAJZysYbBjw+azChSGPN4DSPLXOcooGRvDwZWMcF/mLO2Q==, tarball: https://registry.npmmirror.com/@babel/helper-string-parser/-/helper-string-parser-7.24.6.tgz}
+  /@babel/helper-string-parser@7.24.7:
+    resolution: {integrity: sha512-7MbVt6xrwFQbunH2DNQsAP5sTGxfqQtErvBIvIMi6EQnbgUOuVYanvREcmFrOPhoXBrTtjhhP+lW+o5UfK+tDg==, tarball: https://registry.npmmirror.com/@babel/helper-string-parser/-/helper-string-parser-7.24.7.tgz}
     engines: {node: '>=6.9.0'}
     dev: true
 
@@ -1166,8 +965,8 @@ packages:
     resolution: {integrity: sha512-3q93SSKX2TWCG30M2G2kwaKeTYgEUp5Snjuj8qm729SObL6nbtUldAi37qbxkD5gg3xnBio+f9nqpSepGZMvxA==, tarball: https://registry.npmmirror.com/@babel/helper-validator-identifier/-/helper-validator-identifier-7.24.5.tgz}
     engines: {node: '>=6.9.0'}
 
-  /@babel/helper-validator-identifier@7.24.6:
-    resolution: {integrity: sha512-4yA7s865JHaqUdRbnaxarZREuPTHrjpDT+pXoAZ1yhyo6uFnIEpS8VMu16siFOHDpZNKYv5BObhsB//ycbICyw==, tarball: https://registry.npmmirror.com/@babel/helper-validator-identifier/-/helper-validator-identifier-7.24.6.tgz}
+  /@babel/helper-validator-identifier@7.24.7:
+    resolution: {integrity: sha512-rR+PBcQ1SMQDDyF6X0wxtG8QyLCgUB0eRAGguqRLfkCA87l7yAP7ehq8SNj96OOGTO8OBV70KhuFYcIkHXOg0w==, tarball: https://registry.npmmirror.com/@babel/helper-validator-identifier/-/helper-validator-identifier-7.24.7.tgz}
     engines: {node: '>=6.9.0'}
 
   /@babel/helper-validator-option@7.23.5:
@@ -1184,11 +983,11 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@babel/highlight@7.24.6:
-    resolution: {integrity: sha512-2YnuOp4HAk2BsBrJJvYCbItHx0zWscI1C3zgWkz+wDyD9I7GIVrfnLyrR4Y1VR+7p+chAEcrgRQYZAGIKMV7vQ==, tarball: https://registry.npmmirror.com/@babel/highlight/-/highlight-7.24.6.tgz}
+  /@babel/highlight@7.24.7:
+    resolution: {integrity: sha512-EStJpq4OuY8xYfhGVXngigBJRWxftKX9ksiGDnmlY3o7B/V7KIAc9X4oiK87uPJSc/vs5L869bem5fhZa8caZw==, tarball: https://registry.npmmirror.com/@babel/highlight/-/highlight-7.24.7.tgz}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/helper-validator-identifier': 7.24.6
+      '@babel/helper-validator-identifier': 7.24.7
       chalk: 2.4.2
       js-tokens: 4.0.0
       picocolors: 1.0.0
@@ -1200,12 +999,12 @@ packages:
     dependencies:
       '@babel/types': 7.23.9
 
-  /@babel/parser@7.24.6:
-    resolution: {integrity: sha512-eNZXdfU35nJC2h24RznROuOpO94h6x8sg9ju0tT9biNtLZ2vuP8SduLqqV+/8+cebSLV9SJEAN5Z3zQbJG/M+Q==, tarball: https://registry.npmmirror.com/@babel/parser/-/parser-7.24.6.tgz}
+  /@babel/parser@7.24.7:
+    resolution: {integrity: sha512-9uUYRm6OqQrCqQdG1iCBwBPZgN8ciDBro2nIOFaiRz1/BCxaI7CNvQbDHvsArAC7Tw9Hda/B3U+6ui9u4HWXPw==, tarball: https://registry.npmmirror.com/@babel/parser/-/parser-7.24.7.tgz}
     engines: {node: '>=6.0.0'}
     hasBin: true
     dependencies:
-      '@babel/types': 7.24.6
+      '@babel/types': 7.24.7
     dev: true
 
   /@babel/plugin-syntax-async-generators@7.8.4(@babel/core@7.23.9):
@@ -1377,13 +1176,6 @@ packages:
     dependencies:
       regenerator-runtime: 0.14.1
 
-  /@babel/runtime@7.24.6:
-    resolution: {integrity: sha512-Ja18XcETdEl5mzzACGd+DKgaGJzPTCow7EglgwTmHdwokzDFYh/MHua6lU6DV/hjF2IaOJ4oX2nqnjG7RElKOw==, tarball: https://registry.npmmirror.com/@babel/runtime/-/runtime-7.24.6.tgz}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      regenerator-runtime: 0.14.1
-    dev: false
-
   /@babel/standalone@7.23.10:
     resolution: {integrity: sha512-xqWviI/pt1Zb/d+6ilWa5IDL2mkDzsBnlHbreqnfyP3/QB/ofQ1bNVcHj8YQX154Rf/xZKR6y0s1ydVF3nAS8g==}
     engines: {node: '>=6.9.0'}
@@ -1393,7 +1185,7 @@ packages:
     resolution: {integrity: sha512-+xrD2BWLpvHKNmX2QbpdpsBaWnRxahMwJjO+KZk2JOElj5nSmKezyS1B4u+QbHMTX69t4ukm6hh9lsYQ7GHCKA==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/code-frame': 7.24.6
+      '@babel/code-frame': 7.24.7
       '@babel/parser': 7.23.9
       '@babel/types': 7.23.9
 
@@ -1401,7 +1193,7 @@ packages:
     resolution: {integrity: sha512-I/4UJ9vs90OkBtY6iiiTORVMyIhJ4kAVmsKo9KFc8UOxMeUfi2hvtIBsET5u9GizXE6/GFSuKCTNfgCswuEjRg==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/code-frame': 7.24.6
+      '@babel/code-frame': 7.24.7
       '@babel/generator': 7.23.6
       '@babel/helper-environment-visitor': 7.22.20
       '@babel/helper-function-name': 7.23.0
@@ -1422,12 +1214,12 @@ packages:
       '@babel/helper-validator-identifier': 7.24.5
       to-fast-properties: 2.0.0
 
-  /@babel/types@7.24.6:
-    resolution: {integrity: sha512-WaMsgi6Q8zMgMth93GvWPXkhAIEobfsIkLTacoVZoK1J0CevIPGYY2Vo5YvJGqyHqXM6P4ppOYGsIRU8MM9pFQ==, tarball: https://registry.npmmirror.com/@babel/types/-/types-7.24.6.tgz}
+  /@babel/types@7.24.7:
+    resolution: {integrity: sha512-XEFXSlxiG5td2EJRe8vOmRbaXVgfcBlszKujvVmWIK/UpywWljQCfzAv3RQCGujWQ1RD4YYWEAqDXfuJiy8f5Q==, tarball: https://registry.npmmirror.com/@babel/types/-/types-7.24.7.tgz}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/helper-string-parser': 7.24.6
-      '@babel/helper-validator-identifier': 7.24.6
+      '@babel/helper-string-parser': 7.24.7
+      '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
     dev: true
 
@@ -1547,14 +1339,14 @@ packages:
       w3c-keyname: 2.2.8
     dev: false
 
-  /@commitlint/cli@18.6.1(@types/node@20.14.1)(typescript@5.3.3):
+  /@commitlint/cli@18.6.1(@types/node@20.14.2)(typescript@5.3.3):
     resolution: {integrity: sha512-5IDE0a+lWGdkOvKH892HHAZgbAjcj1mT5QrfA/SVbLJV/BbBMGyKN0W5mhgjekPJJwEQdVNvhl9PwUacY58Usw==}
     engines: {node: '>=v18'}
     hasBin: true
     dependencies:
       '@commitlint/format': 18.6.1
       '@commitlint/lint': 18.6.1
-      '@commitlint/load': 18.6.1(@types/node@20.14.1)(typescript@5.3.3)
+      '@commitlint/load': 18.6.1(@types/node@20.14.2)(typescript@5.3.3)
       '@commitlint/read': 18.6.1
       '@commitlint/types': 18.6.1
       execa: 5.1.1
@@ -1626,7 +1418,7 @@ packages:
       '@commitlint/types': 18.6.1
     dev: true
 
-  /@commitlint/load@18.6.1(@types/node@20.14.1)(typescript@5.3.3):
+  /@commitlint/load@18.6.1(@types/node@20.14.2)(typescript@5.3.3):
     resolution: {integrity: sha512-p26x8734tSXUHoAw0ERIiHyW4RaI4Bj99D8YgUlVV9SedLf8hlWAfyIFhHRIhfPngLlCe0QYOdRKYFt8gy56TA==}
     engines: {node: '>=v18'}
     dependencies:
@@ -1636,7 +1428,7 @@ packages:
       '@commitlint/types': 18.6.1
       chalk: 4.1.2
       cosmiconfig: 8.3.6(typescript@5.3.3)
-      cosmiconfig-typescript-loader: 5.0.0(@types/node@20.14.1)(cosmiconfig@8.3.6)(typescript@5.3.3)
+      cosmiconfig-typescript-loader: 5.0.0(@types/node@20.14.2)(cosmiconfig@8.3.6)(typescript@5.3.3)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
@@ -2635,24 +2427,24 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@microsoft/api-extractor-model@7.28.3(@types/node@20.14.1):
+  /@microsoft/api-extractor-model@7.28.3(@types/node@20.14.2):
     resolution: {integrity: sha512-wT/kB2oDbdZXITyDh2SQLzaWwTOFbV326fP0pUwNW00WeliARs0qjmXBWmGWardEzp2U3/axkO3Lboqun6vrig==}
     dependencies:
       '@microsoft/tsdoc': 0.14.2
       '@microsoft/tsdoc-config': 0.16.2
-      '@rushstack/node-core-library': 3.62.0(@types/node@20.14.1)
+      '@rushstack/node-core-library': 3.62.0(@types/node@20.14.2)
     transitivePeerDependencies:
       - '@types/node'
     dev: true
 
-  /@microsoft/api-extractor@7.39.0(@types/node@20.14.1):
+  /@microsoft/api-extractor@7.39.0(@types/node@20.14.2):
     resolution: {integrity: sha512-PuXxzadgnvp+wdeZFPonssRAj/EW4Gm4s75TXzPk09h3wJ8RS3x7typf95B4vwZRrPTQBGopdUl+/vHvlPdAcg==}
     hasBin: true
     dependencies:
-      '@microsoft/api-extractor-model': 7.28.3(@types/node@20.14.1)
+      '@microsoft/api-extractor-model': 7.28.3(@types/node@20.14.2)
       '@microsoft/tsdoc': 0.14.2
       '@microsoft/tsdoc-config': 0.16.2
-      '@rushstack/node-core-library': 3.62.0(@types/node@20.14.1)
+      '@rushstack/node-core-library': 3.62.0(@types/node@20.14.2)
       '@rushstack/rig-package': 0.5.1
       '@rushstack/ts-command-line': 4.17.1
       colors: 1.2.5
@@ -2840,25 +2632,6 @@ packages:
 
   /@polka/url@1.0.0-next.24:
     resolution: {integrity: sha512-2LuNTFBIO0m7kKIQvvPHN6UE63VjpmL9rnEEaOOaiSPbZK+zUOYIzBAWcED+3XYzhYsd/0mD57VdxAEqqV52CQ==}
-
-  /@probe.gl/env@3.6.0:
-    resolution: {integrity: sha512-4tTZYUg/8BICC3Yyb9rOeoKeijKbZHRXBEKObrfPmX4sQmYB15ZOUpoVBhAyJkOYVAM8EkPci6Uw5dLCwx2BEQ==, tarball: https://registry.npmmirror.com/@probe.gl/env/-/env-3.6.0.tgz}
-    dependencies:
-      '@babel/runtime': 7.24.6
-    dev: false
-
-  /@probe.gl/log@3.6.0:
-    resolution: {integrity: sha512-hjpyenpEvOdowgZ1qMeCJxfRD4JkKdlXz0RC14m42Un62NtOT+GpWyKA4LssT0+xyLULCByRAtG2fzZorpIAcA==, tarball: https://registry.npmmirror.com/@probe.gl/log/-/log-3.6.0.tgz}
-    dependencies:
-      '@babel/runtime': 7.24.6
-      '@probe.gl/env': 3.6.0
-    dev: false
-
-  /@probe.gl/stats@3.6.0:
-    resolution: {integrity: sha512-JdALQXB44OP4kUBN/UrQgzbJe4qokbVF4Y8lkIA8iVCFnjVowWIgkD/z/0QO65yELT54tTrtepw1jScjKB+rhQ==, tarball: https://registry.npmmirror.com/@probe.gl/stats/-/stats-3.6.0.tgz}
-    dependencies:
-      '@babel/runtime': 7.24.6
-    dev: false
 
   /@purge-icons/core@0.10.0:
     resolution: {integrity: sha512-AtJbZv5Yy+vWX5v32DPTr+CW7AkSK8HJx52orDbrYt/9s4lGM2t4KKAmwaTQEH2HYr2HVh1mlqs54/S1s3WT1g==}
@@ -3073,7 +2846,7 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@rushstack/node-core-library@3.62.0(@types/node@20.14.1):
+  /@rushstack/node-core-library@3.62.0(@types/node@20.14.2):
     resolution: {integrity: sha512-88aJn2h8UpSvdwuDXBv1/v1heM6GnBf3RjEy6ZPP7UnzHNCqOHA2Ut+ScYUbXcqIdfew9JlTAe3g+cnX9xQ/Aw==}
     peerDependencies:
       '@types/node': '*'
@@ -3081,7 +2854,7 @@ packages:
       '@types/node':
         optional: true
     dependencies:
-      '@types/node': 20.14.1
+      '@types/node': 20.14.2
       colors: 1.2.5
       fs-extra: 7.0.1
       import-lazy: 4.0.0
@@ -3388,8 +3161,8 @@ packages:
     dependencies:
       undici-types: 5.26.5
 
-  /@types/node@20.14.1:
-    resolution: {integrity: sha512-T2MzSGEu+ysB/FkWfqmhV3PLyQlowdptmmgD20C6QxsS8Fmv5SjpZ1ayXaEC0S21/h5UJ9iA6W/5vSNU5l00OA==, tarball: https://registry.npmmirror.com/@types/node/-/node-20.14.1.tgz}
+  /@types/node@20.14.2:
+    resolution: {integrity: sha512-xyu6WAMVwv6AKFLB+e/7ySZVr/0zLCzOa7rSpq6jNwpqOrUbcACDWC+53d4n2QHOnDou0fbIsg8wZu/sxrnI4Q==, tarball: https://registry.npmmirror.com/@types/node/-/node-20.14.2.tgz}
     dependencies:
       undici-types: 5.26.5
 
@@ -3623,7 +3396,7 @@ packages:
       '@unocss/core': 0.58.5
       '@unocss/reset': 0.58.5
       '@unocss/vite': 0.58.5(rollup@3.29.4)(vite@5.1.3)
-      vite: 5.1.3(@types/node@20.14.1)(less@4.2.0)(sass@1.71.0)
+      vite: 5.1.3(@types/node@20.14.2)(less@4.2.0)(sass@1.71.0)
     transitivePeerDependencies:
       - rollup
 
@@ -3798,7 +3571,7 @@ packages:
       chokidar: 3.6.0
       fast-glob: 3.3.2
       magic-string: 0.30.7
-      vite: 5.1.3(@types/node@20.14.1)(less@4.2.0)(sass@1.71.0)
+      vite: 5.1.3(@types/node@20.14.2)(less@4.2.0)(sass@1.71.0)
     transitivePeerDependencies:
       - rollup
 
@@ -3854,7 +3627,7 @@ packages:
       '@babel/core': 7.23.9
       '@babel/plugin-transform-typescript': 7.23.6(@babel/core@7.23.9)
       '@vue/babel-plugin-jsx': 1.2.1(@babel/core@7.23.9)
-      vite: 5.1.3(@types/node@20.14.1)(less@4.2.0)(sass@1.71.0)
+      vite: 5.1.3(@types/node@20.14.2)(less@4.2.0)(sass@1.71.0)
       vue: 3.4.27(typescript@5.4.5)
     transitivePeerDependencies:
       - supports-color
@@ -3867,7 +3640,7 @@ packages:
       vite: ^5.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 5.1.3(@types/node@20.14.1)(less@4.2.0)(sass@1.71.0)
+      vite: 5.1.3(@types/node@20.14.2)(less@4.2.0)(sass@1.71.0)
       vue: 3.4.27(typescript@5.4.5)
     dev: true
 
@@ -3923,7 +3696,7 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
-      '@babel/code-frame': 7.24.6
+      '@babel/code-frame': 7.24.7
       '@babel/core': 7.23.9
       '@babel/helper-module-imports': 7.22.15
       '@babel/helper-plugin-utils': 7.22.5
@@ -3943,7 +3716,7 @@ packages:
   /@vue/compiler-core@3.4.27:
     resolution: {integrity: sha512-E+RyqY24KnyDXsCuQrI+mlcdW3ALND6U7Gqa/+bVwbcpcR3BRRIckFoz7Qyd4TTlnugtwuI7YgjbvsLmxb+yvg==, tarball: https://registry.npmmirror.com/@vue/compiler-core/-/compiler-core-3.4.27.tgz}
     dependencies:
-      '@babel/parser': 7.24.6
+      '@babel/parser': 7.24.7
       '@vue/shared': 3.4.27
       entities: 4.5.0
       estree-walker: 2.0.2
@@ -3979,7 +3752,7 @@ packages:
   /@vue/compiler-sfc@3.4.27:
     resolution: {integrity: sha512-nDwntUEADssW8e0rrmE0+OrONwmRlegDA1pD6QhVeXxjIytV03yDqTey9SBDiALsvAd5U4ZrEKbMyVXhX6mCGA==, tarball: https://registry.npmmirror.com/@vue/compiler-sfc/-/compiler-sfc-3.4.27.tgz}
     dependencies:
-      '@babel/parser': 7.24.6
+      '@babel/parser': 7.24.7
       '@vue/compiler-core': 3.4.27
       '@vue/compiler-dom': 3.4.27
       '@vue/compiler-ssr': 3.4.27
@@ -4255,10 +4028,6 @@ packages:
     dependencies:
       '@webassemblyjs/ast': 1.12.1
       '@xtuc/long': 4.2.2
-    dev: false
-
-  /@webgpu/types@0.1.42:
-    resolution: {integrity: sha512-uvJtt4OD1Vjdebrrz3kNLgpOicYbikwnM8WPG6YD2lkCOHDtPdEtCINJFIFtbOCtPfA8SreR/vKyUNbAt92IwQ==, tarball: https://registry.npmmirror.com/@webgpu/types/-/types-0.1.42.tgz}
     dev: false
 
   /@xmldom/xmldom@0.8.10:
@@ -5047,10 +4816,25 @@ packages:
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.23.0)
 
+  /browserslist@4.23.1:
+    resolution: {integrity: sha512-TUfofFo/KsK/bWZ9TWQ5O26tsWW4Uhmt8IYklbnUa70udB6P2wA7w7o4PY4muaEPBQaAX+CEnmmIA41NVHtPVw==, tarball: https://registry.npmmirror.com/browserslist/-/browserslist-4.23.1.tgz}
+    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
+    hasBin: true
+    dependencies:
+      caniuse-lite: 1.0.30001632
+      electron-to-chromium: 1.4.797
+      node-releases: 2.0.14
+      update-browserslist-db: 1.0.16(browserslist@4.23.1)
+    dev: false
+
   /bser@2.1.1:
     resolution: {integrity: sha512-gQxTNE/GAfIIrmHLUE3oJyp5FO6HRBfhjnw4/wMmA63ZGDJnWBmgY/lyQBpnDUkGmAhbSe39tx2d/iTOAfglwQ==, tarball: https://registry.npmmirror.com/bser/-/bser-2.1.1.tgz}
     dependencies:
       node-int64: 0.4.0
+    dev: false
+
+  /bubblesets-js@2.3.3:
+    resolution: {integrity: sha512-7++8/mcahpmJyIGY+YSPG5o2FnTIeNgVx17eoFyEjzcTblpcMd8SSUtt67MlKYlj8mIh9/aYpY+1GvPoy6pViQ==, tarball: https://registry.npmmirror.com/bubblesets-js/-/bubblesets-js-2.3.3.tgz}
     dev: false
 
   /buffer-crc32@0.2.13:
@@ -5173,6 +4957,10 @@ packages:
 
   /caniuse-lite@1.0.30001588:
     resolution: {integrity: sha512-+hVY9jE44uKLkH0SrUTqxjxqNTOWHsbnQDIKjwkZ3lNTzUUVdBLBGXtj/q5Mp5u98r3droaZAewQuEDzjQdZlQ==, tarball: https://registry.npmmirror.com/caniuse-lite/-/caniuse-lite-1.0.30001588.tgz}
+
+  /caniuse-lite@1.0.30001632:
+    resolution: {integrity: sha512-udx3o7yHJfUxMLkGohMlVHCvFvWmirKh9JAH/d7WOLPetlH+LTL5cocMZ0t7oZx/mdlOWXti97xLZWc8uURRHg==, tarball: https://registry.npmmirror.com/caniuse-lite/-/caniuse-lite-1.0.30001632.tgz}
+    dev: false
 
   /cfb@1.2.2:
     resolution: {integrity: sha512-KfdUZsSOw19/ObEWasvBP/Ac4reZvAGauZhs6S/gqNhXhI7cKwvlH7ulj+dOEYnca4bm4SGo8C1bTAQvnTjgQA==}
@@ -5411,14 +5199,6 @@ packages:
       simple-swizzle: 0.2.2
     dev: false
 
-  /color@4.2.3:
-    resolution: {integrity: sha512-1rXeuUUiGGrykh+CeBdu5Ie7OJwinCgQY0bc7GCRxy5xVHy+moaqkpL/jqQq0MtQOeYcrqEz4abc5f0KtU7W4A==, tarball: https://registry.npmmirror.com/color/-/color-4.2.3.tgz}
-    engines: {node: '>=12.5.0'}
-    dependencies:
-      color-convert: 2.0.1
-      color-string: 1.9.1
-    dev: false
-
   /colord@2.9.3:
     resolution: {integrity: sha512-jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==}
     dev: true
@@ -5644,7 +5424,7 @@ packages:
       vary: 1.1.2
     dev: true
 
-  /cosmiconfig-typescript-loader@5.0.0(@types/node@20.14.1)(cosmiconfig@8.3.6)(typescript@5.3.3):
+  /cosmiconfig-typescript-loader@5.0.0(@types/node@20.14.2)(cosmiconfig@8.3.6)(typescript@5.3.3):
     resolution: {integrity: sha512-+8cK7jRAReYkMwMiG+bxhcNKiHJDM6bR9FD/nGBXOWdMLuYawjF5cGrtLilJ+LGd3ZjCXnJjR5DkfWPoIVlqJA==}
     engines: {node: '>=v16'}
     peerDependencies:
@@ -5652,7 +5432,7 @@ packages:
       cosmiconfig: '>=8.2'
       typescript: '>=4'
     dependencies:
-      '@types/node': 20.14.1
+      '@types/node': 20.14.2
       cosmiconfig: 8.3.6(typescript@5.3.3)
       jiti: 1.21.0
       typescript: 5.3.3
@@ -5932,13 +5712,29 @@ packages:
     hasBin: true
     dev: true
 
-  /d3-color@1.4.1:
-    resolution: {integrity: sha512-p2sTHSLCJI2QKunbGb7ocOh7DgTAn8IrLx21QRc/BSnodXM4sv6aLQlnfpvehFMLZEfBc6g9pH9SWQccFYfJ9Q==, tarball: https://registry.npmmirror.com/d3-color/-/d3-color-1.4.1.tgz}
+  /d3-binarytree@1.0.2:
+    resolution: {integrity: sha512-cElUNH+sHu95L04m92pG73t2MEJXKu+GeKUN1TJkFsu93E5W8E9Sc3kHEGJKgenGvj19m6upSn2EunvMgMD2Yw==, tarball: https://registry.npmmirror.com/d3-binarytree/-/d3-binarytree-1.0.2.tgz}
+    dev: false
+
+  /d3-color@3.1.0:
+    resolution: {integrity: sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA==, tarball: https://registry.npmmirror.com/d3-color/-/d3-color-3.1.0.tgz}
+    engines: {node: '>=12'}
     dev: false
 
   /d3-dispatch@3.0.1:
     resolution: {integrity: sha512-rzUyPU/S7rwUflMyLc1ETDeBj0NRuHKKAcvukozwhshr6g6c5d8zh4c2gQjY2bZ0dXeGLWc1PF174P2tVvKhfg==, tarball: https://registry.npmmirror.com/d3-dispatch/-/d3-dispatch-3.0.1.tgz}
     engines: {node: '>=12'}
+    dev: false
+
+  /d3-force-3d@3.0.5:
+    resolution: {integrity: sha512-tdwhAhoTYZY/a6eo9nR7HP3xSW/C6XvJTbeRpR92nlPzH6OiE+4MliN9feuSFd0tPtEUo+191qOhCTWx3NYifg==, tarball: https://registry.npmmirror.com/d3-force-3d/-/d3-force-3d-3.0.5.tgz}
+    engines: {node: '>=12'}
+    dependencies:
+      d3-binarytree: 1.0.2
+      d3-dispatch: 3.0.1
+      d3-octree: 1.0.2
+      d3-quadtree: 3.0.1
+      d3-timer: 3.0.1
     dev: false
 
   /d3-force@3.0.0:
@@ -5962,6 +5758,13 @@ packages:
   /d3-timer@3.0.1:
     resolution: {integrity: sha512-ndfJ/JxxMd3nw31uyKoY2naivF+r29V+Lc0svZxe1JvvIRmi8hUsrMvdOwgS1o6uBHmiz91geQ0ylPP0aj1VUA==, tarball: https://registry.npmmirror.com/d3-timer/-/d3-timer-3.0.1.tgz}
     engines: {node: '>=12'}
+    dev: false
+
+  /dagre@0.8.5:
+    resolution: {integrity: sha512-/aTqmnRta7x7MCCpExk7HQL2O4owCT2h8NT//9I1OQ9vt29Pa0BzSAkR5lwFUcQ7491yVi/3CXU9jQ5o0Mn2Sw==, tarball: https://registry.npmmirror.com/dagre/-/dagre-0.8.5.tgz}
+    dependencies:
+      graphlib: 2.1.8
+      lodash: 4.17.21
     dev: false
 
   /dargs@7.0.0:
@@ -6352,10 +6155,6 @@ packages:
   /duplexer@0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
 
-  /earcut@2.2.4:
-    resolution: {integrity: sha512-/pjZsA1b4RPHbeWZQn66SWS8nZZWLQQ23oE3Eam7aroEFGEvwKAsJfZ9ytiEMycfzXWpca4FA9QIOehf7PocBQ==, tarball: https://registry.npmmirror.com/earcut/-/earcut-2.2.4.tgz}
-    dev: false
-
   /eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: true
@@ -6391,6 +6190,10 @@ packages:
 
   /electron-to-chromium@1.4.673:
     resolution: {integrity: sha512-zjqzx4N7xGdl5468G+vcgzDhaHkaYgVcf9MqgexcTqsl2UHSCmOj/Bi3HAprg4BZCpC7HyD8a6nZl6QAZf72gw==, tarball: https://registry.npmmirror.com/electron-to-chromium/-/electron-to-chromium-1.4.673.tgz}
+
+  /electron-to-chromium@1.4.797:
+    resolution: {integrity: sha512-RWMYymqyWwIdCEb7Psag5zyAHirYnB354ZREoF8c5QOHbt8AodF7lwVxGUnu5gzBVjzDo9R3XeTwy7pbvubxGw==, tarball: https://registry.npmmirror.com/electron-to-chromium/-/electron-to-chromium-1.4.797.tgz}
+    dev: false
 
   /element-resize-detector@1.2.4:
     resolution: {integrity: sha512-Fl5Ftk6WwXE0wqCgNoseKWndjzZlDCwuPTcoVZfCP9R3EHQF8qUtr3YUPNETegRBOKqQKPW3n4kiIWngGi8tKg==, tarball: https://registry.npmmirror.com/element-resize-detector/-/element-resize-detector-1.2.4.tgz}
@@ -6931,7 +6734,7 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-plugin-prettier@5.1.3(eslint-config-prettier@9.1.0)(eslint@8.56.0)(prettier@3.3.0):
+  /eslint-plugin-prettier@5.1.3(eslint-config-prettier@9.1.0)(eslint@8.56.0)(prettier@3.3.1):
     resolution: {integrity: sha512-C9GCVAs4Eq7ZC/XFQHITLiHJxQngdtraXaM+LoUFoFp/lHNl2Zn8f3WQbe9HvTBBQ9YnKFB0/2Ajdqwo5D1EAw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -6947,7 +6750,7 @@ packages:
     dependencies:
       eslint: 8.56.0
       eslint-config-prettier: 9.1.0(eslint@8.56.0)
-      prettier: 3.3.0
+      prettier: 3.3.1
       prettier-linter-helpers: 1.0.0
       synckit: 0.8.8
     dev: true
@@ -7110,10 +6913,6 @@ packages:
   /eventemitter2@6.4.9:
     resolution: {integrity: sha512-JEPTiaOt9f04oa6NOkc4aH+nVp5I3wEjpHbIPqfgCdD5v5bUzy7xQqwcVO2aDQgOWhI28da57HksMrzK9HlRxg==}
     dev: true
-
-  /eventemitter3@4.0.7:
-    resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==, tarball: https://registry.npmmirror.com/eventemitter3/-/eventemitter3-4.0.7.tgz}
-    dev: false
 
   /eventemitter3@5.0.1:
     resolution: {integrity: sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==}
@@ -7654,10 +7453,6 @@ packages:
     resolution: {integrity: sha512-wcCp8vu8FT22BnvKVPjXa/ICBWRq/zjFfdofZy1WSpQZpphblv12/bOQLBC1rMM7SGOFS9ltVmKOHil5+Ml7gA==, tarball: https://registry.npmmirror.com/gl-matrix/-/gl-matrix-3.4.3.tgz}
     dev: false
 
-  /gl-vec2@1.3.0:
-    resolution: {integrity: sha512-YiqaAuNsheWmUV0Sa8k94kBB0D6RWjwZztyO+trEYS8KzJ6OQB/4686gdrf59wld4hHFIvaxynO3nRxpk1Ij/A==, tarball: https://registry.npmmirror.com/gl-vec2/-/gl-vec2-1.3.0.tgz}
-    dev: false
-
   /glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
     engines: {node: '>= 6'}
@@ -7802,16 +7597,17 @@ packages:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
     dev: true
 
+  /graphlib@2.1.8:
+    resolution: {integrity: sha512-jcLLfkpoVGmH7/InMC/1hIvOPSUh38oJtGhvrOFGzioE1DZ+0YW16RgmOJhHiuWTvGiJQ9Z1Ik43JvkRPRvE+A==, tarball: https://registry.npmmirror.com/graphlib/-/graphlib-2.1.8.tgz}
+    dependencies:
+      lodash: 4.17.21
+    dev: false
+
   /gzip-size@6.0.0:
     resolution: {integrity: sha512-ax7ZYomf6jqPTQ4+XCpUGyXKHk5WweS+e05MBO4/y3WJ5RkmPXNKvX+bx1behVILVwr6JSQvZAku021CHPXG3Q==}
     engines: {node: '>=10'}
     dependencies:
       duplexer: 0.1.2
-
-  /hammerjs@2.0.8:
-    resolution: {integrity: sha512-tSQXBXS/MWQOn/RKckawJ61vvsDpCom87JgxiYdGwHdOa0ht0vzUWDlfioofFCRU0L+6NGDt6XzbgoJvZkMeRQ==, tarball: https://registry.npmmirror.com/hammerjs/-/hammerjs-2.0.8.tgz}
-    engines: {node: '>=0.8.0'}
-    dev: false
 
   /hard-rejection@2.1.0:
     resolution: {integrity: sha512-VIZB+ibDhx7ObhAe7OVtoEbuP4h/MuOTHJ+J8h/eBXotJYl0fBgR72xDFCKgIh22OJZIOVNxBMWuhAr10r8HdA==, tarball: https://registry.npmmirror.com/hard-rejection/-/hard-rejection-2.1.0.tgz}
@@ -8062,6 +7858,11 @@ packages:
       - supports-color
     dev: true
 
+  /hull.js@1.0.6:
+    resolution: {integrity: sha512-TC7e9sHYOaCVms0sn2hN7buxnaGfcl9h5EPVoVX9DTPoMpqQiS9bf3tmGDgiNaMVHBD91RAvWjCxrJ5Jx8BI5A==, tarball: https://registry.npmmirror.com/hull.js/-/hull.js-1.0.6.tgz}
+    deprecated: This package is not maintained anymore on npmjs.com, please use GitHub URL to fetch the latest version. See the package homepage for instructions.
+    dev: false
+
   /human-signals@2.1.0:
     resolution: {integrity: sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==}
     engines: {node: '>=10.17.0'}
@@ -8172,10 +7973,6 @@ packages:
   /ini@1.3.8:
     resolution: {integrity: sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==}
     dev: true
-
-  /insert-css@2.0.0:
-    resolution: {integrity: sha512-xGq5ISgcUP5cvGkS2MMFLtPDBtrtQPSFfC6gA6U8wHKqfjTIMZLZNxOItQnoSjdOzlXOLU/yD32RKC4SvjNbtA==, tarball: https://registry.npmmirror.com/insert-css/-/insert-css-2.0.0.tgz}
-    dev: false
 
   /internal-slot@1.0.7:
     resolution: {integrity: sha512-NGnrKwXzSms2qUUih/ILZ5JBqNTSa1+ZmP6flaIp6KmSElgE9qdndzS3cqjrDovwFdmwsGsLdeFgB6suw+1e9g==}
@@ -8827,7 +8624,7 @@ packages:
     resolution: {integrity: sha512-rMyFe1+jnyAAf+NHwTclDz0eAaLkVDdKVHHBFWsBWHnnh5YeJMNWWsv7AbFYXfK3oTqvL7VTWkhNLu1jX24D+g==, tarball: https://registry.npmmirror.com/jest-message-util/-/jest-message-util-27.5.1.tgz}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
-      '@babel/code-frame': 7.24.6
+      '@babel/code-frame': 7.24.7
       '@jest/types': 27.5.1
       '@types/stack-utils': 2.0.3
       chalk: 4.1.2
@@ -10053,8 +9850,8 @@ packages:
       ml-array-min: 1.2.3
     dev: false
 
-  /ml-matrix@6.11.0:
-    resolution: {integrity: sha512-7jr9NmFRkaUxbKslfRu3aZOjJd2LkSitCGv+QH9PF0eJoEG7jIpjXra1Vw8/kgao8+kHCSsJONG6vfWmXQ+/Eg==, tarball: https://registry.npmmirror.com/ml-matrix/-/ml-matrix-6.11.0.tgz}
+  /ml-matrix@6.11.1:
+    resolution: {integrity: sha512-Fvp1xF1O07tt6Ux9NcnEQTei5UlqbRpvvaFZGs7l3Ij+nOaEDcmbSVtxwNa8V4IfdyFI1NLNUteroMJ1S6vcEg==, tarball: https://registry.npmmirror.com/ml-matrix/-/ml-matrix-6.11.1.tgz}
     dependencies:
       is-any-array: 2.0.1
       ml-array-rescale: 1.3.7
@@ -10565,7 +10362,7 @@ packages:
     resolution: {integrity: sha512-ayCKvm/phCGxOkYRSCM82iDwct8/EonSEgCSxWxD7ve6jHggsFl4fZVQBPRNgQoKiuV/odhFrGzQXZwbifC8Rg==}
     engines: {node: '>=8'}
     dependencies:
-      '@babel/code-frame': 7.24.6
+      '@babel/code-frame': 7.24.7
       error-ex: 1.3.2
       json-parse-even-better-errors: 2.3.1
       lines-and-columns: 1.2.4
@@ -11334,8 +11131,8 @@ packages:
     hasBin: true
     dev: true
 
-  /prettier@3.3.0:
-    resolution: {integrity: sha512-J9odKxERhCQ10OC2yb93583f6UnYutOeiV5i0zEDS7UGTdUt0u+y8erxl3lBKvwo/JHyyoEdXjwp4dke9oyZ/g==, tarball: https://registry.npmmirror.com/prettier/-/prettier-3.3.0.tgz}
+  /prettier@3.3.1:
+    resolution: {integrity: sha512-7CAwy5dRsxs8PHXT3twixW9/OEll8MLE0VRPCJyl7CkS6VHGPSlsVaWTiASPTyGyYRyApxlaWTzwUxVNrhcwDg==, tarball: https://registry.npmmirror.com/prettier/-/prettier-3.3.1.tgz}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
@@ -11356,15 +11153,6 @@ packages:
 
   /print-js@1.6.0:
     resolution: {integrity: sha512-BfnOIzSKbqGRtO4o0rnj/K3681BSd2QUrsIZy/+WdCIugjIswjmx3lDEZpXB2ruGf9d4b3YNINri81+J0FsBWg==}
-    dev: false
-
-  /probe.gl@3.6.0:
-    resolution: {integrity: sha512-19JydJWI7+DtR4feV+pu4Mn1I5TAc0xojuxVgZdXIyfmTLfUaFnk4OloWK1bKbPtkgGKLr2lnbnCXmpZEcEp9g==, tarball: https://registry.npmmirror.com/probe.gl/-/probe.gl-3.6.0.tgz}
-    dependencies:
-      '@babel/runtime': 7.24.6
-      '@probe.gl/env': 3.6.0
-      '@probe.gl/log': 3.6.0
-      '@probe.gl/stats': 3.6.0
     dev: false
 
   /process-nextick-args@2.0.1:
@@ -11594,10 +11382,6 @@ packages:
       set-function-name: 2.0.1
     dev: true
 
-  /regl@1.7.0:
-    resolution: {integrity: sha512-bEAtp/qrtKucxXSJkD4ebopFZYP0q1+3Vb2WECWv/T8yQEgKxDxJ7ztO285tAMaYZVR6mM1GgI6CCn8FROtL1w==, tarball: https://registry.npmmirror.com/regl/-/regl-1.7.0.tgz}
-    dev: false
-
   /relateurl@0.2.7:
     resolution: {integrity: sha512-G08Dxvm4iDN3MLM0EsP62EDV9IuhXPR6blNz6Utcp7zyV3tr4HVNINt6MpaRWbxoOHT3Q7YN2P+jaHX8vUbgog==}
     engines: {node: '>= 0.10'}
@@ -11753,7 +11537,7 @@ packages:
       rollup: 3.29.4
       typescript: 5.3.3
     optionalDependencies:
-      '@babel/code-frame': 7.24.6
+      '@babel/code-frame': 7.24.7
     dev: true
 
   /rollup-plugin-purge-icons@0.10.0:
@@ -12839,7 +12623,7 @@ packages:
       jest-worker: 27.5.1
       schema-utils: 3.3.0
       serialize-javascript: 6.0.2
-      terser: 5.31.0
+      terser: 5.31.1
       webpack: 5.91.0
     dev: false
 
@@ -12854,8 +12638,8 @@ packages:
       source-map-support: 0.5.21
     dev: true
 
-  /terser@5.31.0:
-    resolution: {integrity: sha512-Q1JFAoUKE5IMfI4Z/lkE/E6+SwgzO+x4tq4v1AyBLRj8VSYvRO6A/rQrPg1yud4g0En9EKI1TvFRF2tQFcoUkg==, tarball: https://registry.npmmirror.com/terser/-/terser-5.31.0.tgz}
+  /terser@5.31.1:
+    resolution: {integrity: sha512-37upzU1+viGvuFtBo9NPufCb9dwM0+l9hMxYyWfBA+fbwrPqNJAhbZ6W47bBFnZHKHTUBnMvi87434qq+qnxOg==, tarball: https://registry.npmmirror.com/terser/-/terser-5.31.1.tgz}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -13456,7 +13240,7 @@ packages:
       '@unocss/transformer-directives': 0.58.5
       '@unocss/transformer-variant-group': 0.58.5
       '@unocss/vite': 0.58.5(rollup@3.29.4)(vite@5.1.3)
-      vite: 5.1.3(@types/node@20.14.1)(less@4.2.0)(sass@1.71.0)
+      vite: 5.1.3(@types/node@20.14.2)(less@4.2.0)(sass@1.71.0)
     transitivePeerDependencies:
       - postcss
       - rollup
@@ -13513,6 +13297,17 @@ packages:
       browserslist: 4.23.0
       escalade: 3.1.2
       picocolors: 1.0.1
+
+  /update-browserslist-db@1.0.16(browserslist@4.23.1):
+    resolution: {integrity: sha512-KVbTxlBYlckhF5wgfyZXTWnMn7MMZjMu9XG8bPlliUOP9ThaF4QnhP8qrjrH7DRzHfSk0oQv1wToW+iA5GajEQ==, tarball: https://registry.npmmirror.com/update-browserslist-db/-/update-browserslist-db-1.0.16.tgz}
+    hasBin: true
+    peerDependencies:
+      browserslist: '>= 4.21.0'
+    dependencies:
+      browserslist: 4.23.1
+      escalade: 3.1.2
+      picocolors: 1.0.1
+    dev: false
 
   /uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
@@ -13699,12 +13494,12 @@ packages:
       chalk: 4.1.2
       debug: 4.3.4
       fs-extra: 10.1.0
-      vite: 5.1.3(@types/node@20.14.1)(less@4.2.0)(sass@1.71.0)
+      vite: 5.1.3(@types/node@20.14.2)(less@4.2.0)(sass@1.71.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite-plugin-dts@3.7.2(@types/node@20.14.1)(rollup@3.29.4)(typescript@5.4.5)(vite@5.1.3):
+  /vite-plugin-dts@3.7.2(@types/node@20.14.2)(rollup@3.29.4)(typescript@5.4.5)(vite@5.1.3):
     resolution: {integrity: sha512-kg//1nDA01b8rufJf4TsvYN8LMkdwv0oBYpiQi6nRwpHyue+wTlhrBiqgipdFpMnW1oOYv6ywmzE5B0vg6vSEA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -13714,13 +13509,13 @@ packages:
       vite:
         optional: true
     dependencies:
-      '@microsoft/api-extractor': 7.39.0(@types/node@20.14.1)
+      '@microsoft/api-extractor': 7.39.0(@types/node@20.14.2)
       '@rollup/pluginutils': 5.1.0(rollup@3.29.4)
       '@vue/language-core': 1.8.27(typescript@5.4.5)
       debug: 4.3.4
       kolorist: 1.8.0
       typescript: 5.4.5
-      vite: 5.1.3(@types/node@20.14.1)(less@4.2.0)(sass@1.71.0)
+      vite: 5.1.3(@types/node@20.14.2)(less@4.2.0)(sass@1.71.0)
       vue-tsc: 1.8.27(typescript@5.4.5)
     transitivePeerDependencies:
       - '@types/node'
@@ -13745,7 +13540,7 @@ packages:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 5.1.3(@types/node@20.14.1)(less@4.2.0)(sass@1.71.0)
+      vite: 5.1.3(@types/node@20.14.2)(less@4.2.0)(sass@1.71.0)
     dev: true
 
   /vite-plugin-mock@2.9.8(mockjs@1.1.0)(vite@5.1.3):
@@ -13764,7 +13559,7 @@ packages:
       fast-glob: 3.3.2
       mockjs: 1.1.0
       path-to-regexp: 6.2.1
-      vite: 5.1.3(@types/node@20.14.1)(less@4.2.0)(sass@1.71.0)
+      vite: 5.1.3(@types/node@20.14.2)(less@4.2.0)(sass@1.71.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -13778,7 +13573,7 @@ packages:
       '@purge-icons/core': 0.10.0
       '@purge-icons/generated': 0.10.0
       rollup-plugin-purge-icons: 0.10.0
-      vite: 5.1.3(@types/node@20.14.1)(less@4.2.0)(sass@1.71.0)
+      vite: 5.1.3(@types/node@20.14.2)(less@4.2.0)(sass@1.71.0)
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -13797,7 +13592,7 @@ packages:
       pathe: 0.2.0
       svg-baker: 1.7.0
       svgo: 2.8.0
-      vite: 5.1.3(@types/node@20.14.1)(less@4.2.0)(sass@1.71.0)
+      vite: 5.1.3(@types/node@20.14.2)(less@4.2.0)(sass@1.71.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -13838,7 +13633,7 @@ packages:
       fsevents: 2.3.3
     dev: false
 
-  /vite@5.1.3(@types/node@20.14.1)(less@4.2.0)(sass@1.71.0):
+  /vite@5.1.3(@types/node@20.14.2)(less@4.2.0)(sass@1.71.0):
     resolution: {integrity: sha512-UfmUD36DKkqhi/F75RrxvPpry+9+tTkrXfMNZD+SboZqBCMsxKtO52XeGzzuh7ioz+Eo/SYDBbdb0Z7vgcDJew==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -13866,7 +13661,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 20.14.1
+      '@types/node': 20.14.2
       esbuild: 0.19.12
       less: 4.2.0
       postcss: 8.4.35
@@ -14142,10 +13937,6 @@ packages:
     dependencies:
       loose-envify: 1.4.0
 
-  /wasm-feature-detect@1.6.1:
-    resolution: {integrity: sha512-R1i9ED8UlLu/foILNB1ck9XS63vdtqU/tP1MCugVekETp/ySCrBZRk5I/zI67cI1wlQYeSonNm1PLjDHZDNg6g==, tarball: https://registry.npmmirror.com/wasm-feature-detect/-/wasm-feature-detect-1.6.1.tgz}
-    dev: false
-
   /watchpack@2.4.1:
     resolution: {integrity: sha512-8wrBCMtVhqcXP2Sup1ctSkga6uc2Bx0IIvKyT7yTFier5AXHooSI+QyQQAtTb7+E0IUCCKyTFmXqdqgum2XWGg==, tarball: https://registry.npmmirror.com/watchpack/-/watchpack-2.4.1.tgz}
     engines: {node: '>=10.13.0'}
@@ -14197,7 +13988,7 @@ packages:
       '@webassemblyjs/wasm-parser': 1.12.1
       acorn: 8.11.3
       acorn-import-assertions: 1.9.0(acorn@8.11.3)
-      browserslist: 4.23.0
+      browserslist: 4.23.1
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.17.0
       es-module-lexer: 1.5.3

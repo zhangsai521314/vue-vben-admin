@@ -1,7 +1,6 @@
 <template>
   <div :class="`${prefixCls}top-logo`">
     <img src="../../../assets/images/logo.png" />
-    <span>{{ corporateName }}</span>
   </div>
   <div :class="`${prefixCls}top-menu`">
     <a-dropdown :class="`${prefixCls}menu-item`">

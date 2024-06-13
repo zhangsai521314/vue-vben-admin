@@ -79,7 +79,7 @@
           </a-select> -->
         </div>
         <!-- @click="handleTitleClick(row)" title="点击查看详情" -->
-        <div style="padding-left: 8px">
+        <div style="padding-left: 8px" @click="handleTitleClick(row)" title="点击查看详情">
           <div
             style="
               display: -webkit-box;
