@@ -7,8 +7,10 @@ export interface GplotState {
   containerConfig: object;
   //是否渲染成功
   renderSuccess: Boolean;
+  //是否选中了画布
+  isSelectContaine: Boolean;
   //选中的组件
-  selectedOb: Nullable<object>;
+  selectedOb: object;
   //节点的配置项
   nodeConfig: object;
 }
@@ -30,6 +32,7 @@ export const useGplotStore = defineStore({
       runType: [],
     },
     renderSuccess: false,
+    isSelectContaine: true,
     selectedOb: {
       style: {
         x: 0,
@@ -53,7 +56,7 @@ export const useGplotStore = defineStore({
         //文字位移Y
         labelOffsetY: -20,
         //是否文字背景
-        labelBackground: false,
+        labelBackground: true,
         //文字背景颜色
         labelBackgroundFill: '#fff',
         //文字边框颜色
@@ -81,21 +84,19 @@ export const useGplotStore = defineStore({
         //线条颜色
         stroke: '#9AAED1',
         //是否显示开始箭头
-        startArrow: false,
+        startArrow: true,
         //开始箭头大小
         startArrowSize: 10,
         //开始箭头类型
         startArrowType: 'triangle',
         //是否显示结束箭头
-        endArrow: false,
+        endArrow: true,
         //结束箭头大小
         endArrowSize: 10,
         //结束箭头类型
         endArrowType: 'triangle',
       },
       data: {
-        //节点类型
-        type: 'container1111',
         //锁定
         lockAll: false,
         //事件
@@ -118,7 +119,7 @@ export const useGplotStore = defineStore({
         //文字大小
         labelFontSize: 30,
         //文字位移
-        labelOffsetY: -20,
+        labelOffsetY: -12,
         //图标类型
         iconFontFamily: 'iconfont',
         //图标颜色
@@ -130,8 +131,6 @@ export const useGplotStore = defineStore({
       },
       //自定义信息
       data: {
-        //节点类型
-        type: 'container1111',
         //锁定
         lockAll: false,
         //图元标记，编辑器左侧能显示的哪些

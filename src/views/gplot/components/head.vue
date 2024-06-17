@@ -94,6 +94,13 @@
   import { ref } from 'vue';
 
   const props = defineProps({
+    //拓扑对象
+    graphObRef: {
+      type: Object,
+      default() {
+        return null;
+      },
+    },
     //canvas对象
     containerObArray: {
       type: Array,

@@ -1,11 +1,8 @@
 <template>
   <div :class="`${prefixCls}prop`">
-    <template v-if="gplotStore.selectedOb.data.type == 'container'">
+    <template v-if="gplotStore.isSelectContaine">
       <div :class="`${prefixCls}prop-container`">
-        <a-tabs
-          v-model:activeKey="configTabsActiveKey"
-          :tabBarStyle="{ height: '32px', marginBottom: '0.5px', background: '#fff' }"
-        >
+        <a-tabs :tabBarStyle="{ height: '32px', marginBottom: '0.5px', background: '#fff' }">
           <a-tab-pane key="containerConfig" tab="容器配置">
             <a-collapse
               v-model:activeKey="propContainerActiveKey"
@@ -19,17 +16,13 @@
                       <a-switch
                         v-model:checked="gplotStore.containerConfig.gridShow"
                         size="small"
-                        @change="gridShowChange"
                       />
                     </div>
                   </div>
                   <div>
                     <div> 背景颜色 </div>
                     <div class="upbackcolor">
-                      <selectColor
-                        :color="gplotStore.containerConfig.backgroundColor"
-                        @change="(value) => colorChange('canvas|backgroundColor', value)"
-                      />
+                      <selectColor :color="gplotStore.containerConfig.backgroundColor" />
                       <IconFontClass
                         @click="deleteBackgroundColor('canvas|backgroundColor')"
                         v-show="gplotStore.containerConfig.backgroundColor"
@@ -50,7 +43,7 @@
                       <div class="upbackimg">
                         <a-upload
                           v-model:fileList="fileList"
-                          maxCount="1"
+                          :maxCount="1"
                           :multiple="false"
                           accept=".png,.jpg,.jpeg,.svg"
                           :before-upload="(file) => beforeUpload(file, 'canvas|backgroundImg')"
@@ -90,11 +83,10 @@
                     <div style="display: flex; width: 200px; height: 25px">
                       <div style="width: 100%">
                         <a-slider
-                          @change="zoomChange"
                           v-model:value="gplotStore.containerConfig.zoom"
                           :min="10"
-                          max="500"
-                          :marks="marks"
+                          :max="500"
+                          :marks="[100]"
                           :included="false"
                           :tipFormatter="null"
                         />
@@ -135,7 +127,7 @@
         </a-tabs>
       </div>
     </template>
-    <template v-else>
+    <template v-if="gplotStore.selectedOb">
       <div :class="`${prefixCls}prop-attr`">
         <a-tabs
           v-model:activeKey="configTabsActiveKey"
@@ -192,7 +184,7 @@
                       class="aSlider"
                       v-model:value="gplotStore.selectedOb.style.lineWidth"
                       :min="1"
-                      max="50"
+                      :max="50"
                       :included="false"
                       :tipFormatter="null"
                     />
@@ -201,7 +193,7 @@
                       v-model:value="gplotStore.selectedOb.style.lineWidth"
                       addon-after="px"
                       :min="1"
-                      max="50"
+                      :max="50"
                       size="small"
                     />
                   </a-row>
@@ -216,7 +208,7 @@
                       class="aSlider"
                       v-model:value="gplotStore.selectedOb.style.opacity"
                       :min="0"
-                      max="100"
+                      :max="100"
                       :included="false"
                       :tipFormatter="null"
                     />
@@ -224,7 +216,7 @@
                       style="width: 90px !important"
                       v-model:value="gplotStore.selectedOb.style.opacity"
                       min="0"
-                      max="100"
+                      :max="100"
                       addon-after="%"
                       size="small"
                     />
@@ -248,7 +240,7 @@
                       class="aSlider"
                       v-model:value="gplotStore.selectedOb.style.labelFontSize"
                       :min="12"
-                      max="100"
+                      :max="100"
                       :included="false"
                       :tipFormatter="null"
                     />
@@ -256,7 +248,7 @@
                       style="width: 90px !important"
                       v-model:value="gplotStore.selectedOb.style.labelFontSize"
                       min="12"
-                      max="100"
+                      :max="100"
                       :precision="0"
                       addon-after="px"
                       size="small"
@@ -309,7 +301,7 @@
                       style="width: 64px; margin-right: 9px"
                       v-model:value="gplotStore.selectedOb.style.labelBackgroundLineWidth"
                       :min="0"
-                      max="100"
+                      :max="100"
                       :included="false"
                       :tipFormatter="null"
                     />
@@ -318,7 +310,7 @@
                       style="width: 90px !important"
                       v-model:value="gplotStore.selectedOb.style.labelBackgroundLineWidth"
                       min="0"
-                      max="100"
+                      :max="100"
                       :precision="0"
                     />
                   </a-row>
@@ -333,7 +325,7 @@
                       style="width: 64px; margin-right: 9px"
                       v-model:value="gplotStore.selectedOb.style.labelBackgroundRadius"
                       :min="0"
-                      max="100"
+                      :max="100"
                       :included="false"
                       :tipFormatter="null"
                     />
@@ -342,7 +334,7 @@
                       style="width: 90px !important"
                       v-model:value="gplotStore.selectedOb.style.labelBackgroundRadius"
                       min="0"
-                      max="100"
+                      :max="100"
                       :precision="0"
                     />
                   </a-row>
@@ -357,7 +349,7 @@
                       class="aSlider"
                       v-model:value="gplotStore.selectedOb.style.labelBackgroundOpacity"
                       :min="0"
-                      max="100"
+                      :max="100"
                       :included="false"
                       :tipFormatter="null"
                     />
@@ -365,7 +357,7 @@
                       style="width: 90px !important"
                       v-model:value="gplotStore.selectedOb.style.labelBackgroundOpacity"
                       min="0"
-                      max="100"
+                      :max="100"
                       :precision="0"
                       addon-after="%"
                       size="small"
@@ -382,7 +374,7 @@
                       style="width: 64px; margin-right: 9px"
                       v-model:value="gplotStore.selectedOb.style.labelBackgroundLineDash"
                       :min="0"
-                      max="100"
+                      :max="100"
                       :included="false"
                       :tipFormatter="null"
                     />
@@ -391,7 +383,7 @@
                       style="width: 90px !important"
                       v-model:value="gplotStore.selectedOb.style.labelBackgroundLineDash"
                       min="0"
-                      max="100"
+                      :max="100"
                       :precision="0"
                     />
                   </a-row>
@@ -464,7 +456,7 @@
                       style="width: 64px; margin-right: 9px"
                       v-model:value="gplotStore.selectedOb.style.startArrowSize"
                       :min="0"
-                      max="100"
+                      :max="100"
                       :included="false"
                       :tipFormatter="null"
                     />
@@ -473,7 +465,7 @@
                       style="width: 90px !important"
                       v-model:value="gplotStore.selectedOb.style.startArrowSize"
                       min="0"
-                      max="100"
+                      :max="100"
                       :precision="0"
                     />
                   </a-row>
@@ -546,7 +538,7 @@
                       style="width: 64px; margin-right: 9px"
                       v-model:value="gplotStore.selectedOb.style.endArrowSize"
                       :min="0"
-                      max="100"
+                      :max="100"
                       :included="false"
                       :tipFormatter="null"
                     />
@@ -554,8 +546,8 @@
                       class="myInputNumber"
                       style="width: 90px !important"
                       v-model:value="gplotStore.selectedOb.style.endArrowSize"
-                      min="0"
-                      max="100"
+                      :min="0"
+                      :max="100"
                       :precision="0"
                     />
                   </a-row>
@@ -563,7 +555,7 @@
               </a-form>
             </a-tab-pane>
           </template>
-          <template v-if="true">
+          <template v-if="false">
             <a-tab-pane key="event" tab="交互">
               <div :class="`${prefixCls}attr-event`">
                 <div
@@ -699,6 +691,7 @@
     </template>
   </div>
   <a-drawer
+    v-if="false"
     :bodyStyle="{ overflowY: 'hidden', overflowX: 'hidden' }"
     :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
     :width="320"
@@ -731,7 +724,15 @@
   import codemirror from '/@/components/MyCodemirror/codemirror.vue';
   import { useGplotStoreWithOut } from '@/store/modules/gplot';
 
+  const { prefixCls } = useDesign('GplotManage-');
   const props = defineProps({
+    //拓扑对象
+    graphObRef: {
+      type: Object,
+      default() {
+        return null;
+      },
+    },
     //选中的组件
     selectedOb: {
       type: Object,
@@ -799,6 +800,9 @@
     },
   });
   const gplotStore = useGplotStoreWithOut();
+  const propContainerActiveKey = ref(['container', 'run']);
+  const fileList = ref([]);
+  function zoomChange(v) {}
 </script>
 <style lang="less" scoped>
   @prefixCls: ~'@{namespace}-GplotManage-';

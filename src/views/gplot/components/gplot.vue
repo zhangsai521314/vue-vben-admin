@@ -159,10 +159,8 @@
           //图标大小
           iconFontSize: gplotStore.nodeConfig.style.iconFontSize,
         },
+        //自定义信息
         data: {
-          //自定义属性数据
-          //节点类型
-          type: 'node',
           //图元标记，编辑器左侧能显示的哪些
           sign: ['text'],
         },
@@ -235,14 +233,14 @@
         };
       }
 
-      onCreate() {
+      override onCreate() {
         const marker = this.upsert(
           'marker',
           Circle,
           this.getMarkerStyle(this.attributes, this),
           this,
         );
-        marker.animate([{ offsetDistance: 0 }, { offsetDistance: 1 }], {
+        marker?.animate([{ offsetDistance: 0 }, { offsetDistance: 1 }], {
           duration: 1000,
           iterations: Infinity,
         });
@@ -255,7 +253,7 @@
     graphOb = new Graph({
       //画布容器
       container: mountRef.value,
-      renderer: () => new Renderer(),
+      // renderer: () => new Renderer(),
       //是否自动调整大小
       autoResize: true,
       //画布背景色
@@ -296,6 +294,9 @@
           enable: () => {
             return props.viewType == 'edit';
           },
+          // onClick: (e) => {
+          //   //同 graphOb.on('click'一致
+          // },
         },
         {
           //框选
@@ -457,7 +458,7 @@
               //图形填充色
               fill: '',
               //文字
-              labelText: 'default',
+              labelText: '默认文字',
               //文字颜色
               labelFill: 'red',
               //文字大小
@@ -473,9 +474,10 @@
               //图标大小
               iconFontSize: 80,
             },
+            //自定义信息
             data: {
-              //自定义属性数据
-              type: 'node',
+              //图元标记，编辑器左侧能显示的哪些
+              sign: ['text'],
             },
           },
           {
@@ -516,17 +518,13 @@
               startArrow: true,
               startArrowType: 'circle',
             },
-
-            data: {
-              //自定义属性数据
-              type: 'edge',
-            },
+            type: 'polyline',
           },
           {
             id: 'node-5-node-6',
             source: 'node-5',
             target: 'node-6',
-            type: 'fly-marker-cubic',
+            // type: 'fly-marker-cubic',
           },
         ],
         combos: [
@@ -538,17 +536,32 @@
               fill: 'red',
               stroke: 'red',
             },
-            data: {
-              //自定义属性数据
-              type: 'combo',
-            },
           },
           { id: 'combo2', type: 'rect' },
         ],
       },
+      edge: {
+        //全部边线都是正交线
+        type: 'polyline',
+        style: {
+          router: true,
+        },
+      },
     });
     //监控事件
-    graphOb.on('click', (a, b, c) => {
+    graphOb.on('click', (e) => {
+      console.log('点击', e.target);
+      if (e.target?.nodeName == 'document' && !e.target.hasOwnProperty('type')) {
+        //点击了画布
+        gplotStore.isSelectContaine = true;
+      } else {
+        gplotStore.isSelectContaine = false;
+        let selectedObs = [];
+        //获取选中的对象
+        selectedObs = selectedObs.concat(graphOb.getElementDataByState('node', 'selected'));
+        selectedObs = selectedObs.concat(graphOb.getElementDataByState('combo', 'selected'));
+        gplotStore.selectedOb = selectedObs.length > 1 ? selectedObs : selectedObs[0];
+      }
       // const contextmenu = graphOb.getPluginInstance('ContextMenu');
       // contextmenu?.hide();
     });
