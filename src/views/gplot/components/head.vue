@@ -201,10 +201,10 @@
     return false;
   }
 
-  const { prefixCls } = useDesign('modeling');
+  const { prefixCls } = useDesign('GplotManage-');
 </script>
 <style lang="less" scoped>
-  @prefixCls: ~'@{namespace}-modeling';
+  @prefixCls: ~'@{namespace}-GplotManage-';
 
   :deep(.ant-upload-list) {
     display: none;

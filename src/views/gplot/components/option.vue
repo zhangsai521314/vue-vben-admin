@@ -288,7 +288,7 @@
     },
   });
 
-  const { prefixCls } = useDesign('GplotManage');
+  const { prefixCls } = useDesign('GplotManage-');
   const previewInfo = ref({
     width: 600,
     height: 500,
@@ -417,7 +417,7 @@
   );
 </script>
 <style lang="less" scoped>
-  @prefixCls: ~'@{namespace}-GplotManage';
+  @prefixCls: ~'@{namespace}-GplotManage-';
 
   .@{prefixCls}center-tool {
     display: flex;

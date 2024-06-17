@@ -71,7 +71,7 @@
     },
   });
 
-  const { prefixCls } = useDesign('GplotManage');
+  const { prefixCls } = useDesign('GplotManage-');
   const gplotStore = useGplotStoreWithOut();
 
   //全部的assembly
@@ -157,7 +157,7 @@
   onMounted(() => {});
 </script>
 <style lang="less" scoped>
-  @prefixCls: ~'@{namespace}-GplotManage';
+  @prefixCls: ~'@{namespace}-GplotManage-';
 
   .assemblySelected {
     color: #0960bd;

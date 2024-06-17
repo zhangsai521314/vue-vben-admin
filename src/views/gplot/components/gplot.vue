@@ -17,7 +17,9 @@
 </template>
 
 <script setup lang="ts">
-  import { Graph } from '@antv/g6';
+  import { Circle } from '@antv/g';
+  import { CubicHorizontal, ExtensionCategory, Graph, register, subStyleProps } from '@antv/g6';
+  import { Renderer } from '@antv/g-svg';
   import dayjs from 'dayjs';
   import ContextMenu from '@imengyu/vue3-context-menu';
   import { onMounted, ref, nextTick, createVNode, watch, unref } from 'vue';
@@ -102,6 +104,23 @@
         },
       },
     ]);
+    graphOb.updateComboData([
+      {
+        id: 'combo1',
+        style: {
+          fill: color,
+          stroke: color,
+        },
+      },
+    ]);
+    graphOb.updateEdgeData([
+      {
+        id: 'edge-1',
+        style: {
+          stroke: color,
+        },
+      },
+    ]);
     graphOb.draw();
   }
 
@@ -118,31 +137,34 @@
           x: zuoBiao[0],
           y: zuoBiao[1],
           //正方形圆角度
-          radius: 2,
+          radius: gplotStore.nodeConfig.style.rectRadius,
           //图形大小
-          size: 100,
+          size: gplotStore.nodeConfig.style.size,
           //图形填充色
-          fill: gplotStore.nodeConfig.nodeFill,
+          fill: gplotStore.nodeConfig.style.fill,
           //文字
-          labelText: gplotStore.labelText,
+          labelText: gplotStore.nodeConfig.style.labelText,
           //文字颜色
-          labelFill: gplotStore.labelFill,
+          labelFill: gplotStore.nodeConfig.style.labelFill,
           //文字大小
-          labelFontSize: gplotStore.labelFontSize,
+          labelFontSize: gplotStore.nodeConfig.style.labelFontSize,
           //文字位移
-          labelOffsetY: gplotStore.labelOffsetY,
+          labelOffsetY: gplotStore.nodeConfig.style.labelOffsetY,
           //图标类型
-          iconFontFamily: gplotStore.iconFontFamily,
+          iconFontFamily: gplotStore.nodeConfig.style.iconFontFamily,
           //图标
           iconText: eval(`'${ob.iconUnicode}'`),
           //图标颜色
-          iconFill: gplotStore.iconFill,
+          iconFill: gplotStore.nodeConfig.style.iconFill,
           //图标大小
-          iconFontSize: gplotStore.iconFontSize,
+          iconFontSize: gplotStore.nodeConfig.style.iconFontSize,
         },
         data: {
           //自定义属性数据
+          //节点类型
           type: 'node',
+          //图元标记，编辑器左侧能显示的哪些
+          sign: ['text'],
         },
       },
     ]);
@@ -199,10 +221,41 @@
 
   onMounted(() => {
     init();
+
+    //自定义边上的marker的渲染规则
+    class FlyMarkerCubic extends CubicHorizontal {
+      getMarkerStyle(attributes, t) {
+        console.log(attributes);
+        console.log(t);
+        return {
+          r: 5,
+          fill: 'red',
+          offsetPath: this.shapeMap.key,
+          ...subStyleProps(attributes, 'marker'),
+        };
+      }
+
+      onCreate() {
+        const marker = this.upsert(
+          'marker',
+          Circle,
+          this.getMarkerStyle(this.attributes, this),
+          this,
+        );
+        marker.animate([{ offsetDistance: 0 }, { offsetDistance: 1 }], {
+          duration: 1000,
+          iterations: Infinity,
+        });
+      }
+    }
+    register(ExtensionCategory.EDGE, 'fly-marker-cubic', FlyMarkerCubic);
+    //自定义边上的marker的渲染规则
+
     //画布配置：https://g6-next.antv.antgroup.com/api/graph/option
     graphOb = new Graph({
       //画布容器
       container: mountRef.value,
+      renderer: () => new Renderer(),
       //是否自动调整大小
       autoResize: true,
       //画布背景色
@@ -381,6 +434,13 @@
           },
         },
       ],
+      // layout: {
+      //   //
+      //   type: 'antv-dagre',
+      //   ranksep: 50,
+      //   nodesep: 5,
+      //   sortByCombo: true,
+      // },
       data: {
         nodes: [
           {
@@ -421,30 +481,30 @@
           {
             id: 'node-1',
             combo: 'combo1',
-            style: { x: 50, y: 100, labelText: 'node' },
+            style: { x: 50, y: 100, labelText: 'node1' },
           },
           {
             id: 'node-2',
             combo: 'combo1',
-            style: { x: 150, y: 100 },
+            style: { x: 150, y: 100, labelText: 'node2' },
           },
           {
             id: 'node-3',
             combo: 'combo2',
-            style: { x: 150, y: 200 },
+            style: { x: 150, y: 200, labelText: 'node3' },
           },
           {
             id: 'node-4',
             combo: 'combo2',
-            style: { x: 250, y: 200 },
+            style: { x: 250, y: 200, labelText: 'node4' },
           },
           {
             id: 'node-5',
-            style: { x: 250, y: 300 },
+            style: { x: 250, y: 300, labelText: 'node5' },
           },
           {
             id: 'node-6',
-            style: { x: 250, y: 400 },
+            style: { x: 250, y: 400, labelText: 'node6' },
           },
         ],
         edges: [
@@ -452,10 +512,21 @@
             id: 'edge-1',
             source: 'node-1',
             target: 'node-2',
+            style: {
+              startArrow: true,
+              startArrowType: 'circle',
+            },
+
             data: {
               //自定义属性数据
               type: 'edge',
             },
+          },
+          {
+            id: 'node-5-node-6',
+            source: 'node-5',
+            target: 'node-6',
+            type: 'fly-marker-cubic',
           },
         ],
         combos: [
@@ -463,6 +534,10 @@
             id: 'combo1',
             type: 'rect',
             combo: 'combo2',
+            style: {
+              fill: 'red',
+              stroke: 'red',
+            },
             data: {
               //自定义属性数据
               type: 'combo',

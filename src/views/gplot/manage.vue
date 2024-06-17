@@ -21,7 +21,7 @@
       <div :class="`${prefixCls}bottom-center`">
         <gplot ref="graphObRef" gplotId="gplotId" viewType="edit" />
       </div>
-      <div style="width: 4px; height: 100%; background-color: #fff"></div>
+      <div style="width: 2px; height: 100%; background-color: #eee"></div>
       <div :class="`${prefixCls}bottom-right`">
         <prop :graphObRef="graphObRef" />
       </div>
@@ -38,7 +38,7 @@
   import { ref, unref, watch, nextTick } from 'vue';
 
   defineOptions({ name: 'GplotManage' });
-  const { prefixCls } = useDesign('GplotManage');
+  const { prefixCls } = useDesign('GplotManage-');
   const { currentRoute } = useRouter();
   //获取url参数
   const { menuid } = unref(currentRoute).params;
@@ -46,7 +46,7 @@
   const graphObRef = ref(null);
 </script>
 <style lang="less" scoped>
-  @prefixCls: ~'@{namespace}-GplotManage';
+  @prefixCls: ~'@{namespace}-GplotManage-';
 
   .@{prefixCls} {
     // 弹性布局
@@ -107,8 +107,9 @@
       }
 
       .@{prefixCls}bottom-right {
-        width: 280px;
+        width: 300px;
         height: 100%;
+        padding: 0 4px;
         background-color: #fafbfc;
 
         .prop-bottom {
