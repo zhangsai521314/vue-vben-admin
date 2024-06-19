@@ -255,7 +255,7 @@
             name="mobile"
             :rules="[
               { required: true, message: '' },
-              { max: 30, message: '联系电话过长' },
+              { max: 15, message: '联系电话过长' },
               { validator: formValidator.positiveInteger, message: '联系电话格式为自然数' },
               { validator: formValidator.empty, message: '请输入联系电话' },
             ]"

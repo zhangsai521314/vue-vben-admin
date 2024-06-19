@@ -34,7 +34,11 @@ export const useGplotStore = defineStore({
     renderSuccess: false,
     isSelectContaine: true,
     selectedOb: {
+      id: '',
+      type: '',
       style: {
+        //节点类型
+        type: '',
         x: 0,
         y: 0,
         //边框角度
@@ -46,17 +50,100 @@ export const useGplotStore = defineStore({
         //是否显示文字
         label: true,
         //文字
-        labelText: '默认文字',
+        labelText: '',
         //文字颜色
         labelFill: '#000',
         //文字大小
         labelFontSize: 30,
         //文字位移X
-        labelOffsetX: -20,
+        labelOffsetX: 0,
         //文字位移Y
-        labelOffsetY: -20,
+        labelOffsetY: -13,
         //是否文字背景
-        labelBackground: true,
+        labelBackground: false,
+        //文字背景颜色
+        labelBackgroundFill: '#fff',
+        //文字边框颜色
+        labelBackgroundStroke: '#fff',
+        //文字边框短点大小
+        labelBackgroundLineDash: 0,
+        //文字边框大小
+        labelBackgroundLineWidth: 0,
+        //文字边框透明色
+        labelBackgroundOpacity: 1,
+        //文字边框圆角
+        labelBackgroundRadius: 0,
+        //文字内边距
+        labelPadding: 0,
+
+        //图标类型
+        iconFontFamily: 'iconfont',
+        //图标颜色
+        iconFill: '#1783FF',
+        //图标大小
+        iconFontSize: 80,
+        //透明度
+        opacity: 1,
+
+        //线条宽度
+        lineWidth: 2,
+        //虚线
+        lineDash: [0, 0],
+        //线条颜色
+        stroke: 'blue',
+        //是否显示开始箭头
+        startArrow: false,
+        //开始箭头大小
+        startArrowSize: 10,
+        //开始箭头类型
+        startArrowType: 'triangle',
+        //是否显示结束箭头
+        endArrow: false,
+        //结束箭头大小
+        endArrowSize: 10,
+        //结束箭头类型
+        endArrowType: 'triangle',
+
+        //组合的内边距
+        padding: 20,
+      },
+      data: {
+        //节点大类型：node、edge、combo
+        myType: '',
+        //锁定
+        myLockAll: false,
+        //事件
+        myEvent: [],
+      },
+    },
+    nodeConfig: {
+      id: '',
+      type: '',
+      style: {
+        //节点类型
+        type: '',
+        x: 0,
+        y: 0,
+        //边框角度
+        rectRadius: 2,
+        //大小
+        size: 100,
+        //填充色
+        fill: '',
+        //是否显示文字
+        label: true,
+        //文字
+        labelText: '',
+        //文字颜色
+        labelFill: '#000',
+        //文字大小
+        labelFontSize: 30,
+        //文字位移X
+        labelOffsetX: 0,
+        //文字位移Y
+        labelOffsetY: -13,
+        //是否文字背景
+        labelBackground: false,
         //文字背景颜色
         labelBackgroundFill: '#fff',
         //文字边框颜色
@@ -76,65 +163,36 @@ export const useGplotStore = defineStore({
         iconFill: '#1783FF',
         //图标大小
         iconFontSize: 80,
-        //透明度
-        opacity: 100,
 
+        //透明度
+        opacity: 1,
         //线条宽度
         lineWidth: 2,
         //线条颜色
-        stroke: '#9AAED1',
+        stroke: 'blue',
         //是否显示开始箭头
-        startArrow: true,
+        startArrow: false,
         //开始箭头大小
         startArrowSize: 10,
         //开始箭头类型
         startArrowType: 'triangle',
         //是否显示结束箭头
-        endArrow: true,
+        endArrow: false,
         //结束箭头大小
         endArrowSize: 10,
         //结束箭头类型
         endArrowType: 'triangle',
+
+        //组合的内边距
+        padding: 0,
       },
       data: {
+        //节点大类型：node、edge、combo
+        myType: '',
         //锁定
-        lockAll: false,
+        myLockAll: false,
         //事件
-        event: [],
-      },
-    },
-    nodeConfig: {
-      style: {
-        lineWidth: 2,
-        //node是方形的边框角度
-        radius: 2,
-        //node图形大小
-        size: 100,
-        //node图形填充色
-        fill: '',
-        //文字
-        labelText: '默认文字',
-        //文字颜色
-        labelFill: '#000',
-        //文字大小
-        labelFontSize: 30,
-        //文字位移
-        labelOffsetY: -12,
-        //图标类型
-        iconFontFamily: 'iconfont',
-        //图标颜色
-        iconFill: '#1783FF',
-        //图标大小
-        iconFontSize: 80,
-        //透明度
-        opacity: 100,
-      },
-      //自定义信息
-      data: {
-        //锁定
-        lockAll: false,
-        //图元标记，编辑器左侧能显示的哪些
-        sign: ['text'],
+        myEvent: [],
       },
     },
   }),

@@ -82,13 +82,13 @@ const Common = {
   getColor: function () {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
   },
-  //使用第二对象属性的值替换第一个对象存在的属性的值
-  objectReplace(o1, o2) {
-    if (o1 && o2) {
-      for (const key in o1) {
-        if (o2.hasOwnProperty(key)) {
-          o1[key] = _.cloneDeep(o2[key]);
-        }
+  //拷贝对象2中对象1存在的键给对象1
+  objectToObject(obj, obj2) {
+    for (const i in obj2) {
+      if ($.isPlainObject(obj[i])) {
+        this.objectToObject(obj[i], obj2[i]);
+      } else {
+        obj[i] = obj2[i];
       }
     }
   },

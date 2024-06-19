@@ -13,16 +13,16 @@
                   <div>
                     <div> 网格显示 </div>
                     <div>
-                      <a-switch
-                        v-model:checked="gplotStore.containerConfig.gridShow"
-                        size="small"
-                      />
+                      <a-switch v-model:checked="gplotStore.containerConfig.gridShow" />
                     </div>
                   </div>
                   <div>
                     <div> 背景颜色 </div>
                     <div class="upbackcolor">
-                      <selectColor :color="gplotStore.containerConfig.backgroundColor" />
+                      <selectColor
+                        :color="gplotStore.containerConfig.backgroundColor"
+                        @change="(value) => containerColorChange('backgroundColor', value)"
+                      />
                       <IconFontClass
                         @click="deleteBackgroundColor('canvas|backgroundColor')"
                         v-show="gplotStore.containerConfig.backgroundColor"
@@ -127,7 +127,7 @@
         </a-tabs>
       </div>
     </template>
-    <template v-if="gplotStore.selectedOb">
+    <template v-if="!Array.isArray(gplotStore.selectedOb)">
       <div :class="`${prefixCls}prop-attr`">
         <a-tabs
           v-model:activeKey="configTabsActiveKey"
@@ -142,6 +142,20 @@
                 :model="gplotStore.selectedOb.style"
               >
                 <a-form-item
+                  :class="{ 'not-click': gplotStore.selectedOb.data.myType != 'node' }"
+                  name="size"
+                  label="整体大小"
+                >
+                  <a-input-number
+                    v-model:value="gplotStore.selectedOb.style.size"
+                    min="0"
+                    :max="99999"
+                    :precision="0"
+                    addon-after="px"
+                  />
+                </a-form-item>
+                <a-form-item
+                  :class="{ 'not-click': gplotStore.selectedOb.data.myType != 'node' }"
                   name="x"
                   label="水平位置X"
                   :rules="[{ required: true, message: '请输入水平位置' }]"
@@ -150,40 +164,101 @@
                     style="width: 100px"
                     v-model:value="gplotStore.selectedOb.style.x"
                     addon-after="px"
-                    size="small"
                   />
                 </a-form-item>
                 <a-form-item
+                  :class="{ 'not-click': gplotStore.selectedOb.data.myType != 'node' }"
                   name="y"
                   label="水平位置Y"
                   :rules="[{ required: true, message: '请输入水平位置y' }]"
                 >
-                  <a-input-number
-                    v-model:value="gplotStore.selectedOb.style.y"
-                    addon-after="px"
-                    size="small"
-                  />
+                  <a-input-number v-model:value="gplotStore.selectedOb.style.y" addon-after="px" />
                 </a-form-item>
-                <a-form-item name="fill" label="背景颜色">
+                <a-form-item
+                  :class="{
+                    'not-click':
+                      gplotStore.selectedOb.data.myType != 'node' &&
+                      gplotStore.selectedOb.data.myType != 'combo',
+                  }"
+                  name="fill"
+                  label="背景颜色"
+                >
                   <div>
-                    <selectColor :color="gplotStore.selectedOb.style.fill" />
-                  </div>
-                </a-form-item>
-                <a-form-item name="stroke" label="线条颜色">
-                  <div>
-                    <selectColor :color="gplotStore.selectedOb.style.stroke" />
+                    <selectColor
+                      :color="gplotStore.selectedOb.style.fill"
+                      @change="(value) => colorChange('fill', value)"
+                    />
                   </div>
                 </a-form-item>
                 <a-form-item
+                  :class="{
+                    'not-click': gplotStore.selectedOb.data.myType != 'node',
+                  }"
+                  name="iconFill"
+                  label="图标颜色"
+                >
+                  <div>
+                    <selectColor
+                      :color="gplotStore.selectedOb.style.iconFill"
+                      @change="(value) => colorChange('iconFill', value)"
+                    />
+                  </div>
+                </a-form-item>
+                <a-form-item
+                  :class="{
+                    'not-click': gplotStore.selectedOb.data.myType != 'node',
+                  }"
+                  name="iconFontSize"
+                  label="图标大小"
+                  :autoLink="false"
+                >
+                  <a-row>
+                    <a-slider
+                      class="aSlider"
+                      v-model:value="gplotStore.selectedOb.style.iconFontSize"
+                      :min="0"
+                      :max="1000"
+                      :included="false"
+                      :tipFormatter="null"
+                    />
+                    <a-input-number
+                      style="width: 90px !important"
+                      v-model:value="gplotStore.selectedOb.style.iconFontSize"
+                      min="0"
+                      :max="1000"
+                      :precision="0"
+                      addon-after="px"
+                    />
+                  </a-row>
+                </a-form-item>
+                <a-form-item
+                  :class="{
+                    'not-click': gplotStore.selectedOb.data.myType == 'node',
+                  }"
+                  name="stroke"
+                  label="线条颜色"
+                >
+                  <div>
+                    <selectColor
+                      :color="gplotStore.selectedOb.style.stroke"
+                      @change="(value) => colorChange('stroke', value)"
+                    />
+                  </div>
+                </a-form-item>
+                <a-form-item
+                  :class="{
+                    'not-click': gplotStore.selectedOb.data.myType == 'node',
+                  }"
                   name="lineWidth"
                   label="线条宽度"
                   :rules="[{ required: true, message: '请输入线条宽度' }]"
+                  :autoLink="false"
                 >
                   <a-row>
                     <a-slider
                       class="aSlider"
                       v-model:value="gplotStore.selectedOb.style.lineWidth"
-                      :min="1"
+                      :min="0"
                       :max="50"
                       :included="false"
                       :tipFormatter="null"
@@ -192,21 +267,75 @@
                       style="width: 90px !important"
                       v-model:value="gplotStore.selectedOb.style.lineWidth"
                       addon-after="px"
-                      :min="1"
+                      :min="0"
                       :max="50"
-                      size="small"
                     />
                   </a-row>
                 </a-form-item>
+
                 <a-form-item
                   name="opacity"
                   label="透明度"
                   :rules="[{ required: true, message: '请输入透明度' }]"
+                  :autoLink="false"
                 >
                   <a-row>
                     <a-slider
                       class="aSlider"
                       v-model:value="gplotStore.selectedOb.style.opacity"
+                      :min="0"
+                      :max="1"
+                      :included="false"
+                      :tipFormatter="null"
+                      :step="0.0001"
+                    />
+                    <a-input-number
+                      style="width: 90px !important"
+                      v-model:value="gplotStore.selectedOb.style.opacity"
+                      min="0"
+                      :max="1"
+                      :step="0.0001"
+                    />
+                  </a-row>
+                </a-form-item>
+                <a-form-item
+                  :class="{
+                    'not-click': gplotStore.selectedOb.data.myType == 'combo',
+                  }"
+                  name="labelText"
+                  label="文字内容"
+                >
+                  <a-input
+                    v-model:value="gplotStore.selectedOb.style.labelText"
+                    placeholder="文字内容"
+                  />
+                </a-form-item>
+                <a-form-item
+                  :class="{
+                    'not-click': gplotStore.selectedOb.data.myType == 'combo',
+                  }"
+                  name="labelFill"
+                  label="文字颜色"
+                >
+                  <div>
+                    <selectColor
+                      :color="gplotStore.selectedOb.style.labelFill"
+                      @change="(value) => colorChange('labelFill', value)"
+                    />
+                  </div>
+                </a-form-item>
+                <a-form-item
+                  :class="{
+                    'not-click': gplotStore.selectedOb.data.myType == 'combo',
+                  }"
+                  name="labelFontSize"
+                  label="文字大小"
+                  :autoLink="false"
+                >
+                  <a-row>
+                    <a-slider
+                      class="aSlider"
+                      v-model:value="gplotStore.selectedOb.style.labelFontSize"
                       :min="0"
                       :max="100"
                       :included="false"
@@ -214,65 +343,47 @@
                     />
                     <a-input-number
                       style="width: 90px !important"
-                      v-model:value="gplotStore.selectedOb.style.opacity"
+                      v-model:value="gplotStore.selectedOb.style.labelFontSize"
                       min="0"
-                      :max="100"
-                      addon-after="%"
-                      size="small"
-                    />
-                  </a-row>
-                </a-form-item>
-                <a-form-item name="labelText" label="文字内容">
-                  <a-input
-                    size="small"
-                    v-model:value="gplotStore.selectedOb.style.labelText"
-                    placeholder="文字内容"
-                  />
-                </a-form-item>
-                <a-form-item name="labelFill" label="文字颜色">
-                  <div>
-                    <selectColor :color="gplotStore.selectedOb.style.labelFill" />
-                  </div>
-                </a-form-item>
-                <a-form-item name="labelFontSize" label="文字大小">
-                  <a-row>
-                    <a-slider
-                      class="aSlider"
-                      v-model:value="gplotStore.selectedOb.style.labelFontSize"
-                      :min="12"
-                      :max="100"
-                      :included="false"
-                      :tipFormatter="null"
-                    />
-                    <a-input-number
-                      style="width: 90px !important"
-                      v-model:value="gplotStore.selectedOb.style.labelFontSize"
-                      min="12"
                       :max="100"
                       :precision="0"
                       addon-after="px"
-                      size="small"
                     />
                   </a-row>
                 </a-form-item>
-                <a-form-item name="labelOffsetX" label="文字位移X">
+                <a-form-item
+                  :class="{
+                    'not-click': gplotStore.selectedOb.data.myType == 'combo',
+                  }"
+                  name="labelOffsetX"
+                  label="文字位移X"
+                >
                   <a-input-number
                     v-model:value="gplotStore.selectedOb.style.labelOffsetX"
                     addon-after="px"
-                    size="small"
                   />
                 </a-form-item>
-                <a-form-item name="labelOffsetY" label="文字位移Y">
+                <a-form-item
+                  :class="{
+                    'not-click': gplotStore.selectedOb.data.myType == 'combo',
+                  }"
+                  name="labelOffsetY"
+                  label="文字位移Y"
+                >
                   <a-input-number
                     v-model:value="gplotStore.selectedOb.style.labelOffsetY"
                     addon-after="px"
-                    size="small"
                   />
                 </a-form-item>
-                <a-form-item name="labelBackground" label="文字背景">
+                <a-form-item
+                  :class="{
+                    'not-click': gplotStore.selectedOb.data.myType == 'combo',
+                  }"
+                  name="labelBackground"
+                  label="文字背景"
+                >
                   <a-checkbox v-model:checked="gplotStore.selectedOb.style.labelBackground" />
                 </a-form-item>
-
                 <a-form-item
                   name="labelBackgroundFill"
                   label="文字背景色"
@@ -283,18 +394,28 @@
                   </div>
                 </a-form-item>
                 <a-form-item
+                  :class="{
+                    'not-click': gplotStore.selectedOb.data.myType == 'combo',
+                  }"
                   name="labelBackgroundStroke"
                   label="文字边框颜色"
                   v-show="gplotStore.selectedOb.style.labelBackground"
                 >
                   <div>
-                    <selectColor :color="gplotStore.selectedOb.style.labelBackgroundStroke" />
+                    <selectColor
+                      :color="gplotStore.selectedOb.style.labelBackgroundStroke"
+                      @change="(value) => colorChange('labelBackgroundStroke', value)"
+                    />
                   </div>
                 </a-form-item>
                 <a-form-item
+                  :class="{
+                    'not-click': gplotStore.selectedOb.data.myType == 'combo',
+                  }"
                   name="labelBackgroundLineWidth"
                   label="文字边框宽度"
                   v-show="gplotStore.selectedOb.style.labelBackground"
+                  :autoLink="false"
                 >
                   <a-row>
                     <a-slider
@@ -316,9 +437,13 @@
                   </a-row>
                 </a-form-item>
                 <a-form-item
+                  :class="{
+                    'not-click': gplotStore.selectedOb.data.myType == 'combo',
+                  }"
                   name="labelBackgroundRadius"
                   label="文字边框圆角"
                   v-show="gplotStore.selectedOb.style.labelBackground"
+                  :autoLink="false"
                 >
                   <a-row>
                     <a-slider
@@ -340,9 +465,13 @@
                   </a-row>
                 </a-form-item>
                 <a-form-item
+                  :class="{
+                    'not-click': gplotStore.selectedOb.data.myType == 'combo',
+                  }"
                   name="labelBackgroundOpacity"
                   label="文字边框透明"
                   v-show="gplotStore.selectedOb.style.labelBackground"
+                  :autoLink="false"
                 >
                   <a-row>
                     <a-slider
@@ -360,14 +489,17 @@
                       :max="100"
                       :precision="0"
                       addon-after="%"
-                      size="small"
                     />
                   </a-row>
                 </a-form-item>
                 <a-form-item
+                  :class="{
+                    'not-click': gplotStore.selectedOb.data.myType == 'combo',
+                  }"
                   name="labelBackgroundLineDash"
                   label="文字边框分割"
                   v-show="gplotStore.selectedOb.style.labelBackground"
+                  :autoLink="false"
                 >
                   <a-row>
                     <a-slider
@@ -388,7 +520,11 @@
                     />
                   </a-row>
                 </a-form-item>
-                <a-form-item name="startArrow" label="开始箭头">
+                <a-form-item
+                  :class="{ 'not-click': gplotStore.selectedOb.data.myType != 'edge' }"
+                  name="startArrow"
+                  label="开始箭头"
+                >
                   <a-checkbox v-model:checked="gplotStore.selectedOb.style.startArrow" />
                 </a-form-item>
                 <a-form-item
@@ -450,6 +586,7 @@
                   name="startArrowSize"
                   label="开始箭头大小"
                   v-show="gplotStore.selectedOb.style.startArrow"
+                  :autoLink="false"
                 >
                   <a-row>
                     <a-slider
@@ -470,7 +607,11 @@
                     />
                   </a-row>
                 </a-form-item>
-                <a-form-item name="endArrow" label="结束箭头">
+                <a-form-item
+                  :class="{ 'not-click': gplotStore.selectedOb.data.myType != 'edge' }"
+                  name="endArrow"
+                  label="结束箭头"
+                >
                   <a-checkbox v-model:checked="gplotStore.selectedOb.style.endArrow" />
                 </a-form-item>
                 <a-form-item
@@ -532,6 +673,7 @@
                   name="endArrowSize"
                   label="结束箭头大小"
                   v-show="gplotStore.selectedOb.style.endArrow"
+                  :autoLink="false"
                 >
                   <a-row>
                     <a-slider
@@ -582,7 +724,7 @@
                         <div>
                           <div> 事件类型 </div>
                           <div>
-                            <a-select v-model:value="item.event" style="width: 120px" size="small">
+                            <a-select v-model:value="item.event" style="width: 120px">
                               <a-select-option value="click">单击</a-select-option>
                               <a-select-option
                                 :disabled="
@@ -687,6 +829,16 @@
             </a-tab-pane>
           </template>
         </a-tabs>
+      </div>
+    </template>
+    <template v-else>
+      <div style="text-align: center">
+        <IconFontClass
+          name="icon-baseui-zanwuneirong"
+          :isSvg="true"
+          style="margin: 0 auto; font-size: 176px"
+        />
+        <div style="font-size: 16px"> 多项不支持更改</div>
       </div>
     </template>
   </div>
@@ -803,6 +955,13 @@
   const propContainerActiveKey = ref(['container', 'run']);
   const fileList = ref([]);
   function zoomChange(v) {}
+
+  function containerColorChange(attr, color) {
+    gplotStore.containerConfig[attr] = color;
+  }
+  function colorChange(attr, color) {
+    gplotStore.selectedOb.style[attr] = color;
+  }
 </script>
 <style lang="less" scoped>
   @prefixCls: ~'@{namespace}-GplotManage-';
@@ -847,6 +1006,14 @@
       display: flex;
       flex-direction: column;
       height: 100%;
+
+      :deep(.ant-collapse) {
+        border-radius: 0;
+      }
+
+      :deep(.ant-collapse > .ant-collapse-item:last-child) {
+        border-radius: 0;
+      }
 
       > div:first-child {
         width: 100%;

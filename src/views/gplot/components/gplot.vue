@@ -129,43 +129,25 @@
     //给定的浏览器坐标，转换为画布上的绘制坐标
     const zuoBiao = graphOb.getCanvasByClient([ob.domX, ob.domY]);
     const id = myCommon.uniqueId();
-    graphOb.addNodeData([
-      {
-        id: id,
-        type: 'rect',
-        style: {
-          x: zuoBiao[0],
-          y: zuoBiao[1],
-          //正方形圆角度
-          radius: gplotStore.nodeConfig.style.rectRadius,
-          //图形大小
-          size: gplotStore.nodeConfig.style.size,
-          //图形填充色
-          fill: gplotStore.nodeConfig.style.fill,
-          //文字
-          labelText: gplotStore.nodeConfig.style.labelText,
-          //文字颜色
-          labelFill: gplotStore.nodeConfig.style.labelFill,
-          //文字大小
-          labelFontSize: gplotStore.nodeConfig.style.labelFontSize,
-          //文字位移
-          labelOffsetY: gplotStore.nodeConfig.style.labelOffsetY,
-          //图标类型
-          iconFontFamily: gplotStore.nodeConfig.style.iconFontFamily,
-          //图标
-          iconText: eval(`'${ob.iconUnicode}'`),
-          //图标颜色
-          iconFill: gplotStore.nodeConfig.style.iconFill,
-          //图标大小
-          iconFontSize: gplotStore.nodeConfig.style.iconFontSize,
-        },
-        //自定义信息
-        data: {
-          //图元标记，编辑器左侧能显示的哪些
-          sign: ['text'],
-        },
+    const nodeConfig = _.cloneDeep(gplotStore.nodeConfig);
+    myCommon.objectToObject(nodeConfig, {
+      id: id,
+      type: 'rect',
+      style: {
+        x: zuoBiao[0],
+        y: zuoBiao[1],
+        //图标
+        iconText: eval(`'${ob.iconUnicode}'`),
+        lineWidth: 0,
+        labelText: '默认文字',
       },
-    ]);
+      //自定义信息
+      data: {
+        myType: 'node',
+      },
+    });
+    graphOb.addNodeData([nodeConfig]);
+    console.log('增加', nodeConfig);
     graphOb.draw();
   }
 
@@ -175,6 +157,16 @@
     //获取选中的对象
     selectedObs = selectedObs.concat(graphOb.getElementDataByState('node', 'selected'));
     selectedObs = selectedObs.concat(graphOb.getElementDataByState('combo', 'selected'));
+    selectedObs = selectedObs.concat(graphOb.getElementDataByState('node', 'active'));
+    selectedObs = selectedObs.concat(graphOb.getElementDataByState('combo', 'active'));
+    let active = graphOb
+      .getElementDataByState('node', 'active')
+      .filter((m) => selectedObs.find((i) => i.id != m.id));
+    selectedObs = selectedObs.concat(active);
+    active = graphOb
+      .getElementDataByState('combo', 'active')
+      .filter((m) => selectedObs.find((i) => i.id != m.id));
+    selectedObs = selectedObs.concat(active);
     if (selectedObs.length > 1) {
       //获取带组的选中的对象
       const comboSelectedObs = selectedObs.filter((m) => m.hasOwnProperty('combo'));
@@ -185,11 +177,32 @@
           {
             id: comboId,
             type: 'rect',
+            style: {
+              opacity: 1,
+              lineWidth: 2,
+              fill: '',
+              stroke: '#99ADD1',
+            },
             data: {
-              type: 'combo',
+              myType: 'combo',
             },
           },
         ]);
+
+        // const nodeConfig = _.cloneDeep(gplotStore.nodeConfig);
+        // myCommon.objectToObject(nodeConfig, {
+        //   id: comboId,
+        //   type: 'rect',
+        //   style: {
+        //     lineWidth: 2,
+        //   },
+        //   //自定义信息
+        //   data: {
+        //     type: 'combo',
+        //   },
+        // });
+        // graphOb.addComboData([nodeConfig]);
+
         selectedObs.forEach((m) => (m['combo'] = comboId));
         //更新的方式：https://github.com/antvis/G6/issues/5857
         const nodes = [];
@@ -214,41 +227,41 @@
         graphOb.updateNodeData(nodes);
         graphOb.draw();
       }
+      //有组合有节点:另外的组合形式
     }
   }
 
   onMounted(() => {
     init();
 
-    //自定义边上的marker的渲染规则
-    class FlyMarkerCubic extends CubicHorizontal {
-      getMarkerStyle(attributes, t) {
-        console.log(attributes);
-        console.log(t);
-        return {
-          r: 5,
-          fill: 'red',
-          offsetPath: this.shapeMap.key,
-          ...subStyleProps(attributes, 'marker'),
-        };
-      }
+    // //自定义边上的marker的渲染规则
+    // class FlyMarkerCubic extends CubicHorizontal {
+    //   getMarkerStyle(attributes, t) {
+    //     console.log(attributes);
+    //     console.log(t);
+    //     return {
+    //       r: 5,
+    //       fill: 'red',
+    //       offsetPath: this.shapeMap.key,
+    //       ...subStyleProps(attributes, 'marker'),
+    //     };
+    //   }
 
-      override onCreate() {
-        const marker = this.upsert(
-          'marker',
-          Circle,
-          this.getMarkerStyle(this.attributes, this),
-          this,
-        );
-        marker?.animate([{ offsetDistance: 0 }, { offsetDistance: 1 }], {
-          duration: 1000,
-          iterations: Infinity,
-        });
-      }
-    }
-    register(ExtensionCategory.EDGE, 'fly-marker-cubic', FlyMarkerCubic);
-    //自定义边上的marker的渲染规则
-
+    //   override onCreate() {
+    //     const marker = this.upsert(
+    //       'marker',
+    //       Circle,
+    //       this.getMarkerStyle(this.attributes, this),
+    //       this,
+    //     );
+    //     marker?.animate([{ offsetDistance: 0 }, { offsetDistance: 1 }], {
+    //       duration: 1000,
+    //       iterations: Infinity,
+    //     });
+    //   }
+    // }
+    // register(ExtensionCategory.EDGE, 'fly-marker-cubic', FlyMarkerCubic);
+    // //自定义边上的marker的渲染规则
     //画布配置：https://g6-next.antv.antgroup.com/api/graph/option
     graphOb = new Graph({
       //画布容器
@@ -294,9 +307,6 @@
           enable: () => {
             return props.viewType == 'edit';
           },
-          // onClick: (e) => {
-          //   //同 graphOb.on('click'一致
-          // },
         },
         {
           //框选
@@ -313,43 +323,14 @@
             stroke: '#0ff',
           },
         },
-        // {
-        //   //拉索选择
-        //   key: 'LassoSelect',
-        //   type: 'lasso-select',
-        //   mode: 'union',
-        //   trigger: 'alt',
-        //   style: {
-        //     fill: '#00f',
-        //     fillOpacity: 0.1,
-        //     stroke: '#0ff',
-        //     lineWidth: 2,
-        //   },
-        // },
-        {
-          //悬停激活
-          key: 'HoverActivate ',
-          type: 'hover-activate',
-          trigger: '',
-          enable: () => {
-            return props.viewType == 'edit';
-          },
-          onHover: (e) => {},
-        },
         {
           //创建边
           key: 'CreateEdge',
           type: 'create-edge',
           //drag拖拽的方式创建、click通过点击
           trigger: 'click',
-          style: {
-            //线的色
-            stroke: 'red',
-            //线的宽度
-            lineWidth: gplotStore.lineWidth,
-          },
+          style: gplotStore.nodeConfig.style,
           enable: () => {
-            console.log('连线', isDownAlt);
             return props.viewType == 'edit' && isDownAlt;
           },
           onCreate: (e) => {
@@ -358,17 +339,22 @@
               return null;
             }
             const data = graphOb.getData();
-            if (!data.edges.find((m) => m.source == e.source && m.target == e.target)) {
-              return e;
-            } else {
-              message.info('该节点直接已有连线');
-              return null;
+            if (data) {
+              if (!data.edges.find((m) => m.source == e.source && m.target == e.target)) {
+                e['data'] = {
+                  myType: 'edge',
+                  lockAll: false,
+                  event: [],
+                };
+                return e;
+              } else {
+                message.info('该节点直接已有连线');
+                return null;
+              }
             }
+            return null;
           },
-          // onFinish: (e) => {
-          //   debugger;
-          //   return true;
-          // },
+          onFinish: (e) => {},
         },
       ],
       plugins: [
@@ -443,102 +429,9 @@
       //   sortByCombo: true,
       // },
       data: {
-        nodes: [
-          {
-            id: 'default',
-            type: 'rect',
-            combo: 'combo1',
-            style: {
-              x: 350,
-              y: 100,
-              //正方形圆角度
-              radius: 2,
-              //图形大小
-              size: 100,
-              //图形填充色
-              fill: '',
-              //文字
-              labelText: '默认文字',
-              //文字颜色
-              labelFill: 'red',
-              //文字大小
-              labelFontSize: 30,
-              //文字位移
-              labelOffsetY: -20,
-              //图标类型
-              iconFontFamily: 'iconfont',
-              //图标
-              iconText: '\ue6e5',
-              //图标颜色
-              iconFill: 'blue',
-              //图标大小
-              iconFontSize: 80,
-            },
-            //自定义信息
-            data: {
-              //图元标记，编辑器左侧能显示的哪些
-              sign: ['text'],
-            },
-          },
-          {
-            id: 'node-1',
-            combo: 'combo1',
-            style: { x: 50, y: 100, labelText: 'node1' },
-          },
-          {
-            id: 'node-2',
-            combo: 'combo1',
-            style: { x: 150, y: 100, labelText: 'node2' },
-          },
-          {
-            id: 'node-3',
-            combo: 'combo2',
-            style: { x: 150, y: 200, labelText: 'node3' },
-          },
-          {
-            id: 'node-4',
-            combo: 'combo2',
-            style: { x: 250, y: 200, labelText: 'node4' },
-          },
-          {
-            id: 'node-5',
-            style: { x: 250, y: 300, labelText: 'node5' },
-          },
-          {
-            id: 'node-6',
-            style: { x: 250, y: 400, labelText: 'node6' },
-          },
-        ],
-        edges: [
-          {
-            id: 'edge-1',
-            source: 'node-1',
-            target: 'node-2',
-            style: {
-              startArrow: true,
-              startArrowType: 'circle',
-            },
-            type: 'polyline',
-          },
-          {
-            id: 'node-5-node-6',
-            source: 'node-5',
-            target: 'node-6',
-            // type: 'fly-marker-cubic',
-          },
-        ],
-        combos: [
-          {
-            id: 'combo1',
-            type: 'rect',
-            combo: 'combo2',
-            style: {
-              fill: 'red',
-              stroke: 'red',
-            },
-          },
-          { id: 'combo2', type: 'rect' },
-        ],
+        nodes: [],
+        edges: [],
+        combos: [],
       },
       edge: {
         //全部边线都是正交线
@@ -560,7 +453,21 @@
         //获取选中的对象
         selectedObs = selectedObs.concat(graphOb.getElementDataByState('node', 'selected'));
         selectedObs = selectedObs.concat(graphOb.getElementDataByState('combo', 'selected'));
-        gplotStore.selectedOb = selectedObs.length > 1 ? selectedObs : selectedObs[0];
+        selectedObs = selectedObs.concat(graphOb.getElementDataByState('edge', 'selected'));
+        console.log('点击获取', selectedObs);
+        if (selectedObs.length == 0) {
+          gplotStore.isSelectContaine = true;
+        } else if (selectedObs.length > 1) {
+          gplotStore.selectedOb = selectedObs;
+        } else {
+          const activeOb = graphOb.getElementData(e.target.id);
+          console.log('点击获取activeOb', activeOb);
+          gplotStore.selectedOb = {
+            id: activeOb.id,
+            style: _.cloneDeep(activeOb.style),
+            data: _.cloneDeep(activeOb.data),
+          };
+        }
       }
       // const contextmenu = graphOb.getPluginInstance('ContextMenu');
       // contextmenu?.hide();
@@ -591,26 +498,35 @@
   watch(
     () => gplotStore.renderSuccess,
     () => {
-      let i = 0;
-      setInterval(() => {
-        changeStatus(i % 2 == 0 ? 'green' : 'red');
-        i++;
-      }, 1000);
+      // let i = 0;
+      // setInterval(() => {
+      //   changeStatus(i % 2 == 0 ? 'green' : 'red');
+      //   i++;
+      // }, 1000);
     },
   );
 
-  //线的宽度改变
   watch(
-    () => gplotStore.lineWidth,
+    () => gplotStore.selectedOb,
     () => {
-      if (graphOb) {
-        const CreateEdge = graphOb.getBehaviors().find((m) => m.key == 'CreateEdge');
-        CreateEdge.style.lineWidth = gplotStore.lineWidth;
-        graphOb.updateBehavior(CreateEdge);
+      console.log('切换', gplotStore.selectedOb);
+      if (!Array.isArray(gplotStore.selectedOb)) {
+        switch (gplotStore.selectedOb.data.myType) {
+          case 'node':
+            graphOb.updateNodeData([gplotStore.selectedOb]);
+            break;
+          case 'edge':
+            graphOb.updateEdgeData([gplotStore.selectedOb]);
+            break;
+          case 'combo':
+            graphOb.updateComboData([gplotStore.selectedOb]);
+            break;
+        }
+        graphOb.draw();
       }
     },
+    { deep: true },
   );
-  //线的颜色改变
 
   //暴露给父组件可以调用的方法
   defineExpose({
