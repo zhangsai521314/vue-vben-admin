@@ -4,7 +4,7 @@ import { defHttp } from '@/utils/http/axios';
 const Gplot = {
   //根据ID获取详情
   GetGplot: function (params) {
-    return defHttp.post({
+    return defHttp.get({
       url: '/Gplot/GetGplot/',
       params,
     });
@@ -41,6 +41,20 @@ const Gplot = {
   GetGplotelements: function () {
     return defHttp.get({
       url: '/Gplot/GetGplotelements',
+    });
+  },
+  //新增历史配置信息
+  AddtGplotHis: function (params) {
+    return defHttp.post({
+      url: '/Gplot/AddtGplotHis',
+      params,
+    });
+  },
+  //获取历史配置信息的最新一条
+  GetGplotHisLast: function (params) {
+    return defHttp.get({
+      url: '/Gplot/GetGplotHisLast/',
+      params,
     });
   },
 };

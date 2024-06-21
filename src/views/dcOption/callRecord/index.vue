@@ -463,12 +463,32 @@
                 }
               });
             } else {
-              message.info(data.message);
+              message.info(
+                data.message == null
+                  ? data.recordFileStatus == 1
+                    ? '获取成功'
+                    : data.recordFileStatus == 2
+                      ? '正在获取'
+                      : data.recordFileStatus == 3
+                        ? '正在存储'
+                        : '获取失败'
+                  : data.message,
+              );
             }
           } else if (data.recordFileStatus == 1) {
             myCommon.downLoadFileByUrl(data.recordFile);
           } else {
-            message.info(data.message);
+            message.info(
+              data.message == null
+                ? data.recordFileStatus == 1
+                  ? '获取成功'
+                  : data.recordFileStatus == 2
+                    ? '正在获取'
+                    : data.recordFileStatus == 3
+                      ? '正在存储'
+                      : '获取失败'
+                : data.message,
+            );
           }
         });
     }

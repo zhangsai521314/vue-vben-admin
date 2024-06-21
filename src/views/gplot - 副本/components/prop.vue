@@ -6,156 +6,156 @@
       <div :class="`${prefixCls}prop-container`">
         <a-tabs :tabBarStyle="{ height: '32px', marginBottom: '0.5px', background: '#fff' }">
           <a-tab-pane key="containerConfig" tab="容器配置">
-            <a-form
-              :label-col="{ span: 10 }"
-              :wrapper-col="{ span: 14 }"
-              autocomplete="off"
-              :model="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig"
+            <a-collapse
+              v-model:activeKey="propContainerActiveKey"
+              :class="`${prefixCls}prop-container-content`"
             >
-              <!-- <a-divider orientation="center">编辑配置</a-divider> -->
-              <a-form-item name="gridShow" label="网格显示">
-                <a-switch
-                  v-model:checked="
-                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.grid.myIsShow
-                  "
-                />
-              </a-form-item>
-              <a-form-item name="background" label="背景颜色">
-                <div>
-                  <selectColor
-                    :color="
-                      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.background
-                        .myBackground
-                    "
-                    @change="(value) => containerColorChange('myBackground', value)"
-                  />
-                </div>
-              </a-form-item>
-              <a-form-item name="backgroundImg" label="背景图片">
-                <div class="upbackimg">
-                  <a-upload
-                    v-model:fileList="fileList"
-                    :maxCount="1"
-                    :multiple="false"
-                    accept=".png,.jpg,.jpeg,.svg"
-                    :before-upload="(file) => beforeUpload(file, 'backgroundImage')"
-                  >
-                    <div
-                      v-if="
-                        !gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.background
-                          .backgroundImage
-                      "
-                    >
-                      <IconFontClass style="font-size: 16px" name="icon-baseui-tupian2" />
-                    </div>
-                    <div v-else>
-                      <img
-                        style="
-                          width: 25px;
-                          height: 25px;
-                          background-repeat: no-repeat;
-                          background-size: 100% 100%;
-                        "
-                        :src="
-                          gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig
-                            .background.backgroundImage
+              <a-collapse-panel key="container" header="画布">
+                <div :class="`${prefixCls}prop-config`">
+                  <div>
+                    <div> 网格显示 </div>
+                    <div>
+                      <a-switch
+                        v-model:checked="
+                          gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.gridShow
                         "
                       />
                     </div>
-                  </a-upload>
-                  <IconFontClass
-                    @click="deleteBackgroundImg('backgroundImage')"
-                    v-show="
-                      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.background
-                        .backgroundImage
-                    "
-                    style="
-                      position: absolute;
-                      top: -2px;
-                      right: 0;
-                      font-size: 12px;
-                      cursor: pointer;
-                    "
-                    name="icon-baseui-delete"
-                  />
+                  </div>
+                  <div>
+                    <div> 背景颜色 </div>
+                    <div class="upbackcolor">
+                      <selectColor
+                        :color="
+                          gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig
+                            .backgroundColor
+                        "
+                        @change="(value) => containerColorChange('backgroundColor', value)"
+                      />
+                      <IconFontClass
+                        @click="deleteBackgroundColor('canvas|backgroundColor')"
+                        v-show="
+                          gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig
+                            .backgroundColor
+                        "
+                        style="
+                          position: absolute;
+                          top: -2px;
+                          right: 0;
+                          font-size: 12px;
+                          cursor: pointer;
+                        "
+                        name="icon-baseui-delete"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div> 背景图片 </div>
+                    <div>
+                      <div class="upbackimg">
+                        <a-upload
+                          v-model:fileList="fileList"
+                          :maxCount="1"
+                          :multiple="false"
+                          accept=".png,.jpg,.jpeg,.svg"
+                          :before-upload="(file) => beforeUpload(file, 'canvas|backgroundImg')"
+                        >
+                          <div
+                            v-if="
+                              !gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig
+                                .backgroundImg
+                            "
+                          >
+                            <IconFontClass style="font-size: 16px" name="icon-baseui-tupian2" />
+                          </div>
+                          <div v-else>
+                            <img
+                              style="
+                                width: 25px;
+                                height: 25px;
+                                background-repeat: no-repeat;
+                                background-size: 100% 100%;
+                              "
+                              :src="
+                                gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig
+                                  .backgroundImg
+                              "
+                            />
+                          </div>
+                        </a-upload>
+                        <IconFontClass
+                          @click="deleteBackgroundImg('canvas|backgroundImg')"
+                          v-show="
+                            gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig
+                              .backgroundImg
+                          "
+                          style="
+                            position: absolute;
+                            top: -2px;
+                            right: 0;
+                            font-size: 12px;
+                            cursor: pointer;
+                          "
+                          name="icon-baseui-delete"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div> 缩放 </div>
+                    <div style="display: flex; width: 200px; height: 25px">
+                      <div style="width: 100%">
+                        <a-slider
+                          v-model:value="
+                            gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.zoom
+                          "
+                          :min="10"
+                          :max="500"
+                          :marks="[100]"
+                          :included="false"
+                          :tipFormatter="null"
+                        />
+                      </div>
+                      <span style="line-height: 28px"
+                        >{{
+                          gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.zoom
+                        }}%</span
+                      >
+                    </div>
+                  </div>
+                  <div>
+                    <a-space size="1">
+                      <a-tag @click="zoomChange(-1)" style="margin: 0 1 0 0; padding: 0 1px"
+                        >缩放到内容</a-tag
+                      >
+                      <a-tag @click="zoomChange(-2)" style="margin: 1; padding: 0 1px"
+                        >缩放到宽度</a-tag
+                      >
+                      <a-tag @click="zoomChange(-3)" style="margin: 1; padding: 0 1px"
+                        >缩放到画布</a-tag
+                      >
+                      <a-tag @click="zoomChange(-4)" style="margin: 0 0 0 1; padding: 0 1px"
+                        >重置缩放</a-tag
+                      >
+                    </a-space>
+                  </div>
                 </div>
-              </a-form-item>
-              <a-form-item
-                :class="{
-                  'not-click':
-                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
-                    'combo',
-                }"
-                name="zoom"
-                label="缩放大小"
-                :autoLink="false"
-              >
-                <a-row>
-                  <a-slider
-                    class="aSlider"
-                    v-model:value="
-                      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.zoom
-                    "
-                    :min="0"
-                    :max="10"
-                    :step="0.01"
-                    :included="false"
-                    :tipFormatter="null"
-                  />
-                  <a-input-number
-                    style="width: 82px !important"
-                    v-model:value="
-                      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.zoom
-                    "
-                    :min="0"
-                    :max="10"
-                    :precision="3"
-                    :step="0.01"
-                  />
-                </a-row>
-                <a-row style="margin: 2px 0">
-                  <a-space size="1">
-                    <a-tooltip>
-                      <template #title>将图平移至视口中心</template>
-                      <a-tag
-                        @click="
-                          () => {
-                            if (props.graphObRef) {
-                              props.graphObRef.fitCenter();
-                            }
-                          }
-                        "
-                        >fitCenter</a-tag
-                      >
-                    </a-tooltip>
-                    <a-tooltip>
-                      <template #title>将图缩放至合适大小并平移至视口中心</template>
-                      <a-tag
-                        @click="
-                          () => {
-                            if (props.graphObRef) {
-                              props.graphObRef.fitView();
-                            }
-                          }
-                        "
-                        >fitView</a-tag
-                      >
-                    </a-tooltip>
-                  </a-space>
-                </a-row>
-              </a-form-item>
-              <a-divider orientation="center">展示配置</a-divider>
-              <a-form-item name="runType" label="画布">
-                <a-checkbox-group
-                  v-model:value="
-                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.runType
-                  "
-                >
-                  <a-checkbox value="zommCanvas">锁定画布缩放</a-checkbox>
-                  <a-checkbox value="dragCanvas">锁定画布平移</a-checkbox>
-                </a-checkbox-group>
-              </a-form-item>
-            </a-form>
+              </a-collapse-panel>
+              <a-collapse-panel key="run" header="展示">
+                <div :class="`${prefixCls}prop-config`">
+                  <div>
+                    <a-checkbox-group
+                      v-model:value="
+                        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.runType
+                      "
+                    >
+                      <a-checkbox value="zommCanvas">锁定画布缩放</a-checkbox>
+                      <a-checkbox value="dragCanvas">锁定画布平移</a-checkbox>
+                    </a-checkbox-group>
+                  </div>
+                </div>
+              </a-collapse-panel>
+            </a-collapse>
           </a-tab-pane>
         </a-tabs>
       </div>
@@ -180,7 +180,6 @@
                 :model="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style"
               >
                 <a-form-item
-                  style="margin-top: 2px"
                   :class="{
                     'not-click':
                       gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType !=
@@ -1122,6 +1121,58 @@
         return {};
       },
     },
+    //选中的容器配置
+    containerConfig: {
+      type: Object,
+      default() {
+        return {
+          //容器大小类型
+          size: 'custom',
+          //宽度
+          sizeWidth: '',
+          //高度
+          sizeHeight: '',
+          //背景色
+          backgroundColor: '',
+          //背景图
+          backgroundImg: '',
+          //自定义接口是否启用
+          requestUse: false,
+          //接口刷新频率
+          requstRefresh: 1000,
+          //运行方式
+          runType: [],
+        };
+      },
+    },
+    //修改当前选中容器的属性值
+    updateSelectContainerValue: {
+      type: Function,
+      default() {
+        return (attr, value) => {};
+      },
+    },
+    //控制属性的显示
+    showSign: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+    //canvas对象
+    containerObArray: {
+      type: Array,
+      default() {
+        return null;
+      },
+    },
+    //视频列表
+    videoData: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
     menuTreeData: {
       type: Array,
       default() {
@@ -1134,40 +1185,11 @@
   const fileList = ref([]);
   function zoomChange(v) {}
 
-  //容器颜色的改变
   function containerColorChange(attr, color) {
-    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.background[attr] = color;
+    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig[attr] = color;
   }
-  //属性颜色的改变
   function colorChange(attr, color) {
     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style[attr] = color;
-  }
-  //容器背景图片上传
-  function beforeUpload(file, attr) {
-    return new Promise((resolve, reject) => {
-      const isLt5M = file.size / 1024 / 1024 < 5;
-      if (!isLt5M) {
-        message.error('文件大小不可超过 5MB');
-      } else {
-        myCommon
-          .imgBase64(file)
-          .then((data) => {
-            gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.background[attr] =
-              `url(${data})`;
-          })
-          .catch((error) => {
-            console.error(error);
-            message.error('图片转换失败');
-          });
-      }
-      //解决这个组件上传的个数超过限制时会报：warning.js:6 Warning: [antdv: Checkbox] `value` is not validate prop, do you mean `checked`?
-      fileList.value = [];
-      reject();
-    });
-  }
-  //删除容器背景图片
-  function deleteBackgroundImg(attr) {
-    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.background[attr] = '';
   }
 </script>
 <style lang="less" scoped>
@@ -1222,7 +1244,32 @@
         border-radius: 0;
       }
 
-      .backgroundColor {
+      > div:first-child {
+        width: 100%;
+        height: 35px;
+        // border-bottom: 1px solid #dfe3e8;
+        padding-left: 10px;
+        color: rgb(51 51 51);
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 35px;
+      }
+
+      > div:last-child {
+        flex: 1 auto;
+        flex-basis: 0;
+        overflow: auto;
+
+        :deep(.ant-collapse-header) {
+          padding: 3px 16px;
+        }
+
+        :deep(.ant-collapse-content-box) {
+          padding: 5px;
+        }
+      }
+
+      .upbackcolor {
         position: relative;
       }
 
@@ -1237,11 +1284,55 @@
           display: none;
         }
       }
+    }
 
-      :deep(.ant-divider-horizontal.ant-divider-with-text) {
-        margin: 5px 0;
-        color: #0960bd;
-        font-size: 13px;
+    .@{prefixCls}prop-config {
+      display: flex;
+      flex-flow: row wrap;
+
+      :deep(.ant-tag) {
+        margin-inline-end: 5px;
+        cursor: pointer;
+      }
+      .@{prefixCls}config-quick {
+        position: relative;
+
+        > i {
+          padding: 0;
+          padding: 0 5px;
+          font-size: 17px;
+          font-weight: 500;
+        }
+      }
+
+      :deep(.ant-input-number-group-addon) {
+        padding: 0 2px;
+        color: rgb(209 209 209);
+        font-size: 10px;
+      }
+
+      > div {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 5px;
+      }
+
+      .upbackcolor {
+        position: relative;
+      }
+
+      .upbackimg {
+        position: relative;
+        width: 25px;
+        height: 25px;
+        border: 1px solid #e6e6e6;
+        text-align: center;
+
+        :deep(.ant-upload-list) {
+          display: none;
+        }
       }
     }
 

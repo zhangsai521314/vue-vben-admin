@@ -71,7 +71,7 @@
     "@ant-design/icons-vue": "^7.0.1",
     "@antv/g": "^6.0.6",
     "@antv/g-svg": "^2.0.7",
-    "@antv/g6": "5.0.1",
+    "@antv/g6": "^5.0.2",
     "@ckpack/vue-color": "^1.5.0",
     "@codemirror/lang-javascript": "^6.2.2",
     "@codemirror/lang-json": "^6.0.1",

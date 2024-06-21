@@ -149,7 +149,7 @@
             <template #title>预览</template>
             <div style="float: right">
               <a-spin :spinning="isRunSavePreview">
-                <IconFontClass @click="props.viewPre()" name="icon-baseui-dapingzhanshi" />
+                <IconFontClass @click="previewClick" name="icon-baseui-dapingzhanshi" />
               </a-spin>
             </div>
           </a-tooltip>
@@ -185,14 +185,6 @@
         return null;
       },
     },
-    //预览
-    viewPre: {
-      type: Function,
-      default() {
-        return () => {};
-      },
-    },
-
     //总的容器配置
     canvasCotainers: {
       type: Array,

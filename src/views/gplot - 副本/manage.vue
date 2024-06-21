@@ -12,39 +12,23 @@
       />
     </div> -->
     <div :class="`${prefixCls}content-center`">
-      <option_ :graphObRef="graphObRef" :viewPre="viewPre" />
+      <option_ :graphObRef="graphObRef" />
     </div>
     <div :class="`${prefixCls}content-bottom`" class="draggable-content">
       <div :class="`${prefixCls}bottom-left`">
         <assembly :graphObRef="graphObRef" />
       </div>
       <div :class="`${prefixCls}bottom-center`">
-        <gplot ref="graphObRef" :gplotId="gplotId" viewType="edit" :menuid="menuid" />
+        <gplot ref="graphObRef" gplotId="gplotId" viewType="edit" />
       </div>
       <div style="width: 2px; height: 100%; background-color: #eee"></div>
       <div :class="`${prefixCls}bottom-right`">
         <prop :graphObRef="graphObRef" />
       </div>
     </div>
-    <a-modal
-      wrap-class-name="gplot-full-modal"
-      v-model:open="openView"
-      title="预览"
-      width="100%"
-      :footer="null"
-      @on-cancel="viewCancel"
-    >
-      <viewIndex
-        v-if="openView"
-        style="width: 100%; height: 100%"
-        viewType="pre"
-        :gplotId="graphObRef.getGplotId()"
-      />
-    </a-modal>
   </MyContent>
 </template>
 <script setup lang="ts">
-  import viewIndex from './index.vue';
   import { useRouter } from 'vue-router';
   import { useDesign } from '@/hooks/web/useDesign';
   import option_ from './components/option.vue';
@@ -55,71 +39,13 @@
 
   defineOptions({ name: 'GplotManage' });
   const { prefixCls } = useDesign('GplotManage-');
-  //获取url参数
   const { currentRoute } = useRouter();
+  //获取url参数
   const { menuid } = unref(currentRoute).params;
   const gplotId = ref(null);
   const graphObRef = ref(null);
-  const openView = ref(false);
-
-  //预览
-  function viewPre() {
-    console.log(graphObRef.value.getGplotId());
-    openView.value = true;
-  }
-  function viewCancel() {
-    openView.value = false;
-  }
 </script>
-<style lang="less">
-  .gplot-full-modal {
-    .ant-modal {
-      top: 0;
-      max-width: 100%;
-      margin: 0;
-      padding-bottom: 0;
-    }
-
-    .ant-modal-content {
-      display: flex;
-      flex-direction: column;
-      height: calc(100vh) !important;
-      border-radius: 0;
-    }
-
-    .ant-modal-body {
-      flex: 1;
-    }
-
-    .ant-modal-header {
-      margin-bottom: 0;
-      padding: 6px;
-    }
-
-    .ant-modal-close-x {
-      line-height: 36px !important;
-    }
-  }
-</style>
 <style lang="less" scoped>
-  .full-modal {
-    .ant-modal {
-      top: 0;
-      max-width: 100%;
-      margin: 0;
-      padding-bottom: 0;
-    }
-
-    .ant-modal-content {
-      display: flex;
-      flex-direction: column;
-      height: calc(100vh) !important;
-    }
-
-    .ant-modal-body {
-      flex: 1;
-    }
-  }
   @prefixCls: ~'@{namespace}-GplotManage-';
 
   .@{prefixCls} {

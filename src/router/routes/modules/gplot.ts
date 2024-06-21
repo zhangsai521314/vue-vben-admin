@@ -25,7 +25,7 @@ const GplotRouter: AppRouteModule = {
       },
     },
     {
-      path: 'index/:menuid',
+      path: 'index/:gplotId',
       name: 'Gplot',
       component: () => import('/@/views/gplot/index.vue'),
       meta: {

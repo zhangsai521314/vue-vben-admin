@@ -17,13 +17,12 @@
 </template>
 
 <script setup lang="ts">
-  import { useAppStore } from '@/store/modules/app';
   import { Circle } from '@antv/g';
   import { CubicHorizontal, ExtensionCategory, Graph, register, subStyleProps } from '@antv/g6';
   import { Renderer } from '@antv/g-svg';
   import dayjs from 'dayjs';
   import ContextMenu from '@imengyu/vue3-context-menu';
-  import { onMounted, ref, nextTick, createVNode, watch, unref, onBeforeUnmount } from 'vue';
+  import { onMounted, ref, nextTick, createVNode, watch, unref } from 'vue';
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import { tryOnUnmounted } from '@vueuse/core';
@@ -34,8 +33,6 @@
   import * as echarts from 'echarts';
   //快捷键监控
   import shortcutKey from 'keymaster';
-  import gplotApi from '@/api/gplot';
-  import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils';
 
   const props = defineProps({
     viewType: {
@@ -44,24 +41,9 @@
         return 'monitor';
       },
     },
-    gplotId: {
-      type: String,
-      default() {
-        return null;
-      },
-    },
-    menuId: {
-      type: String,
-      default() {
-        return null;
-      },
-    },
   });
   const gplotKey = `${myCommon.uniqueId()}`;
-  const timeKey = `gplot_${myCommon.uniqueId()}`;
-  const appStore = useAppStore();
   const gplotStore = useGplotStoreWithOut();
-  //初始化配置
   gplotStore.setGplotKeyOb(gplotKey);
   //拓扑图对象
   let graphOb: Graph;
@@ -71,411 +53,14 @@
   let isDownAlt = false;
   let isDownCtrl = false;
   let isDownShift = false;
-  //保存的配置id
-  let gplotId = props.gplotId;
-  //动态保存配置信息id
-  let changeSaveTimeId;
-  //是否需要保存
-  let isHaveSave = false;
 
   shortcutKey_();
 
-  async function init() {
+  function init() {
     // rendering.value = true;
     // setInterval(() => {
     //   gplotStore.gplotKeyOb[gplotKey].lineWidth = gplotStore.gplotKeyOb[gplotKey].lineWidth + 2;
     // }, 2000);
-    let gplotConfig = {};
-    if (gplotId != null) {
-      try {
-        const config = await getConfig();
-        gplotConfig = JSON.parse(config.gplotConfig);
-        gplotStore.gplotKeyOb[gplotKey].containerConfig = JSON.parse(config.globalConfig);
-      } catch (error) {
-        message.warning('获取配置信息失败');
-      }
-    }
-    // //自定义边上的marker的渲染规则
-    // class FlyMarkerCubic extends CubicHorizontal {
-    //   getMarkerStyle(attributes, t) {
-    //     console.log(attributes);
-    //     console.log(t);
-    //     return {
-    //       r: 5,
-    //       fill: 'red',
-    //       offsetPath: this.shapeMap.key,
-    //       ...subStyleProps(attributes, 'marker'),
-    //     };
-    //   }
-
-    //   override onCreate() {
-    //     const marker = this.upsert(
-    //       'marker',
-    //       Circle,
-    //       this.getMarkerStyle(this.attributes, this),
-    //       this,
-    //     );
-    //     marker?.animate([{ offsetDistance: 0 }, { offsetDistance: 1 }], {
-    //       duration: 1000,
-    //       iterations: Infinity,
-    //     });
-    //   }
-    // }
-    // register(ExtensionCategory.EDGE, 'fly-marker-cubic', FlyMarkerCubic);
-    // //自定义边上的marker的渲染规则
-    //画布配置：https://g6-next.antv.antgroup.com/api/graph/option
-
-    const graphConfig = {
-      //画布容器
-      container: mountRef.value,
-      // renderer: () => new Renderer(),
-      //是否自动调整大小
-      autoResize: true,
-      // //画布背景色，暂有bug
-      // background: gplotStore.gplotKeyOb[gplotKey].containerConfig.backgroundColor,
-      //缩放比列
-      zoom: 1,
-      //图的宽度
-      width: mountRef.value?.clientWidth,
-      //图的高度
-      height: mountRef.value?.clientHeight,
-      //功能控制 https://g6-next.antv.antgroup.com/api/behaviors/brush-select
-      behaviors: [
-        {
-          key: 'ZoomCanvas',
-          type: 'zoom-canvas',
-          onFinish: () => {
-            console.log(graphOb.getZoom());
-            gplotStore.gplotKeyOb[gplotKey].containerConfig.zoom = graphOb.getZoom();
-          },
-          enable: () => {
-            if (props.viewType == 'edit') {
-              return props.viewType == 'edit' && !isDownShift;
-            } else {
-              return !gplotStore.gplotKeyOb[gplotKey].containerConfig.runType.includes(
-                'zommCanvas',
-              );
-            }
-          },
-        },
-        {
-          key: 'DragCanvas',
-          type: 'drag-canvas',
-          enable: () => {
-            if (props.viewType == 'edit') {
-              return !isDownAlt && !isDownShift && !isDownCtrl;
-            } else {
-              return !gplotStore.gplotKeyOb[gplotKey].containerConfig.runType.includes(
-                'dragCanvas',
-              );
-            }
-          },
-        },
-        {
-          key: 'DragElement',
-          type: 'drag-element',
-          enable: () => {
-            return props.viewType == 'edit' && !isDownShift;
-          },
-        },
-        {
-          //单击选中
-          key: 'ClickSelect',
-          type: 'click-select',
-          //开启多选
-          multiple: true,
-          trigger: ['Control'],
-          enable: () => {
-            return props.viewType == 'edit';
-          },
-        },
-        {
-          //框选
-          key: 'BrushSelect',
-          type: 'brush-select',
-          mode: 'union',
-          trigger: ['shift'],
-          enable: () => {
-            return props.viewType == 'edit';
-          },
-          style: {
-            fill: '#00f',
-            fillOpacity: 0.2,
-            stroke: '#0ff',
-          },
-        },
-        {
-          //创建边
-          key: 'CreateEdge',
-          type: 'create-edge',
-          //drag拖拽的方式创建、click通过点击
-          trigger: 'click',
-          style: gplotStore.gplotKeyOb[gplotKey].nodeConfig.style,
-          enable: () => {
-            return props.viewType == 'edit' && isDownAlt;
-          },
-          onCreate: (e) => {
-            if (e.source == e.target) {
-              message.info('同一节点不可连线');
-              return null;
-            }
-            const data = graphOb.getData();
-            if (data) {
-              if (!data.edges.find((m) => m.source == e.source && m.target == e.target)) {
-                e['data'] = {
-                  myType: 'edge',
-                  lockAll: false,
-                  event: [],
-                };
-                return e;
-              } else {
-                message.info('该节点直接已有连线');
-                return null;
-              }
-            }
-            return null;
-          },
-          onFinish: (e) => {},
-        },
-      ],
-      plugins: [
-        gplotStore.gplotKeyOb[gplotKey].containerConfig.grid,
-        gplotStore.gplotKeyOb[gplotKey].containerConfig.background,
-        //右键菜单
-        {
-          key: 'ContextMenu',
-          type: 'contextmenu',
-          trigger: 'contextmenu', // 'click' or 'contextmenu'
-          getContent: (e) => {
-            console.log(e);
-            setTimeout(() => {
-              ContextMenu.showContextMenu({
-                x: e.client.x,
-                y: e.client.y,
-                items: [
-                  {
-                    label: '复制',
-                    icon: '',
-                    onClick: () => {
-                      alert('复制');
-                    },
-                  },
-                  {
-                    label: '删除',
-                    icon: '',
-                    onClick: () => {
-                      alert('删除');
-                    },
-                  },
-                  {
-                    label: '组合',
-                    icon: '',
-                    // disabled: true,
-                    onClick: () => {
-                      groupGplot();
-                    },
-                  },
-                  {
-                    label: '拆分',
-                    icon: '',
-                    disabled: true,
-                    onClick: () => {},
-                  },
-                ],
-              });
-            }, 150);
-            return null;
-          },
-        },
-      ],
-      // layout: {
-      //   //
-      //   type: 'antv-dagre',
-      //   ranksep: 50,
-      //   nodesep: 5,
-      //   sortByCombo: true,
-      // },
-      data: gplotConfig,
-      edge: {
-        //全部边线都是正交线
-        type: 'polyline',
-        style: {
-          router: true,
-        },
-      },
-    };
-    if (props.viewType == 'edit') {
-      graphConfig.plugins.push({
-        //前进后退
-        type: 'history',
-        key: 'history',
-        enable: () => {
-          return props.viewType == 'edit';
-        },
-      });
-    }
-    graphConfig.plugins.find((m) => m.key == 'GridLine').lineWidth = gplotStore.gplotKeyOb[gplotKey]
-      .containerConfig.grid.myIsShow
-      ? 1
-      : 0;
-    graphOb = new Graph(graphConfig);
-    //监控事件
-    graphOb.on('click', (e) => {
-      console.log('点击', e.target);
-      if (e.target?.nodeName == 'document' && !e.target.hasOwnProperty('type')) {
-        //点击了画布
-        gplotStore.gplotKeyOb[gplotKey].isSelectContaine = true;
-      } else {
-        gplotStore.gplotKeyOb[gplotKey].isSelectContaine = false;
-        let selectedObs = [];
-        //获取选中的对象
-        selectedObs = selectedObs.concat(graphOb.getElementDataByState('node', 'selected'));
-        selectedObs = selectedObs.concat(graphOb.getElementDataByState('combo', 'selected'));
-        selectedObs = selectedObs.concat(graphOb.getElementDataByState('edge', 'selected'));
-        console.log('点击获取', selectedObs);
-        if (selectedObs.length == 0) {
-          gplotStore.gplotKeyOb[gplotKey].isSelectContaine = true;
-        } else if (selectedObs.length > 1) {
-          gplotStore.gplotKeyOb[gplotKey].selectedOb = selectedObs;
-        } else {
-          const activeOb = graphOb.getElementData(e.target.id);
-          console.log('点击获取activeOb', activeOb);
-          gplotStore.gplotKeyOb[gplotKey].selectedOb = {
-            id: activeOb.id,
-            style: _.cloneDeep(activeOb.style),
-            data: _.cloneDeep(activeOb.data),
-          };
-        }
-      }
-      // const contextmenu = graphOb.getPluginInstance('ContextMenu');
-      // contextmenu?.hide();
-    });
-    // graphOb.on('contextmenu', (a, b, c) => {
-    //   //阻止系统右键事件
-    //   event.preventDefault();
-    //   return false;
-    // });
-    graphOb.render().then(() => {
-      // graphOb.setBackground('#0960BD');
-      // graphOb.draw();
-      // console.log('背景颜色', graphOb.getBackground());
-      if (props.viewType != 'edit') {
-        //将图缩放至合适大小并平移至视口中心，编辑状态下使用户拖拽位置计算不正确
-        // graphOb.fitView();
-        //平移至中心
-        graphOb.fitCenter();
-      }
-      gplotStore.gplotKeyOb[gplotKey].renderSuccess = true;
-      //根据插件的key更新插件信息
-      // graphOb.updatePlugin({
-      //   key: 'GridLine',
-      //   size: 150,
-      // });
-      //更新功能
-      //graphOb.updateBehavior({key: 'key', ...});
-      if (props.viewType == 'edit') {
-        watch(
-          () => gplotStore.gplotKeyOb[gplotKey].selectedOb,
-          () => {
-            isHaveSave = true;
-            console.log('切换', gplotStore.gplotKeyOb[gplotKey].selectedOb);
-            if (!Array.isArray(gplotStore.gplotKeyOb[gplotKey].selectedOb)) {
-              switch (gplotStore.gplotKeyOb[gplotKey].selectedOb.data.myType) {
-                case 'node':
-                  graphOb.updateNodeData([gplotStore.gplotKeyOb[gplotKey].selectedOb]);
-                  break;
-                case 'edge':
-                  graphOb.updateEdgeData([gplotStore.gplotKeyOb[gplotKey].selectedOb]);
-                  break;
-                case 'combo':
-                  graphOb.updateComboData([gplotStore.gplotKeyOb[gplotKey].selectedOb]);
-                  break;
-              }
-              graphOb.draw();
-            }
-            changeSave();
-          },
-          { deep: true },
-        );
-        watch(
-          () => gplotStore.gplotKeyOb[gplotKey].containerConfig.grid.myIsShow,
-          () => {
-            //根据插件的key获取插件
-            // const plugin = graphOb.getPluginInstance('GridLine');
-            //更新组件
-            graphOb.updatePlugin({
-              key: 'GridLine',
-              lineWidth: gplotStore.gplotKeyOb[gplotKey].containerConfig.grid.myIsShow ? 1 : 0,
-            });
-          },
-        );
-        watch(
-          () => gplotStore.gplotKeyOb[gplotKey].containerConfig.background.myBackground,
-          () => {
-            if (gplotStore.gplotKeyOb[gplotKey].containerConfig.background.backgroundImage == '') {
-              gplotStore.gplotKeyOb[gplotKey].containerConfig.background.background =
-                gplotStore.gplotKeyOb[gplotKey].containerConfig.background.myBackground;
-              graphOb.updatePlugin(gplotStore.gplotKeyOb[gplotKey].containerConfig.background);
-            }
-          },
-        );
-        watch(
-          () => gplotStore.gplotKeyOb[gplotKey].containerConfig.background.backgroundImage,
-          () => {
-            if (gplotStore.gplotKeyOb[gplotKey].containerConfig.background.backgroundImage != '') {
-              gplotStore.gplotKeyOb[gplotKey].containerConfig.background.background = '';
-            } else {
-              gplotStore.gplotKeyOb[gplotKey].containerConfig.background.background =
-                gplotStore.gplotKeyOb[gplotKey].containerConfig.background.myBackground;
-            }
-            graphOb.updatePlugin(gplotStore.gplotKeyOb[gplotKey].containerConfig.background);
-          },
-        );
-        watch(
-          () => gplotStore.gplotKeyOb[gplotKey].containerConfig.zoom,
-          (v) => {
-            graphOb.zoomTo(v, true, [
-              graphOb.getViewportCenter()[0],
-              graphOb.getViewportCenter()[1],
-            ]);
-            // graphOb.draw();
-          },
-        );
-      } else {
-        //变化监控
-      }
-    });
-  }
-
-  //动态保存配置
-  function changeSave() {
-    if (graphOb && isHaveSave) {
-      clearTimeout(changeSaveTimeId);
-      changeSaveTimeId = useTimeFn(
-        setTimeout(() => {
-          try {
-            graphOb.toDataURL().then((img) => {
-              gplotApi
-                .AddtGplotHis({
-                  globalConfig: JSON.stringify(gplotStore.gplotKeyOb[gplotKey].containerConfig),
-                  gplotConfig: JSON.stringify(graphOb.getData()),
-                  gplotId: gplotId,
-                  mainImg: img,
-                  menuId: props.menuId,
-                })
-                .then((data) => {
-                  isHaveSave = false;
-                  gplotId = data;
-                });
-            });
-          } catch (error) {
-            console.error('动态保存配置错误', error);
-          }
-        }, 5000),
-        timeKey,
-        'changeSave',
-      );
-    }
   }
 
   //快捷键监控
@@ -646,41 +231,293 @@
     }
   }
 
-  //监控浏览器关闭
-  function beforeunloadHandler(event) {
-    if (gplotId != null && isHaveSave) {
-      event.preventDefault();
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  async function getConfig() {
-    if (props.viewType == 'pre') {
-      return gplotApi.GetGplotHisLast(gplotId);
-    } else {
-      return gplotApi.GetGplot(gplotId);
-    }
-  }
-
-  watch(
-    () => appStore.projectConfig!.menuSetting.collapsed,
-    () => {
-      if (graphOb) {
-        graphOb.resize(mountRef.value?.clientWidth, mountRef.value?.clientHeight);
-      }
-    },
-  );
-
   onMounted(() => {
-    window.addEventListener('beforeunload', beforeunloadHandler);
     init();
-    window.onresize = () => {
-      if (graphOb) {
-        graphOb.resize(mountRef.value?.clientWidth, mountRef.value?.clientHeight);
+
+    // //自定义边上的marker的渲染规则
+    // class FlyMarkerCubic extends CubicHorizontal {
+    //   getMarkerStyle(attributes, t) {
+    //     console.log(attributes);
+    //     console.log(t);
+    //     return {
+    //       r: 5,
+    //       fill: 'red',
+    //       offsetPath: this.shapeMap.key,
+    //       ...subStyleProps(attributes, 'marker'),
+    //     };
+    //   }
+
+    //   override onCreate() {
+    //     const marker = this.upsert(
+    //       'marker',
+    //       Circle,
+    //       this.getMarkerStyle(this.attributes, this),
+    //       this,
+    //     );
+    //     marker?.animate([{ offsetDistance: 0 }, { offsetDistance: 1 }], {
+    //       duration: 1000,
+    //       iterations: Infinity,
+    //     });
+    //   }
+    // }
+    // register(ExtensionCategory.EDGE, 'fly-marker-cubic', FlyMarkerCubic);
+    // //自定义边上的marker的渲染规则
+    //画布配置：https://g6-next.antv.antgroup.com/api/graph/option
+    graphOb = new Graph({
+      //画布容器
+      container: mountRef.value,
+      // renderer: () => new Renderer(),
+      //是否自动调整大小
+      autoResize: true,
+      //画布背景色
+      background: '#fff',
+      //缩放比列
+      zoom: 1,
+      //图的宽度
+      width: mountRef.value?.clientWidth,
+      //图的高度
+      height: mountRef.value?.clientHeight,
+      //功能控制 https://g6-next.antv.antgroup.com/api/behaviors/brush-select
+      behaviors: [
+        {
+          key: 'ZoomCanvas',
+          type: 'zoom-canvas',
+        },
+        {
+          key: 'DragCanvas',
+          type: 'drag-canvas',
+          enable: () => {
+            return !isDownAlt && !isDownShift && !isDownCtrl;
+          },
+        },
+        {
+          key: 'DragElement',
+          type: 'drag-element',
+          enable: () => {
+            return props.viewType == 'edit' && !isDownShift;
+          },
+        },
+        {
+          //单击选中
+          key: 'ClickSelect',
+          type: 'click-select',
+          //开启多选
+          multiple: true,
+          trigger: ['Control'],
+          enable: () => {
+            return props.viewType == 'edit';
+          },
+        },
+        {
+          //框选
+          key: 'BrushSelect',
+          type: 'brush-select',
+          mode: 'union',
+          trigger: ['shift'],
+          enable: () => {
+            return props.viewType == 'edit';
+          },
+          style: {
+            fill: '#00f',
+            fillOpacity: 0.2,
+            stroke: '#0ff',
+          },
+        },
+        {
+          //创建边
+          key: 'CreateEdge',
+          type: 'create-edge',
+          //drag拖拽的方式创建、click通过点击
+          trigger: 'click',
+          style: gplotStore.gplotKeyOb[gplotKey].nodeConfig.style,
+          enable: () => {
+            return props.viewType == 'edit' && isDownAlt;
+          },
+          onCreate: (e) => {
+            if (e.source == e.target) {
+              message.info('同一节点不可连线');
+              return null;
+            }
+            const data = graphOb.getData();
+            if (data) {
+              if (!data.edges.find((m) => m.source == e.source && m.target == e.target)) {
+                e['data'] = {
+                  myType: 'edge',
+                  lockAll: false,
+                  event: [],
+                };
+                return e;
+              } else {
+                message.info('该节点直接已有连线');
+                return null;
+              }
+            }
+            return null;
+          },
+          onFinish: (e) => {},
+        },
+      ],
+      plugins: [
+        {
+          //画布网格
+          key: 'GridLine',
+          type: 'grid-line',
+          enable: () => {
+            return props.viewType == 'edit';
+          },
+        },
+        {
+          //前进后退
+          type: 'history',
+          key: 'history',
+          enable: () => {
+            return props.viewType == 'edit';
+          },
+        },
+        //右键菜单
+        {
+          key: 'ContextMenu',
+          type: 'contextmenu',
+          trigger: 'contextmenu', // 'click' or 'contextmenu'
+          getContent: (e) => {
+            console.log(e);
+            setTimeout(() => {
+              ContextMenu.showContextMenu({
+                x: e.client.x,
+                y: e.client.y,
+                items: [
+                  {
+                    label: '复制',
+                    icon: '',
+                    onClick: () => {
+                      alert('复制');
+                    },
+                  },
+                  {
+                    label: '删除',
+                    icon: '',
+                    onClick: () => {
+                      alert('删除');
+                    },
+                  },
+                  {
+                    label: '组合',
+                    icon: '',
+                    // disabled: true,
+                    onClick: () => {
+                      groupGplot();
+                    },
+                  },
+                  {
+                    label: '拆分',
+                    icon: '',
+                    disabled: true,
+                    onClick: () => {},
+                  },
+                ],
+              });
+            }, 150);
+            return null;
+          },
+        },
+      ],
+      // layout: {
+      //   //
+      //   type: 'antv-dagre',
+      //   ranksep: 50,
+      //   nodesep: 5,
+      //   sortByCombo: true,
+      // },
+      data: {
+        // nodes: [],
+        // edges: [],
+        // combos: [],
+      },
+      edge: {
+        //全部边线都是正交线
+        type: 'polyline',
+        style: {
+          router: true,
+        },
+      },
+    });
+    //监控事件
+    graphOb.on('click', (e) => {
+      console.log('点击', e.target);
+      if (e.target?.nodeName == 'document' && !e.target.hasOwnProperty('type')) {
+        //点击了画布
+        gplotStore.gplotKeyOb[gplotKey].isSelectContaine = true;
+      } else {
+        gplotStore.gplotKeyOb[gplotKey].isSelectContaine = false;
+        let selectedObs = [];
+        //获取选中的对象
+        selectedObs = selectedObs.concat(graphOb.getElementDataByState('node', 'selected'));
+        selectedObs = selectedObs.concat(graphOb.getElementDataByState('combo', 'selected'));
+        selectedObs = selectedObs.concat(graphOb.getElementDataByState('edge', 'selected'));
+        console.log('点击获取', selectedObs);
+        if (selectedObs.length == 0) {
+          gplotStore.gplotKeyOb[gplotKey].isSelectContaine = true;
+        } else if (selectedObs.length > 1) {
+          gplotStore.gplotKeyOb[gplotKey].selectedOb = selectedObs;
+        } else {
+          const activeOb = graphOb.getElementData(e.target.id);
+          console.log('点击获取activeOb', activeOb);
+          gplotStore.gplotKeyOb[gplotKey].selectedOb = {
+            id: activeOb.id,
+            style: _.cloneDeep(activeOb.style),
+            data: _.cloneDeep(activeOb.data),
+          };
+        }
       }
-    };
+      // const contextmenu = graphOb.getPluginInstance('ContextMenu');
+      // contextmenu?.hide();
+    });
+    // graphOb.on('contextmenu', (a, b, c) => {
+    //   //阻止系统右键事件
+    //   event.preventDefault();
+    //   return false;
+    // });
+    graphOb.render().then(() => {
+      if (props.viewType != 'edit') {
+        //将图缩放至合适大小并平移至视口中心，编辑状态下使用户拖拽位置计算不正确
+        graphOb.fitView();
+      }
+      gplotStore.gplotKeyOb[gplotKey].renderSuccess = true;
+      //根据插件的key获取插件
+      // const plugin = graphOb.getPluginInstance('GridLine');
+      //根据插件的key更新插件信息
+      // gplotStore.gplotKeyOb[gplotKey].gplotOb.updatePlugin({
+      //   key: 'GridLine',
+      //   size: 150,
+      // });
+      //更新功能
+      //gplotStore.gplotKeyOb[gplotKey].gplotOb.updateBehavior({key: 'key', ...});
+      if (props.viewType == 'edit') {
+        watch(
+          () => gplotStore.gplotKeyOb[gplotKey].selectedOb,
+          () => {
+            console.log('切换', gplotStore.gplotKeyOb[gplotKey].selectedOb);
+            if (!Array.isArray(gplotStore.gplotKeyOb[gplotKey].selectedOb)) {
+              switch (gplotStore.gplotKeyOb[gplotKey].selectedOb.data.myType) {
+                case 'node':
+                  graphOb.updateNodeData([gplotStore.gplotKeyOb[gplotKey].selectedOb]);
+                  break;
+                case 'edge':
+                  graphOb.updateEdgeData([gplotStore.gplotKeyOb[gplotKey].selectedOb]);
+                  break;
+                case 'combo':
+                  graphOb.updateComboData([gplotStore.gplotKeyOb[gplotKey].selectedOb]);
+                  break;
+              }
+              graphOb.draw();
+            }
+          },
+          { deep: true },
+        );
+      } else {
+        //变化监控
+      }
+    });
   });
 
   //暴露给父组件可以调用的方法
@@ -694,20 +531,6 @@
     addGplot,
     //拓扑图的key
     gplotKey,
-    //拓扑图id
-    getGplotId: () => {
-      return gplotId;
-    },
-    fitCenter: () => {
-      if (graphOb) {
-        graphOb.fitCenter();
-      }
-    },
-    fitView: () => {
-      if (graphOb) {
-        graphOb.fitView();
-      }
-    },
   });
 
   //页面卸载后

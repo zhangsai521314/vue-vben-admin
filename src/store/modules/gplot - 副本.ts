@@ -2,6 +2,20 @@
 import { defineStore } from 'pinia';
 import { store } from '@/store';
 
+interface GplotStateOb {
+  gplotKeyOb: {
+    //画布的配置
+    containerConfig: object;
+    //是否渲染成功
+    renderSuccess: boolean;
+    //是否选中了画布
+    isSelectContaine: boolean;
+    //选中的组件
+    selectedOb: object;
+    //节点的配置项
+    nodeConfig: object;
+  };
+}
 export interface GplotState {
   gplotKeyOb: object;
 }
@@ -13,50 +27,27 @@ export const useGplotStore = defineStore({
     gplotKeyOb: {},
   }),
   getters: {
-    //根据key获取自己的拓扑配置项
     getKeyOb: (state) => {
       return (key) => state.gplotKeyOb[key];
     },
   },
   actions: {
-    //初始化设置
     setGplotKeyOb(key) {
       this.gplotKeyOb[key] = {
-        //画布的配置
         containerConfig: {
           //是否展示网格
-          grid: {
-            //myIsShow非g6属性,用与控制lineWidth实现显示隐藏
-            myIsShow: true,
-            //画布网格
-            key: 'GridLine',
-            type: 'grid-line',
-            lineWidth: 1,
-            follow: false,
-            size: 20,
-          },
+          gridShow: true,
+          //背景色
+          backgroundColor: '#fff',
           //背景图
-          background: {
-            //myBackground非g6属性，由于background和backgroundImage同时存在，图片显示有问题
-            myBackground: '',
-            key: 'Background',
-            type: 'background',
-            background: '',
-            backgroundImage: '',
-            backgrounfRepeat: 'no-repeat',
-            backgroundSize: 'cover',
-            opacity: 1,
-          },
+          backgroundImg: '',
           //缩放放大比例%
-          zoom: 1,
+          zoom: 100,
           //运行限制：zommCanvas、dragCanvas
           runType: [],
         },
-        //是否渲染成功
         renderSuccess: false,
-        //是否选中了画布
         isSelectContaine: true,
-        //选中的组件
         selectedOb: {
           id: '',
           type: '',
@@ -140,7 +131,6 @@ export const useGplotStore = defineStore({
             myEvent: [],
           },
         },
-        //节点的全局配置项
         nodeConfig: {
           id: '',
           type: '',
