@@ -46,6 +46,15 @@ const reportDesign: AppRouteModule = {
       },
     },
     {
+      path: 'test',
+      name: 'test',
+      component: () => import('../../../views/mydemo/test.vue'),
+      meta: {
+        title: 'test',
+        hideMenu: false,
+      },
+    },
+    {
       path: 'doc',
       name: 'Doc',
       component: IFRAME,

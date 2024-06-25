@@ -138,12 +138,12 @@
             />
           </div>
         </div> -->
-        <!-- <div>
+        <div>
           <a-tooltip placement="top">
             <template #title>导出</template>
             <IconFontClass @click="props.exportConfig" name="icon-baseui-xiazai" />
           </a-tooltip>
-        </div> -->
+        </div>
         <div>
           <a-tooltip placement="top">
             <template #title>预览</template>
@@ -418,7 +418,6 @@
       if (history.canUndo()) history.undo();
     }
   }
-
   watch(
     () => gplotStore.renderSuccess,
     () => {},

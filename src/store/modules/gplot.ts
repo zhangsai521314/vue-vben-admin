@@ -51,6 +51,23 @@ export const useGplotStore = defineStore({
           zoom: 1,
           //运行限制：zommCanvas、dragCanvas
           runType: [],
+          //所有数据的配置
+          allDataConfig: [
+            // {
+            //   //数据来源类型
+            //   type: 'mqtt',
+            //   //主题
+            //   topic: '',
+            //   //值获取，\n //返回object值\n  //参数mqttDataStr为当前主题接收到的数据\n
+            //   getValue: '',
+            //   //值键值
+            //   key: '',
+            //   //值描述名称
+            //   name: '',
+            // },
+          ],
+          //数据值对象,键为myValueConfg中的key,值为myValueConfg中的getValue的计算值
+          allDataValue: {},
         },
         //是否渲染成功
         renderSuccess: false,
@@ -134,10 +151,51 @@ export const useGplotStore = defineStore({
           data: {
             //节点大类型：node、edge、combo
             myType: '',
+            //配置原有的样式
+            myOldStyle: {
+              iconFill: '',
+              labelFill: '',
+            },
             //锁定
             myLockAll: false,
             //事件
-            myEvent: [],
+            myEvent: [
+              // {
+              //   key: "s1",
+              //   title: '交互',
+              //   //click、right
+              //   event: "click",
+              //   open: false,//配置是否有效
+              //   type: "",//单击事件类型。open_url(打开连接)/instructions(下发指令)
+              //   //右键菜单数据
+              //   children: [
+              //   ],
+              //   openurl: {
+              //     url: "",//菜单打开的地址
+              //     target: "",//打开地址的方式内部打开和新浏览器标签打开。page_alert(页内弹出)/new_label(新页打开)
+              //     width: "",//打开窗口的宽度
+              //     height: "",//打开窗口的高度
+              //     urlType: "",//url的类型，custom(自定义地址)/inside(监测页面)
+              //     menuId: "",//urlType为inside时的菜单id
+              //   },
+              //   requesturl: {
+              //     url: "",//请求地址
+              //     reques_type: "",//请求地址方式
+              //     isreturn: false //是否弹出返回消息
+              //   }
+              // }
+            ],
+            //状态控制
+            myState: [
+              // {
+              //   //myValue为data下的myValue，可以根据myValueConfg的key获取所有绑定的的值，返回bool值
+              //   isChange: (myValue) => {},
+              //   //isChange为true时更改的颜色
+              //   color: '',
+              //   //myState中的优先计算的等级
+              //   level: 0,
+              // },
+            ],
           },
         },
         //节点的全局配置项

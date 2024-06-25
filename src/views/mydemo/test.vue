@@ -1,20 +1,21 @@
 <template>
-  <div :class="`${prefixCls}bottom-center`">
-    <view2d
-      v-for="(item, index) in canvasCotainers.filter((m) => m.canvasType == '2d')"
-      :key="index"
-      ref="containerObArray"
-      :changeSelectOb="changeSelectOb"
-      :assemblyConfig="assemblyConfig"
-      :canvasId="item.containerId"
-      :canvasConfig="canvasConfig[item.containerId].canvas2dConfig"
-      :domConfig="canvasConfig[item.containerId].domConfig"
-      :getvideoData="getvideoData"
-      :getSelectob="getSelectob"
-      :updateSelectContainerValue="updateSelectContainerValue"
-      :showSaveComponent="showSaveComponent"
-      :refreshassemblyTreeData="refreshassemblyTreeData"
-      viewType="edit"
-    />
+  <div>
+    <button @click="executeCode">执行后端代码</button>
   </div>
 </template>
+
+<script setup>
+  import { ref } from 'vue';
+
+  const backendCode = ref('');
+
+  // 假设这是从后端获取的代码
+  backendCode.value = 'console.log(s);';
+
+  const executeCode = () => {
+    // 使用Function类型执行代码
+    const executeFunc = new Function(backendCode.value);
+    const s = 1;
+    executeFunc(s);
+  };
+</script>

@@ -1,5 +1,6 @@
 <template>
   <a-spin tip="渲染中..." :spinning="rendering">
+    <!-- <button @click="executeCode">执行后端代码</button> -->
     <div
       onclick=""
       @contextmenu="rightClick"
@@ -79,6 +80,17 @@
   let isHaveSave = false;
 
   shortcutKey_();
+
+  const backendCode = ref('');
+
+  // 假设这是从后端获取的代码
+  backendCode.value = 'function ssss(value){console.log(value);}';
+
+  const executeCode = () => {
+    // 使用Function类型执行代码
+    const executeFunc = new Function('value', backendCode.value);
+    executeFunc(gplotStore.gplotKeyOb[gplotKey].containerConfig.all);
+  };
 
   async function init() {
     // rendering.value = true;

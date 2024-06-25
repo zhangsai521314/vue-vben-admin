@@ -180,7 +180,6 @@ export const useMqttStore = defineStore({
     },
     //播放信息提示音
     playMsgAudio(row: MsgData) {
-      return;
       if (!this.msgIsMute && this.msgAudioIsShow) {
         //播放告警提示音
         try {
