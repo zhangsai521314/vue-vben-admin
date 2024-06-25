@@ -156,8 +156,8 @@
         {
           key: 'ZoomCanvas',
           type: 'zoom-canvas',
+          sensitivity: 0.1,
           onFinish: () => {
-            console.log(graphOb.getZoom());
             gplotStore.gplotKeyOb[gplotKey].containerConfig.zoom = graphOb.getZoom();
           },
           enable: () => {
@@ -443,16 +443,6 @@
             graphOb.updatePlugin(gplotStore.gplotKeyOb[gplotKey].containerConfig.background);
           },
         );
-        watch(
-          () => gplotStore.gplotKeyOb[gplotKey].containerConfig.zoom,
-          (v) => {
-            graphOb.zoomTo(v, true, [
-              graphOb.getViewportCenter()[0],
-              graphOb.getViewportCenter()[1],
-            ]);
-            // graphOb.draw();
-          },
-        );
       } else {
         //变化监控
       }
@@ -719,6 +709,10 @@
       if (graphOb) {
         graphOb.fitView();
       }
+    },
+    zoomChange: (v) => {
+      graphOb.zoomTo(v, true, [graphOb.getViewportCenter()[0], graphOb.getViewportCenter()[1]]);
+      graphOb.draw();
     },
   });
 

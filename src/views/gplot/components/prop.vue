@@ -104,6 +104,11 @@
                     :step="0.01"
                     :included="false"
                     :tipFormatter="null"
+                    @change="
+                      props.graphObRef.zoomChange(
+                        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.zoom,
+                      )
+                    "
                   />
                   <a-input-number
                     style="width: 82px !important"
@@ -114,6 +119,11 @@
                     :max="10"
                     :precision="3"
                     :step="0.01"
+                    @change="
+                      props.graphObRef.zoomChange(
+                        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.zoom,
+                      )
+                    "
                   />
                 </a-row>
                 <!-- <a-row style="margin: 2px 0">
@@ -231,14 +241,13 @@
               autocomplete="off"
               :model="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style"
             >
-              <a-form-item style="margin-top: 2px" name="id" label="节点id">
+              <a-form-item name="id" label="节点id">
                 <a-input
                   disabled
                   :value="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.id"
                 />
               </a-form-item>
               <a-form-item
-                style="margin-top: 2px"
                 :class="{
                   'not-click':
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType !=
@@ -951,108 +960,59 @@
                   />
                 </a-row>
               </a-form-item>
+              <a-divider orientation="center">状态配置</a-divider>
+              <a-table
+                :columns="selectedObStateColumns"
+                :data-source="
+                  gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myState
+                "
+                bordered
+                size="small"
+                style="min-height: 400px; overflow: auto"
+                :pagination="false"
+              >
+                <template #bodyCell="{ column, text, record }">
+                  <template v-if="column.dataIndex == 'operation'">
+                    <div style="width: 64px">
+                      <a-space>
+                        <a @click="showSelectedObState(record)">配置</a>
+                        <a-popconfirm title="是否删除?" @confirm="delteSelectedObState(record.key)">
+                          <a style="color: red">删除</a>
+                        </a-popconfirm></a-space
+                      >
+                    </div>
+                  </template>
+                  <template v-else>
+                    <div style="width: 88px">{{ text }}</div></template
+                  >
+                </template>
+                <template #footer>
+                  <div>
+                    <IconFontClass
+                      name="icon-baseui-tianjiawukuang"
+                      style="color: #0960bd; font-size: 12px; cursor: pointer; user-select: none"
+                      @click="showSelectedObState()"
+                      >添加</IconFontClass
+                    >
+                    <a-popconfirm title="是否清空?" @confirm="clearSelectedObStates()">
+                      <IconFontClass
+                        name="icon-baseui-delete"
+                        style="
+                          margin-left: 10px;
+                          color: red;
+                          font-size: 12px;
+                          cursor: pointer;
+                          user-select: none;
+                        "
+                        >清空</IconFontClass
+                      >
+                    </a-popconfirm>
+                  </div>
+                </template>
+              </a-table>
             </a-form>
           </a-tab-pane>
-          <a-tab-pane key="state" tab="状态">
-            <div :class="`${prefixCls}attr-cartoon`">
-              <div
-                :class="`${prefixCls}cartoon-content`"
-                v-show="
-                  gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.myValueConfg.length >
-                  0
-                "
-              >
-                <a-collapse v-model:activeKey="attrCartoonActiveKey">
-                  <a-collapse-panel
-                    v-for="item in props.selectedOb.attribute.myValueConfg"
-                    :key="item.functionname"
-                    :header="item.title"
-                  >
-                    <div :class="`${prefixCls}content-item`">
-                      <div>
-                        <div> 开启 </div>
-                        <div>
-                          <a-switch
-                            v-model:checked="item.open"
-                            checked-children="开"
-                            un-checked-children="关"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <div> 动画类型 </div>
-                        <div>
-                          <a-select v-model:value="item.action" style="width: 120px" size="small">
-                            <a-select-option :value="3">变色+闪烁</a-select-option>
-                            <a-select-option :value="0">变色</a-select-option>
-                            <a-select-option :value="4">旋转</a-select-option>
-                            <!-- <a-select-option value="5">移动</a-select-option> -->
-                            <a-select-option :value="6">隐藏</a-select-option>
-                          </a-select>
-                        </div>
-                      </div>
-                      <div v-show="[0, 3].includes(item.action)">
-                        <div> 颜色 </div>
-                        <div>
-                          <selectColor
-                            :color="item.color"
-                            @change="(value) => colorChange('alarm_color', value, item)"
-                          />
-                        </div>
-                      </div>
-                      <div v-show="[0, 3].includes(item.action)">
-                        <div> 色值方式 </div>
-                        <div>
-                          <a-select v-model:value="item.filters" style="width: 120px" size="small">
-                            <a-select-option value="add">添加</a-select-option>
-                            <a-select-option value="diff" class="">差异</a-select-option>
-                            <a-select-option value="subtract" class="">减去</a-select-option>
-                            <a-select-option value="multiply" class="">乘</a-select-option>
-                            <a-select-option value="screen" class="">屏幕</a-select-option>
-                            <a-select-option value="lighten" class="">减轻</a-select-option>
-                            <a-select-option value="darken" class="">变暗</a-select-option>
-                            <a-select-option value="overlay" class="">覆盖</a-select-option>
-                            <a-select-option value="exclusion" class="">排除</a-select-option>
-                            <a-select-option value="tint" class="">着色</a-select-option>
-                          </a-select>
-                        </div>
-                      </div>
-                      <div>
-                        <div> 触发条件： </div>
-                      </div>
-                      <div>
-                        <div style="width: 100%; height: 200px">
-                          <codemirror
-                            :code="item.functionstr"
-                            :style="{ height: '100%', overflow: 'auto' }"
-                            lang="javascript"
-                            @change="(value) => alarmCodeChange(item, value)"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <template #extra>
-                      <IconFontClass
-                        @click="deleteAlarm(item)"
-                        style="font-size: 12px; font-weight: 700"
-                        name="icon-iNeuOS-guanbicuowu"
-                      />
-                    </template>
-                  </a-collapse-panel>
-                </a-collapse>
-              </div>
-              <div
-                style="opacity: 0.5; text-align: center"
-                v-show="props.selectedOb.attribute.alarm.length == 0"
-              >
-                <IconFontClass :isSvg="true" style="font-size: 180px" name="icon-iNeuOS-bianji1" />
-              </div>
-              <div style="height: 40px; padding-top: 5px; text-align: center">
-                <a-button type="primary" @click="addAlarm">添加动画</a-button>
-              </div>
-            </div>
-          </a-tab-pane>
-          <a-tab-pane key="event" tab="交互"> 交互 </a-tab-pane>
+          <!-- <a-tab-pane key="event" tab="交互"> 交互 </a-tab-pane>
           <template v-if="false">
             <a-tab-pane key="event" tab="交互">
               <div :class="`${prefixCls}attr-event`">
@@ -1191,7 +1151,7 @@
                 </div>
               </div>
             </a-tab-pane>
-          </template>
+          </template> -->
         </a-tabs>
       </div>
     </template>
@@ -1251,7 +1211,7 @@
         label="主键"
       >
         <a-input
-          :disabled="isSaveAllDataConfigAdd"
+          :disabled="!isSaveAllDataConfigAdd"
           placeholder="请输入全数据配置唯一主键"
           v-model:value="newAllDataConfig.key"
         />
@@ -1291,6 +1251,71 @@
       <!-- </a-spin> -->
     </template>
   </a-drawer>
+  <a-drawer
+    :bodyStyle="{ overflow: 'hidden' }"
+    :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+    :width="500"
+    :visible="isShowSelectedObState"
+    title="状态配置"
+    :footer-style="{ textAlign: 'right' }"
+    @close="closeSelectedObState"
+  >
+    <a-form
+      ref="newSelectedObStateRef"
+      :model="newSelectedObState"
+      :label-col="{ span: 4 }"
+      :style="{ paddingRight: '2px' }"
+      autocomplete="off"
+    >
+      <a-form-item
+        name="name"
+        label="状态名称"
+        :rules="[{ required: true, message: '请输入状态名称' }]"
+      >
+        <a-input placeholder="请输入状态名称" v-model:value="newSelectedObState.name" />
+      </a-form-item>
+      <a-form-item
+        name="name"
+        label="优先级"
+        :rules="[{ required: true, message: '请输入优先级' }]"
+      >
+        <a-input-number
+          min="0"
+          :max="99999"
+          :precision="0"
+          placeholder="请输入优先级"
+          v-model:value="newSelectedObState.level"
+        />
+      </a-form-item>
+      <a-form-item name="color" label="变化颜色">
+        <div>
+          <selectColor
+            :color="newSelectedObState.color"
+            @change="(value) => newSelectedObStateColorChange(value)"
+          />
+        </div>
+      </a-form-item>
+      <a-form-item
+        :labelCol="{ span: 24 }"
+        name="isChange"
+        :rules="[{ required: true, message: '请输入状态处理' }]"
+        label="请输入数据处理:"
+      >
+        <codemirror
+          :modelValue="newSelectedObState.isChange"
+          :style="{ height: '300px', overflow: 'auto' }"
+          lang="javascript"
+          @change="(value) => getStateChange(item, value)"
+        />
+      </a-form-item>
+    </a-form>
+    <template #footer>
+      <!-- <a-spin :spinning="fromSpinning"> -->
+      <a-button type="primary" @click="saveSelectedObState">保存</a-button>
+      <a-button style="margin-left: 8px" @click="closeSelectedObState">关闭</a-button>
+      <!-- </a-spin> -->
+    </template>
+  </a-drawer>
 </template>
 <script setup>
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
@@ -1298,7 +1323,7 @@
   import action from './action.vue';
   import selectColor from '/@/components/MySelectColor/index.vue';
   import { message } from 'ant-design-vue';
-  import { ref, watch } from 'vue';
+  import { ref, watch, unref } from 'vue';
   import { useDesign } from '/@/hooks/web/useDesign';
   import codemirror from '/@/components/MyCodemirror/codemirror.vue';
   import { useGplotStoreWithOut } from '@/store/modules/gplot';
@@ -1349,7 +1374,25 @@
   const newAllDataConfig = ref({});
   const newAllDataConfigRef = ref({});
   const isSaveAllDataConfigAdd = ref(true);
-  function zoomChange(v) {}
+
+  const selectedObStateColumns = [
+    {
+      title: '名称',
+      dataIndex: 'name',
+    },
+    {
+      title: '颜色',
+      dataIndex: 'color',
+    },
+    {
+      title: '操作',
+      dataIndex: 'operation',
+    },
+  ];
+  const isShowSelectedObState = ref(false);
+  const newSelectedObState = ref({});
+  const newSelectedObStateRef = ref({});
+  const isSaveSelectedObStateAdd = ref(true);
 
   //容器颜色的改变
   function containerColorChange(attr, color) {
@@ -1402,14 +1445,24 @@
       }
       try {
         const executeFunc = new Function('mqttDataStr', newAllDataConfig.value.getValue);
-        const runValue = executeFunc(
-          gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.allDataConfig,
-        );
-        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.allDataConfig.push(
-          newAllDataConfig.value,
-        );
-        message.success('添加成功');
-        isShowSourceDataConfig.value = false;
+        const runValue = executeFunc('');
+        if (runValue != undefined) {
+          if (isSaveAllDataConfigAdd.value) {
+            gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.allDataConfig.push(
+              newAllDataConfig.value,
+            );
+            message.success('添加成功');
+          } else {
+            const oldData = gplotStore.gplotKeyOb[
+              props.graphObRef.gplotKey
+            ].containerConfig.allDataConfig.find((m) => m.key == newAllDataConfig.value.key);
+            myCommon.objectReplace(oldData, newAllDataConfig.value);
+            message.success('编辑成功');
+          }
+          isShowSourceDataConfig.value = false;
+        } else {
+          message.error('返回值错误，请检查');
+        }
       } catch (error) {
         message.error('数据处理错误，请检查');
       }
@@ -1433,14 +1486,15 @@
   //显示数据配置
   function showAllDataConfig(data) {
     newAllDataConfig.value = data
-      ? data
+      ? _.cloneDeep(data)
       : {
           //数据来源类型
           type: 'mqtt',
           //主题
-          topic: '',
+          topic: null,
           //值获取，
-          getValue: '//默认参数mqttDataStr为当前主题接收到的数据\n//返回值类型为Object\n',
+          getValue:
+            '//默认参数mqttDataStr为当前主题接收到的数据\n//必须有返回值，返回值类型不得为undefined\nif(mqttDataStr)\n{\n//编辑您的计算逻辑并return值\nconst data=JSON.pase(mqttDataStr);\nreturn data;\n\n}\nelse{\n return null \n}\n',
           //值键值
           key: myCommon.uniqueId(),
           //值描述名称
@@ -1457,6 +1511,95 @@
   //数据处理的改变
   function getValueChange(item, value) {
     newAllDataConfig.value.getValue = value;
+  }
+
+  //保存选中节点的状态配置
+  function saveSelectedObState() {
+    newSelectedObStateRef.value.validate().then(() => {
+      if (
+        (isSaveSelectedObStateAdd.value &&
+          gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myState.find(
+            (m) => m.name == newSelectedObState.value.name,
+          )) ||
+        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myState.find(
+          (m) => m.name == newSelectedObState.value.name && m.key != newSelectedObState.value.key,
+        )
+      ) {
+        message.warning('名称重复，不可添加');
+        return;
+      }
+      try {
+        const executeFunc = new Function('allDataValue', newSelectedObState.value.isChange);
+        const runValue = executeFunc(
+          gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.allDataValue,
+        );
+        if (typeof runValue == 'boolean') {
+          if (isSaveSelectedObStateAdd.value) {
+            gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myState.push(
+              newSelectedObState.value,
+            );
+            message.success('添加成功');
+          } else {
+            const oldData = gplotStore.gplotKeyOb[
+              props.graphObRef.gplotKey
+            ].selectedOb.data.myState.find((m) => m.key == newSelectedObState.value.key);
+            myCommon.objectReplace(oldData, newSelectedObState.value);
+            message.success('编辑成功');
+          }
+          isShowSelectedObState.value = false;
+        } else {
+          message.error('返回值错误，请检查');
+        }
+      } catch (error) {
+        message.error('数据处理错误，请检查');
+      }
+    });
+  }
+  //清除选中节点的所有状态配置
+  function clearSelectedObStates() {
+    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myState = [];
+  }
+  //根据key删除选中节点的状态配置
+  function delteSelectedObState(key) {
+    if (myCommon.isnull(key)) {
+      message.warning('主键缺失，不可删除');
+    } else {
+      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myState =
+        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myState.filter(
+          (m) => m.key != key,
+        );
+    }
+  }
+  //显示选中节点的状态配置
+  function showSelectedObState(data) {
+    (newSelectedObState.value = data
+      ? _.cloneDeep(data)
+      : {
+          key: myCommon.uniqueId(),
+          //allDataValue为containerConfig下的allDataValue，可以根据allDataConfig的key获取所有绑定的的值，返回bool值
+          isChange:
+            '//默认参数allDataValue为该画布下所有数据源对象\n//您可以根据自己在数据配置中设置的主键，从allDataValue对象中获取数据\n//必须有返回值，返回值类型为bool\nif(allDataValue)\n{\n//编辑您的计算逻辑并return值;\n\nreturn true;\n}\nelse{\n return false \n}\n',
+          //isChange为true时更改的颜色
+          color: '',
+          //myState中的优先计算的等级
+          level: 0,
+          //状态名称
+          name: '',
+        }),
+      (isSaveSelectedObStateAdd.value = data ? false : true);
+    isShowSelectedObState.value = true;
+  }
+  //关闭选中节点的状态配置
+  function closeSelectedObState() {
+    newSelectedObStateRef.value.clearValidate();
+    isShowSelectedObState.value = false;
+  }
+  //选中节点状态处理的改变
+  function getStateChange(item, value) {
+    newSelectedObState.value.isChange = value;
+  }
+  function newSelectedObStateColorChange(color) {
+    newSelectedObState.value.color = color;
   }
 </script>
 <style lang="less" scoped>

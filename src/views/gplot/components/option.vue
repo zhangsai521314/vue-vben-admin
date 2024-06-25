@@ -1,9 +1,9 @@
 <template>
   <div :class="`${prefixCls}content-center`">
     <div :class="`${prefixCls}center-tool`">
-      <div :class="`${prefixCls}tool-item`">
+      <!-- <div :class="`${prefixCls}tool-item`">
         <div @click="props.graphObRef.groupGplot()"> 组合 </div>
-      </div>
+      </div> -->
       <!-- <div :class="`${prefixCls}tool-item`">
         <div>
           <a-tooltip placement="top">
@@ -138,12 +138,12 @@
             />
           </div>
         </div> -->
-        <div>
+        <!-- <div>
           <a-tooltip placement="top">
             <template #title>导出</template>
             <IconFontClass @click="props.exportConfig" name="icon-baseui-xiazai" />
           </a-tooltip>
-        </div>
+        </div> -->
         <div>
           <a-tooltip placement="top">
             <template #title>预览</template>

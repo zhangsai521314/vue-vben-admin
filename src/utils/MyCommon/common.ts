@@ -350,16 +350,16 @@ const Common = {
   getJWTDate(timestamp: number) {
     return new Date(timestamp * 1000);
   },
-  //拷贝对象2中对象1存在的键给对象1
-  objectToObject(obj, obj2) {
-    for (const i in obj2) {
-      if ($.isPlainObject(obj[i])) {
-        this.objectToObject(obj[i], obj2[i]);
-      } else {
-        obj[i] = obj2[i];
-      }
-    }
-  },
+  // //拷贝对象2中对象1存在的键给对象1
+  // objectToObject(obj, obj2) {
+  //   for (const i in obj2) {
+  //     if ($.isPlainObject(obj[i])) {
+  //       this.objectToObject(obj[i], obj2[i]);
+  //     } else {
+  //       obj[i] = obj2[i];
+  //     }
+  //   }
+  // },
   //修改对象的某个属性值，子集属性用|分割
   changeObAtrrValue(oldOb, attr, value, way = 'equal') {
     let ob = oldOb;

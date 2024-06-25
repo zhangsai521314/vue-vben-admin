@@ -131,7 +131,7 @@
       Roboto, 'PingFang SC', miui, 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
     font-size: 13px;
     font-weight: 400;
-    user-select: none;
+    //user-select: none;
 
     // .@{prefixCls}content-top {
     //   display: flex;
