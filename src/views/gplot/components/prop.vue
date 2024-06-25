@@ -241,7 +241,7 @@
               autocomplete="off"
               :model="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style"
             >
-              <a-form-item name="id" label="节点id">
+              <a-form-item style="margin-top: 1px" name="id" label="节点id">
                 <a-input
                   disabled
                   :value="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.id"
