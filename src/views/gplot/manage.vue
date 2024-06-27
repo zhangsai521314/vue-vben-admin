@@ -19,7 +19,7 @@
         <assembly :graphObRef="graphObRef" />
       </div>
       <div :class="`${prefixCls}bottom-center`">
-        <gplot ref="graphObRef" :gplotId="gplotId" viewType="edit" :menuid="menuid" />
+        <gplot ref="graphObRef" :gplotId="gplotId" viewType="edit" :menuId="menuId" />
       </div>
       <div style="width: 2px; height: 100%; background-color: #eee"></div>
       <div :class="`${prefixCls}bottom-right`">
@@ -36,7 +36,7 @@
     >
       <viewIndex
         v-if="openView"
-        style="width: 100%; height: 100%"
+        style="width: 100%; height: 50%"
         viewType="pre"
         :gplotId="graphObRef.getGplotId()"
       />
@@ -57,15 +57,16 @@
   const { prefixCls } = useDesign('GplotManage-');
   //获取url参数
   const { currentRoute } = useRouter();
-  const { menuid } = unref(currentRoute).params;
+  // const { menuId } = unref(currentRoute).params;
   const gplotId = ref(null);
   const graphObRef = ref(null);
   const openView = ref(false);
-
+  const menuId = ref('561989311823947');
   //预览
   function viewPre() {
-    console.log(graphObRef.value.getGplotId());
-    openView.value = true;
+    return graphObRef.value?.saveHisConfig().then(() => {
+      openView.value = true;
+    });
   }
   function viewCancel() {
     openView.value = false;
@@ -143,20 +144,6 @@
     //   color: #333;
     //   font-size: 15px;
     // }
-
-    .@{prefixCls}content-center {
-      display: flex;
-      //nowrap不换行
-      flex-wrap: nowrap;
-      //定义了多根轴线的对齐方式，如果项目只有一根轴线，那么该属性将不起作用。flex-start：与交叉轴的起点对齐
-      place-content: flex-start space-between;
-      //space-between两端对齐，项目之间的间隔都相等
-      width: 100%;
-      height: 40px;
-      transition: margin-top 0.5s ease-in-out;
-      border-bottom: 1px solid #dfe3e8;
-      background: #fafbfc;
-    }
 
     .@{prefixCls}content-bottom {
       display: flex;

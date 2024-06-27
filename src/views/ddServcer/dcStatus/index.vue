@@ -29,7 +29,7 @@
                   </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>注册时间：</label>
+                    <label>登录时间：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         allowClear
@@ -214,7 +214,7 @@
       },
       {
         field: 'loginTime',
-        title: '注册时间',
+        title: '登录时间',
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -222,7 +222,7 @@
       },
       {
         field: 'updateTime',
-        title: '更新时间',
+        title: '心跳时间',
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,

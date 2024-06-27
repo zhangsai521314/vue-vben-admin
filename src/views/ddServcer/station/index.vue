@@ -31,7 +31,7 @@
                 </a-space>
               </AuthDom>
               <AuthDom auth="ddServcer_station_add">
-                <a-button class="ant-btn" @click="showFrom(null)">新增线路</a-button>
+                <a-button class="ant-btn" @click="showFrom(null)">新增车站</a-button>
               </AuthDom>
             </a-space>
           </div>

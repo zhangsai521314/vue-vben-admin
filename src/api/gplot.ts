@@ -57,5 +57,12 @@ const Gplot = {
       params,
     });
   },
+  //根据菜单id获取最新配置
+  GetGplotMenuId: function (params) {
+    return defHttp.get({
+      url: '/Gplot/GetGplotMenuId/',
+      params,
+    });
+  },
 };
 export default Gplot;

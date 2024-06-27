@@ -34,7 +34,7 @@ const ddServcer: AppRouteModule = {
       name: 'DDServcerDCStatus',
       component: () => import('/@/views/ddServcer/dcStatus/index.vue'),
       meta: {
-        title: '调度在线状态',
+        title: '调度台/值班台在线状态',
       },
     },
     {

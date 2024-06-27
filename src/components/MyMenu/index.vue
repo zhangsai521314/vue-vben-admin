@@ -21,7 +21,7 @@
           border: 1px solid #f0f0f0;
         "
       >
-        <a-spin tip="数据点..." :spinning="isGetTree || isGetMenuInfo">
+        <a-spin tip="加载中..." :spinning="isGetTree || isGetMenuInfo">
           <div style="width: 100%" v-if="props.isShowSearch">
             <a-input-search
               v-model:value="searchContent"
@@ -34,13 +34,13 @@
               v-if="props.isEdit"
               name="icon-baseui-add"
               title="新增根菜单"
-              :style="{ fontSize: '29px', position: 'relative', top: '-6px' }"
+              :style="{ fontSize: '29px' }"
               @click="showMenuForm('add', node)"
             />
             <IconFontClass
               name="icon-baseui-redo"
               title="刷新菜单"
-              :style="{ fontSize: '21px', position: 'relative', top: '-8px' }"
+              :style="{ fontSize: '21px', position: 'relative', top: '-3px' }"
               @click="getTreeData"
             />
           </div>
@@ -74,12 +74,12 @@
                       v-if="props.isEdit"
                       :class="{
                         'not-click':
-                          !userData.isadmin &&
+                          !userData.isAdmin &&
                           node.powertype.indexOf('3') == -1 &&
                           node.powertype.indexOf('1') == -1,
                       }"
                       name="icon-baseui-tianjiawukuang"
-                      title="添加子设备"
+                      title="添加子菜单"
                       style="color: #10893e"
                       @click="showMenuForm('add', node)"
                     />
@@ -87,7 +87,7 @@
                       v-if="props.isEdit"
                       :class="{
                         'not-click':
-                          !userData.isadmin &&
+                          !userData.isAdmin &&
                           node.powertype.indexOf('2') == -1 &&
                           node.powertype.indexOf('1') == -1,
                       }"
@@ -101,7 +101,7 @@
                       :class="{
                         'not-click':
                           node.children.length > 0 ||
-                          (!userData.isadmin &&
+                          (!userData.isAdmin &&
                             node.powertype.indexOf('4') == -1 &&
                             node.powertype.indexOf('1') == -1),
                       }"
@@ -289,21 +289,21 @@
   const searchContent = ref('');
   const isShowMenuFrom = ref(false);
   const menuFromDef = {
-    menuname: '',
-    menuicon: 'icon-baseui-biaodan',
-    parentid: 0,
-    orderindex: null,
-    isdesktop: true,
-    ismobile: false,
-    menutype: props.menuType,
-    opensizetype: props.openSizeType,
-    openwidth: 1365,
-    openheight: 750,
+    menuName: '',
+    menuIcon: 'icon-baseui-biaodan',
+    parentId: null,
+    orderIndex: null,
+    isDesktop: true,
+    isMobile: false,
+    menuType: props.menuType,
+    openSizeType: props.openSizeType,
+    openWidth: 1365,
+    openHeight: 750,
+    isValid: true,
   };
   const menuFromData = ref(_.cloneDeep(menuFromDef));
   const isRunSaveMenuInfo = ref(false);
   const saveType = ref('');
-  getTreeData();
 
   //关闭菜单树
   function myCancel() {
@@ -322,7 +322,7 @@
     if (saveType.value == 'edit') {
       getMenuInfo(node);
     } else if (node) {
-      menuFromData.value.parentid = node.key;
+      menuFromData.value.parentId = node.key;
     }
     isShowMenuFrom.value = true;
   }
@@ -331,14 +331,14 @@
   function getMenuInfo(node) {
     isGetMenuInfo.value = true;
     menuApi
-      .GetMenu({
-        MenuId: node.key,
-        execompleteBefore: () => {
-          isGetMenuInfo.value = false;
-        },
-      })
+      .GetMenu(node.key)
       .then((data) => {
+        isGetMenuInfo.value = false;
+        data.parentId = data.parentId == 0 ? null : data.parentId;
         menuFromData.value = data;
+      })
+      .catch(() => {
+        isGetMenuInfo.value = false;
       });
   }
 
@@ -349,32 +349,37 @@
       isRunSaveMenuInfo.value = false;
       isShowMenuFrom.value = false;
     };
-    if (menuFromData.value.menuid != undefined) {
-      menuApi.UpdateMenu(menuFromData.value).then((data) => {
-        const node = myCommon.arrayFindOb(treeData.value, data.menuid, 'key', 'children');
-        node.title = data.menuname;
+    const d = _.cloneDeep(menuFromData.value);
+    d.parentId = d.parentId == null ? 0 : d.parentId;
+    if (menuFromData.value.menuId != undefined) {
+      menuApi.UpdateMenu(d).then((data) => {
+        // const node = myCommon.arrayFindOb(treeData.value, data.menuId, 'key', 'children');
+        // node.title = data.menuName;
+        getTreeData();
       });
     } else {
       menuApi
-        .AddMenu(menuFromData.value)
+        .AddMenu(d)
         .then((data) => {
-          const newMode = Object.assign(data, {
-            key: data.menuid,
-            parentid: data.parentid,
-            title: data.menuname,
-            powertype: data.powertype,
-            children: [],
-          });
-          dataList.push(newMode);
-          if (data.parentid == 0) {
-            treeData.value.push(newMode);
-          } else {
-            const parent = myCommon.arrayFindOb(treeData.value, data.parentid, 'key', 'children');
-            parent.children.push(newMode);
-          }
-          if (checkedKeys.value.length == 0) {
-            checkedKeys.value.push(data.menuid);
-          }
+          getTreeData();
+          // const newMode = Object.assign(data, {
+          //   key: data.menuId,
+          //   parentId: d.parentId,
+          //   title: data.menuName,
+          //   powertype: data.powertype,
+          //   children: [],
+          // });
+          // dataList.push(newMode);
+          // debugger;
+          // if (data.parentId == 0) {
+          //   treeData.value.push(newMode);
+          // } else {
+          //   const parent = myCommon.arrayFindOb(treeData.value, data.parentId, 'key', 'children');
+          //   parent.children.push(newMode);
+          // }
+          // if (checkedKeys.value.length == 0) {
+          //   checkedKeys.value.push(data.menuId);
+          // }
         })
         .catch(() => {
           isRunSaveMenuInfo.value = false;
@@ -390,19 +395,16 @@
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {
-        menuApi
-          .DeleteMenu({
-            menuId: node.key,
-          })
-          .then((data) => {
-            message.success('删除菜单成功');
-            if (node.parentid == 0) {
-              treeData.value = treeData.value.filter((m) => m.key != node.key);
-            } else {
-              const parent = myCommon.arrayFindOb(treeData.value, node.parentid, 'key', 'children');
-              parent.children = parent.children.filter((m) => m.key != node.key);
-            }
-          });
+        menuApi.DeleteMenu(node.key).then((data) => {
+          debugger;
+          message.success('删除菜单成功');
+          if (node.parentId == 0 || node.parentId == null) {
+            treeData.value = treeData.value.filter((m) => m.key != node.key);
+          } else {
+            const parent = myCommon.arrayFindOb(treeData.value, node.parentId, 'key', 'children');
+            parent.children = parent.children.filter((m) => m.key != node.key);
+          }
+        });
       },
       onCancel() {},
     });
@@ -420,7 +422,7 @@
       })
       .then((data) => {
         treeData.value = data;
-        generateList(treeData.value);
+        // generateList(treeData.value);
       })
       .catch(() => {
         treeData.value = [];
@@ -472,7 +474,7 @@
       //选中
       if (
         props.isPageEditing &&
-        !userData.value.isadmin &&
+        !userData.value.isAdmin &&
         node.powertype.indexOf('1') == -1 &&
         node.powertype.indexOf('2') == -1
       ) {
@@ -490,7 +492,7 @@
         checkedKeys.value.splice(checkedKeys.value.indexOf(node.key), 1);
       }
     }
-    emits('check', checkedKeys, node);
+    emits('check', checkedKeys.value, node);
   }
 
   //还原搜索之前的展开
@@ -514,8 +516,8 @@
       const node = data[i];
       const key = node.key;
       const title = node.title;
-      const parentid = node.parentid;
-      dataList.push({ key, title, parentid });
+      const parentId = node.parentId;
+      dataList.push({ key, title, parentId });
       if (node.children) {
         generateList(node.children);
       }
@@ -524,8 +526,8 @@
   //获取所有父级主键
   function getParentKey(node) {
     expandeds.push(node.key);
-    if (node.parentid != '0') {
-      const parent = dataList.find((m) => m.key == node.parentid);
+    if (node.parentId != '0') {
+      const parent = dataList.find((m) => m.key == node.parentId);
       getParentKey(parent);
     }
   }
@@ -561,6 +563,16 @@
     },
   );
 
+  watch(
+    () => props.isShow,
+    () => {
+      if (props.isShow) {
+        getTreeData();
+      }
+    },
+    { immediate: true },
+  );
+
   watch(isShowMenuFrom, () => {
     if (!isShowMenuFrom.value) {
       menuFromData.value = menuFromDef;
@@ -576,7 +588,7 @@
     if (props.isShowSearch) {
       height = height - 32;
     }
-    if (treeHeight.value != height) {
+    if (height > 0 && treeHeight.value != height) {
       treeHeight.value = height;
     }
   }

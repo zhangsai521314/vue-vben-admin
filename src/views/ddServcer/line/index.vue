@@ -102,7 +102,7 @@
             name="code"
             :rules="[
               { required: true, message: '' },
-              { max: 3, message: '线路编码过短' },
+              { min: 3, message: '线路编码过短' },
               { max: 6, message: '线路编码过长' },
               { validator: formValidator.empty, message: '请输入线路编码' },
             ]"
@@ -140,105 +140,145 @@
             <a-input placeholder="请输入ISDN" v-model:value="formData.dcIsdn" autocomplete="off" />
           </a-form-item>
           <a-form-item
-            name="groupAllCirNumber"
-            label="全呼CIR组呼号码"
-            :rules="[
-              { required: true, message: '' },
-              { min: 3, message: '全呼CIR组呼号码过短' },
-              { max: 10, message: '全呼CIR组呼号码过长' },
-              { validator: formValidator.positiveInteger, message: '全呼CIR组呼号码格式为自然数' },
-              { validator: formValidator.empty, message: '请输入全呼CIR组呼号码' },
-            ]"
+            v-if="saveType == 'edit'"
+            :wrapper-col="{ span: 20, offset: 12 }"
+            style="position: relative; height: 0"
           >
-            <a-input
-              placeholder="请输入全呼CIR组呼号码"
-              v-model:value="formData.groupAllCirNumber"
-              autocomplete="off"
+            <IconFontClass
+              name="icon-baseui-zhankai"
+              :title="isShowUpdate ? '修改二级信息' : '不修改二级信息'"
+              @click="
+                () => {
+                  isShowUpdate = !isShowUpdate;
+                }
+              "
+              style="position: absolute; top: -2px; left: 16%; cursor: pointer"
+              :class="{
+                fanZhun: isShowUpdate,
+              }"
             />
           </a-form-item>
-          <a-form-item
-            name="groupAllCirPriority"
-            label="全呼CIR组呼优先级"
-            :rules="[{ required: true, message: '请输入全呼CIR组呼优先级' }]"
-          >
-            <a-input-number
-              placeholder="请输入全呼CIR组呼优先级"
-              style="width: 262px"
-              min="1"
-              max="15"
-              :precision="0"
-              v-model:value="formData.groupAllCirPriority"
-            />
-          </a-form-item>
-          <a-form-item
-            name="groupAllDcNumber"
-            label="全呼CIR组呼号码"
-            :rules="[
-              { required: true, message: '' },
-              { min: 3, message: '全呼CIR组呼号码过短' },
-              { max: 10, message: '全呼CIR组呼号码过长' },
-              {
-                validator: formValidator.positiveInteger,
-                message: '全呼调度台组呼号码格式为正整数',
-              },
-              { validator: formValidator.empty, message: '请输入全呼调度台组呼号码' },
-            ]"
-          >
-            <a-input
-              placeholder="请输入全呼调度台组呼号码"
-              v-model:value="formData.groupAllDcNumber"
-              autocomplete="off"
-            />
-          </a-form-item>
-          <a-form-item
-            name="groupAllDcPriority"
-            label="全呼调度台组优先级"
-            :rules="[{ required: true, message: '请输入全呼调度台组优先级' }]"
-          >
-            <a-input-number
-              placeholder="请输入全呼调度台组优先级"
-              style="width: 262px"
-              min="1"
-              max="15"
-              :precision="0"
-              v-model:value="formData.groupAllDcPriority"
-            />
-          </a-form-item>
-
-          <a-form-item
-            name="groupAllBroadcastNumber"
-            label="线路广播组呼号码"
-            :rules="[
-              { required: true, message: '' },
-              { min: 3, message: '线路广播组呼号码过短' },
-              { max: 10, message: '线路广播组呼号码过长' },
-              {
-                validator: formValidator.positiveInteger,
-                message: '线路广播组呼号码格式为自然数',
-              },
-              { validator: formValidator.empty, message: '请输入线路广播组呼号码' },
-            ]"
-          >
-            <a-input
-              placeholder="请输入线路广播组呼号码"
-              v-model:value="formData.groupAllBroadcastNumber"
-              autocomplete="off"
-            />
-          </a-form-item>
-          <a-form-item
-            name="groupAllBroadcastPriority"
-            label="线路广播组呼优先级"
-            :rules="[{ required: true, message: '请输入线路广播组呼优先级' }]"
-          >
-            <a-input-number
-              placeholder="请输入线路广播组呼优先级"
-              style="width: 262px"
-              min="1"
-              max="15"
-              :precision="0"
-              v-model:value="formData.groupAllBroadcastPriority"
-            />
-          </a-form-item>
+          <template v-if="isShowUpdate || saveType == 'add'">
+            <a-form-item
+              name="programUpdatePassWord"
+              label="二级修改密码"
+              :rules="[{ required: true, message: '请输入二级修改密码' }]"
+            >
+              <a-input
+                placeholder="请输入二级修改密码"
+                v-model:value="formData.programUpdatePassWord"
+                autocomplete="off"
+              />
+            </a-form-item>
+            <a-form-item
+              name="groupAllCirNumber"
+              label="全呼CIR组呼号码"
+              :rules="[
+                { required: true, message: '' },
+                { min: 3, message: '全呼CIR组呼号码过短' },
+                { max: 10, message: '全呼CIR组呼号码过长' },
+                {
+                  validator: formValidator.positiveInteger,
+                  message: '全呼CIR组呼号码格式为自然数',
+                },
+                { validator: formValidator.empty, message: '请输入全呼CIR组呼号码' },
+              ]"
+            >
+              <a-input
+                :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
+                placeholder="请输入全呼CIR组呼号码"
+                v-model:value="formData.groupAllCirNumber"
+                autocomplete="off"
+              />
+            </a-form-item>
+            <a-form-item
+              name="groupAllCirPriority"
+              label="全呼CIR组呼优先级"
+              :rules="[{ required: true, message: '请输入全呼CIR组呼优先级' }]"
+            >
+              <a-input-number
+                :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
+                placeholder="请输入全呼CIR组呼优先级"
+                style="width: 262px"
+                min="1"
+                max="15"
+                :precision="0"
+                v-model:value="formData.groupAllCirPriority"
+              />
+            </a-form-item>
+            <a-form-item
+              name="groupAllDcNumber"
+              label="全呼CIR组呼号码"
+              :rules="[
+                { required: true, message: '' },
+                { min: 3, message: '全呼CIR组呼号码过短' },
+                { max: 10, message: '全呼CIR组呼号码过长' },
+                {
+                  validator: formValidator.positiveInteger,
+                  message: '全呼调度台组呼号码格式为正整数',
+                },
+                { validator: formValidator.empty, message: '请输入全呼调度台组呼号码' },
+              ]"
+            >
+              <a-input
+                :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
+                placeholder="请输入全呼调度台组呼号码"
+                v-model:value="formData.groupAllDcNumber"
+                autocomplete="off"
+              />
+            </a-form-item>
+            <a-form-item
+              name="groupAllDcPriority"
+              label="全呼调度台组优先级"
+              :rules="[{ required: true, message: '请输入全呼调度台组优先级' }]"
+            >
+              <a-input-number
+                :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
+                placeholder="请输入全呼调度台组优先级"
+                style="width: 262px"
+                min="1"
+                max="15"
+                :precision="0"
+                v-model:value="formData.groupAllDcPriority"
+              />
+            </a-form-item>
+            <a-form-item
+              name="groupAllBroadcastNumber"
+              label="线路广播组呼号码"
+              :rules="[
+                { required: true, message: '' },
+                { min: 3, message: '线路广播组呼号码过短' },
+                { max: 10, message: '线路广播组呼号码过长' },
+                {
+                  validator: formValidator.positiveInteger,
+                  message: '线路广播组呼号码格式为自然数',
+                },
+                { validator: formValidator.empty, message: '请输入线路广播组呼号码' },
+              ]"
+            >
+              <a-input
+                :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
+                placeholder="请输入线路广播组呼号码"
+                v-model:value="formData.groupAllBroadcastNumber"
+                autocomplete="off"
+              />
+            </a-form-item>
+            <a-form-item
+              name="groupAllBroadcastPriority"
+              label="线路广播组呼优先级"
+              :rules="[{ required: true, message: '请输入线路广播组呼优先级' }]"
+            >
+              <a-input-number
+                :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
+                placeholder="请输入线路广播组呼优先级"
+                style="width: 262px"
+                min="1"
+                max="15"
+                :precision="0"
+                v-model:value="formData.groupAllBroadcastPriority"
+              />
+            </a-form-item>
+          </template>
           <a-form-item name="reamrk" label="备注" :rules="[{ max: 250, message: '备注过长' }]">
             <a-textarea
               placeholder="请输入备注"
@@ -401,6 +441,7 @@
     groupAllDcPriority: null,
     groupAllBroadcastNumber: null,
     groupAllBroadcastPriority: null,
+    programUpdatePassWord: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);
@@ -417,6 +458,7 @@
   const seacthContent = ref({
     name: '',
   });
+  const isShowUpdate = ref(false);
 
   getDDServerLines();
 
@@ -491,6 +533,7 @@
   //关闭表单
   function formClose() {
     isShowForm.value = false;
+    isShowUpdate.value = false;
     formData.value = _.cloneDeep(defFromData);
     formRef.value.clearValidate();
   }

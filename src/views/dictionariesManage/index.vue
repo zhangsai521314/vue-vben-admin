@@ -26,6 +26,29 @@
                     </div>
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
+                        <label>字典类型：</label>
+                        <a-select
+                          placeholder="请选择字典类型"
+                          style="width: 170px"
+                          allow-clear
+                          show-search
+                          :filter-option="AntVueCommon.filterOption"
+                          v-model:value="seacthContent.dictionariesClass"
+                        >
+                          <a-select-option value="equipmentType">硬件设备</a-select-option>
+                          <a-select-option value="systemType">操作系统</a-select-option>
+                          <a-select-option value="serviceType">软件服务</a-select-option>
+                          <a-select-option value="msgType">信息提示</a-select-option>
+                          <a-select-option value="commonConfig">通用配置</a-select-option>
+                          <a-select-option value="performanceAlarmType"
+                            >设备性能告警阈值</a-select-option
+                          >
+                          <a-select-option value="collectionFrequency">数据频率</a-select-option>
+                        </a-select>
+                      </a-space>
+                    </div>
+                    <div class="row-div">
+                      <a-space direction="horizontal" size="small" :wrap="true">
                         <a-button @click="getDictionariess" type="primary">查询</a-button>
                       </a-space>
                     </div>
@@ -309,6 +332,7 @@
   </MyContent>
 </template>
 <script setup lang="ts">
+  import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import formValidator from '@/utils/MyCommon/formValidator';
   import myCommon from '@/utils/MyCommon/common';
   import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
@@ -343,6 +367,7 @@
   let saveType = 'add';
   const seacthContent = ref({
     dictionariesName: '',
+    dictionariesClass: null,
   });
   const syncMqttPerformance = ref(false);
 

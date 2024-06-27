@@ -4,7 +4,7 @@
     <div :class="`${prefixCls}assembly`">
       <div v-for="(item, index) in assemblyAll" :key="index" :class="`${prefixCls}assembly-item`">
         <div :class="{ assemblySelected: item.isSelected }">
-          <IconFontClass :style="item.style" :name="item.icon" />
+          <IconFontClass :name="item.icon" />
         </div>
         <div>
           {{ item.name }}
@@ -80,7 +80,6 @@
       name: '素材',
       key: 'Sys',
       icon: 'icon-baseui-sucai',
-      style: '',
       isSelected: true,
     },
   ]);

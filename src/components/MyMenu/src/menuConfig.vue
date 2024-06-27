@@ -16,68 +16,85 @@
       autocomplete="off"
       ref="menuRef"
     >
+      <a-form-item name="parentId" label="上级菜单">
+        <a-tree-select
+          v-model:value="props.fromData.parentId"
+          show-search
+          style="width: 100%"
+          :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+          placeholder="请选择上级菜单"
+          allow-clear
+          show-arrow
+          :filterTreeNode="AntVueCommon.filterTreeNode"
+          :tree-data="menuTreeDatas"
+        />
+      </a-form-item>
       <a-form-item
-        name="menuname"
-        label="名称"
+        name="menuName"
+        label="菜单名称"
         :rules="[
           { required: true, message: '' },
-          { validator: formValidator.empty, message: '请输入名称' },
+          { max: 50, message: '菜单名称过长' },
+          { validator: formValidator.empty, message: '请输入菜单名称' },
         ]"
       >
-        <a-input v-model:value="props.fromData.menuname" />
+        <a-input v-model:value="props.fromData.menuName" />
       </a-form-item>
-      <a-form-item name="opensizetype" label="窗口大小">
-        <a-select :disabled="saveType == 'edit'" v-model:value="props.fromData.opensizetype">
+      <!-- <a-form-item name="openSizeType" label="窗口大小">
+        <a-select :disabled="saveType == 'edit'" v-model:value="props.fromData.openSizeType">
           <a-select-option :value="1">正常(1360px*750px)</a-select-option>
           <a-select-option :value="2">最大化</a-select-option>
           <a-select-option :value="3">自定义</a-select-option>
         </a-select>
       </a-form-item>
-      <template v-if="props.fromData.opensizetype == '3'">
+      <template v-if="props.fromData.openSizeType == '3'">
         <a-form-item
-          name="openwidth"
+          name="openWidth"
           label="宽度"
           :rules="[{ required: true, message: '请输入宽度' }]"
         >
           <a-input-number
             :style="{ width: '100%' }"
-            v-model:value="props.fromData.openwidth"
+            v-model:value="props.fromData.openWidth"
             :min="1350"
           />
         </a-form-item>
         <a-form-item
-          name="openheight"
+          name="openHeight"
           label="高度"
           :rules="[{ required: true, message: '请输入高度' }]"
         >
           <a-input-number
             :style="{ width: '100%' }"
-            v-model:value="props.fromData.openheight"
+            v-model:value="props.fromData.openHeight"
             :min="750"
           />
         </a-form-item>
-      </template>
+      </template> -->
       <a-form-item
-        name="orderindex"
-        label="排序"
-        :rules="[{ required: true, message: '请输入排序' }]"
+        name="orderIndex"
+        label="菜单排序"
+        :rules="[{ required: true, message: '请输入菜单排序' }]"
       >
         <a-input-number
+          :precision="3"
+          :min="-99999"
+          :max="99999"
           :style="{ width: '100%' }"
-          v-model:value="props.fromData.orderindex"
-          :min="0"
+          placeholder="请输入菜单排序"
+          v-model:value="props.fromData.orderIndex"
         />
       </a-form-item>
-      <a-form-item label="桌面">
+      <!-- <a-form-item label="桌面">
         <a-switch
-          v-model:checked="props.fromData.isdesktop"
+          v-model:checked="props.fromData.isDesktop"
           checked-children="是"
           un-checked-children="否"
         />
-      </a-form-item>
+      </a-form-item> -->
       <!-- <a-form-item label="移动端">
         <a-switch
-          v-model:checked="props.fromData.ismobile"
+          v-model:checked="props.fromData.isMobile"
           checked-children="是"
           un-checked-children="否"
         />
@@ -89,23 +106,25 @@
   </a-drawer>
 </template>
 <script setup>
+  import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import formValidator from '@/utils/MyCommon/formValidator';
-  import { ref } from 'vue';
+  import { ref, watch } from 'vue';
+  import menuApi from '@/api/menu';
   //vue3使用defineProps接收传过来的参数
   const props = defineProps({
     fromData: {
       type: Object,
       default() {
         return {
-          menuicon: 'icon-baseui-biaodan',
-          parentid: 0,
-          menuname: '',
-          orderindex: null,
-          isdesktop: true,
-          ismobile: false,
-          opensizetype: 2,
-          openwidth: 1365,
-          openheight: 750,
+          menuIcon: 'icon-baseui-biaodan',
+          parentId: 0,
+          menuName: '',
+          orderIndex: null,
+          isDesktop: true,
+          isMobile: false,
+          openSizeType: 2,
+          openWidth: 1365,
+          openHeight: 750,
         };
       },
     },
@@ -149,4 +168,21 @@
     },
   });
   const menuRef = ref({});
+  const menuTreeDatas = ref([]);
+
+  //获取菜单树
+  function getMenuTreeDatas() {
+    menuApi.GetMenuSimple({ NoMenuType: [7] }).then((data) => {
+      menuTreeDatas.value = data;
+    });
+  }
+  watch(
+    () => props.isShow,
+    () => {
+      if (props.isShow) {
+        getMenuTreeDatas();
+      }
+    },
+    { immediate: true },
+  );
 </script>

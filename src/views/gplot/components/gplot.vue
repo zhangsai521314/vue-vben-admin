@@ -78,7 +78,9 @@
   let changeSaveTimeId;
   //是否需要保存
   let isHaveSave = false;
-
+  //最后点击选中的元素
+  let lastSelectedOb;
+  gplotStore.gplotKeyOb[gplotKey].containerConfig.menuId = props.menuId;
   shortcutKey_();
 
   const backendCode = ref('');
@@ -93,16 +95,22 @@
   };
 
   async function init() {
-    // rendering.value = true;
+    rendering.value = true;
     // setInterval(() => {
     //   gplotStore.gplotKeyOb[gplotKey].lineWidth = gplotStore.gplotKeyOb[gplotKey].lineWidth + 2;
     // }, 2000);
     let gplotConfig = {};
-    if (gplotId != null) {
+    if (gplotId != null || gplotStore.gplotKeyOb[gplotKey].containerConfig.menuId != null) {
       try {
         const config = await getConfig();
-        gplotConfig = JSON.parse(config.gplotConfig);
-        gplotStore.gplotKeyOb[gplotKey].containerConfig = JSON.parse(config.globalConfig);
+        gplotId = config.gplotId;
+        if (config.gplotConfig) {
+          gplotConfig = JSON.parse(config.gplotConfig);
+        }
+        if (config.globalConfig) {
+          gplotStore.gplotKeyOb[gplotKey].containerConfig = JSON.parse(config.globalConfig);
+          gplotStore.gplotKeyOb[gplotKey].containerConfig.runSave = false;
+        }
       } catch (error) {
         message.warning('获取配置信息失败');
       }
@@ -215,6 +223,18 @@
             fillOpacity: 0.2,
             stroke: '#0ff',
           },
+          onSelect: (e) => {
+            const ids = [];
+            for (const key in e) {
+              ids.push(key);
+            }
+            if (ids.length > 0) {
+              gplotStore.gplotKeyOb[gplotKey].selectedOb = graphOb.getElementData(ids);
+            } else {
+              gplotStore.gplotKeyOb[gplotKey].selectedOb = null;
+            }
+            return e;
+          },
         },
         {
           //创建边
@@ -236,8 +256,15 @@
               if (!data.edges.find((m) => m.source == e.source && m.target == e.target)) {
                 e['data'] = {
                   myType: 'edge',
-                  lockAll: false,
-                  event: [],
+                  //配置原有的样式
+                  myOldStyle: {
+                    iconFill: '',
+                    labelFill: '',
+                  },
+                  //锁定
+                  myLockAll: false,
+                  myEvent: [],
+                  myState: [],
                 };
                 return e;
               } else {
@@ -260,42 +287,44 @@
           trigger: 'contextmenu', // 'click' or 'contextmenu'
           getContent: (e) => {
             console.log(e);
-            setTimeout(() => {
-              ContextMenu.showContextMenu({
-                x: e.client.x,
-                y: e.client.y,
-                items: [
-                  {
-                    label: '复制',
-                    icon: '',
-                    onClick: () => {
-                      alert('复制');
+            if (gplotStore.gplotKeyOb[gplotKey].selectedOb != null) {
+              setTimeout(() => {
+                ContextMenu.showContextMenu({
+                  x: e.client.x,
+                  y: e.client.y,
+                  items: [
+                    // {
+                    //   label: '复制',
+                    //   icon: '',
+                    //   onClick: () => {
+                    //     alert('复制');
+                    //   },
+                    // },
+                    {
+                      label: '删除',
+                      icon: '',
+                      onClick: () => {
+                        deleteGplot(gplotStore.gplotKeyOb[gplotKey].selectedOb);
+                      },
                     },
-                  },
-                  {
-                    label: '删除',
-                    icon: '',
-                    onClick: () => {
-                      alert('删除');
+                    {
+                      label: '组合',
+                      icon: '',
+                      // disabled: true,
+                      onClick: () => {
+                        groupGplot();
+                      },
                     },
-                  },
-                  {
-                    label: '组合',
-                    icon: '',
-                    // disabled: true,
-                    onClick: () => {
-                      groupGplot();
+                    {
+                      label: '拆分',
+                      icon: '',
+                      disabled: true,
+                      onClick: () => {},
                     },
-                  },
-                  {
-                    label: '拆分',
-                    icon: '',
-                    disabled: true,
-                    onClick: () => {},
-                  },
-                ],
-              });
-            }, 150);
+                  ],
+                });
+              }, 150);
+            }
             return null;
           },
         },
@@ -336,26 +365,18 @@
       console.log('点击', e.target);
       if (e.target?.nodeName == 'document' && !e.target.hasOwnProperty('type')) {
         //点击了画布
-        gplotStore.gplotKeyOb[gplotKey].isSelectContaine = true;
+        gplotStore.gplotKeyOb[gplotKey].selectedOb = null;
       } else {
-        gplotStore.gplotKeyOb[gplotKey].isSelectContaine = false;
-        let selectedObs = [];
-        //获取选中的对象
-        selectedObs = selectedObs.concat(graphOb.getElementDataByState('node', 'selected'));
-        selectedObs = selectedObs.concat(graphOb.getElementDataByState('combo', 'selected'));
-        selectedObs = selectedObs.concat(graphOb.getElementDataByState('edge', 'selected'));
-        console.log('点击获取', selectedObs);
+        let selectedObs = getAllSelectOb(true);
         if (selectedObs.length == 0) {
-          gplotStore.gplotKeyOb[gplotKey].isSelectContaine = true;
         } else if (selectedObs.length > 1) {
           gplotStore.gplotKeyOb[gplotKey].selectedOb = selectedObs;
         } else {
-          const activeOb = graphOb.getElementData(e.target.id);
-          console.log('点击获取activeOb', activeOb);
+          const selectedOb = graphOb.getElementData(e.target.id);
           gplotStore.gplotKeyOb[gplotKey].selectedOb = {
-            id: activeOb.id,
-            style: _.cloneDeep(activeOb.style),
-            data: _.cloneDeep(activeOb.data),
+            id: selectedOb.id,
+            style: _.cloneDeep(selectedOb.style),
+            data: _.cloneDeep(selectedOb.data),
           };
         }
       }
@@ -371,11 +392,17 @@
       // graphOb.setBackground('#0960BD');
       // graphOb.draw();
       // console.log('背景颜色', graphOb.getBackground());
-      if (props.viewType != 'edit') {
+      if (props.viewType == 'edit') {
         //将图缩放至合适大小并平移至视口中心，编辑状态下使用户拖拽位置计算不正确
         // graphOb.fitView();
         //平移至中心
         graphOb.fitCenter();
+      } else {
+        if (gplotStore.gplotKeyOb[gplotKey].containerConfig.fit == 'fitCenter') {
+          graphOb.fitCenter();
+        } else if (gplotStore.gplotKeyOb[gplotKey].containerConfig.fit == 'fitView') {
+          graphOb.fitView();
+        }
       }
       gplotStore.gplotKeyOb[gplotKey].renderSuccess = true;
       //根据插件的key更新插件信息
@@ -389,23 +416,28 @@
         watch(
           () => gplotStore.gplotKeyOb[gplotKey].selectedOb,
           () => {
-            isHaveSave = true;
             console.log('切换', gplotStore.gplotKeyOb[gplotKey].selectedOb);
-            if (!Array.isArray(gplotStore.gplotKeyOb[gplotKey].selectedOb)) {
-              switch (gplotStore.gplotKeyOb[gplotKey].selectedOb.data.myType) {
-                case 'node':
-                  graphOb.updateNodeData([gplotStore.gplotKeyOb[gplotKey].selectedOb]);
-                  break;
-                case 'edge':
-                  graphOb.updateEdgeData([gplotStore.gplotKeyOb[gplotKey].selectedOb]);
-                  break;
-                case 'combo':
-                  graphOb.updateComboData([gplotStore.gplotKeyOb[gplotKey].selectedOb]);
-                  break;
+            if (
+              gplotStore.gplotKeyOb[gplotKey].selectedOb != null &&
+              Object.keys(gplotStore.gplotKeyOb[gplotKey].selectedOb).length != 0
+            ) {
+              isHaveSave = true;
+              if (!Array.isArray(gplotStore.gplotKeyOb[gplotKey].selectedOb)) {
+                switch (gplotStore.gplotKeyOb[gplotKey].selectedOb.data.myType) {
+                  case 'node':
+                    graphOb.updateNodeData([gplotStore.gplotKeyOb[gplotKey].selectedOb]);
+                    break;
+                  case 'edge':
+                    graphOb.updateEdgeData([gplotStore.gplotKeyOb[gplotKey].selectedOb]);
+                    break;
+                  case 'combo':
+                    graphOb.updateComboData([gplotStore.gplotKeyOb[gplotKey].selectedOb]);
+                    break;
+                }
+                graphOb.draw();
               }
-              graphOb.draw();
+              changeSave();
             }
-            changeSave();
           },
           { deep: true },
         );
@@ -446,6 +478,7 @@
       } else {
         //变化监控
       }
+      rendering.value = false;
     });
   }
 
@@ -455,28 +488,77 @@
       clearTimeout(changeSaveTimeId);
       changeSaveTimeId = useTimeFn(
         setTimeout(() => {
-          try {
-            graphOb.toDataURL().then((img) => {
-              gplotApi
-                .AddtGplotHis({
-                  globalConfig: JSON.stringify(gplotStore.gplotKeyOb[gplotKey].containerConfig),
-                  gplotConfig: JSON.stringify(graphOb.getData()),
-                  gplotId: gplotId,
-                  mainImg: img,
-                  menuId: props.menuId,
-                })
-                .then((data) => {
-                  isHaveSave = false;
-                  gplotId = data;
-                });
-            });
-          } catch (error) {
-            console.error('动态保存配置错误', error);
-          }
+          saveHisConfig();
         }, 5000),
         timeKey,
         'changeSave',
       );
+    }
+  }
+
+  //正式保存配置
+  function saveConfig() {
+    if (gplotId == null) {
+      return saveHisConfig();
+    }
+    try {
+      gplotStore.gplotKeyOb[gplotKey].containerConfig.runSave = true;
+      return graphOb.toDataURL().then((img) => {
+        const configData = _.cloneDeep(graphOb.getData());
+        for (const key in configData) {
+          configData[key].forEach((item) => {
+            item.states = [];
+          });
+        }
+        return gplotApi
+          .UpdateGplot({
+            globalConfig: JSON.stringify(gplotStore.gplotKeyOb[gplotKey].containerConfig),
+            gplotConfig: JSON.stringify(configData),
+            gplotId: gplotId,
+            mainImg: img,
+            menuId: gplotStore.gplotKeyOb[gplotKey].containerConfig.menuId,
+          })
+          .then(() => {
+            gplotStore.gplotKeyOb[gplotKey].containerConfig.runSave = false;
+            message.success('保存配置成功');
+          })
+          .catch(() => {
+            gplotStore.gplotKeyOb[gplotKey].containerConfig.runSave = false;
+          });
+      });
+    } catch (error) {
+      console.error('动态保存配置错误', error);
+      gplotStore.gplotKeyOb[gplotKey].containerConfig.runSave = false;
+    }
+  }
+
+  //保存历史配置
+  function saveHisConfig() {
+    clearTimeout(changeSaveTimeId);
+    try {
+      return graphOb.toDataURL().then((img) => {
+        const configData = _.cloneDeep(graphOb.getData());
+        for (const key in configData) {
+          configData[key].forEach((item) => {
+            item.states = [];
+          });
+        }
+        return gplotApi
+          .AddtGplotHis({
+            globalConfig: JSON.stringify(gplotStore.gplotKeyOb[gplotKey].containerConfig),
+            gplotConfig: JSON.stringify(configData),
+            gplotId: gplotId,
+            mainImg: img,
+            menuId: gplotStore.gplotKeyOb[gplotKey].containerConfig.menuId,
+          })
+          .then((data) => {
+            isHaveSave = false;
+            gplotId = data;
+            message.info('已为您自动保存配置历史');
+          });
+      });
+    } catch (error) {
+      console.error('动态保存配置错误', error);
     }
   }
 
@@ -568,22 +650,9 @@
     graphOb.draw();
   }
 
-  //组合
+  //组合选中
   function groupGplot() {
-    let selectedObs = [];
-    //获取选中的对象
-    selectedObs = selectedObs.concat(graphOb.getElementDataByState('node', 'selected'));
-    selectedObs = selectedObs.concat(graphOb.getElementDataByState('combo', 'selected'));
-    selectedObs = selectedObs.concat(graphOb.getElementDataByState('node', 'active'));
-    selectedObs = selectedObs.concat(graphOb.getElementDataByState('combo', 'active'));
-    let active = graphOb
-      .getElementDataByState('node', 'active')
-      .filter((m) => selectedObs.find((i) => i.id != m.id));
-    selectedObs = selectedObs.concat(active);
-    active = graphOb
-      .getElementDataByState('combo', 'active')
-      .filter((m) => selectedObs.find((i) => i.id != m.id));
-    selectedObs = selectedObs.concat(active);
+    let selectedObs = getAllSelectOb();
     if (selectedObs.length > 1) {
       //获取带组的选中的对象
       const comboSelectedObs = selectedObs.filter((m) => m.hasOwnProperty('combo'));
@@ -602,6 +671,15 @@
             },
             data: {
               myType: 'combo',
+              //配置原有的样式
+              myOldStyle: {
+                iconFill: '',
+                labelFill: '',
+              },
+              //锁定
+              myLockAll: false,
+              myEvent: [],
+              myState: [],
             },
           },
         ]);
@@ -648,6 +726,48 @@
     }
   }
 
+  //删除选中
+  function deleteGplot(data) {
+    if (!Array.isArray(data)) {
+      deleteGplot([data]);
+    } else {
+      const deleteOb = {
+        nodes: [],
+        edges: [],
+        // , combos: []
+      };
+      const comboIds = [];
+      data.forEach((m) => {
+        if (m.data.myType == 'node') {
+          deleteOb.nodes.push(m.id);
+        } else if (m.data.myType == 'edge') {
+          deleteOb.edges.push(m.id);
+        } else if (m.data.myType == 'combo') {
+          comboIds.push(m.id);
+          // deleteOb.combos.push(m.id);
+        }
+      });
+      graphOb.removeData(deleteOb);
+      try {
+        graphOb.removeComboData(comboIds);
+      } catch (error) {
+        console.error(error);
+      }
+      graphOb.draw();
+    }
+  }
+
+  //获取所有选中的对象
+  function getAllSelectOb(isGetEdge = false) {
+    let selectedObs = [];
+    selectedObs = selectedObs.concat(graphOb.getElementDataByState('node', 'selected'));
+    selectedObs = selectedObs.concat(graphOb.getElementDataByState('combo', 'selected'));
+    if (isGetEdge) {
+      selectedObs = selectedObs.concat(graphOb.getElementDataByState('edge', 'selected'));
+    }
+    return selectedObs;
+  }
+
   //监控浏览器关闭
   function beforeunloadHandler(event) {
     if (gplotId != null && isHaveSave) {
@@ -659,10 +779,14 @@
   }
 
   async function getConfig() {
-    if (props.viewType == 'pre') {
-      return gplotApi.GetGplotHisLast(gplotId);
+    if (gplotId) {
+      if (props.viewType == 'pre') {
+        return gplotApi.GetGplotHisLast(gplotId);
+      } else {
+        return gplotApi.GetGplot(gplotId);
+      }
     } else {
-      return gplotApi.GetGplot(gplotId);
+      return gplotApi.GetGplotMenuId(gplotStore.gplotKeyOb[gplotKey].containerConfig.menuId);
     }
   }
 
@@ -700,6 +824,8 @@
     getGplotId: () => {
       return gplotId;
     },
+    saveConfig,
+    saveHisConfig,
     fitCenter: () => {
       if (graphOb) {
         graphOb.fitCenter();

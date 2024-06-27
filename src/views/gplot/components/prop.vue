@@ -1,232 +1,10 @@
 <template>
   <div :class="`${prefixCls}prop`">
     <template
-      v-if="props.graphObRef && gplotStore.gplotKeyOb[props.graphObRef.gplotKey].isSelectContaine"
-    >
-      <div :class="`${prefixCls}prop-container`">
-        <a-tabs
-          v-model:activeKey="containerTabsActiveKey"
-          :tabBarStyle="{ height: '32px', marginBottom: '0.5px', background: '#fff' }"
-        >
-          <a-tab-pane key="containerConfig" tab="容器配置">
-            <a-form
-              :label-col="{ span: 10 }"
-              :wrapper-col="{ span: 14 }"
-              autocomplete="off"
-              :model="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig"
-            >
-              <!-- <a-divider orientation="center">编辑配置</a-divider> -->
-              <a-form-item name="gridShow" label="网格显示">
-                <a-switch
-                  v-model:checked="
-                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.grid.myIsShow
-                  "
-                />
-              </a-form-item>
-              <a-form-item name="background" label="背景颜色">
-                <div>
-                  <selectColor
-                    :color="
-                      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.background
-                        .myBackground
-                    "
-                    @change="(value) => containerColorChange('myBackground', value)"
-                  />
-                </div>
-              </a-form-item>
-              <a-form-item name="backgroundImg" label="背景图片">
-                <div class="upbackimg">
-                  <a-upload
-                    v-model:fileList="fileList"
-                    :maxCount="1"
-                    :multiple="false"
-                    accept=".png,.jpg,.jpeg,.svg"
-                    :before-upload="(file) => beforeUpload(file, 'backgroundImage')"
-                  >
-                    <div
-                      v-if="
-                        !gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.background
-                          .backgroundImage
-                      "
-                    >
-                      <IconFontClass style="font-size: 16px" name="icon-baseui-tupian2" />
-                    </div>
-                    <div v-else>
-                      <img
-                        style="
-                          width: 25px;
-                          height: 25px;
-                          background-repeat: no-repeat;
-                          background-size: 100% 100%;
-                        "
-                        :src="
-                          gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig
-                            .background.backgroundImage
-                        "
-                      />
-                    </div>
-                  </a-upload>
-                  <IconFontClass
-                    @click="deleteBackgroundImg('backgroundImage')"
-                    v-show="
-                      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.background
-                        .backgroundImage
-                    "
-                    style="
-                      position: absolute;
-                      top: -2px;
-                      right: 0;
-                      font-size: 12px;
-                      cursor: pointer;
-                    "
-                    name="icon-baseui-delete"
-                  />
-                </div>
-              </a-form-item>
-              <a-form-item
-                :class="{
-                  'not-click':
-                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
-                    'combo',
-                }"
-                name="zoom"
-                label="缩放大小"
-                :autoLink="false"
-              >
-                <a-row>
-                  <a-slider
-                    class="aSlider"
-                    v-model:value="
-                      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.zoom
-                    "
-                    :min="0"
-                    :max="10"
-                    :step="0.01"
-                    :included="false"
-                    :tipFormatter="null"
-                    @change="
-                      props.graphObRef.zoomChange(
-                        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.zoom,
-                      )
-                    "
-                  />
-                  <a-input-number
-                    style="width: 82px !important"
-                    v-model:value="
-                      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.zoom
-                    "
-                    :min="0"
-                    :max="10"
-                    :precision="3"
-                    :step="0.01"
-                    @change="
-                      props.graphObRef.zoomChange(
-                        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.zoom,
-                      )
-                    "
-                  />
-                </a-row>
-                <!-- <a-row style="margin: 2px 0">
-                  <a-space size="1">
-                    <a-tooltip>
-                      <template #title>将图平移至视口中心</template>
-                      <a-tag
-                        @click="
-                          () => {
-                            if (props.graphObRef) {
-                              props.graphObRef.fitCenter();
-                            }
-                          }
-                        "
-                        >fitCenter</a-tag
-                      >
-                    </a-tooltip>
-                    <a-tooltip>
-                      <template #title>将图缩放至合适大小并平移至视口中心</template>
-                      <a-tag
-                        @click="
-                          () => {
-                            if (props.graphObRef) {
-                              props.graphObRef.fitView();
-                            }
-                          }
-                        "
-                        >fitView</a-tag
-                      >
-                    </a-tooltip>
-                  </a-space>
-                </a-row> -->
-              </a-form-item>
-              <a-divider orientation="center">展示配置</a-divider>
-              <a-form-item name="runType" label="画布">
-                <a-checkbox-group
-                  v-model:value="
-                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.runType
-                  "
-                >
-                  <a-checkbox value="zommCanvas">锁定画布缩放</a-checkbox>
-                  <a-checkbox value="dragCanvas">锁定画布平移</a-checkbox>
-                </a-checkbox-group>
-              </a-form-item>
-              <a-divider orientation="center">数据配置</a-divider>
-              <a-table
-                :columns="allDataConfigColumns"
-                :data-source="
-                  gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.allDataConfig
-                "
-                bordered
-                size="small"
-                style="min-height: 400px; overflow: auto"
-                :pagination="false"
-              >
-                <template #bodyCell="{ column, text, record }">
-                  <template v-if="column.dataIndex == 'operation'">
-                    <div style="width: 64px">
-                      <a-space>
-                        <a @click="showAllDataConfig(record)">配置</a>
-                        <a-popconfirm title="是否删除?" @confirm="delteAllDataConfig(record.key)">
-                          <a style="color: red">删除</a>
-                        </a-popconfirm></a-space
-                      >
-                    </div>
-                  </template>
-                  <template v-else>
-                    <div style="width: 88px">{{ text }}</div></template
-                  >
-                </template>
-                <template #footer>
-                  <div>
-                    <IconFontClass
-                      name="icon-baseui-tianjiawukuang"
-                      style="color: #0960bd; font-size: 12px; cursor: pointer; user-select: none"
-                      @click="showAllDataConfig()"
-                      >添加</IconFontClass
-                    >
-                    <a-popconfirm title="是否清空?" @confirm="clearAllDataConfigs()">
-                      <IconFontClass
-                        name="icon-baseui-delete"
-                        style="
-                          margin-left: 10px;
-                          color: red;
-                          font-size: 12px;
-                          cursor: pointer;
-                          user-select: none;
-                        "
-                        >清空</IconFontClass
-                      >
-                    </a-popconfirm>
-                  </div>
-                </template>
-              </a-table>
-            </a-form>
-          </a-tab-pane>
-        </a-tabs>
-      </div>
-    </template>
-    <template
       v-if="
         props.graphObRef &&
-        !Array.isArray(gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb)
+        !Array.isArray(gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb) &&
+        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb != null
       "
     >
       <div :class="`${prefixCls}prop-attr`">
@@ -1155,7 +933,233 @@
         </a-tabs>
       </div>
     </template>
-    <template v-if="props.graphObRef">
+    <template
+      v-else-if="
+        props.graphObRef && gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb == null
+      "
+    >
+      <div :class="`${prefixCls}prop-container`">
+        <a-tabs
+          v-model:activeKey="containerTabsActiveKey"
+          :tabBarStyle="{ height: '32px', marginBottom: '0.5px', background: '#fff' }"
+        >
+          <a-tab-pane key="containerConfig" tab="容器配置">
+            <a-form
+              :label-col="{ span: 10 }"
+              :wrapper-col="{ span: 14 }"
+              autocomplete="off"
+              :model="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig"
+            >
+              <!-- <a-divider orientation="center">编辑配置</a-divider> -->
+              <a-form-item name="gridShow" label="网格显示">
+                <a-switch
+                  v-model:checked="
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.grid.myIsShow
+                  "
+                />
+              </a-form-item>
+              <a-form-item name="background" label="背景颜色">
+                <div>
+                  <selectColor
+                    :color="
+                      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.background
+                        .myBackground
+                    "
+                    @change="(value) => containerColorChange('myBackground', value)"
+                  />
+                </div>
+              </a-form-item>
+              <a-form-item name="backgroundImg" label="背景图片">
+                <div class="upbackimg">
+                  <a-upload
+                    v-model:fileList="fileList"
+                    :maxCount="1"
+                    :multiple="false"
+                    accept=".png,.jpg,.jpeg,.svg"
+                    :before-upload="(file) => beforeUpload(file, 'backgroundImage')"
+                  >
+                    <div
+                      v-if="
+                        !gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.background
+                          .backgroundImage
+                      "
+                    >
+                      <IconFontClass style="font-size: 16px" name="icon-baseui-tupian2" />
+                    </div>
+                    <div v-else>
+                      <img
+                        style="
+                          width: 25px;
+                          height: 25px;
+                          background-repeat: no-repeat;
+                          background-size: 100% 100%;
+                        "
+                        :src="
+                          gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig
+                            .background.backgroundImage
+                        "
+                      />
+                    </div>
+                  </a-upload>
+                  <IconFontClass
+                    @click="deleteBackgroundImg('backgroundImage')"
+                    v-show="
+                      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.background
+                        .backgroundImage
+                    "
+                    style="
+                      position: absolute;
+                      top: -2px;
+                      right: 0;
+                      font-size: 12px;
+                      cursor: pointer;
+                    "
+                    name="icon-baseui-delete"
+                  />
+                </div>
+              </a-form-item>
+              <a-form-item name="zoom" label="缩放大小" :autoLink="false">
+                <a-row>
+                  <a-slider
+                    class="aSlider"
+                    v-model:value="
+                      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.zoom
+                    "
+                    :min="0"
+                    :max="10"
+                    :step="0.01"
+                    :included="false"
+                    :tipFormatter="null"
+                    @change="
+                      props.graphObRef.zoomChange(
+                        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.zoom,
+                      )
+                    "
+                  />
+                  <a-input-number
+                    style="width: 82px !important"
+                    v-model:value="
+                      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.zoom
+                    "
+                    :min="0"
+                    :max="10"
+                    :precision="3"
+                    :step="0.01"
+                    @change="
+                      props.graphObRef.zoomChange(
+                        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.zoom,
+                      )
+                    "
+                  />
+                </a-row>
+                <!-- <a-row style="margin: 2px 0">
+                  <a-space size="1">
+                    <a-tooltip>
+                      <template #title>将图平移至视口中心</template>
+                      <a-tag
+                        @click="
+                          () => {
+                            if (props.graphObRef) {
+                              props.graphObRef.fitCenter();
+                            }
+                          }
+                        "
+                        >fitCenter</a-tag
+                      >
+                    </a-tooltip>
+                    <a-tooltip>
+                      <template #title>将图缩放至合适大小并平移至视口中心</template>
+                      <a-tag
+                        @click="
+                          () => {
+                            if (props.graphObRef) {
+                              props.graphObRef.fitView();
+                            }
+                          }
+                        "
+                        >fitView</a-tag
+                      >
+                    </a-tooltip>
+                  </a-space>
+                </a-row> -->
+              </a-form-item>
+              <a-divider orientation="center">展示配置</a-divider>
+              <a-form-item name="runType" label="画布">
+                <a-checkbox-group
+                  v-model:value="
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.runType
+                  "
+                >
+                  <a-checkbox value="zommCanvas">锁定画布缩放</a-checkbox>
+                  <a-checkbox value="dragCanvas">锁定画布平移</a-checkbox>
+                </a-checkbox-group>
+              </a-form-item>
+              <a-form-item name="fit" label="图平移中心">
+                <a-radio-group
+                  v-model:value="
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.fit
+                  "
+                >
+                  <a-radio value="fitCenter">平移至视口中心</a-radio>
+                  <a-radio value="fitView">缩放并平移至视口中心</a-radio>
+                </a-radio-group>
+              </a-form-item>
+              <a-divider orientation="center">数据配置</a-divider>
+              <a-table
+                :columns="allDataConfigColumns"
+                :data-source="
+                  gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.allDataConfig
+                "
+                bordered
+                size="small"
+                style="min-height: 400px; overflow: auto"
+                :pagination="false"
+              >
+                <template #bodyCell="{ column, text, record }">
+                  <template v-if="column.dataIndex == 'operation'">
+                    <div style="width: 64px">
+                      <a-space>
+                        <a @click="showAllDataConfig(record)">配置</a>
+                        <a-popconfirm title="是否删除?" @confirm="delteAllDataConfig(record.key)">
+                          <a style="color: red">删除</a>
+                        </a-popconfirm></a-space
+                      >
+                    </div>
+                  </template>
+                  <template v-else>
+                    <div style="width: 88px">{{ text }}</div></template
+                  >
+                </template>
+                <template #footer>
+                  <div>
+                    <IconFontClass
+                      name="icon-baseui-tianjiawukuang"
+                      style="color: #0960bd; font-size: 12px; cursor: pointer; user-select: none"
+                      @click="showAllDataConfig()"
+                      >添加</IconFontClass
+                    >
+                    <a-popconfirm title="是否清空?" @confirm="clearAllDataConfigs()">
+                      <IconFontClass
+                        name="icon-baseui-delete"
+                        style="
+                          margin-left: 10px;
+                          color: red;
+                          font-size: 12px;
+                          cursor: pointer;
+                          user-select: none;
+                        "
+                        >清空</IconFontClass
+                      >
+                    </a-popconfirm>
+                  </div>
+                </template>
+              </a-table>
+            </a-form>
+          </a-tab-pane>
+        </a-tabs>
+      </div>
+    </template>
+    <template v-else-if="props.graphObRef">
       <div style="text-align: center">
         <IconFontClass
           name="icon-baseui-zanwuneirong"
@@ -1219,17 +1223,15 @@
       <a-form-item name="name" label="名称">
         <a-input placeholder="请输入名称" v-model:value="newAllDataConfig.name" />
       </a-form-item>
-      <a-form-item
+      <!-- <a-form-item
         name="topic"
         :rules="[{ required: true, message: '请选择通信主题' }]"
         label="通信主题"
       >
         <a-select placeholder="请选择通信主题" v-model:value="newAllDataConfig.topic">
-          <a-select-option value="1">服务报警</a-select-option>
-          <a-select-option value="2">服务心跳</a-select-option>
-          <a-select-option value="3">性能超出</a-select-option>
+          <a-select-option value="Data/Monitor/WebAlarm/+">服务报警</a-select-option>
         </a-select>
-      </a-form-item>
+      </a-form-item> -->
       <a-form-item
         :labelCol="{ span: 24 }"
         name="getValue"
@@ -1491,7 +1493,7 @@
           //数据来源类型
           type: 'mqtt',
           //主题
-          topic: null,
+          topic: 'Data/Monitor/WebAlarm/+',
           //值获取，
           getValue:
             '//默认参数mqttDataStr为当前主题接收到的数据\n//必须有返回值，返回值类型不得为undefined\nif(mqttDataStr)\n{\n//编辑您的计算逻辑并return值\nconst data=JSON.pase(mqttDataStr);\nreturn data;\n\n}\nelse{\n return null \n}\n',

@@ -50,7 +50,7 @@
                         v-model:value="seacthContent.roleId"
                         :options="roles"
                         :allowClear="true"
-                        placeholder="请选择用户角色"
+                        placeholder="请选择角色名称"
                         show-search
                         :filter-option="AntVueCommon.filterOption"
                       />

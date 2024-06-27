@@ -167,8 +167,7 @@
           label="上级菜单"
           :rules="[
             { required: true, message: '' },
-            { max: 50, message: '菜单名称过长' },
-            { validator: formValidator.empty, message: '请输入菜单名称' },
+            { validator: formValidator.empty, message: '请选择菜单名称' },
           ]"
         >
           <a-tree-select

@@ -1,10 +1,6 @@
 <template>
   <MyContent :class="prefixCls">
-    <gplot
-      ref="graphObRef"
-      :gplotId="gplotId ? gplotId : props.gplotId"
-      :viewType="props.viewType"
-    />
+    <gplot ref="graphObRef" :gplotId="_gplotId" :menuId="_menuId" :viewType="props.viewType" />
   </MyContent>
 </template>
 
@@ -12,7 +8,7 @@
   import { useRouter } from 'vue-router';
   import gplot from './components/gplot.vue';
   import { useDesign } from '@/hooks/web/useDesign';
-  import { unref } from 'vue';
+  import { unref, ref } from 'vue';
 
   const props = defineProps({
     viewType: {
@@ -33,7 +29,10 @@
 
   //获取url参数
   const { currentRoute } = useRouter();
-  const { gplotId } = unref(currentRoute).params;
+  const _gplotId = ref(props.gplotId);
+  const _menuId = ref();
+  const { menuId } = unref(currentRoute).params;
+  _menuId.value = menuId;
 </script>
 
 <style lang="less" scoped>

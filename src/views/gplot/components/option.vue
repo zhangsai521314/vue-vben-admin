@@ -1,10 +1,10 @@
 <template>
   <div :class="`${prefixCls}content-center`">
-    <div :class="`${prefixCls}center-tool`">
-      <!-- <div :class="`${prefixCls}tool-item`">
+    <!-- <div :class="`${prefixCls}center-tool`">
+      <div :class="`${prefixCls}tool-item`">
         <div @click="props.graphObRef.groupGplot()"> 组合 </div>
-      </div> -->
-      <!-- <div :class="`${prefixCls}tool-item`">
+      </div>
+      <div :class="`${prefixCls}tool-item`">
         <div>
           <a-tooltip placement="top">
             <template #title>后退 Ctrl+Z</template>
@@ -19,18 +19,16 @@
             <IconFontClass name="icon-baseui-huifu" @click="gplotAdvance" />
           </a-tooltip>
         </div>
-      </div> -->
-      <!-- <div :class="`${prefixCls}tool-item`">
-                <div>
-                    <a-tooltip placement="top">
-                        <template #title>格式刷</template>
-                        <IconFontClass
-                            class="not-click"
-                            name="icon-baseui-geshishua" />
-                    </a-tooltip>
-                </div>
-            </div> -->
-      <!-- <div :class="`${prefixCls}tool-item`">
+      </div>
+      <div :class="`${prefixCls}tool-item`">
+        <div>
+          <a-tooltip placement="top">
+            <template #title>格式刷</template>
+            <IconFontClass class="not-click" name="icon-baseui-geshishua" />
+          </a-tooltip>
+        </div>
+      </div>
+      <div :class="`${prefixCls}tool-item`">
         <a-dropdown :class="`${prefixCls}menu-item`">
           <IconFontClass name="icon-baseui-zuoduiqi1" />
           <template #overlay>
@@ -68,8 +66,8 @@
             </div>
           </template>
         </a-dropdown>
-      </div> -->
-      <!-- <div :class="`${prefixCls}tool-item`">
+      </div>
+      <div :class="`${prefixCls}tool-item`">
         <a-tooltip placement="top">
           <template #title>垂直翻转</template>
           <IconFontClass @click="selectedObSetConfig('vertical')" name="icon-baseui-vertical" />
@@ -92,15 +90,14 @@
           <template #title>置底层</template>
           <IconFontClass @click="levelOption('groundLevel')" name="icon-baseui-zhidiceng" />
         </a-tooltip>
-      </div> -->
-      <!-- <div :class="`${prefixCls}tool-item`">
-                <a-tooltip placement="top">
-                    <template #title>锁定</template>
-                    <IconFontClass
-                        name="icon-baseui-suo1" />
-                </a-tooltip>
-            </div> -->
-    </div>
+      </div>
+      <div :class="`${prefixCls}tool-item`">
+        <a-tooltip placement="top">
+          <template #title>锁定</template>
+          <IconFontClass name="icon-baseui-suo1" />
+        </a-tooltip>
+      </div>
+    </div> -->
     <div :class="`${prefixCls}center-menu`">
       <div :class="`${prefixCls}menu-item`">
         <!-- <div style="display: flex">
@@ -137,8 +134,8 @@
               :width="280"
             />
           </div>
-        </div> -->
-        <!-- <div>
+        </div>
+        <div>
           <a-tooltip placement="top">
             <template #title>导出</template>
             <IconFontClass @click="props.exportConfig" name="icon-baseui-xiazai" />
@@ -146,27 +143,56 @@
         </div> -->
         <div>
           <a-tooltip placement="top">
+            <template #title>保存</template>
+            <div style="float: right">
+              <IconFontClass
+                style="font-weight: 600"
+                @click="saveClick"
+                name="icon-baseui-baocun"
+              />
+            </div>
+          </a-tooltip>
+        </div>
+        <div>
+          <a-tooltip placement="top">
             <template #title>预览</template>
             <div style="float: right">
               <a-spin :spinning="isRunSavePreview">
-                <IconFontClass @click="props.viewPre()" name="icon-baseui-dapingzhanshi" />
+                <IconFontClass @click="previewClick" name="icon-baseui-shengchengyulan" />
               </a-spin>
             </div>
           </a-tooltip>
         </div>
       </div>
     </div>
-    <!-- <a-modal
-            style="top: 10px"
-            v-model:visible="previewInfo.isShow"
-            :width="previewInfo.width"
-            title="链接页面">
-            <template #footer>
-                <a-button key="back" @click="previewClose">关闭</a-button>
-            </template>
-            <myViewModel v-if="previewInfo.isShow" :noImport="['modeling']" :style="{ width: '100%', height: previewInfo.height + 'px' }" menuurl="/modelingPreview/index/" :menuid="previewInfo.id" :outherInfo="previewInfo" />
-        </a-modal> -->
   </div>
+  <menuDrawer
+    :checkedKeys="
+      props.graphObRef
+        ? [gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.menuId]
+        : []
+    "
+    :isRadio="true"
+    :width="500"
+    :isShow="isShowSaveMenu"
+    :cancel="closeSaveConfig"
+    :ztitle="'保存配置'"
+    :menuType="2"
+    :openSizeType="2"
+    :isPageEditing="true"
+    @check="menuDataChange"
+    :footerStyle="{ height: '55px', textAlign: 'right' }"
+  >
+    <template #footer_>
+      <a-spin
+        tip="正在保存配置..."
+        :spinning="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.runSave"
+      >
+        <a-button type="primary" @click="saveConfig">保存</a-button>
+        <a-button style="margin-left: 8px" @click="closeSaveConfig">关闭</a-button>
+      </a-spin>
+    </template>
+  </menuDrawer>
 </template>
 <script setup>
   import { QrCode } from '/@/components/Qrcode/index';
@@ -175,6 +201,7 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import { PlusOutlined } from '@ant-design/icons-vue';
   import { useGplotStoreWithOut } from '@/store/modules/gplot';
+  import menuDrawer from '/@/components/MyMenu/index.vue';
 
   const gplotStore = useGplotStoreWithOut();
   const props = defineProps({
@@ -297,44 +324,48 @@
   });
 
   const { prefixCls } = useDesign('GplotManage-');
-  const previewInfo = ref({
-    width: 600,
-    height: 500,
-    isShow: false,
-    type: 'preview',
-    id: null,
-  });
-
   const isRunSavePreview = ref(false);
   const isShowShare = ref(false);
+  const isShowSaveMenu = ref(false);
 
   //获取分享地址
   function getShareUrl() {
     return `${window.location.origin}/#/modelingShare/index/${props.menuCheckedIds[0]}`;
   }
 
-  function previewClose() {
-    previewInfo.value.isShow = false;
-  }
-
   //预览
   function previewClick() {
     isRunSavePreview.value = true;
-    const config = props.getAllConfig();
-    config.execompleteBefore = () => {
-      isRunSavePreview.value = false;
-    };
-    modelingApi.AddPreviewMenuConfig(config).then((data) => {
-      window.open(`#/modelingPreview/index/${data}`);
-      // const info = {
-      //     isShow: true,
-      //     width: $(`body`).width() - 10,
-      //     height: $(`body`).height() - 120,
-      //     type: "preview",
-      //     id: data
-      // }
-      // previewInfo.value = info;
-    });
+    props
+      .viewPre()
+      .then(() => {
+        isRunSavePreview.value = false;
+      })
+      .catch(() => {
+        isRunSavePreview.value = false;
+      });
+  }
+
+  //保存
+  function saveClick() {
+    isShowSaveMenu.value = true;
+  }
+  function closeSaveConfig() {
+    isShowSaveMenu.value = false;
+  }
+  function saveConfig() {
+    props.graphObRef
+      .saveConfig()
+      .then(() => {
+        isShowSaveMenu.value = false;
+      })
+      .catch(() => {
+        isShowSaveMenu.value = false;
+      });
+  }
+  function menuDataChange(v) {
+    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.menuId =
+      v.length > 0 ? v[0] : null;
   }
 
   //层级设置
@@ -425,6 +456,20 @@
 </script>
 <style lang="less" scoped>
   @prefixCls: ~'@{namespace}-GplotManage-';
+
+  .@{prefixCls}content-center {
+    display: flex;
+    //nowrap不换行
+    flex-wrap: nowrap;
+    // justify-content: space-between;
+    justify-content: right;
+    //space-between两端对齐，项目之间的间隔都相等
+    width: 100%;
+    height: 40px;
+    transition: margin-top 0.5s ease-in-out;
+    border-bottom: 1px solid #dfe3e8;
+    background: #fafbfc;
+  }
 
   .@{prefixCls}center-tool {
     display: flex;

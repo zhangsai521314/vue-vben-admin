@@ -20,7 +20,7 @@
                     <a-input
                       @press-enter="getRoles"
                       v-model:value="seacthContent.name"
-                      placeholder="输入名称查询"
+                      placeholder="输入角色名称查询"
                     />
                   </a-space>
                 </div>

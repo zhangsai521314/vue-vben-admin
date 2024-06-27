@@ -32,6 +32,7 @@ import App from './App.vue';
 
 import { getAppEnvConfig } from '@/utils/env';
 import { useMqttStoreWithOut } from '@/store/modules/mqtt';
+import { useGplotStoreWithOut } from '@/store/modules/gplot';
 import messageApi from '@/api/message';
 import dayjs from 'dayjs';
 import { useUserStore } from '@/store/modules/user';
@@ -82,6 +83,7 @@ async function bootstrap() {
 
 async function mqttInit() {
   const mqttStore = useMqttStoreWithOut();
+  const gplotStore = useGplotStoreWithOut();
   let timeId;
   let isDingYue = false;
   const errTopic: Array<string> = [];
@@ -123,8 +125,7 @@ async function mqttInit() {
     const decoder = new TextDecoder('utf-8');
     if (mqttConfig.IsOpen) {
       const topics = [
-        mqttConfig.WebAlarmInsert,
-        mqttConfig.WebAlarmUpdate,
+        mqttConfig.WebAlarm,
         mqttConfig.WebDownLog,
         mqttConfig.WebPlayCallRecord,
         mqttConfig.WebDownCallRecord,
@@ -184,13 +185,14 @@ async function mqttInit() {
         if (!myCommon.isnull(msg)) {
           try {
             msg = JSON.parse(msg);
+            gplotStore.mqttMsgReceive(topic, msg);
           } catch (error) {
             console.error('mqtt转换json失败', msg);
           }
-          if (topic == mqttConfig.WebAlarmInsert) {
+          if (topic == mqttConfig.WebAlarm.replace('+', '') + 'Insert') {
             //告警插入
             mqttStore.addMsgData(msg);
-          } else if (topic == mqttConfig.WebAlarmUpdate) {
+          } else if (topic == mqttConfig.WebAlarm.replace('+', '') + 'Update') {
             //告警更新
             mqttStore.updateMsgData(msg);
           } else if (

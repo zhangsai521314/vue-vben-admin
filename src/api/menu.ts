@@ -2,6 +2,7 @@
 import { defHttp } from '@/utils/http/axios';
 import { ContentTypeEnum } from '@/enums/httpEnum';
 import { ErrorMessageMode } from '/#/axios';
+
 const menu = {
   //获取菜单列表
   GetMenuList: function (params) {
@@ -36,7 +37,7 @@ const menu = {
   },
   //根据ID获取用户菜单信息
   GetMenu: function (params) {
-    return defHttp.post({
+    return defHttp.get({
       url: '/Menu/GetMenu/',
       params,
     });
