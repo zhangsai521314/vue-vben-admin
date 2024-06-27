@@ -65,18 +65,13 @@
           </a-space>
         </div>
       </template>
-      <template #runStatus="{ row }">
+      <template #isFault="{ row }">
         <span
           :style="{
-            color:
-              row.runStatus == '故障' || row.runStatus == '中断'
-                ? 'red'
-                : row.runStatus == '正常运行'
-                  ? 'green'
-                  : '',
+            color: row.isFault ? 'red' : 'green',
           }"
         >
-          {{ row.runStatus }}</span
+          {{ row.isFault ? '故障' : '正常' }}</span
         >
       </template>
       <template #default="{ row }">
@@ -449,14 +444,22 @@
         showHeaderOverflow: true,
         sortable: true,
       },
+      // {
+      //   field: 'isOnline',
+      //   title: '心跳在线',
+      //   showOverflow: true,
+      //   showHeaderOverflow: true,
+      //   sortable: true,
+      //   cellRender: { name: 'render_isno' },
+      // },
       {
-        field: 'runStatus',
-        title: '软件状态',
+        field: 'isFault',
+        title: '服务状态',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
         slots: {
-          default: 'runStatus',
+          default: 'isFault',
         },
       },
       {
@@ -545,7 +548,6 @@
     port: '',
     serviceType: null,
     filePath: '',
-    runStatus: '运行',
     serviceCode: '',
     isUpPerformance: false,
     orgId: null,

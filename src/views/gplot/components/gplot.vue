@@ -274,7 +274,6 @@
             }
             return null;
           },
-          onFinish: (e) => {},
         },
       ],
       plugins: [
@@ -392,7 +391,9 @@
       // graphOb.setBackground('#0960BD');
       // graphOb.draw();
       // console.log('背景颜色', graphOb.getBackground());
+      $('.g6-background').css({ backgroundRepeat: 'no-repeat', backgroundSize: '100% 100%' });
       if (props.viewType == 'edit') {
+        window.addEventListener('beforeunload', beforeunloadHandler);
         //将图缩放至合适大小并平移至视口中心，编辑状态下使用户拖拽位置计算不正确
         // graphOb.fitView();
         //平移至中心
@@ -402,14 +403,15 @@
           graphOb.fitCenter();
         } else if (gplotStore.gplotKeyOb[gplotKey].containerConfig.fit == 'fitView') {
           graphOb.fitView();
+          setTimeout(() => {
+            graphOb.zoomTo(graphOb.getZoom() - 0.05, true, [
+              graphOb.getViewportCenter()[0],
+              graphOb.getViewportCenter()[1],
+            ]);
+          }, 300);
         }
       }
       gplotStore.gplotKeyOb[gplotKey].renderSuccess = true;
-      //根据插件的key更新插件信息
-      // graphOb.updatePlugin({
-      //   key: 'GridLine',
-      //   size: 150,
-      // });
       //更新功能
       //graphOb.updateBehavior({key: 'key', ...});
       if (props.viewType == 'edit') {
@@ -451,6 +453,7 @@
               key: 'GridLine',
               lineWidth: gplotStore.gplotKeyOb[gplotKey].containerConfig.grid.myIsShow ? 1 : 0,
             });
+            $('.g6-background').css({ backgroundRepeat: 'no-repeat', backgroundSize: '100% 100%' });
           },
         );
         watch(
@@ -460,7 +463,10 @@
               gplotStore.gplotKeyOb[gplotKey].containerConfig.background.background =
                 gplotStore.gplotKeyOb[gplotKey].containerConfig.background.myBackground;
               graphOb.updatePlugin(gplotStore.gplotKeyOb[gplotKey].containerConfig.background);
+            } else {
+              //  delete gplotStore.gplotKeyOb[gplotKey].containerConfig.background.background;
             }
+            // graphOb.updatePlugin(gplotStore.gplotKeyOb[gplotKey].containerConfig.background);
           },
         );
         watch(
@@ -468,11 +474,13 @@
           () => {
             if (gplotStore.gplotKeyOb[gplotKey].containerConfig.background.backgroundImage != '') {
               gplotStore.gplotKeyOb[gplotKey].containerConfig.background.background = '';
+              //  delete gplotStore.gplotKeyOb[gplotKey].containerConfig.background.background;
             } else {
               gplotStore.gplotKeyOb[gplotKey].containerConfig.background.background =
                 gplotStore.gplotKeyOb[gplotKey].containerConfig.background.myBackground;
             }
             graphOb.updatePlugin(gplotStore.gplotKeyOb[gplotKey].containerConfig.background);
+            $('.g6-background').css({ backgroundRepeat: 'no-repeat', backgroundSize: '100% 100%' });
           },
         );
       } else {
@@ -800,7 +808,6 @@
   );
 
   onMounted(() => {
-    window.addEventListener('beforeunload', beforeunloadHandler);
     init();
     window.onresize = () => {
       if (graphOb) {
@@ -851,6 +858,11 @@
 </script>
 
 <style lang="less" scoped>
+  .g6-background {
+    background-repeat: no-repeat !important;
+    background-size: 100% 100% !important;
+  }
+
   /* 其他元素的-展示（视频） */
   .otherDom {
     z-index: auto;

@@ -49,10 +49,13 @@ export const useGplotStore = defineStore({
             myBackground: '',
             key: 'Background',
             type: 'background',
+            width: '100%',
+            height: '100%',
+            //有background属性图片的backgrounfRepeat和backgroundSize会被忽略
             background: '',
             backgroundImage: '',
-            backgrounfRepeat: 'no-repeat',
-            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: '100% 100%',
             opacity: 1,
           },
           //缩放放大比例%

@@ -986,19 +986,18 @@
                     >
                       <IconFontClass style="font-size: 16px" name="icon-baseui-tupian2" />
                     </div>
-                    <div v-else>
-                      <img
-                        style="
-                          width: 25px;
-                          height: 25px;
-                          background-repeat: no-repeat;
-                          background-size: 100% 100%;
-                        "
-                        :src="
+                    <div
+                      v-else
+                      :style="{
+                        width: '25px',
+                        height: '25px',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: '100% 100%',
+                        backgroundImage:
                           gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig
-                            .background.backgroundImage
-                        "
-                      />
+                            .background.backgroundImage,
+                      }"
+                    >
                     </div>
                   </a-upload>
                   <IconFontClass
@@ -1104,7 +1103,7 @@
                   <a-radio value="fitView">缩放并平移至视口中心</a-radio>
                 </a-radio-group>
               </a-form-item>
-              <a-divider orientation="center">数据配置</a-divider>
+              <a-divider orientation="center">数据源配置</a-divider>
               <a-table
                 :columns="allDataConfigColumns"
                 :data-source="
@@ -1446,7 +1445,7 @@
         }
       }
       try {
-        const executeFunc = new Function('mqttDataStr', newAllDataConfig.value.getValue);
+        const executeFunc = new Function('dataOb', newAllDataConfig.value.getValue);
         const runValue = executeFunc('');
         if (runValue != undefined) {
           if (isSaveAllDataConfigAdd.value) {
@@ -1496,7 +1495,7 @@
           topic: 'Data/Monitor/WebAlarm/+',
           //值获取，
           getValue:
-            '//默认参数mqttDataStr为当前主题接收到的数据\n//必须有返回值，返回值类型不得为undefined\nif(mqttDataStr)\n{\n//编辑您的计算逻辑并return值\nconst data=JSON.pase(mqttDataStr);\nreturn data;\n\n}\nelse{\n return null \n}\n',
+            '//默认参数dataOb为收到的数据对象\n//必须有返回值，返回值类型不得为undefined\nif(dataOb)\n{\n//编辑您的计算逻辑并return值\n\nreturn dataOb;\n\n}\nelse{\n return null \n}\n',
           //值键值
           key: myCommon.uniqueId(),
           //值描述名称

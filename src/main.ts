@@ -94,7 +94,7 @@ async function mqttInit() {
     mqttStore.isInitAlarmData = false;
     clearTimeout(timeId);
     mqttStore.updateMqttStatus(5);
-    Promise.all([getServiceNewStatusMsg()])
+    Promise.all([getServiceMsgTypeLast()])
       .then((rdata) => {
         mqttStore.updateMqttStatus(7);
         rdata[0].forEach((m) => {
@@ -307,8 +307,8 @@ async function mqttInit() {
     }
   }
 
-  function getServiceNewStatusMsg() {
-    return messageApi.GetServiceNewStatusMsg();
+  function getServiceMsgTypeLast() {
+    return messageApi.GetServiceMsgTypeLast();
     // return new Promise((resolve, reject) => {
     //   reject('reject');
     // });

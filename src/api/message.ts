@@ -12,10 +12,10 @@ const Message = {
     });
   },
   //获取服务最新的报警状态
-  GetServiceNewStatusMsg: function () {
+  GetServiceMsgTypeLast: function () {
     return defHttp.get(
       {
-        url: '/Message/GetServiceNewStatusMsg',
+        url: '/Message/GetServiceMsgTypeLast',
       },
       {
         errorMessageMode: 'none',

@@ -36,7 +36,7 @@
     >
       <viewIndex
         v-if="openView"
-        style="width: 100%; height: 50%"
+        style="width: 100%; height: 100%"
         viewType="pre"
         :gplotId="graphObRef.getGplotId()"
       />

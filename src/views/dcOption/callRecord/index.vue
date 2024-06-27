@@ -335,14 +335,14 @@
         showHeaderOverflow: true,
         sortable: true,
       },
-      {
-        field: 'isOnline',
-        title: '是否在线',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        cellRender: { name: 'render_isno' },
-        visible: false,
-      },
+      // {
+      //   field: 'isOnline',
+      //   title: '是否在线',
+      //   showOverflow: true,
+      //   showHeaderOverflow: true,
+      //   cellRender: { name: 'render_isno' },
+      //   visible: false,
+      // },
       {
         field: 'recordFileStatus',
         title: '录音文件',
