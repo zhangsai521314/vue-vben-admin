@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "7992753",
+      "name": "超出12",
+      "font_class": "chaochu",
+      "unicode": "e81c",
+      "unicode_decimal": 59420
+    },
+    {
       "icon_id": "7639355",
       "name": "实心正方形",
       "font_class": "shixinzhengfangxing",

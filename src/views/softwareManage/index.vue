@@ -65,15 +65,6 @@
           </a-space>
         </div>
       </template>
-      <template #isFault="{ row }">
-        <span
-          :style="{
-            color: row.isFault ? 'red' : 'green',
-          }"
-        >
-          {{ row.isFault ? '故障' : '正常' }}</span
-        >
-      </template>
       <template #default="{ row }">
         <div :class="`tableOption`">
           <AuthDom auth="softwareManage_table_showconfig">
@@ -444,29 +435,35 @@
         showHeaderOverflow: true,
         sortable: true,
       },
-      // {
-      //   field: 'isOnline',
-      //   title: '心跳在线',
-      //   showOverflow: true,
-      //   showHeaderOverflow: true,
-      //   sortable: true,
-      //   cellRender: { name: 'render_isno' },
-      // },
       {
-        field: 'isFault',
-        title: '服务状态',
+        field: 'isOnline',
+        title: '服务是否在线',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        slots: {
-          default: 'isFault',
-        },
+        cellRender: { name: 'render_isno' },
+      },
+      {
+        field: 'isNormal',
+        title: '运行是否正常',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        cellRender: { name: 'render_isno' },
       },
       {
         field: 'isUpPerformance',
         title: '性能上报',
         showOverflow: true,
         showHeaderOverflow: true,
+        cellRender: { name: 'render_isno' },
+      },
+      {
+        field: 'isPerformanceNormal',
+        title: '性能正常',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
         cellRender: { name: 'render_isno' },
       },
       {

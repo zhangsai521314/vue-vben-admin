@@ -145,6 +145,14 @@
         >
         <span v-else style="color: green">是</span>
       </template>
+      <template #msgClass="{ row }">
+        <span
+          :style="{
+            color: row.msgClass == '告警' ? '#0960BD' : '',
+          }"
+          >{{ row.msgClass }}</span
+        >
+      </template>
       <template #msgStatus="{ row }">
         <span
           :style="{
@@ -308,12 +316,15 @@
         width: 150,
       },
       {
-        field: 'msgStatus',
+        field: 'msgClass',
         title: '信息大类',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
         width: 100,
+        slots: {
+          default: 'msgClass',
+        },
       },
       {
         field: 'msgType',
