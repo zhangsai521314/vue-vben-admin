@@ -79,7 +79,7 @@
                   addon-after="px"
                 />
               </a-form-item>
-              <a-form-item
+              <!-- <a-form-item
                 :class="{
                   'not-click':
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType !=
@@ -101,7 +101,7 @@
                     "
                   />
                 </div>
-              </a-form-item>
+              </a-form-item> -->
               <a-form-item
                 :class="{
                   'not-click':
