@@ -264,7 +264,7 @@
                   //锁定
                   myLockAll: false,
                   myEvent: [],
-                  myState: [],
+                  myAgileState: [],
                 };
                 return e;
               } else {
@@ -687,7 +687,7 @@
               //锁定
               myLockAll: false,
               myEvent: [],
-              myState: [],
+              myAgileState: [],
             },
           },
         ]);

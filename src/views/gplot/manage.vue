@@ -61,7 +61,7 @@
   const gplotId = ref(null);
   const graphObRef = ref(null);
   const openView = ref(false);
-  const menuId = ref('561989311823947');
+  const menuId = ref(null);
   //预览
   function viewPre() {
     return graphObRef.value?.saveHisConfig().then(() => {

@@ -166,6 +166,8 @@ export const useGplotStore = defineStore({
             },
             //锁定
             myLockAll: false,
+            //是否禁用全部事件
+            myIsDisabledEvent: false,
             //事件
             myEvent: [
               // {
@@ -193,8 +195,9 @@ export const useGplotStore = defineStore({
               //   }
               // }
             ],
-            //状态控制
-            myState: [
+            myIsAgileState: false,
+            //灵活状态控制
+            myAgileState: [
               // {
               //   key: myCommon.uniqueId(),
               //   //allDataValue为containerConfig下的allDataValue，可以根据allDataConfig的key获取所有绑定的的值，返回bool值
@@ -202,11 +205,35 @@ export const useGplotStore = defineStore({
               //     '//默认参数allDataValue为该画布下所有数据源对象\n//您可以根据自己在数据配置中设置的主键，从allDataValue对象中获取数据\n//必须有返回值，返回值类型为bool\nif(allDataValue)\n{\n//编辑您的计算逻辑并return值;\n\n}\nelse{\n return false \n}\n',
               //   //isChange为true时更改的颜色
               //   color: '',
-              //   //myState中的优先计算的等级
+              //   //myAgileState中的优先计算的等级
               //   level: 0,
               //   //状态名称
               //   name: '',
               // }
+            ],
+            //简单状态控制
+            mySimpleState: [
+              {
+                name: '中断',
+                code: '',
+                color: '#FF0000',
+                open: true,
+                level: 0,
+              },
+              {
+                name: '故障',
+                code: '',
+                color: '#BD0808',
+                open: true,
+                level: 1,
+              },
+              {
+                name: '性能超出',
+                code: '',
+                color: '#FF7F27',
+                open: true,
+                level: 2,
+              },
             ],
           },
         },

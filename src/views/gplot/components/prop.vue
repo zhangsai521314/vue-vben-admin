@@ -93,7 +93,12 @@
                 <div>
                   <selectColor
                     :color="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.fill"
-                    @change="(value) => colorChange('fill', value)"
+                    @change="
+                      (value) => {
+                        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.fill =
+                          value;
+                      }
+                    "
                   />
                 </div>
               </a-form-item>
@@ -111,7 +116,12 @@
                     :color="
                       gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.iconFill
                     "
-                    @change="(value) => colorChange('iconFill', value)"
+                    @change="
+                      (value) => {
+                        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.iconFill =
+                          value;
+                      }
+                    "
                   />
                 </div>
               </a-form-item>
@@ -162,7 +172,12 @@
                     :color="
                       gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.stroke
                     "
-                    @change="(value) => colorChange('stroke', value)"
+                    @change="
+                      (value) => {
+                        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.stroke =
+                          value;
+                      }
+                    "
                   />
                 </div>
               </a-form-item>
@@ -259,7 +274,13 @@
                     :color="
                       gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelFill
                     "
-                    @change="(value) => colorChange('labelFill', value)"
+                    @change="
+                      (value) => {
+                        gplotStore.gplotKeyOb[
+                          props.graphObRef.gplotKey
+                        ].selectedOb.style.labelFill = value;
+                      }
+                    "
                   />
                 </div>
               </a-form-item>
@@ -380,7 +401,13 @@
                       gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style
                         .labelBackgroundStroke
                     "
-                    @change="(value) => colorChange('labelBackgroundStroke', value)"
+                    @change="
+                      (value) => {
+                        gplotStore.gplotKeyOb[
+                          props.graphObRef.gplotKey
+                        ].selectedOb.style.labelBackgroundStroke = value;
+                      }
+                    "
                   />
                 </div>
               </a-form-item>
@@ -739,10 +766,56 @@
                 </a-row>
               </a-form-item>
               <a-divider orientation="center">状态配置</a-divider>
+              <a-form-item name="startArrow" label="灵活绑定">
+                <a-checkbox
+                  v-model:checked="
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myIsAgileState
+                  "
+                />
+              </a-form-item>
               <a-table
+                v-show="
+                  !gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myIsAgileState
+                "
+                :columns="selectedObAgileStateColumns"
+                :data-source="
+                  gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.mySimpleState
+                "
+                bordered
+                size="small"
+                style="min-height: 400px; overflow: auto"
+                :pagination="false"
+              >
+                <template #bodyCell="{ column, text, record }">
+                  <template v-if="column.dataIndex == 'level'">
+                    <div style="width: 36px">{{ text }}</div>
+                  </template>
+                  <template v-else-if="column.dataIndex == 'color'">
+                    <div>
+                      <selectColor
+                        :color="record.color"
+                        @change="
+                          (value) => {
+                            record.color = value;
+                          }
+                        "
+                      />
+                    </div>
+                  </template>
+                  <template v-else-if="column.dataIndex == 'open'">
+                    <div style="width: 36px">
+                      <a-switch v-model:checked="record.open" size="small"
+                    /></div>
+                  </template>
+                </template>
+              </a-table>
+              <a-table
+                v-show="
+                  gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myIsAgileState
+                "
                 :columns="selectedObStateColumns"
                 :data-source="
-                  gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myState
+                  gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myAgileState
                 "
                 bordered
                 size="small"
@@ -965,7 +1038,13 @@
                       gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.background
                         .myBackground
                     "
-                    @change="(value) => containerColorChange('myBackground', value)"
+                    @change="
+                      (value) => {
+                        gplotStore.gplotKeyOb[
+                          props.graphObRef.gplotKey
+                        ].containerConfig.background.myBackground = value;
+                      }
+                    "
                   />
                 </div>
               </a-form-item>
@@ -1241,7 +1320,11 @@
           :modelValue="newAllDataConfig.getValue"
           :style="{ height: '300px', overflow: 'auto' }"
           lang="javascript"
-          @change="(value) => getValueChange(item, value)"
+          @change="
+            (value) => {
+              newAllDataConfig.getValue = value;
+            }
+          "
         />
       </a-form-item>
     </a-form>
@@ -1257,7 +1340,7 @@
     :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
     :width="500"
     :visible="isShowSelectedObState"
-    title="状态配置"
+    title="灵活状态配置"
     :footer-style="{ textAlign: 'right' }"
     @close="closeSelectedObState"
   >
@@ -1292,7 +1375,11 @@
         <div>
           <selectColor
             :color="newSelectedObState.color"
-            @change="(value) => newSelectedObStateColorChange(value)"
+            @change="
+              (value) => {
+                newSelectedObState.color = value;
+              }
+            "
           />
         </div>
       </a-form-item>
@@ -1306,7 +1393,11 @@
           :modelValue="newSelectedObState.isChange"
           :style="{ height: '300px', overflow: 'auto' }"
           lang="javascript"
-          @change="(value) => getStateChange(item, value)"
+          @change="
+            (value) => {
+              newSelectedObState.isChange = value;
+            }
+          "
         />
       </a-form-item>
     </a-form>
@@ -1388,6 +1479,24 @@
     {
       title: '操作',
       dataIndex: 'operation',
+    },
+  ];
+  const selectedObAgileStateColumns = [
+    {
+      title: '状态',
+      dataIndex: 'name',
+    },
+    {
+      title: '优先级',
+      dataIndex: 'level',
+    },
+    {
+      title: '颜色',
+      dataIndex: 'color',
+    },
+    {
+      title: '开启',
+      dataIndex: 'open',
     },
   ];
   const isShowSelectedObState = ref(false);
@@ -1509,20 +1618,16 @@
     newAllDataConfigRef.value.clearValidate();
     isShowSourceDataConfig.value = false;
   }
-  //数据处理的改变
-  function getValueChange(item, value) {
-    newAllDataConfig.value.getValue = value;
-  }
 
   //保存选中节点的状态配置
   function saveSelectedObState() {
     newSelectedObStateRef.value.validate().then(() => {
       if (
         (isSaveSelectedObStateAdd.value &&
-          gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myState.find(
+          gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myAgileState.find(
             (m) => m.name == newSelectedObState.value.name,
           )) ||
-        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myState.find(
+        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myAgileState.find(
           (m) => m.name == newSelectedObState.value.name && m.key != newSelectedObState.value.key,
         )
       ) {
@@ -1536,14 +1641,14 @@
         );
         if (typeof runValue == 'boolean') {
           if (isSaveSelectedObStateAdd.value) {
-            gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myState.push(
+            gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myAgileState.push(
               newSelectedObState.value,
             );
             message.success('添加成功');
           } else {
             const oldData = gplotStore.gplotKeyOb[
               props.graphObRef.gplotKey
-            ].selectedOb.data.myState.find((m) => m.key == newSelectedObState.value.key);
+            ].selectedOb.data.myAgileState.find((m) => m.key == newSelectedObState.value.key);
             myCommon.objectReplace(oldData, newSelectedObState.value);
             message.success('编辑成功');
           }
@@ -1558,15 +1663,15 @@
   }
   //清除选中节点的所有状态配置
   function clearSelectedObStates() {
-    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myState = [];
+    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myAgileState = [];
   }
   //根据key删除选中节点的状态配置
   function delteSelectedObState(key) {
     if (myCommon.isnull(key)) {
       message.warning('主键缺失，不可删除');
     } else {
-      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myState =
-        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myState.filter(
+      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myAgileState =
+        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myAgileState.filter(
           (m) => m.key != key,
         );
     }
@@ -1582,7 +1687,7 @@
             '//默认参数allDataValue为该画布下所有数据源对象\n//您可以根据自己在数据配置中设置的主键，从allDataValue对象中获取数据\n//必须有返回值，返回值类型为bool\nif(allDataValue)\n{\n//编辑您的计算逻辑并return值;\n\nreturn true;\n}\nelse{\n return false \n}\n',
           //isChange为true时更改的颜色
           color: '',
-          //myState中的优先计算的等级
+          //myAgileState中的优先计算的等级
           level: 0,
           //状态名称
           name: '',
@@ -1594,13 +1699,6 @@
   function closeSelectedObState() {
     newSelectedObStateRef.value.clearValidate();
     isShowSelectedObState.value = false;
-  }
-  //选中节点状态处理的改变
-  function getStateChange(item, value) {
-    newSelectedObState.value.isChange = value;
-  }
-  function newSelectedObStateColorChange(color) {
-    newSelectedObState.value.color = color;
   }
 </script>
 <style lang="less" scoped>

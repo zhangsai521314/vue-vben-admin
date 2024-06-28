@@ -148,14 +148,7 @@
       <template #msgStatus="{ row }">
         <span
           :style="{
-            color:
-              row.msgStatus == '故障'
-                ? 'red'
-                : row.msgStatus == '恢复'
-                  ? 'green'
-                  : row.msgStatus == '确认'
-                    ? '#0960bd '
-                    : '',
+            color: row.msgStatus == '故障' ? 'red' : row.msgStatus == '恢复' ? 'green' : '',
           }"
           >{{ row.msgStatus }}</span
         >
@@ -313,6 +306,14 @@
         showHeaderOverflow: true,
         sortable: true,
         width: 150,
+      },
+      {
+        field: 'msgStatus',
+        title: '信息大类',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        width: 100,
       },
       {
         field: 'msgType',
