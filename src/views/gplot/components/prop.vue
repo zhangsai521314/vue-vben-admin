@@ -773,6 +773,27 @@
                   "
                 />
               </a-form-item>
+              <a-form-item
+                v-show="
+                  !gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myIsAgileState
+                "
+                label="绑定服务"
+                name="myServiceId"
+              >
+                <a-tree-select
+                  v-model:value="
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myServiceId
+                  "
+                  show-search
+                  style="width: 100%"
+                  :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                  placeholder="请选择绑定软件服务"
+                  allow-clear
+                  show-arrow
+                  :filterTreeNode="AntVueCommon.filterTreeNode"
+                  :tree-data="serviceTreeData"
+                />
+              </a-form-item>
               <a-table
                 v-show="
                   !gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myIsAgileState
@@ -1419,6 +1440,7 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import codemirror from '/@/components/MyCodemirror/codemirror.vue';
   import { useGplotStoreWithOut } from '@/store/modules/gplot';
+  import softwareApi from '@/api/software';
 
   const { prefixCls } = useDesign('GplotManage-');
   const props = defineProps({
@@ -1503,7 +1525,9 @@
   const newSelectedObState = ref({});
   const newSelectedObStateRef = ref({});
   const isSaveSelectedObStateAdd = ref(true);
+  const serviceTreeData = ref([]);
 
+  getServiceTreeData();
   //容器颜色的改变
   function containerColorChange(attr, color) {
     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.background[attr] = color;
@@ -1699,6 +1723,13 @@
   function closeSelectedObState() {
     newSelectedObStateRef.value.clearValidate();
     isShowSelectedObState.value = false;
+  }
+
+  //获取设备服务树数据
+  function getServiceTreeData() {
+    softwareApi.GetEServiceTreeDatas().then((data) => {
+      serviceTreeData.value = data;
+    });
   }
 </script>
 <style lang="less" scoped>

@@ -1,5 +1,6 @@
 //软件服务
 import { defHttp } from '@/utils/http/axios';
+
 const Software = {
   //根据ID获取详情
   GetService: function (params) {
@@ -40,6 +41,20 @@ const Software = {
   DeleteService: function (params) {
     return defHttp.post({
       url: '/Software/DeleteService/',
+      params,
+    });
+  },
+  //获取设备和软件服务树数据
+  GetEServiceTreeDatas: function (params) {
+    return defHttp.get({
+      url: '/Software/GetEServiceTreeDatas',
+      params,
+    });
+  },
+  //获取服务的各种状态
+  GetServiceStatus: function (params) {
+    return defHttp.post({
+      url: '/Software/GetServiceStatus',
       params,
     });
   },

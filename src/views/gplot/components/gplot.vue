@@ -37,6 +37,7 @@
   import shortcutKey from 'keymaster';
   import gplotApi from '@/api/gplot';
   import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils';
+  import softwareApi from '@/api/software';
 
   const props = defineProps({
     viewType: {
@@ -78,21 +79,12 @@
   let changeSaveTimeId;
   //是否需要保存
   let isHaveSave = false;
-  //最后点击选中的元素
-  let lastSelectedOb;
+  //绑定软件服务的节点
+  const serviceIdDatas = [];
+  //绑定灵活配置的节点
+  const agileStateData = [];
   gplotStore.gplotKeyOb[gplotKey].containerConfig.menuId = props.menuId;
   shortcutKey_();
-
-  const backendCode = ref('');
-
-  // 假设这是从后端获取的代码
-  backendCode.value = 'function ssss(value){console.log(value);}';
-
-  const executeCode = () => {
-    // 使用Function类型执行代码
-    const executeFunc = new Function('value', backendCode.value);
-    executeFunc(gplotStore.gplotKeyOb[gplotKey].containerConfig.all);
-  };
 
   async function init() {
     rendering.value = true;
@@ -244,6 +236,7 @@
           trigger: 'click',
           style: gplotStore.gplotKeyOb[gplotKey].nodeConfig.style,
           enable: () => {
+            return false;
             return props.viewType == 'edit' && isDownAlt;
           },
           onCreate: (e) => {
@@ -265,6 +258,8 @@
                   myLockAll: false,
                   myEvent: [],
                   myAgileState: [],
+                  myIsAgileState: false,
+                  mySimpleState: gplotStore.gplotKeyOb[gplotKey].nodeConfig.mySimpleState,
                 };
                 return e;
               } else {
@@ -483,8 +478,32 @@
             $('.g6-background').css({ backgroundRepeat: 'no-repeat', backgroundSize: '100% 100%' });
           },
         );
+        // //修复新增加的配置对象
+        // const datas = graphOb.getData();
+        // for (const key in datas) {
+        //   datas[key].forEach((item) => {
+        //     item.data.mySimpleState = gplotStore.gplotKeyOb[gplotKey].nodeConfig.data.mySimpleState;
+        //   });
+        // }
+        //修复新增加的配置对象
       } else {
-        //变化监控
+        //区别是否灵活配置更改状态
+        const datas = graphOb.getData();
+        for (const key in datas) {
+          datas[key].forEach((changeNode) => {
+            //增加原本的样式属性
+            changeNode.data.myOldStyle = _.cloneDeep(changeNode.style);
+            if (!changeNode.data.myIsAgileState && changeNode.data.myServiceId != null) {
+              serviceIdDatas.push(changeNode);
+            } else if (changeNode.data.myIsAgileState && changeNode.data.myAgileState.length > 0) {
+              agileStateData.push(changeNode);
+            }
+          });
+        }
+        //非灵活配置的变化监控
+        if (serviceIdDatas.length > 0) {
+          NoAgileStateChangeStatus();
+        }
       }
       rendering.value = false;
     });
@@ -600,37 +619,6 @@
     event.preventDefault();
   }
 
-  //更改状态
-  function changeStatus(color) {
-    graphOb.updateNodeData([
-      {
-        id: 'default',
-        style: {
-          iconFill: color,
-          labelFill: color,
-        },
-      },
-    ]);
-    graphOb.updateComboData([
-      {
-        id: 'combo1',
-        style: {
-          fill: color,
-          stroke: color,
-        },
-      },
-    ]);
-    graphOb.updateEdgeData([
-      {
-        id: 'edge-1',
-        style: {
-          stroke: color,
-        },
-      },
-    ]);
-    graphOb.draw();
-  }
-
   //增加拓扑对象{domX, domY, iconUnicode}
   function addGplot(ob) {
     //给定的浏览器坐标，转换为画布上的绘制坐标
@@ -688,6 +676,8 @@
               myLockAll: false,
               myEvent: [],
               myAgileState: [],
+              myIsAgileState: false,
+              mySimpleState: gplotStore.gplotKeyOb[gplotKey].nodeConfig.mySimpleState,
             },
           },
         ]);
@@ -796,6 +786,88 @@
     } else {
       return gplotApi.GetGplotMenuId(gplotStore.gplotKeyOb[gplotKey].containerConfig.menuId);
     }
+  }
+
+  //非灵活配置的变化监控
+  function NoAgileStateChangeStatus() {
+    softwareApi
+      .GetServiceStatus(serviceIdDatas.map((m) => m.data.myServiceId))
+      .then(async (nodeState) => {
+        console.log('nodeState', nodeState);
+        serviceIdDatas.forEach((node) => {
+          const stateOb = graphOb.getElementData(node.id);
+          let color = null;
+          // if (stateOb.data.myServiceId == '522045670068299') {
+          //   debugger;
+          // }
+          for (let i = 0; i < stateOb.data.mySimpleState.length; i++) {
+            const element = stateOb.data.mySimpleState[i];
+            if (!nodeState[element.code + stateOb.data.myServiceId]) {
+              color = element.color;
+              break;
+            }
+          }
+          if (color == null) {
+            //回复原始状态
+            switch (stateOb.data.myType) {
+              case 'node':
+                color = stateOb.data.myOldStyle.iconFill;
+                break;
+              case 'edge':
+                color = stateOb.data.myOldStyle.fill;
+                break;
+              case 'combo':
+                color = stateOb.data.myOldStyle.stroke;
+                break;
+            }
+          }
+          //更改成对应状态
+          switch (stateOb.data.myType) {
+            case 'node':
+              graphOb.updateNodeData([
+                {
+                  id: node.id,
+                  style: {
+                    iconFill: color,
+                    labelFill: color,
+                  },
+                },
+              ]);
+              break;
+            case 'edge':
+              graphOb.updateComboData([
+                {
+                  id: node.id,
+                  style: {
+                    fill: color,
+                    stroke: color,
+                  },
+                },
+              ]);
+              break;
+            case 'combo':
+              graphOb.updateEdgeData([
+                {
+                  id: node.id,
+                  style: {
+                    stroke: color,
+                  },
+                },
+              ]);
+              break;
+          }
+        });
+        await graphOb.draw();
+        setTimeout(() => {
+          NoAgileStateChangeStatus();
+        }, 500);
+      })
+      .catch((e) => {
+        console.error(e);
+        setTimeout(() => {
+          NoAgileStateChangeStatus();
+        }, 500);
+      });
   }
 
   watch(

@@ -195,6 +195,7 @@ export const useGplotStore = defineStore({
               //   }
               // }
             ],
+            //是否灵活控制
             myIsAgileState: false,
             //灵活状态控制
             myAgileState: [
@@ -211,25 +212,27 @@ export const useGplotStore = defineStore({
               //   name: '',
               // }
             ],
+            //服务的Id
+            myServiceId: null,
             //简单状态控制
             mySimpleState: [
               {
                 name: '中断',
-                code: '',
+                code: 'isOnline_',
                 color: '#FF0000',
                 open: true,
                 level: 0,
               },
               {
                 name: '故障',
-                code: '',
-                color: '#BD0808',
+                code: 'isNormal_',
+                color: '#EE1481',
                 open: true,
                 level: 1,
               },
               {
                 name: '性能超出',
-                code: '',
+                code: 'isPerformanceNormal_',
                 color: '#FF7F27',
                 open: true,
                 level: 2,
