@@ -245,7 +245,7 @@ export const useGplotStore = defineStore({
     //mqtt信息过滤
     async mqttMsgReceive(topic: string, message) {
       try {
-        if (['Data/Monitor/WebAlarm/Insert', 'Data/Monitor/WebAlarm/Update'].includes(topic)) {
+        if (['Data/Monitor/WebMsg/Insert', 'Data/Monitor/WebMsg/Update'].includes(topic)) {
           this.mqttMsgChange = {
             topic,
             message,

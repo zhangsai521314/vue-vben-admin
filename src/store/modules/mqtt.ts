@@ -201,22 +201,24 @@ export const useMqttStore = defineStore({
     },
     //增加信息
     addMsgData(item: MsgData) {
-      const keyId = item.joinId ? item.joinId : item.serviceId;
-      if (
-        !this.newInfo[keyId] ||
-        dayjs(this.newInfo[keyId].msgStartTime) <= dayjs(item.msgStartTime)
-      ) {
-        this.newInfo[keyId] = item;
-      }
-      this.changeNewInfoKey = `${keyId}_${item.msgStatus}`;
-      if (!this.msgData?.find((m) => m.msgId == item.msgId)) {
-        this.msgData = [item, ...(this.msgData || [])];
-        if (this.msgData.length > 500) {
-          this.msgData.splice(this.msgData.length - 1, 1);
+      if (item.webMsgIsShow) {
+        const keyId = item.joinId ? item.joinId : item.serviceId;
+        if (
+          !this.newInfo[keyId] ||
+          dayjs(this.newInfo[keyId].msgStartTime) <= dayjs(item.msgStartTime)
+        ) {
+          this.newInfo[keyId] = item;
         }
-        this.msgData = _.orderBy(this.msgData, ['msgStartTime'], ['desc']);
+        this.changeNewInfoKey = `${keyId}_${item.msgStatus}`;
+        if (!this.msgData?.find((m) => m.msgId == item.msgId)) {
+          this.msgData = [item, ...(this.msgData || [])];
+          if (this.msgData.length > 500) {
+            this.msgData.splice(this.msgData.length - 1, 1);
+          }
+          this.msgData = _.orderBy(this.msgData, ['msgStartTime'], ['desc']);
+        }
+        this.playMsgAudio(item);
       }
-      this.playMsgAudio(item);
     },
     //更改信息
     updateMsgData(item: MsgData) {

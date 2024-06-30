@@ -502,7 +502,10 @@
         }
         //非灵活配置的变化监控
         if (serviceIdDatas.length > 0) {
-          NoAgileStateChangeStatus();
+          noAgileStateChangeStatus();
+        }
+        if (agileStateData.length > 0) {
+          agileStateChangeStatus();
         }
       }
       rendering.value = false;
@@ -789,7 +792,7 @@
   }
 
   //非灵活配置的变化监控
-  function NoAgileStateChangeStatus() {
+  function noAgileStateChangeStatus() {
     softwareApi
       .GetServiceStatus(serviceIdDatas.map((m) => m.data.myServiceId))
       .then(async (nodeState) => {
@@ -859,16 +862,19 @@
         });
         await graphOb.draw();
         setTimeout(() => {
-          NoAgileStateChangeStatus();
+          noAgileStateChangeStatus();
         }, 500);
       })
       .catch((e) => {
         console.error(e);
         setTimeout(() => {
-          NoAgileStateChangeStatus();
+          noAgileStateChangeStatus();
         }, 500);
       });
   }
+
+  //灵活配置的变化监控
+  function agileStateChangeStatus() {}
 
   watch(
     () => appStore.projectConfig!.menuSetting.collapsed,

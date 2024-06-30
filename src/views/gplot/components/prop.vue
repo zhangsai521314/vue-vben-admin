@@ -854,6 +854,18 @@
                       >
                     </div>
                   </template>
+                  <template v-else-if="column.dataIndex == 'color'">
+                    <div>
+                      <selectColor
+                        :color="record.color"
+                        @change="
+                          (value) => {
+                            record.color = value;
+                          }
+                        "
+                      />
+                    </div>
+                  </template>
                   <template v-else>
                     <div style="width: 88px">{{ text }}</div></template
                   >
@@ -1328,7 +1340,7 @@
         label="通信主题"
       >
         <a-select placeholder="请选择通信主题" v-model:value="newAllDataConfig.topic">
-          <a-select-option value="Data/Monitor/WebAlarm/+">服务报警</a-select-option>
+          <a-select-option value="Data/Monitor/WebMsg/+">服务报警</a-select-option>
         </a-select>
       </a-form-item> -->
       <a-form-item
@@ -1580,7 +1592,9 @@
       try {
         const executeFunc = new Function('dataOb', newAllDataConfig.value.getValue);
         const runValue = executeFunc('');
-        if (runValue != undefined) {
+        if (runValue === undefined) {
+          message.error('返回值错误，请检查');
+        } else {
           if (isSaveAllDataConfigAdd.value) {
             gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.allDataConfig.push(
               newAllDataConfig.value,
@@ -1594,8 +1608,6 @@
             message.success('编辑成功');
           }
           isShowSourceDataConfig.value = false;
-        } else {
-          message.error('返回值错误，请检查');
         }
       } catch (error) {
         message.error('数据处理错误，请检查');
@@ -1625,7 +1637,7 @@
           //数据来源类型
           type: 'mqtt',
           //主题
-          topic: 'Data/Monitor/WebAlarm/+',
+          topic: 'Data/Monitor/WebMsg/+',
           //值获取，
           getValue:
             '//默认参数dataOb为收到的数据对象\n//必须有返回值，返回值类型不得为undefined\nif(dataOb)\n{\n//编辑您的计算逻辑并return值\n\nreturn dataOb;\n\n}\nelse{\n return null \n}\n',
@@ -1660,10 +1672,8 @@
       }
       try {
         const executeFunc = new Function('allDataValue', newSelectedObState.value.isChange);
-        const runValue = executeFunc(
-          gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.allDataValue,
-        );
-        if (typeof runValue == 'boolean') {
+        const runValue = executeFunc('');
+        if (typeof runValue === 'boolean') {
           if (isSaveSelectedObStateAdd.value) {
             gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myAgileState.push(
               newSelectedObState.value,

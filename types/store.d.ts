@@ -101,4 +101,5 @@ export interface MsgData {
   confirmUser?: string;
   isRead?: boolean;
   msgIcon?: string;
+  webMsgIsShow: boolean;
 }

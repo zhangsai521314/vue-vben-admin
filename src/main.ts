@@ -125,7 +125,7 @@ async function mqttInit() {
     const decoder = new TextDecoder('utf-8');
     if (mqttConfig.IsOpen) {
       const topics = [
-        mqttConfig.WebAlarm,
+        mqttConfig.WebMsg,
         mqttConfig.WebDownLog,
         mqttConfig.WebPlayCallRecord,
         mqttConfig.WebDownCallRecord,
@@ -189,10 +189,10 @@ async function mqttInit() {
           } catch (error) {
             console.error('mqtt转换json失败', msg);
           }
-          if (topic == mqttConfig.WebAlarm.replace('+', '') + 'Insert') {
+          if (topic == mqttConfig.WebMsg.replace('+', '') + 'Insert') {
             //告警插入
             mqttStore.addMsgData(msg);
-          } else if (topic == mqttConfig.WebAlarm.replace('+', '') + 'Update') {
+          } else if (topic == mqttConfig.WebMsg.replace('+', '') + 'Update') {
             //告警更新
             mqttStore.updateMsgData(msg);
           } else if (
