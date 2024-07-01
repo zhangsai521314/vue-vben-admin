@@ -56,7 +56,7 @@
                 </div>
                 <!-- <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>小区名称：</label>
+                    <label>ECA名称：</label>
                     <a-select
                       style="width: 400px"
                       allow-clear
@@ -139,8 +139,8 @@
                       allow-clear
                       v-model:value="seacthContent.LoginStatus"
                     >
-                      <a-select-option :value="0">成功</a-select-option>
-                      <a-select-option :value="1">失败</a-select-option>
+                      <a-select-option :value="1">登录</a-select-option>
+                      <a-select-option :value="0">未登录</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
@@ -213,7 +213,7 @@
       },
       {
         field: 'stationCode',
-        title: '车站号码',
+        title: '车站代码',
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -277,7 +277,7 @@
       },
       {
         field: 'lacci',
-        title: '小区号',
+        title: 'ECA号',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -285,7 +285,7 @@
       },
       {
         field: 'lacciName',
-        title: '小区名称',
+        title: 'ECA名称',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

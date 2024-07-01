@@ -20,21 +20,21 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>小区名称：</label>
+                      <label>ECA名称：</label>
                       <a-input
                         @press-enter="getDDServerTLaccis"
                         v-model:value="seacthContent.name"
-                        placeholder="输入小区名称查询"
+                        placeholder="输入ECA名称查询"
                       />
                     </a-space>
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>lacci：</label>
+                      <label>ECA：</label>
                       <a-input
                         @press-enter="initPage()"
                         v-model:value="seacthContent.lacci"
-                        placeholder="输入lacci查询"
+                        placeholder="输入ECA查询"
                       />
                     </a-space>
                   </div>
@@ -49,7 +49,7 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button class="ant-btn" @click="showFrom()">新增小区</a-button>
+                      <a-button class="ant-btn" @click="showFrom()">新增ECA</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -108,27 +108,23 @@
             name="name"
             :rules="[
               { required: true, message: '' },
-              { max: 50, message: '小区名称过长' },
-              { validator: formValidator.empty, message: '请输入小区名称' },
+              { max: 50, message: 'ECA名称过长' },
+              { validator: formValidator.empty, message: '请输入ECA名称' },
             ]"
           >
-            <a-input
-              placeholder="请输入小区名称"
-              v-model:value="formData.name"
-              autocomplete="off"
-            />
+            <a-input placeholder="请输入ECA名称" v-model:value="formData.name" autocomplete="off" />
           </a-form-item>
           <a-form-item
-            label="lacci"
+            label="ECA"
             name="lacci"
             :rules="[
               { required: true, message: '' },
-              { min: 4, message: 'lacci过短' },
-              { max: 8, message: 'lacci过长' },
-              { validator: formValidator.empty, message: '请输入lacci' },
+              { min: 4, message: 'ECA过短' },
+              { max: 8, message: 'ECA过长' },
+              { validator: formValidator.empty, message: '请输入ECA' },
             ]"
           >
-            <a-input placeholder="请输入lacci" v-model:value="formData.lacci" autocomplete="off" />
+            <a-input placeholder="请输入ECA" v-model:value="formData.lacci" autocomplete="off" />
           </a-form-item>
           <a-form-item
             name="longitude"
@@ -203,21 +199,21 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'id',
-        title: '小区id',
+        title: 'ECAid',
         visible: false,
         showHeaderOverflow: true,
         fixed: 'left',
       },
       {
         field: 'name',
-        title: '小区名称',
+        title: 'ECA名称',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'lacci',
-        title: 'lacci',
+        title: 'ECA',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -329,7 +325,7 @@
     }
   }
 
-  //删除小区信息
+  //删除ECA信息
   function remove(row) {
     Modal.confirm({
       maskClosable: true,
@@ -342,7 +338,7 @@
           .DeleteDDServerTLacci(row.id.toString())
           .then(() => {
             isRunGet.value = false;
-            message.success('删除小区信息成功');
+            message.success('删除ECA信息成功');
             getDDServerTLaccis();
           })
           .catch(() => {
@@ -360,7 +356,7 @@
     formRef.value.clearValidate();
   }
 
-  //获取小区
+  //获取ECA
   function getDDServerTLacci(id) {
     isRunGet.value = true;
     lacciApi
@@ -372,7 +368,7 @@
           saveType.value = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取小区信息失败');
+          message.error('获取ECA信息失败');
         }
       })
       .catch(() => {
@@ -380,7 +376,7 @@
       });
   }
 
-  //获取小区列表
+  //获取ECA列表
   function getDDServerTLaccis() {
     loading.value = true;
     lacciApi
@@ -416,7 +412,7 @@
         lacciApi.AddDDServerTLacci(formData.value).then((data) => {
           tableConfig.data?.splice(0, 0, data);
           formClose();
-          message.success('新增小区成功');
+          message.success('新增ECA成功');
           page.total = page.total + 1;
         });
       } else {
@@ -424,7 +420,7 @@
           const oldData = tableRef.value.getRowById(data.id);
           myCommon.objectReplace(oldData, formData.value);
           formClose();
-          message.success('更新小区信息成功');
+          message.success('更新ECA信息成功');
         });
       }
     });

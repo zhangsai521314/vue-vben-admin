@@ -30,7 +30,7 @@
                 </div>
                 <!-- <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>小区名称：</label>
+                    <label>ECA名称：</label>
                     <a-select
                       style="width: 400px"
                       allow-clear
@@ -140,14 +140,14 @@
       },
       {
         field: 'lacci',
-        title: '小区号',
+        title: 'ECA号',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'lacciName',
-        title: '小区名称',
+        title: 'ECA名称',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

@@ -112,23 +112,6 @@
             />
           </a-form-item>
           <a-form-item
-            label="车站号码"
-            name="code"
-            :rules="[
-              { required: true, message: '' },
-              { min: 1, message: '车站号码过短' },
-              { max: 5, message: '车站号码过长' },
-              { validator: formValidator.empty, message: '请输入车站号码' },
-              { validator: formValidator.positiveInteger, message: '邻站组呼号码格式为自然数' },
-            ]"
-          >
-            <a-input
-              placeholder="请输入车站号码"
-              v-model:value="formData.code"
-              autocomplete="off"
-            />
-          </a-form-item>
-          <a-form-item
             name="longitude"
             label="经度"
             :rules="[
@@ -182,69 +165,6 @@
               placeholder="请选择下一车站"
             />
           </a-form-item>
-          <a-form-item
-            name="groupCallNumber"
-            label="站内组呼号码"
-            :rules="[
-              { required: true, message: '' },
-              { min: 3, message: '站内组呼号码过短' },
-              { max: 10, message: '站内组呼号码过长' },
-              { validator: formValidator.positiveInteger, message: '站内组呼号码格式为自然数' },
-              { validator: formValidator.empty, message: '请输入站内组呼号码' },
-            ]"
-          >
-            <a-input
-              placeholder="请输入站内组呼号码"
-              v-model:value="formData.groupCallNumber"
-              autocomplete="off"
-            />
-          </a-form-item>
-          <a-form-item
-            name="groupCallPriority"
-            label="全呼车站优先级"
-            :rules="[{ required: true, message: '请输入全呼车站优先级' }]"
-          >
-            <a-input-number
-              placeholder="请输入全呼车站优先级"
-              style="width: 262px"
-              min="1"
-              max="15"
-              :precision="0"
-              v-model:value="formData.groupCallPriority"
-            />
-          </a-form-item>
-          <a-form-item
-            name="tempCallNumber"
-            label="邻站组呼号码"
-            :rules="[
-              { required: true, message: '' },
-              { min: 3, message: '邻站组呼号码过短' },
-              { max: 10, message: '邻站组呼号码过长' },
-              { validator: formValidator.positiveInteger, message: '邻站组呼号码格式为自然数' },
-              { validator: formValidator.empty, message: '请输入邻站组呼号码' },
-            ]"
-          >
-            <a-input
-              placeholder="请输入邻站组呼号码"
-              v-model:value="formData.tempCallNumber"
-              autocomplete="off"
-            />
-          </a-form-item>
-          <a-form-item
-            name="tempCallPriority"
-            label="邻站组呼优先级"
-            :rules="[{ required: true, message: '请输入邻站组呼优先级' }]"
-          >
-            <a-input-number
-              placeholder="请输入邻站组呼优先级"
-              style="width: 262px"
-              min="1"
-              max="15"
-              :precision="0"
-              v-model:value="formData.tempCallPriority"
-            />
-          </a-form-item>
-
           <a-form-item name="startGlb" label="起始公里标(米)">
             <a-input-number
               min="-900000"
@@ -263,6 +183,158 @@
               autocomplete="off"
             />
           </a-form-item>
+          <a-form-item
+            v-if="saveType == 'edit'"
+            :wrapper-col="{ span: 20, offset: 12 }"
+            style="position: relative; height: 0"
+          >
+            <IconFontClass
+              name="icon-baseui-zhankai"
+              :title="isShowUpdate ? '修改二级信息' : '不修改二级信息'"
+              @click="
+                () => {
+                  isShowUpdate = !isShowUpdate;
+                }
+              "
+              style="position: absolute; top: -2px; left: 16%; cursor: pointer"
+              :class="{
+                fanZhun: isShowUpdate,
+              }"
+            />
+          </a-form-item>
+          <template v-if="isShowUpdate || saveType == 'add'">
+            <a-form-item
+              name="programUpdatePassWord"
+              label="二级修改密码"
+              :rules="[{ required: true, message: '请输入二级修改密码' }]"
+            >
+              <a-input
+                placeholder="请输入二级修改密码"
+                v-model:value="formData.programUpdatePassWord"
+                autocomplete="off"
+              />
+            </a-form-item>
+            <a-form-item
+              label="车站代码"
+              name="code"
+              :rules="[
+                { required: true, message: '' },
+                { min: 1, message: '车站代码过短' },
+                { max: 5, message: '车站代码过长' },
+                { validator: formValidator.empty, message: '请输入车站代码' },
+                { validator: formValidator.positiveInteger, message: '车站代码格式为自然数' },
+              ]"
+            >
+              <a-input
+                :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
+                placeholder="请输入车站代码"
+                v-model:value="formData.code"
+                autocomplete="off"
+              />
+            </a-form-item>
+            <a-form-item
+              label="功能号"
+              name="dcFn"
+              :rules="[
+                { required: true, message: '' },
+                { min: 9, message: '功能号过短' },
+                { max: 9, message: '功能号过长' },
+                { validator: formValidator.empty, message: '请输入功能号' },
+                { validator: formValidator.positiveInteger, message: '功能号格式为自然数' },
+              ]"
+            >
+              <a-input
+                :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
+                placeholder="请输入车站代码"
+                v-model:value="formData.dcFn"
+                autocomplete="off"
+              />
+            </a-form-item>
+            <a-form-item
+              label="ISDN号"
+              name="dcIsdn"
+              :rules="[
+                { required: true, message: '' },
+                { min: 4, message: 'ISDN号过短' },
+                { max: 4, message: 'ISDN号过长' },
+                { validator: formValidator.empty, message: '请输入ISDN号' },
+                { validator: formValidator.positiveInteger, message: 'ISDN号格式为自然数' },
+              ]"
+            >
+              <a-input
+                :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
+                placeholder="请输入车站代码"
+                v-model:value="formData.dcIsdn"
+                autocomplete="off"
+              />
+            </a-form-item>
+            <a-form-item
+              name="groupCallNumber"
+              label="站内组呼号码"
+              :rules="[
+                { required: true, message: '' },
+                { min: 3, message: '站内组呼号码过短' },
+                { max: 10, message: '站内组呼号码过长' },
+                { validator: formValidator.positiveInteger, message: '站内组呼号码格式为自然数' },
+                { validator: formValidator.empty, message: '请输入站内组呼号码' },
+              ]"
+            >
+              <a-input
+                :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
+                placeholder="请输入站内组呼号码"
+                v-model:value="formData.groupCallNumber"
+                autocomplete="off"
+              />
+            </a-form-item>
+            <a-form-item
+              name="groupCallPriority"
+              label="站内组呼优先级"
+              :rules="[{ required: true, message: '请输入站内组呼优先级' }]"
+            >
+              <a-input-number
+                :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
+                placeholder="请输入站内组呼优先级"
+                style="width: 262px"
+                min="1"
+                max="15"
+                :precision="0"
+                v-model:value="formData.groupCallPriority"
+              />
+            </a-form-item>
+            <a-form-item
+              name="tempCallNumber"
+              label="邻站组呼号码"
+              :rules="[
+                { required: true, message: '' },
+                { min: 3, message: '邻站组呼号码过短' },
+                { max: 10, message: '邻站组呼号码过长' },
+                { validator: formValidator.positiveInteger, message: '邻站组呼号码格式为自然数' },
+                { validator: formValidator.empty, message: '请输入邻站组呼号码' },
+              ]"
+            >
+              <a-input
+                :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
+                placeholder="请输入邻站组呼号码"
+                v-model:value="formData.tempCallNumber"
+                autocomplete="off"
+              />
+            </a-form-item>
+            <a-form-item
+              name="tempCallPriority"
+              label="邻站组呼优先级"
+              :rules="[{ required: true, message: '请输入邻站组呼优先级' }]"
+            >
+              <a-input-number
+                :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
+                placeholder="请输入邻站组呼优先级"
+                style="width: 262px"
+                min="1"
+                max="15"
+                :precision="0"
+                v-model:value="formData.tempCallPriority"
+              />
+            </a-form-item>
+          </template>
           <a-form-item name="remark" label="备注" :rules="[{ max: 250, message: '备注过长' }]">
             <a-textarea
               placeholder="请输入备注"
@@ -325,7 +397,21 @@
       },
       {
         field: 'code',
-        title: '车站号码',
+        title: '车站代码',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'dcFn',
+        title: '功能号',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'dcIsdn',
+        title: 'ISDN号',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -338,7 +424,6 @@
         sortable: true,
         visible: false,
       },
-
       {
         field: 'latitude',
         title: '纬度',
@@ -370,7 +455,7 @@
       },
       {
         field: 'groupCallPriority',
-        title: '全呼车站优先级',
+        title: '站内组呼优先级',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -464,6 +549,7 @@
     nextStationId: null,
     latitude: null,
     longitude: null,
+    programUpdatePassWord: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);
@@ -482,6 +568,7 @@
   });
   const lineDatas = ref([]);
   const stationDatas = ref([]);
+  const isShowUpdate = ref(false);
 
   getDDServerStations();
 
@@ -551,6 +638,7 @@
 
   //关闭表单
   function formClose() {
+    isShowUpdate.value = false;
     isShowForm.value = false;
     formData.value = _.cloneDeep(defFromData);
     formRef.value.clearValidate();

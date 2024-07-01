@@ -46,11 +46,11 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>源功能号：</label>
+                    <label>主叫功能号：</label>
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.srcFn"
-                      placeholder="输入源功能号查询"
+                      placeholder="输入主叫功能号查询"
                     />
                   </a-space>
                 </div>
@@ -79,7 +79,7 @@
           @page-change="handlePageChange"
         />
       </template>
-      <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? ':' + row.port : '' }} </template>
+      <template #desFn="{ row }"> {{ row.desFn ? row.desFn : '-' }} </template>
     </vxe-grid>
   </MyContent>
 </template>
@@ -117,7 +117,7 @@
       },
       {
         field: 'srcFn',
-        title: '源功能号',
+        title: '主叫功能号',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -125,7 +125,7 @@
       },
       {
         field: 'srcIsdn',
-        title: '源Isdn',
+        title: '主叫Isdn',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -133,7 +133,7 @@
       },
       {
         field: 'srcLacci',
-        title: '源Lacci',
+        title: '主叫ECA',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -141,14 +141,17 @@
       },
       {
         field: 'desFn',
-        title: '目的功能号',
+        title: '被叫功能号/短号码',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        slots: {
+          default: 'desFn',
+        },
       },
       {
         field: 'desIsdn',
-        title: '目的Idsn',
+        title: '被叫Isdn/组呼号',
         showHeaderOverflow: true,
         sortable: true,
       },

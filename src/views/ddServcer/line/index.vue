@@ -98,17 +98,17 @@
             />
           </a-form-item>
           <a-form-item
-            label="线路编码"
+            label="线路代码"
             name="code"
             :rules="[
               { required: true, message: '' },
-              { min: 3, message: '线路编码过短' },
-              { max: 6, message: '线路编码过长' },
-              { validator: formValidator.empty, message: '请输入线路编码' },
+              { min: 3, message: '线路代码过短' },
+              { max: 6, message: '线路代码过长' },
+              { validator: formValidator.empty, message: '请输入线路代码' },
             ]"
           >
             <a-input
-              placeholder="请输入线路编码"
+              placeholder="请输入线路代码"
               v-model:value="formData.code"
               autocomplete="off"
             />
@@ -215,14 +215,14 @@
                 { max: 10, message: '全呼CIR组呼号码过长' },
                 {
                   validator: formValidator.positiveInteger,
-                  message: '全呼调度台组呼号码格式为正整数',
+                  message: '全呼车站组呼号码格式为正整数',
                 },
-                { validator: formValidator.empty, message: '请输入全呼调度台组呼号码' },
+                { validator: formValidator.empty, message: '请输入全呼车站组呼号码' },
               ]"
             >
               <a-input
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
-                placeholder="请输入全呼调度台组呼号码"
+                placeholder="请输入全呼车站组呼号码"
                 v-model:value="formData.groupAllDcNumber"
                 autocomplete="off"
               />
@@ -331,7 +331,7 @@
       },
       {
         field: 'code',
-        title: '线路编码',
+        title: '线路代码',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -367,7 +367,7 @@
       },
       {
         field: 'groupAllDcNumber',
-        title: '全呼调度台组呼号',
+        title: '全呼车站组呼号',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

@@ -34,11 +34,11 @@
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>lacci：</label>
+                      <label>ECA：</label>
                       <a-input
                         @press-enter="initPage()"
                         v-model:value="seacthContent.lacci"
-                        placeholder="输入lacci查询"
+                        placeholder="输入ECA查询"
                       />
                     </a-space>
                   </div>
@@ -53,7 +53,7 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button class="ant-btn" @click="showFrom()">新增车站小区关系</a-button>
+                      <a-button class="ant-btn" @click="showFrom()">新增车站ECA关系</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -154,8 +154,8 @@
             </a-select>
           </a-form-item>
           <a-form-item
-            :rules="[{ required: true, message: '请选择小区名称' }]"
-            label="小区名称"
+            :rules="[{ required: true, message: '请选择ECA名称' }]"
+            label="ECA名称"
             name="lacciIds"
           >
             <a-select
@@ -165,7 +165,7 @@
               :allowClear="true"
               show-search
               :filter-option="AntVueCommon.filterOption"
-              placeholder="请选择小区名称"
+              placeholder="请选择ECA名称"
             />
           </a-form-item>
         </a-form>
@@ -225,13 +225,13 @@
       },
       {
         field: 'lacciNames',
-        title: '小区名称',
+        title: 'ECA名称',
         showOverflow: true,
         showHeaderOverflow: true,
       },
       {
         field: 'laccis',
-        title: 'lacci集合',
+        title: 'ECA集合',
         showOverflow: true,
         showHeaderOverflow: true,
       },
@@ -331,7 +331,7 @@
     }
   }
 
-  //删除小区信息
+  //删除ECA信息
   function remove(row) {
     Modal.confirm({
       maskClosable: true,
@@ -344,7 +344,7 @@
           .DeleteDDServerStationLacci({ StationId: row.stationId, Type: row.type })
           .then(() => {
             isRunGet.value = false;
-            message.success('删除小区信息成功');
+            message.success('删除ECA信息成功');
             getDDServerStationTLaccis();
           })
           .catch(() => {
@@ -362,7 +362,7 @@
     formRef.value.clearValidate();
   }
 
-  //获取小区
+  //获取ECA
   function getDDServerStationTLacci(row) {
     isRunGet.value = true;
     stationLacciApi
@@ -376,7 +376,7 @@
           saveType.value = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取小区信息失败');
+          message.error('获取ECA信息失败');
         }
       })
       .catch(() => {
@@ -384,7 +384,7 @@
       });
   }
 
-  //获取小区列表
+  //获取ECA列表
   function getDDServerStationTLaccis() {
     loading.value = true;
     stationLacciApi
@@ -413,14 +413,14 @@
       if (saveType.value == 'add') {
         stationLacciApi.AUDDServerStationLacci(formData.value).then((data) => {
           formClose();
-          message.success('新增小区成功');
+          message.success('新增ECA成功');
           getDDServerStationTLaccis();
           page.total = page.total + 1;
         });
       } else {
         stationLacciApi.AUDDServerStationLacci(formData.value).then((data) => {
           formClose();
-          message.success('更新小区信息成功');
+          message.success('更新ECA信息成功');
           getDDServerStationTLaccis();
         });
       }

@@ -505,6 +505,7 @@
           noAgileStateChangeStatus();
         }
         if (agileStateData.length > 0) {
+          agileStateLastStatus();
           agileStateChangeStatus();
         }
       }
@@ -803,7 +804,7 @@
           // if (stateOb.data.myServiceId == '522045670068299') {
           //   debugger;
           // }
-          for (let i = 0; i < stateOb.data.mySimpleState.length; i++) {
+          for (let i = 0; i < stateOb.data.mySimpleState.filter((m) => m.open).length; i++) {
             const element = stateOb.data.mySimpleState[i];
             if (!nodeState[element.code + stateOb.data.myServiceId]) {
               color = element.color;
@@ -824,40 +825,42 @@
                 break;
             }
           }
-          //更改成对应状态
-          switch (stateOb.data.myType) {
-            case 'node':
-              graphOb.updateNodeData([
-                {
-                  id: node.id,
-                  style: {
-                    iconFill: color,
-                    labelFill: color,
+          if (color != null) {
+            //更改成对应状态
+            switch (stateOb.data.myType) {
+              case 'node':
+                graphOb.updateNodeData([
+                  {
+                    id: node.id,
+                    style: {
+                      iconFill: color,
+                      labelFill: color,
+                    },
                   },
-                },
-              ]);
-              break;
-            case 'edge':
-              graphOb.updateComboData([
-                {
-                  id: node.id,
-                  style: {
-                    fill: color,
-                    stroke: color,
+                ]);
+                break;
+              case 'edge':
+                graphOb.updateComboData([
+                  {
+                    id: node.id,
+                    style: {
+                      fill: color,
+                      stroke: color,
+                    },
                   },
-                },
-              ]);
-              break;
-            case 'combo':
-              graphOb.updateEdgeData([
-                {
-                  id: node.id,
-                  style: {
-                    stroke: color,
+                ]);
+                break;
+              case 'combo':
+                graphOb.updateEdgeData([
+                  {
+                    id: node.id,
+                    style: {
+                      stroke: color,
+                    },
                   },
-                },
-              ]);
-              break;
+                ]);
+                break;
+            }
           }
         });
         await graphOb.draw();
@@ -873,6 +876,8 @@
       });
   }
 
+  //灵活配置节点的最后信息
+  function agileStateLastStatus() {}
   //灵活配置的变化监控
   function agileStateChangeStatus() {}
 

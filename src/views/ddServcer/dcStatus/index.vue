@@ -163,7 +163,7 @@
       },
       {
         field: 'stationCode',
-        title: '车站号码',
+        title: '车站代码',
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -171,7 +171,7 @@
       },
       {
         field: 'stationName',
-        title: '车站名称',
+        title: '调度台/值班台名称',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -189,6 +189,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        width: 120,
       },
       //20240603-郭彦军指示不显示
       // {
