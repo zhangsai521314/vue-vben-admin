@@ -93,14 +93,14 @@
 
   //获取订阅的设备
   function getUserSubscribes() {
-    performanceApi
-      .GetUserSubscribes({ subscribeType: 1 })
-      .then((data) => {
-        subscribeEquipment.value = data.map((m) => m.keyId);
-      })
-      .catch(() => {
-        subscribeEquipment.value = [];
-      });
+    // performanceApi
+    //   .GetUserSubscribes({ subscribeType: 1 })
+    //   .then((data) => {
+    //     subscribeEquipment.value = data.map((m) => m.keyId);
+    //   })
+    //   .catch(() => {
+    //     subscribeEquipment.value = [];
+    //   });
   }
 
   //监控订阅设备
