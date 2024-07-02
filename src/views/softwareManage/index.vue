@@ -735,7 +735,7 @@
       } else {
         softwareApi.UpdateService(formData.value).then((data) => {
           const oldData = tableRef.value.getRowById(data.serviceId);
-          delete formData.value.createUser;
+          delete data.createUser;
           myCommon.objectReplace(oldData, data);
           oldData.modifyTime = data.modifyTime;
           oldData.modifyUser = data.modifyUser;

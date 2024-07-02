@@ -8,6 +8,7 @@
         id="mytable"
         ref="tableRef"
         :loading="loading"
+        :seq-config="{ startIndex: (page.current - 1) * page.size }"
         :row-config="{ keyField: 'id' }"
         :column-config="{ resizable: true }"
         :custom-config="{ storage: true }"
@@ -20,21 +21,21 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>ECA名称：</label>
+                      <label>ECI名称：</label>
                       <a-input
                         @press-enter="getDDServerTLaccis"
                         v-model:value="seacthContent.name"
-                        placeholder="输入ECA名称查询"
+                        placeholder="输入ECI名称查询"
                       />
                     </a-space>
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>ECA：</label>
+                      <label>ECI：</label>
                       <a-input
                         @press-enter="initPage()"
                         v-model:value="seacthContent.lacci"
-                        placeholder="输入ECA查询"
+                        placeholder="输入ECI查询"
                       />
                     </a-space>
                   </div>
@@ -49,7 +50,7 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button class="ant-btn" @click="showFrom()">新增ECA</a-button>
+                      <a-button class="ant-btn" @click="showFrom()">新增ECI</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -108,23 +109,23 @@
             name="name"
             :rules="[
               { required: true, message: '' },
-              { max: 50, message: 'ECA名称过长' },
-              { validator: formValidator.empty, message: '请输入ECA名称' },
+              { max: 50, message: 'ECI名称过长' },
+              { validator: formValidator.empty, message: '请输入ECI名称' },
             ]"
           >
-            <a-input placeholder="请输入ECA名称" v-model:value="formData.name" autocomplete="off" />
+            <a-input placeholder="请输入ECI名称" v-model:value="formData.name" autocomplete="off" />
           </a-form-item>
           <a-form-item
-            label="ECA"
+            label="ECI"
             name="lacci"
             :rules="[
               { required: true, message: '' },
-              { min: 4, message: 'ECA过短' },
-              { max: 8, message: 'ECA过长' },
-              { validator: formValidator.empty, message: '请输入ECA' },
+              { min: 4, message: 'ECI过短' },
+              { max: 8, message: 'ECI过长' },
+              { validator: formValidator.empty, message: '请输入ECI' },
             ]"
           >
-            <a-input placeholder="请输入ECA" v-model:value="formData.lacci" autocomplete="off" />
+            <a-input placeholder="请输入ECI" v-model:value="formData.lacci" autocomplete="off" />
           </a-form-item>
           <a-form-item
             name="longitude"
@@ -199,21 +200,21 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'id',
-        title: 'ECAid',
+        title: 'ECIid',
         visible: false,
         showHeaderOverflow: true,
         fixed: 'left',
       },
       {
         field: 'name',
-        title: 'ECA名称',
+        title: 'ECI名称',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'lacci',
-        title: 'ECA',
+        title: 'ECI',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -325,7 +326,7 @@
     }
   }
 
-  //删除ECA信息
+  //删除ECI信息
   function remove(row) {
     Modal.confirm({
       maskClosable: true,
@@ -338,7 +339,7 @@
           .DeleteDDServerTLacci(row.id.toString())
           .then(() => {
             isRunGet.value = false;
-            message.success('删除ECA信息成功');
+            message.success('删除ECI信息成功');
             getDDServerTLaccis();
           })
           .catch(() => {
@@ -356,7 +357,7 @@
     formRef.value.clearValidate();
   }
 
-  //获取ECA
+  //获取ECI
   function getDDServerTLacci(id) {
     isRunGet.value = true;
     lacciApi
@@ -368,7 +369,7 @@
           saveType.value = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取ECA信息失败');
+          message.error('获取ECI信息失败');
         }
       })
       .catch(() => {
@@ -376,7 +377,7 @@
       });
   }
 
-  //获取ECA列表
+  //获取ECI列表
   function getDDServerTLaccis() {
     loading.value = true;
     lacciApi
@@ -412,7 +413,7 @@
         lacciApi.AddDDServerTLacci(formData.value).then((data) => {
           tableConfig.data?.splice(0, 0, data);
           formClose();
-          message.success('新增ECA成功');
+          message.success('新增ECI成功');
           page.total = page.total + 1;
         });
       } else {
@@ -420,7 +421,7 @@
           const oldData = tableRef.value.getRowById(data.id);
           myCommon.objectReplace(oldData, formData.value);
           formClose();
-          message.success('更新ECA信息成功');
+          message.success('更新ECI信息成功');
         });
       }
     });

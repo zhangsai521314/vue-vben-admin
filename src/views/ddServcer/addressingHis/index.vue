@@ -5,6 +5,7 @@
       id="mytable"
       ref="tableRef"
       :loading="loading"
+      :seq-config="{ startIndex: (page.current - 1) * page.size }"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"
       @sort-change="onSortChange"
@@ -41,6 +42,7 @@
                       <a-select-option :value="241">站内组呼</a-select-option>
                       <a-select-option :value="242">邻站组呼</a-select-option>
                       <a-select-option :value="243">紧急组呼</a-select-option>
+                      <a-select-option :value="226">短号码</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
@@ -52,6 +54,20 @@
                       v-model:value="seacthContent.srcFn"
                       placeholder="输入主叫功能号查询"
                     />
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>寻址结果：</label>
+                    <a-select
+                      placeholder="寻址结果"
+                      style="width: 170px"
+                      allow-clear
+                      v-model:value="seacthContent.result"
+                    >
+                      <a-select-option :value="0">成功</a-select-option>
+                      <a-select-option :value="1">失败</a-select-option>
+                    </a-select>
                   </a-space>
                 </div>
                 <div class="row-div">
@@ -133,7 +149,7 @@
       },
       {
         field: 'srcLacci',
-        title: '主叫ECA',
+        title: '主叫ECI',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -198,6 +214,7 @@
     srcFn: null,
     startTime: null,
     endTime: null,
+    result: null,
   });
   const page = reactive({
     current: 1,
@@ -250,6 +267,7 @@
       srcFn: null,
       startTime: null,
       endTime: null,
+      result: null,
     };
     timeValue.value = null;
   }

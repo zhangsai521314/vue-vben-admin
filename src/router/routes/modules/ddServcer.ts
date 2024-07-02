@@ -42,7 +42,7 @@ const ddServcer: AppRouteModule = {
       name: 'DDServcerLacci',
       component: () => import('/@/views/ddServcer/lacci/index.vue'),
       meta: {
-        title: 'ECA管理',
+        title: 'ECI管理',
       },
     },
     {
@@ -50,7 +50,7 @@ const ddServcer: AppRouteModule = {
       name: 'DDServcerStationLacci',
       component: () => import('/@/views/ddServcer/stationLacci/index.vue'),
       meta: {
-        title: '车站ECA管理',
+        title: '车站ECI管理',
       },
     },
     {

@@ -5,6 +5,7 @@
       id="mytable"
       ref="tableRef"
       :loading="loading"
+      :seq-config="{ startIndex: (page.current - 1) * page.size }"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"
       @sort-change="onSortChange"
@@ -56,7 +57,7 @@
                 </div>
                 <!-- <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>ECA名称：</label>
+                    <label>ECI名称：</label>
                     <a-select
                       style="width: 400px"
                       allow-clear
@@ -277,7 +278,7 @@
       },
       {
         field: 'lacci',
-        title: 'ECA号',
+        title: 'ECI号',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -285,7 +286,7 @@
       },
       {
         field: 'lacciName',
-        title: 'ECA名称',
+        title: 'ECI名称',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

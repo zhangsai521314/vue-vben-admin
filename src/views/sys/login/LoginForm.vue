@@ -172,7 +172,7 @@
         notification.success({
           message: t('sys.login.loginSuccessTitle'),
           description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.userName}`,
-          duration: 3,
+          duration: 2,
         });
       }
     } catch (error) {

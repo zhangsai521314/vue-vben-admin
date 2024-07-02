@@ -5,6 +5,7 @@
       id="mytable"
       ref="tableRef"
       :loading="loading"
+      :seq-config="{ startIndex: (page.current - 1) * page.size }"
       :row-config="{ keyField: 'msgId' }"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"
@@ -445,7 +446,7 @@
         },
         showHeaderOverflow: true,
         fixed: 'right',
-        minWidth: 50,
+        minWidth: 80,
       },
     ],
     toolbarConfig: {

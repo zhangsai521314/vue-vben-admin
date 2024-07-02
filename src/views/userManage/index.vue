@@ -6,6 +6,7 @@
         id="mytable"
         ref="tableRef"
         :loading="loading"
+        :seq-config="{ startIndex: (page.current - 1) * page.size }"
         :row-config="{ keyField: 'userId' }"
         :column-config="{ resizable: true }"
         :custom-config="{ storage: true }"
@@ -160,7 +161,7 @@
             :rules="[
               { required: true, message: '' },
               { max: 30, message: '登录名长度超限' },
-              { min: 3, message: '登录名最少3位' },
+              { min: 2, message: '登录名最少2位' },
               { validator: formValidator.empty, message: '请输入登录名' },
             ]"
           >
@@ -255,7 +256,7 @@
             name="mobile"
             :rules="[
               { required: true, message: '' },
-              { max: 15, message: '联系电话过长' },
+              { max: 18, message: '联系电话过长' },
               { validator: formValidator.positiveInteger, message: '联系电话格式为自然数' },
               { validator: formValidator.empty, message: '请输入联系电话' },
             ]"
@@ -463,14 +464,14 @@
         sortable: true,
         visible: false,
       },
-      {
-        field: 'lastLoginOs',
-        title: '最后登录客户端',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        visible: false,
-        sortable: true,
-      },
+      // {
+      //   field: 'lastLoginOs',
+      //   title: '最后登录客户端',
+      //   showOverflow: true,
+      //   showHeaderOverflow: true,
+      //   visible: false,
+      //   sortable: true,
+      // },
       {
         field: 'lastLoginBrowser',
         title: '最后登录浏览器',

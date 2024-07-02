@@ -58,6 +58,7 @@
             max-height="100%"
             ref="tableRef"
             show-overflow
+            :seq-config="{ startIndex: (page.current - 1) * page.size }"
             :custom-config="{ storage: true }"
             :row-config="{ isHover: true, useKey: true, keyField: 'testId' }"
             :column-config="{ resizable: true }"

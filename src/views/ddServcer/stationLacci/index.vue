@@ -8,6 +8,7 @@
         id="mytable"
         ref="tableRef"
         :loading="loading"
+        :seq-config="{ startIndex: (page.current - 1) * page.size }"
         :row-config="{ keyField: 'longId' }"
         :column-config="{ resizable: true }"
         :custom-config="{ storage: true }"
@@ -34,11 +35,11 @@
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>ECA：</label>
+                      <label>ECI：</label>
                       <a-input
                         @press-enter="initPage()"
                         v-model:value="seacthContent.lacci"
-                        placeholder="输入ECA查询"
+                        placeholder="输入ECI查询"
                       />
                     </a-space>
                   </div>
@@ -53,7 +54,7 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button class="ant-btn" @click="showFrom()">新增车站ECA关系</a-button>
+                      <a-button class="ant-btn" @click="showFrom()">新增车站ECI关系</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -154,8 +155,8 @@
             </a-select>
           </a-form-item>
           <a-form-item
-            :rules="[{ required: true, message: '请选择ECA名称' }]"
-            label="ECA名称"
+            :rules="[{ required: true, message: '请选择ECI名称' }]"
+            label="ECI名称"
             name="lacciIds"
           >
             <a-select
@@ -165,7 +166,7 @@
               :allowClear="true"
               show-search
               :filter-option="AntVueCommon.filterOption"
-              placeholder="请选择ECA名称"
+              placeholder="请选择ECI名称"
             />
           </a-form-item>
         </a-form>
@@ -225,13 +226,13 @@
       },
       {
         field: 'lacciNames',
-        title: 'ECA名称',
+        title: 'ECI名称集合',
         showOverflow: true,
         showHeaderOverflow: true,
       },
       {
         field: 'laccis',
-        title: 'ECA集合',
+        title: 'ECI集合',
         showOverflow: true,
         showHeaderOverflow: true,
       },
@@ -331,7 +332,7 @@
     }
   }
 
-  //删除ECA信息
+  //删除ECI信息
   function remove(row) {
     Modal.confirm({
       maskClosable: true,
@@ -344,7 +345,7 @@
           .DeleteDDServerStationLacci({ StationId: row.stationId, Type: row.type })
           .then(() => {
             isRunGet.value = false;
-            message.success('删除ECA信息成功');
+            message.success('删除ECI信息成功');
             getDDServerStationTLaccis();
           })
           .catch(() => {
@@ -362,7 +363,7 @@
     formRef.value.clearValidate();
   }
 
-  //获取ECA
+  //获取ECI
   function getDDServerStationTLacci(row) {
     isRunGet.value = true;
     stationLacciApi
@@ -376,7 +377,7 @@
           saveType.value = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取ECA信息失败');
+          message.error('获取ECI信息失败');
         }
       })
       .catch(() => {
@@ -384,7 +385,7 @@
       });
   }
 
-  //获取ECA列表
+  //获取ECI列表
   function getDDServerStationTLaccis() {
     loading.value = true;
     stationLacciApi
@@ -413,14 +414,14 @@
       if (saveType.value == 'add') {
         stationLacciApi.AUDDServerStationLacci(formData.value).then((data) => {
           formClose();
-          message.success('新增ECA成功');
+          message.success('新增ECI成功');
           getDDServerStationTLaccis();
           page.total = page.total + 1;
         });
       } else {
         stationLacciApi.AUDDServerStationLacci(formData.value).then((data) => {
           formClose();
-          message.success('更新ECA信息成功');
+          message.success('更新ECI信息成功');
           getDDServerStationTLaccis();
         });
       }

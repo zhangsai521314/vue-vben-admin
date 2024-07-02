@@ -54,6 +54,7 @@
             id="performance_his_table"
             v-bind="tableConfig"
             ref="tableRef"
+            :seq-config="{ startIndex: (page.current - 1) * page.size }"
             :row-config="{ keyField: 'keyId' }"
             :column-config="{ resizable: true }"
             :custom-config="{ storage: true }"

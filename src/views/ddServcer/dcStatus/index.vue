@@ -5,6 +5,7 @@
       id="mytable"
       ref="tableRef"
       :loading="loading"
+      :seq-config="{ startIndex: (page.current - 1) * page.size }"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"
       @sort-change="onSortChange"

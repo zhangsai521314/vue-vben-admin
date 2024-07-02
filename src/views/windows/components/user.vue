@@ -47,7 +47,7 @@
         :rules="[
           { required: true, message: '' },
           { max: 30, message: '登录名长度超限' },
-          { min: 3, message: '登录名最少2位' },
+          { min: 2, message: '登录名最少2位' },
           { validator: formValidator.empty, message: '请输入登录名' },
         ]"
       >
@@ -58,7 +58,7 @@
         name="mobile"
         :rules="[
           { required: true, message: '' },
-          { max: 30, message: '联系电话过长' },
+          { max: 18, message: '联系电话过长' },
           { validator: formValidator.positiveInteger, message: '联系电话格式为自然数' },
           { validator: formValidator.empty, message: '请输入联系电话' },
         ]"
