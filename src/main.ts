@@ -134,6 +134,7 @@ async function mqttInit() {
         mqttConfig.LookLogBack,
         mqttConfig.WebCallRecordChange,
       ];
+      //合并用户自己订阅的主题
       if (userStore) {
         const t = userStore.getUserInfo.userMqTopic.map((m) => m.topic);
         if (t) {

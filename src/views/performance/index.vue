@@ -26,7 +26,7 @@
         "
       >
         <div
-          v-for="(value, index) in userStore.getUserMqTopic"
+          v-for="(value, index) in userStore.getUserMqTopic?.filter((m) => m.subscribeType == 1)"
           :key="index"
           style="
             display: flex;
@@ -39,12 +39,12 @@
           <content
             v-if="mqttStore.userTopicPerformanceNewValue.hasOwnProperty(`${value.topic}`)"
             :newDataInfo="mqttStore.userTopicPerformanceNewValue[`${value.topic}`]"
-            :name="equipmentData.find((m) => m.key == value.keyId)?.label"
+            :name="equipmentData.find((m) => m.serviceCode == value.keyId)?.label"
           ></content>
           <content
             v-else
             :newDataInfo="null"
-            :name="equipmentData.find((m) => m.key == value.keyId)?.label"
+            :name="equipmentData.find((m) => m.serviceCode == value.keyId)?.label"
           ></content>
         </div>
       </div>
@@ -83,24 +83,40 @@
         },
       })
       .then((data) => {
-        equipmentData.value = data;
+        equipmentData.value = data.filter((m) => m.serviceCode != null);
         getUserSubscribes();
       })
       .catch(() => {
         equipmentData.value = [];
+        userStore.userInfo.userMqTopic = userStore.userInfo.userMqTopic.filter(
+          (m) => m.subscribeType != 1,
+        );
       });
   }
 
   //获取订阅的设备
   function getUserSubscribes() {
-    // performanceApi
-    //   .GetUserSubscribes({ subscribeType: 1 })
-    //   .then((data) => {
-    //     subscribeEquipment.value = data.map((m) => m.keyId);
-    //   })
-    //   .catch(() => {
-    //     subscribeEquipment.value = [];
-    //   });
+    performanceApi
+      .GetUserSubscribes({ subscribeType: 1 })
+      .then((data) => {
+        subscribeEquipment.value = data.map((m) => m.equipmentId);
+        if (subscribeEquipment.value.length == 0) {
+          userStore.userInfo.userMqTopic = userStore.userInfo.userMqTopic.filter(
+            (m) => m.subscribeType != 1,
+          );
+        } else {
+          const keyIds = data.map((m) => m.keyId);
+          userStore.userInfo.userMqTopic = userStore.userInfo.userMqTopic.filter(
+            (m) => m.subscribeType == 1 && keyIds.indexOf(m.keyId) != -1,
+          );
+        }
+      })
+      .catch(() => {
+        subscribeEquipment.value = [];
+        userStore.userInfo.userMqTopic = userStore.userInfo.userMqTopic.filter(
+          (m) => m.subscribeType != 1,
+        );
+      });
   }
 
   //监控订阅设备
@@ -112,13 +128,14 @@
         n.forEach((id) => {
           if (!o.includes(id)) {
             const t = `${mqttStore.mqttConfig.UpPerformance}/${equipmentData.value.find((m) => m.key == id).serviceCode}`;
-            data.push({
+            const newData = {
               subscribeType: 1,
-              keyId: id,
+              keyId: equipmentData.value.find((m) => m.key == id).serviceCode,
               topic: t,
-            });
+            };
+            data.push(newData);
             if (!userStore.userInfo?.userMqTopic.find((m) => m.topic == t)) {
-              userStore.userInfo?.userMqTopic.push({ topic: t, keyId: id });
+              userStore.userInfo?.userMqTopic.push(newData);
             }
             try {
               mqttStore.subscribe(t, (e) => {});

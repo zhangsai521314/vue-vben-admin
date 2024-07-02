@@ -183,7 +183,7 @@
     .@{prefixCls}min-echart {
       width: 180px;
       height: 70px;
-      padding: 6px;
+      padding: 0;
     }
     .@{prefixCls}div-max {
       position: relative;

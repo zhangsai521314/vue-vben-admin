@@ -836,7 +836,10 @@
                 "
                 :columns="selectedObStateColumns"
                 :data-source="
-                  gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myAgileState
+                  _.sortBy(
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myAgileState,
+                    (m) => m.level,
+                  )
                 "
                 bordered
                 size="small"
@@ -1453,6 +1456,7 @@
   import codemirror from '/@/components/MyCodemirror/codemirror.vue';
   import { useGplotStoreWithOut } from '@/store/modules/gplot';
   import softwareApi from '@/api/software';
+  import _ from 'lodash-es';
 
   const { prefixCls } = useDesign('GplotManage-');
   const props = defineProps({
@@ -1591,26 +1595,22 @@
       }
       try {
         const executeFunc = new Function('dataOb', newAllDataConfig.value.getValue);
-        const runValue = executeFunc('');
-        if (runValue === undefined) {
-          message.error('返回值错误，请检查');
+        executeFunc('');
+        if (isSaveAllDataConfigAdd.value) {
+          gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.allDataConfig.push(
+            newAllDataConfig.value,
+          );
+          message.success('添加成功');
         } else {
-          if (isSaveAllDataConfigAdd.value) {
-            gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.allDataConfig.push(
-              newAllDataConfig.value,
-            );
-            message.success('添加成功');
-          } else {
-            const oldData = gplotStore.gplotKeyOb[
-              props.graphObRef.gplotKey
-            ].containerConfig.allDataConfig.find((m) => m.key == newAllDataConfig.value.key);
-            myCommon.objectReplace(oldData, newAllDataConfig.value);
-            message.success('编辑成功');
-          }
-          isShowSourceDataConfig.value = false;
+          const oldData = gplotStore.gplotKeyOb[
+            props.graphObRef.gplotKey
+          ].containerConfig.allDataConfig.find((m) => m.key == newAllDataConfig.value.key);
+          myCommon.objectReplace(oldData, newAllDataConfig.value);
+          message.success('编辑成功');
         }
+        isShowSourceDataConfig.value = false;
       } catch (error) {
-        message.error('数据处理错误，请检查');
+        message.error('javaScript编码错误，请检查');
       }
     });
   }
@@ -1640,7 +1640,7 @@
           topic: 'Data/Monitor/WebMsg/+',
           //值获取，
           getValue:
-            '//默认参数dataOb为收到的数据对象\n//必须有返回值，返回值类型不得为undefined\nif(dataOb)\n{\n//编辑您的计算逻辑并return值\n\nreturn dataOb;\n\n}\nelse{\n return null \n}\n',
+            '//默认参数dataOb为收到的数据对象\n//必须有返回值，返回值类型为undefined时表示该返回值无效\nif(dataOb)\n{\n//编辑您的计算逻辑并return值\n\nreturn dataOb;\n\n}\nelse{\n return undefined \n}\n',
           //值键值
           key: myCommon.uniqueId(),
           //值描述名称

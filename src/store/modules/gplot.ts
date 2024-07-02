@@ -246,10 +246,7 @@ export const useGplotStore = defineStore({
     async mqttMsgReceive(topic: string, message) {
       try {
         if (['Data/Monitor/WebMsg/Insert', 'Data/Monitor/WebMsg/Update'].includes(topic)) {
-          this.mqttMsgChange = {
-            topic,
-            message,
-          };
+          this.mqttMsgChange = message;
         }
       } catch (error) {
         console.error(error);

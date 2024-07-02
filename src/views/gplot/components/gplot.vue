@@ -38,6 +38,7 @@
   import gplotApi from '@/api/gplot';
   import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils';
   import softwareApi from '@/api/software';
+  import messageApi from '@/api/message';
 
   const props = defineProps({
     viewType: {
@@ -506,7 +507,6 @@
         }
         if (agileStateData.length > 0) {
           agileStateLastStatus();
-          agileStateChangeStatus();
         }
       }
       rendering.value = false;
@@ -825,43 +825,7 @@
                 break;
             }
           }
-          if (color != null) {
-            //更改成对应状态
-            switch (stateOb.data.myType) {
-              case 'node':
-                graphOb.updateNodeData([
-                  {
-                    id: node.id,
-                    style: {
-                      iconFill: color,
-                      labelFill: color,
-                    },
-                  },
-                ]);
-                break;
-              case 'edge':
-                graphOb.updateComboData([
-                  {
-                    id: node.id,
-                    style: {
-                      fill: color,
-                      stroke: color,
-                    },
-                  },
-                ]);
-                break;
-              case 'combo':
-                graphOb.updateEdgeData([
-                  {
-                    id: node.id,
-                    style: {
-                      stroke: color,
-                    },
-                  },
-                ]);
-                break;
-            }
-          }
+          changeStyle(stateOb.data.myType, node.id, color);
         });
         await graphOb.draw();
         setTimeout(() => {
@@ -876,11 +840,141 @@
       });
   }
 
-  //灵活配置节点的最后信息
-  function agileStateLastStatus() {}
-  //灵活配置的变化监控
-  function agileStateChangeStatus() {}
+  //灵活配置节点的状态初始化
+  function agileStateLastStatus() {
+    messageApi
+      .GetServiceMsgTypeLastSimple()
+      .then(async (nodeState) => {
+        //设置全局变量值
+        nodeState.forEach((state) => {
+          changeAllDataConfig(state);
+        });
+        console.log(gplotStore.gplotKeyOb[gplotKey].containerConfig.allDataValue);
+        agileStateChange();
+        agileStateChangeStatus();
+      })
+      .catch((e) => {
+        console.error(e);
+        agileStateChangeStatus();
+      });
+  }
 
+  //灵活配置更改全局值
+  function changeAllDataConfig(data) {
+    gplotStore.gplotKeyOb[gplotKey].containerConfig.allDataConfig.forEach((dataConfig) => {
+      try {
+        const executeFunc = new Function('dataOb', dataConfig.getValue);
+        const runValue = executeFunc(data);
+        if (runValue != undefined) {
+          gplotStore.gplotKeyOb[gplotKey].containerConfig.allDataValue[dataConfig.key] = runValue;
+        }
+      } catch (error) {
+        console.error('设置全局变量值出错', error, dataConfig);
+      }
+    });
+  }
+  //灵活配置状态判定及改变
+  async function agileStateChange() {
+    if (Object.keys(gplotStore.gplotKeyOb[gplotKey].containerConfig.allDataValue).length > 0) {
+      //画布节点灵活配置赋值
+      agileStateData.forEach((node) => {
+        let color = null;
+        //获取画布节点
+        const stateOb = graphOb.getElementData(node.id);
+        const orderData = _.sortBy(stateOb.data.myAgileState, (m) => m.level);
+        for (let i = 0; i < orderData.length; i++) {
+          try {
+            const executeFunc = new Function('allDataValue', orderData[i].isChange);
+            const runValue = executeFunc(
+              gplotStore.gplotKeyOb[gplotKey].containerConfig.allDataValue,
+            );
+            if (typeof runValue === 'boolean') {
+              if (runValue) {
+                //灵活配置颜色
+                color = orderData[i].color;
+              }
+              if (color == null) {
+                //回复原始状态
+                switch (stateOb.data.myType) {
+                  case 'node':
+                    color = stateOb.data.myOldStyle.iconFill;
+                    break;
+                  case 'edge':
+                    color = stateOb.data.myOldStyle.fill;
+                    break;
+                  case 'combo':
+                    color = stateOb.data.myOldStyle.stroke;
+                    break;
+                }
+              }
+              changeStyle(stateOb.data.myType, node.id, color);
+              if (runValue) {
+                //按优先级计算,有满足则跳出
+                break;
+              }
+            } else {
+              console.error('设置画布节点变量值返回值错误', orderData[i]);
+            }
+          } catch (error) {
+            console.error('设置画布节点变量值出错', orderData[i]);
+          }
+        }
+      });
+      await graphOb.draw();
+    }
+  }
+  //灵活配置的变化监控
+  function agileStateChangeStatus() {
+    watch(
+      () => gplotStore.mqttMsgChange,
+      async () => {
+        if (gplotStore.mqttMsgChange) {
+          changeAllDataConfig(gplotStore.mqttMsgChange);
+          await agileStateChange();
+        }
+      },
+    );
+  }
+
+  function changeStyle(type, id, color) {
+    if (color != null) {
+      //更改成对应状态
+      switch (type) {
+        case 'node':
+          graphOb.updateNodeData([
+            {
+              id: id,
+              style: {
+                iconFill: color,
+                labelFill: color,
+              },
+            },
+          ]);
+          break;
+        case 'edge':
+          graphOb.updateComboData([
+            {
+              id: id,
+              style: {
+                fill: color,
+                stroke: color,
+              },
+            },
+          ]);
+          break;
+        case 'combo':
+          graphOb.updateEdgeData([
+            {
+              id: id,
+              style: {
+                stroke: color,
+              },
+            },
+          ]);
+          break;
+      }
+    }
+  }
   watch(
     () => appStore.projectConfig!.menuSetting.collapsed,
     () => {

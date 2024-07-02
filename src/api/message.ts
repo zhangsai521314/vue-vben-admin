@@ -44,10 +44,9 @@ const Message = {
     });
   },
   //获取服务每个类型的最新消息-简化版
-  GetServiceMsgTypeLastSimple: function (params) {
-    return defHttp.post({
+  GetServiceMsgTypeLastSimple: function () {
+    return defHttp.get({
       url: '/Message/GetServiceMsgTypeLastSimple',
-      params,
     });
   },
 };

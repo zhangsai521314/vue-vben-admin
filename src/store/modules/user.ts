@@ -122,6 +122,7 @@ export const useUserStore = defineStore({
       if (!this.getToken) return null;
       // get user info
       const userInfo = await this.getUserInfoAction();
+      //订阅用户自己订阅的主题
       setTimeout(() => {
         try {
           const mqttStore = useMqttStoreWithOut();
