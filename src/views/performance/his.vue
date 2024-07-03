@@ -9,7 +9,7 @@
         <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
           <div class="row-div">
             <a-space direction="horizontal" size="small" :wrap="true">
-              <label>按键时间：</label>
+              <label>数据时间：</label>
               <a-config-provider :locale="zhCN">
                 <a-range-picker
                   allowClear
@@ -24,6 +24,7 @@
             <a-space direction="horizontal" size="small" :wrap="true">
               <label>设备名称：</label>
               <a-select
+                placeholder="输入设备名称查询"
                 style="width: 170px"
                 allow-clear
                 show-search
@@ -202,7 +203,7 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'keyId',
-        title: '主键ID',
+        title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,

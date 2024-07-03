@@ -26,7 +26,7 @@
                   <a-input
                     @press-enter="initPage"
                     v-model:value="seacthContent.name"
-                    placeholder="输入车站查询"
+                    placeholder="输入车站名称查询"
                   />
                   <a-button @click="initPage" type="primary">查询</a-button>
                 </a-space>
@@ -102,7 +102,7 @@
             name="name"
             :rules="[
               { required: true, message: '' },
-              { max: 50, message: '车站名称过长' },
+              { max: 40, message: '车站名称过长' },
               { validator: formValidator.empty, message: '请输入车站名称' },
             ]"
           >
@@ -115,10 +115,7 @@
           <a-form-item
             name="longitude"
             label="经度"
-            :rules="[
-              { required: true, message: '' },
-              { validator: formValidator.empty, message: '请输入经度' },
-            ]"
+            :rules="[{ required: true, message: '请输入经度' }]"
           >
             <a-input-number
               style="width: 262px"
@@ -132,10 +129,7 @@
           <a-form-item
             name="latitude"
             label="纬度"
-            :rules="[
-              { required: true, message: '' },
-              { validator: formValidator.empty, message: '请输入纬度' },
-            ]"
+            :rules="[{ required: true, message: '请输入纬度' }]"
           >
             <a-input-number
               style="width: 262px"
@@ -168,8 +162,9 @@
           </a-form-item>
           <a-form-item name="startGlb" label="起始公里标(米)">
             <a-input-number
-              min="-900000"
-              max="900000"
+              min="-9999999"
+              max="9999999"
+              :precision="0"
               placeholder="请输入起始公里标"
               v-model:value="formData.startGlb"
               autocomplete="off"
@@ -177,8 +172,9 @@
           </a-form-item>
           <a-form-item name="endGlb" label="终止公里标(米)">
             <a-input-number
-              min="-900000"
-              max="900000"
+              min="-9999999"
+              max="9999999"
+              :precision="0"
               placeholder="请输入终止公里标"
               v-model:value="formData.endGlb"
               autocomplete="off"
@@ -205,12 +201,13 @@
           </a-form-item>
           <template v-if="isShowUpdate || saveType == 'add'">
             <a-form-item
+              v-if="saveType == 'edit'"
               name="programUpdatePassWord"
               label="二级修改密码"
-              :rules="[{ required: true, message: '请输入二级修改密码' }]"
+              :rules="[{ required: true, message: '修改信息请输入二级密码' }]"
             >
               <a-input
-                placeholder="请输入二级修改密码"
+                placeholder="修改信息请输入二级密码"
                 v-model:value="formData.programUpdatePassWord"
                 autocomplete="off"
               />
@@ -376,7 +373,7 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'id',
-        title: '车站ID',
+        title: '记录ID',
         visible: false,
         showHeaderOverflow: true,
         fixed: 'left',

@@ -22,7 +22,7 @@
                       show-search
                       style="width: 170px"
                       :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                      placeholder="请选择所属部门："
+                      placeholder="请选择所属部门"
                       allow-clear
                       show-arrow
                       :filterTreeNode="AntVueCommon.filterTreeNode"
@@ -36,7 +36,7 @@
                     <a-input
                       @press-enter="getEquipments"
                       v-model:value="seacthContent.equipmentName"
-                      placeholder="输入名称查询"
+                      placeholder="输入设备名称查询"
                     />
                   </a-space>
                 </div>
@@ -119,7 +119,7 @@
           label="设备名称"
           :rules="[
             { required: true, message: '' },
-            { max: 50, message: '设备名称过长' },
+            { max: 40, message: '设备名称过长' },
             { validator: formValidator.empty, message: '请输入设备名称' },
           ]"
         >
@@ -229,7 +229,7 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'equipmentId',
-        title: '设备ID',
+        title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -378,7 +378,6 @@
     getOrganization();
     getDictionaries();
     if (myCommon.isnull(row)) {
-      formData.value = _.cloneDeep(defFromData);
       saveType = 'add';
       isShowForm.value = true;
     } else {
@@ -414,6 +413,7 @@
   //关闭表单
   function formClose() {
     isShowForm.value = false;
+    formData.value = _.cloneDeep(defFromData);
     formRef.value.clearValidate();
   }
 

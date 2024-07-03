@@ -88,7 +88,7 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'keyId',
-        title: '主键ID',
+        title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,

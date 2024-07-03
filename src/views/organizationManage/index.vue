@@ -13,7 +13,7 @@
                       <a-input
                         @press-enter="getOrganizations"
                         v-model:value="seacthContent.orgName"
-                        placeholder="输入名称查询"
+                        placeholder="输入部门名称查询"
                       />
                     </a-space>
                   </div>
@@ -51,8 +51,8 @@
           >
             <vxe-column type="seq" title="序号" width="60" />
             <vxe-column field="orgId" title="部门id" :visible="false" />
-            <vxe-column field="orgName" title="名称" tree-node />
-            <vxe-column field="orderIndex" title="排序" :visible="false" />
+            <vxe-column field="orgName" title="部门名称" tree-node />
+            <vxe-column field="orderIndex" title="部门排序" :visible="false" />
             <vxe-column field="createTime" title="创建时间" :visible="false" />
             <vxe-column field="createUser" title="创建人" :visible="false" />
             <vxe-column field="modifyTime" title="修改时间" :visible="false" />
@@ -109,10 +109,10 @@
       >
         <a-form-item
           name="orgName"
-          label="名称"
+          label="部门名称"
           :rules="[
             { required: true, message: '' },
-            { max: 50, message: '部门名称过长' },
+            { max: 40, message: '部门名称过长' },
             { validator: formValidator.empty, message: '请输入部门名称' },
           ]"
         >
@@ -124,8 +124,8 @@
         </a-form-item>
         <a-form-item
           name="orderIndex"
-          label="排序"
-          :rules="[{ required: true, message: '请输入排序' }]"
+          label="部门排序"
+          :rules="[{ required: true, message: '请输入部门排序' }]"
         >
           <a-input-number
             style="width: 300px"
@@ -275,6 +275,8 @@
         });
       } else {
         organizationApi.UpdateOrganization(formData.value).then((data) => {
+          delete data.createtTime;
+          delete data.createUser;
           myCommon.objectReplace(tableRef.value.getRowById(data.orgId), data);
           formClose();
           message.success('更新部门信息成功');

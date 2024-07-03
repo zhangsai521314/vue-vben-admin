@@ -167,7 +167,7 @@
           label="软件名称"
           :rules="[
             { required: true, message: '' },
-            { max: 50, message: '软件名称过长' },
+            { max: 40, message: '软件名称过长' },
             { validator: formValidator.empty, message: '请输入软件名称' },
           ]"
         >
@@ -204,10 +204,11 @@
           />
         </a-form-item>
         <a-form-item name="port" label="运行端口">
-          <a-input
+          <a-input-number
             placeholder="请输入运行端口"
             v-model:value="formData.port"
             autocomplete="off"
+            :precision="0"
             :min="0"
             :max="9999999999"
           />
@@ -381,7 +382,7 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'serviceId',
-        title: '软件ID',
+        title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -632,7 +633,6 @@
     getDictionaries();
     getEquipments();
     if (myCommon.isnull(row)) {
-      formData.value = _.cloneDeep(defFromData);
       saveType = 'add';
       isShowForm.value = true;
     } else {
@@ -669,6 +669,7 @@
   function formClose() {
     isShowForm.value = false;
     newServerCode = null;
+    formData.value = _.cloneDeep(defFromData);
     formRef.value.clearValidate();
   }
 
@@ -735,6 +736,7 @@
       } else {
         softwareApi.UpdateService(formData.value).then((data) => {
           const oldData = tableRef.value.getRowById(data.serviceId);
+          delete data.createtTime;
           delete data.createUser;
           myCommon.objectReplace(oldData, data);
           oldData.modifyTime = data.modifyTime;

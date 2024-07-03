@@ -149,7 +149,7 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'id',
-        title: '状态id',
+        title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -164,7 +164,7 @@
       },
       {
         field: 'stationCode',
-        title: '车站代码',
+        title: '线路/车站代码',
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -172,7 +172,7 @@
       },
       {
         field: 'stationName',
-        title: '调度台/值班台名称',
+        title: '所属线路/车站',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

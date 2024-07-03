@@ -93,7 +93,7 @@
           label="角色名称"
           :rules="[
             { required: true, message: '' },
-            { max: 50, message: '角色名称过长' },
+            { max: 40, message: '角色名称过长' },
             { validator: formValidator.empty, message: '请输入角色名称' },
           ]"
         >
@@ -151,7 +151,7 @@
       //基础
       {
         field: 'roleId',
-        title: '角色ID',
+        title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -258,7 +258,6 @@
 
   function showFrom(row) {
     if (myCommon.isnull(row)) {
-      formData.value = _.cloneDeep(defFromData);
       saveType = 'add';
       isShowForm.value = true;
     } else {
@@ -294,6 +293,7 @@
   //关闭表单
   function formClose() {
     isShowForm.value = false;
+    formData.value = _.cloneDeep(defFromData);
     formRef.value.clearValidate();
   }
 

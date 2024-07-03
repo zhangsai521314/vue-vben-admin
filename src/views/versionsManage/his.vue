@@ -179,7 +179,7 @@
       { type: 'seq', title: '序号', width: 50 },
       {
         field: 'hisId',
-        title: '版本id',
+        title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -286,7 +286,6 @@
   const dictionariesData_add = ref([]);
 
   function showFrom(row) {
-    formData.value = _.cloneDeep(defFromData);
     formData.value.versionId = props.versionId;
     fileList.value = [];
     saveType = 'add';
@@ -296,6 +295,7 @@
   //关闭表单
   function formClose() {
     isShowForm.value = false;
+    formData.value = _.cloneDeep(defFromData);
     formRef.value.clearValidate();
   }
 

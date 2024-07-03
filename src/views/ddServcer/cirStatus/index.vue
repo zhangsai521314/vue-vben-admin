@@ -17,7 +17,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>时间：</label>
+                    <label>心跳时间：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         allowClear
@@ -85,15 +85,15 @@
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.jcFn"
-                      placeholder="输入告机车功能号查询"
+                      placeholder="输入机车功能号查询"
                     />
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>机车状态：</label>
+                    <label>机车号状态：</label>
                     <a-select
-                      placeholder="请选择机车状态"
+                      placeholder="请选择机车号状态"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.JcFnStatus"
@@ -117,9 +117,9 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>车次状态：</label>
+                    <label>车次号状态：</label>
                     <a-select
-                      placeholder="请选择车次状态"
+                      placeholder="请选择车次号状态"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.CcFnStatus"
@@ -199,7 +199,7 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'id',
-        title: '状态id',
+        title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -228,6 +228,28 @@
         sortable: true,
       },
       {
+        field: 'stationLocationName',
+        title: '所在位置',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'lacciName',
+        title: 'ECI名称',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        visible: false,
+      },
+      {
+        field: 'lacci',
+        title: 'ECI号码',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
         field: 'isdn',
         title: 'ISDN',
         showOverflow: true,
@@ -243,7 +265,7 @@
       },
       {
         field: 'jCFnStatusName',
-        title: '机车状态',
+        title: '机车号状态',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -257,7 +279,7 @@
       },
       {
         field: 'cCFnStatusName',
-        title: '车次状态',
+        title: '车次号状态',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -272,29 +294,6 @@
       {
         field: 'glb',
         title: '公里标',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-      },
-      {
-        field: 'lacci',
-        title: 'ECI号',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-        visible: false,
-      },
-      {
-        field: 'lacciName',
-        title: 'ECI名称',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-        visible: false,
-      },
-      {
-        field: 'stationLocationName',
-        title: '所在位置',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -338,7 +337,7 @@
       },
       {
         field: 'updateTime',
-        title: '时间',
+        title: '心跳时间',
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,

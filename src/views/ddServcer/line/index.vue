@@ -88,7 +88,7 @@
             name="name"
             :rules="[
               { required: true, message: '' },
-              { max: 50, message: '线路名称过长' },
+              { max: 40, message: '线路名称过长' },
               { validator: formValidator.empty, message: '请输入线路名称' },
             ]"
           >
@@ -105,6 +105,7 @@
               { required: true, message: '' },
               { min: 3, message: '线路代码过短' },
               { max: 6, message: '线路代码过长' },
+              { validator: formValidator.positiveInteger, message: '线路代码格式为自然数' },
               { validator: formValidator.empty, message: '请输入线路代码' },
             ]"
           >
@@ -161,12 +162,13 @@
           </a-form-item>
           <template v-if="isShowUpdate || saveType == 'add'">
             <a-form-item
+              v-if="saveType == 'edit'"
               name="programUpdatePassWord"
               label="二级修改密码"
-              :rules="[{ required: true, message: '请输入二级修改密码' }]"
+              :rules="[{ required: true, message: '修改信息请输入二级密码' }]"
             >
               <a-input
-                placeholder="请输入二级修改密码"
+                placeholder="修改信息请输入二级密码"
                 v-model:value="formData.programUpdatePassWord"
                 autocomplete="off"
               />
@@ -318,7 +320,7 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'id',
-        title: '线路ID',
+        title: '记录ID',
         visible: false,
         showHeaderOverflow: true,
         fixed: 'left',

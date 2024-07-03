@@ -19,7 +19,7 @@
                         <a-input
                           @press-enter="getMenus"
                           v-model:value="seacthContent.menuName"
-                          placeholder="输入名称查询"
+                          placeholder="输入菜单名称查询"
                         />
                       </a-space>
                     </div>
@@ -453,6 +453,8 @@
           formClose();
           message.success('更新菜单信息成功');
           if (tableRef.value.getRowById(data.menuId).parentId == data.parentId) {
+            delete data.createtTime;
+            delete data.createUser;
             myCommon.objectReplace(tableRef.value.getRowById(data.menuId), data);
           } else {
             getMenus();

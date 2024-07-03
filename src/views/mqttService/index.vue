@@ -101,10 +101,11 @@
             name="mqttPort"
             :rules="[{ required: true, message: '请输入端口' }]"
           >
-            <a-input
+            <a-input-number
               placeholder="端口号"
               v-model:value="formData.mqttPort"
               style="width: 134px"
+              :precision="0"
               :min="0"
               :max="9999999999"
             />
@@ -175,7 +176,7 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'mqttId',
-        title: '通信ID',
+        title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -292,7 +293,6 @@
   function showFrom(row) {
     if (myCommon.isnull(row)) {
       getServerTypes();
-      formData.value = _.cloneDeep(defFromData);
       saveType = 'add';
       isShowForm.value = true;
     } else {
@@ -329,6 +329,7 @@
   //关闭表单
   function formClose() {
     isShowForm.value = false;
+    formData.value = _.cloneDeep(defFromData);
     formRef.value.clearValidate();
   }
 
@@ -367,7 +368,8 @@
       } else {
         mqttApi.UpdateMqtt(formData.value).then((data) => {
           const oldData = tableRef.value.getRowById(data.mqttId);
-          delete formData.value.createUser;
+          delete data.createtTime;
+          delete data.createUser;
           myCommon.objectReplace(oldData, data);
           oldData.modifyTime = data.modifyTime;
           oldData.modifyUser = data.modifyUser;

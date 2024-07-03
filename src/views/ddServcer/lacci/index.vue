@@ -109,7 +109,7 @@
             name="name"
             :rules="[
               { required: true, message: '' },
-              { max: 50, message: 'ECI名称过长' },
+              { max: 40, message: 'ECI名称过长' },
               { validator: formValidator.empty, message: '请输入ECI名称' },
             ]"
           >
@@ -200,7 +200,7 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'id',
-        title: 'ECIid',
+        title: '记录ID',
         visible: false,
         showHeaderOverflow: true,
         fixed: 'left',

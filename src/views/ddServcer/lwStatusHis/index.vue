@@ -17,7 +17,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>时间：</label>
+                    <label>上报时间：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         allowClear
@@ -100,7 +100,7 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'id',
-        title: '记录id',
+        title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,

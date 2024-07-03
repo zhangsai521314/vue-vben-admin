@@ -97,7 +97,10 @@
           <a-form-item
             label="联系名称"
             name="userName"
-            :rules="[{ required: true, message: '请输入联系名称' }]"
+            :rules="[
+              { required: true, message: '请输入联系名称' },
+              { max: 40, message: '联系名称过长' },
+            ]"
           >
             <a-input
               placeholder="请输入联系名称"
@@ -160,7 +163,7 @@
       //基础
       {
         field: 'phoneId',
-        title: '电话ID',
+        title: '记录ID',
         visible: false,
         showHeaderOverflow: true,
         fixed: 'left',
@@ -294,7 +297,6 @@
   //显示表单
   function showFrom(row) {
     if (myCommon.isnull(row)) {
-      formData.value = _.cloneDeep(defFromData);
       saveType.value = 'add';
       isShowForm.value = true;
     } else {
@@ -330,6 +332,7 @@
   //关闭表单
   function formClose() {
     isShowForm.value = false;
+    formData.value = _.cloneDeep(defFromData);
     formRef.value.clearValidate();
   }
 

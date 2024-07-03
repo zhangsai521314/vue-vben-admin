@@ -17,7 +17,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>时间：</label>
+                    <label>操作时间：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         allowClear
@@ -26,6 +26,21 @@
                         format="YYYY-MM-DD HH:mm:ss"
                       />
                     </a-config-provider>
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>功能号类型：</label>
+                    <a-select
+                      placeholder="请选择功能号类型"
+                      style="width: 170px"
+                      allow-clear
+                      v-model:value="seacthContent.regType"
+                    >
+                      <a-select-option :value="91">调度功能号</a-select-option>
+                      <a-select-option :value="2">机车功能号</a-select-option>
+                      <a-select-option :value="3">车次功能号</a-select-option>
+                    </a-select>
                   </a-space>
                 </div>
                 <div class="row-div">
@@ -50,9 +65,9 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>注册状态：</label>
+                    <label>操作类型：</label>
                     <a-select
-                      placeholder="请选择注册状态"
+                      placeholder="请选择操作类型："
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.regStatus"
@@ -66,24 +81,9 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>类型：</label>
+                    <label>操作结果：</label>
                     <a-select
-                      placeholder="请选择类型"
-                      style="width: 170px"
-                      allow-clear
-                      v-model:value="seacthContent.regType"
-                    >
-                      <a-select-option :value="91">调度功能号</a-select-option>
-                      <a-select-option :value="2">机车功能号</a-select-option>
-                      <a-select-option :value="3">车次功能号</a-select-option>
-                    </a-select>
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>注册结果：</label>
-                    <a-select
-                      placeholder="请选择注册结果"
+                      placeholder="请选择操作结果："
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.regResult"
@@ -146,10 +146,17 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'id',
-        title: '状态id',
+        title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+      },
+      {
+        field: 'regTypeName',
+        title: '功能号类型',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'fn',
@@ -167,28 +174,21 @@
       },
       {
         field: 'regStatusName',
-        title: '状态',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-      },
-      {
-        field: 'regTypeName',
-        title: '类型',
+        title: '操作类型',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'regResultName',
-        title: '注册注销结果',
+        title: '操作结果',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'regTime',
-        title: '时间',
+        title: '操作时间',
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,

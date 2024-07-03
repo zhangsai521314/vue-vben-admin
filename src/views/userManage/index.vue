@@ -35,7 +35,7 @@
                         show-search
                         style="width: 170px"
                         :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                        placeholder="请选择所属部门："
+                        placeholder="请选择所属部门"
                         allow-clear
                         show-arrow
                         :filterTreeNode="AntVueCommon.filterTreeNode"
@@ -140,33 +140,33 @@
           :model="formData"
         >
           <a-form-item
-            label="用户名"
+            label="用户名称"
             name="userName"
             :rules="[
               { required: true, message: '' },
-              { max: 30, message: '用户名长度超限' },
-              { min: 2, message: '用户名最少2位' },
-              { validator: formValidator.empty, message: '请输入用户名' },
+              { max: 40, message: '用户名称长度超限' },
+              { min: 2, message: '用户名称最少2位' },
+              { validator: formValidator.empty, message: '请输入用户名称' },
             ]"
           >
             <a-input
-              placeholder="请输入用户名"
+              placeholder="请输入用户名称"
               v-model:value="formData.userName"
               autocomplete="off"
             />
           </a-form-item>
           <a-form-item
-            label="登录名"
+            label="登录名称"
             name="userAccount"
             :rules="[
               { required: true, message: '' },
-              { max: 30, message: '登录名长度超限' },
-              { min: 2, message: '登录名最少2位' },
-              { validator: formValidator.empty, message: '请输入登录名' },
+              { max: 40, message: '登录名称长度超限' },
+              { min: 2, message: '登录名称最少2位' },
+              { validator: formValidator.empty, message: '请输入登录名称' },
             ]"
           >
             <a-input
-              placeholder="请输入登录名"
+              placeholder="请输入登录名称"
               v-model:value="formData.userAccount"
               autocomplete="off"
             />
@@ -181,7 +181,7 @@
               name="userpwd"
               :rules="[
                 { required: true, message: '' },
-                { max: 30, message: '密码长度超限' },
+                { max: 40, message: '密码长度超限' },
                 { min: 5, message: '密码最少5位' },
                 { validator: formValidator.empty, message: '请输入登录密码' },
               ]"
@@ -375,7 +375,7 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'userId',
-        title: '用户ID',
+        title: '记录ID',
         visible: false,
         showHeaderOverflow: true,
         fixed: 'left',
@@ -647,7 +647,6 @@
     getOrganization();
     getRoles();
     if (myCommon.isnull(row)) {
-      formData.value = _.cloneDeep(defFromData);
       saveType.value = 'add';
       isShowForm.value = true;
     } else {
@@ -684,6 +683,7 @@
   //关闭表单
   function formClose() {
     isShowForm.value = false;
+    formData.value = _.cloneDeep(defFromData);
     formRef.value.clearValidate();
   }
 

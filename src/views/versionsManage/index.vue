@@ -166,7 +166,7 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'versionId',
-        title: '软件包类型ID',
+        title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -290,7 +290,6 @@
 
   function showFrom() {
     getServerTypes();
-    formData.value = _.cloneDeep(defFromData);
     saveType = 'add';
     isShowForm.value = true;
   }
@@ -322,6 +321,7 @@
   //关闭表单
   function formClose() {
     isShowForm.value = false;
+    formData.value = _.cloneDeep(defFromData);
     formRef.value.clearValidate();
   }
 

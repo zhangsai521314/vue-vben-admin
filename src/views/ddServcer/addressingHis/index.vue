@@ -17,7 +17,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>时间：</label>
+                    <label>寻址时间 ：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         allowClear
@@ -30,19 +30,19 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>类型：</label>
+                    <label>寻址类型：</label>
                     <a-select
-                      placeholder="请选择类型"
+                      placeholder="请选择寻址类型"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.dataType"
                     >
+                      <a-select-option :value="226">短号码</a-select-option>
                       <a-select-option :value="224">车次功能号</a-select-option>
                       <a-select-option :value="225">机车功能号</a-select-option>
                       <a-select-option :value="241">站内组呼</a-select-option>
                       <a-select-option :value="242">邻站组呼</a-select-option>
                       <a-select-option :value="243">紧急组呼</a-select-option>
-                      <a-select-option :value="226">短号码</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
@@ -118,14 +118,14 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'id',
-        title: '记录id',
+        title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
       },
       {
         field: 'typeName',
-        title: '类型',
+        title: '寻址类型',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -141,7 +141,7 @@
       },
       {
         field: 'srcIsdn',
-        title: '主叫Isdn',
+        title: '主叫ISDN',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -167,7 +167,7 @@
       },
       {
         field: 'desIsdn',
-        title: '被叫Isdn/组呼号',
+        title: '被叫ISDN/组呼号',
         showHeaderOverflow: true,
         sortable: true,
       },

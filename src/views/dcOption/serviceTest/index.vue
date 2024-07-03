@@ -15,7 +15,7 @@
                   >
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
-                        <label>按键时间：</label>
+                        <label>自检时间：</label>
                         <a-config-provider :locale="zhCN">
                           <a-range-picker
                             allowClear

@@ -143,7 +143,7 @@
       { type: 'seq', title: '序号', width: 50, fixed: 'left' },
       {
         field: 'id',
-        title: '黑名单ID',
+        title: '记录ID',
         visible: false,
         showHeaderOverflow: true,
         fixed: 'left',
@@ -241,7 +241,6 @@
   //显示表单
   function showFrom(row) {
     if (myCommon.isnull(row)) {
-      formData.value = _.cloneDeep(defFromData);
       saveType.value = 'add';
       isShowForm.value = true;
     } else {
@@ -277,6 +276,7 @@
   //关闭表单
   function formClose() {
     isShowForm.value = false;
+    formData.value = _.cloneDeep(defFromData);
     formRef.value.clearValidate();
   }
 

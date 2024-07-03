@@ -31,24 +31,24 @@
         </a-upload>
       </a-form-item>
       <a-form-item
-        label="用户名"
+        label="用户名称"
         name="userName"
         :rules="[
-          { required: true, message: '请输入用户名' },
-          { max: 30, message: '用户名长度超限' },
-          { min: 2, message: '用户名最少2位' },
+          { required: true, message: '请输入用户名称' },
+          { max: 40, message: '用户名称长度超限' },
+          { min: 2, message: '用户名称最少2位' },
         ]"
       >
         <a-input v-model:value="userData.userName" autocomplete="off" />
       </a-form-item>
       <a-form-item
-        label="登录名"
+        label="登录名称"
         name="userAccount"
         :rules="[
           { required: true, message: '' },
-          { max: 30, message: '登录名长度超限' },
-          { min: 2, message: '登录名最少2位' },
-          { validator: formValidator.empty, message: '请输入登录名' },
+          { max: 40, message: '登录名称长度超限' },
+          { min: 2, message: '登录名称最少2位' },
+          { validator: formValidator.empty, message: '请输入登录名称' },
         ]"
       >
         <a-input v-model:value="userData.userAccount" autocomplete="off" />
@@ -101,7 +101,7 @@
           name="oldPwd"
           :rules="[
             { required: true, message: '' },
-            { max: 30, message: '密码长度超限' },
+            { max: 40, message: '密码长度超限' },
             { min: 5, message: '密码最少5位' },
             { validator: formValidator.empty, message: '请输入旧密码' },
           ]"
@@ -113,7 +113,7 @@
           name="userpwd"
           :rules="[
             { required: true, message: '请输入新密码' },
-            { max: 30, message: '密码长度超限' },
+            { max: 40, message: '密码长度超限' },
             { min: 5, message: '密码最少5位' },
             { validator: validate_pwd },
           ]"

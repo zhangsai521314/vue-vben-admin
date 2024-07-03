@@ -20,7 +20,7 @@
                         <a-input
                           @press-enter="getDictionariess"
                           v-model:value="seacthContent.dictionariesName"
-                          placeholder="输入名称查询"
+                          placeholder="输入字典名称查询"
                         />
                       </a-space>
                     </div>
@@ -104,8 +104,8 @@
             :data="tableConfigData"
           >
             <vxe-column type="seq" title="序号" width="60" />
-            <vxe-column field="dictionariesId" title="字典键值" :visible="false" />
-            <vxe-column field="dictionariesName" title="显示名称" tree-node :sortable="true" />
+            <vxe-column field="dictionariesId" title="记录ID" :visible="false" />
+            <vxe-column field="dictionariesName" title="字典名称" tree-node :sortable="true" />
             <vxe-column field="dictionariesClass" title="字典类型" :sortable="true">
               <template #default="{ row }">
                 <span>{{
@@ -215,17 +215,17 @@
       >
         <a-form-item
           name="dictionariesName"
-          label="显示名称"
+          label="字典名称"
           :labelCol="{ span: 7 }"
           :rules="[
             { required: true, message: '' },
-            { max: 50, message: '显示名称过长' },
-            { validator: formValidator.empty, message: '请输入显示名称' },
+            { max: 40, message: '字典名称过长' },
+            { validator: formValidator.empty, message: '请输入字典名称' },
           ]"
         >
           <a-input
             v-model:value="formData.dictionariesName"
-            placeholder="请输入显示名称"
+            placeholder="请输入字典名称"
             autocomplete="off"
           />
         </a-form-item>
