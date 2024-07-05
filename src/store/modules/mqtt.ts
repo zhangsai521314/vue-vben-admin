@@ -297,10 +297,10 @@ export const useMqttStore = defineStore({
     publish(topic, msg, back: Function) {
       if (this.mqttClient && this.mqttClient.connected) {
         this.mqttClient.publish(topic, msg, { qos: 1, retain: false }, (error) => {
-          back(error);
+          if (typeof back == 'function') back(error);
         });
       } else {
-        back('mqtt未连接，同步失败');
+        if (typeof back == 'function') back('mqtt未连接，同步失败');
       }
     },
     //订阅

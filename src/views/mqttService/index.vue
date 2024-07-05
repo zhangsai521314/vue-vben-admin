@@ -25,7 +25,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button class="ant-btn" @click="showFrom()">新增通信类型</a-button>
+                    <a-button class="ant-btn" @click="showFrom()">新增通信</a-button>
                   </a-space>
                 </div>
               </a-space>
@@ -363,7 +363,7 @@
           data.serviceName = dictionariesData.value.find((m) => m.key == data.serviceType)?.label;
           tableConfig.data?.splice(0, 0, data);
           formClose();
-          message.success('新增通信类型配置成功');
+          message.success('新增通信配置成功');
         });
       } else {
         mqttApi.UpdateMqtt(formData.value).then((data) => {
@@ -383,16 +383,14 @@
     });
   }
 
-  //获取字典
+  //获取服务类型字典
   function getServerTypes(dictionariesId = null) {
     mqttApi
       .GetServerTypes(dictionariesId)
       .then((data) => {
-        debugger;
         dictionariesData.value = data;
       })
       .catch(() => {
-        debugger;
         dictionariesData.value = [];
       });
   }

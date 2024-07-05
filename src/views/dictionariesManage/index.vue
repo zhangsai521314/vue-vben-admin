@@ -49,7 +49,22 @@
                     </div>
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
+                        <label>归属服务类型：</label>
+                        <a-select
+                          style="width: 170px"
+                          allow-clear
+                          show-search
+                          :filter-option="AntVueCommon.filterOption"
+                          placeholder="请选择服务类型"
+                          v-model:value="seacthContent.serviceType"
+                          :options="serviceTypeData"
+                        />
+                      </a-space>
+                    </div>
+                    <div class="row-div">
+                      <a-space direction="horizontal" size="small" :wrap="true">
                         <a-button @click="getDictionariess" type="primary">查询</a-button>
+                        <a-button @click="resetSeacth">重置表单</a-button>
                       </a-space>
                     </div>
                   </a-space>
@@ -64,8 +79,9 @@
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
                         <a-button class="ant-btn" @click="showFrom('add', null, 0)"
-                          >新增顶级字典</a-button
+                          >新增字典</a-button
                         >
+                        <!-- 新增顶级字典 -->
                       </a-space>
                     </div>
                   </a-space>
@@ -127,6 +143,7 @@
                 }}</span>
               </template>
             </vxe-column>
+            <vxe-column field="serviceTypeName" title="归属服务类型" :sortable="true" />
             <vxe-column field="isKeyMaster" title="是否自定义主键">
               <template #default="{ row }">
                 <span :style="{ color: row.isKeyMaster ? 'green' : 'red' }">{{
@@ -164,14 +181,14 @@
               <template #default="{ row }">
                 <div :class="`tableStyle`">
                   <template v-if="!row.isSystem">
-                    <AuthDom auth="dictionariesManage_table_add">
+                    <!-- <AuthDom auth="dictionariesManage_table_add">
                       <IconFontClass
                         name="icon-baseui-tianjiawukuang"
                         @click="showFrom('add', row, row.dictionariesId)"
                         style="color: #0a61bd"
                         title="增加子级"
                       />
-                    </AuthDom>
+                    </AuthDom> -->
                     <AuthDom auth="dictionariesManage_table_edit">
                       <IconFontClass
                         name="icon-baseui-edit-fill"
@@ -295,6 +312,16 @@
             :max="99999"
           />
         </a-form-item>
+        <a-form-item label="归属服务类型" name="serviceType" :labelCol="{ span: 7 }">
+          <a-select
+            style="width: 170px"
+            allow-clear
+            show-search
+            :filter-option="AntVueCommon.filterOption"
+            v-model:value="formData.serviceType"
+            :options="serviceTypeData"
+          />
+        </a-form-item>
         <a-form-item
           name="other"
           label="附属信息"
@@ -341,6 +368,7 @@
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
+  import softwareApi from '@/api/software';
 
   defineOptions({ name: 'DictionariesManage' });
   const mqttStore = useMqttStoreWithOut();
@@ -356,6 +384,7 @@
     dictionariesKey: '',
     remark: null,
     other: null,
+    serviceType: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref({});
@@ -368,12 +397,16 @@
   const seacthContent = ref({
     dictionariesName: '',
     dictionariesClass: null,
+    serviceType: null,
   });
   const syncMqttPerformance = ref(false);
+  const serviceTypeData = ref([]);
 
   getDictionariess();
+  getServerTypes();
 
   function showFrom(type, row, pid) {
+    getServerTypes();
     saveType = type;
     if (type == 'add') {
       isShowForm.value = true;
@@ -474,13 +507,22 @@
       };
       if (saveType == 'add') {
         dictionariesApi.AddDictionaries(formData.value).then((data) => {
+          data.serviceTypeName = serviceTypeData.value.find(
+            (m) => m.key == data.serviceType,
+          )?.label;
           tableConfigData.value.splice(0, 0, data);
           formClose();
           message.success('新增字典成功');
         });
       } else {
         dictionariesApi.UpdateDictionaries(formData.value).then((data) => {
-          myCommon.objectReplace(tableRef.value.getRowById(data.dictionariesId), data);
+          delete data.createtTime;
+          delete data.createUser;
+          const oldData = tableRef.value.getRowById(data.dictionariesId);
+          myCommon.objectReplace(oldData, data);
+          oldData.serviceTypeName = serviceTypeData.value.find(
+            (m) => m.key == data.serviceType,
+          )?.label;
           formClose();
           message.success('更新字典信息成功');
         });
@@ -511,6 +553,30 @@
       });
   }
 
+  //获取服务类型数据
+  function getServerTypes() {
+    dictionariesApi
+      .GetDictionariesSimple({
+        dictionariesclass: ['serviceType'],
+      })
+      .then((data) => {
+        debugger;
+        serviceTypeData.value = data;
+      })
+      .catch(() => {
+        debugger;
+        serviceTypeData.value = [];
+      });
+  }
+
+  //重置搜索条件
+  function resetSeacth() {
+    seacthContent.value = {
+      dictionariesName: '',
+      dictionariesClass: null,
+      serviceType: null,
+    };
+  }
   watch(
     () => (formData.value.dictionariesClass, formData.value.isKeyMaster),
     () => {

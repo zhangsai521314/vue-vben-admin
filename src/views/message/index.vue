@@ -39,6 +39,11 @@
                       :filter-option="AntVueCommon.filterOption"
                       v-model:value="seacthContent.serviceId"
                       :options="serviceData"
+                      @change="
+                        () => {
+                          seacthContent.msgType = null;
+                        }
+                      "
                     />
                   </a-space>
                 </div>
@@ -51,7 +56,18 @@
                       show-search
                       :filter-option="AntVueCommon.filterOption"
                       v-model:value="seacthContent.msgType"
-                      :options="dictionariesData"
+                      :options="
+                        seacthContent.serviceId != null &&
+                        serviceData.find((m) => m.key == seacthContent.serviceId).serviceType !=
+                          null
+                          ? dictionariesData.filter(
+                              (m) =>
+                                m.serviceType ==
+                                  serviceData.find((m) => m.key == seacthContent.serviceId)
+                                    .serviceType || m.serviceType == null,
+                            )
+                          : dictionariesData
+                      "
                     />
                   </a-space>
                 </div>

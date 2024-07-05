@@ -756,7 +756,7 @@
   //获取字典
   function getDictionaries() {
     dictionariesApi
-      .GetDictionariesimple({
+      .GetDictionariesSimple({
         dictionariesClass: ['serviceType'],
       })
       .then((data) => {

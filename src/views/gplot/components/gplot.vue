@@ -828,15 +828,23 @@
           changeStyle(stateOb.data.myType, node.id, color);
         });
         await graphOb.draw();
-        setTimeout(() => {
-          noAgileStateChangeStatus();
-        }, 500);
+        useTimeFn(
+          setTimeout(() => {
+            noAgileStateChangeStatus();
+          }, 500),
+          timeKey,
+          'noAgileStateChangeStatus',
+        );
       })
       .catch((e) => {
         console.error(e);
-        setTimeout(() => {
-          noAgileStateChangeStatus();
-        }, 500);
+        useTimeFn(
+          setTimeout(() => {
+            noAgileStateChangeStatus();
+          }, 500),
+          timeKey,
+          'noAgileStateChangeStatus',
+        );
       });
   }
 

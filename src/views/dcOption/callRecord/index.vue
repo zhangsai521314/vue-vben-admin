@@ -65,7 +65,12 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-input v-model:value="duration" style="width: 260px" placeholder="分钟">
+                    <a-input
+                      @press-enter="initPage()"
+                      v-model:value="duration"
+                      style="width: 260px"
+                      placeholder="分钟"
+                    >
                       <template #addonBefore>
                         <a-select v-model:value="durationQueryType" style="width: 130px">
                           <a-select-option :value="3">{{ '通话时长 >=' }}</a-select-option>
@@ -140,7 +145,7 @@
       </template>
       <template #default="{ row }">
         <div :class="`tableOption`">
-          <AuthDom auth="DCOptionCallRecord.edit">
+          <AuthDom auth="DCOptionCallRecord_play">
             <IconFontClass
               name="icon-baseui-bofang"
               @click="getCallRecordFilePath(row, 'play')"
@@ -148,7 +153,7 @@
               title="播放"
             />
           </AuthDom>
-          <AuthDom auth="DCOptionCallRecord.down">
+          <AuthDom auth="DCOptionCallRecord_down">
             <IconFontClass
               name="icon-baseui-xiazai"
               @click="getCallRecordFilePath(row, 'down')"
@@ -574,7 +579,7 @@
   //获取字典
   function getDictionaries() {
     dictionariesApi
-      .GetDictionariesimple({
+      .GetDictionariesSimple({
         dictionariesclass: ['msgType'],
       })
       .then((data) => {

@@ -125,11 +125,10 @@
     startTime: null,
     endTime: null,
   });
-  const timeValue = ref(null);
-  //   [
-  //   dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
-  //   dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
-  // ]
+  const timeValue = ref([
+    dayjs(dayjs().add(-6, 'day').format('YYYY-MM-DD')),
+    dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
+  ]);
   const equipmentData = ref([]);
   const page = reactive({
     current: 1,
@@ -184,6 +183,7 @@
       .GetPerformances({
         PageIndex: page.current,
         PageSize: page.size,
+        // activeKey.value == 'table' ? page.size : -1
         ...seacthContent.value,
         fullSort: getFullSort(),
         execompleteBefore: () => {

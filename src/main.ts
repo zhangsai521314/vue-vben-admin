@@ -37,6 +37,9 @@ import messageApi from '@/api/message';
 import dayjs from 'dayjs';
 import { useUserStore } from '@/store/modules/user';
 import { createLocalStorage } from '@/utils/cache';
+import { message } from 'ant-design-vue';
+
+const userStore = useUserStore();
 
 async function bootstrap() {
   const app = createApp(App);
@@ -87,196 +90,240 @@ async function mqttInit() {
   let timeId;
   let isDingYue = false;
   const errTopic: Array<string> = [];
+  init();
   //初始化数据仓库
   dataInit();
-
   function dataInit() {
-    mqttStore.isInitAlarmData = false;
-    clearTimeout(timeId);
-    mqttStore.updateMqttStatus(5);
-    Promise.all([getServiceMsgTypeLast()])
-      .then((rdata) => {
-        mqttStore.updateMqttStatus(7);
-        rdata[0].forEach((m) => {
-          mqttStore.addMsgData(m);
+    if (!myCommon.isnull(userStore.getToken)) {
+      mqttStore.isInitAlarmData = false;
+      clearTimeout(timeId);
+      mqttStore.updateMqttStatus(5);
+      Promise.all([getServiceMsgTypeLast()])
+        .then((rdata) => {
+          mqttStore.updateMqttStatus(7);
+          rdata[0].forEach((m) => {
+            mqttStore.addMsgData(m);
+          });
+          mqttStore.isInitAlarmData = true;
+          mqttStore.updateMqttStatus(8);
+          //合并用户自己订阅的主题
+          const topics = [mqttStore.mqttConfig.WebMsg];
+          if (userStore) {
+            const t = userStore.getUserInfo.userMqTopic.map((m) => m.topic);
+            if (t) {
+              topics.concat(t);
+            }
+          }
+          topics.forEach((t) => {
+            try {
+              mqttStore.updateMqttStatus(1);
+              mqttStore.subscribe(t);
+              errTopicRetry();
+            } catch (error) {
+              console.error(error);
+            }
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          mqttStore.updateMqttStatus(6);
+          timeId = setTimeout(() => {
+            dataInit();
+          }, 1000 * 2);
         });
-        mqttStore.isInitAlarmData = true;
-        mqttStore.updateMqttStatus(8);
-        try {
-          init();
-        } catch (error) {
-          console.error(error);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        mqttStore.updateMqttStatus(6);
-        timeId = setTimeout(() => {
-          dataInit();
-        }, 1000 * 2);
-      });
+    } else {
+      timeId = setTimeout(() => {
+        dataInit();
+      }, 1000 * 2);
+    }
   }
 
   function init() {
-    const userStore = useUserStore();
-    const { VITE_GLOB_MQTT } = getAppEnvConfig();
-    const mqttConfig = JSON.parse(VITE_GLOB_MQTT);
-    mqttStore.setMqttConfig(mqttConfig);
-    const decoder = new TextDecoder('utf-8');
-    if (mqttConfig.IsOpen) {
-      const topics = [
-        mqttConfig.WebMsg,
-        mqttConfig.WebDownLog,
-        mqttConfig.WebPlayCallRecord,
-        mqttConfig.WebDownCallRecord,
-        // mqttConfig.UpPerformance,
-        mqttConfig.LookConfigBack,
-        mqttConfig.LookLogBack,
-        mqttConfig.WebCallRecordChange,
-      ];
-      //合并用户自己订阅的主题
-      if (userStore) {
-        const t = userStore.getUserInfo.userMqTopic.map((m) => m.topic);
-        if (t) {
-          topics.concat(t);
-        }
-      }
-      mqttStore.updateMqttStatus(2);
-      const client = mqtt.connect(mqttConfig.ServerAddress, {
-        clientId: mqttConfig.ClientIdPrefix + myCommon.uniqueId(),
-        username: mqttConfig.UserName,
-        password: mqttConfig.UserPwd,
-        keepalive: mqttConfig.KeepAlivePeriod, // 默认60秒，设置0为禁用
-        clean: mqttConfig.CleanSession, // 设置为false以在脱机时接收QoS 1和2消息
-        connectTimeout: mqttConfig.ConnectTimeout * 1000, // 收到connect之前等待的时间
-        protocolId: 'MQIsdp', // 只支持MQTT 3.1(不符合3.1.1)的代理
-        protocolVersion: 3, // 版本
-        reconnectPeriod: mqttConfig.ReconnectPeriod * 1000, //设置多长时间进行重新连接 单位毫秒 两次重新连接之间的时间间隔。通过将设置为，禁用自动重新连接0
-      });
-      mqttStore.lookLog = mqttConfig.LookLog;
-      mqttStore.lookConfig = mqttConfig.LookConfig;
-      mqttStore.monitorClient = mqttConfig.MonitorClient;
-      mqttStore.downLog = mqttConfig.DownLog;
-      //连接成功
-      client.on('connect', function () {
-        mqttStore.updateMqttStatus(1);
-        Array.from(topics).forEach((topic: string) => {
-          const tt = topic.replace(mqttConfig.MonitorClient, '/' + client.options.clientId);
-          if (!mqttStore.alreadyTopic.includes(tt)) {
-            client.subscribe(tt, { qos: 1 }, function (err) {
-              if (!err) {
-                mqttStore.alreadyTopic.push(tt);
-                console.log(`订阅mqtt主题${topic}成功`);
-              } else {
-                errTopic.push(topic);
-                console.log(`订阅mqtt主题${topic}失败`);
+    try {
+      const { VITE_GLOB_MQTT } = getAppEnvConfig();
+      const mqttConfig = JSON.parse(VITE_GLOB_MQTT);
+      mqttStore.setMqttConfig(mqttConfig);
+      const decoder = new TextDecoder('utf-8');
+      if (mqttConfig.IsOpen) {
+        const topics = [
+          mqttConfig.WebUserLoginTokenChange,
+          mqttConfig.WebUserLoginOut,
+          mqttConfig.WebDownLog,
+          mqttConfig.WebPlayCallRecord,
+          mqttConfig.WebDownCallRecord,
+          // mqttConfig.UpPerformance,
+          mqttConfig.LookConfigBack,
+          mqttConfig.LookLogBack,
+          mqttConfig.WebCallRecordChange,
+        ];
+        mqttStore.updateMqttStatus(2);
+        const client = mqtt.connect(mqttConfig.ServerAddress, {
+          clientId: mqttConfig.ClientIdPrefix + myCommon.uniqueId(),
+          username: mqttConfig.UserName,
+          password: mqttConfig.UserPwd,
+          keepalive: mqttConfig.KeepAlivePeriod, // 默认60秒，设置0为禁用
+          clean: mqttConfig.CleanSession, // 设置为false以在脱机时接收QoS 1和2消息
+          connectTimeout: mqttConfig.ConnectTimeout * 1000, // 收到connect之前等待的时间
+          protocolId: 'MQIsdp', // 只支持MQTT 3.1(不符合3.1.1)的代理
+          protocolVersion: 3, // 版本
+          reconnectPeriod: mqttConfig.ReconnectPeriod * 1000, //设置多长时间进行重新连接 单位毫秒 两次重新连接之间的时间间隔。通过将设置为，禁用自动重新连接0
+        });
+        mqttStore.lookLog = mqttConfig.LookLog;
+        mqttStore.lookConfig = mqttConfig.LookConfig;
+        mqttStore.monitorClient = mqttConfig.MonitorClient;
+        mqttStore.downLog = mqttConfig.DownLog;
+        //连接成功
+        client.on('connect', function () {
+          mqttStore.updateMqttStatus(1);
+          Array.from(topics).forEach((topic: string) => {
+            const tt = topic.replace(mqttConfig.MonitorClient, '/' + client.options.clientId);
+            if (!mqttStore.alreadyTopic.includes(tt)) {
+              client.subscribe(tt, { qos: 1 }, function (err) {
+                if (!err) {
+                  mqttStore.alreadyTopic.push(tt);
+                  console.log(`订阅mqtt主题${topic}成功`);
+                } else {
+                  errTopic.push(topic);
+                  console.log(`订阅mqtt主题${topic}失败`);
+                }
+              });
+            }
+          });
+          isDingYue = true;
+        });
+        //连接失败
+        client.on('error', (error) => {
+          mqttStore.updateMqttStatus(3);
+        });
+        //接收信息
+        client.on('message', function (topic, _message) {
+          let msg = decoder.decode(_message);
+          if (!myCommon.isnull(msg)) {
+            try {
+              msg = JSON.parse(msg);
+              gplotStore.mqttMsgReceive(topic, msg);
+            } catch (error) {
+              console.error('mqtt转换json失败', msg);
+            }
+            if (topic == mqttConfig.WebUserLoginOut) {
+              //退出登录
+              if (
+                !myCommon.isnull(userStore.userInfo?.userId) &&
+                !myCommon.isnull(msg.UserId) &&
+                msg.clientId != client.options.clientId &&
+                userStore.userInfo?.userId == msg.UserId
+              ) {
+                //用户在别处退出登录
+                userStore.logout(true);
+                message.info('您的账户已在别处退出登录，如非自己操作，请更改密码', 10);
               }
-            });
+            } else if (topic == mqttConfig.WebUserLoginTokenChange) {
+              //token改变
+              if (
+                !myCommon.isnull(userStore.getToken) &&
+                !myCommon.isnull(msg.Token) &&
+                !myCommon.isnull(userStore.userInfo?.userId) &&
+                !myCommon.isnull(msg.UserId) &&
+                userStore.userInfo?.userId == msg.UserId &&
+                userStore.getToken != msg.Token
+              ) {
+                //用户在别处已登录
+                userStore.logout(true);
+                message.info('您的账户已在别处登录，如非自己登录，请更改密码', 10);
+              }
+            } else if (topic == mqttConfig.WebMsg.replace('+', '') + 'Insert') {
+              //告警插入
+              mqttStore.addMsgData(msg);
+            } else if (topic == mqttConfig.WebMsg.replace('+', '') + 'Update') {
+              //告警更新
+              mqttStore.updateMsgData(msg);
+            } else if (
+              topic ==
+              mqttConfig.WebPlayCallRecord.replace(
+                mqttConfig.MonitorClient,
+                '/' + client.options.clientId,
+              )
+            ) {
+              //通话记录播放文件准备完毕
+              mqttStore.setNewCallRecordPlayFile(msg);
+            } else if (topic == mqttConfig.WebCallRecordChange) {
+              //录音文件状态发生改变
+              mqttStore.setCallRecordChange(msg);
+            } else if (
+              topic ==
+              mqttConfig.WebDownCallRecord.replace(
+                mqttConfig.MonitorClient,
+                '/' + client.options.clientId,
+              )
+            ) {
+              //通话记录下载文件准备完毕
+              if (msg && msg.recordFile) {
+                myCommon.downLoadFileByUrl(msg.recordFile);
+              }
+            } else if (
+              topic ==
+              mqttConfig.LookLogBack.replace(
+                mqttConfig.MonitorClient,
+                '/' + client.options.clientId,
+              )
+            ) {
+              //日志目录内容
+              mqttStore.setNewServiceLogShowDirectory(msg);
+            } else if (
+              topic ==
+              mqttConfig.WebDownLog.replace(mqttConfig.MonitorClient, '/' + client.options.clientId)
+            ) {
+              //下载日志文件准备完毕
+              myCommon.downLoadFileByUrl(msg);
+            } else if (
+              topic ==
+              mqttConfig.LookConfigBack.replace(
+                mqttConfig.MonitorClient,
+                '/' + client.options.clientId,
+              )
+            ) {
+              //终端配置文件内容
+              mqttStore.setNewServicConfig(msg);
+            } else if (topic.indexOf(mqttConfig.UpPerformance.replace('/+', '')) != -1) {
+              //性能监测数据
+              mqttStore.addUserTopicPerformanceNewValue(topic, msg);
+            } else {
+              console.warn(`mqtt_${topic}_非匹配主题_丢弃`);
+            }
+          } else {
+            console.warn(`mqtt_${topic}_信息为空_丢弃`);
           }
         });
-        isDingYue = true;
-      });
-      //连接失败
-      client.on('error', (error) => {
-        mqttStore.updateMqttStatus(3);
-      });
-      //接收信息
-      client.on('message', function (topic, message) {
-        let msg = decoder.decode(message);
-        if (!myCommon.isnull(msg)) {
-          try {
-            msg = JSON.parse(msg);
-            gplotStore.mqttMsgReceive(topic, msg);
-          } catch (error) {
-            console.error('mqtt转换json失败', msg);
+        //连接断开
+        client.on('close', function () {
+          mqttStore.updateMqttStatus(4);
+        });
+        //重连
+        client.on('reconnect', () => {
+          mqttStore.updateMqttStatus(2);
+        });
+        //客户端已发出数据包
+        client.on('packetsend', (packet) => {
+          if (packet && packet.payload) {
+            console.log('packetsend' + packet.payload);
           }
-          if (topic == mqttConfig.WebMsg.replace('+', '') + 'Insert') {
-            //告警插入
-            mqttStore.addMsgData(msg);
-          } else if (topic == mqttConfig.WebMsg.replace('+', '') + 'Update') {
-            //告警更新
-            mqttStore.updateMsgData(msg);
-          } else if (
-            topic ==
-            mqttConfig.WebPlayCallRecord.replace(
-              mqttConfig.MonitorClient,
-              '/' + client.options.clientId,
-            )
-          ) {
-            //通话记录播放文件准备完毕
-            mqttStore.setNewCallRecordPlayFile(msg);
-          } else if (topic == mqttConfig.WebCallRecordChange) {
-            //录音文件状态发生改变
-            mqttStore.setCallRecordChange(msg);
-          } else if (
-            topic ==
-            mqttConfig.WebDownCallRecord.replace(
-              mqttConfig.MonitorClient,
-              '/' + client.options.clientId,
-            )
-          ) {
-            //通话记录下载文件准备完毕
-            if (msg && msg.recordFile) {
-              myCommon.downLoadFileByUrl(msg.recordFile);
-            }
-          } else if (
-            topic ==
-            mqttConfig.LookLogBack.replace(mqttConfig.MonitorClient, '/' + client.options.clientId)
-          ) {
-            //日志目录内容
-            mqttStore.setNewServiceLogShowDirectory(msg);
-          } else if (
-            topic ==
-            mqttConfig.WebDownLog.replace(mqttConfig.MonitorClient, '/' + client.options.clientId)
-          ) {
-            //下载日志文件准备完毕
-            myCommon.downLoadFileByUrl(msg);
-          } else if (
-            topic ==
-            mqttConfig.LookConfigBack.replace(
-              mqttConfig.MonitorClient,
-              '/' + client.options.clientId,
-            )
-          ) {
-            //终端配置文件内容
-            mqttStore.setNewServicConfig(msg);
-          } else if (topic.indexOf(mqttConfig.UpPerformance.replace('/+', '')) != -1) {
-            //性能监测数据
-            mqttStore.addUserTopicPerformanceNewValue(topic, msg);
-          } else {
-            console.warn(`mqtt_${topic}_非匹配主题_丢弃`);
-          }
-        } else {
-          console.warn(`mqtt_${topic}_信息为空_丢弃`);
-        }
-      });
-      //连接断开
-      client.on('close', function () {
-        mqttStore.updateMqttStatus(4);
-      });
-      //重连
-      client.on('reconnect', () => {
-        mqttStore.updateMqttStatus(2);
-      });
-      //客户端已发出数据包
-      client.on('packetsend', (packet) => {
-        if (packet && packet.payload) {
-          console.log('packetsend' + packet.payload);
-        }
-      });
-      //客户端脱机下线触发回调
-      client.on('offline', function () {
-        console.log('offline');
-      });
-      //当客户端接收到任何数据包时发出。这包括来自订阅主题的信息包以及MQTT用于管理订阅和连接的信息包
-      client.on('packetreceive', (packet) => {
-        // console.log('packetreceive', packet);
-      });
-      mqttStore.setMqttClient(client);
-      //订阅失败处理
-      errTopicRetry();
-    } else {
-      mqttStore.updateMqttStatus(-1);
+        });
+        //客户端脱机下线触发回调
+        client.on('offline', function () {
+          console.log('offline');
+        });
+        //当客户端接收到任何数据包时发出。这包括来自订阅主题的信息包以及MQTT用于管理订阅和连接的信息包
+        client.on('packetreceive', (packet) => {
+          // console.log('packetreceive', packet);
+        });
+        mqttStore.setMqttClient(client);
+        //订阅失败处理
+        errTopicRetry();
+      } else {
+        mqttStore.updateMqttStatus(-1);
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 

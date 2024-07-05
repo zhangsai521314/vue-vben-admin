@@ -770,7 +770,7 @@
   // //获取字典
   // function getDictionaries() {
   //   dictionariesApi
-  //     .GetDictionariesimple({
+  //     .GetDictionariesSimple({
   //       dictionariesclass: ['msgType'],
   //     })
   //     .then((data) => {

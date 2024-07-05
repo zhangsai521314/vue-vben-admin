@@ -19,7 +19,7 @@ const Dictionaries = {
     });
   },
   //获取字典列表-下拉框
-  GetDictionariesimple: function (params) {
+  GetDictionariesSimple: function (params) {
     return defHttp.post({
       url: '/Dictionaries/GetDictionariesSimple',
       params,

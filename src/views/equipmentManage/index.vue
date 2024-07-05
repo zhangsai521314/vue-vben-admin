@@ -495,7 +495,7 @@
 
   function getDictionaries() {
     dictionariesApi
-      .GetDictionariesimple({
+      .GetDictionariesSimple({
         execompleteBefore: () => {
           loading.value = false;
         },
