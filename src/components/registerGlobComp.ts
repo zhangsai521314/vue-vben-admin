@@ -19,7 +19,7 @@ export function registerGlobComp(app: App) {
   //提示信息全局配置
   message.config({
     top: '150px',
-    duration: 1,
+    duration: 3,
   });
   //VXETable的全局组件配置:https://vxetable.cn/#/table/start/global
 

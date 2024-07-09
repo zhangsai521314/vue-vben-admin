@@ -85,6 +85,8 @@ async function bootstrap() {
 }
 
 async function mqttInit() {
+  //需要放到登录之后，退出后断开链接
+  debugger;
   const mqttStore = useMqttStoreWithOut();
   const gplotStore = useGplotStoreWithOut();
   let timeId;
@@ -155,6 +157,7 @@ async function mqttInit() {
           mqttConfig.LookConfigBack,
           mqttConfig.LookLogBack,
           mqttConfig.WebCallRecordChange,
+          mqttConfig.DDServerUpdateDBRes,
         ];
         mqttStore.updateMqttStatus(2);
         const client = mqtt.connect(mqttConfig.ServerAddress, {
@@ -287,6 +290,15 @@ async function mqttInit() {
             } else if (topic.indexOf(mqttConfig.UpPerformance.replace('/+', '')) != -1) {
               //性能监测数据
               mqttStore.addUserTopicPerformanceNewValue(topic, msg);
+            } else if (
+              topic ==
+              mqttConfig.DDServerUpdateDBRes.replace(
+                mqttConfig.MonitorClient,
+                '/' + client.options.clientId,
+              )
+            ) {
+              //调度服务数据变更，更改回复
+              msg.Result == 0 ? message.success(msg.Msg) : message.error(msg.Msg);
             } else {
               console.warn(`mqtt_${topic}_非匹配主题_丢弃`);
             }

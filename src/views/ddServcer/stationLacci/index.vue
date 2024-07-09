@@ -59,6 +59,17 @@
                   </div>
                 </a-space>
               </AuthDom>
+              <AuthDom auth="ddServcer_stationLacci_pusMq">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-spin :spinning="isRunMushMq" title="命令发送中">
+                        <a-button class="ant-btn" @click="pushMq()">同步命令</a-button>
+                      </a-spin>
+                    </a-space>
+                  </div>
+                </a-space>
+              </AuthDom>
             </a-space>
           </div>
         </template>
@@ -185,6 +196,8 @@
   import myCommon from '@/utils/MyCommon/common';
   import { ref, reactive, createVNode, nextTick, watch, unref } from 'vue';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
+  import commonApi from '@/api/common';
+  import { useMqttStoreWithOut } from '@/store/modules/mqtt';
   import {
     Line as lineApi,
     Station as stationApi,
@@ -195,6 +208,7 @@
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 
   defineOptions({ name: 'DDServcerStationLacci' });
+  const mqttStore = useMqttStoreWithOut();
   const isRunGet = ref(false);
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
@@ -272,7 +286,7 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['lineName asc'],
+    sortlist: ['stationId asc'],
   });
   const seacthContent = ref({
     lacci: '',
@@ -281,7 +295,7 @@
   const lacciDatas = ref([]);
   const lineDatas = ref([]);
   const stationDatas = ref([]);
-
+  const isRunMushMq = ref(false);
   getDDServerTLacciSimple();
   getDDServerStationTLaccis();
 
@@ -448,6 +462,20 @@
 
   function changeLine() {
     formData.value.stationId = null;
+  }
+
+  //发送命令
+  function pushMq() {
+    isRunMushMq.value = true;
+    commonApi.PushDDServerUpdateDBMq({
+      MqInfo: JSON.stringify({
+        Type: 3,
+        ClientId: mqttStore.mqttClient.options.clientId,
+      }),
+      execompleteBefore: () => {
+        isRunMushMq.value = false;
+      },
+    });
   }
 </script>
 <style lang="less" scoped>

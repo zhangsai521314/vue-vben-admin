@@ -304,7 +304,15 @@
       },
       {
         field: 'startTime',
-        title: '开始时间',
+        title: '拨打时间',
+        width: 150,
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'acceptTime',
+        title: '接通时间',
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,

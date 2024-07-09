@@ -2,6 +2,8 @@
 import { defHttp } from '@/utils/http/axios';
 import { ContentTypeEnum } from '@/enums/httpEnum';
 import { ErrorMessageMode } from '/#/axios';
+import { message } from 'ant-design-vue';
+
 const common = {
   //指定获取数据的url,请求类型
   Request: function name(
@@ -36,11 +38,27 @@ const common = {
     }
   },
   text: function () {
-    return defHttp.get(
-      {
-        url: '/Common/text',
-      }
-    );
+    return defHttp.get({
+      url: '/Common/text',
+    });
+  },
+  //后台发送mq信息
+  PushDDServerUpdateDBMq: function (params) {
+    defHttp
+      .post({
+        url: '/Common/PushDDServerUpdateDBMq',
+        params,
+      })
+      .then((data) => {
+        if (data) {
+          message.success('命令发送成功');
+        } else {
+          message.error('命令发送失败');
+        }
+      })
+      .catch(() => {
+        message.error('命令发送失败');
+      });
   },
 };
 export default common;

@@ -45,6 +45,17 @@
                   </div>
                 </a-space>
               </AuthDom>
+              <AuthDom auth="ddServcer_black_pusMq">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-spin :spinning="isRunMushMq" title="命令发送中">
+                        <a-button class="ant-btn" @click="pushMq()">同步命令</a-button>
+                      </a-spin>
+                    </a-space>
+                  </div>
+                </a-space>
+              </AuthDom>
             </a-space>
           </div>
         </template>
@@ -132,8 +143,11 @@
   import { Black as blackApi } from '@/api/ddServcer';
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
+  import commonApi from '@/api/common';
+  import { useMqttStoreWithOut } from '@/store/modules/mqtt';
 
   defineOptions({ name: 'DDServcerBlack' });
+  const mqttStore = useMqttStoreWithOut();
   const isRunGet = ref(false);
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
@@ -208,7 +222,7 @@
   const seacthContent = ref({
     ip: '',
   });
-
+  const isRunMushMq = ref(false);
   getDDServerBlacks();
 
   //页码改变
@@ -349,6 +363,20 @@
     page.current = 1;
     page.total = 0;
     getDDServerBlacks();
+  }
+
+  //发送命令
+  function pushMq() {
+    isRunMushMq.value = true;
+    commonApi.PushDDServerUpdateDBMq({
+      MqInfo: JSON.stringify({
+        Type: 4,
+        ClientId: mqttStore.mqttClient.options.clientId,
+      }),
+      execompleteBefore: () => {
+        isRunMushMq.value = false;
+      },
+    });
   }
 </script>
 <style lang="less" scoped>

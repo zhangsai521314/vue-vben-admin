@@ -274,6 +274,7 @@
             :rules="[
               { required: true, message: '请输入联系邮箱' },
               { type: 'email', message: '联系邮箱格式不正确' },
+              { max: 126, message: '联系邮箱过长' },
             ]"
           >
             <a-input

@@ -55,6 +55,17 @@
                   </div>
                 </a-space>
               </AuthDom>
+              <AuthDom auth="ddServcer_lacci_pusMq">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-spin :spinning="isRunMushMq" title="命令发送中">
+                        <a-button class="ant-btn" @click="pushMq()">同步命令</a-button>
+                      </a-spin>
+                    </a-space>
+                  </div>
+                </a-space>
+              </AuthDom>
             </a-space>
           </div>
         </template>
@@ -127,14 +138,7 @@
           >
             <a-input placeholder="请输入ECI" v-model:value="formData.lacci" autocomplete="off" />
           </a-form-item>
-          <a-form-item
-            name="longitude"
-            label="经度"
-            :rules="[
-              { required: true, message: '' },
-              { validator: formValidator.empty, message: '请输入经度' },
-            ]"
-          >
+          <a-form-item name="longitude" label="经度">
             <a-input-number
               style="width: 262px"
               placeholder="请输入经度"
@@ -144,14 +148,7 @@
               max="999999999"
             />
           </a-form-item>
-          <a-form-item
-            name="latitude"
-            label="纬度"
-            :rules="[
-              { required: true, message: '' },
-              { validator: formValidator.empty, message: '请输入纬度' },
-            ]"
-          >
+          <a-form-item name="latitude" label="纬度">
             <a-input-number
               style="width: 262px"
               placeholder="请输入纬度"
@@ -161,11 +158,11 @@
               max="999999999"
             />
           </a-form-item>
-          <a-form-item name="remark" label="备注" :rules="[{ max: 250, message: '备注过长' }]">
+          <a-form-item name="reamrk" label="备注" :rules="[{ max: 250, message: '备注过长' }]">
             <a-textarea
               placeholder="请输入备注"
               :rows="3"
-              v-model:value="formData.remark"
+              v-model:value="formData.reamrk"
               autocomplete="off"
             />
           </a-form-item>
@@ -186,11 +183,13 @@
   import { ref, reactive, createVNode, nextTick, watch, unref } from 'vue';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import { Line as lineApi, Station as stationApi, Lacci as lacciApi } from '@/api/ddServcer';
-
+  import commonApi from '@/api/common';
+  import { useMqttStoreWithOut } from '@/store/modules/mqtt';
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 
   defineOptions({ name: 'DDServcerLacci' });
+  const mqttStore = useMqttStoreWithOut();
   const isRunGet = ref(false);
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
@@ -235,7 +234,7 @@
         sortable: true,
       },
       {
-        field: 'remark',
+        field: 'reamrk',
         title: '备注信息',
         showOverflow: true,
         showHeaderOverflow: true,
@@ -264,7 +263,7 @@
   const defFromData = reactive({
     lineId: null,
     stationId: null,
-    remark: null,
+    reamrk: null,
     name: null,
     lacci: null,
     latitude: null,
@@ -286,6 +285,7 @@
     name: '',
     lacci: '',
   });
+  const isRunMushMq = ref(false);
   getDDServerTLaccis();
 
   //页码改变
@@ -424,6 +424,20 @@
           message.success('更新ECI信息成功');
         });
       }
+    });
+  }
+
+  //发送命令
+  function pushMq() {
+    isRunMushMq.value = true;
+    commonApi.PushDDServerUpdateDBMq({
+      MqInfo: JSON.stringify({
+        Type: 3,
+        ClientId: mqttStore.mqttClient.options.clientId,
+      }),
+      execompleteBefore: () => {
+        isRunMushMq.value = false;
+      },
     });
   }
 </script>

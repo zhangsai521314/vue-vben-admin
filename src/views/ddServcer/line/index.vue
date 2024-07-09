@@ -34,6 +34,11 @@
               <AuthDom auth="ddServcer_line_add">
                 <a-button class="ant-btn" @click="showFrom()">新增线路</a-button>
               </AuthDom>
+              <AuthDom auth="ddServcer_line_pusMq">
+                <a-spin :spinning="isRunMushMq" title="命令发送中">
+                  <a-button class="ant-btn" @click="pushMq()">同步命令</a-button>
+                </a-spin>
+              </AuthDom>
             </a-space>
           </div>
         </template>
@@ -309,8 +314,11 @@
   import { Line as lineApi } from '@/api/ddServcer';
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
+  import { useMqttStoreWithOut } from '@/store/modules/mqtt';
+  import commonApi from '@/api/common';
 
   defineOptions({ name: 'DDServcerLine' });
+  const mqttStore = useMqttStoreWithOut();
   const isRunGet = ref(false);
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
@@ -462,7 +470,7 @@
     name: '',
   });
   const isShowUpdate = ref(false);
-
+  const isRunMushMq = ref(false);
   getDDServerLines();
 
   //页码改变
@@ -603,6 +611,19 @@
           message.success('更新线路信息成功');
         });
       }
+    });
+  }
+  //发送命令
+  function pushMq() {
+    isRunMushMq.value = true;
+    commonApi.PushDDServerUpdateDBMq({
+      MqInfo: JSON.stringify({
+        Type: 1,
+        ClientId: mqttStore.mqttClient.options.clientId,
+      }),
+      execompleteBefore: () => {
+        isRunMushMq.value = false;
+      },
     });
   }
 </script>

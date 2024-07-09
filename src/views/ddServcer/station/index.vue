@@ -34,6 +34,11 @@
               <AuthDom auth="ddServcer_station_add">
                 <a-button class="ant-btn" @click="showFrom(null)">新增车站</a-button>
               </AuthDom>
+              <AuthDom auth="ddServcer_station_pusMq">
+                <a-spin :spinning="isRunMushMq" title="命令发送中">
+                  <a-button class="ant-btn" @click="pushMq()">同步命令</a-button>
+                </a-spin>
+              </AuthDom>
             </a-space>
           </div>
         </template>
@@ -359,11 +364,13 @@
   import { ref, reactive, createVNode, nextTick, watch, unref } from 'vue';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import { Line as lineApi, Station as stationApi } from '@/api/ddServcer';
-
+  import commonApi from '@/api/common';
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
+  import { useMqttStoreWithOut } from '@/store/modules/mqtt';
 
   defineOptions({ name: 'DDServcerStation' });
+  const mqttStore = useMqttStoreWithOut();
   const isRunGet = ref(false);
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
@@ -559,7 +566,7 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['updateTime desc'],
+    sortlist: ['stationId asc'],
   });
   const seacthContent = ref({
     name: '',
@@ -567,7 +574,7 @@
   const lineDatas = ref([]);
   const stationDatas = ref([]);
   const isShowUpdate = ref(false);
-
+  const isRunMushMq = ref(false);
   getDDServerStations();
 
   //页码改变
@@ -732,6 +739,19 @@
   function getDDServerLineSimple() {
     lineApi.GetDDServerLineSimple().then((data) => {
       lineDatas.value = data;
+    });
+  }
+  //发送命令
+  function pushMq() {
+    isRunMushMq.value = true;
+    commonApi.PushDDServerUpdateDBMq({
+      MqInfo: JSON.stringify({
+        Type: 2,
+        ClientId: mqttStore.mqttClient.options.clientId,
+      }),
+      execompleteBefore: () => {
+        isRunMushMq.value = false;
+      },
     });
   }
 </script>
