@@ -124,6 +124,7 @@
 
   //改变大的图表显示
   function changeMaxEchart(name, di) {
+    //20240710-需要增加数据时间排序
     selectedMaxShowName.value = name;
     if (name == 'CPU') {
       echartsAllData.value = cpuData.value;
