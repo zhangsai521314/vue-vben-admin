@@ -38,6 +38,7 @@ import dayjs from 'dayjs';
 import { useUserStore } from '@/store/modules/user';
 import { createLocalStorage } from '@/utils/cache';
 import { message } from 'ant-design-vue';
+import { find } from 'xe-utils';
 
 const userStore = useUserStore();
 
@@ -374,14 +375,26 @@ async function mqttInit() {
     // });
   }
 
-  //定时判断是否强提示
+  // //定时判断是否强提示
+  // setInterval(() => {
+  //   for (const key in mqttStore.msgStrongPromptingTime) {
+  //     if (mqttStore.msgStrongPromptingTime[key].time.isBefore(dayjs())) {
+  //       delete mqttStore.msgStrongPromptingTime[key];
+  //     }
+  //   }
+  // }, 3000);
+
+  //有未确认未恢复的告警则一直播放告警声音
   setInterval(() => {
-    for (const key in mqttStore.msgStrongPromptingTime) {
-      if (mqttStore.msgStrongPromptingTime[key].time.isBefore(dayjs())) {
-        delete mqttStore.msgStrongPromptingTime[key];
+    if (!mqttStore.msgIsMute) {
+      const alarmDataCount = mqttStore.msgData.filter(
+        (m) => m.msgClass == 2 && m.msgStatus == 1 && m.confirmTime == null,
+      ).length;
+      if (alarmDataCount > 0) {
+        mqttStore.msgAudioOb?.play();
       }
     }
-  }, 3000);
+  }, 1500);
 }
 
 bootstrap();

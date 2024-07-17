@@ -314,7 +314,7 @@
         </a-form-item>
         <a-form-item label="归属服务类型" name="serviceType" :labelCol="{ span: 7 }">
           <a-select
-            style="width: 170px"
+            placeholder="为空则全部服务都可用"
             allow-clear
             show-search
             :filter-option="AntVueCommon.filterOption"

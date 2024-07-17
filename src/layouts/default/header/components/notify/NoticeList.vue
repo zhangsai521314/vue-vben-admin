@@ -13,31 +13,35 @@
           <div>
             <IconFontClass
               :title="
-                row.msgStatus == 1
-                  ? '告警'
-                  : row.msgStatus == 2
-                    ? '正常'
-                    : row.msgStatus == 3
-                      ? '未知 '
-                      : ''
+                row.msgClass == 1
+                  ? '提示'
+                  : row.msgStatus == 1
+                    ? '告警'
+                    : row.msgStatus == 2
+                      ? '正常'
+                      : row.msgStatus == 3
+                        ? '未知 '
+                        : ''
               "
               v-if="row.msgIcon"
               :name="row.msgIcon"
               style="font-size: 38px"
               :style="{
                 color:
-                  row.msgStatus == 1
-                    ? 'red'
-                    : row.msgStatus == 2
-                      ? 'green'
-                      : row.msgStatus == 3
-                        ? '#0960bd '
-                        : '',
+                  row.msgClass == 1
+                    ? ''
+                    : row.msgStatus == 1
+                      ? 'red'
+                      : row.msgStatus == 2
+                        ? 'green'
+                        : row.msgStatus == 3
+                          ? '#0960bd '
+                          : '',
               }"
             />
             <a-tag
               style="display: block; width: 38px; margin-left: 2px"
-              :color="row.isRead ? '' : 'red'"
+              :color="row.isRead ? 'green' : 'red'"
               >{{ row.isRead ? '已读' : '未读' }}</a-tag
             >
           </div>
@@ -79,7 +83,26 @@
           </a-select> -->
         </div>
         <!-- @click="handleTitleClick(row)" title="点击查看详情" -->
-        <div style="padding-left: 8px" @click="handleTitleClick(row)" title="点击查看详情">
+        <div
+          style="position: relative; width: 100%; padding-left: 8px; overflow: hidden"
+          @click="handleTitleClick(row)"
+          title="点击查看详情"
+        >
+          <div style="position: absolute; top: 4px; right: 0">
+            <a-tag
+              style="font-size: 15px; cursor: pointer"
+              v-if="row.msgClass == 2 && row.confirmTime == null"
+              @click="(e) => okMsg(e, row)"
+              color="#108ee9"
+              >确认告警</a-tag
+            >
+            <IconFontClass
+              v-else-if="row.msgClass == 2"
+              style="margin: 0 3px; color: green; font-size: 23px"
+              name="icon-baseui-xuanzhongduihao"
+              title="已确认"
+            />
+          </div>
           <div
             style="
               display: -webkit-box;
@@ -137,11 +160,12 @@
 <script lang="ts" setup>
   import { ref, reactive, onMounted, computed, PropType, watch, nextTick } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
-  import { List, Avatar, Tag, Typography } from 'ant-design-vue';
+  import { List, Avatar, Tag, Typography, message } from 'ant-design-vue';
   import { isNumber } from '@/utils/is';
   import type { MsgData } from '#/store';
   import dayjs from 'dayjs';
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
+  import messageApi from '@/api/message';
 
   const mqttStore = useMqttStoreWithOut();
 
@@ -214,6 +238,22 @@
 
   function handleTitleClick(item: ListItem) {
     props.onTitleClick && props.onTitleClick(item);
+  }
+
+  //确认告警
+  function okMsg(e, row) {
+    e.stopPropagation();
+    messageApi
+      .OkMsg(row.msgId)
+      .then((data) => {
+        message.success('确认告警成功');
+        row.confirmTime = data.confirmTime;
+        row.confirmUser = data.confirmUser;
+        row.isRead = data.isRead;
+      })
+      .catch(() => {
+        message.error('确认告警失败');
+      });
   }
 
   // 需要获取dom元素 所以要在onMounted钩子中进行

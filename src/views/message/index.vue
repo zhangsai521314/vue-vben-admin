@@ -663,6 +663,7 @@
     hisId.value = '';
   }
 
+  //确认告警
   function okMsg(row) {
     if (!row.confirmTime && !row.confirmUser) {
       messageApi

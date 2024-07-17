@@ -349,14 +349,14 @@
         showHeaderOverflow: true,
         sortable: true,
       },
-      // {
-      //   field: 'isOnline',
-      //   title: '是否在线',
-      //   showOverflow: true,
-      //   showHeaderOverflow: true,
-      //   cellRender: { name: 'render_isno' },
-      //   visible: false,
-      // },
+      {
+        field: 'isOnline',
+        title: '是否在线',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        cellRender: { name: 'render_isno' },
+        visible: false,
+      },
       {
         field: 'recordFileStatus',
         title: '录音文件',
@@ -436,46 +436,62 @@
   getDictionaries();
   getServices();
 
-  //播放
+  //播放下载
   function getCallRecordFilePath(row, OperationType) {
-    if (!myCommon.isnull(row.recordFile)) {
-      if (OperationType == 'play') {
-        isRunPlay.value = true;
-        modelShow.value = true;
-        nextTick(() => {
-          playRef.value.changePaly({ src: row.recordFile });
-        });
+    if (row.isOnline) {
+      if (!myCommon.isnull(row.recordFile)) {
+        if (OperationType == 'play') {
+          isRunPlay.value = true;
+          modelShow.value = true;
+          nextTick(() => {
+            playRef.value.changePaly({ src: row.recordFile });
+          });
+        } else {
+          myCommon.downLoadFileByUrl(row.recordFile);
+        }
       } else {
-        myCommon.downLoadFileByUrl(row.recordFile);
-      }
-    } else {
-      callRecordApi
-        .GetCallRecordFilePath({
-          CallId: row.callId,
-          ClientId: mqttStore.mqttClient.options.clientId,
-          OperationType,
-          execompleteBefore: () => {
-            loading.value = false;
-          },
-        })
-        .then((data) => {
-          playFileStatus.value = data.recordFileStatus;
-          const oldData = tableRef.value.getRowById(data.callId);
-          if (oldData) {
-            myCommon.objectReplace(oldData, data);
-          }
-          if (OperationType == 'play') {
-            if (data.recordFileStatus != 4) {
-              playCallId = row.callId;
-              modelShow.value = true;
-              nextTick(() => {
-                if (data.recordFileStatus == 1) {
-                  isRunPlay.value = true;
-                  nextTick(() => {
-                    playRef.value.changePaly({ src: data.recordFile });
-                  });
-                }
-              });
+        callRecordApi
+          .GetCallRecordFilePath({
+            CallId: row.callId,
+            ClientId: mqttStore.mqttClient.options.clientId,
+            OperationType,
+            execompleteBefore: () => {
+              loading.value = false;
+            },
+          })
+          .then((data) => {
+            playFileStatus.value = data.recordFileStatus;
+            const oldData = tableRef.value.getRowById(data.callId);
+            if (oldData) {
+              myCommon.objectReplace(oldData, data);
+            }
+            if (OperationType == 'play') {
+              if (data.recordFileStatus != 4) {
+                playCallId = row.callId;
+                modelShow.value = true;
+                nextTick(() => {
+                  if (data.recordFileStatus == 1) {
+                    isRunPlay.value = true;
+                    nextTick(() => {
+                      playRef.value.changePaly({ src: data.recordFile });
+                    });
+                  }
+                });
+              } else {
+                message.info(
+                  data.message == null
+                    ? data.recordFileStatus == 1
+                      ? '获取成功'
+                      : data.recordFileStatus == 2
+                        ? '正在获取'
+                        : data.recordFileStatus == 3
+                          ? '正在存储'
+                          : '获取失败'
+                    : data.message,
+                );
+              }
+            } else if (data.recordFileStatus == 1) {
+              myCommon.downLoadFileByUrl(data.recordFile);
             } else {
               message.info(
                 data.message == null
@@ -489,22 +505,10 @@
                   : data.message,
               );
             }
-          } else if (data.recordFileStatus == 1) {
-            myCommon.downLoadFileByUrl(data.recordFile);
-          } else {
-            message.info(
-              data.message == null
-                ? data.recordFileStatus == 1
-                  ? '获取成功'
-                  : data.recordFileStatus == 2
-                    ? '正在获取'
-                    : data.recordFileStatus == 3
-                      ? '正在存储'
-                      : '获取失败'
-                : data.message,
-            );
-          }
-        });
+          });
+      }
+    } else {
+      message.info('服务与网管系统掉线，不可获取');
     }
   }
 

@@ -437,6 +437,14 @@
         sortable: true,
       },
       {
+        field: 'changeTime',
+        title: '状态时间',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        width: 150,
+      },
+      {
         field: 'isOnline',
         title: '服务是否在线',
         showOverflow: true,
@@ -829,7 +837,7 @@
         },
       );
     } else {
-      message.info('服务中断，不可获取');
+      message.info('服务与网管系统掉线，不可获取');
     }
   }
 
@@ -865,7 +873,7 @@
         },
       );
     } else {
-      message.info('服务中断，不可获取');
+      message.info('服务与网管系统掉线，不可获取');
     }
   }
 

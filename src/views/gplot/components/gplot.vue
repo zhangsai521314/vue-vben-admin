@@ -800,32 +800,32 @@
         console.log('nodeState', nodeState);
         serviceIdDatas.forEach((node) => {
           const stateOb = graphOb.getElementData(node.id);
-          let color = null;
-          // if (stateOb.data.myServiceId == '522045670068299') {
-          //   debugger;
-          // }
-          for (let i = 0; i < stateOb.data.mySimpleState.filter((m) => m.open).length; i++) {
-            const element = stateOb.data.mySimpleState[i];
-            if (!nodeState[element.code + stateOb.data.myServiceId]) {
-              color = element.color;
-              break;
+          if (stateOb) {
+            var serviceStatus = nodeState.find((m) => m.serviceId == stateOb.data.myServiceId);
+            let color = null;
+            for (let i = 0; i < stateOb.data.mySimpleState.filter((m) => m.open).length; i++) {
+              const element = stateOb.data.mySimpleState[i];
+              if (!serviceStatus[element.code]) {
+                color = element.color;
+                break;
+              }
             }
-          }
-          if (color == null) {
-            //回复原始状态
-            switch (stateOb.data.myType) {
-              case 'node':
-                color = stateOb.data.myOldStyle.iconFill;
-                break;
-              case 'edge':
-                color = stateOb.data.myOldStyle.fill;
-                break;
-              case 'combo':
-                color = stateOb.data.myOldStyle.stroke;
-                break;
+            if (color == null) {
+              //回复原始状态
+              switch (stateOb.data.myType) {
+                case 'node':
+                  color = stateOb.data.myOldStyle.iconFill;
+                  break;
+                case 'edge':
+                  color = stateOb.data.myOldStyle.fill;
+                  break;
+                case 'combo':
+                  color = stateOb.data.myOldStyle.stroke;
+                  break;
+              }
             }
+            changeStyle(stateOb.data.myType, node.id, color);
           }
-          changeStyle(stateOb.data.myType, node.id, color);
         });
         await graphOb.draw();
         useTimeFn(
@@ -889,42 +889,44 @@
         let color = null;
         //获取画布节点
         const stateOb = graphOb.getElementData(node.id);
-        const orderData = _.sortBy(stateOb.data.myAgileState, (m) => m.level);
-        for (let i = 0; i < orderData.length; i++) {
-          try {
-            const executeFunc = new Function('allDataValue', orderData[i].isChange);
-            const runValue = executeFunc(
-              gplotStore.gplotKeyOb[gplotKey].containerConfig.allDataValue,
-            );
-            if (typeof runValue === 'boolean') {
-              if (runValue) {
-                //灵活配置颜色
-                color = orderData[i].color;
-              }
-              if (color == null) {
-                //回复原始状态
-                switch (stateOb.data.myType) {
-                  case 'node':
-                    color = stateOb.data.myOldStyle.iconFill;
-                    break;
-                  case 'edge':
-                    color = stateOb.data.myOldStyle.fill;
-                    break;
-                  case 'combo':
-                    color = stateOb.data.myOldStyle.stroke;
-                    break;
+        if (stateOb) {
+          const orderData = _.sortBy(stateOb.data.myAgileState, (m) => m.level);
+          for (let i = 0; i < orderData.length; i++) {
+            try {
+              const executeFunc = new Function('allDataValue', orderData[i].isChange);
+              const runValue = executeFunc(
+                gplotStore.gplotKeyOb[gplotKey].containerConfig.allDataValue,
+              );
+              if (typeof runValue === 'boolean') {
+                if (runValue) {
+                  //灵活配置颜色
+                  color = orderData[i].color;
                 }
+                if (color == null) {
+                  //回复原始状态
+                  switch (stateOb.data.myType) {
+                    case 'node':
+                      color = stateOb.data.myOldStyle.iconFill;
+                      break;
+                    case 'edge':
+                      color = stateOb.data.myOldStyle.fill;
+                      break;
+                    case 'combo':
+                      color = stateOb.data.myOldStyle.stroke;
+                      break;
+                  }
+                }
+                changeStyle(stateOb.data.myType, node.id, color);
+                if (runValue) {
+                  //按优先级计算,有满足则跳出
+                  break;
+                }
+              } else {
+                console.error('设置画布节点变量值返回值错误', orderData[i]);
               }
-              changeStyle(stateOb.data.myType, node.id, color);
-              if (runValue) {
-                //按优先级计算,有满足则跳出
-                break;
-              }
-            } else {
-              console.error('设置画布节点变量值返回值错误', orderData[i]);
+            } catch (error) {
+              console.error('设置画布节点变量值出错', orderData[i]);
             }
-          } catch (error) {
-            console.error('设置画布节点变量值出错', orderData[i]);
           }
         }
       });

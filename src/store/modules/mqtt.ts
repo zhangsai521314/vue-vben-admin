@@ -87,11 +87,11 @@ export const useMqttStore = defineStore({
     },
     //获取未读的报警信息
     getUnreadalarmData(state) {
-      return state.msgData.filter((m) => !m.isRead && m.msgCategory == 2 && m.msgTitle);
+      return state.msgData.filter((m) => !m.isRead && m.msgTitle);
     },
     //获取报警信息
     getAlarmData(state) {
-      return state.msgData.filter((m) => m.msgCategory == 2 && m.msgTitle);
+      return state.msgData.filter((m) => m.msgTitle);
       // const f = [];
       // state.msgData[0].serviceId = '522045728034891';
       // state.msgData[0].serviceName = '科里巴-车站值班台addadadadggwe你看发了你发';
@@ -180,24 +180,24 @@ export const useMqttStore = defineStore({
     },
     //播放信息提示音
     playMsgAudio(row: MsgData) {
-      if (!this.msgIsMute && this.msgAudioIsShow) {
-        //播放告警提示音
-        try {
-          if (
-            (row.msgClass == 1 || (row.msgClass == 2 && row.msgStatus == 1)) &&
-            (this.msgStrongPromptingTime[
-              `${row.serviceId}_${row.msgCategory}_${row.msgClass}_${row.msgStatus}`
-            ] == null ||
-              this.msgStrongPromptingTime[
-                `${row.serviceId}_${row.msgCategory}_${row.msgClass}_${row.msgStatus}`
-              ].time.isBefore(dayjs()))
-          ) {
-            this.msgAudioOb?.play();
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      }
+      // if (!this.msgIsMute && this.msgAudioIsShow) {
+      //   //播放告警提示音
+      //   try {
+      //     if (
+      //       (row.msgClass == 1 || (row.msgClass == 2 && row.msgStatus == 1)) &&
+      //       (this.msgStrongPromptingTime[
+      //         `${row.serviceId}_${row.msgCategory}_${row.msgClass}_${row.msgStatus}`
+      //       ] == null ||
+      //         this.msgStrongPromptingTime[
+      //           `${row.serviceId}_${row.msgCategory}_${row.msgClass}_${row.msgStatus}`
+      //         ].time.isBefore(dayjs()))
+      //     ) {
+      //       this.msgAudioOb?.play();
+      //     }
+      //   } catch (error) {
+      //     console.error(error);
+      //   }
+      // }
     },
     //增加信息
     addMsgData(item: MsgData) {

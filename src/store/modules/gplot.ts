@@ -218,21 +218,21 @@ export const useGplotStore = defineStore({
             mySimpleState: [
               {
                 name: '中断',
-                code: 'isOnline_',
+                code: 'isOnline',
                 color: '#FF0000',
                 open: true,
                 level: 0,
               },
               {
                 name: '故障',
-                code: 'isNormal_',
+                code: 'isNormal',
                 color: '#EE1481',
                 open: true,
                 level: 1,
               },
               {
                 name: '性能超出',
-                code: 'isPerformanceNormal_',
+                code: 'isPerformanceNormal',
                 color: '#FF7F27',
                 open: true,
                 level: 2,
