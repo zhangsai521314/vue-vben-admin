@@ -145,15 +145,18 @@
           <a-tooltip placement="top">
             <template #title>保存</template>
             <div style="float: right">
-              <IconFontClass
-                style="font-weight: 600"
-                @click="saveClick"
-                name="icon-baseui-baocun"
-              />
+              <!-- @click="saveClick" -->
+              <a-spin :spinning="isShowSaveMenu">
+                <IconFontClass
+                  style="font-weight: 600"
+                  @click="saveConfig"
+                  name="icon-baseui-baocun"
+                />
+              </a-spin>
             </div>
           </a-tooltip>
         </div>
-        <div>
+        <!-- <div>
           <a-tooltip placement="top">
             <template #title>预览</template>
             <div style="float: right">
@@ -162,7 +165,7 @@
               </a-spin>
             </div>
           </a-tooltip>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -174,6 +177,7 @@
     "
     :isRadio="true"
     :width="500"
+    v-if="false"
     :isShow="isShowSaveMenu"
     :cancel="closeSaveConfig"
     :ztitle="'保存配置'"
@@ -354,6 +358,7 @@
     isShowSaveMenu.value = false;
   }
   function saveConfig() {
+    isShowSaveMenu.value = true;
     props.graphObRef
       .saveConfig()
       .then(() => {

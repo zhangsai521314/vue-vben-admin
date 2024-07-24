@@ -208,7 +208,6 @@
         title: 'Ip+端口号',
         showOverflow: true,
         showHeaderOverflow: true,
-        width: 150,
         slots: {
           default: 'ipport',
         },
@@ -217,7 +216,6 @@
       {
         field: 'loginTime',
         title: '登录时间',
-        width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -225,7 +223,6 @@
       {
         field: 'updateTime',
         title: '心跳时间',
-        width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

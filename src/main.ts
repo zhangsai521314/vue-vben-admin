@@ -87,7 +87,6 @@ async function bootstrap() {
 
 async function mqttInit() {
   //需要放到登录之后，退出后断开链接
-  debugger;
   const mqttStore = useMqttStoreWithOut();
   const gplotStore = useGplotStoreWithOut();
   let timeId;
@@ -386,7 +385,7 @@ async function mqttInit() {
 
   //有未确认未恢复的告警则一直播放告警声音
   setInterval(() => {
-    if (!mqttStore.msgIsMute) {
+    if (!mqttStore.msgIsMute && userStore.userInfo) {
       const alarmDataCount = mqttStore.msgData.filter(
         (m) => m.msgClass == 2 && m.msgStatus == 1 && m.confirmTime == null,
       ).length;

@@ -457,14 +457,14 @@
         showHeaderOverflow: true,
         sortable: true,
       },
-      {
-        field: 'lastLoginIp',
-        title: '最后登录IP',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-        visible: false,
-      },
+      // {
+      //   field: 'lastLoginIp',
+      //   title: '最后登录IP',
+      //   showOverflow: true,
+      //   showHeaderOverflow: true,
+      //   sortable: true,
+      //   visible: false,
+      // },
       // {
       //   field: 'lastLoginOs',
       //   title: '最后登录客户端',

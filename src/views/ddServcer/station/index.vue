@@ -120,29 +120,33 @@
           <a-form-item
             name="longitude"
             label="经度"
-            :rules="[{ required: true, message: '请输入经度' }]"
+            :rules="[
+              { required: true, message: '请输入经度' },
+              { max: 16, message: '经度过长' },
+              { validator: formValidator.longitude, message: '经度格式不正确' },
+            ]"
           >
-            <a-input-number
+            <a-input
               style="width: 262px"
               placeholder="请输入经度"
               v-model:value="formData.longitude"
               autocomplete="off"
-              min="-999999999"
-              max="999999999"
             />
           </a-form-item>
           <a-form-item
             name="latitude"
             label="纬度"
-            :rules="[{ required: true, message: '请输入纬度' }]"
+            :rules="[
+              { required: true, message: '请输入纬度' },
+              { max: 16, message: '纬度过长' },
+              { validator: formValidator.latitude, message: '纬度格式不正确' },
+            ]"
           >
-            <a-input-number
+            <a-input
               style="width: 262px"
               placeholder="请输入纬度"
               v-model:value="formData.latitude"
               autocomplete="off"
-              min="-999999999"
-              max="999999999"
             />
           </a-form-item>
           <a-form-item label="上一车站" name="prevStationId">

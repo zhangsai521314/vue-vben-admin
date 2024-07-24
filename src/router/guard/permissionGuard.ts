@@ -99,7 +99,6 @@ export function createPermissionGuard(router: Router) {
     if (to.name === PAGE_NOT_FOUND_ROUTE.name) {
       // 遇到不存在页面，后续逻辑不再处理redirect（阻止下面else逻辑）
       from.query.redirect = '';
-
       if (
         from.path === LOGIN_PATH &&
         to.fullPath !== (userStore.getUserInfo.homePath || PageEnum.BASE_HOME)

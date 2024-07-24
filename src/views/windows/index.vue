@@ -981,11 +981,11 @@
         disabled: userData.value.isAdmin
           ? false
           : m.action == 'delete'
-            ? data.powertype.indexOf('1') != -1 || data.powertype.indexOf('4') != -1
+            ? data.powerType.indexOf('1') != -1 || data.powerType.indexOf('4') != -1
               ? false
               : true
             : m.action == 'edit'
-              ? data.powertype.indexOf('1') != -1 || data.powertype.indexOf('2') != -1
+              ? data.powerType.indexOf('1') != -1 || data.powerType.indexOf('2') != -1
                 ? false
                 : true
               : false,
@@ -1923,7 +1923,6 @@
       }
 
       .msg-twinkle {
-        animation: twinkle 600ms infinite;
         animation: twinkle 600ms infinite;
         color: #fff;
       }

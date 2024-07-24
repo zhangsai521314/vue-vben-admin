@@ -29,8 +29,6 @@
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import { tryOnUnmounted } from '@vueuse/core';
   import { useGplotStoreWithOut } from '@/store/modules/gplot';
-  //定时器
-  import { useTimeFn } from '/@/hooks/core/useTime_';
   import html2Canvas from 'html2canvas';
   import * as echarts from 'echarts';
   //快捷键监控
@@ -84,6 +82,7 @@
   const serviceIdDatas = [];
   //绑定灵活配置的节点
   const agileStateData = [];
+  let noAgileStateChangeStatus_timeId = 0;
   gplotStore.gplotKeyOb[gplotKey].containerConfig.menuId = props.menuId;
   shortcutKey_();
 
@@ -313,8 +312,10 @@
                     {
                       label: '拆分',
                       icon: '',
-                      disabled: true,
-                      onClick: () => {},
+                      // disabled: true,
+                      onClick: () => {
+                        chaiFengGplot();
+                      },
                     },
                   ],
                 });
@@ -517,13 +518,9 @@
   function changeSave() {
     if (graphOb && isHaveSave) {
       clearTimeout(changeSaveTimeId);
-      changeSaveTimeId = useTimeFn(
-        setTimeout(() => {
-          saveHisConfig();
-        }, 5000),
-        timeKey,
-        'changeSave',
-      );
+      changeSaveTimeId = setTimeout(() => {
+        saveHisConfig();
+      }, 5000);
     }
   }
 
@@ -585,7 +582,7 @@
           .then((data) => {
             isHaveSave = false;
             gplotId = data;
-            message.info('已为您自动保存配置历史');
+            // message.info('已为您自动保存配置历史');
           });
       });
     } catch (error) {
@@ -655,8 +652,11 @@
     let selectedObs = getAllSelectOb();
     if (selectedObs.length > 1) {
       //获取带组的选中的对象
-      const comboSelectedObs = selectedObs.filter((m) => m.hasOwnProperty('combo'));
-      if (comboSelectedObs.length == 0) {
+      const comboSelectedObs = selectedObs.filter(
+        (m) => m.hasOwnProperty('combo') && m.combo != undefined,
+      );
+      const selectObCombo = selectedObs.filter((m) => m.data.myType == 'combo');
+      if (comboSelectedObs.length == 0 && selectObCombo.length == 0) {
         //目前选中的对象都没组合
         const comboId = myCommon.uniqueId();
         graphOb.addComboData([
@@ -723,8 +723,50 @@
         graphOb.updateComboData(combos);
         graphOb.updateNodeData(nodes);
         graphOb.draw();
+      } else {
+        message.info('不支持此组合');
       }
       //有组合有节点:另外的组合形式
+    }
+  }
+
+  //拆分
+  function chaiFengGplot() {
+    let selectedObs = getAllSelectOb();
+    if (selectedObs.length > 0) {
+      const deleteComboIds = selectedObs
+        .filter((m) => {
+          return m.data.myType == 'combo';
+        })
+        .map((m) => m.id);
+      if (deleteComboIds.length > 0) {
+        const updateNodes = [];
+        const updateCombos = [];
+        const updateEdges = [];
+        deleteComboIds.forEach((c) => {
+          graphOb.getChildrenData(c).forEach((m) => {
+            delete m.combo;
+            if (m.data.myType == 'node') {
+              updateNodes.push(m);
+            } else if (m.data.myType == 'edge') {
+              updateEdges.push(m);
+            } else if (m.data.myType == 'combo') {
+              updateCombos.push(m);
+            }
+          });
+        });
+        if (updateCombos.length > 0) {
+          graphOb.updateComboData(updateCombos);
+        }
+        if (updateNodes.length > 0) {
+          graphOb.updateNodeData(updateNodes);
+        }
+        if (updateEdges.length > 0) {
+          graphOb.updateEdgeData(updateEdges);
+        }
+        graphOb.removeComboData(deleteComboIds);
+        graphOb.draw();
+      }
     }
   }
 
@@ -828,23 +870,15 @@
           }
         });
         await graphOb.draw();
-        useTimeFn(
-          setTimeout(() => {
-            noAgileStateChangeStatus();
-          }, 500),
-          timeKey,
-          'noAgileStateChangeStatus',
-        );
+        noAgileStateChangeStatus_timeId = setTimeout(() => {
+          noAgileStateChangeStatus();
+        }, 500);
       })
       .catch((e) => {
         console.error(e);
-        useTimeFn(
-          setTimeout(() => {
-            noAgileStateChangeStatus();
-          }, 500),
-          timeKey,
-          'noAgileStateChangeStatus',
-        );
+        noAgileStateChangeStatus_timeId = setTimeout(() => {
+          noAgileStateChangeStatus();
+        }, 500);
       });
   }
 
@@ -1038,6 +1072,7 @@
 
   //页面卸载后
   tryOnUnmounted(() => {
+    clearTimeout(noAgileStateChangeStatus_timeId);
     if (graphOb) {
       graphOb.destroy();
     }

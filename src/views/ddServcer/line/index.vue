@@ -180,33 +180,33 @@
             </a-form-item>
             <a-form-item
               name="groupAllCirNumber"
-              label="全呼CIR组呼号码"
+              label="全呼机车组呼号码"
               :rules="[
                 { required: true, message: '' },
-                { min: 3, message: '全呼CIR组呼号码过短' },
-                { max: 10, message: '全呼CIR组呼号码过长' },
+                { min: 3, message: '全呼机车组呼号码过短' },
+                { max: 10, message: '全呼机车组呼号码过长' },
                 {
                   validator: formValidator.positiveInteger,
-                  message: '全呼CIR组呼号码格式为自然数',
+                  message: '全呼机车组呼号码格式为自然数',
                 },
-                { validator: formValidator.empty, message: '请输入全呼CIR组呼号码' },
+                { validator: formValidator.empty, message: '请输入全呼机车组呼号码' },
               ]"
             >
               <a-input
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
-                placeholder="请输入全呼CIR组呼号码"
+                placeholder="请输入全呼机车组呼号码"
                 v-model:value="formData.groupAllCirNumber"
                 autocomplete="off"
               />
             </a-form-item>
             <a-form-item
               name="groupAllCirPriority"
-              label="全呼CIR组呼优先级"
-              :rules="[{ required: true, message: '请输入全呼CIR组呼优先级' }]"
+              label="全呼机车组呼优先级"
+              :rules="[{ required: true, message: '请输入全呼机车组呼优先级' }]"
             >
               <a-input-number
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
-                placeholder="请输入全呼CIR组呼优先级"
+                placeholder="请输入全呼机车组呼优先级"
                 style="width: 262px"
                 min="1"
                 max="15"
@@ -216,11 +216,11 @@
             </a-form-item>
             <a-form-item
               name="groupAllDcNumber"
-              label="全呼CIR组呼号码"
+              label="全呼车站组呼号码"
               :rules="[
                 { required: true, message: '' },
-                { min: 3, message: '全呼CIR组呼号码过短' },
-                { max: 10, message: '全呼CIR组呼号码过长' },
+                { min: 3, message: '全呼车站组呼号码过短' },
+                { max: 10, message: '全呼车站组呼号码过长' },
                 {
                   validator: formValidator.positiveInteger,
                   message: '全呼车站组呼号码格式为正整数',
@@ -237,12 +237,12 @@
             </a-form-item>
             <a-form-item
               name="groupAllDcPriority"
-              label="全呼调度台组优先级"
-              :rules="[{ required: true, message: '请输入全呼调度台组优先级' }]"
+              label="全呼车站组呼优先级"
+              :rules="[{ required: true, message: '请输入全呼车站组呼优先级' }]"
             >
               <a-input-number
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
-                placeholder="请输入全呼调度台组优先级"
+                placeholder="请输入全呼车站组呼优先级"
                 style="width: 262px"
                 min="1"
                 max="15"
@@ -252,33 +252,33 @@
             </a-form-item>
             <a-form-item
               name="groupAllBroadcastNumber"
-              label="线路广播组呼号码"
+              label="全线广播组呼号码"
               :rules="[
                 { required: true, message: '' },
-                { min: 3, message: '线路广播组呼号码过短' },
-                { max: 10, message: '线路广播组呼号码过长' },
+                { min: 3, message: '全线广播组呼号码过短' },
+                { max: 10, message: '全线广播组呼号码过长' },
                 {
                   validator: formValidator.positiveInteger,
-                  message: '线路广播组呼号码格式为自然数',
+                  message: '全线广播组呼号码格式为自然数',
                 },
-                { validator: formValidator.empty, message: '请输入线路广播组呼号码' },
+                { validator: formValidator.empty, message: '请输入全线广播组呼号码' },
               ]"
             >
               <a-input
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
-                placeholder="请输入线路广播组呼号码"
+                placeholder="请输入全线广播组呼号码"
                 v-model:value="formData.groupAllBroadcastNumber"
                 autocomplete="off"
               />
             </a-form-item>
             <a-form-item
               name="groupAllBroadcastPriority"
-              label="线路广播组呼优先级"
-              :rules="[{ required: true, message: '请输入线路广播组呼优先级' }]"
+              label="全线广播组呼优先级"
+              :rules="[{ required: true, message: '请输入全线广播组呼优先级' }]"
             >
               <a-input-number
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
-                placeholder="请输入线路广播组呼优先级"
+                placeholder="请输入全线广播组呼优先级"
                 style="width: 262px"
                 min="1"
                 max="15"

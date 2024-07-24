@@ -11,7 +11,7 @@ const FormValidator = {
   //ip校验
   ip: async (rule, value, callback) => {
     const reg =
-      /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){6}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^::([\da-fA-F]{1,4}:){0,4}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:):([\da-fA-F]{1,4}:){0,3}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){2}:([\da-fA-F]{1,4}:){0,2}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){3}:([\da-fA-F]{1,4}:){0,1}((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){4}:((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$|^([\da-fA-F]{1,4}:){7}[\da-fA-F]{1,4}$|^:((:[\da-fA-F]{1,4}){1,6}|:)$|^[\da-fA-F]{1,4}:((:[\da-fA-F]{1,4}){1,5}|:)$|^([\da-fA-F]{1,4}:){2}((:[\da-fA-F]{1,4}){1,4}|:)$|^([\da-fA-F]{1,4}:){3}((:[\da-fA-F]{1,4}){1,3}|:)$|^([\da-fA-F]{1,4}:){4}((:[\da-fA-F]{1,4}){1,2}|:)$|^([\da-fA-F]{1,4}:){5}:([\da-fA-F]{1,4})?$|^([\da-fA-F]{1,4}:){6}:$/;
+      /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     if (myCommon.isnull(value) || reg.test(value)) {
       return Promise.resolve();
     } else {
@@ -47,6 +47,24 @@ const FormValidator = {
       return Promise.resolve();
     } else {
       return Promise.reject('不是自然数');
+    }
+  },
+  //经度校验
+  longitude: async (rule, value, callback) => {
+    const longitude = /^-?((1?[0-7]?\d(\.\d{1,10})?)|(180(\.0{1,10})?))$/;
+    if (myCommon.isnull(value) || longitude.test(value)) {
+      return Promise.resolve();
+    } else {
+      return Promise.reject('经度不符合规则');
+    }
+  },
+  //纬度校验
+  latitude: async (rule, value, callback) => {
+    const latitude = /^-?(([0-8]?\d(\.\d{1,10})?)|(90(\.0{1,10})?))$/;
+    if (myCommon.isnull(value) || latitude.test(value)) {
+      return Promise.resolve();
+    } else {
+      return Promise.reject('经度不符合规则');
     }
   },
 };

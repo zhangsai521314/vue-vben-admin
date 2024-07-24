@@ -83,7 +83,7 @@
   import commonApi from '@/api/common';
   import dayjs from 'dayjs';
   //定时器
-  import { useTimeFn } from '@/hooks/core/useTime_';
+  import { useUnmount } from '@/hooks/core/useTime_';
 
   const { prefixCls } = useDesign('charts');
   const props = defineProps({

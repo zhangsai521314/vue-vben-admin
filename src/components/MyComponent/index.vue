@@ -20,6 +20,7 @@
   import { useAppStore } from '@/store/modules/app';
   import { useDesign } from '@/hooks/web/useDesign';
   import { onMounted, ref } from 'vue';
+
   const appStore = useAppStore();
   const projectSetting = appStore.getProjectConfig;
   const domid = myCommon.uniqueId();
@@ -32,11 +33,11 @@
 </script>
 <style lang="less" scoped>
   .div-content {
-    margin: 0;
-    padding: 0;
+    position: relative;
     width: 100%;
     height: 100vh;
-    position: relative;
+    margin: 0;
+    padding: 0;
     // background-color: #fff;
   }
 
@@ -47,6 +48,7 @@
   .div-content-height-multiTabs {
     height: calc(100vh - 44px);
   }
+
   .div-content-height-header-multiTabs {
     height: calc(100vh - 58px - 44px);
   }

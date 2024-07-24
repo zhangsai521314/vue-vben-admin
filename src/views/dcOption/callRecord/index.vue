@@ -544,6 +544,7 @@
     if (!myCommon.isnull(duration.value)) {
       seacthContent.value.SearchParameters = [
         {
+          CSharpTypeName: 'int',
           FieldName: 'duration',
           ConditionalType: durationQueryType.value,
           FieldValue: durationUnit.value == 'MM' ? duration.value * 60 : null,

@@ -120,7 +120,6 @@ export const useUserStore = defineStore({
           // 记录动态路由加载完成
           permissionStore.setDynamicAddedRoute(true);
         }
-
         goHome && (await router.replace(userInfo?.homePath || PageEnum.BASE_HOME));
       }
       return userInfo;

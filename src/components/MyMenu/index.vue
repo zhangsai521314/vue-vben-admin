@@ -75,8 +75,8 @@
                       :class="{
                         'not-click':
                           !userData.isAdmin &&
-                          node.powertype.indexOf('3') == -1 &&
-                          node.powertype.indexOf('1') == -1,
+                          node.powerType.indexOf('3') == -1 &&
+                          node.powerType.indexOf('1') == -1,
                       }"
                       name="icon-baseui-tianjiawukuang"
                       title="添加子菜单"
@@ -88,8 +88,8 @@
                       :class="{
                         'not-click':
                           !userData.isAdmin &&
-                          node.powertype.indexOf('2') == -1 &&
-                          node.powertype.indexOf('1') == -1,
+                          node.powerType.indexOf('2') == -1 &&
+                          node.powerType.indexOf('1') == -1,
                       }"
                       name="icon-baseui-edit-fill"
                       title="编辑"
@@ -102,8 +102,8 @@
                         'not-click':
                           node.children.length > 0 ||
                           (!userData.isAdmin &&
-                            node.powertype.indexOf('4') == -1 &&
-                            node.powertype.indexOf('1') == -1),
+                            node.powerType.indexOf('4') == -1 &&
+                            node.powerType.indexOf('1') == -1),
                       }"
                       name="icon-baseui-guanbicuowu"
                       title="删除"
@@ -366,7 +366,7 @@
           //   key: data.menuId,
           //   parentId: d.parentId,
           //   title: data.menuName,
-          //   powertype: data.powertype,
+          //   powerType: data.powerType,
           //   children: [],
           // });
           // dataList.push(newMode);
@@ -475,8 +475,8 @@
       if (
         props.isPageEditing &&
         !userData.value.isAdmin &&
-        node.powertype.indexOf('1') == -1 &&
-        node.powertype.indexOf('2') == -1
+        node.powerType.indexOf('1') == -1 &&
+        node.powerType.indexOf('2') == -1
       ) {
         message.warning('您没有编辑该菜单的权限');
       } else {

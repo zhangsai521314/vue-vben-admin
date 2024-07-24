@@ -136,7 +136,7 @@
     total: 0,
     sortlist: ['dataTime desc'],
   });
-
+  const diskNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'k', 'i', 'j'];
   getEquipments();
 
   /**
@@ -182,8 +182,7 @@
     performanceApi
       .GetPerformances({
         PageIndex: page.current,
-        PageSize: page.size,
-        // activeKey.value == 'table' ? page.size : -1
+        PageSize: activeKey.value == 'table' ? page.size : -1,
         ...seacthContent.value,
         fullSort: getFullSort(),
         execompleteBefore: () => {
@@ -194,193 +193,203 @@
         assembylData(data);
       })
       .catch((e) => {
-        assembylData(null);
+        assembylData({ source: [] });
       });
   }
 
   function assembylData(data) {
-    baseColumns = [
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
-      {
-        field: 'keyId',
-        title: '记录ID',
-        visible: false,
-        showOverflow: true,
-        showHeaderOverflow: true,
-      },
-      {
-        field: 'cpuUsage',
-        title: 'CPU使用率(%)',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-      },
-      {
-        field: 'memorySize',
-        title: '内存大小(G)',
-        showOverflow: false,
-        showHeaderOverflow: true,
-        sortable: true,
-      },
-      {
-        field: 'memoryUsage',
-        title: '内存使用率(%)',
-        showOverflow: false,
-        showHeaderOverflow: true,
-        sortable: true,
-      },
-    ];
-    baseColumnsChart = ['cpuUsage', 'memoryUsage'];
-    if (data) {
+    if (data.source.length > 0) {
+      baseColumns = [
+        { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+        {
+          field: 'keyId',
+          title: '记录ID',
+          visible: false,
+          showOverflow: true,
+          showHeaderOverflow: true,
+        },
+        {
+          field: 'cpuUsage',
+          title: 'CPU使用率(%)',
+          showOverflow: true,
+          showHeaderOverflow: true,
+          sortable: false,
+        },
+        {
+          field: 'memorySize',
+          title: '内存大小(G)',
+          showOverflow: false,
+          showHeaderOverflow: true,
+          sortable: false,
+        },
+        {
+          field: 'memoryUsage',
+          title: '内存使用率(%)',
+          showOverflow: false,
+          showHeaderOverflow: true,
+          sortable: false,
+        },
+      ];
+      baseColumnsChart = [
+        {
+          name: 'cpu使用率',
+          col: 'cpuUsage',
+          color: '#84C8DD',
+        },
+        {
+          name: '内存使用率',
+          col: 'memoryUsage',
+          color: '#CB88DE',
+        },
+      ];
       page.total = data.totalCount;
-      data.source.forEach((m) => {
-        m.diskList.forEach((d) => {
-          const col_u = `disku_${d.diskName}`;
-          const col_s = `disks_${d.diskName}`;
-          m[col_u] = d.diskUsage;
-          m[col_s] = d.diskSize;
-          if (!baseColumns.find((c) => c.field == col_s)) {
-            baseColumns.push({
-              field: col_s,
-              title: `${d.diskName}盘大小(G)`,
-              showOverflow: true,
-              showHeaderOverflow: true,
-              sortable: true,
-            });
-          }
-          if (!baseColumns.find((c) => c.field == col_u)) {
-            baseColumns.push({
-              field: col_u,
-              title: `${d.diskName}盘使用率(%)`,
-              showOverflow: true,
-              showHeaderOverflow: true,
-              sortable: true,
-            });
-            baseColumnsChart.push(col_u);
+      diskNames.forEach((col) => {
+        ['DiskSize', 'DiskUsage'].forEach((d) => {
+          const name = col + d;
+          if (data.source.filter((m) => m[col + d] != null).length > 0) {
+            if (d == 'DiskSize') {
+              baseColumns.push({
+                field: name,
+                title: `${col}盘大小(G)`,
+                showOverflow: true,
+                showHeaderOverflow: true,
+                sortable: false,
+              });
+            } else {
+              baseColumns.push({
+                field: name,
+                title: `${col}盘使用率(%)`,
+                showOverflow: true,
+                showHeaderOverflow: true,
+                sortable: false,
+              });
+              baseColumnsChart.push({
+                name: `${col}盘使用率(%)`,
+                col: name,
+                color: '#9ADC69',
+              });
+            }
           }
         });
-        delete m.diskList;
       });
-      isDataSource.value = true;
-      tableConfig.data = data.source;
       if (activeKey.value == 'echart') {
+        tableConfig.data = [];
+        page.total = 0;
         handleEchar(data.source);
+      } else {
+        isDataSource.value = false;
+        baseColumns.push({
+          field: 'dataTime',
+          title: '数据时间',
+          width: 150,
+          showOverflow: true,
+          showHeaderOverflow: true,
+          sortable: true,
+        });
+        tableConfig.data = data.source;
+        tableConfig.columns = baseColumns;
       }
     } else {
       isDataSource.value = false;
       tableConfig.data = [];
       page.total = 0;
     }
-    baseColumns.push({
-      field: 'dataTime',
-      title: '数据时间',
-      width: 150,
-      showOverflow: true,
-      showHeaderOverflow: true,
-      sortable: true,
-    });
-    tableConfig.columns = baseColumns;
   }
 
   function handleEchar(dataSource) {
-    if (dataSource.length > 0) {
-      dataSource = _.sortBy(dataSource, (m) => m.dataTime);
-      const option = {
-        backgroundColor: '#fff',
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#6a7985',
-            },
+    isDataSource.value = true;
+    dataSource = _.sortBy(dataSource, (m) => m.dataTime);
+    const option = {
+      backgroundColor: '#fff',
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'cross',
+          label: {
+            backgroundColor: '#6a7985',
           },
         },
-        dataZoom: [
-          {
-            show: false,
-            realtime: true,
-            start: 0,
-            end: 100,
-          },
-          {
-            type: 'inside',
-            realtime: true,
-            start: 0,
-            end: 100,
-          },
-        ],
-        legend: {
-          data: ['cpu使用率(%)', '内存使用率(%)'],
+      },
+      dataZoom: [
+        {
+          show: false,
+          realtime: true,
+          start: 0,
+          end: 100,
         },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
+        {
+          type: 'inside',
+          realtime: true,
+          start: 0,
+          end: 100,
+        },
+      ],
+      legend: {
+        data: [],
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        axisLabel: {
+          formatter: function (parm) {
+            let time = dayjs(parm).format('YYYY-MM-DD HH:mm:ss');
+            if (time.indexOf(' ' != -1)) {
+              return time.substring(5, 10) + '\r\n' + time.substring(10, parm.length);
+            }
+            return time;
+          },
+        },
+      },
+      yAxis: [
+        {
+          type: 'value',
+          min: 0,
+          max: 100,
           axisLabel: {
-            formatter: function (parm) {
-              let time = dayjs(parm).format('YYYY-MM-DD HH:mm:ss');
-              if (time.indexOf(' ' != -1)) {
-                return time.substring(5, 10) + '\r\n' + time.substring(10, parm.length);
-              }
-              return time;
-            },
+            formatter: '{value} %',
           },
         },
-        yAxis: [
-          {
-            type: 'value',
-            min: 0,
-            max: 100,
-            axisLabel: {
-              formatter: '{value} %',
-            },
-          },
-        ],
-        series: [
-          {
-            symbol: 'none',
-            name: 'cpu使用率(%)',
-            field: 'cpuUsage',
-            type: 'line',
-            data: [],
-            color: '#84C8DD',
-            smooth: 0.2,
-          },
-          {
-            name: '内存使用率(%)',
-            field: 'memoryUsage',
-            type: 'line',
-            data: [],
-            symbol: 'none',
-            color: '#CB88DE',
-            smooth: 0.2,
-          },
-        ],
-      };
-      baseColumnsChart.forEach((m) => {
-        const n = `磁盘${m.split('_')[1]}使用率(%)`;
-        if (m.indexOf('disku_') != -1 && !option.legend.data.find((m) => m == n)) {
-          option.legend.data.push(n);
-          option.series.push({
-            name: n,
-            field: m,
-            type: 'line',
-            data: [],
-            symbol: 'none',
-            // color: '#9ADC69',
-            smooth: 0.2,
-          });
-        }
+      ],
+      series: [
+        {
+          symbol: 'none',
+          name: 'cpu使用率(%)',
+          field: 'cpuUsage',
+          type: 'line',
+          data: [],
+          color: '#84C8DD',
+          smooth: 0.2,
+        },
+        {
+          name: '内存使用率(%)',
+          field: 'memoryUsage',
+          type: 'line',
+          data: [],
+          symbol: 'none',
+          color: '#CB88DE',
+          smooth: 0.2,
+        },
+      ],
+    };
+    baseColumnsChart.forEach((m) => {
+      option.legend.data.push(m.name);
+      option.series.push({
+        name: m.name,
+        field: m.col,
+        type: 'line',
+        data: [],
+        symbol: 'none',
+        color: m.color,
+        smooth: 0.2,
       });
-
-      baseColumnsChart.forEach((m) => {
-        const data = option.series.find((n) => n.field == m);
-        dataSource.forEach((d) => {
-          data.data.push([d.dataTime, d[m]]);
-        });
+    });
+    baseColumnsChart.forEach((m) => {
+      const data = option.series.find((n) => n.field == m.col);
+      dataSource.forEach((d) => {
+        data.data.push([d.dataTime, d[m.col]]);
       });
-      getInstance().setOption(option, true);
-    }
+    });
+    getInstance().setOption(option, true);
   }
 
   function handlePageChange() {
@@ -388,11 +397,7 @@
   }
 
   function tabsChange(key) {
-    if (key == 'echart') {
-      nextTick(() => {
-        handleEchar();
-      });
-    } else {
+    if (key != 'echart') {
       tableRef.value.reloadData(tableConfig.data);
     }
   }
@@ -410,6 +415,9 @@
   }
 </script>
 <style lang="less" scoped>
+  .div-content-height-header {
+    height: calc(100vh - 66px) !important;
+  }
   @prefixCls: ~'@{namespace}-PerformanceHis-';
 
   .@{prefixCls} {

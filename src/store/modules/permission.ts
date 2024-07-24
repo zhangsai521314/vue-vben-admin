@@ -319,8 +319,8 @@ export const usePermissionStore = defineStore({
               if (
                 menu &&
                 isUpUrl &&
-                menu.powertype.indexOf('1') == -1 &&
-                menu.powertype.indexOf('2') == -1
+                menu.powerType.indexOf('1') == -1 &&
+                menu.powerType.indexOf('2') == -1
               ) {
                 if (isShowMsg) {
                   message.warning('您没有打开该菜单的权限');
