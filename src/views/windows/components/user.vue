@@ -27,7 +27,7 @@
             Authorization: token,
           }"
         >
-          <a-avatar :size="90" alt="USER" :src="userData.avatar" />
+          <a-avatar :size="90" alt="U" :src="userData.avatar || headerImg" />
         </a-upload>
       </a-form-item>
       <a-form-item
@@ -155,6 +155,7 @@
   import { getAppEnvConfig } from '@/utils/env';
   import { sm2 } from 'sm-crypto-v2';
   import commonApi from '@/api/common';
+  import headerImg from '@/assets/images/header.jpg';
 
   const props = defineProps({
     backgroundColor: {

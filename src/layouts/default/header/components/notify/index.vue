@@ -79,7 +79,7 @@
       description: '点击任意区域交互-以开启信息声音提示',
       placement: 'top',
       style: {
-        width: '300px',
+        width: '320px',
         top: '20px',
         border: '1px solid red',
       },

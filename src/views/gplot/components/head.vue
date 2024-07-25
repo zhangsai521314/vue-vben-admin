@@ -1,6 +1,6 @@
 <template>
   <div :class="`${prefixCls}top-logo`">
-    <img src="../../../assets/images/logo.png" />
+    <img src="../../../assets/images/logo.png" style="width: 65px; height: 65px" />
   </div>
   <div :class="`${prefixCls}top-menu`">
     <a-dropdown :class="`${prefixCls}menu-item`">

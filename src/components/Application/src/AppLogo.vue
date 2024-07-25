@@ -14,7 +14,7 @@
       {{ company }}
     </div> -->
     <!-- <div v-show="showTitle" style="margin: 9px 0 0 2px; color: #fff">{{ version }}</div> -->
-    <img src="../../../assets/images/logo.png" style=" width: auto;height: auto" />
+    <img src="../../../assets/images/logo.png" style="width: 65px; height: 65px" />
   </div>
 </template>
 <script lang="ts" setup>
