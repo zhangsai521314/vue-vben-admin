@@ -246,10 +246,19 @@
             <a-select
               placeholder="请选择账户类型"
               v-model:value="formData.adminType"
-              :options="admintypeOptions"
               show-search
               :filter-option="AntVueCommon.filterOption"
-            />
+            >
+              <a-select-option :value="1" :disabled="userData.adminType > 1">
+                超级管理员
+              </a-select-option>
+              <a-select-option :value="2" :disabled="userData.adminType > 2">
+                管理员
+              </a-select-option>
+              <a-select-option :value="3" :disabled="userData.adminType > 3">
+                普通用户
+              </a-select-option>
+            </a-select>
           </a-form-item>
           <a-form-item
             label="联系电话"
@@ -364,6 +373,7 @@
   import organizationApi from '@/api/organization';
   import { sm2 } from 'sm-crypto-v2';
   import { useDesign } from '@/hooks/web/useDesign';
+  import { useUserStore } from '@/store/modules/user';
 
   defineOptions({ name: 'UserManage' });
   const { prefixCls } = useDesign('UserManage-');
@@ -559,6 +569,8 @@
   const isReadPower = ref(false);
   const assignPowerUserId = ref(null);
   const roles = ref([]);
+  const userStore = useUserStore();
+  const userData = ref(_.cloneDeep(userStore.getUserInfo));
   const tenants = ref([]);
   const page = reactive({
     current: 1,
@@ -566,21 +578,6 @@
     total: 0,
     sortlist: ['modifyTime desc', 'createTime desc'],
   });
-  const admintypeOptions = [
-    {
-      value: 2,
-      label: '管理员',
-    },
-    {
-      value: 3,
-      label: '普通用户',
-    },
-    {
-      value: 1,
-      label: '超级管理员',
-      disabled: true,
-    },
-  ];
   const statusOptions = [
     {
       value: 1,

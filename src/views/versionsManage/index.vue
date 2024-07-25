@@ -109,7 +109,7 @@
             :filter-option="AntVueCommon.filterOption"
             placeholder="请选择服务类型"
             v-model:value="formData.serviceType"
-            :options="dictionariesData_add.filter((m) => m.dictionariesClass == 'serviceType')"
+            :options="dictionariesData_add"
           />
         </a-form-item>
         <a-form-item

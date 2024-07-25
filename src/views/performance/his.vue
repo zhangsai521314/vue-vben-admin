@@ -77,7 +77,7 @@
         </a-tab-pane>
         <a-tab-pane key="echart" tab="历史曲线">
           <div v-show="isDataSource" :class="prefixCls" ref="chartRef" style="height: 100%"></div>
-          <div style="height: 100%">
+          <div style="height: 100%" v-show="!isDataSource">
             <div style="height: 30px; padding-top: 20%; text-align: center"> 暂无数据 </div>
           </div>
         </a-tab-pane>

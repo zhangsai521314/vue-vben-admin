@@ -92,9 +92,16 @@
             :labelCol="{ span: 8, offset: 2 }"
             label="通信地址"
             name="mqttIp"
-            :rules="[{ required: true, message: '请输入通信地址Ip' }]"
+            :rules="[
+              { required: true, message: '请输入通信地址Ip' },
+              { validator: formValidator.ip, message: 'IP地址不正确' },
+            ]"
           >
-            <a-input placeholder="IP" v-model:value="formData.mqttIp" style="margin-left: 2px" />
+            <a-input
+              placeholder="通信地址IP"
+              v-model:value="formData.mqttIp"
+              style="margin-left: 2px"
+            />
           </a-form-item>
           <a-form-item
             label=""
@@ -165,6 +172,7 @@
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import { useDesign } from '@/hooks/web/useDesign';
+  import formValidator from '@/utils/MyCommon/formValidator';
 
   defineOptions({ name: 'MqttService' });
   const { prefixCls } = useDesign('mqttService-');
