@@ -83,6 +83,7 @@
   //绑定灵活配置的节点
   const agileStateData = [];
   let noAgileStateChangeStatus_timeId = 0;
+  let isStop = false;
   gplotStore.gplotKeyOb[gplotKey].containerConfig.menuId = props.menuId;
   shortcutKey_();
 
@@ -836,50 +837,52 @@
 
   //非灵活配置的变化监控
   function noAgileStateChangeStatus() {
-    softwareApi
-      .GetServiceStatus(serviceIdDatas.map((m) => m.data.myServiceId))
-      .then(async (nodeState) => {
-        console.log('nodeState', nodeState);
-        serviceIdDatas.forEach((node) => {
-          const stateOb = graphOb.getElementData(node.id);
-          if (stateOb) {
-            var serviceStatus = nodeState.find((m) => m.serviceId == stateOb.data.myServiceId);
-            let color = null;
-            for (let i = 0; i < stateOb.data.mySimpleState.filter((m) => m.open).length; i++) {
-              const element = stateOb.data.mySimpleState[i];
-              if (!serviceStatus[element.code]) {
-                color = element.color;
-                break;
+    if (!isStop) {
+      softwareApi
+        .GetServiceStatus(serviceIdDatas.map((m) => m.data.myServiceId))
+        .then(async (nodeState) => {
+          console.log('nodeState', nodeState);
+          serviceIdDatas.forEach((node) => {
+            const stateOb = graphOb.getElementData(node.id);
+            if (stateOb) {
+              var serviceStatus = nodeState.find((m) => m.serviceId == stateOb.data.myServiceId);
+              let color = null;
+              for (let i = 0; i < stateOb.data.mySimpleState.filter((m) => m.open).length; i++) {
+                const element = stateOb.data.mySimpleState[i];
+                if (!serviceStatus[element.code]) {
+                  color = element.color;
+                  break;
+                }
               }
-            }
-            if (color == null) {
-              //回复原始状态
-              switch (stateOb.data.myType) {
-                case 'node':
-                  color = stateOb.data.myOldStyle.iconFill;
-                  break;
-                case 'edge':
-                  color = stateOb.data.myOldStyle.fill;
-                  break;
-                case 'combo':
-                  color = stateOb.data.myOldStyle.stroke;
-                  break;
+              if (color == null) {
+                //回复原始状态
+                switch (stateOb.data.myType) {
+                  case 'node':
+                    color = stateOb.data.myOldStyle.iconFill;
+                    break;
+                  case 'edge':
+                    color = stateOb.data.myOldStyle.fill;
+                    break;
+                  case 'combo':
+                    color = stateOb.data.myOldStyle.stroke;
+                    break;
+                }
               }
+              changeStyle(stateOb.data.myType, node.id, color);
             }
-            changeStyle(stateOb.data.myType, node.id, color);
-          }
+          });
+          await graphOb.draw();
+          noAgileStateChangeStatus_timeId = setTimeout(() => {
+            noAgileStateChangeStatus();
+          }, 500);
+        })
+        .catch((e) => {
+          console.error(e);
+          noAgileStateChangeStatus_timeId = setTimeout(() => {
+            noAgileStateChangeStatus();
+          }, 500);
         });
-        await graphOb.draw();
-        noAgileStateChangeStatus_timeId = setTimeout(() => {
-          noAgileStateChangeStatus();
-        }, 500);
-      })
-      .catch((e) => {
-        console.error(e);
-        noAgileStateChangeStatus_timeId = setTimeout(() => {
-          noAgileStateChangeStatus();
-        }, 500);
-      });
+    }
   }
 
   //灵活配置节点的状态初始化
@@ -1072,6 +1075,7 @@
 
   //页面卸载后
   tryOnUnmounted(() => {
+    isStop = true;
     clearTimeout(noAgileStateChangeStatus_timeId);
     if (graphOb) {
       graphOb.destroy();

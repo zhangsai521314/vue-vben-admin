@@ -18,7 +18,7 @@
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
 
   const mqttStore = useMqttStoreWithOut();
-  mqttStore.msgAudioOb = new Audio('/src/assets/audio/gaojin2.mp3'); // 替换为你的音频文件路径
+  mqttStore.msgAudioOb = new Audio('/audio/gaojin2.mp3'); // 替换为你的音频文件路径
   // support Multi-language
   const { getAntdLocale } = useLocale();
 
