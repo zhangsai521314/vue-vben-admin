@@ -73,6 +73,19 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>信息大类：</label>
+                    <a-select
+                      style="width: 170px"
+                      allow-clear
+                      v-model:value="seacthContent.msgClass"
+                    >
+                      <a-select-option :value="2">告警</a-select-option>
+                      <a-select-option :value="1">提示</a-select-option>
+                    </a-select>
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
                     <label>信息状态：</label>
                     <a-select
                       style="width: 170px"
@@ -165,7 +178,7 @@
       <template #msgClass="{ row }">
         <span
           :style="{
-            color: row.msgClass == '告警' ? '#0960BD' : '',
+            color: row.msgClass == '告警' ? 'red' : '',
           }"
           >{{ row.msgClass }}</span
         >
@@ -210,10 +223,20 @@
           </AuthDom>
           <AuthDom auth="message_show_detail">
             <IconFontClass
+              :class="{ 'not-click': row.msgClass == '提示' }"
               name="icon-baseui-show"
               @click="showMgsHis(row)"
               style="color: #0fc10e"
               title="查看告警记录"
+            />
+          </AuthDom>
+          <AuthDom auth="message_repair">
+            <IconFontClass
+              :class="{ 'not-click': row.msgClass == '提示' }"
+              name="icon-baseui-zijianrizhi"
+              @click="showRepair(row)"
+              style="color: #0749df"
+              title="修复内容"
             />
           </AuthDom>
           <!-- <AuthDom auth="message_show_read">
@@ -272,6 +295,45 @@
       @close="closeHis"
     >
       <his :msgId="hisId" />
+    </a-drawer>
+    <a-drawer
+      :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+      :width="500"
+      :visible="isShowRepair"
+      title="简要修复内容"
+      :footer-style="{ textAlign: 'right' }"
+      @close="closeRepair"
+    >
+      <a-form
+        :label-col="{ span: 4 }"
+        :style="{ paddingRight: '2px' }"
+        :wrapper-col="{ span: 20 }"
+        autocomplete="off"
+        ref="formRef"
+        :model="formData"
+      >
+        <a-form-item
+          name="briefRepairMethods"
+          label="修复内容"
+          :rules="[
+            { required: true, message: '请输入修复内容' },
+            { max: 1063, message: '修复内容过长' },
+          ]"
+        >
+          <a-textarea
+            placeholder="请输入修复内容"
+            :rows="20"
+            v-model:value="formData.briefRepairMethods"
+            autocomplete="off"
+          />
+        </a-form-item>
+      </a-form>
+      <template #footer>
+        <a-spin :spinning="fromRepaiSpinning">
+          <a-button type="primary" @click="saveFromRepair">保存</a-button>
+          <a-button style="margin-left: 8px" @click="closeRepair">关闭</a-button>
+        </a-spin>
+      </template>
     </a-drawer>
   </MyContent>
 </template>
@@ -437,16 +499,16 @@
         visible: false,
         sortable: true,
       },
-      {
-        title: '告警强提示',
-        width: 180,
-        slots: {
-          default: 'strongPrompting',
-        },
-        showOverflow: true,
-        showHeaderOverflow: true,
-        visible: false,
-      },
+      // {
+      //   title: '告警强提示',
+      //   width: 180,
+      //   slots: {
+      //     default: 'strongPrompting',
+      //   },
+      //   showOverflow: true,
+      //   showHeaderOverflow: true,
+      //   visible: false,
+      // },
       // {
       //   title: '是否已读',
       //   slots: {
@@ -456,13 +518,22 @@
       //   fixed: 'right',
       // },
       {
+        field: 'briefRepairMethods',
+        title: '简要修复内容',
+        showOverflow: false,
+        showHeaderOverflow: true,
+        sortable: true,
+        width: '200',
+        visible: false,
+      },
+      {
         title: '操作',
         slots: {
           default: 'default',
         },
         showHeaderOverflow: true,
         fixed: 'right',
-        minWidth: 80,
+        minWidth: 110,
       },
     ],
     toolbarConfig: {
@@ -475,6 +546,7 @@
   });
   const tableRef = ref({});
   const myContentRef = ref({});
+  const formRef = ref({});
   const seacthContent = ref({
     serviceId: null,
     msgType: '',
@@ -484,6 +556,7 @@
     startTime: null,
     endTime: null,
     isConfirm: null,
+    msgClass: 2,
   });
   const timeValue = ref(null);
   //   [
@@ -503,7 +576,12 @@
   let refreshTimeId;
   const hisId = ref('');
   const isShowVis = ref(false);
-
+  const isShowRepair = ref(false);
+  const fromRepaiSpinning = ref(false);
+  const formData = reactive({
+    msgId: null,
+    briefRepairMethods: null,
+  });
   getMessages(true);
   getDictionaries();
   getServices();
@@ -581,6 +659,7 @@
       startTime: null,
       endTime: null,
       isConfirm: null,
+      msgClass: 2,
     };
 
     timeValue.value = null;
@@ -682,6 +761,50 @@
     }
   }
 
+  //显示修复建议
+  function showRepair(row) {
+    formData.msgId = row.msgId;
+    messageApi
+      .GetRepair(row.msgId)
+      .then((data) => {
+        isShowRepair.value = true;
+        formData.briefRepairMethods = data;
+      })
+      .catch(() => {
+        isShowRepair.value = true;
+      });
+  }
+  function closeRepair() {
+    formData.briefRepairMethods = null;
+    isShowRepair.value = false;
+  }
+  function saveFromRepair() {
+    formRef.value.validate().then(() => {
+      fromRepaiSpinning.value = true;
+      messageApi
+        .UpdateRepair({
+          ...formData,
+          execompleteBefore: () => {
+            fromRepaiSpinning.value = false;
+          },
+        })
+        .then((data) => {
+          if (data) {
+            message.success('更新简要修复内容成功');
+            const oldData = tableRef.value.getRowById(formData.msgId);
+            if (oldData) {
+              oldData.briefRepairMethods = formData.briefRepairMethods;
+            }
+            isShowRepair.value = false;
+          } else {
+            message.error('更新简要修复内容失败');
+          }
+        })
+        .catch(() => {
+          message.error('更新简要修复内容出错');
+        });
+    });
+  }
   watch(
     () => refresh.value,
     () => {

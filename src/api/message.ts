@@ -49,5 +49,19 @@ const Message = {
       url: '/Message/GetServiceMsgTypeLastSimple',
     });
   },
+  //获取修复内容
+  GetRepair: function (params) {
+    return defHttp.get({
+      url: '/Message/GetRepair/',
+      params,
+    });
+  },
+  //更新简要修复内容
+  UpdateRepair: function (params) {
+    return defHttp.post({
+      url: '/Message/UpdateRepair',
+      params,
+    });
+  },
 };
 export default Message;
