@@ -556,7 +556,7 @@
     startTime: null,
     endTime: null,
     isConfirm: null,
-    msgClass: 2,
+    msgClass: msgId == null ? 2 : null,
   });
   const timeValue = ref(null);
   //   [
