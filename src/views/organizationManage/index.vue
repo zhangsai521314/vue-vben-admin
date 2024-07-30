@@ -125,7 +125,11 @@
         <a-form-item
           name="orderIndex"
           label="部门排序"
-          :rules="[{ required: true, message: '请输入部门排序' }]"
+          :rules="[
+            { required: true, message: '请输入部门排序' },
+            { validator: formValidator.min, min: -9999, message: '排序值-9999至9999' },
+            { validator: formValidator.max, max: 9999, message: '排序值-9999至9999' },
+          ]"
         >
           <a-input-number
             style="width: 300px"
@@ -133,8 +137,6 @@
             placeholder="请输入部门排序"
             autocomplete="off"
             :precision="3"
-            :min="-99999"
-            :max="99999"
           />
         </a-form-item>
       </a-form>

@@ -115,14 +115,16 @@
         <a-form-item
           name="orderIndex"
           label="软件包排序"
-          :rules="[{ required: true, message: '请输入软件包排序' }]"
+          :rules="[
+            { required: true, message: '请输入软件包排序' },
+            { validator: formValidator.min, min: -9999, message: '排序值-9999至9999' },
+            { validator: formValidator.max, max: 9999, message: '排序值-9999至9999' },
+          ]"
         >
           <a-input-number
             placeholder="请输入软件包排序"
             style="width: 300px"
             :precision="3"
-            :min="-99999"
-            :max="99999"
             v-model:value="formData.orderIndex"
           />
         </a-form-item>

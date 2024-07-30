@@ -169,20 +169,46 @@
               placeholder="请选择下一车站"
             />
           </a-form-item>
-          <a-form-item name="startGlb" label="起始公里标(米)">
+          <a-form-item
+            name="startGlb"
+            label="起始公里标(米)"
+            :rules="[
+              {
+                validator: formValidator.min,
+                min: -9999999,
+                message: '起始公里标-9999999至9999999',
+              },
+              {
+                validator: formValidator.max,
+                max: 9999999,
+                message: '起始公里标-9999999至9999999',
+              },
+            ]"
+          >
             <a-input-number
-              min="-9999999"
-              max="9999999"
               :precision="0"
               placeholder="请输入起始公里标"
               v-model:value="formData.startGlb"
               autocomplete="off"
             />
           </a-form-item>
-          <a-form-item name="endGlb" label="终止公里标(米)">
+          <a-form-item
+            name="endGlb"
+            label="终止公里标(米)"
+            :rules="[
+              {
+                validator: formValidator.min,
+                min: -9999999,
+                message: '终止公里标-9999999至9999999',
+              },
+              {
+                validator: formValidator.max,
+                max: 9999999,
+                message: '终止公里标-9999999至9999999',
+              },
+            ]"
+          >
             <a-input-number
-              min="-9999999"
-              max="9999999"
               :precision="0"
               placeholder="请输入终止公里标"
               v-model:value="formData.endGlb"
@@ -296,14 +322,16 @@
             <a-form-item
               name="groupCallPriority"
               label="站内组呼优先级"
-              :rules="[{ required: true, message: '请输入站内组呼优先级' }]"
+              :rules="[
+                { required: true, message: '请输入站内组呼优先级' },
+                { validator: formValidator.min, min: 1, message: '站内组呼优先级1至15' },
+                { validator: formValidator.max, max: 15, message: '站内组呼优先级1至15' },
+              ]"
             >
               <a-input-number
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
                 placeholder="请输入站内组呼优先级"
                 style="width: 262px"
-                min="1"
-                max="15"
                 :precision="0"
                 v-model:value="formData.groupCallPriority"
               />
@@ -329,14 +357,16 @@
             <a-form-item
               name="tempCallPriority"
               label="邻站组呼优先级"
-              :rules="[{ required: true, message: '请输入邻站组呼优先级' }]"
+              :rules="[
+                { required: true, message: '请输入邻站组呼优先级' },
+                { validator: formValidator.min, min: 1, message: '邻站组呼优先级1至15' },
+                { validator: formValidator.max, max: 15, message: '邻站组呼优先级1至15' },
+              ]"
             >
               <a-input-number
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
                 placeholder="请输入邻站组呼优先级"
                 style="width: 262px"
-                min="1"
-                max="15"
                 :precision="0"
                 v-model:value="formData.tempCallPriority"
               />

@@ -94,11 +94,11 @@
             name="mqttIp"
             :rules="[
               { required: true, message: '请输入通信地址Ip' },
-              { validator: formValidator.ip, message: 'IP地址不正确' },
+              { validator: formValidator.ip, message: '通信地址Ip地址不正确' },
             ]"
           >
             <a-input
-              placeholder="通信地址IP"
+              placeholder="请输入通信地址IP"
               v-model:value="formData.mqttIp"
               style="margin-left: 2px"
             />
@@ -106,15 +106,17 @@
           <a-form-item
             label=""
             name="mqttPort"
-            :rules="[{ required: true, message: '请输入端口' }]"
+            :rules="[
+              { required: true, message: '请输入端口号' },
+              { validator: formValidator.min, min: 1, message: '端口号1至65535' },
+              { validator: formValidator.max, max: 65535, message: '端口号1至65535' },
+            ]"
           >
             <a-input-number
-              placeholder="端口号"
+              placeholder="请输入端口号"
               v-model:value="formData.mqttPort"
               style="width: 134px"
               :precision="0"
-              :min="0"
-              :max="9999999999"
             />
           </a-form-item>
         </a-space>
@@ -143,14 +145,16 @@
         <a-form-item
           name="orderIndex"
           label="排序"
-          :rules="[{ required: true, message: '请输入排序' }]"
+          :rules="[
+            { required: true, message: '请输入排序' },
+            { validator: formValidator.min, min: -9999, message: '排序值-9999至9999' },
+            { validator: formValidator.max, max: 9999, message: '排序值-9999至9999' },
+          ]"
         >
           <a-input-number
             placeholder="请输入排序"
             style="width: 300px"
             :precision="3"
-            :min="-99999"
-            :max="99999"
             v-model:value="formData.orderIndex"
           />
         </a-form-item>

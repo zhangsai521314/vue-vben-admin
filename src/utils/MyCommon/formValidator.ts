@@ -67,5 +67,19 @@ const FormValidator = {
       return Promise.reject('经度不符合规则');
     }
   },
+  //最小值
+  min: async (rule, value, callback) => {
+    if (parseFloat(value) < rule.min) {
+      return Promise.reject(`最小值应大于${rule.min}`);
+    }
+    return Promise.resolve();
+  },
+  //最大值
+  max: async (rule, value, callback) => {
+    if (parseFloat(value) > rule.max) {
+      return Promise.reject(`最大值应小于${rule.max}`);
+    }
+    return Promise.resolve();
+  },
 };
 export default FormValidator;

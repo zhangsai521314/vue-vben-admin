@@ -203,14 +203,20 @@
             autocomplete="off"
           />
         </a-form-item>
-        <a-form-item name="port" label="运行端口">
+        <a-form-item
+          name="port"
+          label="端口号"
+          :rules="[
+            { required: true, message: '请输入端口号' },
+            { validator: formValidator.min, min: 1, message: '端口号1至65535' },
+            { validator: formValidator.max, max: 65535, message: '端口号1至65535' },
+          ]"
+        >
           <a-input-number
-            placeholder="请输入运行端口"
+            placeholder="请输入端口号"
             v-model:value="formData.port"
             autocomplete="off"
             :precision="0"
-            :min="0"
-            :max="9999999999"
           />
         </a-form-item>
         <a-form-item
@@ -223,13 +229,15 @@
         <a-form-item
           name="orderIndex"
           label="软件排序"
-          :rules="[{ required: true, message: '请输入软件排序' }]"
+          :rules="[
+            { required: true, message: '请输入软件排序' },
+            { validator: formValidator.min, min: -9999, message: '排序值-9999至9999' },
+            { validator: formValidator.max, max: 9999, message: '排序值-9999至9999' },
+          ]"
         >
           <a-input-number
             placeholder="请输入软件排序"
             :precision="3"
-            :min="-99999"
-            :max="99999"
             style="width: 300px"
             v-model:value="formData.orderIndex"
           />

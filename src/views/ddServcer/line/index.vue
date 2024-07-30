@@ -202,14 +202,16 @@
             <a-form-item
               name="groupAllCirPriority"
               label="全呼机车组呼优先级"
-              :rules="[{ required: true, message: '请输入全呼机车组呼优先级' }]"
+              :rules="[
+                { required: true, message: '请输入全呼机车组呼优先级' },
+                { validator: formValidator.min, min: 1, message: '全呼机车组呼优先级1至15' },
+                { validator: formValidator.max, max: 15, message: '全呼机车组呼优先级1至15' },
+              ]"
             >
               <a-input-number
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
                 placeholder="请输入全呼机车组呼优先级"
                 style="width: 262px"
-                min="1"
-                max="15"
                 :precision="0"
                 v-model:value="formData.groupAllCirPriority"
               />
@@ -238,14 +240,16 @@
             <a-form-item
               name="groupAllDcPriority"
               label="全呼车站组呼优先级"
-              :rules="[{ required: true, message: '请输入全呼车站组呼优先级' }]"
+              :rules="[
+                { required: true, message: '请输入全呼车站组呼优先级' },
+                { validator: formValidator.min, min: 1, message: '全呼车站组呼优先级1至15' },
+                { validator: formValidator.max, max: 15, message: '全呼车站组呼优先级1至15' },
+              ]"
             >
               <a-input-number
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
                 placeholder="请输入全呼车站组呼优先级"
                 style="width: 262px"
-                min="1"
-                max="15"
                 :precision="0"
                 v-model:value="formData.groupAllDcPriority"
               />
@@ -274,14 +278,16 @@
             <a-form-item
               name="groupAllBroadcastPriority"
               label="全线广播组呼优先级"
-              :rules="[{ required: true, message: '请输入全线广播组呼优先级' }]"
+              :rules="[
+                { required: true, message: '请输入全线广播组呼优先级' },
+                { validator: formValidator.min, min: 1, message: '全线广播组呼优先级1至15' },
+                { validator: formValidator.max, max: 15, message: '全线广播组呼优先级1至15' },
+              ]"
             >
               <a-input-number
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
                 placeholder="请输入全线广播组呼优先级"
                 style="width: 262px"
-                min="1"
-                max="15"
                 :precision="0"
                 v-model:value="formData.groupAllBroadcastPriority"
               />

@@ -280,13 +280,15 @@
         <a-form-item
           name="orderIndex"
           label="菜单排序"
-          :rules="[{ required: true, message: '请输入排序' }]"
+          :rules="[
+            { required: true, message: '请输入排序' },
+            { validator: formValidator.min, min: -9999, message: '排序值-9999至9999' },
+            { validator: formValidator.max, max: 9999, message: '排序值-9999至9999' },
+          ]"
         >
           <a-input-number
             style="width: 300px"
             :precision="3"
-            :min="-99999"
-            :max="99999"
             v-model:value="formData.orderIndex"
             placeholder="请输入菜单排序"
             autocomplete="off"

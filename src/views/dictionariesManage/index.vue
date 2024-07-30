@@ -300,7 +300,11 @@
           name="orderIndex"
           label="字典排序"
           :labelCol="{ span: 7 }"
-          :rules="[{ required: true, message: '请输入字典排序' }]"
+          :rules="[
+            { required: true, message: '请输入字典排序' },
+            { validator: formValidator.min, min: -9999, message: '排序值-9999至9999' },
+            { validator: formValidator.max, max: 9999, message: '排序值-9999至9999' },
+          ]"
         >
           <a-input-number
             style="width: 300px"
@@ -308,8 +312,6 @@
             v-model:value="formData.orderIndex"
             placeholder="请输入字典排序"
             autocomplete="off"
-            :min="-99999"
-            :max="99999"
           />
         </a-form-item>
         <a-form-item label="归属服务类型" name="serviceType" :labelCol="{ span: 7 }">
