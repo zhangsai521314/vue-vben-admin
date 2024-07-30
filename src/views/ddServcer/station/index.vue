@@ -122,7 +122,6 @@
             label="经度"
             :rules="[
               { required: true, message: '请输入经度' },
-              { max: 16, message: '经度过长' },
               { validator: formValidator.longitude, message: '经度格式不正确' },
             ]"
           >
@@ -138,7 +137,6 @@
             label="纬度"
             :rules="[
               { required: true, message: '请输入纬度' },
-              { max: 16, message: '纬度过长' },
               { validator: formValidator.latitude, message: '纬度格式不正确' },
             ]"
           >

@@ -107,6 +107,24 @@
   const chartRef = ref();
   let baseColumns = [];
   let baseColumnsChart = [];
+  const diskColor = [
+    '#70FB09',
+    '#5BCA09',
+    '#429208',
+    '#477A22',
+    '#2C6005',
+    '#2C6005',
+    '#2C6005',
+    '#2C6005',
+    '#2C6005',
+    '#2C6005',
+    '#2C6005',
+    '#2C6005',
+    '#2C6005',
+    '#2C6005',
+    '#2C6005',
+    '#2C6005',
+  ];
   const { getInstance, resize, setOptions, echarts } = useECharts(chartRef);
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
@@ -267,7 +285,7 @@
               baseColumnsChart.push({
                 name: `${col}盘使用率(%)`,
                 col: name,
-                color: '#9ADC69',
+                color: diskColor[baseColumnsChart.length - 2],
               });
             }
           }
@@ -327,6 +345,8 @@
       ],
       legend: {
         data: [],
+        icon: 'rectangle',
+        itemHeight: 8,
       },
       xAxis: {
         type: 'category',
