@@ -155,6 +155,7 @@
       .then((data) => {
         tableConfigData.value = data.source;
         page.total = data.totalCount;
+        page.current = data.pageIndex;
       })
       .catch(() => {
         tableConfigData.value = [];

@@ -417,6 +417,7 @@
       .then((data) => {
         tableConfig.data = data.source;
         page.total = data.totalCount;
+        page.current = data.pageIndex;
         refreshData();
       })
       .catch(() => {

@@ -243,6 +243,7 @@
         },
       ];
       page.total = data.totalCount;
+      page.current = data.pageIndex;
       diskNames.forEach((col) => {
         ['DiskSize', 'DiskUsage'].forEach((d) => {
           const name = col + d;
