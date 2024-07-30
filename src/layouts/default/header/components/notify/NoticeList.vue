@@ -10,7 +10,7 @@
         <!-- <div style="width: 94px"> -->
         <div style="width: 50px">
           <!-- <div style="display: flex; align-items: center; justify-content: space-between"> -->
-          <div>
+          <div style="padding-left: 1px">
             <IconFontClass
               :title="
                 row.msgClass == 1

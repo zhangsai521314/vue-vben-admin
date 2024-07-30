@@ -108,8 +108,8 @@
             name="code"
             :rules="[
               { required: true, message: '' },
-              { min: 3, message: '线路代码过短' },
-              { max: 6, message: '线路代码过长' },
+              { min: 3, message: '线路代码是3至6位' },
+              { max: 6, message: '线路代码是3至6位' },
               { validator: formValidator.positiveInteger, message: '线路代码格式为自然数' },
               { validator: formValidator.empty, message: '请输入线路代码' },
             ]"
@@ -125,8 +125,8 @@
             label="功能号"
             :rules="[
               { required: true, message: '' },
-              { min: 5, message: '功能号名称过短' },
-              { max: 9, message: '功能号名称过长' },
+              { min: 5, message: '功能号名称是5至9位' },
+              { max: 9, message: '功能号名称是5至9位' },
               { validator: formValidator.positiveInteger, message: '功能号格式为自然数' },
               { validator: formValidator.empty, message: '请输入功能号' },
             ]"
@@ -138,8 +138,8 @@
             label="调度台ISDN"
             :rules="[
               { required: true, message: '' },
-              { min: 4, message: '调度台ISDN名称过短' },
-              { max: 11, message: '调度台ISDN名称过长' },
+              { min: 4, message: '调度台ISDN名称是4至11位' },
+              { max: 11, message: '调度台ISDN名称是4至11位' },
               { validator: formValidator.positiveInteger, message: '调度台ISDN格式为自然数' },
               { validator: formValidator.empty, message: '请输入调度台ISDN' },
             ]"
@@ -183,8 +183,8 @@
               label="全呼机车组呼号码"
               :rules="[
                 { required: true, message: '' },
-                { min: 3, message: '全呼机车组呼号码过短' },
-                { max: 10, message: '全呼机车组呼号码过长' },
+                { min: 3, message: '全呼机车组呼号码是3至10位' },
+                { max: 10, message: '全呼机车组呼号码是3至10位' },
                 {
                   validator: formValidator.positiveInteger,
                   message: '全呼机车组呼号码格式为自然数',
@@ -221,8 +221,8 @@
               label="全呼车站组呼号码"
               :rules="[
                 { required: true, message: '' },
-                { min: 3, message: '全呼车站组呼号码过短' },
-                { max: 10, message: '全呼车站组呼号码过长' },
+                { min: 3, message: '全呼车站组呼号码是3至10位' },
+                { max: 10, message: '全呼车站组呼号码是3至10位' },
                 {
                   validator: formValidator.positiveInteger,
                   message: '全呼车站组呼号码格式为正整数',
@@ -259,8 +259,8 @@
               label="全线广播组呼号码"
               :rules="[
                 { required: true, message: '' },
-                { min: 3, message: '全线广播组呼号码过短' },
-                { max: 10, message: '全线广播组呼号码过长' },
+                { min: 3, message: '全线广播组呼号码是3至10位' },
+                { max: 10, message: '全线广播组呼号码是3至10位' },
                 {
                   validator: formValidator.positiveInteger,
                   message: '全线广播组呼号码格式为自然数',

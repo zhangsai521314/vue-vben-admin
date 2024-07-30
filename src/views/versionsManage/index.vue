@@ -157,6 +157,7 @@
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import his from './his.vue';
   import { useDesign } from '@/hooks/web/useDesign';
+  import formValidator from '@/utils/MyCommon/formValidator';
 
   defineOptions({ name: 'VersionsManage' });
   const { prefixCls } = useDesign('versionsManage-');

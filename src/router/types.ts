@@ -49,6 +49,7 @@ export interface Menu {
   tag?: MenuTag;
 
   hideMenu?: boolean;
+  parentId: string;
 }
 
 export type MenuModule = Menu;

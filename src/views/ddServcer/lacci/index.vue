@@ -131,8 +131,8 @@
             name="lacci"
             :rules="[
               { required: true, message: '' },
-              { min: 4, message: 'ECI过短' },
-              { max: 8, message: 'ECI过长' },
+              { min: 4, message: 'ECI是4至8位' },
+              { max: 8, message: 'ECI是4至8位' },
               { validator: formValidator.empty, message: '请输入ECI' },
             ]"
           >

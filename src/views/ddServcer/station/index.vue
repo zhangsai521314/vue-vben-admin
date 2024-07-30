@@ -252,8 +252,8 @@
               name="code"
               :rules="[
                 { required: true, message: '' },
-                { min: 1, message: '车站代码过短' },
-                { max: 5, message: '车站代码过长' },
+                { min: 1, message: '车站代码是1至5位' },
+                { max: 5, message: '车站代码是1至5位' },
                 { validator: formValidator.empty, message: '请输入车站代码' },
                 { validator: formValidator.positiveInteger, message: '车站代码格式为自然数' },
               ]"
@@ -270,8 +270,8 @@
               name="dcFn"
               :rules="[
                 { required: true, message: '' },
-                { min: 9, message: '功能号过短' },
-                { max: 9, message: '功能号过长' },
+                { min: 9, message: '功能号是9位' },
+                { max: 9, message: '功能号是9位' },
                 { validator: formValidator.empty, message: '请输入功能号' },
                 { validator: formValidator.positiveInteger, message: '功能号格式为自然数' },
               ]"
@@ -288,8 +288,8 @@
               name="dcIsdn"
               :rules="[
                 { required: true, message: '' },
-                { min: 4, message: 'ISDN号过短' },
-                { max: 4, message: 'ISDN号过长' },
+                { min: 4, message: 'ISDN号是4位' },
+                { max: 4, message: 'ISDN号是4位' },
                 { validator: formValidator.empty, message: '请输入ISDN号' },
                 { validator: formValidator.positiveInteger, message: 'ISDN号格式为自然数' },
               ]"
@@ -306,8 +306,8 @@
               label="站内组呼号码"
               :rules="[
                 { required: true, message: '' },
-                { min: 3, message: '站内组呼号码过短' },
-                { max: 10, message: '站内组呼号码过长' },
+                { min: 3, message: '站内组呼号码是3至10位' },
+                { max: 10, message: '站内组呼号码是3至10位' },
                 { validator: formValidator.positiveInteger, message: '站内组呼号码格式为自然数' },
                 { validator: formValidator.empty, message: '请输入站内组呼号码' },
               ]"
@@ -341,8 +341,8 @@
               label="邻站组呼号码"
               :rules="[
                 { required: true, message: '' },
-                { min: 3, message: '邻站组呼号码过短' },
-                { max: 10, message: '邻站组呼号码过长' },
+                { min: 3, message: '邻站组呼号码是3位至10位' },
+                { max: 10, message: '邻站组呼号码是3位至10位' },
                 { validator: formValidator.positiveInteger, message: '邻站组呼号码格式为自然数' },
                 { validator: formValidator.empty, message: '请输入邻站组呼号码' },
               ]"

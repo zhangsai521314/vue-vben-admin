@@ -55,8 +55,17 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref, emit: A
       return;
     }
     const reg = createSearchReg(unref(keyword));
-    const filterMenu = filter(menuList, (item) => {
+    let filterMenu = filter(menuList, (item) => {
       return reg.test(item.name) && !item.hideMenu;
+    });
+    filterMenu = filterMenu.filter((m) => {
+      const f = myCommon.arrayFindOb(menuList, m.menuId, 'parentId', 'children');
+      if (m.children?.length == 0 && !f) {
+        //父级不展示
+        return m;
+      } else if (m.children?.length > 0) {
+        return m;
+      }
     });
     searchResult.value = handlerSearchResult(filterMenu, reg);
     activeIndex.value = 0;
