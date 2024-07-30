@@ -186,8 +186,8 @@ export const useUserStore = defineStore({
     /**
      * @description: logout
      */
-    async logout(goLogin = false) {
-      if (this.getToken) {
+    async logout(goLogin = false, goLogout = true) {
+      if (this.getToken && goLogout) {
         try {
           await doLogout();
         } catch {

@@ -158,6 +158,7 @@ async function mqttInit() {
           mqttConfig.LookLogBack,
           mqttConfig.WebCallRecordChange,
           mqttConfig.DDServerUpdateDBRes,
+          mqttConfig.WebUserInfoChange,
         ];
         mqttStore.updateMqttStatus(2);
         const client = mqtt.connect(mqttConfig.ServerAddress, {
@@ -233,6 +234,16 @@ async function mqttInit() {
                 //用户在别处已登录
                 userStore.logout(true);
                 message.info('您的账户已在别处登录，如非自己登录，请更改密码', 10);
+              }
+            } else if (topic == mqttConfig.WebUserInfoChange) {
+              if (
+                !myCommon.isnull(userStore.userInfo?.userId) &&
+                !myCommon.isnull(msg.userId) &&
+                userStore.userInfo?.userId == msg.userId
+              ) {
+                //用户信息已被修改（基础信息-部门信息|角色信息，权限信息）
+                userStore.logout(true, false);
+                message.info(`${msg.msg}`, 10);
               }
             } else if (topic == mqttConfig.WebMsg.replace('+', '') + 'Insert') {
               //告警插入

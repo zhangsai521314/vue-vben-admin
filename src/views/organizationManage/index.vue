@@ -24,7 +24,7 @@
                   </div>
                 </a-space>
               </AuthDom>
-              <AuthDom auth="organizationManage_add">
+              <AuthDom v-if="userData.adminType < 3" auth="organizationManage_add">
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
@@ -156,8 +156,11 @@
   import organizationApi from '@/api/organization';
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
+  import { useUserStore } from '@/store/modules/user';
 
   defineOptions({ name: 'OrganizationManage' });
+  const userStore = useUserStore();
+  const userData = ref(_.cloneDeep(userStore.getUserInfo));
   const { prefixCls } = useDesign('organizationManage-');
   const loading = ref(true);
   const tableConfigData = ref([]);
