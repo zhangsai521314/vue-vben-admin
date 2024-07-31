@@ -582,7 +582,7 @@
     msgId: null,
     briefRepairMethods: null,
   });
-  getMessages(true);
+  getMessages(msgId == null);
   getDictionaries();
   getServices();
 
