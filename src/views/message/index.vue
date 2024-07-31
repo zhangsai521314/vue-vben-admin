@@ -111,7 +111,7 @@
                     </a-select>
                   </a-space>
                 </div>
-                <div class="row-div">
+                <!-- <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>信息标题：</label>
                     <a-input
@@ -120,7 +120,7 @@
                       placeholder="输入信息标题查询"
                     />
                   </a-space>
-                </div>
+                </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>信息内容：</label>
@@ -466,7 +466,7 @@
         width: 100,
       },
       {
-        field: 'confirmUser',
+        field: 'confirmUserName',
         title: '确认人员',
         showOverflow: true,
         showHeaderOverflow: true,
@@ -752,7 +752,7 @@
           message.success('确认告警成功');
           const oldData = tableRef.value.getRowById(data.msgId);
           oldData.confirmTime = data.confirmTime;
-          oldData.confirmUser = userData.value.userName;
+          oldData.confirmUserName = data.confirmUserName;
         })
         .catch(() => {
           message.error('确认告警失败');

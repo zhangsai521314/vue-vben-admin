@@ -461,7 +461,7 @@
         title: '服务是否在线',
         showOverflow: true,
         showHeaderOverflow: true,
-        sortable: true,
+        // sortable: true,
         cellRender: { name: 'render_isno' },
       },
       {
@@ -469,7 +469,7 @@
         title: '运行是否正常',
         showOverflow: true,
         showHeaderOverflow: true,
-        sortable: true,
+        // sortable: true,
         cellRender: { name: 'render_isno' },
       },
       {
@@ -484,7 +484,7 @@
         title: '性能正常',
         showOverflow: true,
         showHeaderOverflow: true,
-        sortable: true,
+        // sortable: true,
         cellRender: { name: 'render_isno' },
       },
       {
@@ -619,7 +619,7 @@
             code: 'down',
             name: '下载',
             prefixIcon: 'iconfont icon-baseui-xiazai',
-            className: prefixCls + 'logTtable-xiazai-item  sssssss',
+            className: prefixCls + 'logTtable-xiazai-item',
           },
         ],
       ],

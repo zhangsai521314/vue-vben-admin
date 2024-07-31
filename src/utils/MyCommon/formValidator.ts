@@ -55,7 +55,7 @@ const FormValidator = {
     if (myCommon.isnull(value) || longitude.test(value)) {
       return Promise.resolve();
     } else {
-      return Promise.reject('经度不符合规则');
+      return Promise.reject('经度范围是-180至180，不超过10位小数');
     }
   },
   //纬度校验
@@ -64,7 +64,7 @@ const FormValidator = {
     if (myCommon.isnull(value) || latitude.test(value)) {
       return Promise.resolve();
     } else {
-      return Promise.reject('经度不符合规则');
+      return Promise.reject('纬度范围是-90至90，不超过10位小数');
     }
   },
   //最小值

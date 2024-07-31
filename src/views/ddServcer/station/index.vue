@@ -122,7 +122,10 @@
             label="经度"
             :rules="[
               { required: true, message: '请输入经度' },
-              { validator: formValidator.longitude, message: '经度格式不正确' },
+              {
+                validator: formValidator.longitude,
+                message: '经度范围是-180至180，不超过10位小数',
+              },
             ]"
           >
             <a-input
@@ -137,7 +140,7 @@
             label="纬度"
             :rules="[
               { required: true, message: '请输入纬度' },
-              { validator: formValidator.latitude, message: '纬度格式不正确' },
+              { validator: formValidator.latitude },
             ]"
           >
             <a-input

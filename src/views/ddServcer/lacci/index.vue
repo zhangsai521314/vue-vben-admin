@@ -141,7 +141,7 @@
           <a-form-item
             name="longitude"
             label="经度"
-            :rules="[{ validator: formValidator.longitude, message: '经度格式不正确' }]"
+            :rules="[{ validator: formValidator.longitude }]"
           >
             <a-input
               style="width: 262px"
@@ -153,7 +153,7 @@
           <a-form-item
             name="latitude"
             label="纬度"
-            :rules="[{ validator: formValidator.latitude, message: '纬度格式不正确' }]"
+            :rules="[{ validator: formValidator.latitude }]"
           >
             <a-input
               style="width: 262px"

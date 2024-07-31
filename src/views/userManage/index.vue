@@ -239,12 +239,12 @@
             />
           </a-form-item>
           <a-form-item
-            label="账户类型"
+            label="用户类型"
             name="adminType"
-            :rules="[{ required: true, message: '请选择账户类型' }]"
+            :rules="[{ required: true, message: '请选择用户类型' }]"
           >
             <a-select
-              placeholder="请选择账户类型"
+              placeholder="请选择用户类型"
               v-model:value="formData.adminType"
               show-search
               :filter-option="AntVueCommon.filterOption"
@@ -421,7 +421,7 @@
       },
       {
         field: 'adminType',
-        title: '账户类型',
+        title: '用户类型',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -501,7 +501,7 @@
         sortable: true,
       },
       {
-        field: 'createUser',
+        field: 'createUserName',
         title: '创建用户',
         visible: false,
         showOverflow: true,
@@ -518,7 +518,7 @@
         sortable: true,
       },
       {
-        field: 'modifyUser',
+        field: 'modifyUserName',
         title: '修改用户',
         visible: false,
         showOverflow: true,
@@ -813,7 +813,7 @@
           myCommon.objectReplace(oldData, formData.value);
           oldData.roleName = roles.value.find((m) => m.value == oldData.roleId)?.label;
           oldData.modifyTime = data.modifyTime;
-          oldData.modifyUser = data.modifyUser;
+          oldData.modifyUserName = data.modifyUserName;
           oldData.orgName = _organizationDatas.find((m) => m.key == oldData.orgId)?.label;
           formClose();
           message.success('更新用户信息成功');

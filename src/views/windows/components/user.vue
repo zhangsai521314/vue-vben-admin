@@ -82,7 +82,7 @@
       <a-form-item label="用户角色" name="roleName">
         <a-input :disabled="true" v-model:value="userData.roleName" autocomplete="off" />
       </a-form-item>
-      <a-form-item label="账户类型" name="adminTypeName" style="margin-bottom: 0">
+      <a-form-item label="用户类型" name="adminTypeName" style="margin-bottom: 0">
         <a-input :disabled="true" v-model:value="userData.adminTypeName" autocomplete="off" />
       </a-form-item>
       <a-form-item :wrapper-col="{ span: 20, offset: 12 }" style="position: relative; height: 0">

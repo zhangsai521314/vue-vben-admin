@@ -343,19 +343,18 @@
         visible: false,
       },
       {
-        field: 'recordStateDescription',
-        title: '录音状态',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-      },
-      {
         field: 'isOnline',
         title: '是否在线',
         showOverflow: true,
         showHeaderOverflow: true,
         cellRender: { name: 'render_isno' },
-        visible: false,
+      },
+      {
+        field: 'recordStateDescription',
+        title: '录音状态',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
       },
       {
         field: 'recordFileStatus',
@@ -374,6 +373,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        visible: false,
         formatter: ({ cellValue }) => {
           return cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : '';
         },
