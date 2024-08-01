@@ -61,7 +61,7 @@
                   <span :class="`${prefixCls}option`">
                     <!-- 节点后的操作按钮 -->
                     <span :class="{ 'option-read': props.isRead }">
-                      <a-checkbox-group :value="node.powerType" name="checkboxgroup">
+                      <a-checkbox-group :value="node.powerType.split(',')" name="checkboxgroup">
                         <a-checkbox
                           :disabled="props.isRead"
                           @dblclick="changeChildren(item.value, node)"
@@ -323,17 +323,14 @@
             node_ = myCommon.arrayFindOb(businessTreeData.value, node.key, 'key', 'children');
             break;
         }
-        const index = node_.powerType.indexOf(value);
+        const index = node_.powerType.split(',').indexOf(value);
         if (index == -1) {
           //选中
-          // const addP = node_.powerType == '' ? [] : node_.powerType.split(',');
-          // addP.push(value);
-          // node_.powerType = addP.join(',');
           if (node_.powerType == '') {
-            node_.powerType = [];
+            node_.powerType = `${value}`;
+          } else {
+            node_.powerType = `${node_.powerType},${value}`;
           }
-          node_.powerType.push(value);
-          console.log(node_.powerType);
           if (menuTreeChecnk.value.indexOf(node_.key) == -1) {
             menuTreeChecnk.value.push(node_.key);
           }
