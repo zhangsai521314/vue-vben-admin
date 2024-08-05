@@ -1166,7 +1166,7 @@
                     "
                   />
                 </a-row>
-                <!-- <a-row style="margin: 2px 0">
+                <a-row style="margin: 2px 0">
                   <a-space size="1">
                     <a-tooltip>
                       <template #title>将图平移至视口中心</template>
@@ -1195,7 +1195,7 @@
                       >
                     </a-tooltip>
                   </a-space>
-                </a-row> -->
+                </a-row>
               </a-form-item>
               <a-divider orientation="center">展示配置</a-divider>
               <a-form-item name="runType" label="画布">

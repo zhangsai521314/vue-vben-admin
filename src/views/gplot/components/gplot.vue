@@ -237,7 +237,7 @@
           trigger: 'click',
           style: gplotStore.gplotKeyOb[gplotKey].nodeConfig.style,
           enable: () => {
-            return false;
+            // return false;
             return props.viewType == 'edit' && isDownAlt;
           },
           onCreate: (e) => {
