@@ -3,18 +3,13 @@
  * @Description: logo component
 -->
 <template>
-  <div
-    class="anticon"
-    :class="getAppLogoClass"
-    @click="goHome"
-    style="position: absolute; top: 38px; height: 30px; padding-left: 0"
-  >
-    <!-- <img src="../../../assets/images/logo.png" />
-    <div class="ml-2 truncate md:opacity-100" :class="getTitleClass" v-show="showTitle">
+  <div class="anticon" :class="getAppLogoClass">
+    <img src="../../../assets/images/logo.png" style="width: 380px; height: 60px" />
+    <!--<div class="ml-2 truncate md:opacity-100" :class="getTitleClass" v-show="showTitle">
       {{ company }}
     </div> -->
     <!-- <div v-show="showTitle" style="margin: 9px 0 0 2px; color: #fff">{{ version }}</div> -->
-    <img src="../../../assets/images/logo.png" style="width: 65px; height: 65px" />
+    <!-- <img src="../../../assets/images/header.png" style="width: 65px; height: 65px" /> -->
   </div>
 </template>
 <script lang="ts" setup>
@@ -62,7 +57,6 @@
   ]);
 
   function goHome() {
-    debugger;
     go(userStore.getUserInfo.homePath || PageEnum.BASE_HOME);
   }
 </script>
@@ -72,7 +66,7 @@
   .@{prefix-cls} {
     display: flex;
     align-items: center;
-    padding-left: 7px;
+    // padding-left: 7px;
     transition: all 0.2s ease;
     cursor: pointer;
 
@@ -81,7 +75,7 @@
     }
 
     &.collapsed-show-title {
-      padding-left: 20px;
+      // padding-left: 20px;
     }
 
     &.light &__title {

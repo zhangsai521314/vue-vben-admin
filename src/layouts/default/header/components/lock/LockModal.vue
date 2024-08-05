@@ -33,7 +33,7 @@
 
   import { useUserStore } from '@/store/modules/user';
   import { useLockStore } from '@/store/modules/lock';
-  import headerImg from '@/assets/images/header.jpg';
+  import headerImg from '@/assets/images/header.png';
 
   defineOptions({ name: 'LockModal' });
 

@@ -155,7 +155,7 @@
   import { getAppEnvConfig } from '@/utils/env';
   import { sm2 } from 'sm-crypto-v2';
   import commonApi from '@/api/common';
-  import headerImg from '@/assets/images/header.jpg';
+  import headerImg from '@/assets/images/header.png';
 
   const props = defineProps({
     backgroundColor: {

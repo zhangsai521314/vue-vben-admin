@@ -1,5 +1,6 @@
 <template>
   <div :class="prefixCls" class="relative w-full h-full px-4">
+    <img src="/@/assets/images/long01.png" class="imgLeft" />
     <AppLocalePicker
       class="absolute text-white top-4 right-4 enter-x xl:text-gray-600"
       :showText="false"
@@ -11,26 +12,25 @@
 
     <span class="-enter-x xl:hidden">
       <AppLogo :alwaysShowTitle="true" />
+      <div class="minWindth">
+        <div class="font-medium -enter-x">
+          <span style="font-size: 18px"> {{ title }}</span>
+          <span style="position: relative; top: 4px; margin-top: 5px; margin-left: 8px">
+            {{ version }}
+          </span>
+        </div>
+      </div>
     </span>
 
     <div class="container relative h-full py-2 mx-auto sm:px-10">
       <div class="flex h-full">
         <div class="hidden min-h-full pl-4 mr-4 xl:flex xl:flex-col xl:w-6/12">
           <AppLogo class="-enter-x" />
-          <div class="my-auto" style="position: absolute; top: 63px">
-            <!-- <img
-              :alt="title"
-              src="../../../assets/svg/login-box-bg.svg"
-              class="w-1/2 -mt-16 -enter-x"
-            /> -->
-            <div class="font-medium text-white -enter-x">
-              <span class="inline-block mt-4 text-3xl" style="font-size: 18px">
-                {{ t('sys.login.signInTitle') }}</span
-              >
-              <span style="position: relative; top: 4px; margin-top: 5px; margin-left: 8px">
-                {{ t('sys.login.signInDesc') }}
-              </span>
-            </div>
+          <div class="minWindth">
+            <span style="font-size: 18px"> {{ title }}</span>
+            <span style="position: relative; top: 4px; margin-top: 5px; margin-left: 8px">
+              {{ version }}
+            </span>
           </div>
         </div>
         <div class="flex w-full h-full py-5 xl:h-auto xl:py-0 xl:my-0 xl:w-6/12">
@@ -67,12 +67,12 @@
       type: Boolean,
     },
   });
-
   const globSetting = useGlobSetting();
   const { prefixCls } = useDesign('login');
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const showLocale = localeStore.getShowPicker;
+  const version = computed(() => globSetting?.version ?? '');
   const title = computed(() => globSetting?.title ?? '');
 </script>
 <style lang="less">
@@ -127,29 +127,31 @@
       }
     }
 
-    &::before {
+    .imgLeft {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
+      width: 50%;
       height: 100%;
-      margin-left: -52%;
-      // background-image: url(/@/assets/svg/login-bg.svg);
-      background-image: url('/@/assets/images/long01.png');
-      background-repeat: no-repeat;
-      background-position: 100%;
-      background-size: auto 100%;
 
       @media (max-width: @screen-xl) {
         display: none;
       }
     }
 
+    .minWindth {
+      color: #fff;
+
+      @media (max-width: @screen-xl) {
+        color: #111;
+      }
+    }
+
     .@{logo-prefix-cls} {
-      position: absolute;
-      top: 12px;
-      height: 30px;
+      // position: absolute;
+      // top: 12px;
+      // height: 30px;
 
       &__title {
         color: #fff;
@@ -165,7 +167,6 @@
       .@{logo-prefix-cls} {
         display: flex;
         width: 60%;
-        height: 80px;
 
         &__title {
           color: #fff;

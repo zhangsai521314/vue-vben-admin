@@ -151,10 +151,8 @@ export interface GlobConfig {
   urlPrefix?: string;
   // Project abbreviation
   shortName: string;
-  //公司名称
-  company: string;
-  //matt配置
-  VITE_GLOB_MQTT: string;
+  //mqtt配置
+  mqttConfig: string;
 }
 export interface GlobEnvConfig {
   // Site title
@@ -163,16 +161,12 @@ export interface GlobEnvConfig {
   VITE_GLOB_API_URL: string;
   // Service interface url prefix
   VITE_GLOB_API_URL_PREFIX?: string;
-  // Project abbreviation
-  VITE_GLOB_APP_SHORT_NAME: string;
   // Upload url
   VITE_GLOB_UPLOAD_URL?: string;
   // 版本号
   VITE_GLOB_APP_VERSION: string;
   // 请求地址是否全小写
   VITE_GLOB_APP_LOWERCASEROUTE: boolean;
-  //公司名称
-  VITE_GLOB_APP_COMPANY_TITLE: string;
   //matt配置
   VITE_GLOB_MQTT: string;
 }

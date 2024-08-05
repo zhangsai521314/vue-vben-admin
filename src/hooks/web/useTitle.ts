@@ -25,7 +25,6 @@ export function useTitle() {
       if (route.name === REDIRECT_NAME) {
         return;
       }
-
       const tTitle = t(route?.meta?.title as string);
       pageTitle.value = tTitle ? ` ${tTitle} - ${title} ` : `${title}`;
     },

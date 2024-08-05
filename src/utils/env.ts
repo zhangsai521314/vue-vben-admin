@@ -3,8 +3,8 @@ import pkg from '../../package.json';
 import { API_ADDRESS } from '@/enums/cacheEnum';
 
 export function getCommonStoragePrefix() {
-  const { VITE_GLOB_APP_SHORT_NAME } = getAppEnvConfig();
-  return `${VITE_GLOB_APP_SHORT_NAME.replace(/\s/g, '_')}__${getEnv()}`.toUpperCase();
+  const { VITE_GLOB_APP_TITLE } = getAppEnvConfig();
+  return `${VITE_GLOB_APP_TITLE.replace(/\s/g, '_')}__${getEnv()}`.toUpperCase();
 }
 
 // Generate cache key according to version
@@ -25,7 +25,7 @@ const getVariableName = (title: string) => {
 };
 
 export function getAppEnvConfig() {
-  const ENV_NAME = getVariableName(import.meta.env.VITE_GLOB_APP_SHORT_NAME);
+  const ENV_NAME = getVariableName(import.meta.env.VITE_GLOB_APP_TITLE);
   const ENV = (import.meta.env.DEV
     ? // Get the global configuration (the configuration will be extracted independently when packaging)
       (import.meta.env as unknown as GlobEnvConfig)
@@ -34,12 +34,10 @@ export function getAppEnvConfig() {
       : (import.meta.env as unknown as GlobEnvConfig)) as unknown as GlobEnvConfig;
   const {
     VITE_GLOB_APP_TITLE,
-    VITE_GLOB_APP_SHORT_NAME,
     VITE_GLOB_API_URL_PREFIX,
     VITE_GLOB_UPLOAD_URL,
     VITE_GLOB_APP_VERSION,
     VITE_GLOB_APP_LOWERCASEROUTE,
-    VITE_GLOB_APP_COMPANY_TITLE,
     VITE_GLOB_MQTT,
   } = ENV;
 
@@ -51,12 +49,10 @@ export function getAppEnvConfig() {
   return {
     VITE_GLOB_APP_TITLE: VITE_GLOB_APP_TITLE,
     VITE_GLOB_API_URL,
-    VITE_GLOB_APP_SHORT_NAME: VITE_GLOB_APP_SHORT_NAME,
     VITE_GLOB_API_URL_PREFIX,
     VITE_GLOB_UPLOAD_URL,
     VITE_GLOB_APP_VERSION,
     VITE_GLOB_APP_LOWERCASEROUTE: Boolean(VITE_GLOB_APP_LOWERCASEROUTE),
-    VITE_GLOB_APP_COMPANY_TITLE,
     VITE_GLOB_MQTT,
   };
 }

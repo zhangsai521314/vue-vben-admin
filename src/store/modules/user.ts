@@ -220,13 +220,17 @@ export const useUserStore = defineStore({
         title: () => h('span', t('sys.app.logoutTip')),
         content: () => h('span', t('sys.app.logoutMessage')),
         onOk: async () => {
-          mqttStore.publish(
-            mqttStore.mqttConfig.WebUserLoginOut,
-            JSON.stringify({
-              UserId: this.userInfo?.userId,
-              clientId: mqttStore.mqttClient.options.clientId,
-            }),
-          );
+          try {
+            mqttStore.publish(
+              mqttStore.mqttConfig.WebUserLoginOut,
+              JSON.stringify({
+                UserId: this.userInfo?.userId,
+                clientId: mqttStore.mqttClient.options.clientId,
+              }),
+            );
+          } catch (error) {
+            console.error(error);
+          }
           // 主动登出，不带redirect地址
           await this.logout(true);
         },

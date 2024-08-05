@@ -118,7 +118,6 @@ async function mqttInit() {
           }
           topics.forEach((t) => {
             try {
-              mqttStore.updateMqttStatus(1);
               mqttStore.subscribe(t);
               errTopicRetry();
             } catch (error) {
