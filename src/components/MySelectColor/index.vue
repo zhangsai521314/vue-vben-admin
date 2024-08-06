@@ -1,7 +1,7 @@
 <template>
   <div class="divColor" :id="domid" :style="backgroundColor" @click="showSelectColor"></div>
   <div class="selectColorModel" ref="selectColorModelRef">
-    <sketchs v-model="selectColorRef" @click="selectedColor" />
+    <sketchs v-model="sketchsColor" @click="selectedColor" />
     <div class="divSelectColor">
       <a-button @click="saveColor" type="primary" style="float: right">关闭</a-button>
       <a-button @click="clearColor" style="height: 33px; margin-right: 2px; float: right"
@@ -35,7 +35,7 @@
     backgroundColor: props.color,
   });
   const domid = myCommon.uniqueId();
-  const selectColorRef = ref({});
+  const sketchsColor = ref('');
   let isShowSelectColor = false;
   const selectColorModelRef = ref({});
 
@@ -47,6 +47,7 @@
         domid != localStorage.getItem('clickSelectColorId') ? true : !isShowSelectColor;
       localStorage.setItem('clickSelectColorId', domid);
       if (isShowSelectColor) {
+        const oldColor = myCommon.rgbToHex($('#' + domid).css('background-color'));
         const $c = $(selectColorModelRef.value);
         $c.addClass('selectColor');
         $c.removeClass('selectColorModel');
@@ -63,14 +64,14 @@
           $c.css({ top: event.y + 3 });
         }
         $('body').append($c);
+        sketchsColor.value = oldColor;
       }
     }
   }
 
   //颜色选择
   function selectedColor() {
-    backgroundColor.value.backgroundColor = selectColorRef.value.hex8;
-    emits('change', selectColorRef.value.hex8);
+    emits('change', sketchsColor.value.hex8);
   }
 
   //关闭颜色
@@ -80,7 +81,7 @@
 
   //清空颜色
   function clearColor() {
-    selectColorRef.value = {};
+    sketchsColor.value = {};
     backgroundColor.value.backgroundColor = '';
     $('.selectColor').remove();
     emits('change', '');
@@ -117,6 +118,7 @@
     width: 25px;
     height: 25px;
     border: 1px solid #e6e6e6;
+    cursor: pointer;
   }
 
   .divSelectColor {

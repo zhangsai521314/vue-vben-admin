@@ -394,5 +394,15 @@ const Common = {
       };
     });
   },
+  //颜色转换
+  rgbToHex(rgb) {
+    const values = rgb.match(/\d+/g); // 提取RGB值
+    const hex = values.reduce((hexValue, currentValue) => {
+      const hexString = Number(currentValue).toString(16); // 将每个RGB值转换成16进制字符串
+      const paddedHexString = hexString.padStart(2, '0'); // 在不满两位的字符串前补0
+      return hexValue + paddedHexString; // 拼接每个RGB值对应的16进制字符串
+    }, '');
+    return `#${hex.toUpperCase()}`; // 返回完整的HEX颜色代码（需将字母转换为大写）
+  },
 };
 export default Common;
