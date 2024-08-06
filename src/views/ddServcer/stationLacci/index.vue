@@ -229,14 +229,14 @@
         title: '车站名称',
         showOverflow: true,
         showHeaderOverflow: true,
-        sortable: true,
+        sortable: false,
       },
       {
         field: 'typeName',
         title: '管辖区间',
         showOverflow: true,
         showHeaderOverflow: true,
-        sortable: true,
+        sortable: false,
       },
       {
         field: 'lacciNames',
@@ -286,7 +286,7 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['stationId asc'],
+    sortlist: ['indexOrder asc', 'typeOrder asc'],
   });
   const seacthContent = ref({
     lacci: '',

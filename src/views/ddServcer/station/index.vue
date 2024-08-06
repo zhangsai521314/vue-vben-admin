@@ -217,6 +217,22 @@
             />
           </a-form-item>
           <a-form-item
+            name="index"
+            label="车站排序"
+            :rules="[
+              { validator: formValidator.min, min: -9999, message: '排序值-9999至9999' },
+              { validator: formValidator.max, max: 9999, message: '排序值-9999至9999' },
+            ]"
+          >
+            <a-input-number
+              style="width: 300px"
+              :precision="0"
+              v-model:value="formData.index"
+              placeholder="请输入车站排序"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
             v-if="saveType == 'edit'"
             :wrapper-col="{ span: 20, offset: 12 }"
             style="position: relative; height: 0"
@@ -548,6 +564,14 @@
         visible: false,
       },
       {
+        field: 'indexOrder',
+        title: '排序',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        visible: false,
+        sortable: true,
+      },
+      {
         title: '操作',
         width: 140,
         slots: {
@@ -590,6 +614,7 @@
     latitude: null,
     longitude: null,
     programUpdatePassWord: null,
+    index: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);
@@ -601,7 +626,7 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['stationId asc'],
+    sortlist: ['indexOrder asc,lineName asc,name asc'],
   });
   const seacthContent = ref({
     name: '',
@@ -736,6 +761,7 @@
           data.lineName = lineDatas.value.find((m) => m.key == data.lineId).label;
           data.prevStationName = stationDatas.value.find((m) => m.key == data.prevStationId)?.label;
           data.nextStationName = stationDatas.value.find((m) => m.key == data.nextStationId)?.label;
+          data.indexOrder = data.index;
           tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增线路成功');
@@ -753,6 +779,7 @@
             (m) => m.key == formData.value.nextStationId,
           )?.label;
           oldData.updateTime = data.updateTime;
+          oldData.indexOrder = data.index;
           formClose();
           message.success('更新线路信息成功');
         });
