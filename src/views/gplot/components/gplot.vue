@@ -475,14 +475,16 @@
             $('.g6-background').css({ backgroundRepeat: 'no-repeat', backgroundSize: '100% 100%' });
           },
         );
-        // //修复新增加的配置对象
-        // const datas = graphOb.getData();
-        // for (const key in datas) {
-        //   datas[key].forEach((item) => {
-        //     item.data.mySimpleState = gplotStore.gplotKeyOb[gplotKey].nodeConfig.data.mySimpleState;
-        //   });
-        // }
         //修复新增加的配置对象
+        const datas = graphOb.getData();
+        for (const key in datas) {
+          datas[key].forEach((item) => {
+            if (!item.data.myAgileState) {
+              item.data.myAgileState = gplotStore.gplotKeyOb[gplotKey].nodeConfig.data.myAgileState;
+            }
+          });
+        }
+        // 修复新增加的配置对象
       } else {
         //区别是否灵活配置更改状态
         const datas = graphOb.getData();

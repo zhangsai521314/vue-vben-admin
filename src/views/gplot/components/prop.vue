@@ -850,7 +850,7 @@
                   <template v-if="column.dataIndex == 'operation'">
                     <div style="width: 64px">
                       <a-space>
-                        <a @click="showSelectedObState(record)">配置</a>
+                        <a @click="showSelectedObState(record)">编辑</a>
                         <a-popconfirm title="是否删除?" @confirm="delteSelectedObState(record.key)">
                           <a style="color: red">删除</a>
                         </a-popconfirm></a-space
@@ -1395,7 +1395,7 @@
         <a-input placeholder="请输入状态名称" v-model:value="newSelectedObState.name" />
       </a-form-item>
       <a-form-item
-        name="name"
+        name="level"
         label="优先级"
         :rules="[{ required: true, message: '请输入优先级' }]"
       >
@@ -1720,9 +1720,9 @@
           isChange:
             '//默认参数allDataValue为该画布下所有数据源对象\n//您可以根据自己在数据配置中设置的主键，从allDataValue对象中获取数据\n//必须有返回值，返回值类型为bool\nif(allDataValue)\n{\n//编辑您的计算逻辑并return值;\n\nreturn true;\n}\nelse{\n return false \n}\n',
           //isChange为true时更改的颜色
-          color: '',
+          color: 'red',
           //myAgileState中的优先计算的等级
-          level: 0,
+          level: 1,
           //状态名称
           name: '',
         }),
