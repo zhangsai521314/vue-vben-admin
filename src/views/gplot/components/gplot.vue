@@ -400,13 +400,7 @@
         if (gplotStore.gplotKeyOb[gplotKey].containerConfig.fit == 'fitCenter') {
           graphOb.fitCenter();
         } else if (gplotStore.gplotKeyOb[gplotKey].containerConfig.fit == 'fitView') {
-          graphOb.fitView();
-          setTimeout(() => {
-            graphOb.zoomTo(graphOb.getZoom() - 0.05, true, [
-              graphOb.getViewportCenter()[0],
-              graphOb.getViewportCenter()[1],
-            ]);
-          }, 300);
+          viewShiPei();
         }
       }
       gplotStore.gplotKeyOb[gplotKey].renderSuccess = true;
@@ -619,6 +613,17 @@
   function rightClick() {
     //阻止系统右键事件
     event.preventDefault();
+  }
+
+  //窗口适配
+  function viewShiPei() {
+    graphOb.fitView();
+    setTimeout(() => {
+      graphOb.zoomTo(graphOb.getZoom() - 0.05, true, [
+        graphOb.getViewportCenter()[0],
+        graphOb.getViewportCenter()[1],
+      ]);
+    }, 300);
   }
 
   //增加拓扑对象{domX, domY, iconUnicode}
@@ -1025,8 +1030,14 @@
   watch(
     () => appStore.projectConfig!.menuSetting.collapsed,
     () => {
+      //监控菜单宽度改变
       if (graphOb) {
-        graphOb.resize(mountRef.value?.clientWidth, mountRef.value?.clientHeight);
+        setTimeout(() => {
+          graphOb.resize(mountRef.value?.clientWidth, mountRef.value?.clientHeight);
+          if (props.viewType != 'edit') {
+            viewShiPei();
+          }
+        }, 300);
       }
     },
   );
@@ -1035,7 +1046,12 @@
     init();
     window.onresize = () => {
       if (graphOb) {
-        graphOb.resize(mountRef.value?.clientWidth, mountRef.value?.clientHeight);
+        setTimeout(() => {
+          graphOb.resize(mountRef.value?.clientWidth, mountRef.value?.clientHeight);
+          if (props.viewType != 'edit') {
+            viewShiPei();
+          }
+        }, 300);
       }
     };
   });

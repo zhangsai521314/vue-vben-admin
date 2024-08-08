@@ -144,7 +144,7 @@
     endTime: null,
   });
   const timeValue = ref([
-    dayjs(dayjs().add(-6, 'day').format('YYYY-MM-DD')),
+    dayjs(dayjs().add(-1, 'day').format('YYYY-MM-DD')),
     dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
   ]);
   const equipmentData = ref([]);
@@ -202,7 +202,7 @@
         PageIndex: page.current,
         PageSize: activeKey.value == 'table' ? page.size : -1,
         ...seacthContent.value,
-        fullSort: getFullSort(),
+        fullSort: activeKey.value == 'table' ? getFullSort() : '',
         execompleteBefore: () => {
           loading.value = false;
         },

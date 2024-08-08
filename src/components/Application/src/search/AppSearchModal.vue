@@ -40,7 +40,7 @@
               ]"
             >
               <div :class="`${prefixCls}-list__item-icon`">
-                <Icon :icon="item.icon || 'mdi:form-select'" :size="20" />
+                <IconFontClass :name="item.icon" style="font-size: 20px" />
               </div>
               <div :class="`${prefixCls}-list__item-text`">
                 {{ item.name }}

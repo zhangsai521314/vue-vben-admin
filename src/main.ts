@@ -108,6 +108,9 @@ async function mqttInit() {
           });
           mqttStore.isInitAlarmData = true;
           mqttStore.updateMqttStatus(8);
+          if (isDingYue) {
+            mqttStore.updateMqttStatus(1);
+          }
           //合并用户自己订阅的主题
           const topics = [mqttStore.mqttConfig.WebMsg];
           if (userStore) {
@@ -119,11 +122,12 @@ async function mqttInit() {
           topics.forEach((t) => {
             try {
               mqttStore.subscribe(t);
-              errTopicRetry();
             } catch (error) {
+              errTopic.push(t);
               console.error(error);
             }
           });
+          errTopicRetry();
         })
         .catch((error) => {
           console.log(error);
@@ -244,10 +248,16 @@ async function mqttInit() {
                 userStore.logout(true, false);
                 message.info(`${msg.msg}`, 10);
               }
-            } else if (topic == mqttConfig.WebMsg.replace('+', '') + 'Insert') {
+            } else if (
+              topic == mqttConfig.WebMsg.replace('+', '') + 'Insert' &&
+              mqttStore.isInitAlarmData
+            ) {
               //告警插入
               mqttStore.addMsgData(msg);
-            } else if (topic == mqttConfig.WebMsg.replace('+', '') + 'Update') {
+            } else if (
+              topic == mqttConfig.WebMsg.replace('+', '') + 'Update' &&
+              mqttStore.isInitAlarmData
+            ) {
               //告警更新
               mqttStore.updateMsgData(msg);
             } else if (
