@@ -30,7 +30,7 @@
               mqttStore.mqttStatus == '未连接'
                 ? 'yellow'
                 : mqttStore.mqttStatus == '已连接'
-                  ? 'green'
+                  ? '#05e705'
                   : mqttStore.mqttStatus == '连接中'
                     ? 'blue'
                     : mqttStore.mqttStatus == '连接失败'

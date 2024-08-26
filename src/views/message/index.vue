@@ -236,7 +236,7 @@
               name="icon-baseui-zijianrizhi"
               @click="showRepair(row)"
               style="color: #0749df"
-              title="修复内容"
+              title="告警处理"
             />
           </AuthDom>
           <!-- <AuthDom auth="message_show_read">
@@ -300,7 +300,7 @@
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
       :width="500"
       :visible="isShowRepair"
-      title="简要修复内容"
+      title="处理内容"
       :footer-style="{ textAlign: 'right' }"
       @close="closeRepair"
     >
@@ -314,14 +314,14 @@
       >
         <a-form-item
           name="briefRepairMethods"
-          label="修复内容"
+          label="处理内容"
           :rules="[
-            { required: true, message: '请输入修复内容' },
-            { max: 1063, message: '修复内容过长' },
+            { required: true, message: '请输入处理内容' },
+            { max: 1063, message: '处理内容过长' },
           ]"
         >
           <a-textarea
-            placeholder="请输入修复内容"
+            placeholder="请输入处理内容"
             :rows="20"
             v-model:value="formData.briefRepairMethods"
             autocomplete="off"
@@ -519,7 +519,7 @@
       // },
       {
         field: 'briefRepairMethods',
-        title: '简要修复内容',
+        title: '处理内容',
         showOverflow: false,
         showHeaderOverflow: true,
         sortable: true,
@@ -791,18 +791,18 @@
         })
         .then((data) => {
           if (data) {
-            message.success('更新简要修复内容成功');
+            message.success('更改处理内容成功');
             const oldData = tableRef.value.getRowById(formData.msgId);
             if (oldData) {
               oldData.briefRepairMethods = formData.briefRepairMethods;
             }
             isShowRepair.value = false;
           } else {
-            message.error('更新简要修复内容失败');
+            message.error('更改处理内容失败');
           }
         })
         .catch(() => {
-          message.error('更新简要修复内容出错');
+          message.error('更改处理内容出错');
         });
     });
   }
