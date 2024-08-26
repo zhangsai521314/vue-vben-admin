@@ -4,7 +4,7 @@
     :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
     :width="620"
     :open="visible"
-    title="权限配置"
+    :title="props.isRead ? '权限查看' : '权限配置'"
     :body-style="{ padding: '0' }"
     :footer-style="{ textAlign: 'right' }"
     @close="formClose"
@@ -22,7 +22,11 @@
         <a-tab-pane key="menu" tab="菜单页面">
           <div :style="{ width: '100%', height: '100%' }">
             <a-space direction="horizontal" :size="1" class="site-space-compact-wrapper">
-              <a-radio-group v-model:value="treeAllSelectValue" button-style="solid">
+              <a-radio-group
+                v-model:value="treeAllSelectValue"
+                button-style="solid"
+                v-show="!props.isRead"
+              >
                 <a-radio-button @click="treeAllClick(1)" :value="1">全选</a-radio-button>
                 <a-radio-button @click="treeAllClick(0)" :value="0">取消</a-radio-button>
               </a-radio-group>
@@ -89,11 +93,15 @@
     </a-spin>
     <template #footer>
       <div style="position: relative">
-        <span style="position: absolute; top: 5px; left: 25px; color: red"
+        <span v-show="!props.isRead" style="position: absolute; top: 5px; left: 25px; color: red"
           >注意：所有权限均带有“显示”权限</span
         >
         <a-spin tip="正在保存..." :spinning="isGetTree">
-          <a-button type="primary" style="margin-left: 8px" @click="savePower(false)"
+          <a-button
+            v-show="!props.isRead"
+            type="primary"
+            style="margin-left: 8px"
+            @click="savePower(false)"
             >保存本页权限</a-button
           >
           <a-button style="margin-left: 8px" @click="formClose">关闭</a-button>

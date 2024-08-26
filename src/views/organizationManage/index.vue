@@ -204,10 +204,16 @@
         loading.value = true;
         organizationApi
           .DeleteOrganization(row.orgId)
-          .then(() => {
+          .then((data) => {
             loading.value = false;
-            tableConfigData.value = tableConfigData.value?.filter((m) => m.orgId != row.orgId);
-            message.success('删除部门信息成功');
+            try {
+              if (data) {
+                tableConfigData.value = tableConfigData.value?.filter(
+                  (m) => data.indexOf(m.orgId) == -1,
+                );
+              }
+              message.success('删除部门信息成功');
+            } catch (error) {}
           })
           .catch(() => {
             loading.value = false;

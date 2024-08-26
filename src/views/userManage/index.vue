@@ -140,33 +140,33 @@
           :model="formData"
         >
           <a-form-item
-            label="用户名称"
+            label="用户姓名"
             name="userName"
             :rules="[
               { required: true, message: '' },
-              { max: 40, message: '用户名称长度超限' },
-              { min: 2, message: '用户名称最少2位' },
-              { validator: formValidator.empty, message: '请输入用户名称' },
+              { max: 40, message: '用户姓名称长度超限' },
+              { min: 2, message: '用户姓名最少2位' },
+              { validator: formValidator.empty, message: '请输入用户姓名' },
             ]"
           >
             <a-input
-              placeholder="请输入用户名称"
+              placeholder="请输入用户姓名"
               v-model:value="formData.userName"
               autocomplete="off"
             />
           </a-form-item>
           <a-form-item
-            label="登录名称"
+            label="登录账号"
             name="userAccount"
             :rules="[
               { required: true, message: '' },
-              { max: 40, message: '登录名称长度超限' },
-              { min: 2, message: '登录名称最少2位' },
-              { validator: formValidator.empty, message: '请输入登录名称' },
+              { max: 40, message: '登录账号称长度超限' },
+              { min: 2, message: '登录账号称最少2位' },
+              { validator: formValidator.empty, message: '请输入登录账号' },
             ]"
           >
             <a-input
-              placeholder="请输入登录名称"
+              placeholder="请输入登录账号"
               v-model:value="formData.userAccount"
               autocomplete="off"
             />
@@ -393,14 +393,14 @@
       },
       {
         field: 'userName',
-        title: '用户名称',
+        title: '用户姓名',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'userAccount',
-        title: '用户账号',
+        title: '登录账号',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

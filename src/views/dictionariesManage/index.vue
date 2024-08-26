@@ -263,7 +263,6 @@
             <a-select-option value="systemType">操作系统</a-select-option>
             <a-select-option value="serviceType">软件服务</a-select-option>
             <a-select-option value="msgType">信息提示</a-select-option>
-            <a-select-option value="performanceType">性能数据性能</a-select-option>
             <a-select-option value="commonConfig">通用配置</a-select-option>
           </a-select>
         </a-form-item>
