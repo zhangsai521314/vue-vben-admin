@@ -91,7 +91,7 @@
               </template>
             </vxe-column>
             <vxe-column field="testStep" title="自检步骤(总数)" :sortable="true" />
-            <vxe-column field="testTime" title="自检时间" :sortable="true" />
+            <vxe-column field="dataTime" title="自检时间" :sortable="true" />
           </vxe-table>
           <vxe-pager
             background

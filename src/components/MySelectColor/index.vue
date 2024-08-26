@@ -1,7 +1,7 @@
 <template>
   <div class="divColor" :id="domid" :style="backgroundColor" @click="showSelectColor"></div>
   <div class="selectColorModel" ref="selectColorModelRef">
-    <sketchs v-model="sketchsColor" @click="selectedColor" />
+    <sketchs v-model="sketchsColor" />
     <div class="divSelectColor">
       <a-button @click="saveColor" type="primary" style="float: right">关闭</a-button>
       <a-button @click="clearColor" style="height: 33px; margin-right: 2px; float: right"
@@ -69,11 +69,6 @@
     }
   }
 
-  //颜色选择
-  function selectedColor() {
-    emits('change', sketchsColor.value.hex8);
-  }
-
   //关闭颜色
   function saveColor() {
     $('.selectColor').remove();
@@ -111,6 +106,13 @@
     () => {
       $('.selectColor').remove();
     },
+  );
+  watch(
+    () => sketchsColor,
+    () => {
+      emits('change', sketchsColor.value.hex8);
+    },
+    { deep: true },
   );
 </script>
 <style scoped>
