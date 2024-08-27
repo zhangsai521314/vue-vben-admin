@@ -151,7 +151,7 @@ export const useGplotStore = defineStore({
         //文字边框短点大小
         labelBackgroundLineDash: 0,
         //文字边框大小
-        labelBackgroundLineWidth: 0,
+        labelBackgroundLineWidth: 1,
         //文字边框透明色
         labelBackgroundOpacity: 1,
         //文字边框圆角

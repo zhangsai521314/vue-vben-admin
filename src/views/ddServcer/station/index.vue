@@ -16,13 +16,10 @@
       >
         <template #toolbar_buttons>
           <div :class="`tableBtn`">
-            <a-space
-              direction="horizontal"
-              size="small"
-              style="margin-left: 5px; line-height: 50px"
-            >
+            <a-space direction="horizontal" size="small" style="margin-left: 5px">
               <AuthDom auth="ddServcer_station_query">
                 <a-space direction="horizontal" size="small">
+                  <label>车站名称：</label>
                   <a-input
                     @press-enter="initPage"
                     v-model:value="seacthContent.name"

@@ -113,7 +113,7 @@
           label="新密码"
           name="userpwd"
           :rules="[
-            { required: true, message: '请输入新密码' },
+            { required: true, message: '' },
             { max: 40, message: '密码长度超限' },
             { min: 5, message: '密码最少5位' },
             { validator: validate_pwd },
@@ -124,10 +124,7 @@
         <a-form-item
           label="确认密码"
           name="checkPass"
-          :rules="[
-            { required: true, message: '请输入确认密码' },
-            { validator: validate_checkPass },
-          ]"
+          :rules="[{ required: true, message: '' }, { validator: validate_checkPass }]"
         >
           <a-input v-model:value="userData.checkPass" type="password" autocomplete="off" />
         </a-form-item>
@@ -182,7 +179,7 @@
 
   let validate_pwd = async (_rule, value) => {
     if (myCommon.isnull(value)) {
-      return Promise.reject('密码不能为空');
+      return Promise.reject('请输入新密码');
     } else {
       if (userData.value.checkPass !== '') {
         formRef.value.validateFields('checkPass');
@@ -192,9 +189,9 @@
   };
   let validate_checkPass = async (_rule, value) => {
     if (myCommon.isnull(value)) {
-      return Promise.reject('密码不能为空');
+      return Promise.reject('请输入确认密码');
     } else if (value !== userData.value.userpwd) {
-      return Promise.reject('两次新密码不一致');
+      return Promise.reject('新密码与确认密码不一致');
     } else {
       return Promise.resolve();
     }

@@ -380,6 +380,13 @@
                       gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style
                         .labelBackgroundFill
                     "
+                    @change="
+                      (value) => {
+                        gplotStore.gplotKeyOb[
+                          props.graphObRef.gplotKey
+                        ].selectedOb.style.labelBackgroundFill = value;
+                      }
+                    "
                   />
                 </div>
               </a-form-item>

@@ -12,12 +12,12 @@
       </div>
     </div>
     <div :class="`${prefixCls}assembly-content`">
-      <div
+      <!-- <div
         :class="`${prefixCls}content-search`"
         v-show="assemblyAll.find((m) => m.isSelected).key == 'Sys'"
       >
         <a-input-search size="small" placeholder="搜索" enter-button @search="assemblySearch" />
-      </div>
+      </div> -->
       <div :class="`${prefixCls}content-item`">
         <div
           :class="`${prefixCls}item-sys`"
