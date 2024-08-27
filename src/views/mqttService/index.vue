@@ -3,6 +3,7 @@
     <vxe-grid
       v-bind="tableConfig"
       id="mytable"
+      :auto-resize="true"
       ref="tableRef"
       :loading="loading"
       :row-config="{ keyField: 'mqttId' }"
@@ -185,13 +186,14 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'mqttId',
         title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        minWidth: 130,
       },
       {
         field: 'serviceName',
@@ -199,6 +201,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'mqttIp',
@@ -209,6 +212,7 @@
         slots: {
           default: 'ipport',
         },
+        minWidth: 130,
       },
       {
         field: 'mqttName',
@@ -216,12 +220,14 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'mqttPwd',
         title: 'MQTT密码',
         showOverflow: true,
         showHeaderOverflow: true,
+        minWidth: 100,
       },
       {
         field: 'orderIndex',
@@ -230,11 +236,12 @@
         showHeaderOverflow: true,
         visible: false,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'createTime',
         title: '创建时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -242,7 +249,7 @@
       {
         field: 'createUser',
         title: '创建人',
-        width: 130,
+        minWidth: 130,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -250,7 +257,7 @@
       {
         field: 'modifyTime',
         title: '修改时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -259,7 +266,7 @@
       {
         field: 'modifyUser',
         title: '修改人',
-        width: 130,
+        minWidth: 130,
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -267,7 +274,7 @@
       },
       {
         title: '操作',
-        width: 140,
+        minWidth: 90,
         slots: {
           default: 'default',
         },

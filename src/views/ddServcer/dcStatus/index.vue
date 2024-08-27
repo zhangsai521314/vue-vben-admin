@@ -3,6 +3,7 @@
     <vxe-grid
       v-bind="tableConfig"
       id="mytable"
+      :auto-resize="true"
       ref="tableRef"
       :loading="loading"
       :seq-config="{ startIndex: (page.current - 1) * page.size }"
@@ -146,13 +147,14 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'id',
         title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        minWidth: 130,
       },
       {
         field: 'lineName',
@@ -161,6 +163,7 @@
         showHeaderOverflow: true,
         visible: false,
         sortable: true,
+        minWidth: 200,
       },
       {
         field: 'stationCode',
@@ -169,6 +172,7 @@
         showHeaderOverflow: true,
         visible: false,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'stationName',
@@ -176,6 +180,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 200,
       },
       {
         field: 'isdn',
@@ -183,6 +188,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 90,
       },
       {
         field: 'typeName',
@@ -190,7 +196,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        width: 120,
+        minWidth: 120,
       },
       //20240603-郭彦军指示不显示
       // {
@@ -212,6 +218,7 @@
           default: 'ipport',
         },
         sortable: true,
+        minWidth: 120,
       },
       {
         field: 'loginTime',
@@ -219,6 +226,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 150,
       },
       {
         field: 'updateTime',
@@ -226,6 +234,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 150,
       },
       // {
       //   title: '操作',

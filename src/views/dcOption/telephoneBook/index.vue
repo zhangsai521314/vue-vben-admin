@@ -7,6 +7,7 @@
         v-bind="tableConfig"
         id="mytable"
         ref="tableRef"
+        :auto-resize="true"
         :loading="loading"
         :seq-config="{ startIndex: (page.current - 1) * page.size }"
         :row-config="{ keyField: 'phoneId' }"
@@ -159,7 +160,7 @@
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
     columns: [
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       //基础
       {
         field: 'phoneId',
@@ -167,6 +168,7 @@
         visible: false,
         showHeaderOverflow: true,
         fixed: 'left',
+        minWidth: 130,
       },
       {
         field: 'userName',
@@ -174,6 +176,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 200,
       },
       {
         field: 'phoneNumber',
@@ -181,11 +184,12 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'createTime',
         title: '创建时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -194,7 +198,7 @@
       {
         field: 'createUser',
         title: '创建人',
-        width: 130,
+        minWidth: 130,
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -203,7 +207,7 @@
       {
         field: 'modifyTime',
         title: '修改时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -212,7 +216,7 @@
       {
         field: 'modifyUser',
         title: '修改人',
-        width: 130,
+        minWidth: 130,
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -220,7 +224,7 @@
       },
       {
         title: '操作',
-        width: 140,
+        minWidth: 90,
         slots: {
           default: 'default',
         },

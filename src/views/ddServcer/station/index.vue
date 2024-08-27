@@ -6,6 +6,7 @@
       <vxe-grid
         v-bind="tableConfig"
         id="mytable"
+        :auto-resize="true"
         ref="tableRef"
         :loading="loading"
         :seq-config="{ startIndex: (page.current - 1) * page.size }"
@@ -425,13 +426,14 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'id',
         title: '记录ID',
         visible: false,
         showHeaderOverflow: true,
         fixed: 'left',
+        minWidth: 130,
       },
       {
         field: 'lineName',
@@ -440,6 +442,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 200,
       },
       {
         field: 'name',
@@ -447,6 +450,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 200,
       },
       {
         field: 'code',
@@ -454,6 +458,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'dcFn',
@@ -461,6 +466,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'dcIsdn',
@@ -468,6 +474,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'longitude',
@@ -476,6 +483,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 100,
       },
       {
         field: 'latitude',
@@ -484,6 +492,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 100,
       },
       {
         field: 'prevStationName',
@@ -491,6 +500,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'nextStationName',
@@ -498,6 +508,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'groupCallNumber',
@@ -505,6 +516,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 150,
       },
       {
         field: 'groupCallPriority',
@@ -512,6 +524,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 170,
       },
       {
         field: 'tempCallNumber',
@@ -519,6 +532,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 150,
       },
       {
         field: 'tempCallPriority',
@@ -526,6 +540,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 170,
       },
       {
         field: 'startGlb',
@@ -534,6 +549,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 150,
       },
       {
         field: 'endGlb',
@@ -542,6 +558,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 150,
       },
       {
         field: 'remark',
@@ -550,6 +567,7 @@
         showHeaderOverflow: true,
         visible: false,
         sortable: true,
+        minWidth: 150,
       },
       {
         field: 'updateTime',
@@ -557,7 +575,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        width: 150,
+        minWidth: 150,
         visible: false,
       },
       {
@@ -567,10 +585,11 @@
         showHeaderOverflow: true,
         visible: false,
         sortable: true,
+        minWidth: 90,
       },
       {
         title: '操作',
-        width: 140,
+        minWidth: 90,
         slots: {
           default: 'default',
         },

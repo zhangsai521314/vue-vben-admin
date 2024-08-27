@@ -6,6 +6,7 @@
       <vxe-grid
         v-bind="tableConfig"
         id="mytable"
+        :auto-resize="true"
         ref="tableRef"
         :loading="loading"
         :seq-config="{ startIndex: (page.current - 1) * page.size }"
@@ -154,13 +155,14 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'id',
         title: '记录ID',
         visible: false,
         showHeaderOverflow: true,
         fixed: 'left',
+        minWidth: 130,
       },
       {
         field: 'ip',
@@ -168,6 +170,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'remark',
@@ -175,18 +178,19 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'updateTime',
         title: '更新时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
       },
       {
         title: '操作',
-        width: 140,
+        minWidth: 90,
         slots: {
           default: 'default',
         },

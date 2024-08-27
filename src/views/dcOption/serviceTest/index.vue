@@ -54,6 +54,7 @@
         <div style="width: 100%; height: calc(100% - 80px)">
           <vxe-table
             id="serviceTest"
+            :auto-resize="true"
             :border="true"
             max-height="100%"
             ref="tableRef"
@@ -66,11 +67,32 @@
             :data="tableConfigData"
             @sort-change="onSortChange"
           >
-            <vxe-column field="testId" title="主键id" :visible="false" />
-            <vxe-column field="serviceCode" title="服务编号" :visible="false" :sortable="true" />
-            <vxe-column field="serviceName" title="服务名称" :sortable="true" />
-            <vxe-column field="testStepName" title="自检名称" tree-node :sortable="true" />
-            <vxe-column field="testStatus" title="自检状态" :sortable="true">
+            <vxe-column type="seq" title="序号" minwidth="70" fixed="left" />
+            <vxe-column
+              field="testId"
+              title="记录id"
+              :visible="false"
+              :minwidth="130"
+              fixed="left"
+            />
+            <vxe-column
+              field="serviceCode"
+              title="服务编号"
+              :visible="false"
+              :sortable="true"
+              :minwidth="100"
+              fixed="left"
+            />
+            <vxe-column field="serviceName" title="服务名称" :sortable="true" :minwidth="200" />
+            <vxe-column
+              field="testStepName"
+              title="自检名称"
+              tree-node
+              :sortable="true"
+              :minWidth="120"
+              fixed="left"
+            />
+            <vxe-column field="testStatus" title="自检状态" :sortable="true" :minwidth="100">
               <template #default="{ row }">
                 <span
                   :class="{
@@ -90,8 +112,8 @@
                 >
               </template>
             </vxe-column>
-            <vxe-column field="testStep" title="自检步骤(总数)" :sortable="true" />
-            <vxe-column field="dataTime" title="自检时间" :sortable="true" />
+            <vxe-column field="testStep" title="自检步骤(总数)" :sortable="true" :minwidth="150" />
+            <vxe-column field="dataTime" title="自检时间" :sortable="true" :minwidth="150" />
           </vxe-table>
           <vxe-pager
             background

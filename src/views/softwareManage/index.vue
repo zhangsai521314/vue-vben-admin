@@ -3,6 +3,7 @@
     <vxe-grid
       v-bind="tableConfig"
       id="mytable"
+      :auto-resize="true"
       ref="tableRef"
       :loading="loading"
       :row-config="{ keyField: 'serviceId' }"
@@ -295,6 +296,7 @@
       @close="closeLog"
     >
       <vxe-table
+        :auto-resize="true"
         :class="`${prefixCls}logTable`"
         ref="logTableRef"
         :loading="isRunGetLog"
@@ -387,13 +389,14 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'serviceId',
         title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        minWidth: 130,
       },
       {
         field: 'orgName',
@@ -402,6 +405,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 130,
       },
       {
         field: 'equipmentName',
@@ -410,6 +414,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 130,
       },
       {
         field: 'serviceType',
@@ -417,6 +422,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'serviceName',
@@ -424,6 +430,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 200,
       },
       {
         field: 'serviceCode',
@@ -431,6 +438,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'filePath',
@@ -439,6 +447,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 150,
       },
       {
         field: 'port',
@@ -447,6 +456,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 130,
       },
       {
         field: 'changeTime',
@@ -454,7 +464,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        width: 150,
+        minWidth: 150,
       },
       {
         field: 'isOnline',
@@ -463,6 +473,7 @@
         showHeaderOverflow: true,
         // sortable: true,
         cellRender: { name: 'render_isno' },
+        minWidth: 120,
       },
       {
         field: 'isNormal',
@@ -471,6 +482,7 @@
         showHeaderOverflow: true,
         // sortable: true,
         cellRender: { name: 'render_isno' },
+        minWidth: 120,
       },
       {
         field: 'isUpPerformance',
@@ -478,6 +490,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         cellRender: { name: 'render_isno' },
+        minWidth: 100,
       },
       {
         field: 'isPerformanceNormal',
@@ -486,6 +499,7 @@
         showHeaderOverflow: true,
         // sortable: true,
         cellRender: { name: 'render_isno' },
+        minWidth: 100,
       },
       {
         field: 'orderIndex',
@@ -494,6 +508,7 @@
         showHeaderOverflow: true,
         visible: false,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'remark',
@@ -502,11 +517,12 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 130,
       },
       {
         field: 'createTime',
         title: '创建时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -515,7 +531,7 @@
       {
         field: 'createUser',
         title: '创建人',
-        width: 130,
+        minWidth: 130,
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -524,7 +540,7 @@
       {
         field: 'modifyTime',
         title: '修改时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -533,7 +549,7 @@
       {
         field: 'modifyUser',
         title: '修改人',
-        width: 130,
+        minWidth: 130,
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -541,7 +557,7 @@
       },
       {
         title: '操作',
-        width: 140,
+        minWidth: 140,
         slots: {
           default: 'default',
         },

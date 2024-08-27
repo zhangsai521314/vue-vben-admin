@@ -4,6 +4,7 @@
       v-bind="tableConfig"
       id="mytable"
       ref="tableRef"
+      :auto-resize="true"
       :loading="loading"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"

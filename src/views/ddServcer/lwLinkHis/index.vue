@@ -3,6 +3,7 @@
     <vxe-grid
       v-bind="tableConfig"
       id="mytable"
+      :auto-resize="true"
       ref="tableRef"
       :loading="loading"
       :seq-config="{ startIndex: (page.current - 1) * page.size }"
@@ -102,13 +103,14 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'id',
         title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        minWidth: 130,
       },
       {
         field: 'typeName',
@@ -116,6 +118,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'srcNumber',
@@ -123,6 +126,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'srcIp',
@@ -133,6 +137,7 @@
         slots: {
           default: 'srcipport',
         },
+        minWidth: 130,
       },
       {
         field: 'desNumber',
@@ -140,6 +145,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'desIp',
@@ -150,6 +156,7 @@
         slots: {
           default: 'desipport',
         },
+        minWidth: 130,
       },
       {
         field: 'linkResultName',
@@ -157,6 +164,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'addTime',
@@ -164,11 +172,11 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        width: 150,
+        minWidth: 150,
       },
       // {
       //   title: '操作',
-      //   width: 140,
+      //   minWidth: 140,
       //   slots: {
       //     default: 'default',
       //   },

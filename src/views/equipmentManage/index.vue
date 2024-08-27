@@ -3,6 +3,7 @@
     <vxe-grid
       v-bind="tableConfig"
       id="mytable"
+      :auto-resize="true"
       ref="tableRef"
       :loading="loading"
       :row-config="{ keyField: 'equipmentId' }"
@@ -228,13 +229,14 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'equipmentId',
         title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        minWidth: 130,
       },
       {
         field: 'orgName',
@@ -242,6 +244,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'equipmentName',
@@ -249,6 +252,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'equipmentType',
@@ -256,6 +260,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'systemType',
@@ -263,6 +268,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'address',
@@ -270,6 +276,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 140,
       },
       {
         field: 'orderIndex',
@@ -278,6 +285,7 @@
         showHeaderOverflow: true,
         visible: false,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'remark',
@@ -285,11 +293,12 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 120,
       },
       {
         field: 'createTime',
         title: '创建时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -298,7 +307,7 @@
       {
         field: 'createUser',
         title: '创建人',
-        width: 130,
+        minWidth: 130,
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -307,7 +316,7 @@
       {
         field: 'modifyTime',
         title: '修改时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -316,7 +325,7 @@
       {
         field: 'modifyUser',
         title: '修改人',
-        width: 130,
+        minWidth: 130,
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -324,7 +333,7 @@
       },
       {
         title: '操作',
-        width: 140,
+        minWidth: 90,
         slots: {
           default: 'default',
         },

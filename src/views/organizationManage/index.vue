@@ -40,6 +40,7 @@
         </vxe-toolbar>
         <div style="width: 100%; height: calc(100% - 62px)">
           <vxe-table
+            :auto-resize="true"
             :border="true"
             max-height="100%"
             ref="tableRef"
@@ -49,15 +50,15 @@
             :tree-config="{ transform: true, rowField: 'orgId', parentField: 'parentId' }"
             :data="tableConfigData"
           >
-            <vxe-column type="seq" title="序号" width="60" />
-            <vxe-column field="orgId" title="部门id" :visible="false" />
-            <vxe-column field="orgName" title="部门名称" tree-node />
-            <vxe-column field="orderIndex" title="部门排序" :visible="false" />
-            <vxe-column field="createTime" title="创建时间" :visible="false" />
-            <vxe-column field="createUser" title="创建人" :visible="false" />
-            <vxe-column field="modifyTime" title="修改时间" :visible="false" />
-            <vxe-column field="modifyUser" title="修改人" :visible="false" />
-            <vxe-column title="操作" width="140">
+            <vxe-column type="seq" title="序号" minWidth="70" fixed="left" />
+            <vxe-column field="orgId" title="记录id" :visible="false" minWidth="130" fixed="left" />
+            <vxe-column field="orgName" title="部门名称" tree-node minWidth="200" fixed="left" />
+            <vxe-column field="orderIndex" title="部门排序" :visible="false" minWidth="100" />
+            <vxe-column field="createTime" title="创建时间" minWidth="150" />
+            <vxe-column field="createUser" title="创建人" minWidth="130" />
+            <vxe-column field="modifyTime" title="修改时间" minWidth="150" />
+            <vxe-column field="modifyUser" title="修改人" minWidth="130" />
+            <vxe-column title="操作" width="140" fixed="right">
               <template #default="{ row }">
                 <div :class="`tableStyle`">
                   <AuthDom auth="organizationManage_table_add">

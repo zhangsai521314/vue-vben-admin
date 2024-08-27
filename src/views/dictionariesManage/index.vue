@@ -111,6 +111,7 @@
         <div style="width: 100%; height: calc(100% - 62px)">
           <vxe-table
             :border="true"
+            :auto-resize="true"
             max-height="100%"
             ref="tableRef"
             show-overflow
@@ -119,10 +120,23 @@
             :tree-config="{ transform: true, rowField: 'dictionariesId', parentField: 'parentId' }"
             :data="tableConfigData"
           >
-            <vxe-column type="seq" title="序号" width="60" />
-            <vxe-column field="dictionariesId" title="记录ID" :visible="false" />
-            <vxe-column field="dictionariesName" title="字典名称" tree-node :sortable="true" />
-            <vxe-column field="dictionariesClass" title="字典类型" :sortable="true">
+            <vxe-column type="seq" title="序号" minWidth="70" fixed="left" />
+            <vxe-column
+              field="dictionariesId"
+              title="记录ID"
+              :visible="false"
+              minWidth="130"
+              fixed="left"
+            />
+            <vxe-column
+              field="dictionariesName"
+              title="字典名称"
+              tree-node
+              :sortable="true"
+              minWidth="130"
+              fixed="left"
+            />
+            <vxe-column field="dictionariesClass" title="字典类型" :sortable="true" minWidth="130">
               <template #default="{ row }">
                 <span>{{
                   row.dictionariesClass == 'equipmentType'
@@ -143,23 +157,33 @@
                 }}</span>
               </template>
             </vxe-column>
-            <vxe-column field="serviceTypeName" title="归属服务类型" :sortable="true" />
-            <vxe-column field="isKeyMaster" title="是否自定义主键">
+            <vxe-column
+              field="serviceTypeName"
+              title="归属服务类型"
+              :sortable="true"
+              minWidth="120"
+            />
+            <vxe-column field="isKeyMaster" title="是否自定义主键" minWidth="130">
               <template #default="{ row }">
                 <span :style="{ color: row.isKeyMaster ? 'green' : 'red' }">{{
                   row.isKeyMaster ? '是' : '否'
                 }}</span>
               </template>
             </vxe-column>
-            <vxe-column field="dictionariesKey" title="自定义主键值" :sortable="true" />
-            <vxe-column field="isSystem" title="是否系统">
+            <vxe-column
+              field="dictionariesKey"
+              title="自定义主键值"
+              :sortable="true"
+              minWidth="180"
+            />
+            <vxe-column field="isSystem" title="是否系统" minWidth="100">
               <template #default="{ row }">
                 <span :style="{ color: row.isSystem ? 'green' : 'red' }">{{
                   row.isSystem ? '是' : '否'
                 }}</span>
               </template>
             </vxe-column>
-            <vxe-column field="isSync" title="是否已同步">
+            <vxe-column field="isSync" title="是否已同步" minWidth="100">
               <template #default="{ row }">
                 <span
                   v-if="row.dictionariesClass == 'collectionFrequency'"
@@ -169,15 +193,63 @@
                 <span v-else style="color: green">无需同步</span>
               </template>
             </vxe-column>
-            <vxe-column field="syncTime" title="同步时间" :visible="false" :sortable="true" />
-            <vxe-column field="orderIndex" title="排序" :visible="false" :sortable="true" />
-            <vxe-column field="other" title="附属信息" :showOverflow="true" :sortable="true" />
-            <vxe-column field="remark" title="备注信息" :showOverflow="true" :sortable="true" />
-            <vxe-column field="createTime" title="创建时间" :visible="false" :sortable="true" />
-            <vxe-column field="createUser" title="创建人" :visible="false" :sortable="true" />
-            <vxe-column field="modifyTime" title="修改时间" :visible="false" :sortable="true" />
-            <vxe-column field="modifyUser" title="修改人" :visible="false" :sortable="true" />
-            <vxe-column title="操作" width="140">
+            <vxe-column
+              field="syncTime"
+              title="同步时间"
+              :visible="false"
+              :sortable="true"
+              minWidth="150"
+            />
+            <vxe-column
+              field="orderIndex"
+              title="排序"
+              :visible="false"
+              :sortable="true"
+              minWidth="100"
+            />
+            <vxe-column
+              field="other"
+              title="附属信息"
+              :showOverflow="true"
+              :sortable="true"
+              minWidth="130"
+            />
+            <vxe-column
+              field="remark"
+              title="备注信息"
+              :showOverflow="true"
+              :sortable="true"
+              minWidth="130"
+            />
+            <vxe-column
+              field="createTime"
+              title="创建时间"
+              :visible="false"
+              :sortable="true"
+              minWidth="150"
+            />
+            <vxe-column
+              field="createUser"
+              title="创建人"
+              :visible="false"
+              :sortable="true"
+              minWidth="130"
+            />
+            <vxe-column
+              field="modifyTime"
+              title="修改时间"
+              :visible="false"
+              :sortable="true"
+              minWidth="150"
+            />
+            <vxe-column
+              field="modifyUser"
+              title="修改人"
+              :visible="false"
+              :sortable="true"
+              minWidth="130"
+            />
+            <vxe-column title="操作" width="140" fixed="right">
               <template #default="{ row }">
                 <div :class="`tableStyle`">
                   <template v-if="!row.isSystem">

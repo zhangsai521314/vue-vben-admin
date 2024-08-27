@@ -4,6 +4,7 @@
       v-bind="tableConfig"
       id="mytable"
       ref="tableRef"
+      :auto-resize="true"
       :loading="loading"
       :seq-config="{ startIndex: (page.current - 1) * page.size }"
       :column-config="{ resizable: true }"
@@ -97,13 +98,14 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'id',
         title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        minWidth: 130,
       },
       {
         field: 'typeName',
@@ -111,6 +113,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'number',
@@ -118,6 +121,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'ip',
@@ -128,6 +132,7 @@
         slots: {
           default: 'ipport',
         },
+        minWidth: 130,
       },
       {
         field: 'addTime',
@@ -135,7 +140,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        width: 150,
+        minWidth: 150,
       },
       // {
       //   title: '操作',

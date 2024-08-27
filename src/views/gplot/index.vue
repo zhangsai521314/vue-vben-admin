@@ -7,6 +7,7 @@
       <div style="display: none; width: 100%">
         <vxe-toolbar ref="toolbarRef" custom />
         <vxe-table
+          :auto-resize="true"
           id="bu_jia_id_storage_wu_xiao"
           height="400px"
           :border="true"
@@ -17,10 +18,11 @@
           :column-config="{ resizable: true }"
           :data="mqttStore.msgData"
         >
-          <vxe-column field="msgId" title="告警id" :visible="false" />
-          <vxe-column field="serviceId" title="服务id" :visible="false" />
-          <vxe-column field="serviceCode" title="服务编号" :visible="false" />
-          <vxe-column field="serviceName" title="服务名称" />
+          <vxe-column type="seq" title="序号" minWidth="70" fixed="left" />
+          <vxe-column field="msgId" title="记录id" :visible="false" fixed="left" />
+          <vxe-column field="serviceId" title="服务id" :visible="false" fixed="left" />
+          <vxe-column field="serviceCode" title="服务编号" :visible="false" fixed="left" />
+          <vxe-column field="serviceName" title="服务名称" fixed="left" />
           <vxe-column field="msgType" title="信息类型" :visible="false">
             <template #default="{ row }">
               {{

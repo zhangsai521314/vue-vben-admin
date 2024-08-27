@@ -2,6 +2,7 @@
   <MyContent :class="prefixCls">
     <vxe-grid
       v-bind="tableConfig"
+      :auto-resize="true"
       id="mytable"
       ref="tableRef"
       :loading="loading"
@@ -233,13 +234,14 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'callId',
         title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        minWidth: 130,
       },
       {
         field: 'serviceCode',
@@ -248,6 +250,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'callStateDescription',
@@ -256,6 +259,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'serviceName',
@@ -263,6 +267,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 150,
       },
       {
         field: 'callDirectionDescription',
@@ -270,6 +275,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'mainCallName',
@@ -277,6 +283,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 150,
       },
       {
         field: 'calledName',
@@ -284,6 +291,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 150,
       },
       {
         field: 'callTypeDescription',
@@ -291,6 +299,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'duration',
@@ -301,11 +310,12 @@
         slots: {
           default: 'duration',
         },
+        minWidth: 100,
       },
       {
         field: 'startTime',
         title: '拨打时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -313,7 +323,7 @@
       {
         field: 'acceptTime',
         title: '接通时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -321,7 +331,7 @@
       {
         field: 'endTime',
         title: '结束时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -333,6 +343,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 120,
       },
       {
         field: 'remoteNumber',
@@ -341,6 +352,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 120,
       },
       {
         field: 'isOnline',
@@ -348,6 +360,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         cellRender: { name: 'render_isno' },
+        minWidth: 100,
       },
       {
         field: 'recordStateDescription',
@@ -355,6 +368,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'recordFileStatus',
@@ -365,11 +379,12 @@
         slots: {
           default: 'recordFileStatus',
         },
+        minWidth: 100,
       },
       {
         field: 'recordFileTime',
         title: '录音文件状态时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -380,7 +395,7 @@
       },
       {
         title: '操作',
-        width: 140,
+        minWidth: 90,
         slots: {
           default: 'default',
         },

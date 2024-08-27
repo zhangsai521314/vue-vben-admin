@@ -2,6 +2,7 @@
   <MyContent :class="prefixCls">
     <vxe-grid
       v-bind="tableConfig"
+      :auto-resize="true"
       id="mytable"
       ref="tableRef"
       :loading="loading"
@@ -85,13 +86,14 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'keyId',
         title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        minWidth: 130,
       },
       {
         field: 'serviceCode',
@@ -100,6 +102,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'serviceName',
@@ -107,6 +110,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 200,
       },
       {
         field: 'content',
@@ -114,11 +118,12 @@
         showOverflow: false,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'startTime',
         title: '按键开始时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -126,7 +131,7 @@
       {
         field: 'endTime',
         title: '按键结束时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

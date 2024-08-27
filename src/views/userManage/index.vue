@@ -4,6 +4,7 @@
       <vxe-grid
         v-bind="tableConfig"
         id="mytable"
+        :auto-resize="true"
         ref="tableRef"
         :loading="loading"
         :seq-config="{ startIndex: (page.current - 1) * page.size }"
@@ -85,6 +86,11 @@
             :total="page.total"
             @page-change="handlePageChange"
           />
+        </template>
+        <template #status="{ row }">
+          <span :style="{ color: row.status == 1 ? 'green' : row.status == 2 ? 'red' : 'red' }"
+            >{{ row.status == 1 ? '正常' : row.status == 2 ? '停用' : '删除' }}
+          </span>
         </template>
         <template #default="{ row }">
           <div :class="`tableOption`">
@@ -383,13 +389,14 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'userId',
         title: '记录ID',
         visible: false,
         showHeaderOverflow: true,
         fixed: 'left',
+        minWidth: 130,
       },
       {
         field: 'userName',
@@ -397,6 +404,8 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'userAccount',
@@ -404,6 +413,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'orgName',
@@ -411,6 +421,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'roleName',
@@ -418,6 +429,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'adminType',
@@ -430,6 +442,7 @@
             return row.adminType == 1 ? '超级管理员' : row.adminType == 2 ? '管理员' : '普通账号';
           },
         },
+        minWidth: 100,
       },
       {
         field: 'status',
@@ -438,15 +451,19 @@
         showHeaderOverflow: true,
         sortable: true,
         slots: {
-          default: ({ row }) => {
-            return row.status == 1 ? '正常' : row.status == 2 ? '停用' : '删除';
-          },
+          default: 'status',
         },
+        // slots: {
+        //   default: ({ row }) => {
+        //     return row.status == 1 ? '正常' : row.status == 2 ? '停用' : '删除';
+        //   },
+        // },
+        minWidth: 100,
       },
       {
         field: 'mobile',
         title: '联系电话',
-        width: 130,
+        minWidth: 130,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -454,15 +471,16 @@
       {
         field: 'email',
         title: '联系邮箱',
-        width: 180,
+        minWidth: 180,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'lastLoginTime',
         title: '最后登录时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -490,11 +508,12 @@
         showHeaderOverflow: true,
         visible: false,
         sortable: true,
+        minWidth: 150,
       },
       {
         field: 'createTime',
         title: '创建时间',
-        width: 150,
+        minWidth: 150,
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -507,11 +526,12 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'modifyTime',
         title: '修改时间',
-        width: 150,
+        minWidth: 150,
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -524,10 +544,11 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         title: '操作',
-        width: 140,
+        minWidth: 140,
         slots: {
           default: 'default',
         },

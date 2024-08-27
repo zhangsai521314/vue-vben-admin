@@ -4,6 +4,7 @@
       v-bind="tableConfig"
       id="mytable"
       ref="tableRef"
+      :auto-resize="true"
       :loading="loading"
       :seq-config="{ startIndex: (page.current - 1) * page.size }"
       :row-config="{ keyField: 'msgId' }"
@@ -370,13 +371,14 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'msgId',
         title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        minWidth: 130,
       },
       {
         field: 'serviceCode',
@@ -385,6 +387,7 @@
         visible: false,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'serviceName',
@@ -392,7 +395,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        width: 150,
+        minWidth: 150,
       },
       {
         field: 'msgClass',
@@ -400,7 +403,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        width: 100,
+        minWidth: 100,
         slots: {
           default: 'msgClass',
         },
@@ -410,7 +413,7 @@
         title: '信息类型',
         showHeaderOverflow: true,
         sortable: true,
-        width: 200,
+        minWidth: 200,
       },
       {
         field: 'msgStatus',
@@ -418,7 +421,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        width: 100,
+        minWidth: 100,
         slots: {
           default: 'msgStatus',
         },
@@ -429,6 +432,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 150,
       },
       {
         field: 'msgContent',
@@ -436,12 +440,12 @@
         showOverflow: false,
         showHeaderOverflow: true,
         sortable: true,
-        width: '25%',
+        minWidth: '25%',
       },
       {
         field: 'msgStartTime',
         title: '开始时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -449,7 +453,7 @@
       {
         field: 'msgEndTime',
         title: '结束时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -463,7 +467,7 @@
         slots: {
           default: 'msgDuration',
         },
-        width: 100,
+        minWidth: 100,
       },
       {
         field: 'confirmUserName',
@@ -472,12 +476,12 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
-        width: 100,
+        minWidth: 100,
       },
       {
         field: 'confirmTime',
         title: '确认时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -489,11 +493,12 @@
         showHeaderOverflow: true,
         visible: false,
         sortable: true,
+        minWidth: 150,
       },
       {
         field: 'createTime',
         title: '创建时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -501,7 +506,7 @@
       },
       // {
       //   title: '告警强提示',
-      //   width: 180,
+      //   minWidth: 180,
       //   slots: {
       //     default: 'strongPrompting',
       //   },
@@ -523,7 +528,7 @@
         showOverflow: false,
         showHeaderOverflow: true,
         sortable: true,
-        width: '200',
+        minWidth: '200',
         visible: false,
       },
       {

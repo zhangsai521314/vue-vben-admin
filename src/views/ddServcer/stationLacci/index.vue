@@ -6,6 +6,7 @@
       <vxe-grid
         v-bind="tableConfig"
         id="mytable"
+        :auto-resize="true"
         ref="tableRef"
         :loading="loading"
         :seq-config="{ startIndex: (page.current - 1) * page.size }"
@@ -215,7 +216,7 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'lineName',
         title: '线路名称',
@@ -223,6 +224,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 200,
       },
       {
         field: 'stationName',
@@ -230,6 +232,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: false,
+        minWidth: 200,
       },
       {
         field: 'typeName',
@@ -237,22 +240,25 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: false,
+        minWidth: 100,
       },
       {
         field: 'lacciNames',
         title: 'ECI名称集合',
         showOverflow: true,
         showHeaderOverflow: true,
+        minWidth: 200,
       },
       {
         field: 'laccis',
         title: 'ECI集合',
         showOverflow: true,
         showHeaderOverflow: true,
+        minWidth: 200,
       },
       {
         title: '操作',
-        width: 140,
+        width: 90,
         slots: {
           default: 'default',
         },

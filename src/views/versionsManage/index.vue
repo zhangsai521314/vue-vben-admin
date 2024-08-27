@@ -4,6 +4,7 @@
       v-bind="tableConfig"
       id="mytable"
       ref="tableRef"
+      :auto-resize="true"
       :loading="loading"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"
@@ -166,13 +167,14 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 50, fixed: 'left' },
       {
         field: 'versionId',
         title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        minWidth: 130,
       },
       {
         field: 'serviceName',
@@ -180,6 +182,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 150,
       },
       {
         field: 'runNumber',
@@ -190,11 +193,12 @@
         slots: {
           default: 'runNumber',
         },
+        minWidth: 150,
       },
       {
         field: 'isForce',
         title: '是否强制升级',
-        width: 140,
+        minWidth: 120,
         showOverflow: true,
         showHeaderOverflow: true,
         // sortable: true,
@@ -203,7 +207,7 @@
       {
         field: 'isSync',
         title: '是否已同步',
-        width: 160,
+        minWidth: 130,
         showOverflow: true,
         showHeaderOverflow: true,
         // sortable: true,
@@ -214,7 +218,7 @@
       {
         field: 'syncTime',
         title: '同步时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         sortable: true,
         showHeaderOverflow: true,
@@ -222,7 +226,7 @@
       {
         field: 'syncUserName',
         title: '同步人员',
-        width: 130,
+        minWidth: 130,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -234,11 +238,12 @@
         showHeaderOverflow: true,
         visible: false,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'createTime',
         title: '创建时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -246,14 +251,14 @@
       {
         field: 'createUser',
         title: '创建人',
-        width: 130,
+        minWidth: 130,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
       },
       {
         title: '操作',
-        width: 140,
+        minWidth: 90,
         slots: {
           default: 'default',
         },

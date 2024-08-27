@@ -2,6 +2,7 @@
   <MyContent ref="myContentRef">
     <vxe-grid
       v-bind="tableConfig"
+      :auto-resize="true"
       id="mytable"
       ref="tableRef"
       :loading="loading"
@@ -115,13 +116,14 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'id',
         title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        minWidth: 130,
       },
       {
         field: 'typeName',
@@ -129,7 +131,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        width: 160,
+        minWidth: 160,
       },
       {
         field: 'srcFn',
@@ -137,7 +139,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        width: 120,
+        minWidth: 120,
       },
       {
         field: 'srcIsdn',
@@ -145,7 +147,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        width: 120,
+        minWidth: 120,
       },
       {
         field: 'srcLacci',
@@ -153,7 +155,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        width: 100,
+        minWidth: 100,
       },
       {
         field: 'desFn',
@@ -164,12 +166,14 @@
         slots: {
           default: 'desFn',
         },
+        minWidth: 150,
       },
       {
         field: 'desIsdn',
         title: '被叫ISDN/组呼号',
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 150,
       },
       {
         field: 'resultName',
@@ -177,7 +181,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        width: 120,
+        minWidth: 120,
       },
       {
         field: 'addTime',
@@ -185,7 +189,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        width: 150,
+        minWidth: 150,
       },
       // {
       //   title: '操作',

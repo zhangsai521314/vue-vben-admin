@@ -3,6 +3,7 @@
     <vxe-grid
       v-bind="tableConfig"
       id="mytable"
+      :auto-resize="true"
       ref="tableRef"
       :loading="loading"
       :seq-config="{ startIndex: (page.current - 1) * page.size }"
@@ -196,13 +197,14 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'id',
         title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        minWidth: 130,
       },
       {
         field: 'lineName',
@@ -211,6 +213,7 @@
         showHeaderOverflow: true,
         visible: false,
         sortable: true,
+        minWidth: 200,
       },
       {
         field: 'stationCode',
@@ -219,6 +222,7 @@
         showHeaderOverflow: true,
         visible: false,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'stationName',
@@ -226,6 +230,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 200,
       },
       {
         field: 'stationLocationName',
@@ -233,6 +238,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'lacciName',
@@ -241,6 +247,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 100,
       },
       {
         field: 'lacci',
@@ -248,6 +255,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'isdn',
@@ -255,6 +263,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 90,
       },
       {
         field: 'jcFn',
@@ -262,6 +271,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 110,
       },
       {
         field: 'jCFnStatusName',
@@ -269,6 +279,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 110,
       },
       {
         field: 'ccFn',
@@ -276,6 +287,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 110,
       },
       {
         field: 'cCFnStatusName',
@@ -283,6 +295,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 110,
       },
       {
         field: 'loginStatusName',
@@ -290,6 +303,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'glb',
@@ -298,6 +312,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 100,
       },
       {
         field: 'operatorUser',
@@ -306,6 +321,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 100,
       },
       {
         field: 'longitude',
@@ -314,6 +330,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 80,
       },
       {
         field: 'latitude',
@@ -322,23 +339,24 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        minWidth: 80,
       },
       {
         field: 'ip',
         title: 'Ip+端口号',
         showOverflow: true,
         showHeaderOverflow: true,
-        width: 154,
         visible: false,
         slots: {
           default: 'ipport',
         },
         sortable: true,
+        minWidth: 120,
       },
       {
         field: 'updateTime',
         title: '心跳时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
