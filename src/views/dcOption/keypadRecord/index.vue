@@ -47,6 +47,9 @@
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <a-button @click="initPage()" type="primary">查询</a-button>
+                    <a-spin :spinning="exportDataSpinning">
+                      <a-button @click="exportData" type="primary">导出</a-button>
+                    </a-spin>
                   </a-space>
                 </div>
               </a-space>
@@ -163,6 +166,7 @@
     total: 0,
     sortlist: ['endTime desc'],
   });
+  const exportDataSpinning = ref(false);
 
   getDCOptionKeyRecords();
   getServices();
@@ -236,6 +240,27 @@
       })
       .catch(() => {
         serviceData.value = [];
+      });
+  }
+
+  function exportData() {
+    exportDataSpinning.value = true;
+    seacthContent.value.startTime =
+      timeValue.value == null ? null : timeValue.value[0].format('YYYY-MM-DD HH:mm:ss');
+    seacthContent.value.endTime =
+      timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
+    keypadRecordApi
+      .ExportData({
+        PageIndex: page.current,
+        PageSize: page.size,
+        ...seacthContent.value,
+        fullSort: getFullSort(),
+        execompleteBefore: () => {
+          exportDataSpinning.value = false;
+        },
+      })
+      .then((data) => {
+        myCommon.downLoadFile(data);
       });
   }
 </script>

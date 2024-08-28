@@ -88,6 +88,9 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <a-button @click="initPage()" type="primary">查询</a-button>
                     <a-button @click="resetSeacth">重置表单</a-button>
+                    <a-spin :spinning="exportDataSpinning">
+                      <a-button @click="exportData" type="primary">导出</a-button>
+                    </a-spin>
                   </a-space>
                 </div>
               </a-space>
@@ -446,6 +449,7 @@
   //录音文件状态
   const playFileStatus = ref(0);
   const playRef = ref(null);
+  const exportDataSpinning = ref(false);
 
   getDCOptionCallRecords();
   getDictionaries();
@@ -552,22 +556,7 @@
   //获取列表
   function getDCOptionCallRecords() {
     loading.value = true;
-    seacthContent.value.startTime =
-      timeValue.value == null ? null : timeValue.value[0].format('YYYY-MM-DD HH:mm:ss');
-    seacthContent.value.endTime =
-      timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
-    if (!myCommon.isnull(duration.value)) {
-      seacthContent.value.SearchParameters = [
-        {
-          CSharpTypeName: 'int',
-          FieldName: 'duration',
-          ConditionalType: durationQueryType.value,
-          FieldValue: durationUnit.value == 'MM' ? duration.value * 60 : null,
-        },
-      ];
-    } else {
-      seacthContent.value.SearchParameters = [];
-    }
+    getSelectWhere();
     callRecordApi
       .GetDCOptionCallRecords({
         PageIndex: page.current,
@@ -587,6 +576,25 @@
         tableConfig.data = [];
         page.total = 0;
       });
+  }
+
+  function getSelectWhere() {
+    seacthContent.value.startTime =
+      timeValue.value == null ? null : timeValue.value[0].format('YYYY-MM-DD HH:mm:ss');
+    seacthContent.value.endTime =
+      timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
+    if (!myCommon.isnull(duration.value)) {
+      seacthContent.value.SearchParameters = [
+        {
+          CSharpTypeName: 'int',
+          FieldName: 'duration',
+          ConditionalType: durationQueryType.value,
+          FieldValue: durationUnit.value == 'MM' ? duration.value * 60 : null,
+        },
+      ];
+    } else {
+      seacthContent.value.SearchParameters = [];
+    }
   }
 
   //重置搜索条件
@@ -649,6 +657,24 @@
     page.current = 1;
     page.total = 0;
     getDCOptionCallRecords();
+  }
+
+  function exportData() {
+    exportDataSpinning.value = true;
+    getSelectWhere();
+    callRecordApi
+      .ExportData({
+        PageIndex: page.current,
+        PageSize: page.size,
+        ...seacthContent.value,
+        fullSort: getFullSort(),
+        execompleteBefore: () => {
+          exportDataSpinning.value = false;
+        },
+      })
+      .then((data) => {
+        myCommon.downLoadFile(data);
+      });
   }
 
   //页面卸载后

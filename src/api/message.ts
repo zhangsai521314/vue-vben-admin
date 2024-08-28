@@ -63,5 +63,13 @@ const Message = {
       params,
     });
   },
+  //导出数据
+  ExportData: function (params) {
+    return defHttp.post({
+      url: '/Message/ExportData',
+      params,
+      responseType: 'blob',
+    });
+  },
 };
 export default Message;

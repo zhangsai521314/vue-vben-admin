@@ -136,6 +136,9 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <a-button @click="initPage()" type="primary">查询</a-button>
                     <a-button @click="resetSeacth">重置表单</a-button>
+                    <a-spin :spinning="exportDataSpinning">
+                      <a-button @click="exportData" type="primary">导出</a-button>
+                    </a-spin>
                     <a-radio-group v-model:value="refresh" button-style="solid">
                       <a-radio-button value="yes">开启自动刷新</a-radio-button>
                       <a-radio-button value="no">关闭自动刷新</a-radio-button>
@@ -440,7 +443,7 @@
         showOverflow: false,
         showHeaderOverflow: true,
         sortable: true,
-        minWidth: '25%',
+        minWidth: 200,
       },
       {
         field: 'msgStartTime',
@@ -528,7 +531,25 @@
         showOverflow: false,
         showHeaderOverflow: true,
         sortable: true,
-        minWidth: '200',
+        minWidth: 200,
+        visible: false,
+      },
+      {
+        field: 'briefRepairUserName',
+        title: '处理人员',
+        showOverflow: false,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 100,
+        visible: false,
+      },
+      {
+        field: 'briefRepairTime',
+        title: '处理时间',
+        showOverflow: false,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 150,
         visible: false,
       },
       {
@@ -587,6 +608,7 @@
     msgId: null,
     briefRepairMethods: null,
   });
+  const exportDataSpinning = ref(false);
   getMessages(msgId == null);
   getDictionaries();
   getServices();
@@ -799,7 +821,9 @@
             message.success('更改处理内容成功');
             const oldData = tableRef.value.getRowById(formData.msgId);
             if (oldData) {
-              oldData.briefRepairMethods = formData.briefRepairMethods;
+              oldData.briefRepairMethods = data.briefRepairMethods;
+              oldData.briefRepairTime = data.briefRepairTime;
+              oldData.briefRepairUserName = data.name;
             }
             isShowRepair.value = false;
           } else {
@@ -811,6 +835,29 @@
         });
     });
   }
+
+  function exportData() {
+    exportDataSpinning.value = true;
+    seacthContent.value.startTime =
+      timeValue.value == null ? null : timeValue.value[0].format('YYYY-MM-DD HH:mm:ss');
+    seacthContent.value.endTime =
+      timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
+    messageApi
+      .ExportData({
+        msgId,
+        PageIndex: page.current,
+        PageSize: page.size,
+        ...seacthContent.value,
+        fullSort: getFullSort(),
+        execompleteBefore: () => {
+          exportDataSpinning.value = false;
+        },
+      })
+      .then((data) => {
+        myCommon.downLoadFile(data);
+      });
+  }
+
   watch(
     () => refresh.value,
     () => {

@@ -55,6 +55,14 @@ const CallRecord = {
       params,
     });
   },
+  //导出数据
+  ExportData: function (params) {
+    return defHttp.post({
+      url: '/DCOptionCallRecord/ExportData',
+      params,
+      responseType: 'blob',
+    });
+  },
 };
 const KeypadRecord = {
   //获取列表
@@ -64,6 +72,14 @@ const KeypadRecord = {
       params,
     });
   },
+  //导出数据
+  ExportData: function (params) {
+    return defHttp.post({
+      url: '/DCOptionKeypadRecord/ExportData',
+      params,
+      responseType: 'blob',
+    });
+  },
 };
 const ServiceTest = {
   //获取树列表
@@ -71,6 +87,14 @@ const ServiceTest = {
     return defHttp.post({
       url: '/DCOptionServiceTest/GetDCOptionServiceTests',
       params,
+    });
+  },
+  //导出数据
+  ExportData: function (params) {
+    return defHttp.post({
+      url: '/DCOptionServiceTest/ExportData',
+      params,
+      responseType: 'blob',
     });
   },
 };

@@ -43,6 +43,9 @@
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
                         <a-button @click="initPage()" type="primary">查询</a-button>
+                        <a-spin :spinning="exportDataSpinning">
+                          <a-button @click="exportData" type="primary">导出</a-button>
+                        </a-spin>
                       </a-space>
                     </div>
                   </a-space>
@@ -151,8 +154,9 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['testTime desc'],
+    sortlist: ['dataTime desc'],
   });
+  const exportDataSpinning = ref(false);
 
   getDCOptionServiceTests();
   getServices();
@@ -227,6 +231,27 @@
       })
       .catch(() => {
         serviceData.value = [];
+      });
+  }
+
+  function exportData() {
+    exportDataSpinning.value = true;
+    seacthContent.value.startTime =
+      timeValue.value == null ? null : timeValue.value[0].format('YYYY-MM-DD HH:mm:ss');
+    seacthContent.value.endTime =
+      timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
+    serviceTestApi
+      .ExportData({
+        ...seacthContent.value,
+        PageIndex: page.current,
+        PageSize: page.size,
+        fullSort: getFullSort(),
+        execompleteBefore: () => {
+          exportDataSpinning.value = false;
+        },
+      })
+      .then((data) => {
+        myCommon.downLoadFile(data);
       });
   }
 
