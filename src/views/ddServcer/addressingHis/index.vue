@@ -59,6 +59,16 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>主叫ISDN：</label>
+                    <a-input
+                      @press-enter="initPage()"
+                      v-model:value="seacthContent.srcIsdn"
+                      placeholder="输入主叫ISDN查询"
+                    />
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
                     <label>寻址结果：</label>
                     <a-select
                       placeholder="寻址结果"
@@ -220,6 +230,7 @@
     startTime: null,
     endTime: null,
     result: null,
+    srcIsdn: null,
   });
   const page = reactive({
     current: 1,

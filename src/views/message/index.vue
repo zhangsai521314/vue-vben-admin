@@ -93,7 +93,6 @@
                       allow-clear
                       v-model:value="seacthContent.msgStatus"
                     >
-                      <a-select-option :value="3">提示</a-select-option>
                       <a-select-option :value="1">故障</a-select-option>
                       <a-select-option :value="2">恢复</a-select-option>
                     </a-select>

@@ -409,10 +409,16 @@
         loading.value = true;
         menuApi
           .DeleteMenu(row.menuId)
-          .then(() => {
+          .then((data) => {
             loading.value = false;
-            tableConfigData.value = tableConfigData.value?.filter((m) => m.menuId != row.menuId);
-            message.success('删除菜单信息成功');
+            try {
+              if (data) {
+                tableConfigData.value = tableConfigData.value?.filter(
+                  (m) => data.indexOf(m.menuId) == -1,
+                );
+              }
+              message.success('删除菜单信息成功');
+            } catch (error) {}
           })
           .catch(() => {
             loading.value = false;

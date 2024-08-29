@@ -83,22 +83,15 @@ export const useMqttStore = defineStore({
   getters: {
     //获取所有信息
     getAllMsgData(state) {
-      return state.msgData;
+      return state.msgData.filter((m) => m.msgTitle && m.webMsgIsShow == true);
     },
     //获取未读的报警信息
     getUnreadalarmData(state) {
-      return state.msgData.filter((m) => !m.isRead && m.msgTitle);
+      return state.msgData.filter((m) => !m.isRead && m.msgTitle && m.webMsgIsShow == true);
     },
     //获取报警信息
     getAlarmData(state) {
-      return state.msgData.filter((m) => m.msgTitle);
-      // const f = [];
-      // state.msgData[0].serviceId = '522045728034891';
-      // state.msgData[0].serviceName = '科里巴-车站值班台addadadadggwe你看发了你发';
-      // for (let index = 0; index < 500; index++) {
-      //   f.push(state.msgData[0]);
-      // }
-      // return f;
+      return state.msgData.filter((m) => m.msgTitle && m.webMsgIsShow == true);
     },
   },
   actions: {
@@ -201,27 +194,35 @@ export const useMqttStore = defineStore({
     },
     //增加信息
     addMsgData(item: MsgData) {
-      if (item.webMsgIsShow) {
-        const keyId = item.joinId ? item.joinId : item.serviceId;
-        if (
-          !this.newInfo[keyId] ||
-          dayjs(this.newInfo[keyId].msgStartTime) <= dayjs(item.msgStartTime)
-        ) {
-          this.newInfo[keyId] = item;
+      const userStore = useUserStore();
+      if (userStore.userInfo?.orgIds && !userStore.userInfo?.orgIds.includes(item.orgId)) {
+        //只显示自己部门权限的告警
+        item.webMsgIsShow = false;
+      }
+      const keyId = item.joinId ? item.joinId : item.serviceId;
+      if (
+        !this.newInfo[keyId] ||
+        dayjs(this.newInfo[keyId].msgStartTime) <= dayjs(item.msgStartTime)
+      ) {
+        this.newInfo[keyId] = item;
+      }
+      this.changeNewInfoKey = `${keyId}_${item.msgStatus}`;
+      if (!this.msgData?.find((m) => m.msgId == item.msgId)) {
+        this.msgData = [item, ...(this.msgData || [])];
+        if (this.msgData.length > 500) {
+          this.msgData.splice(this.msgData.length - 1, 1);
         }
-        this.changeNewInfoKey = `${keyId}_${item.msgStatus}`;
-        if (!this.msgData?.find((m) => m.msgId == item.msgId)) {
-          this.msgData = [item, ...(this.msgData || [])];
-          if (this.msgData.length > 500) {
-            this.msgData.splice(this.msgData.length - 1, 1);
-          }
-          this.msgData = _.orderBy(this.msgData, ['msgStartTime'], ['desc']);
-        }
+        this.msgData = _.orderBy(this.msgData, ['msgStartTime'], ['desc']);
         this.playMsgAudio(item);
       }
     },
     //更改信息
     updateMsgData(item: MsgData) {
+      const userStore = useUserStore();
+      if (userStore.userInfo?.orgIds && !userStore.userInfo?.orgIds.includes(item.orgId)) {
+        //只显示自己部门权限的告警
+        item.webMsgIsShow = false;
+      }
       const keyId = item.joinId ? item.joinId : item.serviceId;
       if (
         !this.newInfo[keyId] ||

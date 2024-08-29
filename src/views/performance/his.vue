@@ -219,7 +219,7 @@
   function assembylData(data) {
     if (data.source.length > 0) {
       baseColumns = [
-        { type: 'seq', title: '序号', minWidth: 50, fixed: 'left' },
+        { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
         {
           field: 'keyId',
           title: '记录ID',
@@ -279,6 +279,7 @@
                 showOverflow: true,
                 showHeaderOverflow: true,
                 sortable: false,
+                minWidth: 110,
               });
             } else {
               baseColumns.push({
@@ -287,6 +288,7 @@
                 showOverflow: true,
                 showHeaderOverflow: true,
                 sortable: false,
+                minWidth: 110,
               });
               baseColumnsChart.push({
                 name: `${col}盘使用率(%)`,

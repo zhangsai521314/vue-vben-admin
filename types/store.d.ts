@@ -58,7 +58,8 @@ export interface UserInfo {
   isAdmin: boolean;
   //部门名称
   orgName: string;
-
+  //用户所属部门权限
+  orgIds: string[];
   desc?: string;
   roles: RoleInfo[];
   //用户自己定义的mq主题
@@ -102,4 +103,5 @@ export interface MsgData {
   isRead?: boolean;
   msgIcon?: string;
   webMsgIsShow: boolean;
+  orgId: string;
 }
