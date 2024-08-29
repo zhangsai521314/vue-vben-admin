@@ -104,7 +104,7 @@ async function mqttInit() {
         .then((rdata) => {
           mqttStore.updateMqttStatus(7);
           rdata[0].forEach((m) => {
-            mqttStore.addMsgData(m);
+            mqttStore.addMsgData(userStore, m);
           });
           mqttStore.isInitAlarmData = true;
           mqttStore.updateMqttStatus(8);
@@ -253,13 +253,13 @@ async function mqttInit() {
               mqttStore.isInitAlarmData
             ) {
               //告警插入
-              mqttStore.addMsgData(msg);
+              mqttStore.addMsgData(userStore, msg);
             } else if (
               topic == mqttConfig.WebMsg.replace('+', '') + 'Update' &&
               mqttStore.isInitAlarmData
             ) {
               //告警更新
-              mqttStore.updateMsgData(msg);
+              mqttStore.updateMsgData(userStore, msg);
             } else if (
               topic ==
               mqttConfig.WebPlayCallRecord.replace(

@@ -4,7 +4,6 @@ import { store } from '@/store';
 import dayjs from 'dayjs';
 import messageApi from '@/api/message';
 import { message } from 'ant-design-vue';
-import { useUserStore } from '@/store/modules/user';
 
 export interface MqttState {
   //系统mqtt全部配置信息
@@ -81,10 +80,6 @@ export const useMqttStore = defineStore({
     userTopicPerformanceNewValue: {},
   }),
   getters: {
-    //获取所有信息
-    getAllMsgData(state) {
-      return state.msgData.filter((m) => m.msgTitle && m.webMsgIsShow == true);
-    },
     //获取未读的报警信息
     getUnreadalarmData(state) {
       return state.msgData.filter((m) => !m.isRead && m.msgTitle && m.webMsgIsShow == true);
@@ -193,8 +188,7 @@ export const useMqttStore = defineStore({
       // }
     },
     //增加信息
-    addMsgData(item: MsgData) {
-      const userStore = useUserStore();
+    addMsgData(userStore, item: MsgData) {
       if (userStore.userInfo?.orgIds && !userStore.userInfo?.orgIds.includes(item.orgId)) {
         //只显示自己部门权限的告警
         item.webMsgIsShow = false;
@@ -217,8 +211,7 @@ export const useMqttStore = defineStore({
       }
     },
     //更改信息
-    updateMsgData(item: MsgData) {
-      const userStore = useUserStore();
+    updateMsgData(userStore, item: MsgData) {
       if (userStore.userInfo?.orgIds && !userStore.userInfo?.orgIds.includes(item.orgId)) {
         //只显示自己部门权限的告警
         item.webMsgIsShow = false;
