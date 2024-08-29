@@ -194,6 +194,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'serviceName',
@@ -202,6 +203,7 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'mqttIp',

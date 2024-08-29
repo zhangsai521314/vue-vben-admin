@@ -63,12 +63,12 @@
             :scroll-y="{ enabled: false }"
           >
             >
-            <vxe-column type="seq" title="序号" minWidth="70" fixed="left" />
+            <vxe-column type="seq" title="序号" :minWidth="70" fixed="left" />
             <vxe-column
               field="menuId"
               title="记录id"
               :visible="false"
-              minWidth="130"
+              :minWidth="130"
               fixed="left"
             />
             <vxe-column
@@ -76,7 +76,7 @@
               title="菜单名称"
               tree-node
               :sortable="true"
-              minWidth="150"
+              :minWidth="150"
               fixed="left"
             >
               <template #default="{ row }">
@@ -88,7 +88,7 @@
                 </span>
               </template>
             </vxe-column>
-            <vxe-column field="menuType" title="菜单类型" :sortable="true" minWidth="100">
+            <vxe-column field="menuType" title="菜单类型" :sortable="true" :minWidth="100">
               <template #default="{ row }">
                 <span
                   :class="{
@@ -99,45 +99,45 @@
                 >
               </template>
             </vxe-column>
-            <vxe-column field="menuUrl" title="访问地址" :sortable="true" minWidth="250" />
-            <vxe-column field="authName" title="权限标识" :sortable="true" minWidth="150" />
-            <vxe-column field="isValid" title="是否启用" minWidth="100">
+            <vxe-column field="menuUrl" title="访问地址" :sortable="true" :minWidth="250" />
+            <vxe-column field="authName" title="权限标识" :sortable="true" :minWidth="150" />
+            <vxe-column field="isValid" title="是否启用" :minWidth="100">
               <template #default="{ row }">
                 <span :style="{ color: row.isValid ? 'green' : 'red' }">{{
                   row.isValid ? '是' : '否'
                 }}</span>
               </template>
             </vxe-column>
-            <vxe-column field="orderIndex" title="菜单排序" :sortable="true" minWidth="100" />
+            <vxe-column field="orderIndex" title="菜单排序" :sortable="true" :minWidth="100" />
             <vxe-column
               field="createTime"
               title="创建时间"
               :visible="false"
               :sortable="true"
-              minWidth="150"
+              :minWidth="150"
             />
             <vxe-column
               field="createUser"
               title="创建人"
               :visible="false"
               :sortable="true"
-              minWidth="130"
+              :minWidth="130"
             />
             <vxe-column
               field="modifyTime"
               title="修改时间"
               :visible="false"
               :sortable="true"
-              minWidth="150"
+              :minWidth="150"
             />
             <vxe-column
               field="modifyUser"
               title="修改人"
               :visible="false"
               :sortable="true"
-              minWidth="130"
+              :minWidth="130"
             />
-            <vxe-column title="操作" minWidth="140" fixed="right">
+            <vxe-column title="操作" :minWidth="140" fixed="right">
               <template #default="{ row }">
                 <div :class="`tableStyle`">
                   <AuthDom auth="menuManage_table_add">

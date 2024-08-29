@@ -124,6 +124,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'typeName',

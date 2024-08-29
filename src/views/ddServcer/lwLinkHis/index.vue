@@ -111,6 +111,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'typeName',
@@ -119,6 +120,7 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'srcNumber',
@@ -127,6 +129,7 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'srcIp',

@@ -108,7 +108,7 @@
             </div>
           </template>
         </vxe-toolbar>
-        <div style="width: 100%; height: calc(100% - 62px)">
+        <div style="width: 100%; height: calc(100% - 74px)">
           <vxe-table
             :border="true"
             :auto-resize="true"

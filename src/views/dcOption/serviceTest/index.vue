@@ -70,12 +70,12 @@
             :data="tableConfigData"
             @sort-change="onSortChange"
           >
-            <vxe-column type="seq" title="序号" minwidth="70" fixed="left" />
+            <vxe-column type="seq" title="序号" :minWidth="70" fixed="left" />
             <vxe-column
               field="testId"
               title="记录id"
               :visible="false"
-              :minwidth="130"
+              :minWidth="130"
               fixed="left"
             />
             <vxe-column
@@ -83,19 +83,19 @@
               title="服务编号"
               :visible="false"
               :sortable="true"
-              :minwidth="100"
+              :minWidth="100"
               fixed="left"
             />
-            <vxe-column field="serviceName" title="服务名称" :sortable="true" :minwidth="200" />
+            <vxe-column field="serviceName" title="服务名称" :sortable="true" :minWidth="200" />
             <vxe-column
               field="testStepName"
               title="自检名称"
               tree-node
               :sortable="true"
-              :minWidth="120"
+              :minWidth="150"
               fixed="left"
             />
-            <vxe-column field="testStatus" title="自检状态" :sortable="true" :minwidth="100">
+            <vxe-column field="testStatus" title="自检状态" :sortable="true" :minWidth="100">
               <template #default="{ row }">
                 <span
                   :class="{
@@ -115,8 +115,8 @@
                 >
               </template>
             </vxe-column>
-            <vxe-column field="testStep" title="自检步骤(总数)" :sortable="true" :minwidth="150" />
-            <vxe-column field="dataTime" title="自检时间" :sortable="true" :minwidth="150" />
+            <vxe-column field="testStep" title="自检步骤(总数)" :sortable="true" :minWidth="150" />
+            <vxe-column field="dataTime" title="自检时间" :sortable="true" :minWidth="150" />
           </vxe-table>
           <vxe-pager
             background
@@ -131,6 +131,7 @@
   </MyContent>
 </template>
 <script setup lang="ts">
+  import zhCN from 'ant-design-vue/es/locale/zh_CN';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';

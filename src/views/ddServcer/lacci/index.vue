@@ -217,6 +217,7 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 100,
+        fixed: 'left',
       },
       {
         field: 'lacci',

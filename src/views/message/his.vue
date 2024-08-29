@@ -56,6 +56,7 @@
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        fixed: 'left',
       },
       {
         field: 'serviceCode',
@@ -63,12 +64,14 @@
         showOverflow: true,
         visible: false,
         showHeaderOverflow: true,
+        fixed: 'left',
       },
       {
         field: 'serviceName',
         title: '服务名称',
         showOverflow: true,
         showHeaderOverflow: true,
+        fixed: 'left',
       },
       {
         field: 'msgType',

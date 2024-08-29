@@ -143,13 +143,15 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'id',
         title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        fixed: 'left',
+        minWidth: 130,
       },
       {
         field: 'regTypeName',
@@ -157,6 +159,8 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        fixed: 'left',
+        minWidth: 110,
       },
       {
         field: 'fn',
@@ -164,6 +168,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'isdn',
@@ -171,6 +176,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'regStatusName',
@@ -178,6 +184,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'regResultName',
@@ -185,11 +192,12 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'regTime',
         title: '操作时间',
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

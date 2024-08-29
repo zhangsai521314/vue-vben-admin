@@ -102,13 +102,15 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
       {
         field: 'id',
         title: '记录ID',
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        fixed: 'left',
+        minWidth: 130,
       },
       {
         field: 'lineName',
@@ -117,6 +119,8 @@
         showHeaderOverflow: true,
         visible: false,
         sortable: true,
+        fixed: 'left',
+        minWidth: 200,
       },
       {
         field: 'stationName',
@@ -124,6 +128,8 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        fixed: 'left',
+        minWidth: 200,
       },
       {
         field: 'isdn',
@@ -131,6 +137,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'typeName',
@@ -138,6 +145,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'lacci',
@@ -145,6 +153,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'lacciName',
@@ -152,6 +161,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 130,
       },
       {
         field: 'stationLocationName',
@@ -159,6 +169,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'longitude',
@@ -166,6 +177,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'latitude',
@@ -173,13 +185,14 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
+        minWidth: 100,
       },
       {
         field: 'ip',
         title: 'Ip+端口号',
         showOverflow: true,
         showHeaderOverflow: true,
-        width: 154,
+        minWidth: 154,
         slots: {
           default: 'ipport',
         },

@@ -245,6 +245,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'serviceCode',
@@ -254,6 +255,16 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 100,
+        fixed: 'left',
+      },
+      {
+        field: 'serviceName',
+        title: '服务名称',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 150,
+        fixed: 'left',
       },
       {
         field: 'callStateDescription',
@@ -263,14 +274,6 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 100,
-      },
-      {
-        field: 'serviceName',
-        title: '服务名称',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-        minWidth: 150,
       },
       {
         field: 'callDirectionDescription',

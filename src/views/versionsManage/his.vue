@@ -183,6 +183,7 @@
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
+        fixed: 'left',
       },
       {
         field: 'vNumber',

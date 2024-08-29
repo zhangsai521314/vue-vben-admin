@@ -159,6 +159,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'name',
@@ -167,6 +168,7 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'isValid',

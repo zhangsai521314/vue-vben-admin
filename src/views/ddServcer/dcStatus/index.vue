@@ -155,6 +155,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'lineName',
@@ -164,6 +165,7 @@
         visible: false,
         sortable: true,
         minWidth: 200,
+        fixed: 'left',
       },
       {
         field: 'stationCode',
@@ -173,6 +175,7 @@
         visible: false,
         sortable: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'stationName',
@@ -181,6 +184,7 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 200,
+        fixed: 'left',
       },
       {
         field: 'isdn',

@@ -237,6 +237,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'orgName',
@@ -245,6 +246,7 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'equipmentName',
@@ -253,6 +255,7 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'equipmentType',

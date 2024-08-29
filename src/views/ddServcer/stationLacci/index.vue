@@ -225,6 +225,7 @@
         sortable: true,
         visible: false,
         minWidth: 200,
+        fixed: 'left',
       },
       {
         field: 'stationName',
@@ -233,6 +234,7 @@
         showHeaderOverflow: true,
         sortable: false,
         minWidth: 200,
+        fixed: 'left',
       },
       {
         field: 'typeName',

@@ -397,6 +397,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'orgName',
@@ -406,6 +407,7 @@
         sortable: true,
         visible: false,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'equipmentName',
@@ -415,6 +417,7 @@
         sortable: true,
         visible: false,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'serviceType',
@@ -423,6 +426,7 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'serviceName',
@@ -431,6 +435,7 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 200,
+        fixed: 'left',
       },
       {
         field: 'serviceCode',
@@ -448,6 +453,22 @@
         sortable: true,
         visible: false,
         minWidth: 150,
+      },
+      {
+        field: 'newVersion',
+        title: '正式版本号',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 110,
+      },
+      {
+        field: 'runVersion',
+        title: '运行版本号',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 110,
       },
       {
         field: 'port',

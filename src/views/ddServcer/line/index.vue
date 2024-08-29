@@ -353,6 +353,7 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 200,
+        fixed: 'left',
       },
       {
         field: 'code',

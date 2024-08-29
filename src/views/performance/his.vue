@@ -3,7 +3,7 @@
     <a-space
       direction="horizontal"
       size="small"
-      style="width: 100%; height: 48px; padding-left: 5px; background-color: #fff"
+      style="width: 100%; min-height: 34px; padding: 7px 0 7px 5px; background-color: #fff"
     >
       <AuthDom auth="performance_his_query">
         <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
@@ -12,7 +12,7 @@
               <label>数据时间：</label>
               <a-config-provider :locale="zhCN">
                 <a-range-picker
-                  allowClear
+                  :allowClear="false"
                   v-model:value="timeValue"
                   :showTime="true"
                   format="YYYY-MM-DD HH:mm:ss"
@@ -219,13 +219,15 @@
   function assembylData(data) {
     if (data.source.length > 0) {
       baseColumns = [
-        { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+        { type: 'seq', title: '序号', minWidth: 50, fixed: 'left' },
         {
           field: 'keyId',
           title: '记录ID',
           visible: false,
           showOverflow: true,
           showHeaderOverflow: true,
+          fixed: 'left',
+          minWidth: 130,
         },
         {
           field: 'cpuUsage',
@@ -233,6 +235,7 @@
           showOverflow: true,
           showHeaderOverflow: true,
           sortable: false,
+          minWidth: 110,
         },
         {
           field: 'memorySize',
@@ -240,6 +243,7 @@
           showOverflow: false,
           showHeaderOverflow: true,
           sortable: false,
+          minWidth: 110,
         },
         {
           field: 'memoryUsage',
@@ -247,6 +251,7 @@
           showOverflow: false,
           showHeaderOverflow: true,
           sortable: false,
+          minWidth: 110,
         },
       ];
       baseColumnsChart = [
@@ -301,7 +306,7 @@
         baseColumns.push({
           field: 'dataTime',
           title: '数据时间',
-          width: 150,
+          minWidth: 150,
           showOverflow: true,
           showHeaderOverflow: true,
           sortable: true,

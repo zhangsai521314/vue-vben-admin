@@ -97,6 +97,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         minWidth: 130,
+        fixed: 'left',
       },
       {
         field: 'serviceCode',
@@ -106,6 +107,7 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 100,
+        fixed: 'left',
       },
       {
         field: 'serviceName',
@@ -114,6 +116,7 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 200,
+        fixed: 'left',
       },
       {
         field: 'content',
@@ -121,7 +124,7 @@
         showOverflow: false,
         showHeaderOverflow: true,
         sortable: true,
-        minWidth: 130,
+        minWidth: 200,
       },
       {
         field: 'startTime',

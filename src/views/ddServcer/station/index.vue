@@ -442,6 +442,7 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+        fixed: 'left',
         minWidth: 200,
       },
       {
@@ -451,6 +452,7 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 200,
+        fixed: 'left',
       },
       {
         field: 'code',
