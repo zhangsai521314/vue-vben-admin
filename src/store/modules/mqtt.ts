@@ -215,14 +215,16 @@ export const useMqttStore = defineStore({
       ) {
         this.newInfo[keyId] = item;
       }
-      this.changeNewInfoKey = `${keyId}_${item.msgStatus}`;
-      if (!this.msgData?.find((m) => m.msgId == item.msgId)) {
-        this.msgData = [item, ...(this.msgData || [])];
-        if (this.msgData.length > 500) {
-          this.msgData.splice(this.msgData.length - 1, 1);
+      if (item.webMsgIsShow) {
+        this.changeNewInfoKey = `${keyId}_${item.msgStatus}`;
+        if (!this.msgData?.find((m) => m.msgId == item.msgId)) {
+          this.msgData = [item, ...(this.msgData || [])];
+          if (this.msgData.length > 500) {
+            this.msgData.splice(this.msgData.length - 1, 1);
+          }
+          this.msgData = _.orderBy(this.msgData, ['msgStartTime'], ['desc']);
+          this.playMsgAudio(item);
         }
-        this.msgData = _.orderBy(this.msgData, ['msgStartTime'], ['desc']);
-        this.playMsgAudio(item);
       }
     },
     //更改信息
@@ -247,11 +249,13 @@ export const useMqttStore = defineStore({
         this.newInfo[keyId] = item;
       }
       this.changeNewInfoKey = `${keyId}_${item.msgStatus}`;
-      const data = this.msgData?.find((m) => m.msgId == item.msgId);
-      if (data) {
-        myCommon.objectReplace(data, item);
-        this.msgData = _.orderBy(this.msgData, ['msgStartTime'], ['desc']);
-        this.playMsgAudio(data);
+      if (item.webMsgIsShow) {
+        const data = this.msgData?.find((m) => m.msgId == item.msgId);
+        if (data) {
+          myCommon.objectReplace(data, item);
+          this.msgData = _.orderBy(this.msgData, ['msgStartTime'], ['desc']);
+          this.playMsgAudio(data);
+        }
       }
     },
     //更改mqtt连接状态
