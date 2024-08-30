@@ -67,7 +67,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>操作类型：</label>
                     <a-select
-                      placeholder="请选择操作类型："
+                      placeholder="请选择操作类型"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.regStatus"
@@ -83,7 +83,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>操作结果：</label>
                     <a-select
-                      placeholder="请选择操作结果："
+                      placeholder="请选择操作结果"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.regResult"
