@@ -848,7 +848,6 @@
       softwareApi
         .GetServiceStatus(serviceIdDatas.map((m) => m.data.myServiceId))
         .then(async (nodeState) => {
-          console.log('nodeState', nodeState);
           serviceIdDatas.forEach((node) => {
             const stateOb = graphOb.getElementData(node.id);
             if (stateOb) {

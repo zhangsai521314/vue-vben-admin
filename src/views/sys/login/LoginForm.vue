@@ -193,7 +193,6 @@
       loading.value = false;
     }
   }
-  handleLogin();
 
   //f5刷新
   function handleBeforeunload() {

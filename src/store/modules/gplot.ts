@@ -242,7 +242,7 @@ export const useGplotStore = defineStore({
         },
       };
     },
-    //mqtt信息过滤
+    //mqtt信息过滤,便于拓扑图灵活配置监控
     async mqttMsgReceive(topic: string, message) {
       try {
         if (['Data/Monitor/WebMsg/Insert', 'Data/Monitor/WebMsg/Update'].includes(topic)) {

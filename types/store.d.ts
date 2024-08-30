@@ -56,6 +56,8 @@ export interface UserInfo {
   adminTypeName: string;
   //是否是管理员
   isAdmin: boolean;
+  //是否是超级管理员
+  isSuperAdmin: boolean;
   //部门名称
   orgName: string;
   //用户所属部门权限
@@ -64,6 +66,7 @@ export interface UserInfo {
   roles: RoleInfo[];
   //用户自己定义的mq主题
   userMqTopic: Array<object>[];
+  tenantId: string;
 }
 
 export interface BeforeMiniState {
@@ -104,4 +107,5 @@ export interface MsgData {
   msgIcon?: string;
   webMsgIsShow: boolean;
   orgId: string;
+  tenantId: string;
 }

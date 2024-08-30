@@ -4,6 +4,7 @@ import { store } from '@/store';
 import dayjs from 'dayjs';
 import messageApi from '@/api/message';
 import { message } from 'ant-design-vue';
+import { useUserStore } from '@/store/modules/user';
 
 export interface MqttState {
   //系统mqtt全部配置信息
@@ -80,16 +81,22 @@ export const useMqttStore = defineStore({
     userTopicPerformanceNewValue: {},
   }),
   getters: {
+    getAllMsgData(state) {
+      return state.msgData;
+    },
     //获取未读的报警信息
     getUnreadalarmData(state) {
-      return state.msgData.filter((m) => !m.isRead && m.msgTitle && m.webMsgIsShow == true);
+      return state.msgData.filter((m) => !m.isRead && m.msgTitle && m.webMsgIsShow);
     },
     //获取报警信息
     getAlarmData(state) {
-      return state.msgData.filter((m) => m.msgTitle && m.webMsgIsShow == true);
+      return state.msgData.filter((m) => m.msgTitle && m.webMsgIsShow);
     },
   },
   actions: {
+    clearMsgData() {
+      this.msgData = [];
+    },
     clearAllMsgStrongPromptingTime() {
       this.msgStrongPromptingTime = {};
     },
@@ -188,8 +195,16 @@ export const useMqttStore = defineStore({
       // }
     },
     //增加信息
-    addMsgData(userStore, item: MsgData) {
-      if (userStore.userInfo?.orgIds && !userStore.userInfo?.orgIds.includes(item.orgId)) {
+    addMsgData(item: MsgData) {
+      const userStore = useUserStore();
+      const userInfo = userStore.userInfo;
+      if (
+        item.webMsgIsShow &&
+        userInfo &&
+        !userInfo.isSuperAdmin &&
+        !userInfo.isAdmin &&
+        (item.tenantId != userInfo.tenantId || !userInfo.orgIds.includes(item.orgId))
+      ) {
         //只显示自己部门权限的告警
         item.webMsgIsShow = false;
       }
@@ -211,8 +226,16 @@ export const useMqttStore = defineStore({
       }
     },
     //更改信息
-    updateMsgData(userStore, item: MsgData) {
-      if (userStore.userInfo?.orgIds && !userStore.userInfo?.orgIds.includes(item.orgId)) {
+    updateMsgData(item: MsgData) {
+      const userStore = useUserStore();
+      const userInfo = userStore.userInfo;
+      if (
+        item.webMsgIsShow &&
+        userInfo &&
+        !userInfo.isSuperAdmin &&
+        !userInfo.isAdmin &&
+        (item.tenantId != userInfo.tenantId || !userInfo.orgIds.includes(item.orgId))
+      ) {
         //只显示自己部门权限的告警
         item.webMsgIsShow = false;
       }
@@ -276,6 +299,7 @@ export const useMqttStore = defineStore({
       try {
         if (this.mqttClient && this.mqttClient.connected) {
           this.mqttClient.end();
+          this.mqttClient = null;
         }
       } catch (error) {
         console.log(error);
