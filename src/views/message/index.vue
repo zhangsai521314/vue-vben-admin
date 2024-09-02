@@ -199,7 +199,7 @@
           row.isRead ? '已读' : '未读'
         }}</a-tag>
       </template>
-      <template #msgDuration="{ row }">
+      <!-- <template #msgDuration="{ row }">
         {{
           row.msgDuration == null
             ? ''
@@ -213,7 +213,7 @@
                     ? `${parseFloat(row.msgDuration / 60 / 60 / 24).toFixed(1)} 天`
                     : ''
         }}
-      </template>
+      </template> -->
       <template #default="{ row }">
         <div :class="`tableOption`">
           <AuthDom auth="message_msg_queren">
@@ -465,14 +465,14 @@
       },
       {
         field: 'msgDuration',
-        title: '持续时长',
+        title: '持续时长(秒)',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        slots: {
-          default: 'msgDuration',
-        },
-        minWidth: 100,
+        // slots: {
+        //   default: 'msgDuration',
+        // },
+        minWidth: 120,
       },
       {
         field: 'confirmUserName',

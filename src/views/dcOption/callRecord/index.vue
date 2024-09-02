@@ -136,7 +136,7 @@
           }}</span
         >
       </template>
-      <template #duration="{ row }">
+      <!-- <template #duration="{ row }">
         {{
           row.duration == null
             ? ''
@@ -150,7 +150,7 @@
                     ? `${parseFloat(row.duration / 60 / 60 / 24).toFixed(1)} 天`
                     : ''
         }}
-      </template>
+      </template> -->
       <template #default="{ row }">
         <div :class="`tableOption`">
           <AuthDom auth="DCOptionCallRecord_play">
@@ -313,14 +313,14 @@
       },
       {
         field: 'duration',
-        title: '持续时长',
+        title: '持续时长(秒)',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        slots: {
-          default: 'duration',
-        },
-        minWidth: 100,
+        // slots: {
+        //   default: 'duration',
+        // },
+        minWidth: 120,
       },
       {
         field: 'startTime',
@@ -381,15 +381,24 @@
         minWidth: 100,
       },
       {
+        field: 'logKey',
+        title: '录音文件地址',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        visible: false,
+        minWidth: 150,
+      },
+      {
         field: 'recordFileStatus',
-        title: '录音文件',
+        title: '录音文件状态',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
         slots: {
           default: 'recordFileStatus',
         },
-        minWidth: 100,
+        minWidth: 150,
       },
       {
         field: 'recordFileTime',
