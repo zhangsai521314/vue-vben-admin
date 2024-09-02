@@ -19,7 +19,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>通话时间：</label>
+                    <label>拨打时间：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         allowClear
@@ -66,11 +66,12 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-input
+                    <a-input-number
+                      class="duration"
                       @press-enter="initPage()"
                       v-model:value="duration"
-                      style="width: 260px"
-                      placeholder="分钟"
+                      :min="0"
+                      :placeholder="durationUnit == 'ss' ? '秒' : '分钟'"
                     >
                       <template #addonBefore>
                         <a-select v-model:value="durationQueryType" style="width: 130px">
@@ -79,9 +80,12 @@
                         </a-select>
                       </template>
                       <template #addonAfter>
-                        <span>分钟</span>
+                        <a-select v-model:value="durationUnit" style="width: 60px">
+                          <a-select-option value="ss">秒</a-select-option>
+                          <a-select-option value="mm">分</a-select-option>
+                        </a-select>
                       </template>
-                    </a-input>
+                    </a-input-number>
                   </a-space>
                 </div>
                 <div class="row-div">
@@ -428,7 +432,7 @@
     SearchParameters: [],
   });
   const durationQueryType = ref(5);
-  const durationUnit = ref('MM');
+  const durationUnit = ref('ss');
   const duration = ref(null);
 
   const timeValue = ref(null);
@@ -592,7 +596,7 @@
           CSharpTypeName: 'int',
           FieldName: 'duration',
           ConditionalType: durationQueryType.value,
-          FieldValue: durationUnit.value == 'MM' ? duration.value * 60 : null,
+          FieldValue: durationUnit.value == 'mm' ? duration.value * 60 : duration.value,
         },
       ];
     } else {
@@ -745,5 +749,9 @@
   .@{prefixCls}play {
     width: 100%;
     height: 370px;
+  }
+
+  .duration :deep(.ant-input-number-input) {
+    width: 80px;
   }
 </style>
