@@ -71,6 +71,7 @@
                       @press-enter="initPage()"
                       v-model:value="duration"
                       :min="0"
+                      :max="3000"
                       :placeholder="durationUnit == 'ss' ? '秒' : '分钟'"
                     >
                       <template #addonBefore>
@@ -312,7 +313,7 @@
         minWidth: 100,
       },
       {
-        field: 'duration',
+        field: 'callTimeSpan',
         title: '持续时长(秒)',
         showOverflow: true,
         showHeaderOverflow: true,

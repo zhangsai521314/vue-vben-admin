@@ -292,8 +292,8 @@ function initMq() {
             } else if (topic == mqttConfig.WebUserInfoChange) {
               if (
                 !myCommon.isnull(userStore.userInfo?.userId) &&
-                !myCommon.isnull(msg.userId) &&
-                userStore.userInfo?.userId == msg.userId
+                (userStore.userInfo?.userId == msg.userId ||
+                  userStore.userInfo?.roleId == msg.roleId)
               ) {
                 //用户信息已被修改（基础信息-部门信息|角色信息，权限信息）
                 userStore.logout(true, false);

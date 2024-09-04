@@ -101,7 +101,7 @@
       },
       {
         field: 'msgStartTime',
-        title: '时间',
+        title: '告警时间',
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -113,14 +113,6 @@
         showHeaderOverflow: true,
         visible: false,
         sortable: true,
-      },
-      {
-        field: 'mgStartTime',
-        title: '告警时间',
-        width: 150,
-        showOverflow: true,
-        showHeaderOverflow: true,
-        visible: false,
       },
     ],
     toolbarConfig: {

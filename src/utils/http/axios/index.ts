@@ -206,7 +206,20 @@ const transform: AxiosTransform = {
       if (err?.includes('Network Error')) {
         errMessage = t('sys.api.networkExceptionMsg');
       }
-
+      if (error.request.responseType == 'blob' && errorMessageMode != 'none') {
+        const reader = new FileReader();
+        reader.readAsText(error.response.data, 'utf-8'); // 读取blob数据为文本
+        reader.onload = function (e) {
+          try {
+            // 将读取到的文本解析为JSON对象
+            const jsonData = JSON.parse(e.target.result);
+            createMessage.error(jsonData);
+          } catch (error) {
+            // 处理解析JSON时可能出现的错误
+            console.error('Error parsing JSON:', error);
+          }
+        };
+      }
       if (errMessage) {
         if (errorMessageMode === 'modal') {
           createErrorModal({ title: t('sys.api.errorTip'), content: errMessage });

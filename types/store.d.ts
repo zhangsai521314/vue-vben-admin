@@ -37,7 +37,7 @@ export interface ErrorLogInfo {
 
 export interface UserInfo {
   //用户id
-  userId: number;
+  userId: string;
   // 账户
   account: string;
   // 用户名
@@ -67,6 +67,7 @@ export interface UserInfo {
   //用户自己定义的mq主题
   userMqTopic: Array<object>[];
   tenantId: string;
+  roleId: string;
 }
 
 export interface BeforeMiniState {
