@@ -2,6 +2,7 @@
   <MyContent>
     <a-spin :spinning="isGetUser" title="正在执行...">
       <vxe-grid
+        :scroll-y="{ enabled: true }"
         v-bind="tableConfig"
         id="mytable"
         :auto-resize="true"

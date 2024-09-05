@@ -1,6 +1,7 @@
 <template>
   <MyContent>
     <vxe-grid
+      :scroll-y="{ enabled: true }"
       v-bind="tableConfig"
       id="mytable"
       :auto-resize="true"
@@ -296,6 +297,7 @@
       @close="closeLog"
     >
       <vxe-table
+        :scroll-y="{ enabled: true }"
         :auto-resize="true"
         :class="`${prefixCls}logTable`"
         ref="logTableRef"

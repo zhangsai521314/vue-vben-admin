@@ -1,6 +1,7 @@
 <template>
   <MyContent :class="prefixCls">
     <vxe-grid
+      :scroll-y="{ enabled: true }"
       v-bind="tableConfig"
       :auto-resize="true"
       id="mytable"
@@ -474,7 +475,7 @@
 
   //播放下载
   function getCallRecordFilePath(row, OperationType) {
-    if (row.isOnline) {
+    if (row.isOnline || !myCommon.isnull(row.recordFile)) {
       if (!myCommon.isnull(row.recordFile)) {
         if (OperationType == 'play') {
           isRunPlay.value = true;
@@ -626,7 +627,7 @@
     };
     timeValue.value = null;
     durationQueryType.value = 5;
-    durationUnit.value = 'MM';
+    durationUnit.value = 'ss';
     duration.value = null;
   }
 

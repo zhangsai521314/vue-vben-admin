@@ -253,7 +253,13 @@
                 name="labelText"
                 label="文字内容"
               >
-                <a-input
+                <!-- <a-input
+                  v-model:value="
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelText
+                  "
+                  placeholder="文字内容"
+                /> -->
+                <a-textarea
                   v-model:value="
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelText
                   "

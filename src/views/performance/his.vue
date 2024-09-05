@@ -52,6 +52,7 @@
       >
         <a-tab-pane key="table" tab="表格查询">
           <vxe-grid
+            :scroll-y="{ enabled: true }"
             :auto-resize="true"
             id="performance_his_table"
             v-bind="tableConfig"

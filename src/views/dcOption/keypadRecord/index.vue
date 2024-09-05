@@ -1,6 +1,7 @@
 <template>
   <MyContent :class="prefixCls">
     <vxe-grid
+      :scroll-y="{ enabled: true }"
       v-bind="tableConfig"
       :auto-resize="true"
       id="mytable"

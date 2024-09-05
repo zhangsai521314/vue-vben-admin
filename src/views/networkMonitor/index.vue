@@ -5,6 +5,7 @@
     <div style="width: 100%; margin-bottom: 4px">
       <vxe-toolbar ref="toolbarRef" custom />
       <vxe-table
+            :scroll-y="{ enabled: true }"
            :auto-resize="true"
         id="bu_jia_id_storage_wu_xiao"
         height="400px"

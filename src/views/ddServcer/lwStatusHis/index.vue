@@ -1,6 +1,7 @@
 <template>
   <MyContent ref="myContentRef">
     <vxe-grid
+      :scroll-y="{ enabled: true }"
       v-bind="tableConfig"
       id="mytable"
       ref="tableRef"

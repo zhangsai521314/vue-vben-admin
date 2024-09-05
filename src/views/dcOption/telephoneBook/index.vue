@@ -4,6 +4,7 @@
       <!-- 开启多字段排序 -->
       <!-- :sort-config="{ multiple: true }" -->
       <vxe-grid
+        :scroll-y="{ enabled: true }"
         v-bind="tableConfig"
         id="mytable"
         ref="tableRef"

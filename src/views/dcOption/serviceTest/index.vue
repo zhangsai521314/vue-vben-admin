@@ -56,6 +56,7 @@
         </vxe-toolbar>
         <div style="width: 100%; height: calc(100% - 80px)">
           <vxe-table
+            :scroll-y="{ enabled: true }"
             id="serviceTest"
             :auto-resize="true"
             :border="true"

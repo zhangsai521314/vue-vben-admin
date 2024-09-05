@@ -40,6 +40,7 @@
         </vxe-toolbar>
         <div style="width: 100%; height: calc(100% - 62px)">
           <vxe-table
+            :scroll-y="{ enabled: true }"
             :auto-resize="true"
             :border="true"
             max-height="100%"
