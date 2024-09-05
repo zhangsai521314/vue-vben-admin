@@ -297,6 +297,7 @@
       @close="closeLog"
     >
       <vxe-table
+        height="100%"
         :scroll-y="{ enabled: true }"
         :auto-resize="true"
         :class="`${prefixCls}logTable`"

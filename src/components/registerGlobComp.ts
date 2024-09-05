@@ -30,6 +30,8 @@ export function registerGlobComp(app: App) {
     // version: 0, // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据
     // loadingText: '加载中...', // 全局loading提示内容，如果为null则不显示文本
     table: {
+      height: 'auto',
+      minHeight: 300,
       showHeader: true,
       keepSource: false,
       showOverflow: null,
@@ -107,6 +109,7 @@ export function registerGlobComp(app: App) {
       },
       scrollY: {
         gt: 100,
+        enabled: true,
       },
       loading: {
         icon: 'vxe-icon-spinner roll',
@@ -114,6 +117,9 @@ export function registerGlobComp(app: App) {
       },
     },
     grid: {
+      height: 'auto',
+      minHeight: 300,
+      scrollY: { enabled: true },
       size: 'small',
       zoomConfig: {
         escRestore: true,

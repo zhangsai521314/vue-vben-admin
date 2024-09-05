@@ -43,7 +43,7 @@
             :scroll-y="{ enabled: true }"
             :auto-resize="true"
             :border="true"
-            max-height="100%"
+            height="100%"
             ref="tableRef"
             show-overflow
             :row-config="{ isHover: true, useKey: true, keyField: 'orgId' }"

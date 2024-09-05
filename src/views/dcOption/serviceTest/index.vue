@@ -60,7 +60,7 @@
             id="serviceTest"
             :auto-resize="true"
             :border="true"
-            max-height="100%"
+            height="100%"
             ref="tableRef"
             show-overflow
             :seq-config="{ startIndex: (page.current - 1) * page.size }"
@@ -116,7 +116,7 @@
                 >
               </template>
             </vxe-column>
-            <vxe-column field="testStep" title="自检步骤(总数)" :sortable="true" :minWidth="150" />
+            <vxe-column field="testStep" title="自检步骤" :sortable="true" :minWidth="150" />
             <vxe-column field="dataTime" title="自检时间" :sortable="true" :minWidth="150" />
           </vxe-table>
           <vxe-pager
@@ -156,7 +156,7 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['dataTime desc'],
+    sortlist: ['dataTime desc,testStep asc'],
   });
   const exportDataSpinning = ref(false);
 

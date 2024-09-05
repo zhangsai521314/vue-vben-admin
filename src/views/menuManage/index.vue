@@ -54,14 +54,13 @@
             :auto-resize="true"
             :border="true"
             ref="tableRef"
-            max-height="100%"
+            height="100%"
             show-overflow
             :custom-config="{ storage: true }"
             :row-config="{ isHover: true, useKey: true, keyField: 'menuId' }"
             :column-config="{ resizable: true }"
             :tree-config="{ transform: true, rowField: 'menuId', parentField: 'parentId' }"
             :data="tableConfigData"
-            :scroll-y="{ enabled: false }"
           >
             >
             <vxe-column type="seq" title="序号" :minWidth="70" fixed="left" />
@@ -419,6 +418,7 @@
                 );
               }
               message.success('删除菜单信息成功');
+              getMenuTreeDatas();
             } catch (error) {}
           })
           .catch(() => {
@@ -434,6 +434,7 @@
     formData.value = _.cloneDeep(defFromData);
     isValidForm.value = false;
     formRef.value.clearValidate();
+    getMenuTreeDatas();
   }
 
   //获取菜单

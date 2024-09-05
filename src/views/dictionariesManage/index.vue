@@ -113,7 +113,7 @@
             :scroll-y="{ enabled: true }"
             :border="true"
             :auto-resize="true"
-            max-height="100%"
+            height="100%"
             ref="tableRef"
             show-overflow
             :row-config="{ isHover: true, useKey: true, keyField: 'dictionariesId' }"
@@ -634,11 +634,9 @@
         dictionariesclass: ['serviceType'],
       })
       .then((data) => {
-        debugger;
         serviceTypeData.value = data;
       })
       .catch(() => {
-        debugger;
         serviceTypeData.value = [];
       });
   }
