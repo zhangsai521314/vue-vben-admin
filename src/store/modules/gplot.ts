@@ -130,7 +130,7 @@ export const useGplotStore = defineStore({
             //图标类型
             iconFontFamily: 'iconfont',
             //图标颜色
-            iconFill: '#1783FF',
+            iconFill: '#0DE963',
             //图标大小
             iconFontSize: 80,
 
@@ -219,21 +219,21 @@ export const useGplotStore = defineStore({
               {
                 name: '中断',
                 code: 'isOnline',
-                color: '#FF0000',
+                color: '#B1B1B1',
                 open: true,
                 level: 0,
               },
               {
                 name: '故障',
                 code: 'isNormal',
-                color: '#EE1481',
+                color: '#ECEC0D',
                 open: true,
                 level: 1,
               },
               {
                 name: '性能超出',
                 code: 'isPerformanceNormal',
-                color: '#FF7F27',
+                color: '#F58854',
                 open: true,
                 level: 2,
               },

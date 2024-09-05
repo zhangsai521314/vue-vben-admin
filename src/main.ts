@@ -179,6 +179,8 @@ function dataInit() {
       isDataInit = true;
       if (!mqttStore.mqttClient) {
         initMq();
+      } else {
+        mqttStore.updateMqttStatus(1);
       }
     })
     .catch((error) => {
