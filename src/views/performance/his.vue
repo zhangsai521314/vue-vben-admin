@@ -146,7 +146,7 @@
     endTime: null,
   });
   const timeValue = ref([
-    dayjs(dayjs().add(-1, 'day').format('YYYY-MM-DD')),
+    dayjs(dayjs().add(0, 'day').format('YYYY-MM-DD')),
     dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
   ]);
   const equipmentData = ref([]);
@@ -257,12 +257,12 @@
       ];
       baseColumnsChart = [
         {
-          name: 'cpu使用率',
+          name: 'cpu使用率(%)',
           col: 'cpuUsage',
           color: '#84C8DD',
         },
         {
-          name: '内存使用率',
+          name: '内存使用率(%)',
           col: 'memoryUsage',
           color: '#CB88DE',
         },
@@ -326,7 +326,13 @@
 
   function handleEchar(dataSource) {
     isDataSource.value = true;
-    dataSource = _.sortBy(dataSource, (m) => m.dataTime);
+    // 想显示成几条那么就把6改成几就可以了，dataAxis是横坐标的长度(倒序排列)
+    let start = 0;
+    let end = 100;
+    if (dataSource.length > 100) {
+      start = dataSource.length - 100;
+      end = dataSource.length - 1;
+    }
     const option = {
       backgroundColor: '#fff',
       tooltip: {
@@ -342,14 +348,18 @@
         {
           show: false,
           realtime: true,
-          start: 0,
-          end: 100,
+          startValue: start,
+          endValue: end,
         },
         {
           type: 'inside',
-          realtime: true,
-          start: 0,
-          end: 100,
+          startValue: start,
+          endValue: end,
+        },
+        {
+          type: 'slider',
+          startValue: start,
+          endValue: end,
         },
       ],
       legend: {
