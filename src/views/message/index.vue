@@ -35,6 +35,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>服务名称：</label>
                     <a-select
+                      placeholder="请选择服务名称"
                       style="width: 170px"
                       allow-clear
                       show-search
@@ -53,6 +54,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>信息类型：</label>
                     <a-select
+                      placeholder="请选择信息类型"
                       style="width: 170px"
                       allow-clear
                       show-search
@@ -77,6 +79,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>信息大类：</label>
                     <a-select
+                      placeholder="请选择信息大类"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.msgClass"
@@ -90,6 +93,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>信息状态：</label>
                     <a-select
+                      placeholder="请选择信息状态"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.msgStatus"
@@ -103,6 +107,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>确认状态：</label>
                     <a-select
+                      placeholder="请选择确认状态"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.isConfirm"
@@ -578,7 +583,7 @@
   const formRef = ref({});
   const seacthContent = ref({
     serviceId: null,
-    msgType: '',
+    msgType: null,
     msgStatus: null,
     msgTitle: '',
     msgContent: '',

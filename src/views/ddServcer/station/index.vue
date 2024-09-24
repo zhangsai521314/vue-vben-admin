@@ -123,7 +123,6 @@
               { required: true, message: '请输入经度' },
               {
                 validator: formValidator.longitude,
-                message: '经度范围是-180至180，不超过10位小数',
               },
             ]"
           >
@@ -176,18 +175,18 @@
               {
                 validator: formValidator.min,
                 min: -9999999,
-                message: '起始公里标-9999999至9999999',
+                message: '起始公里标(米)-9999999至9999999',
               },
               {
                 validator: formValidator.max,
                 max: 9999999,
-                message: '起始公里标-9999999至9999999',
+                message: '起始公里标(米)-9999999至9999999',
               },
             ]"
           >
             <a-input-number
               :precision="0"
-              placeholder="请输入起始公里标"
+              placeholder="请输入起始公里标(米)"
               v-model:value="formData.startGlb"
               autocomplete="off"
             />
@@ -199,18 +198,18 @@
               {
                 validator: formValidator.min,
                 min: -9999999,
-                message: '终止公里标-9999999至9999999',
+                message: '终止公里标(米)-9999999至9999999',
               },
               {
                 validator: formValidator.max,
                 max: 9999999,
-                message: '终止公里标-9999999至9999999',
+                message: '终止公里标(米)-9999999至9999999',
               },
             ]"
           >
             <a-input-number
               :precision="0"
-              placeholder="请输入终止公里标"
+              placeholder="请输入终止公里标(米)"
               v-model:value="formData.endGlb"
               autocomplete="off"
             />
@@ -547,7 +546,7 @@
       },
       {
         field: 'startGlb',
-        title: '起始公里标',
+        title: '起始公里标(米)',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -556,7 +555,7 @@
       },
       {
         field: 'endGlb',
-        title: '终止公里标',
+        title: '终止公里标(米)',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

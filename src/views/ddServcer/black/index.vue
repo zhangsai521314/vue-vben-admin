@@ -113,7 +113,7 @@
             :rules="[
               { required: true, message: '' },
               { validator: formValidator.ip, message: 'IP地址不正确' },
-              { validator: formValidator.empty, message: '请输入IP' },
+              { validator: formValidator.empty, message: '请输入黑名单IP' },
             ]"
           >
             <a-input placeholder="请输入黑名单IP" v-model:value="formData.ip" autocomplete="off" />

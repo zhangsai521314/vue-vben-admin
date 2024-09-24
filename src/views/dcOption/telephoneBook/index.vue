@@ -182,7 +182,7 @@
       },
       {
         field: 'phoneNumber',
-        title: '联系号码',
+        title: '联系电话',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

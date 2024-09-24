@@ -133,12 +133,16 @@
             name="lacci"
             :rules="[
               { required: true, message: '' },
-              { min: 4, message: 'ECI是4至8位' },
-              { max: 8, message: 'ECI是4至8位' },
-              { validator: formValidator.empty, message: '请输入ECI' },
+              { min: 4, message: 'ECI号码是4至8位' },
+              { max: 8, message: 'ECI号码是4至8位' },
+              { validator: formValidator.empty, message: '请输入ECI号码' },
             ]"
           >
-            <a-input placeholder="请输入ECI" v-model:value="formData.lacci" autocomplete="off" />
+            <a-input
+              placeholder="请输入ECI号码"
+              v-model:value="formData.lacci"
+              autocomplete="off"
+            />
           </a-form-item>
           <a-form-item
             name="longitude"

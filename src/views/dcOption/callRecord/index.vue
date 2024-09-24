@@ -315,7 +315,7 @@
       },
       {
         field: 'callTimeSpan',
-        title: '持续时长(秒)',
+        title: '持续时长',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

@@ -192,7 +192,7 @@
           label="菜单类型"
           :rules="[{ required: true, message: '请选择菜单类型' }]"
         >
-          <a-select v-model:value="formData.menuType">
+          <a-select v-model:value="formData.menuType" placeholder="请选择菜单类型">
             <a-select-option :value="1">系统菜单</a-select-option>
             <a-select-option :value="7">操作按钮</a-select-option>
             <a-select-option :value="5">新页面打开外链</a-select-option>
@@ -319,7 +319,7 @@
           name="orderIndex"
           label="菜单排序"
           :rules="[
-            { required: true, message: '请输入排序' },
+            { required: true, message: '请输入菜单排序' },
             { validator: formValidator.min, min: -9999, message: '排序值-9999至9999' },
             { validator: formValidator.max, max: 9999, message: '排序值-9999至9999' },
           ]"

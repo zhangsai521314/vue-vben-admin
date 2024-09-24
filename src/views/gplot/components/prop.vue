@@ -1435,7 +1435,7 @@
       <a-form-item
         :labelCol="{ span: 24 }"
         name="isChange"
-        :rules="[{ required: true, message: '请输入状态处理' }]"
+        :rules="[{ required: true, message: '请输入数据处理' }]"
         label="请输入数据处理:"
       >
         <codemirror

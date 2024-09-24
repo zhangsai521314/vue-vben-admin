@@ -104,7 +104,7 @@
         <a-form-item
           name="isValid"
           label="是否启用"
-          :rules="[{ required: true, message: '请输入是否启用' }]"
+          :rules="[{ required: true, message: '请选择是否启用' }]"
         >
           <a-switch v-model:checked="formData.isValid" />
         </a-form-item>

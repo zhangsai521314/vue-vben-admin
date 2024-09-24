@@ -151,7 +151,11 @@
               { validator: formValidator.empty, message: '请输入调度台ISDN' },
             ]"
           >
-            <a-input placeholder="请输入ISDN" v-model:value="formData.dcIsdn" autocomplete="off" />
+            <a-input
+              placeholder="请输入调度台ISDN"
+              v-model:value="formData.dcIsdn"
+              autocomplete="off"
+            />
           </a-form-item>
           <a-form-item
             v-if="saveType == 'edit'"
@@ -394,7 +398,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        minWidth: 150,
+        minWidth: 160,
       },
       {
         field: 'groupAllDcNumber',

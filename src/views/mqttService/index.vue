@@ -223,7 +223,7 @@
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: 120,
       },
       {
         field: 'mqttPwd',

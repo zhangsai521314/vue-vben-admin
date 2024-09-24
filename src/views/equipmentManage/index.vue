@@ -276,7 +276,7 @@
       },
       {
         field: 'address',
-        title: '地址',
+        title: '设备地址',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -284,7 +284,7 @@
       },
       {
         field: 'orderIndex',
-        title: '排序',
+        title: '设备排序',
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,

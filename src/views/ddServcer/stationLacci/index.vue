@@ -168,8 +168,8 @@
             </a-select>
           </a-form-item>
           <a-form-item
-            :rules="[{ required: true, message: '请选择ECI名称' }]"
-            label="ECI名称"
+            :rules="[{ required: true, message: '请选择ECI名称集合' }]"
+            label="ECI名称集合"
             name="lacciIds"
           >
             <a-select
@@ -179,7 +179,7 @@
               :allowClear="true"
               show-search
               :filter-option="AntVueCommon.filterOption"
-              placeholder="请选择ECI名称"
+              placeholder="请选择ECI名称集合"
             />
           </a-form-item>
         </a-form>
