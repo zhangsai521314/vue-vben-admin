@@ -473,6 +473,7 @@
         sortable: true,
         visible: false,
         minWidth: 200,
+        fixed: 'left',
       },
       {
         field: 'name',

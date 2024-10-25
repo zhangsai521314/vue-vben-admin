@@ -51,20 +51,20 @@ const FormValidator = {
   },
   //经度校验
   longitude: async (rule, value, callback) => {
-    const longitude = /^-?((1?[0-7]?\d(\.\d{1,10})?)|(180(\.0{1,10})?))$/;
+    const longitude = /^-?((1?[0-7]?\d(\.\d{1,16})?)|(180(\.0{1,16})?))$/;
     if (myCommon.isnull(value) || longitude.test(value)) {
       return Promise.resolve();
     } else {
-      return Promise.reject('经度范围是-180至180，不超过10位小数');
+      return Promise.reject('经度范围是-180至180，不超过16位小数');
     }
   },
   //纬度校验
   latitude: async (rule, value, callback) => {
-    const latitude = /^-?(([0-8]?\d(\.\d{1,10})?)|(90(\.0{1,10})?))$/;
+    const latitude = /^-?(([0-8]?\d(\.\d{1,16})?)|(90(\.0{1,16})?))$/;
     if (myCommon.isnull(value) || latitude.test(value)) {
       return Promise.resolve();
     } else {
-      return Promise.reject('纬度范围是-90至90，不超过10位小数');
+      return Promise.reject('纬度范围是-90至90，不超过16位小数');
     }
   },
   //最小值

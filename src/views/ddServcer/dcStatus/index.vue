@@ -180,7 +180,7 @@
       },
       {
         field: 'stationName',
-        title: '所属线路/车站',
+        title: '所属车站',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
