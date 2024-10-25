@@ -117,9 +117,11 @@
   import { sm2 } from 'sm-crypto-v2';
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
   import { LoginParams } from '@/api/sys/model/userModel';
+  import { useLocaleStore } from '@/store/modules/locale';
 
   const mqttStore = useMqttStoreWithOut();
-
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
   const ls = createLocalStorage();
   //是否是非法改变导致的返回登录
   const feiFaGaiBianBack = ref(ls.get('feiFaGaiBian') == 1);
@@ -167,6 +169,7 @@
         myCommon.getCryptogramKey().sm2.publicKey,
         1,
       );
+      p_data['locale'] = locale;
       const userInfo = await userStore.login(p_data);
       if (userInfo) {
         notification.success({

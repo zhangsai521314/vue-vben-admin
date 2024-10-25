@@ -102,17 +102,47 @@
             />
           </a-form-item>
           <a-form-item
-            label="车站名称"
-            name="name"
+            label="车站名称(中)"
+            name="nameCn"
             :rules="[
               { required: true, message: '' },
-              { max: 40, message: '车站名称过长' },
-              { validator: formValidator.empty, message: '请输入车站名称' },
+              { max: 40, message: '车站名称(中)过长' },
+              { validator: formValidator.empty, message: '请输入车站名称(中)' },
             ]"
           >
             <a-input
-              placeholder="请输入车站名称"
-              v-model:value="formData.name"
+              placeholder="请输入车站名称(中)"
+              v-model:value="formData.nameCn"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            label="车站名称(英)"
+            name="nameEn"
+            :rules="[
+              { required: true, message: '' },
+              { max: 40, message: '车站名称(英)过长' },
+              { validator: formValidator.empty, message: '请输入车站名称(英)' },
+            ]"
+          >
+            <a-input
+              placeholder="请输入车站名称(英)"
+              v-model:value="formData.nameEn"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            label="车站名称(法)"
+            name="nameFr"
+            :rules="[
+              { required: true, message: '' },
+              { max: 40, message: '车站名称(法)过长' },
+              { validator: formValidator.empty, message: '请输入车站名称(法)' },
+            ]"
+          >
+            <a-input
+              placeholder="请输入车站名称(法)"
+              v-model:value="formData.nameFr"
               autocomplete="off"
             />
           </a-form-item>
@@ -442,7 +472,6 @@
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
-        fixed: 'left',
         minWidth: 200,
       },
       {
@@ -453,6 +482,33 @@
         sortable: true,
         minWidth: 200,
         fixed: 'left',
+      },
+      {
+        field: 'nameCn',
+        title: '车站名称(中)',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 200,
+        visible: false,
+      },
+      {
+        field: 'nameEn',
+        title: '车站名称(英)',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 200,
+        visible: false,
+      },
+      {
+        field: 'nameFr',
+        title: '车站名称(法)',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 200,
+        visible: false,
       },
       {
         field: 'code',
@@ -611,7 +667,9 @@
   const defFromData = reactive({
     lineId: null,
     remark: null,
-    name: null,
+    nameCn: null,
+    nameEn: null,
+    nameFr: null,
     code: null,
     dcFn: null,
     dcIsdn: null,
@@ -644,7 +702,7 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['indexOrder asc,lineName asc,name asc'],
+    sortlist: ['lineNameCn asc,indexOrder asc'],
   });
   const seacthContent = ref({
     name: '',
@@ -790,6 +848,7 @@
           const oldData = tableRef.value.getRowById(data.id);
           myCommon.objectReplace(oldData, formData.value);
           oldData.lineName = lineDatas.value.find((m) => m.key == formData.value.lineId).label;
+          oldData.name = data.name;
           oldData.prevStationName = stationDatas.value.find(
             (m) => m.key == formData.value.prevStationId,
           )?.label;

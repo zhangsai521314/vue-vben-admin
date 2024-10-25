@@ -96,17 +96,47 @@
           :model="formData"
         >
           <a-form-item
-            label="线路名称"
-            name="name"
+            label="线路名称(中)"
+            name="nameCn"
             :rules="[
               { required: true, message: '' },
-              { max: 40, message: '线路名称过长' },
-              { validator: formValidator.empty, message: '请输入线路名称' },
+              { max: 40, message: '线路名称(中)过长' },
+              { validator: formValidator.empty, message: '请输入线路名称(中)' },
             ]"
           >
             <a-input
-              placeholder="请输入线路名称"
-              v-model:value="formData.name"
+              placeholder="请输入线路名称(中)"
+              v-model:value="formData.nameCn"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            label="线路名称(英)"
+            name="nameEn"
+            :rules="[
+              { required: true, message: '' },
+              { max: 40, message: '线路名称(英)过长' },
+              { validator: formValidator.empty, message: '请输入线路名称(英)' },
+            ]"
+          >
+            <a-input
+              placeholder="请输入线路名称(英)"
+              v-model:value="formData.nameEn"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            label="线路名称(法)"
+            name="nameFr"
+            :rules="[
+              { required: true, message: '' },
+              { max: 40, message: '线路名称(法)过长' },
+              { validator: formValidator.empty, message: '请输入线路名称(法)' },
+            ]"
+          >
+            <a-input
+              placeholder="请输入线路名称(法)"
+              v-model:value="formData.nameFr"
               autocomplete="off"
             />
           </a-form-item>
@@ -361,6 +391,33 @@
         fixed: 'left',
       },
       {
+        field: 'nameCn',
+        title: '线路名称(中)',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 200,
+        visible: false,
+      },
+      {
+        field: 'nameEn',
+        title: '线路名称(英)',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 200,
+        visible: false,
+      },
+      {
+        field: 'nameFr',
+        title: '线路名称(法)',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 200,
+        visible: false,
+      },
+      {
         field: 'code',
         title: '线路代码',
         showOverflow: true,
@@ -471,7 +528,9 @@
   });
   const defFromData = reactive({
     reamrk: null,
-    name: null,
+    nameCn: null,
+    nameEn: null,
+    nameFr: null,
     code: null,
     dcFn: null,
     dcIsdn: null,
@@ -636,6 +695,7 @@
         lineApi.UpdateDDServerLine(formData.value).then((data) => {
           const oldData = tableRef.value.getRowById(data.id);
           myCommon.objectReplace(oldData, formData.value);
+          oldData.name = data.name;
           oldData.updateTime = data.updateTime;
           formClose();
           message.success('更新线路信息成功');
