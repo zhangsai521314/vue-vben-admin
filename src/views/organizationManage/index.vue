@@ -40,12 +40,14 @@
         </vxe-toolbar>
         <div style="width: 100%; height: calc(100% - 62px)">
           <vxe-table
+            id="organizationManage"
             :scroll-y="{ enabled: true }"
             :auto-resize="true"
             :border="true"
             height="100%"
             ref="tableRef"
             show-overflow
+            :custom-config="{ storage: true }"
             :row-config="{ isHover: true, useKey: true, keyField: 'orgId' }"
             :column-config="{ resizable: true }"
             :tree-config="{ transform: true, rowField: 'orgId', parentField: 'parentId' }"
@@ -53,7 +55,23 @@
           >
             <vxe-column type="seq" title="序号" minWidth="70" fixed="left" />
             <vxe-column field="orgId" title="记录id" :visible="false" minWidth="130" fixed="left" />
-            <vxe-column field="orgName" title="部门名称" tree-node minWidth="200" fixed="left" />
+            <vxe-column field="orgName" title="部门名称" tree-node minWidth="200" />
+            <vxe-column
+              field="typeLineOrStationId"
+              title="部门管辖线路或车站"
+              width="200"
+              :visible="false"
+            >
+              <template #default="{ row }">
+                <span>
+                  {{
+                    _lintStationDats.find((m) => m.key == row.typeLineOrStationId)
+                      ? _lintStationDats.find((m) => m.key == row.typeLineOrStationId).title
+                      : ''
+                  }}</span
+                >
+              </template>
+            </vxe-column>
             <vxe-column field="orderIndex" title="部门排序" :visible="false" minWidth="100" />
             <vxe-column field="createTime" title="创建时间" minWidth="150" />
             <vxe-column field="createUser" title="创建人" minWidth="130" />
@@ -124,6 +142,19 @@
             autocomplete="off"
           />
         </a-form-item>
+        <a-form-item label="管辖线站" name="typeLineOrStationId">
+          <a-tree-select
+            v-model:value="formData.typeLineOrStationId"
+            show-search
+            style="width: 100%"
+            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+            placeholder="请选择部门管辖线路或车站"
+            allow-clear
+            show-arrow
+            :filterTreeNode="AntVueCommon.filterTreeNode"
+            :tree-data="lintStationDats"
+          />
+        </a-form-item>
         <a-form-item
           name="orderIndex"
           label="部门排序"
@@ -152,6 +183,7 @@
   </MyContent>
 </template>
 <script setup lang="ts">
+  import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import formValidator from '@/utils/MyCommon/formValidator';
   import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
@@ -170,6 +202,9 @@
     orgName: '',
     orderIndex: null,
     parentId: 0,
+    typeLineOrStationId: null,
+    idType: null,
+    lineOrStationId: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref({});
@@ -180,9 +215,14 @@
   const seacthContent = ref({
     orgName: '',
   });
+  const lintStationDats = ref([]);
+  const _lintStationDats = ref([]);
+
   let saveType = 'add';
 
   getOrganizations();
+  getLineStationTree();
+  getLineStationSimple();
 
   function showFrom(type, row, pid) {
     saveType = type;
@@ -241,6 +281,8 @@
         loading.value = false;
         if (data) {
           formData.value = data;
+          formData.value.idType = null;
+          formData.value.lineOrStationId = null;
           saveType = 'edit';
           isShowForm.value = true;
         } else {
@@ -273,6 +315,18 @@
       });
   }
 
+  //获取调度服务数据的线路和车站的上下级列表
+  function getLineStationTree() {
+    organizationApi.GetLineStationTree().then((data) => {
+      lintStationDats.value = data;
+    });
+  }
+  function getLineStationSimple() {
+    organizationApi.GetLineStationSimple().then((data) => {
+      _lintStationDats.value = data;
+    });
+  }
+
   //新增和编辑
   function saveFrom() {
     formRef.value.validate().then(() => {
@@ -280,6 +334,10 @@
       formData.value.execompleteBefore = () => {
         fromSpinning.value = false;
       };
+      if (formData.value.typeLineOrStationId != null) {
+        formData.value.idType = parseInt(formData.value.typeLineOrStationId.split('_')[0]);
+        formData.value.lineOrStationId = parseInt(formData.value.typeLineOrStationId.split('_')[1]);
+      }
       if (saveType == 'add') {
         organizationApi.AddOrganization(formData.value).then((data) => {
           tableConfigData.value.splice(0, 0, data);

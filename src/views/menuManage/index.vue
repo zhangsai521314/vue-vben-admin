@@ -50,6 +50,7 @@
         </vxe-toolbar>
         <div style="width: 100%; height: calc(100% - 60px)">
           <vxe-table
+            id="menuManage"
             :scroll-y="{ enabled: true }"
             :auto-resize="true"
             :border="true"
@@ -57,7 +58,7 @@
             height="100%"
             show-overflow
             :custom-config="{ storage: true }"
-            :row-config="{ isHover: true, useKey: true, keyField: 'menuId' }"
+            :row-config="{ keyField: 'menuId' }"
             :column-config="{ resizable: true }"
             :tree-config="{ transform: true, rowField: 'menuId', parentField: 'parentId' }"
             :data="tableConfigData"

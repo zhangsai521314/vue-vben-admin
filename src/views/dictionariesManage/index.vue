@@ -110,12 +110,14 @@
         </vxe-toolbar>
         <div style="width: 100%; height: calc(100% - 74px)">
           <vxe-table
+            id="dictionariesManage"
             :scroll-y="{ enabled: true }"
             :border="true"
             :auto-resize="true"
             height="100%"
             ref="tableRef"
             show-overflow
+            :custom-config="{ storage: true }"
             :row-config="{ isHover: true, useKey: true, keyField: 'dictionariesId' }"
             :column-config="{ resizable: true }"
             :tree-config="{ transform: true, rowField: 'dictionariesId', parentField: 'parentId' }"

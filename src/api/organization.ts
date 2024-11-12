@@ -2,6 +2,7 @@
 import { defHttp } from '@/utils/http/axios';
 import { ContentTypeEnum } from '@/enums/httpEnum';
 import { ErrorMessageMode } from '/#/axios';
+
 const Organization = {
   //根据ID获取详情
   GetOrganization: function (params) {
@@ -49,6 +50,17 @@ const Organization = {
     return defHttp.post({
       url: '/Organization/DeleteOrganization/',
       params,
+    });
+  },
+  ///获取调度服务数据的线路和车站的上下级列表
+  GetLineStationTree: function () {
+    return defHttp.get({
+      url: '/Organization/GetLineStationTree',
+    });
+  },
+  GetLineStationSimple: function () {
+    return defHttp.get({
+      url: '/Organization/GetLineStationSimple',
     });
   },
 };
