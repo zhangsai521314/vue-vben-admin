@@ -37,10 +37,21 @@ export const LoginRoute: AppRouteRecordRaw = {
   },
 };
 
+//版本文件下载
+export const DownVersionRoute: AppRouteRecordRaw = {
+  path: '/downVersion',
+  name: 'DownVersion',
+  component: () => import('@/views/versionsManage/down.vue'),
+  meta: {
+    title: '版本下载',
+  },
+};
+
 // Basic routing without permission
 // 未经许可的基本路由
 export const basicRoutes = [
   LoginRoute,
+  DownVersionRoute,
   RootRoute,
   REDIRECT_ROUTE,
   PAGE_NOT_FOUND_ROUTE,

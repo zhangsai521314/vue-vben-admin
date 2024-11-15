@@ -6,6 +6,125 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "38864447",
+      "name": "安卓",
+      "font_class": "anzhuo1",
+      "unicode": "e71e",
+      "unicode_decimal": 59166
+    },
+    {
+      "icon_id": "2075064",
+      "name": "ios",
+      "font_class": "ios",
+      "unicode": "e71a",
+      "unicode_decimal": 59162
+    },
+    {
+      "icon_id": "11992171",
+      "name": "app-store",
+      "font_class": "app-store",
+      "unicode": "e71b",
+      "unicode_decimal": 59163
+    },
+    {
+      "icon_id": "41902311",
+      "name": "安卓",
+      "font_class": "anzhuo",
+      "unicode": "e71c",
+      "unicode_decimal": 59164
+    },
+    {
+      "icon_id": "17204073",
+      "name": "上折叠",
+      "font_class": "shangzhedie",
+      "unicode": "e716",
+      "unicode_decimal": 59158
+    },
+    {
+      "icon_id": "42292115",
+      "name": "右折叠",
+      "font_class": "youzhedie",
+      "unicode": "ed34",
+      "unicode_decimal": 60724
+    },
+    {
+      "icon_id": "42292151",
+      "name": "左折叠",
+      "font_class": "zuozhedie",
+      "unicode": "ed35",
+      "unicode_decimal": 60725
+    },
+    {
+      "icon_id": "42292159",
+      "name": "下折叠",
+      "font_class": "xiazhedie",
+      "unicode": "ed36",
+      "unicode_decimal": 60726
+    },
+    {
+      "icon_id": "11042901",
+      "name": "模式",
+      "font_class": "moshi",
+      "unicode": "e719",
+      "unicode_decimal": 59161
+    },
+    {
+      "icon_id": "9917848",
+      "name": "chartmixed",
+      "font_class": "chartmixed",
+      "unicode": "e714",
+      "unicode_decimal": 59156
+    },
+    {
+      "icon_id": "34673973",
+      "name": "心情=很好",
+      "font_class": "xinqinghao",
+      "unicode": "e713",
+      "unicode_decimal": 59155
+    },
+    {
+      "icon_id": "42153179",
+      "name": "地铁定位2",
+      "font_class": "ditiedingwei-da-copy",
+      "unicode": "ed33",
+      "unicode_decimal": 60723
+    },
+    {
+      "icon_id": "37547284",
+      "name": "高铁",
+      "font_class": "gaotie",
+      "unicode": "e715",
+      "unicode_decimal": 59157
+    },
+    {
+      "icon_id": "35795621",
+      "name": "网络设备",
+      "font_class": "wangluoshebei",
+      "unicode": "e711",
+      "unicode_decimal": 59153
+    },
+    {
+      "icon_id": "554260",
+      "name": "电池",
+      "font_class": "iconset0252",
+      "unicode": "e712",
+      "unicode_decimal": 59154
+    },
+    {
+      "icon_id": "5053168",
+      "name": "电池",
+      "font_class": "dianchi",
+      "unicode": "e70f",
+      "unicode_decimal": 59151
+    },
+    {
+      "icon_id": "34732318",
+      "name": "波形-Lorentz",
+      "font_class": "boxing-Lorentz",
+      "unicode": "e710",
+      "unicode_decimal": 59152
+    },
+    {
       "icon_id": "4933265",
       "name": "选中对号",
       "font_class": "xuanzhongduihao",

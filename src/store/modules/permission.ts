@@ -288,6 +288,7 @@ export const usePermissionStore = defineStore({
       if (!userData.isAdmin) {
         //菜单白名单
         const whiteList = [
+          '/DownVersion',
           '/userinfo',
           '/windows',
           '/nopower',

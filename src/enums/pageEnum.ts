@@ -1,4 +1,6 @@
 export enum PageEnum {
+  //版本文件下载页面
+  DownVersion = '/downVersion',
   //登录页
   BASE_LOGIN = '/login',
   //首页地址

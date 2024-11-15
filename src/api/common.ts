@@ -60,5 +60,19 @@ const common = {
         message.error('命令发送失败');
       });
   },
+  //获取可以下载的版本文件
+  GetDownVersion: function () {
+    return defHttp.get({
+      url: '/Common/GetDownVersion',
+    });
+  },
+  //下载版本文件
+  GetServiceFile: function (params) {
+    return defHttp.get({
+      url: '/Common/GetServiceFile',
+      params,
+      responseType: 'blob',
+    });
+  },
 };
 export default common;

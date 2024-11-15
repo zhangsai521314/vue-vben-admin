@@ -281,11 +281,7 @@
   const isShowForm = ref(false);
   const fromSpinning = ref(false);
   let saveType = 'add';
-  const seacthContent = ref({
-    name: '',
-  });
   const fileList = ref([]);
-  const dictionariesData_add = ref([]);
 
   function showFrom(row) {
     formData.value.versionId = props.versionId;

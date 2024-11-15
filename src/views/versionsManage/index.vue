@@ -36,6 +36,14 @@
       </template>
       <template #default="{ row }">
         <div :class="`tableOption`">
+          <AuthDom auth="userManage_table_edit">
+            <IconFontClass
+              name="icon-baseui-edit-fill"
+              @click="showFrom(row)"
+              style="color: #0749df"
+              title="编辑"
+            />
+          </AuthDom>
           <AuthDom auth="versionsManage_table_version">
             <IconFontClass
               name="icon-baseui-jichushezhi"
@@ -102,6 +110,7 @@
         :model="formData"
       >
         <a-form-item
+          v-show="saveType == 'add'"
           label="服务类型"
           name="serviceType"
           :rules="[{ required: true, message: '请选择软件类型' }]"
@@ -113,6 +122,23 @@
             v-model:value="formData.serviceType"
             :options="dictionariesData_add"
           />
+        </a-form-item>
+        <a-form-item
+          name="runPlatform"
+          label="运行平台"
+          :rules="[{ required: true, message: '请选择运行平台' }]"
+        >
+          <a-select v-model:value="formData.runPlatform">
+            <a-select-option :value="1"> Windows</a-select-option>
+            <a-select-option :value="2"> Android</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item
+          name="isBrowserDown"
+          label="浏览器下载"
+          :rules="[{ required: true, message: '请选择是否可以浏览下载安装包' }]"
+        >
+          <a-switch v-model:checked="formData.isBrowserDown" />
         </a-form-item>
         <a-form-item
           name="orderIndex"
@@ -130,6 +156,32 @@
             v-model:value="formData.orderIndex"
           />
         </a-form-item>
+        <a-form-item
+          name="iconBase64"
+          label="logo图片"
+          :rules="[{ required: true, message: 'logo图片缺失' }]"
+        >
+          <a-input disabled v-model:value="formData.iconBase64" />
+        </a-form-item>
+        <a-upload-dragger
+          v-show="formData.isBrowserDown"
+          :fileList="fileList"
+          :maxCount="1"
+          name="file"
+          :multiple="false"
+          accept=".png,.jpg,.jpeg"
+          :before-upload="beforeUpload"
+          @reject="fileReject"
+        >
+          <IconFontClass
+            name="icon-baseui-shangchuan"
+            :style="{ color: '#00b8ff', fontSize: '50px' }"
+          />
+          <p class="ant-upload-text" :style="{ color: 'black', fontSize: '20px' }"
+            >点击上传，或将logo图片拖拽到此处</p
+          >
+          <p class="ant-upload-hint"> </p>
+        </a-upload-dragger>
       </a-form>
       <template #footer>
         <a-spin :spinning="fromSpinning">
@@ -261,7 +313,7 @@
       },
       {
         title: '操作',
-        minWidth: 90,
+        minWidth: 110,
         slots: {
           default: 'default',
         },
@@ -281,16 +333,20 @@
   const defFromData = reactive({
     serviceType: null,
     orderIndex: null,
+    runPlatform: true,
+    isBrowserDown: true,
+    iconBase64: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);
   const tableRef = ref({});
   const isShowForm = ref(false);
   const fromSpinning = ref(false);
-  let saveType = 'add';
+  const saveType = ref('edit');
   const isShowVis = ref(false);
   const dictionariesData_add = ref([]);
   const versionId = ref('');
+  const fileList = ref([]);
 
   getVersions();
 
@@ -299,10 +355,63 @@
     isShowVis.value = true;
   }
 
-  function showFrom() {
+  function showFrom(row) {
     getServerTypes();
-    saveType = 'add';
+    fileList.value = [];
+    formData.value.iconBase64 = null;
+    saveType.value = 'add';
     isShowForm.value = true;
+    if (myCommon.isnull(row)) {
+      saveType.value = 'add';
+      isShowForm.value = true;
+    } else {
+      //编辑
+      getVersion(row.versionId);
+    }
+  }
+
+  //获取用户
+  function getVersion(versionId) {
+    loading.value = true;
+    versionsApi
+      .GetVersion(versionId.toString())
+      .then((data) => {
+        loading.value = false;
+        if (data) {
+          delete data.createTime;
+          delete data.createUser;
+          delete data.modifyTime;
+          delete data.modifyUser;
+          formData.value = data;
+          saveType.value = 'edit';
+          isShowForm.value = true;
+        } else {
+          message.error('获取版本信息失败');
+        }
+      })
+      .catch(() => {
+        loading.value = false;
+      });
+  }
+
+  //上传之前
+  function beforeUpload(file) {
+    fileList.value = [];
+    const isLt5M = file.size / 1024 / 1024 < 5;
+    if (!isLt5M) {
+      file['remove'] = true;
+      message.error('logo图片不可超过5MB');
+    } else {
+      fileList.value.push(file);
+      myCommon.imgBase64(file).then((base64) => {
+        formData.value.iconBase64 = base64;
+      });
+    }
+    return false;
+  }
+  //拖拽文件不符合 accept 类型时的回调
+  function fileReject() {
+    message.warning('选择文件类型不符合');
   }
 
   //删除软件包信息
@@ -368,14 +477,26 @@
         fromSpinning.value = false;
       };
       formData.value['execompleteBefore'] = execompleteBefore;
-      if (saveType == 'add') {
+      if (saveType.value == 'add') {
         versionsApi.AddVersions(formData.value).then((data) => {
+          fileList.value = [];
           data.serviceName = dictionariesData_add.value.find(
             (m) => m.key == data.serviceType,
           ).label;
           tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增软件包类型成功');
+        });
+      } else {
+        versionsApi.UpdateVersion(formData.value).then((data) => {
+          if (data) {
+            message.success('更新版本信息成功');
+            fileList.value = [];
+            formClose();
+            getVersions();
+          } else {
+            message.error('更新版本信息失败');
+          }
         });
       }
     });
@@ -412,5 +533,9 @@
 
   .tableBtn {
     width: 100%;
+  }
+
+  :deep(.ant-upload-list-item-actions) {
+    display: none;
   }
 </style>

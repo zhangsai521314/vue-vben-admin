@@ -1,5 +1,6 @@
 import { defHttp } from '@/utils/http/axios';
 import { ContentTypeEnum } from '@/enums/httpEnum';
+
 const versions = {
   GetServerTypes: function () {
     return defHttp.get({
@@ -53,6 +54,19 @@ const versions = {
   UpdateRunVersionsHis: function (params) {
     return defHttp.post({
       url: '/VerSions/UpdateRunVersionsHis/',
+      params,
+    });
+  },
+  //根据id获取版本信息
+  GetVersion: function (params) {
+    return defHttp.post({
+      url: '/VerSions/GetVersion/',
+      params,
+    });
+  },
+  UpdateVersion: function (params) {
+    return defHttp.post({
+      url: '/VerSions/UpdateVersion',
       params,
     });
   },
