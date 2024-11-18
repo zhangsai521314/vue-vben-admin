@@ -6,7 +6,11 @@
         <vxe-toolbar ref="toolbarRef" custom>
           <template #buttons>
             <div :class="`tableBtn`">
-              <a-space direction="horizontal" size="small" style="margin-left: 5px">
+              <a-space
+                direction="horizontal"
+                size="small"
+                style="align-items: flex-end; margin-left: 5px"
+              >
                 <AuthDom auth="dictionariesManage_query">
                   <a-space
                     direction="horizontal"
@@ -44,6 +48,16 @@
                             >设备性能告警阈值</a-select-option
                           >
                           <a-select-option value="collectionFrequency">数据频率</a-select-option>
+                          <a-select-option value="handPower">手持台权限 </a-select-option>
+
+                          <a-select-option value="cirType">机车类型</a-select-option>
+                          <a-select-option value="userFunction">用户功能码 </a-select-option>
+                          <a-select-option value="dispatchUserFunction"
+                            >调度用户功能码
+                          </a-select-option>
+                          <a-select-option value="vehicleType">车种类型 </a-select-option>
+                          <a-select-option value="Ln_L4L5">位置类型L4L5 </a-select-option>
+                          <a-select-option value="handPower">手持台权限 </a-select-option>
                         </a-select>
                       </a-space>
                     </div>
@@ -139,6 +153,30 @@
               minWidth="130"
               fixed="left"
             />
+            <vxe-column
+              field="dictionariesNameCn"
+              title="字典名称(中)"
+              tree-node
+              :sortable="true"
+              minWidth="130"
+              :visible="false"
+            />
+            <vxe-column
+              field="dictionariesNameEn"
+              title="字典名称(英)"
+              tree-node
+              :sortable="true"
+              minWidth="130"
+              :visible="false"
+            />
+            <vxe-column
+              field="dictionariesNameFr"
+              title="字典名称(法)"
+              tree-node
+              :sortable="true"
+              minWidth="130"
+              :visible="false"
+            />
             <vxe-column field="dictionariesClass" title="字典类型" :sortable="true" minWidth="130">
               <template #default="{ row }">
                 <span>{{
@@ -156,7 +194,19 @@
                               ? '数据频率'
                               : row.dictionariesClass == 'commonConfig'
                                 ? '通用配置'
-                                : ''
+                                : row.dictionariesClass == 'cirType'
+                                  ? '机车类型'
+                                  : row.dictionariesClass == 'userFunction'
+                                    ? '用户功能码'
+                                    : row.dictionariesClass == 'dispatchUserFunction'
+                                      ? '调度用户功能码'
+                                      : row.dictionariesClass == 'vehicleType'
+                                        ? '车种类型'
+                                        : row.dictionariesClass == 'handPower'
+                                          ? '手持台权限'
+                                          : row.dictionariesClass == 'Ln_L4L5'
+                                            ? '位置类型L4L5'
+                                            : ''
                 }}</span>
               </template>
             </vxe-column>
@@ -307,7 +357,7 @@
       >
         <a-form-item
           name="dictionariesName"
-          label="字典名称"
+          label="字典名称(中)"
           :labelCol="{ span: 7 }"
           :rules="[
             { required: true, message: '' },
@@ -318,6 +368,38 @@
           <a-input
             v-model:value="formData.dictionariesName"
             placeholder="请输入字典名称"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
+          name="dictionariesNameEn"
+          label="字典名称(英)"
+          :labelCol="{ span: 7 }"
+          :rules="[
+            { required: true, message: '' },
+            { max: 40, message: '字典名称(英)过长' },
+            { validator: formValidator.empty, message: '请输入字典名称(英)' },
+          ]"
+        >
+          <a-input
+            v-model:value="formData.dictionariesNameEn"
+            placeholder="请输入字典名称(英)"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
+          name="dictionariesNameFr"
+          label="字典名称(法)"
+          :labelCol="{ span: 7 }"
+          :rules="[
+            { required: true, message: '' },
+            { max: 40, message: '字典名称(法)过长' },
+            { validator: formValidator.empty, message: '请输入字典名称(法)' },
+          ]"
+        >
+          <a-input
+            v-model:value="formData.dictionariesNameFr"
+            placeholder="请输入字典名称(法)"
             autocomplete="off"
           />
         </a-form-item>
@@ -339,6 +421,14 @@
             <a-select-option value="serviceType">软件服务</a-select-option>
             <a-select-option value="msgType">信息提示</a-select-option>
             <a-select-option value="commonConfig">通用配置</a-select-option>
+
+            <a-select-option value="handPower">手持台权限 </a-select-option>
+            <a-select-option value="cirType">机车类型</a-select-option>
+            <a-select-option value="userFunction">用户功能码 </a-select-option>
+            <a-select-option value="dispatchUserFunction">调度用户功能码 </a-select-option>
+            <a-select-option value="vehicleType">车种类型 </a-select-option>
+            <a-select-option value="Ln_L4L5">位置类型L4L5 </a-select-option>
+            <a-select-option value="handPower">手持台权限 </a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item
@@ -453,6 +543,8 @@
   const tableConfigData = ref([]);
   const defFromData = reactive({
     dictionariesName: '',
+    dictionariesNameEn: null,
+    dictionariesNameFr: null,
     dictionariesClass: null,
     orderIndex: null,
     parentId: 0,
