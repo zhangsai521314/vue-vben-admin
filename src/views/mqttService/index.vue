@@ -398,6 +398,7 @@
           oldData.serviceName = dictionariesData.value.find(
             (m) => m.key == data.serviceType,
           )?.label;
+          tableRef.value.setRow(oldData);
           formClose();
           message.success('更新软件信息成功');
         });

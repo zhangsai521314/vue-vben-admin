@@ -365,6 +365,7 @@
           myCommon.objectReplace(oldData, formData.value);
           oldData.modifyTime = data.modifyTime;
           oldData.modifyUser = data.modifyUser;
+          tableRef.value.setRow(oldData);
           formClose();
           message.success('更新角色信息成功');
         });

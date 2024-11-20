@@ -438,6 +438,7 @@
         lacciApi.UpdateDDServerTLacci(formData.value).then((data) => {
           const oldData = tableRef.value.getRowById(data.id);
           myCommon.objectReplace(oldData, formData.value);
+          tableRef.value.setRow(oldData);
           formClose();
           message.success('更新ECI信息成功');
         });

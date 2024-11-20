@@ -807,6 +807,7 @@
           )?.label;
           oldData.equipmentName = equipmentData.value.find((m) => m.key == data.equipmentId)?.label;
           oldData.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
+          tableRef.value.setRow(oldData);
           formClose();
           message.success('更新软件信息成功');
         });

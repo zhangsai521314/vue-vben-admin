@@ -501,6 +501,7 @@
             const oldData = tableRef.value.getRowById(data.callId);
             if (oldData) {
               myCommon.objectReplace(oldData, data);
+              tableRef.value.setRow(oldData);
             }
             if (OperationType == 'play') {
               if (data.recordFileStatus != 4) {
@@ -710,6 +711,7 @@
         const oldData = tableRef.value.getRowById(mqttStore.callRecordChange.callId);
         if (oldData) {
           myCommon.objectReplace(oldData, mqttStore.callRecordChange);
+          tableRef.value.setRow(oldData);
         }
         if (
           modelShow.value == true &&
@@ -733,6 +735,7 @@
         const oldData = tableRef.value.getRowById(mqttStore.callRecordChange.callId);
         if (oldData) {
           myCommon.objectReplace(oldData, mqttStore.newCallRecordPlayFile);
+          tableRef.value.setRow(oldData);
         }
         nextTick(() => {
           playFileStatus.value = mqttStore.newCallRecordPlayFile.recordFileStatus;

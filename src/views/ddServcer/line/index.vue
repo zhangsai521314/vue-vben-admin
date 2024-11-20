@@ -697,6 +697,7 @@
           myCommon.objectReplace(oldData, formData.value);
           oldData.name = data.name;
           oldData.updateTime = data.updateTime;
+          tableRef.value.setRow(oldData);
           formClose();
           message.success('更新线路信息成功');
         });

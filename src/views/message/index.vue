@@ -788,6 +788,7 @@
           const oldData = tableRef.value.getRowById(data.msgId);
           oldData.confirmTime = data.confirmTime;
           oldData.confirmUserName = data.confirmUserName;
+          tableRef.value.setRow(oldData);
         })
         .catch(() => {
           message.error('确认告警失败');
@@ -832,6 +833,7 @@
               oldData.briefRepairMethods = data.briefRepairMethods;
               oldData.briefRepairTime = data.briefRepairTime;
               oldData.briefRepairUserName = data.name;
+              tableRef.value.setRow(oldData);
             }
             isShowRepair.value = false;
           } else {

@@ -359,6 +359,7 @@
           const oldData = tableRef.value.getRowById(data.id);
           myCommon.objectReplace(oldData, formData.value);
           oldData.updateTime = data.updateTime;
+          tableRef.value.setRow(oldData);
           formClose();
           message.success('更新黑名单信息成功');
         });

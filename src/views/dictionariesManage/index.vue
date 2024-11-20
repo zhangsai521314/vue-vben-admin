@@ -595,7 +595,8 @@
   function remove(row) {
     Modal.confirm({
       maskClosable: true,
-      title: '删除该项，子集数据也将被删除，是否删除?',
+      // title: '删除该项，子集数据也将被删除，是否删除?',
+      title: '是否删除?',
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {
@@ -691,6 +692,8 @@
           oldData.serviceTypeName = serviceTypeData.value.find(
             (m) => m.key == data.serviceType,
           )?.label;
+          tableRef.value.setRow(oldData);
+          tableRef.value.setRow(oldData);
           formClose();
           message.success('更新字典信息成功');
         });

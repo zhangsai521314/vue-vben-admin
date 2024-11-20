@@ -20,7 +20,7 @@ const Hand: AppRouteModule = {
   children: [
     {
       path: 'index',
-      name: 'hand',
+      name: 'Hand',
       component: () => import('/@/views/hand/index.vue'),
       meta: {
         title: '手持台',

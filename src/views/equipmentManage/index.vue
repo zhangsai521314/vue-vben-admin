@@ -501,6 +501,7 @@
           )?.label;
           oldData.systemType = dictionariesData.value.find((m) => m.key == data.systemType)?.label;
           oldData.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
+          tableRef.value.setRow(oldData);
           formClose();
           message.success('更新设备信息成功');
         });

@@ -858,6 +858,7 @@
           )?.label;
           oldData.updateTime = data.updateTime;
           oldData.indexOrder = data.index;
+          tableRef.value.setRow(oldData);
           formClose();
           message.success('更新线路信息成功');
         });

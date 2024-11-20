@@ -837,6 +837,7 @@
           oldData.modifyTime = data.modifyTime;
           oldData.modifyUserName = data.modifyUserName;
           oldData.orgName = _organizationDatas.find((m) => m.key == oldData.orgId)?.label;
+          tableRef.value.setRow(oldData);
           formClose();
           message.success('更新用户信息成功');
         });
