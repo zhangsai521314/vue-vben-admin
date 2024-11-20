@@ -20,11 +20,13 @@ function joinParentPath(menus: Menu[], parentPath = '') {
     // 请注意，以 / 开头的嵌套路径将被视为根路径。
     // This allows you to leverage the component nesting without having to use a nested URL.
     // 这允许你利用组件嵌套，而无需使用嵌套 URL。
-    if (menu && !(menu.path.startsWith('/') || isHttpUrl(menu.path))) {
-      // path doesn't start with /, nor is it a url, join parent path
-      // 路径不以 / 开头，也不是 url，加入父路径
-      menu.path = `${parentPath}/${menu.path}`;
-    }
+    console.log('菜单', menu);
+    if (Object.keys(menu).length > 0)
+      if (menu && !(menu.path.startsWith('/') || isHttpUrl(menu.path))) {
+        // path doesn't start with /, nor is it a url, join parent path
+        // 路径不以 / 开头，也不是 url，加入父路径
+        menu.path = `${parentPath}/${menu.path}`;
+      }
     if (menu?.children?.length) {
       joinParentPath(menu.children, menu.meta?.hidePathForChildren ? parentPath : menu.path);
     }
@@ -34,7 +36,6 @@ function joinParentPath(menus: Menu[], parentPath = '') {
 // Parsing the menu module
 export function transformMenuModule(menuModule: MenuModule): Menu {
   const menuList = [menuModule];
-
   joinParentPath(menuList);
   return menuList[0];
 }
@@ -74,6 +75,7 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
     },
   });
   // 路径处理
+  console.log('菜单LISt', list);
   joinParentPath(list);
   return cloneDeep(list);
 }

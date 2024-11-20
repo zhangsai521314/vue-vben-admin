@@ -459,7 +459,7 @@
       },
       {
         field: 'newVersion',
-        title: '正式版本号',
+        title: '正式版本',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -467,7 +467,7 @@
       },
       {
         field: 'runVersion',
-        title: '运行版本号',
+        title: '运行版本',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

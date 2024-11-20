@@ -492,7 +492,7 @@
           name="other"
           label="附属信息"
           :labelCol="{ span: 7 }"
-          :rules="[{ max: 250, message: '附属息过长' }]"
+          :rules="[{ max: 250, message: '附属信息过长' }]"
         >
           <a-textarea
             placeholder="请输入附属信息"
@@ -747,7 +747,7 @@
     () => (formData.value.dictionariesClass, formData.value.isKeyMaster),
     () => {
       if (isShowForm.value) {
-        message.info('字典类型、自定义键值 新增后不可修改');
+        message.info('字典类型、是否自定义键值 新增后不可修改');
       }
     },
     { deep: true },

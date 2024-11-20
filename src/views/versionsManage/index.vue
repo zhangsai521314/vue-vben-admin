@@ -241,7 +241,7 @@
       },
       {
         field: 'runNumber',
-        title: '当前运行版本号',
+        title: '正式版本',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

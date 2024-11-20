@@ -211,6 +211,12 @@ const Station = {
       params,
     });
   },
+  //获取线路&车站的树-code
+  GetDDServerStationTreeCode: function () {
+    return defHttp.get({
+      url: '/DDServerStation/GetDDServerStationTreeCode',
+    });
+  },
 };
 const StationLacci = {
   //获取列表
