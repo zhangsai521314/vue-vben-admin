@@ -67,7 +67,7 @@
     </vxe-grid>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="600"
+      :width="500"
       :visible="isShowForm"
       title="上传版本文件"
       :footer-style="{ textAlign: 'right' }"
@@ -82,6 +82,67 @@
         :model="formData"
       >
         <a-form-item
+          name="filePath"
+          label="版本文件"
+          :rules="[{ required: true, message: '请上传版本文件' }]"
+        >
+          <a-upload
+            :fileList="fileList"
+            :maxCount="1"
+            name="file"
+            :multiple="false"
+            accept=".zip,.rar,.apk"
+            :before-upload="beforeUpload"
+            @reject="fileReject"
+          >
+            <div v-if="!myCommon.isnull(formData.filePath)" style="position: relative">
+              <a-input
+                style="width: 300px"
+                :value="formData.filePath.split('/')[formData.filePath.split('/').length - 1]"
+              />
+              <div
+                style="
+                  position: absolute;
+                  z-index: 20;
+                  top: 0;
+                  left: 0;
+                  width: 300px;
+                  height: 32px;
+                  cursor: pointer;
+                "
+              >
+              </div>
+            </div>
+            <div v-else>
+              <a-input style="width: 300px" placeholder="点击上传配置文件" />
+              <div
+                style="
+                  position: absolute;
+                  z-index: 20;
+                  top: 0;
+                  left: 0;
+                  width: 300px;
+                  height: 32px;
+                  cursor: pointer;
+                "
+              >
+              </div>
+            </div>
+          </a-upload>
+          <IconFontClass
+            v-if="formData.filePath"
+            style="position: absolute; right: -20px; font-size: 18px; cursor: pointer"
+            name=" icon-baseui-delete"
+            @click="
+              () => {
+                fileList = [];
+                formData.filePath = null;
+              }
+            "
+            title="删除"
+          />
+        </a-form-item>
+        <a-form-item
           label="版本号"
           name="vNumber"
           :rules="[
@@ -90,12 +151,17 @@
             { max: 20, message: '版本号过长' },
           ]"
         >
-          <a-input placeholder="请输入版本号" v-model:value="formData.vNumber" autocomplete="off" />
+          <a-input
+            disabled
+            placeholder="版本号在版本文件名称中"
+            :value="formData.vNumber"
+            autocomplete="off"
+          />
         </a-form-item>
         <a-form-item
           name="isRun"
-          label="是否运行版本"
-          :rules="[{ required: true, message: '请选择是否运行版本' }]"
+          label="是否终端版本"
+          :rules="[{ required: true, message: '请选择是否终端版本' }]"
         >
           <a-switch v-model:checked="formData.isRun" />
         </a-form-item>
@@ -118,24 +184,6 @@
             autocomplete="off"
           />
         </a-form-item>
-        <a-upload-dragger
-          :fileList="fileList"
-          :maxCount="1"
-          name="file"
-          :multiple="false"
-          accept=".zip,.rar"
-          :before-upload="beforeUpload"
-          @reject="fileReject"
-        >
-          <IconFontClass
-            name="icon-baseui-shangchuan"
-            :style="{ color: '#00b8ff', fontSize: '50px' }"
-          />
-          <p class="ant-upload-text" :style="{ color: 'black', fontSize: '20px' }"
-            >点击上传，或将软件包拖拽到此处</p
-          >
-          <p class="ant-upload-hint"> </p>
-        </a-upload-dragger>
       </a-form>
       <template #footer>
         <a-spin :spinning="fromSpinning">
@@ -147,6 +195,7 @@
   </div>
 </template>
 <script setup lang="ts">
+  import myCommon from '@/utils/MyCommon/common';
   import formValidator from '@/utils/MyCommon/formValidator';
   import { useUserStore } from '@/store/modules/user';
   import { ref, reactive, createVNode, nextTick, watch } from 'vue';
@@ -198,7 +247,7 @@
       },
       {
         field: 'isRun',
-        title: '是否运行版本',
+        title: '是否终端版本',
         width: 120,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -239,7 +288,7 @@
       {
         field: 'remark',
         title: '备注信息',
-        showOverflow: false,
+        showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
       },
@@ -274,19 +323,18 @@
     remark: '',
     versionId: null,
     isForce: false,
+    filePath: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);
   const tableRef = ref({});
   const isShowForm = ref(false);
   const fromSpinning = ref(false);
-  let saveType = 'add';
   const fileList = ref([]);
 
-  function showFrom(row) {
+  function showFrom() {
     formData.value.versionId = props.versionId;
     fileList.value = [];
-    saveType = 'add';
     isShowForm.value = true;
   }
 
@@ -327,36 +375,38 @@
       message.error('软件包不可超过100MB');
     } else {
       fileList.value.push(file);
+      formData.value.filePath = file.name;
+      formData.value.vNumber = formData.value.filePath
+        .split('_')
+        [
+          formData.value.filePath.split('_').length - 1
+        ].substring(0, formData.value.filePath.split('_')[formData.value.filePath.split('_').length - 1].split('.')[0].length);
     }
     return false;
   }
 
   //保存
   function saveFrom() {
-    if (fileList.value.length > 0) {
-      formRef.value.validate().then(() => {
-        fromSpinning.value = true;
-        let _formData = new FormData();
-        _formData.append('file', fileList.value[0]);
-        for (const key in formData.value) {
-          _formData.append(key, formData.value[key]);
-        }
-        versionsApi
-          .AddVersionsHis(_formData)
-          .then(() => {
-            fileList.value = [];
-            fromSpinning.value = false;
-            formClose();
-            message.success('新增软件版本包成功');
-            getVersionsHis();
-          })
-          .catch((error) => {
-            fromSpinning.value = false;
-          });
-      });
-    } else {
-      message.warning('请先选择软件包');
-    }
+    formRef.value.validate().then(() => {
+      fromSpinning.value = true;
+      let _formData = new FormData();
+      _formData.append('file', fileList.value[0]);
+      for (const key in formData.value) {
+        _formData.append(key, formData.value[key]);
+      }
+      versionsApi
+        .AddVersionsHis(_formData)
+        .then(() => {
+          fileList.value = [];
+          fromSpinning.value = false;
+          formClose();
+          message.success('新增软件版本包成功');
+          getVersionsHis();
+        })
+        .catch((error) => {
+          fromSpinning.value = false;
+        });
+    });
   }
 
   //同步
@@ -366,7 +416,7 @@
       .UpdateRunVersionsHis(row.hisId.toString())
       .then(() => {
         row.isRunSync = false;
-        message.success('更新运行版本成功');
+        message.success('更新终端版本成功');
         getVersionsHis();
       })
       .catch(() => {
@@ -389,7 +439,7 @@
     width: 100%;
   }
 
-  :deep(.ant-upload-list-item-actions) {
+  :deep(.ant-upload-list) {
     display: none;
   }
 </style>

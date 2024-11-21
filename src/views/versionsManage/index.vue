@@ -1,5 +1,5 @@
 <template>
-  <MyContent>
+  <MyContent :class="prefixCls">
     <vxe-grid
       :scroll-y="{ enabled: true }"
       v-bind="tableConfig"
@@ -157,31 +157,117 @@
           />
         </a-form-item>
         <a-form-item
+          v-if="formData.isBrowserDown"
           name="iconBase64"
           label="logo图片"
           :rules="[{ required: true, message: 'logo图片缺失' }]"
         >
-          <a-input disabled v-model:value="formData.iconBase64" />
-        </a-form-item>
-        <a-upload-dragger
-          v-show="formData.isBrowserDown"
-          :fileList="fileList"
-          :maxCount="1"
-          name="file"
-          :multiple="false"
-          accept=".png,.jpg,.jpeg"
-          :before-upload="beforeUpload"
-          @reject="fileReject"
-        >
-          <IconFontClass
-            name="icon-baseui-shangchuan"
-            :style="{ color: '#00b8ff', fontSize: '50px' }"
-          />
-          <p class="ant-upload-text" :style="{ color: 'black', fontSize: '20px' }"
-            >点击上传，或将logo图片拖拽到此处</p
+          <a-upload
+            style="margin-bottom: 20px"
+            v-show="formData.isBrowserDown"
+            :fileList="fileList"
+            :maxCount="1"
+            name="file"
+            :multiple="false"
+            accept=".png,.jpg,.jpeg"
+            :before-upload="beforeUpload"
+            @reject="fileReject"
           >
-          <p class="ant-upload-hint"> </p>
-        </a-upload-dragger>
+            <div v-if="formData.iconBase64">
+              <img class="image-container" :src="formData.iconBase64" alt="avatar" />
+            </div>
+            <div
+              v-else
+              style="
+                display: flex;
+                position: relative;
+                align-items: center;
+                justify-content: center;
+                width: 100px;
+                height: 100px;
+                border: 1px dotted #666;
+                cursor: pointer;
+              "
+            >
+              <IconFontClass
+                style="font-size: 25px"
+                name=" icon-baseui-yunshangchuan"
+                title="上传"
+              />
+            </div>
+          </a-upload>
+          <IconFontClass
+            v-if="formData.iconBase64"
+            style="position: absolute; top: 38px; font-size: 18px; cursor: pointer"
+            name=" icon-baseui-delete"
+            @click="
+              () => {
+                fileList = [];
+                formData.iconBase64 = null;
+              }
+            "
+            title="删除"
+          />
+        </a-form-item>
+        <a-form-item name="configFilePath" label="配置文件">
+          <a-upload
+            :fileList="configFileList"
+            :maxCount="1"
+            name="file"
+            :multiple="false"
+            accept=".zip,.rar"
+            :before-upload="configBeforeUpload"
+            @reject="configFileReject"
+          >
+            <div v-if="!myCommon.isnull(formData.configFilePath)" style="position: relative">
+              <a-input
+                style="width: 300px"
+                :value="
+                  formData.configFilePath.split('/')[formData.configFilePath.split('/').length - 1]
+                "
+              />
+              <div
+                style="
+                  position: absolute;
+                  z-index: 20;
+                  top: 0;
+                  left: 0;
+                  width: 300px;
+                  height: 32px;
+                  cursor: pointer;
+                "
+              >
+              </div>
+            </div>
+            <div v-else>
+              <a-input style="width: 300px" placeholder="点击上传配置文件" />
+              <div
+                style="
+                  position: absolute;
+                  z-index: 20;
+                  top: 0;
+                  left: 0;
+                  width: 300px;
+                  height: 32px;
+                  cursor: pointer;
+                "
+              >
+              </div>
+            </div>
+          </a-upload>
+          <IconFontClass
+            v-if="formData.configFilePath"
+            style="position: absolute; right: -20px; font-size: 18px; cursor: pointer"
+            name=" icon-baseui-delete"
+            @click="
+              () => {
+                configFileList = [];
+                formData.configFilePath = null;
+              }
+            "
+            title="删除"
+          />
+        </a-form-item>
       </a-form>
       <template #footer>
         <a-spin :spinning="fromSpinning">
@@ -203,6 +289,7 @@
   </MyContent>
 </template>
 <script setup lang="ts">
+  import myCommon from '@/utils/MyCommon/common';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import { ref, reactive, createVNode } from 'vue';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
@@ -336,6 +423,7 @@
     runPlatform: true,
     isBrowserDown: true,
     iconBase64: null,
+    configFilePath: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);
@@ -347,6 +435,7 @@
   const dictionariesData_add = ref([]);
   const versionId = ref('');
   const fileList = ref([]);
+  const configFileList = ref([]);
 
   getVersions();
 
@@ -358,6 +447,7 @@
   function showFrom(row) {
     getServerTypes();
     fileList.value = [];
+    configFileList.value = [];
     formData.value.iconBase64 = null;
     saveType.value = 'add';
     isShowForm.value = true;
@@ -405,6 +495,7 @@
       fileList.value.push(file);
       myCommon.imgBase64(file).then((base64) => {
         formData.value.iconBase64 = base64;
+        formRef.value.validate(['iconBase64']);
       });
     }
     return false;
@@ -412,6 +503,24 @@
   //拖拽文件不符合 accept 类型时的回调
   function fileReject() {
     message.warning('选择文件类型不符合');
+  }
+
+  //拖拽文件不符合 accept 类型时的回调
+  function configFileReject() {
+    message.warning('选择文件类型不符合');
+  }
+  //上传之前
+  function configBeforeUpload(file) {
+    configFileList.value = [];
+    const isLt5M = file.size / 1024 / 1024 < 20;
+    if (!isLt5M) {
+      file['remove'] = true;
+      message.error('软件包不可超过20MB');
+    } else {
+      configFileList.value.push(file);
+      formData.value.configFilePath = file.name;
+    }
+    return false;
   }
 
   //删除软件包信息
@@ -473,31 +582,48 @@
   function saveFrom() {
     formRef.value.validate().then(() => {
       fromSpinning.value = true;
-      const execompleteBefore = () => {
-        fromSpinning.value = false;
-      };
-      formData.value['execompleteBefore'] = execompleteBefore;
+      let _formData = new FormData();
+      if (configFileList.value.length > 0) {
+        _formData.append('configFile', configFileList.value[0]);
+      }
+      for (const key in formData.value) {
+        _formData.append(key, formData.value[key]);
+      }
       if (saveType.value == 'add') {
-        versionsApi.AddVersions(formData.value).then((data) => {
-          fileList.value = [];
-          data.serviceName = dictionariesData_add.value.find(
-            (m) => m.key == data.serviceType,
-          ).label;
-          tableConfig.data?.splice(0, 0, data);
-          formClose();
-          message.success('新增软件包类型成功');
-        });
-      } else {
-        versionsApi.UpdateVersion(formData.value).then((data) => {
-          if (data) {
-            message.success('更新版本信息成功');
+        versionsApi
+          .AddVersions(_formData)
+          .then((data) => {
+            fromSpinning.value = false;
             fileList.value = [];
+            configFileList.value = [];
+            data.serviceName = dictionariesData_add.value.find(
+              (m) => m.key == data.serviceType,
+            ).label;
+            tableConfig.data?.splice(0, 0, data);
             formClose();
-            getVersions();
-          } else {
-            message.error('更新版本信息失败');
-          }
-        });
+            message.success('新增软件包类型成功');
+          })
+          .catch(() => {
+            fromSpinning.value = false;
+          });
+      } else {
+        versionsApi
+          .UpdateVersion(_formData)
+          .then((data) => {
+            fromSpinning.value = false;
+            if (data) {
+              message.success('更新版本信息成功');
+              fileList.value = [];
+              configFileList.value = [];
+              formClose();
+              getVersions();
+            } else {
+              message.error('更新版本信息失败');
+            }
+          })
+          .catch((e) => {
+            fromSpinning.value = false;
+          });
       }
     });
   }
@@ -521,7 +647,7 @@
       .UpdateRunVersions(row.versionId.toString())
       .then(() => {
         row.isRunSync = false;
-        message.success('更新运行版本成功');
+        message.success('更新终端版本成功');
       })
       .catch(() => {
         row.isRunSync = false;
@@ -535,7 +661,21 @@
     width: 100%;
   }
 
-  :deep(.ant-upload-list-item-actions) {
+  :deep(.ant-upload-list) {
     display: none;
+  }
+
+  .image-container {
+    width: 100px;
+    height: 100px;
+  }
+
+  .image-container::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgb(214 214 214);
+    background-color: inherit;
   }
 </style>

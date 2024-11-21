@@ -19,6 +19,7 @@ const versions = {
     return defHttp.post({
       url: '/VerSions/AddVersions',
       params,
+      headers: { 'Content-Type': ContentTypeEnum.FORM_DATA },
     });
   },
   //删除软件版本类型
@@ -43,14 +44,14 @@ const versions = {
       params,
     });
   },
-  //更改运行版本
+  //更改终端版本
   UpdateRunVersions: function (params) {
     return defHttp.post({
       url: '/VerSions/UpdateRunVersions/',
       params,
     });
   },
-  //更改运行版本
+  //更改终端版本
   UpdateRunVersionsHis: function (params) {
     return defHttp.post({
       url: '/VerSions/UpdateRunVersionsHis/',
@@ -68,6 +69,7 @@ const versions = {
     return defHttp.post({
       url: '/VerSions/UpdateVersion',
       params,
+      headers: { 'Content-Type': ContentTypeEnum.FORM_DATA },
     });
   },
 };

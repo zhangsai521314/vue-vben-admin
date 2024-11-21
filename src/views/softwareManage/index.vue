@@ -467,7 +467,7 @@
       },
       {
         field: 'runVersion',
-        title: '运行版本',
+        title: '终端版本',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
