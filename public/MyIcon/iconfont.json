@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "11764105",
+      "name": "手持单兵",
+      "font_class": "shouchidanbing",
+      "unicode": "e720",
+      "unicode_decimal": 59168
+    },
+    {
       "icon_id": "38864447",
       "name": "安卓",
       "font_class": "anzhuo1",

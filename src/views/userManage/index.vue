@@ -745,11 +745,16 @@
   //获取用户列表
   function getUsers() {
     loading.value = true;
-    getUsers_().then((data) => {
-      tableConfig.data = data.source;
-      page.total = data.totalCount;
-      page.current = data.pageIndex;
-    });
+    getUsers_()
+      .then((data) => {
+        tableConfig.data = data.source;
+        page.total = data.totalCount;
+        page.current = data.pageIndex;
+      })
+      .catch(() => {
+        tableConfig.data = [];
+        page.total = 0;
+      });
   }
   /**
    * 排序条件改变

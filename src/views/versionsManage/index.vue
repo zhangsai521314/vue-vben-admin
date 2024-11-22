@@ -399,6 +399,24 @@
         sortable: true,
       },
       {
+        field: 'modifyTime',
+        title: '修改时间',
+        minWidth: 150,
+        visible: false,
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+      },
+      {
+        field: 'modifyUser',
+        title: '修改用户',
+        visible: false,
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 130,
+      },
+      {
         title: '操作',
         minWidth: 110,
         slots: {
@@ -592,14 +610,11 @@
       if (saveType.value == 'add') {
         versionsApi
           .AddVersions(_formData)
-          .then((data) => {
+          .then(() => {
             fromSpinning.value = false;
             fileList.value = [];
             configFileList.value = [];
-            data.serviceName = dictionariesData_add.value.find(
-              (m) => m.key == data.serviceType,
-            ).label;
-            tableConfig.data?.splice(0, 0, data);
+            getVersions();
             formClose();
             message.success('新增软件包类型成功');
           })
@@ -621,7 +636,7 @@
               message.error('更新版本信息失败');
             }
           })
-          .catch((e) => {
+          .catch(() => {
             fromSpinning.value = false;
           });
       }

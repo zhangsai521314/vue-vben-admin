@@ -1,5 +1,5 @@
 <template>
-  <MyContent>
+  <MyContent :class="prefixCls">
     <vxe-grid
       :scroll-y="{ enabled: true }"
       v-bind="tableConfig"
@@ -10,7 +10,18 @@
       :row-config="{ keyField: 'equipmentId' }"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"
+      @sort-change="onSortChange"
+      :seq-config="{ startIndex: (page.current - 1) * page.size }"
     >
+      <template #pager>
+        <vxe-pager
+          background
+          v-model:current-page="page.current"
+          v-model:page-size="page.size"
+          :total="page.total"
+          @page-change="getEquipments()"
+        />
+      </template>
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
           <a-space direction="horizontal" size="small" style="margin-left: 5px">
@@ -36,7 +47,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>设备名称：</label>
                     <a-input
-                      @press-enter="getEquipments"
+                      @press-enter="initPage"
                       v-model:value="seacthContent.equipmentName"
                       placeholder="输入设备名称查询"
                     />
@@ -44,7 +55,7 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="getEquipments" type="primary">查询</a-button>
+                    <a-button @click="initPage" type="primary">查询</a-button>
                     <a-button @click="resetSeacth">重置表单</a-button>
                   </a-space>
                 </div>
@@ -250,21 +261,20 @@
         fixed: 'left',
       },
       {
-        field: 'equipmentName',
-        title: '设备名称',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-        minWidth: 130,
-        fixed: 'left',
-      },
-      {
         field: 'equipmentType',
         title: '硬件类型',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 100,
+      },
+      {
+        field: 'equipmentName',
+        title: '设备名称',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 130,
       },
       {
         field: 'systemType',
@@ -377,6 +387,12 @@
   });
   const organizationDatas = ref([]);
   let _organizationDatas = [];
+  const page = reactive({
+    current: 1,
+    size: 20,
+    total: 0,
+    sortlist: ['orgName asc', 'equipmentType asc', 'equipmentName asc'],
+  });
 
   getOrganization();
   getEquipments();
@@ -432,6 +448,34 @@
     formRef.value.clearValidate();
   }
 
+  /**
+   * 排序条件改变
+   */
+  function onSortChange({ field, order, sortList, column, property, $event }) {
+    page.sortlist = [];
+    sortList.forEach((item) => {
+      var tempstr = item.field + ' ' + item.order;
+      page.sortlist.push(tempstr);
+    });
+    getEquipments();
+  }
+  /**
+   * 获取排序条件
+   */
+  function getFullSort() {
+    let fullsort = '';
+    page.sortlist.forEach((item) => {
+      fullsort += item + ',';
+    });
+    return fullsort.substring(0, fullsort.length - 1);
+  }
+
+  function initPage() {
+    page.current = 1;
+    page.total = 0;
+    getEquipments();
+  }
+
   //获取设备列表
   function getByid(id) {
     loading.value = true;
@@ -461,12 +505,18 @@
         execompleteBefore: () => {
           loading.value = false;
         },
+        FullSort: getFullSort(),
+        PageIndex: page.current,
+        PageSize: page.size,
       })
       .then((data) => {
-        tableConfig.data = data;
+        tableConfig.data = data.source;
+        page.total = data.totalCount;
+        page.current = data.pageIndex;
       })
       .catch(() => {
         tableConfig.data = [];
+        page.total = 0;
       });
   }
 

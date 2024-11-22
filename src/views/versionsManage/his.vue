@@ -160,8 +160,8 @@
         </a-form-item>
         <a-form-item
           name="isRun"
-          label="是否终端版本"
-          :rules="[{ required: true, message: '请选择是否终端版本' }]"
+          label="是否运行版本"
+          :rules="[{ required: true, message: '请选择是否运行版本' }]"
         >
           <a-switch v-model:checked="formData.isRun" />
         </a-form-item>
@@ -247,7 +247,7 @@
       },
       {
         field: 'isRun',
-        title: '是否终端版本',
+        title: '是否运行版本',
         width: 120,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -403,7 +403,7 @@
           message.success('新增软件版本包成功');
           getVersionsHis();
         })
-        .catch((error) => {
+        .catch(() => {
           fromSpinning.value = false;
         });
     });

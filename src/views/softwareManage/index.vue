@@ -10,7 +10,18 @@
       :row-config="{ keyField: 'serviceId' }"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"
+      @sort-change="onSortChange"
+      :seq-config="{ startIndex: (page.current - 1) * page.size }"
     >
+      <template #pager>
+        <vxe-pager
+          background
+          v-model:current-page="page.current"
+          v-model:page-size="page.size"
+          :total="page.total"
+          @page-change="getSoftwares()"
+        />
+      </template>
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
           <a-space direction="horizontal" size="small" style="margin-left: 5px">
@@ -36,7 +47,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>软件名称：</label>
                     <a-input
-                      @press-enter="getSoftwares()"
+                      @press-enter="initPage"
                       v-model:value="seacthContent.serviceName"
                       placeholder="输入软件名称查询"
                     />
@@ -44,7 +55,7 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="getSoftwares()" type="primary">查询</a-button>
+                    <a-button @click="initPage" type="primary">查询</a-button>
                     <a-button @click="resetSeacth">重置表单</a-button>
                     <a-radio-group v-model:value="refresh" button-style="solid">
                       <a-radio-button value="yes">开启自动刷新</a-radio-button>
@@ -501,7 +512,7 @@
       },
       {
         field: 'isNormal',
-        title: '运行是否正常',
+        title: '是否告警',
         showOverflow: true,
         showHeaderOverflow: true,
         // sortable: true,
@@ -676,6 +687,12 @@
 
   const organizationDatas = ref([]);
   let _organizationDatas = [];
+  const page = reactive({
+    current: 1,
+    size: 20,
+    total: 0,
+    sortlist: ['orgName asc', 'serviceType asc', 'serviceName asc'],
+  });
 
   getOrganization();
   getSoftwares(true);
@@ -763,16 +780,22 @@
     softwareApi
       .GetServices({
         ...seacthContent.value,
+        FullSort: getFullSort(),
+        PageIndex: page.current,
+        PageSize: page.size,
         execompleteBefore: () => {
           loading.value = false;
         },
       })
       .then((data) => {
-        tableConfig.data = data;
+        tableConfig.data = data.source;
+        page.total = data.totalCount;
+        page.current = data.pageIndex;
         refreshData();
       })
       .catch(() => {
         tableConfig.data = [];
+        page.total = 0;
         refreshData();
       });
   }
@@ -843,6 +866,34 @@
       .catch(() => {
         equipmentData.value = [];
       });
+  }
+
+  /**
+   * 排序条件改变
+   */
+  function onSortChange({ field, order, sortList, column, property, $event }) {
+    page.sortlist = [];
+    sortList.forEach((item) => {
+      var tempstr = item.field + ' ' + item.order;
+      page.sortlist.push(tempstr);
+    });
+    getSoftwares();
+  }
+  /**
+   * 获取排序条件
+   */
+  function getFullSort() {
+    let fullsort = '';
+    page.sortlist.forEach((item) => {
+      fullsort += item + ',';
+    });
+    return fullsort.substring(0, fullsort.length - 1);
+  }
+
+  function initPage() {
+    page.current = 1;
+    page.total = 0;
+    getSoftwares();
   }
 
   //刷新数据
