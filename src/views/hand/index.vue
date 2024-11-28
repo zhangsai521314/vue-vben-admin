@@ -23,7 +23,7 @@
                     <label>心跳时间：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
-                        allowClear
+                        :allowClear="false"
                         v-model:value="timeValue"
                         :showTime="true"
                         format="YYYY-MM-DD HH:mm:ss"
@@ -182,6 +182,7 @@
   import log from './log.vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import zhCN from 'ant-design-vue/es/locale/zh_CN';
+  import dayjs from 'dayjs';
   import 'dayjs/locale/zh-cn';
   import dictionariesApi from '@/api/dictionaries';
   import { Station as stationApi } from '@/api/ddServcer';
@@ -368,7 +369,10 @@
   const isShowForm = ref(false);
   const fromSpinning = ref(false);
   const isShowLog = ref(false);
-  const timeValue = ref(null);
+  const timeValue = ref([
+    dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
+    dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
+  ]);
   const dictionariesData = ref([]);
   const stationDatas = ref([]);
 
@@ -462,7 +466,10 @@
       isOnline: null,
       eci: null,
     };
-    timeValue.value = null;
+    timeValue.value = [
+      dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
+      dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
+    ];
   }
 
   function initPage() {

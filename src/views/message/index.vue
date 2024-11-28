@@ -23,7 +23,7 @@
                     <label>开始时间：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
-                        allowClear
+                        :allowClear="false"
                         v-model:value="timeValue"
                         :showTime="true"
                         format="YYYY-MM-DD HH:mm:ss"
@@ -592,11 +592,10 @@
     isConfirm: null,
     msgClass: msgId == null ? 2 : null,
   });
-  const timeValue = ref(null);
-  //   [
-  //   dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
-  //   dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
-  // ]
+  const timeValue = ref([
+    dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
+    dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
+  ]);
   const dictionariesData = ref([]);
   const serviceData = ref([]);
   const page = reactive({
@@ -698,7 +697,10 @@
       msgClass: 2,
     };
 
-    timeValue.value = null;
+    timeValue.value = [
+      dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
+      dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
+    ];
   }
 
   //获取字典

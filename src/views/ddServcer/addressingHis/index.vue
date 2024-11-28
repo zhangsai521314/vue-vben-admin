@@ -22,7 +22,7 @@
                     <label>寻址时间 ：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
-                        allowClear
+                        :allowClear="false"
                         v-model:value="timeValue"
                         :showTime="true"
                         format="YYYY-MM-DD HH:mm:ss"
@@ -118,6 +118,7 @@
   import { AddressingHis as addressingHisApi } from '@/api/ddServcer';
   import { tryOnUnmounted } from '@vueuse/core';
   import zhCN from 'ant-design-vue/es/locale/zh_CN';
+  import dayjs from 'dayjs';
   import 'dayjs/locale/zh-cn';
 
   defineOptions({ name: 'DDServcerAddressingHis' });
@@ -224,7 +225,10 @@
   });
   const tableRef = ref({});
   const myContentRef = ref({});
-  const timeValue = ref(null);
+  const timeValue = ref([
+    dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
+    dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
+  ]);
   const seacthContent = ref({
     dataType: null,
     srcFn: null,
@@ -287,7 +291,10 @@
       endTime: null,
       result: null,
     };
-    timeValue.value = null;
+    timeValue.value = [
+      dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
+      dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
+    ];
   }
 
   function handlePageChange() {

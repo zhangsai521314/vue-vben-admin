@@ -23,7 +23,7 @@
                     <label>按键时间：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
-                        allowClear
+                        :allowClear="false"
                         v-model:value="timeValue"
                         :showTime="true"
                         format="YYYY-MM-DD HH:mm:ss"
@@ -158,11 +158,10 @@
     startTime: null,
     endTime: null,
   });
-  const timeValue = ref(null);
-  //   [
-  //   dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
-  //   dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
-  // ]
+  const timeValue = ref([
+    dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
+    dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
+  ]);
   const serviceData = ref([]);
   const page = reactive({
     current: 1,
