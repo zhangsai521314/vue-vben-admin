@@ -345,7 +345,7 @@
   function showFrom(row) {
     getDDServerTLacciSimple();
     getDDServerLineSimple();
-    getDDServerLacciSimple();
+    getDDServerLacciNoStationSimple();
     if (myCommon.isnull(row)) {
       saveType.value = 'add';
       isShowForm.value = true;
@@ -464,8 +464,8 @@
     });
   }
 
-  function getDDServerLacciSimple() {
-    lacciApi.GetDDServerLacciSimple().then((data) => {
+  function getDDServerLacciNoStationSimple() {
+    lacciApi.GetDDServerLacciNoStationSimple().then((data) => {
       lacciDatas.value = data;
     });
   }

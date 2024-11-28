@@ -64,6 +64,12 @@ const Lacci = {
       url: '/DDServerLacci/GetDDServerLacciSimple',
     });
   },
+  //获取未绑定过车站的小区号
+  GetDDServerLacciNoStationSimple: function () {
+    return defHttp.get({
+      url: '/DDServerLacci/GetDDServerLacciNoStationSimple',
+    });
+  },
   //获取列表
   GetDDServerTLaccis: function (params) {
     return defHttp.post({
