@@ -8,6 +8,7 @@ import 'virtual:svg-icons-register';
 // 其他组件css
 import 'jquery-ui-dist/jquery-ui.min.css';
 import 'vxe-table/lib/style.css';
+import 'vxe-pc-ui/lib/style.css';
 import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css';
 import 'vue3-draggable-resizable/dist/Vue3DraggableResizable.css';
 

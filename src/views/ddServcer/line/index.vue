@@ -693,11 +693,12 @@
         });
       } else {
         lineApi.UpdateDDServerLine(formData.value).then((data) => {
-          const oldData = tableRef.value.getRowById(data.id);
-          myCommon.objectReplace(oldData, formData.value);
-          oldData.name = data.name;
-          oldData.updateTime = data.updateTime;
-          tableRef.value.setRow(oldData);
+          const oldData = tableConfig.data.find((m) => m.id == data.id);
+          if (oldData) {
+            myCommon.objectReplace(oldData, formData.value);
+            oldData.name = data.name;
+            oldData.updateTime = data.updateTime;
+          }
           formClose();
           message.success('更新线路信息成功');
         });

@@ -685,15 +685,17 @@
         });
       } else {
         dictionariesApi.UpdateDictionaries(formData.value).then((data) => {
-          delete data.createtTime;
-          delete data.createUser;
-          const oldData = tableRef.value.getRowById(data.dictionariesId);
-          myCommon.objectReplace(oldData, data);
-          oldData.serviceTypeName = serviceTypeData.value.find(
-            (m) => m.key == data.serviceType,
-          )?.label;
-          tableRef.value.setRow(oldData);
-          tableRef.value.setRow(oldData);
+          const oldData = tableConfigData.value.find(
+            (m) => m.dictionariesId == data.dictionariesId,
+          );
+          if (oldData) {
+            delete data.createtTime;
+            delete data.createUser;
+            myCommon.objectReplace(oldData, data);
+            oldData.serviceTypeName = serviceTypeData.value.find(
+              (m) => m.key == data.serviceType,
+            )?.label;
+          }
           formClose();
           message.success('更新字典信息成功');
         });

@@ -836,13 +836,16 @@
           );
         }
         userApi.UpdateUser(p_data).then((data) => {
-          const oldData = tableRef.value.getRowById(data.userId);
-          myCommon.objectReplace(oldData, formData.value);
-          oldData.roleName = roles.value.find((m) => m.value == oldData.roleId)?.label;
-          oldData.modifyTime = data.modifyTime;
-          oldData.modifyUserName = data.modifyUserName;
-          oldData.orgName = _organizationDatas.find((m) => m.key == oldData.orgId)?.label;
-          tableRef.value.setRow(oldData);
+          const oldData = tableConfig.data.find((m) => m.userId == data.userId);
+          if (oldData) {
+            delete formData.value.createUser;
+            delete formData.value.createTime;
+            myCommon.objectReplace(oldData, formData.value);
+            oldData.roleName = roles.value.find((m) => m.value == oldData.roleId)?.label;
+            oldData.modifyTime = data.modifyTime;
+            oldData.modifyUserName = data.modifyUserName;
+            oldData.orgName = _organizationDatas.find((m) => m.key == oldData.orgId)?.label;
+          }
           formClose();
           message.success('更新用户信息成功');
         });

@@ -240,7 +240,7 @@
               </div>
             </div>
             <div v-else>
-              <a-input style="width: 300px" placeholder="点击上传配置文件" />
+              <a-input style="width: 300px; cursor: pointer" placeholder="点击上传配置文件" />
               <div
                 style="
                   position: absolute;

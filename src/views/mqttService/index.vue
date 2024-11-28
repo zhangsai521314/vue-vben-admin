@@ -389,16 +389,17 @@
         });
       } else {
         mqttApi.UpdateMqtt(formData.value).then((data) => {
-          const oldData = tableRef.value.getRowById(data.mqttId);
-          delete data.createtTime;
-          delete data.createUser;
-          myCommon.objectReplace(oldData, data);
-          oldData.modifyTime = data.modifyTime;
-          oldData.modifyUser = data.modifyUser;
-          oldData.serviceName = dictionariesData.value.find(
-            (m) => m.key == data.serviceType,
-          )?.label;
-          tableRef.value.setRow(oldData);
+          const oldData = tableConfig.data.find((m) => m.mqttId == data.mqttId);
+          if (oldData) {
+            delete data.createtTime;
+            delete data.createUser;
+            myCommon.objectReplace(oldData, data);
+            oldData.modifyTime = data.modifyTime;
+            oldData.modifyUser = data.modifyUser;
+            oldData.serviceName = dictionariesData.value.find(
+              (m) => m.key == data.serviceType,
+            )?.label;
+          }
           formClose();
           message.success('更新软件信息成功');
         });

@@ -436,9 +436,10 @@
         });
       } else {
         lacciApi.UpdateDDServerTLacci(formData.value).then((data) => {
-          const oldData = tableRef.value.getRowById(data.id);
-          myCommon.objectReplace(oldData, formData.value);
-          tableRef.value.setRow(oldData);
+          const oldData = tableConfig.data.find((m) => m.id == data.id);
+          if (oldData) {
+            myCommon.objectReplace(oldData, formData.value);
+          }
           formClose();
           message.success('更新ECI信息成功');
         });

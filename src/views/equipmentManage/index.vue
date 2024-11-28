@@ -541,17 +541,21 @@
         });
       } else {
         equipmentApi.UpdateEquipment(formData.value).then((data) => {
-          const oldData = tableRef.value.getRowById(data.equipmentId);
-          delete formData.value.createUser;
-          myCommon.objectReplace(oldData, formData.value);
-          oldData.modifyTime = data.modifyTime;
-          oldData.modifyUser = data.modifyUser;
-          oldData.equipmentType = dictionariesData.value.find(
-            (m) => m.key == data.equipmentType,
-          )?.label;
-          oldData.systemType = dictionariesData.value.find((m) => m.key == data.systemType)?.label;
-          oldData.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
-          tableRef.value.setRow(oldData);
+          const oldData = tableConfig.data.find((m) => m.equipmentId == data.equipmentId);
+          if (oldData) {
+            delete formData.value.createUser;
+            delete formData.value.createTime;
+            myCommon.objectReplace(oldData, formData.value);
+            oldData.modifyTime = data.modifyTime;
+            oldData.modifyUser = data.modifyUser;
+            oldData.equipmentType = dictionariesData.value.find(
+              (m) => m.key == data.equipmentType,
+            )?.label;
+            oldData.systemType = dictionariesData.value.find(
+              (m) => m.key == data.systemType,
+            )?.label;
+            oldData.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
+          }
           formClose();
           message.success('更新设备信息成功');
         });

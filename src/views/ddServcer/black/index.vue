@@ -356,10 +356,11 @@
         });
       } else {
         blackApi.UpdateDDServerBlack(formData.value).then((data) => {
-          const oldData = tableRef.value.getRowById(data.id);
-          myCommon.objectReplace(oldData, formData.value);
-          oldData.updateTime = data.updateTime;
-          tableRef.value.setRow(oldData);
+          const oldData = tableConfig.data.find((m) => m.id == data.id);
+          if (oldData) {
+            myCommon.objectReplace(oldData, formData.value);
+            oldData.updateTime = data.updateTime;
+          }
           formClose();
           message.success('更新黑名单信息成功');
         });

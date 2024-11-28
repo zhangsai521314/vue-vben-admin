@@ -225,9 +225,9 @@
           <AuthDom auth="message_msg_queren">
             <IconFontClass
               name="icon-baseui-queren"
+              :style="{ color: row.confirmTime ? '#d9d9d9' : '#0749df' }"
               @click="okMsg(row)"
-              style="color: #0749df"
-              title="确认告警"
+              :title="row.confirmTime ? '该告警已被确认' : '确认告警'"
             />
           </AuthDom>
           <AuthDom auth="message_show_detail">
@@ -785,10 +785,11 @@
         .OkMsg(row.msgId)
         .then((data) => {
           message.success('确认告警成功');
-          const oldData = tableRef.value.getRowById(data.msgId);
-          oldData.confirmTime = data.confirmTime;
-          oldData.confirmUserName = data.confirmUserName;
-          tableRef.value.setRow(oldData);
+          const oldData = tableConfig.data.find((m) => m.msgId == data.msgId);
+          if (oldData) {
+            oldData.confirmTime = data.confirmTime;
+            oldData.confirmUserName = data.confirmUserName;
+          }
         })
         .catch(() => {
           message.error('确认告警失败');
@@ -827,14 +828,13 @@
         })
         .then((data) => {
           if (data) {
-            message.success('更改处理内容成功');
-            const oldData = tableRef.value.getRowById(formData.msgId);
+            const oldData = tableConfig.data.find((m) => m.msgId == formData.msgId);
             if (oldData) {
               oldData.briefRepairMethods = data.briefRepairMethods;
               oldData.briefRepairTime = data.briefRepairTime;
               oldData.briefRepairUserName = data.name;
-              tableRef.value.setRow(oldData);
             }
+            message.success('更改处理内容成功');
             isShowRepair.value = false;
           } else {
             message.error('更改处理内容失败');

@@ -97,7 +97,7 @@
           >
             <div v-if="!myCommon.isnull(formData.filePath)" style="position: relative">
               <a-input
-                style="width: 300px"
+                style="width: 300px; cursor: pointer"
                 :value="formData.filePath.split('/')[formData.filePath.split('/').length - 1]"
               />
               <div
@@ -114,7 +114,7 @@
               </div>
             </div>
             <div v-else>
-              <a-input style="width: 300px" placeholder="点击上传配置文件" />
+              <a-input style="width: 300px; cursor: pointer" placeholder="点击上传配置文件" />
               <div
                 style="
                   position: absolute;

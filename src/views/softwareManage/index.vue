@@ -819,18 +819,21 @@
         });
       } else {
         softwareApi.UpdateService(formData.value).then((data) => {
-          const oldData = tableRef.value.getRowById(data.serviceId);
-          delete data.createtTime;
-          delete data.createUser;
-          myCommon.objectReplace(oldData, data);
-          oldData.modifyTime = data.modifyTime;
-          oldData.modifyUser = data.modifyUser;
-          oldData.serviceType = dictionariesData.value.find(
-            (m) => m.key == data.serviceType,
-          )?.label;
-          oldData.equipmentName = equipmentData.value.find((m) => m.key == data.equipmentId)?.label;
-          oldData.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
-          tableRef.value.setRow(oldData);
+          const oldData = tableConfig.data.find((m) => m.serviceId == data.serviceId);
+          if (oldData) {
+            delete data.createtTime;
+            delete data.createUser;
+            myCommon.objectReplace(oldData, data);
+            oldData.modifyTime = data.modifyTime;
+            oldData.modifyUser = data.modifyUser;
+            oldData.serviceType = dictionariesData.value.find(
+              (m) => m.key == data.serviceType,
+            )?.label;
+            oldData.equipmentName = equipmentData.value.find(
+              (m) => m.key == data.equipmentId,
+            )?.label;
+            oldData.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
+          }
           formClose();
           message.success('更新软件信息成功');
         });

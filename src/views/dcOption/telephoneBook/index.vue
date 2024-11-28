@@ -398,12 +398,14 @@
         });
       } else {
         telephoneBookApi.UpdateDCOptionTelephoneBook(formData.value).then((data) => {
-          const oldData = tableRef.value.getRowById(data.phoneId);
-          delete formData.value.createUser;
-          myCommon.objectReplace(oldData, formData.value);
-          oldData.modifyTime = data.modifyTime;
-          oldData.modifyUser = data.modifyUser;
-          tableRef.value.setRow(oldData);
+          const oldData = tableConfig.data.find((m) => m.phoneId == data.phoneId);
+          if (oldData) {
+            delete formData.value.createUser;
+            delete formData.value.createTime;
+            myCommon.objectReplace(oldData, formData.value);
+            oldData.modifyTime = data.modifyTime;
+            oldData.modifyUser = data.modifyUser;
+          }
           formClose();
           message.success('更新电话信息成功');
         });

@@ -346,9 +346,12 @@
         });
       } else {
         organizationApi.UpdateOrganization(formData.value).then((data) => {
-          delete data.createtTime;
-          delete data.createUser;
-          myCommon.objectReplace(tableRef.value.getRowById(data.orgId), data);
+          const oldData = tableConfigData.value.find((m) => m.orgId == data.orgId);
+          if (oldData) {
+            delete data.createtTime;
+            delete data.createUser;
+            myCommon.objectReplace(oldData, data);
+          }
           formClose();
           message.success('更新部门信息成功');
         });

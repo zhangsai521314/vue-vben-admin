@@ -360,12 +360,14 @@
         });
       } else {
         roleApi.UpdateRole(formData.value).then((data) => {
-          const oldData = tableRef.value.getRowById(data.roleId);
-          delete formData.value.createUser;
-          myCommon.objectReplace(oldData, formData.value);
-          oldData.modifyTime = data.modifyTime;
-          oldData.modifyUser = data.modifyUser;
-          tableRef.value.setRow(oldData);
+          const oldData = tableConfig.data.find((m) => m.roleId == data.roleId);
+          if (oldData) {
+            delete formData.value.createUser;
+            delete formData.value.createTime;
+            myCommon.objectReplace(oldData, formData.value);
+            oldData.modifyTime = data.modifyTime;
+            oldData.modifyUser = data.modifyUser;
+          }
           formClose();
           message.success('更新角色信息成功');
         });

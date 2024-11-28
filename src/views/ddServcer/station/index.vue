@@ -846,19 +846,20 @@
         });
       } else {
         stationApi.UpdateDDServerStation(formData.value).then((data) => {
-          const oldData = tableRef.value.getRowById(data.id);
-          myCommon.objectReplace(oldData, formData.value);
-          oldData.lineName = lineDatas.value.find((m) => m.key == formData.value.lineId).label;
-          oldData.name = data.name;
-          oldData.prevStationName = stationDatas.value.find(
-            (m) => m.key == formData.value.prevStationId,
-          )?.label;
-          oldData.nextStationName = stationDatas.value.find(
-            (m) => m.key == formData.value.nextStationId,
-          )?.label;
-          oldData.updateTime = data.updateTime;
-          oldData.indexOrder = data.index;
-          tableRef.value.setRow(oldData);
+          const oldData = tableConfig.data.find((m) => m.id == data.id);
+          if (oldData) {
+            myCommon.objectReplace(oldData, formData.value);
+            oldData.lineName = lineDatas.value.find((m) => m.key == formData.value.lineId).label;
+            oldData.name = data.name;
+            oldData.prevStationName = stationDatas.value.find(
+              (m) => m.key == formData.value.prevStationId,
+            )?.label;
+            oldData.nextStationName = stationDatas.value.find(
+              (m) => m.key == formData.value.nextStationId,
+            )?.label;
+            oldData.updateTime = data.updateTime;
+            oldData.indexOrder = data.index;
+          }
           formClose();
           message.success('更新线路信息成功');
         });

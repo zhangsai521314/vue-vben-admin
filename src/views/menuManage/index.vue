@@ -499,15 +499,16 @@
         });
       } else {
         menuApi.UpdateMenu(d).then((data) => {
-          formClose();
-          message.success('更新菜单信息成功');
-          if (tableRef.value.getRowById(data.menuId).parentId == data.parentId) {
+          const oldData = tableConfigData.value.find((m) => m.menuId == data.menuId);
+          if (oldData && oldData.parentId == data.parentId) {
             delete data.createtTime;
             delete data.createUser;
-            myCommon.objectReplace(tableRef.value.getRowById(data.menuId), data);
+            myCommon.objectReplace(oldData, data);
           } else {
             getMenus();
           }
+          formClose();
+          message.success('更新菜单信息成功');
         });
       }
     });
