@@ -752,7 +752,7 @@
     () => (formData.value.dictionariesClass, formData.value.isKeyMaster),
     () => {
       if (isShowForm.value) {
-        message.info('字典类型、是否自定义键值 新增后不可修改');
+        message.info('字典类型、是否自定义键 新增后不可修改');
       }
     },
     { deep: true },

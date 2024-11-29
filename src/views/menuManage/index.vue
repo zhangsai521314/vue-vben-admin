@@ -308,7 +308,6 @@
           />
         </a-form-item>
         <a-form-item
-          v-if="formData.menuType != 7"
           name="isValid"
           label="是否启用"
           placeholder="请选择是否启用"

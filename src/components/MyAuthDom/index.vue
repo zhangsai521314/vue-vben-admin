@@ -19,7 +19,8 @@
       const power = () => {
         if (!userStore.userInfo?.isAdmin) {
           const { auth } = props;
-          if (auth) {
+          const domAuth = permissionStore.getDomAuthList?.find((m) => m.authName == auth);
+          if (auth && domAuth && domAuth.powerType != '') {
             try {
               const mySlots = getSlot(slots);
               mySlots[0].props['auth'] = auth;
@@ -28,7 +29,6 @@
               } else {
                 mySlots[0].props['class'] = 'auth';
               }
-              const domAuth = permissionStore.getDomAuthList?.find((m) => m.authName == auth);
               if (domAuth && domAuth.powerType != '') {
                 //判断权限
                 if (
@@ -40,8 +40,6 @@
                   console.log('只读', mySlots[0].props['class']);
                 }
                 return mySlots;
-              } else {
-                return null;
               }
             } catch (error) {
               console.error(`按钮权限解析错误：${error}`);
