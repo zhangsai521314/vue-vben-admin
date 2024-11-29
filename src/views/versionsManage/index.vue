@@ -663,6 +663,7 @@
       .then(() => {
         row.isRunSync = false;
         message.success('更新终端版本成功');
+        getVersions();
       })
       .catch(() => {
         row.isRunSync = false;
