@@ -3,7 +3,7 @@
     <vxe-grid
       :scroll-y="{ enabled: true }"
       v-bind="tableConfig"
-      id="mytable"
+      id="ddServcerCirStatus"
       :auto-resize="true"
       ref="tableRef"
       :loading="loading"

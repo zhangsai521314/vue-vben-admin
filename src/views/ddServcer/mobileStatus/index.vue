@@ -3,7 +3,7 @@
     <vxe-grid
       :scroll-y="{ enabled: true }"
       v-bind="tableConfig"
-      id="mytable"
+      id="ddServcerMobileStatus"
       ref="tableRef"
       :loading="loading"
       :seq-config="{ startIndex: (page.current - 1) * page.size }"

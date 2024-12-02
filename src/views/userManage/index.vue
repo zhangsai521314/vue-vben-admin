@@ -4,7 +4,7 @@
       <vxe-grid
         :scroll-y="{ enabled: true }"
         v-bind="tableConfig"
-        id="mytable"
+        id="versionsManage"
         :auto-resize="true"
         ref="tableRef"
         :loading="loading"

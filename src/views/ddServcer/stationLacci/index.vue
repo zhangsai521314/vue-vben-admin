@@ -6,7 +6,7 @@
       <vxe-grid
         :scroll-y="{ enabled: true }"
         v-bind="tableConfig"
-        id="mytable"
+        id="ddServcerStationLacci"
         :auto-resize="true"
         ref="tableRef"
         :loading="loading"
@@ -138,8 +138,8 @@
             />
           </a-form-item>
           <a-form-item
-            :rules="[{ required: true, message: '请选择所属车站' }]"
-            label="所属车站"
+            :rules="[{ required: true, message: '请选择车站' }]"
+            label="车站名称"
             name="stationId"
           >
             <a-select
@@ -147,7 +147,7 @@
               v-model:value="formData.stationId"
               :options="stationDatas.filter((m) => m.lineId == formData.lineId)"
               :allowClear="true"
-              placeholder="请选择所属车站"
+              placeholder="请选择车站"
               show-search
               :filter-option="AntVueCommon.filterOption"
             />

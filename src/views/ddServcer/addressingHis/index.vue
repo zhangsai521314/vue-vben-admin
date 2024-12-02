@@ -4,7 +4,7 @@
       :scroll-y="{ enabled: true }"
       v-bind="tableConfig"
       :auto-resize="true"
-      id="mytable"
+      id="ddServcerAddressingHis"
       ref="tableRef"
       :loading="loading"
       :seq-config="{ startIndex: (page.current - 1) * page.size }"

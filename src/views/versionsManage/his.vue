@@ -3,7 +3,7 @@
     <vxe-grid
       :scroll-y="{ enabled: true }"
       v-bind="tableConfig"
-      id="mytable"
+      id="versionsManageHis"
       ref="tableRef"
       :loading="loading"
       :row-config="{ keyField: 'hisId' }"

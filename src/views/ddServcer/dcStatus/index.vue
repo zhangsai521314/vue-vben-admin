@@ -3,7 +3,7 @@
     <vxe-grid
       :scroll-y="{ enabled: true }"
       v-bind="tableConfig"
-      id="mytable"
+      id="ddServcerDcStatus"
       :auto-resize="true"
       ref="tableRef"
       :loading="loading"
@@ -181,7 +181,7 @@
       },
       {
         field: 'stationName',
-        title: '所属车站',
+        title: '车站名称',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
