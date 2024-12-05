@@ -1,4 +1,5 @@
 import { isObject, isString } from '@/utils/is';
+import { useLocaleStore } from '@/store/modules/locale';
 
 const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
@@ -8,14 +9,19 @@ export function joinTimestamp<T extends boolean>(
 ): T extends true ? string : object;
 
 export function joinTimestamp(join: boolean, restful = false): string | object {
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
   if (!join) {
     return restful ? '' : {};
   }
   const now = new Date().getTime();
   if (restful) {
-    return `?_t=${now}`;
+    return `?culture=${locale}&_t=${now}`;
   }
-  return { _t: now };
+  return {
+    culture: locale,
+    _t: now,
+  };
 }
 
 /**

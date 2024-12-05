@@ -108,6 +108,9 @@
         />
       </template>
       <template #desFn="{ row }"> {{ row.desFn ? row.desFn : '-' }} </template>
+      <template #resultName="{ row }">
+        {{ row.resultName == 'success' ? '成功' : `失败(${row.result})` }}
+      </template>
     </vxe-grid>
   </MyContent>
 </template>
@@ -195,6 +198,9 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 120,
+        slots: {
+          default: 'resultName',
+        },
       },
       {
         field: 'addTime',

@@ -9,17 +9,19 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>部门名称：</label>
+                      <label>{{ t('view.departmentName') }}：</label>
                       <a-input
                         @press-enter="getOrganizations"
                         v-model:value="seacthContent.orgName"
-                        placeholder="输入部门名称查询"
+                        :placeholder="t('view.enterDepartmentNameToSearch')"
                       />
                     </a-space>
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button @click="getOrganizations" type="primary">查询</a-button>
+                      <a-button @click="getOrganizations" type="primary">{{
+                        t('view.query')
+                      }}</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -28,9 +30,9 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button class="ant-btn" @click="showFrom('add', null, 0)"
-                        >新增顶级部门</a-button
-                      >
+                      <a-button class="ant-btn" @click="showFrom('add', null, 0)">{{
+                        t('view.addTopLevelDepartment')
+                      }}</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -53,12 +55,41 @@
             :tree-config="{ transform: true, rowField: 'orgId', parentField: 'parentId' }"
             :data="tableConfigData"
           >
-            <vxe-column type="seq" title="序号" minWidth="70" fixed="left" />
-            <vxe-column field="orgId" title="记录id" :visible="false" minWidth="130" fixed="left" />
-            <vxe-column field="orgName" title="部门名称" tree-node minWidth="200" />
+            <vxe-column type="seq" :title="t('view.serialNumber')" minWidth="70" fixed="left" />
+            <vxe-column
+              field="orgId"
+              :title="t('view.recordId')"
+              :visible="false"
+              minWidth="130"
+              fixed="left"
+            />
+            <vxe-column
+              field="orgName"
+              :title="t('view.departmentName')"
+              tree-node
+              minWidth="200"
+            />
+            <vxe-column
+              field="orgNameCn"
+              :title="t('view.departmentNameCn')"
+              tree-node
+              minWidth="200"
+            />
+            <vxe-column
+              field="orgNameEn"
+              :title="t('view.departmentNameEn')"
+              tree-node
+              minWidth="200"
+            />
+            <vxe-column
+              field="orgNameFr"
+              :title="t('view.departmentNameFr')"
+              tree-node
+              minWidth="200"
+            />
             <vxe-column
               field="typeLineOrStationId"
-              title="部门管辖线路或车站"
+              :title="t('view.departmentManagesLinesOrStations')"
               width="200"
               :visible="false"
             >
@@ -72,12 +103,17 @@
                 >
               </template>
             </vxe-column>
-            <vxe-column field="orderIndex" title="部门排序" :visible="false" minWidth="100" />
-            <vxe-column field="createTime" title="创建时间" minWidth="150" />
-            <vxe-column field="createUser" title="创建人" minWidth="130" />
-            <vxe-column field="modifyTime" title="修改时间" minWidth="150" />
-            <vxe-column field="modifyUser" title="修改人" minWidth="130" />
-            <vxe-column title="操作" width="140" fixed="right">
+            <vxe-column
+              field="orderIndex"
+              :title="t('view.departmentSorting')"
+              :visible="false"
+              minWidth="100"
+            />
+            <vxe-column field="createTime" :title="t('view.creationTime')" minWidth="150" />
+            <vxe-column field="createUser" :title="t('view.creator')" minWidth="130" />
+            <vxe-column field="modifyTime" :title="t('view.modificationTime')" minWidth="150" />
+            <vxe-column field="modifyUser" :title="t('view.modifier')" minWidth="130" />
+            <vxe-column :title="t('view.action')" width="140" fixed="right">
               <template #default="{ row }">
                 <div :class="`tableStyle`">
                   <AuthDom auth="organizationManage_table_add">
@@ -85,7 +121,7 @@
                       name="icon-baseui-tianjiawukuang"
                       @click="showFrom('add', row, row.orgId)"
                       style="color: #0a61bd"
-                      title="增加子级"
+                      :title="t('view.addSubLevel')"
                     />
                   </AuthDom>
                   <AuthDom auth="organizationManage_table_edit">
@@ -93,7 +129,7 @@
                       name="icon-baseui-edit-fill"
                       @click="showFrom('edit', row, row.parentId)"
                       style="color: #0a61bd"
-                      title="编辑"
+                      :title="t('view.edit')"
                     />
                   </AuthDom>
                   <AuthDom auth="organizationManage_table_delete">
@@ -101,7 +137,7 @@
                       name="icon-baseui-guanbicuowu"
                       @click="remove(row)"
                       style="color: red"
-                      title="删除"
+                      :title="t('view.delete')"
                     />
                   </AuthDom>
                 </div>
@@ -113,42 +149,71 @@
     </a-spin>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="500"
+      :width="locale == 'zh-CN' ? 500 : 600"
       :visible="isShowForm"
-      title="部门"
+      :title="t('view.department')"
       :footer-style="{ textAlign: 'right' }"
       @close="formClose"
     >
       <a-form
-        :label-col="{ span: 6 }"
+        :label-col="{ span: locale == 'zh-CN' ? 6 : 10 }"
         :style="{ paddingRight: '2px' }"
-        :wrapper-col="{ span: 16 }"
         autocomplete="off"
         ref="formRef"
         :model="formData"
       >
         <a-form-item
-          name="orgName"
-          label="部门名称"
+          name="orgNameCn"
+          :label="t('view.departmentNameCn')"
           :rules="[
             { required: true, message: '' },
-            { max: 40, message: '部门名称过长' },
-            { validator: formValidator.empty, message: '请输入部门名称' },
+            { max: 40, message: t('view.departmentNameTooLong') },
+            { validator: formValidator.empty, message: t('view.pleaseEnterDepartmentName') },
           ]"
         >
           <a-input
-            v-model:value="formData.orgName"
-            placeholder="请输入部门名称"
+            v-model:value="formData.orgNameCn"
+            :placeholder="t('view.pleaseEnterDepartmentName')"
             autocomplete="off"
           />
         </a-form-item>
-        <a-form-item label="管辖线站" name="typeLineOrStationId">
+        <a-form-item
+          name="orgNameEn"
+          :label="t('view.departmentNameEn')"
+          :rules="[
+            { required: true, message: '' },
+            { max: 40, message: t('view.departmentNameTooLong') },
+            { validator: formValidator.empty, message: t('view.pleaseEnterDepartmentName') },
+          ]"
+        >
+          <a-input
+            v-model:value="formData.orgNameEn"
+            :placeholder="t('view.pleaseEnterDepartmentName')"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
+          name="orgNameFr"
+          :label="t('view.departmentNameFr')"
+          :rules="[
+            { required: true, message: '' },
+            { max: 40, message: t('view.departmentNameTooLong') },
+            { validator: formValidator.empty, message: t('view.pleaseEnterDepartmentName') },
+          ]"
+        >
+          <a-input
+            v-model:value="formData.orgNameFr"
+            :placeholder="t('view.pleaseEnterDepartmentName')"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item :label="t('view.jurisdictionalLinesAndStations')" name="typeLineOrStationId">
           <a-tree-select
             v-model:value="formData.typeLineOrStationId"
             show-search
             style="width: 100%"
             :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-            placeholder="请选择部门管辖线路或车站"
+            :placeholder="t('view.pleaseSelectDepartmentManagedLinesOrStations')"
             allow-clear
             show-arrow
             :filterTreeNode="AntVueCommon.filterTreeNode"
@@ -157,17 +222,25 @@
         </a-form-item>
         <a-form-item
           name="orderIndex"
-          label="部门排序"
+          :label="t('view.departmentSorting')"
           :rules="[
-            { required: true, message: '请输入部门排序' },
-            { validator: formValidator.min, min: -9999, message: '排序值-9999至9999' },
-            { validator: formValidator.max, max: 9999, message: '排序值-9999至9999' },
+            { required: true, message: t('view.pleaseEnterDepartmentSorting') },
+            {
+              validator: formValidator.min,
+              min: -9999,
+              message: t('view.sortingValueMustBeBetween9999'),
+            },
+            {
+              validator: formValidator.max,
+              max: 9999,
+              message: t('view.sortingValueMustBeBetween9999'),
+            },
           ]"
         >
           <a-input-number
             style="width: 300px"
             v-model:value="formData.orderIndex"
-            placeholder="请输入部门排序"
+            :placeholder="t('view.pleaseEnterDepartmentSorting')"
             autocomplete="off"
             :precision="3"
           />
@@ -175,8 +248,8 @@
       </a-form>
       <template #footer>
         <a-spin :spinning="fromSpinning">
-          <a-button type="primary" @click="saveFrom">保存</a-button>
-          <a-button style="margin-left: 8px" @click="formClose">关闭</a-button>
+          <a-button type="primary" @click="saveFrom">{{ t('view.save') }}</a-button>
+          <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
         </a-spin>
       </template>
     </a-drawer>
@@ -191,15 +264,22 @@
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import { useUserStore } from '@/store/modules/user';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
   defineOptions({ name: 'OrganizationManage' });
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
   const userStore = useUserStore();
   const userData = ref(_.cloneDeep(userStore.getUserInfo));
   const { prefixCls } = useDesign('organizationManage-');
   const loading = ref(true);
   const tableConfigData = ref([]);
   const defFromData = reactive({
-    orgName: '',
+    orgNameCn: null,
+    orgNameEn: null,
+    orgNameFr: null,
     orderIndex: null,
     parentId: 0,
     typeLineOrStationId: null,
@@ -213,7 +293,7 @@
   const isShowForm = ref(false);
   const fromSpinning = ref(false);
   const seacthContent = ref({
-    orgName: '',
+    orgName: null,
   });
   const lintStationDats = ref([]);
   const _lintStationDats = ref([]);
@@ -239,7 +319,7 @@
   function remove(row) {
     Modal.confirm({
       maskClosable: true,
-      title: '删除该项，子集数据也将被删除，是否删除?',
+      title: t('view.deletingThisSubsetDataWillAlsoDeleteItAreYouSure'),
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {
@@ -254,7 +334,7 @@
                   (m) => data.indexOf(m.orgId) == -1,
                 );
               }
-              message.success('删除部门信息成功');
+              message.success(t('view.deletionDepartmentInformationSuccessful'));
             } catch (error) {}
           })
           .catch(() => {
@@ -286,7 +366,7 @@
           saveType = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取部门信息失败');
+          message.error(t('view.failedToRetrieveDepartmentInformation'));
         }
       })
       .catch(() => {
@@ -342,7 +422,7 @@
         organizationApi.AddOrganization(formData.value).then((data) => {
           tableConfigData.value.splice(0, 0, data);
           formClose();
-          message.success('新增部门成功');
+          message.success(t('view.additionDepartmentSuccessful'));
         });
       } else {
         organizationApi.UpdateOrganization(formData.value).then((data) => {
@@ -353,7 +433,7 @@
             myCommon.objectReplace(oldData, data);
           }
           formClose();
-          message.success('更新部门信息成功');
+          message.success(t('view.updateDepartmentInformationSuccessful'));
         });
       }
     });

@@ -2,22 +2,25 @@
 import { defHttp } from '@/utils/http/axios';
 import { ContentTypeEnum } from '@/enums/httpEnum';
 import { ErrorMessageMode } from '/#/axios';
+
 const role = {
   //获取角色列表
   GetRoles: function (params) {
     return defHttp.post({
       url: '/Role/GetRoles',
-      params
+      params,
     });
   },
   //获取角色 a-select 标签
   GetRoleSimple: function (mode: ErrorMessageMode = 'none') {
-    return defHttp
-      .get({
+    return defHttp.get(
+      {
         url: '/Role/GetRoleSimple',
-      }, {
+      },
+      {
         errorMessageMode: mode,
-      });
+      },
+    );
   },
   //根据ID获取用户角色信息
   GetRole: function (params) {
@@ -51,7 +54,7 @@ const role = {
   GetRightRoles: function (params) {
     return defHttp.get({
       url: '/Role/GetRightRoles',
-      params
+      params,
     });
   },
   //分配权限

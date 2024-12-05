@@ -22,10 +22,11 @@ import axios from 'axios';
 import { getAppEnvConfig } from '@/utils/env';
 import { router } from '@/router';
 import { PageEnum } from '@/enums/pageEnum';
+import { useLocaleStore } from '@/store/modules/locale';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
-const { createMessage, createErrorModal, createSuccessModal } = useMessage();
+const { createMessage, createErrorModal } = useMessage();
 
 /**
  * @description: 数据处理，方便区分多种处理方式
@@ -47,7 +48,7 @@ const transform: AxiosTransform = {
       //等待处理
     }
     if (!success) {
-      if (message == '401 登录已过期，请重新登录') {
+      if (message == '登录已过期，请重新登录') {
         // 直接回登陆页
         router.replace(PageEnum.BASE_LOGIN);
       }
@@ -72,6 +73,8 @@ const transform: AxiosTransform = {
 
   // 请求之前处理config
   beforeRequestHook: (config, options) => {
+    const localeStore = useLocaleStore();
+    const locale = localeStore.getLocale;
     const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true, urlPrefix } = options;
     const { VITE_GLOB_APP_LOWERCASEROUTE } = getAppEnvConfig();
     //是否外部请求
@@ -117,12 +120,15 @@ const transform: AxiosTransform = {
           config.data &&
           (Object.keys(config.data).length > 0 || config.data instanceof FormData)
         ) {
+          debugger;
           config.data = data;
           config.params = params;
         } else {
           // 非GET请求如果没有提供data，则将params视为data
           config.data = params;
-          config.params = undefined;
+          config.params = {
+            culture: locale,
+          };
         }
         if (joinParamsToUrl) {
           config.url = setObjToUrlParams(
@@ -131,9 +137,14 @@ const transform: AxiosTransform = {
           );
         }
       } else {
-        // 兼容restful风格
-        config.url = config.url + params;
+        // 兼容restful风格:url/参数1/参数2/参数n
+        if (config.url[config.url?.length - 1] == '/') {
+          config.url = `${config.url}${params}${joinTimestamp(joinTime, true)}`;
+        } else {
+          config.url = `${config.url}/${params}${joinTimestamp(joinTime, true)}`;
+        }
         config.params = undefined;
+        config.data = undefined;
       }
     }
     return config;
@@ -143,7 +154,6 @@ const transform: AxiosTransform = {
    * @description: 请求拦截器处理
    */
   requestInterceptors: (config, options) => {
-    // 请求之前处理config
     const token = getToken();
     if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
       // jwt token

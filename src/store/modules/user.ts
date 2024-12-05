@@ -18,7 +18,6 @@ import { isArray } from '@/utils/is';
 import { h } from 'vue';
 import { useAppStore } from '@/store/modules/app';
 import { useMqttStoreWithOut } from '@/store/modules/mqtt';
-import { useLocaleStore } from '@/store/modules/locale';
 
 const mqttStore = useMqttStoreWithOut();
 interface UserState {
@@ -167,9 +166,7 @@ export const useUserStore = defineStore({
       if (!this.getToken) return null;
       let userInfo;
       try {
-        const localeStore = useLocaleStore();
-        const locale = localeStore.getLocale;
-        userInfo = await getUserInfo(locale);
+        userInfo = await getUserInfo();
       } catch (error) {
         this.resetState();
         router.replace(PageEnum.BASE_LOGIN);

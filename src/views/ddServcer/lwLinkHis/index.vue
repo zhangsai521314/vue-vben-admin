@@ -85,6 +85,9 @@
       <template #desipport="{ row }">
         {{ row.desIp }}{{ row.desPort ? ':' + row.desPort : '' }}
       </template>
+      <template #linkResultName="{ row }">
+        {{ row.linkResultName == 'success' ? '成功' : `失败(${row.result})` }}
+      </template>
     </vxe-grid>
   </MyContent>
 </template>
@@ -170,6 +173,9 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 100,
+        slots: {
+          default: 'linkResultName',
+        },
       },
       {
         field: 'addTime',

@@ -144,7 +144,9 @@
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import AssignPower from '@/components/MyAssignPower/index.vue';
+  import { useI18n } from '@/hooks/web/useI18n';
 
+  const { t } = useI18n();
   defineOptions({ name: 'RoleManage' });
   const { prefixCls } = useDesign('roleManage-');
   const loading = ref(true);

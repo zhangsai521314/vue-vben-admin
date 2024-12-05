@@ -120,6 +120,9 @@
         />
       </template>
       <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? '+' + row.port : '' }} </template>
+      <template #regStatusName="{ row }">
+        {{ row.regStatusName == 'success' ? '成功' : `失败(${row.result})` }}
+      </template>
     </vxe-grid>
   </MyContent>
 </template>
@@ -187,6 +190,9 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 100,
+        slots: {
+          default: 'regStatusName',
+        },
       },
       {
         field: 'regResultName',
