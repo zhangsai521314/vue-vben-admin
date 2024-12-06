@@ -55,37 +55,42 @@
             :tree-config="{ transform: true, rowField: 'orgId', parentField: 'parentId' }"
             :data="tableConfigData"
           >
-            <vxe-column type="seq" :title="t('view.serialNumber')" minWidth="70" fixed="left" />
+            <vxe-column
+              type="seq"
+              :title="t('view.serialNumber')"
+              :minWidth="locale == 'en-US' ? 110 : 70"
+              fixed="left"
+            />
             <vxe-column
               field="orgId"
               :title="t('view.recordId')"
               :visible="false"
-              minWidth="130"
+              minWidth="136"
               fixed="left"
             />
             <vxe-column
               field="orgName"
               :title="t('view.departmentName')"
               tree-node
-              minWidth="200"
+              minWidth="210"
             />
             <vxe-column
               field="orgNameCn"
               :title="t('view.departmentNameCn')"
               tree-node
-              minWidth="200"
+              minWidth="210"
             />
             <vxe-column
               field="orgNameEn"
               :title="t('view.departmentNameEn')"
               tree-node
-              minWidth="200"
+              minWidth="210"
             />
             <vxe-column
               field="orgNameFr"
               :title="t('view.departmentNameFr')"
               tree-node
-              minWidth="200"
+              minWidth="210"
             />
             <vxe-column
               field="typeLineOrStationId"
@@ -105,15 +110,15 @@
             </vxe-column>
             <vxe-column
               field="orderIndex"
-              :title="t('view.departmentSorting')"
+              :title="t('view.sorting')"
               :visible="false"
               minWidth="100"
             />
             <vxe-column field="createTime" :title="t('view.creationTime')" minWidth="150" />
             <vxe-column field="createUser" :title="t('view.creator')" minWidth="130" />
-            <vxe-column field="modifyTime" :title="t('view.modificationTime')" minWidth="150" />
+            <vxe-column field="modifyTime" :title="t('view.modificationTime')" minWidth="170" />
             <vxe-column field="modifyUser" :title="t('view.modifier')" minWidth="130" />
-            <vxe-column :title="t('view.action')" width="140" fixed="right">
+            <vxe-column :title="t('view.action')" minWidth="140" fixed="right">
               <template #default="{ row }">
                 <div :class="`tableStyle`">
                   <AuthDom auth="organizationManage_table_add">
@@ -151,7 +156,7 @@
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
       :width="locale == 'zh-CN' ? 500 : 600"
       :visible="isShowForm"
-      :title="t('view.department')"
+      :title="t('view.configuration')"
       :footer-style="{ textAlign: 'right' }"
       @close="formClose"
     >
@@ -222,7 +227,7 @@
         </a-form-item>
         <a-form-item
           name="orderIndex"
-          :label="t('view.departmentSorting')"
+          :label="t('view.sorting')"
           :rules="[
             { required: true, message: t('view.pleaseEnterDepartmentSorting') },
             {
@@ -240,7 +245,7 @@
           <a-input-number
             style="width: 300px"
             v-model:value="formData.orderIndex"
-            :placeholder="t('view.pleaseEnterDepartmentSorting')"
+            :placeholder="t('view.pleaseInputSorting')"
             autocomplete="off"
             :precision="3"
           />
@@ -268,9 +273,10 @@
   import { useLocaleStore } from '@/store/modules/locale';
 
   const { t } = useI18n();
-  defineOptions({ name: 'OrganizationManage' });
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
+
+  defineOptions({ name: 'OrganizationManage' });
   const userStore = useUserStore();
   const userData = ref(_.cloneDeep(userStore.getUserInfo));
   const { prefixCls } = useDesign('organizationManage-');

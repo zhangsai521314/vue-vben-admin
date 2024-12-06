@@ -1,5 +1,5 @@
 <template>
-  <MyContent>
+  <MyContent :class="prefixCls">
     <vxe-grid
       :scroll-y="{ enabled: true }"
       v-bind="tableConfig"
@@ -18,17 +18,17 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>角色名称：</label>
+                    <label>{{ t('view.roleName') }}：</label>
                     <a-input
                       @press-enter="getRoles"
                       v-model:value="seacthContent.name"
-                      placeholder="输入角色名称查询"
+                      :placeholder="t('view.inputRoleNameQuery')"
                     />
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="getRoles" type="primary">查询</a-button>
+                    <a-button @click="getRoles" type="primary"> {{ t('view.query') }}</a-button>
                   </a-space>
                 </div>
               </a-space>
@@ -37,7 +37,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button class="ant-btn" @click="showFrom()">新增角色</a-button>
+                    <a-button class="ant-btn" @click="showFrom()">{{ t('view.addRole') }}</a-button>
                   </a-space>
                 </div>
               </a-space>
@@ -52,7 +52,7 @@
               name="icon-baseui-quanxianpeizhi"
               @click="showPower(row)"
               style="color: #0a61bd"
-              title="分配权限"
+              :title="t('view.assignPermissions')"
             />
           </AuthDom>
           <AuthDom auth="roleManage_table_edit">
@@ -60,7 +60,7 @@
               name="icon-baseui-edit-fill"
               @click="showFrom(row)"
               style="color: #0a61bd"
-              title="编辑"
+              :title="t('view.edit')"
             />
           </AuthDom>
           <AuthDom auth="roleManage_table_delete">
@@ -68,7 +68,7 @@
               name="icon-baseui-guanbicuowu"
               @click="remove(row)"
               style="color: red"
-              title="删除"
+              :title="t('view.delete')"
             />
           </AuthDom>
         </div>
@@ -78,47 +78,88 @@
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
       :width="500"
       :visible="isShowForm"
-      title="配置"
+      :title="t('view.configuration')"
       :footer-style="{ textAlign: 'right' }"
       @close="formClose"
     >
       <a-form
-        :label-col="{ span: 6 }"
+        :label-col="{ span: 8 }"
         :style="{ paddingRight: '2px' }"
-        :wrapper-col="{ span: 16 }"
         autocomplete="off"
         ref="formRef"
         :model="formData"
       >
         <a-form-item
-          name="name"
-          label="角色名称"
+          name="nameCn"
+          :label="t('view.roleName')"
           :rules="[
             { required: true, message: '' },
-            { max: 40, message: '角色名称过长' },
-            { validator: formValidator.empty, message: '请输入角色名称' },
+            { max: 40, message: t('view.roleNameTooLong') },
+            { validator: formValidator.empty, message: t('view.pleaseEnterRoleName') },
           ]"
         >
-          <a-input v-model:value="formData.name" placeholder="请输入角色名称" autocomplete="off" />
+          <a-input
+            v-model:value="formData.nameCn"
+            :placeholder="t('view.pleaseEnterRoleName')"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
+          name="nameEn"
+          :label="t('view.roleName')"
+          :rules="[
+            { required: true, message: '' },
+            { max: 40, message: t('view.roleNameTooLong') },
+            { validator: formValidator.empty, message: t('view.pleaseEnterRoleName') },
+          ]"
+        >
+          <a-input
+            v-model:value="formData.nameEn"
+            :placeholder="t('view.pleaseEnterRoleName')"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
+          name="nameFr"
+          :label="t('view.roleName')"
+          :rules="[
+            { required: true, message: '' },
+            { max: 40, message: t('view.roleNameTooLong') },
+            { validator: formValidator.empty, message: t('view.pleaseEnterRoleName') },
+          ]"
+        >
+          <a-input
+            v-model:value="formData.nameFr"
+            :placeholder="t('view.pleaseEnterRoleName')"
+            autocomplete="off"
+          />
         </a-form-item>
         <a-form-item
           name="isValid"
-          label="是否启用"
-          :rules="[{ required: true, message: '请选择是否启用' }]"
+          :label="t('view.enableOrDisable')"
+          :rules="[{ required: true, message: t('view.pleaseSelectEnableOrDisable') }]"
         >
           <a-switch v-model:checked="formData.isValid" />
         </a-form-item>
         <a-form-item
           name="orderIndex"
-          label="角色排序"
+          :label="t('view.roleSorting')"
           :rules="[
-            { required: true, message: '请输入角色排序' },
-            { validator: formValidator.min, min: -9999, message: '排序值-9999至9999' },
-            { validator: formValidator.max, max: 9999, message: '排序值-9999至9999' },
+            { required: true, message: t('view.pleaseEnterRoleSorting') },
+            {
+              validator: formValidator.min,
+              min: -9999,
+              message: t('view.sortingValueMustBeBetween9999'),
+            },
+            {
+              validator: formValidator.max,
+              max: 9999,
+              message: t('view.sortingValueMustBeBetween9999'),
+            },
           ]"
         >
           <a-input-number
-            placeholder="请输入角色排序"
+            :placeholder="t('view.pleaseInputSorting')"
             style="width: 300px"
             :precision="3"
             v-model:value="formData.orderIndex"
@@ -127,8 +168,8 @@
       </a-form>
       <template #footer>
         <a-spin :spinning="fromSpinning">
-          <a-button type="primary" @click="saveFrom">保存</a-button>
-          <a-button style="margin-left: 8px" @click="formClose">关闭</a-button>
+          <a-button type="primary" @click="saveFrom">{{ t('view.save') }}</a-button>
+          <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
         </a-spin>
       </template>
     </a-drawer>
@@ -145,91 +186,117 @@
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import AssignPower from '@/components/MyAssignPower/index.vue';
   import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
   const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
   defineOptions({ name: 'RoleManage' });
   const { prefixCls } = useDesign('roleManage-');
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
     columns: [
-      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
+      {
+        type: 'seq',
+        title: t('view.serialNumber'),
+        minWidth: locale == 'en-US' ? 110 : 70,
+        fixed: 'left',
+      },
       //基础
       {
         field: 'roleId',
-        title: '记录ID',
+        title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
-        minWidth: 130,
+        minWidth: 136,
         fixed: 'left',
       },
       {
         field: 'name',
-        title: '角色名称',
+        title: t('view.roleName'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 130,
+        minWidth: 174,
         fixed: 'left',
       },
       {
+        field: 'nameCn',
+        title: t('view.roleNameCn'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 174,
+        visible: false,
+      },
+      {
+        field: 'nameEn',
+        title: t('view.roleNameEn'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 174,
+        visible: false,
+      },
+      {
+        field: 'nameFr',
+        title: t('view.roleNameFr'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 174,
+        visible: false,
+      },
+      {
         field: 'isValid',
-        title: '是否启用',
+        title: t('view.enableOrDisable'),
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
+
         cellRender: { name: 'render_isno' },
       },
       {
         field: 'orderIndex',
-        title: '排序',
+        title: t('view.sorting'),
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
         minWidth: 100,
       },
       {
         field: 'createTime',
-        title: '创建时间',
+        title: t('view.creationTime'),
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'createUser',
-        title: '创建人',
+        title: t('view.creator'),
         minWidth: 130,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'modifyTime',
-        title: '修改时间',
-        minWidth: 150,
+        title: t('view.modificationTime'),
+        minWidth: 170,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'modifyUser',
-        title: '修改人',
+        title: t('view.modifier'),
         minWidth: 130,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
-        title: '操作',
+        title: t('view.action'),
         minWidth: 140,
         slots: {
           default: 'default',
         },
         showOverflow: true,
-        showHeaderOverflow: true,
+
         fixed: 'right',
       },
     ],
@@ -242,7 +309,9 @@
     data: [],
   });
   const defFromData = reactive({
-    name: '',
+    nameCn: null,
+    nameEn: null,
+    nameFr: null,
     isValid: true,
     orderIndex: null,
   });
@@ -255,7 +324,7 @@
   const isShowAssignPower = ref(false);
   const assignPowerRoleId = ref(null);
   const seacthContent = ref({
-    name: '',
+    name: null,
   });
   getRoles();
 
@@ -281,7 +350,7 @@
   function remove(row) {
     Modal.confirm({
       maskClosable: true,
-      title: '是否删除?',
+      title: t('view.areYouSureYouWantToDelete'),
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {
@@ -291,7 +360,7 @@
           .then(() => {
             loading.value = false;
             tableConfig.data = tableConfig.data?.filter((m) => m.roleId != row.roleId);
-            message.success('删除角色信息成功');
+            message.success(t('view.deletionSuccessful'));
           })
           .catch(() => {
             loading.value = false;
@@ -320,7 +389,7 @@
           saveType = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取角色信息失败');
+          message.error(t('view.failedToRetrieveRoleInformation'));
         }
       })
       .catch(() => {
@@ -358,20 +427,16 @@
         roleApi.AddRole(formData.value).then((data) => {
           tableConfig.data?.splice(0, 0, data);
           formClose();
-          message.success('新增角色成功');
+          message.success(t('view.additionSuccessful'));
         });
       } else {
         roleApi.UpdateRole(formData.value).then((data) => {
           const oldData = tableConfig.data.find((m) => m.roleId == data.roleId);
           if (oldData) {
-            delete formData.value.createUser;
-            delete formData.value.createTime;
-            myCommon.objectReplace(oldData, formData.value);
-            oldData.modifyTime = data.modifyTime;
-            oldData.modifyUser = data.modifyUser;
+            myCommon.objectReplace(oldData, data);
           }
           formClose();
-          message.success('更新角色信息成功');
+          message.success(t('view.updateSuccessful'));
         });
       }
     });

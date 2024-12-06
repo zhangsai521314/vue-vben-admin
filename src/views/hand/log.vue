@@ -30,6 +30,14 @@
   import { ref, reactive, createVNode, nextTick, watch } from 'vue';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import handApi from '@/api/hand';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
+
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
+  const { t } = useI18n();
   //vue3使用defineProps接收传过来的参数
   const props = defineProps({
     //增加组件
@@ -52,7 +60,7 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50 },
+      { type: 'seq', title: t('view.serialNumber'), width: 50 },
       {
         field: 'dataTime',
         title: '文件时间',

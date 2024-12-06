@@ -20,7 +20,6 @@ function joinParentPath(menus: Menu[], parentPath = '') {
     // 请注意，以 / 开头的嵌套路径将被视为根路径。
     // This allows you to leverage the component nesting without having to use a nested URL.
     // 这允许你利用组件嵌套，而无需使用嵌套 URL。
-    console.log('菜单', menu);
     if (Object.keys(menu).length > 0)
       if (menu && !(menu.path.startsWith('/') || isHttpUrl(menu.path))) {
         // path doesn't start with /, nor is it a url, join parent path

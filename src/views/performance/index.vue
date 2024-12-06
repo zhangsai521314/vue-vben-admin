@@ -60,7 +60,14 @@
   import equipmentApi from '@/api/equipment';
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
   import { useUserStore } from '@/store/modules/user';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
+  const { t } = useI18n();
   defineOptions({ name: 'Performance' });
   const { prefixCls } = useDesign('performance-');
 

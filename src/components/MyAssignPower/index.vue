@@ -4,7 +4,7 @@
     :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
     :width="620"
     :open="visible"
-    :title="props.isRead ? '权限查看' : '权限配置'"
+    :title="props.isRead ? t('view.viewAction') : t('view.configuration')"
     :body-style="{ padding: '0' }"
     :footer-style="{ textAlign: 'right' }"
     @close="formClose"
@@ -19,23 +19,27 @@
         :class="`${prefixCls}content-bar`"
         :id="id"
       >
-        <a-tab-pane key="menu" tab="菜单页面">
+        <a-tab-pane key="menu" :tab="t('view.menuPage')">
           <div :style="{ width: '100%', height: '100%' }">
-            <a-space direction="horizontal" :size="1" class="site-space-compact-wrapper">
-              <a-radio-group
-                v-model:value="treeAllSelectValue"
-                button-style="solid"
-                v-show="!props.isRead"
-              >
-                <a-radio-button @click="treeAllClick(1)" :value="1">全选</a-radio-button>
-                <a-radio-button @click="treeAllClick(0)" :value="0">取消</a-radio-button>
-              </a-radio-group>
-              <a-input-search
-                v-model:value="menuSearchContent"
-                placeholder="搜索"
-                style="width: 350px"
-              />
-            </a-space>
+            <a-row>
+              <a-col :flex="auto" style="padding: 0 2px 0 0">
+                <a-radio-group
+                  v-model:value="treeAllSelectValue"
+                  button-style="solid"
+                  v-show="!props.isRead"
+                >
+                  <a-radio-button @click="treeAllClick(1)" :value="1">{{
+                    t('view.selectAll')
+                  }}</a-radio-button>
+                  <a-radio-button @click="treeAllClick(0)" :value="0">{{
+                    t('view.cancel')
+                  }}</a-radio-button>
+                </a-radio-group>
+              </a-col>
+              <a-col :flex="10" style="padding: 0">
+                <a-input-search v-model:value="menuSearchContent" :placeholder="t('view.search')" />
+              </a-col>
+            </a-row>
             <a-tree
               :checkedKeys="menuTreeChecnk"
               :checkStrictly="true"
@@ -50,7 +54,7 @@
                 <!-- 节点插槽 -->
                 <div :class="`${prefixCls}custom`">
                   <span
-                    v-if="node.title.indexOf(menuSearchContent) > -1"
+                    v-if="node?.title?.indexOf(menuSearchContent) > -1"
                     @click="treeTitleClick(node)"
                   >
                     {{ node.title.substr(0, node.title.indexOf(menuSearchContent)) }}
@@ -92,20 +96,24 @@
       </a-tabs>
     </a-spin>
     <template #footer>
-      <div style="position: relative">
-        <span v-show="!props.isRead" style="position: absolute; top: 5px; left: 25px; color: red"
-          >注意：所有权限均带有“显示”权限</span
+      <div style="position: relative; height: 50px">
+        <span
+          v-show="!props.isRead"
+          style="position: absolute; top: 35px; left: 25px; color: red"
+          >{{ t('view.noteAllPermissionsIncludeDisplayPermission') }}</span
         >
-        <a-spin tip="正在保存..." :spinning="isGetTree">
-          <a-button
-            v-show="!props.isRead"
-            type="primary"
-            style="margin-left: 8px"
-            @click="savePower(false)"
-            >保存本页权限</a-button
-          >
-          <a-button style="margin-left: 8px" @click="formClose">关闭</a-button>
-        </a-spin>
+        <a-space>
+          <a-spin :spinning="isGetTree">
+            <a-button
+              v-show="!props.isRead"
+              type="primary"
+              style="margin-left: 8px"
+              @click="savePower(false)"
+              >{{ t('view.savePagePermissions') }}</a-button
+            >
+          </a-spin>
+          <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
+        </a-space>
       </div>
     </template>
   </a-drawer>
@@ -117,8 +125,12 @@
   import userApi from '@/api/user';
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
-  import { forEach } from 'lodash-es';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
   const props = defineProps({
     isShow: {
       type: Boolean,
@@ -148,7 +160,7 @@
   });
   const powerType = props.userId ? 'user' : props.roleId ? 'role' : '';
   if (powerType == '') {
-    message.warning('参数不正确');
+    message.warning(t('view.parametersNotSatisfied'));
   }
   const { prefixCls } = useDesign('AssignPower-');
   const treeHeight = ref(10);
@@ -161,23 +173,23 @@
   const menuExpandedKeys = ref([]);
   const menuOptions = {
     sys: [
-      { label: '全部', value: '1' },
-      { label: '显示', value: '5' },
-      { label: '编辑', value: '2' },
-      { label: '删除', value: '4' },
-      { label: '添加子集', value: '3' },
+      { label: t('view.all'), value: '1' },
+      { label: t('view.display'), value: '5' },
+      { label: t('view.edit'), value: '2' },
+      { label: t('view.delete'), value: '4' },
+      { label: t('view.addSubset'), value: '3' },
     ],
     nosys: [
-      { label: '全部', value: '1' },
-      { label: '显示', value: '5' },
-      { label: '编辑', value: '2' },
-      { label: '删除', value: '4' },
-      { label: '添加子集', value: '3' },
+      { label: t('view.all'), value: '1' },
+      { label: t('view.display'), value: '5' },
+      { label: t('view.edit'), value: '2' },
+      { label: t('view.delete'), value: '4' },
+      { label: t('view.addSubset'), value: '3' },
     ],
     btn: [
-      { label: '全部', value: '1' },
-      { label: '显示', value: '5' },
-      { label: '点击', value: '9' },
+      { label: t('view.all'), value: '1' },
+      { label: t('view.display'), value: '5' },
+      { label: t('view.clickAction'), value: '9' },
     ],
   };
   const menuSearchContent = ref('');
@@ -187,16 +199,16 @@
   const deviceTagExpandedKeys = ref([]);
   const deviceTagOptions = {
     device: [
-      { label: '全部', value: '1' },
-      { label: '显示', value: '5' },
-      { label: '编辑', value: '2' },
-      { label: '删除', value: '4' },
+      { label: t('view.all'), value: '1' },
+      { label: t('view.display'), value: '5' },
+      { label: t('view.edit'), value: '2' },
+      { label: t('view.delete'), value: '4' },
     ],
     tag: [
-      { label: '全部', value: '1' },
-      { label: '显示', value: '5' },
-      { label: '编辑', value: '2' },
-      { label: '删除', value: '4' },
+      { label: t('view.all'), value: '1' },
+      { label: t('view.display'), value: '5' },
+      { label: t('view.edit'), value: '2' },
+      { label: t('view.delete'), value: '4' },
       { label: '指令', value: '6' },
     ],
   };
@@ -205,10 +217,10 @@
   const flowcontrolTreeData = ref([]);
   const flowcontrolExpandedKeys = ref([]);
   const flowcontrolOptions = [
-    { label: '全部', value: '1' },
-    { label: '显示', value: '5' },
-    { label: '编辑', value: '2' },
-    { label: '删除', value: '4' },
+    { label: t('view.all'), value: '1' },
+    { label: t('view.display'), value: '5' },
+    { label: t('view.edit'), value: '2' },
+    { label: t('view.delete'), value: '4' },
     { label: '启动', value: '7' },
     { label: '停止', value: '8' },
   ];
@@ -216,10 +228,10 @@
 
   const parameterTreeData = ref([]);
   const parameterOptions = [
-    { label: '全部', value: '1' },
-    { label: '显示', value: '5' },
-    { label: '编辑', value: '2' },
-    { label: '删除', value: '4' },
+    { label: t('view.all'), value: '1' },
+    { label: t('view.display'), value: '5' },
+    { label: t('view.edit'), value: '2' },
+    { label: t('view.delete'), value: '4' },
     { label: '添加子参数', value: '3' },
   ];
   const parameterExpandedKeys = ref([]);
@@ -227,17 +239,17 @@
 
   const businessTreeData = ref([]);
   const businessOptions = [
-    { label: '全部', value: '1' },
-    { label: '显示', value: '5' },
-    { label: '编辑', value: '2' },
-    { label: '删除', value: '4' },
+    { label: t('view.all'), value: '1' },
+    { label: t('view.display'), value: '5' },
+    { label: t('view.edit'), value: '2' },
+    { label: t('view.delete'), value: '4' },
     { label: '添加子模型', value: '3' },
   ];
   const businessExpandedKeys = ref([]);
   const businessSearchContent = ref('');
 
   const isGetTree = ref(true);
-  const lodingTile = ref('正在获取...');
+  const lodingTile = ref(t('view.getting'));
   //单击节点文字选中和折叠展开实现
   function treeTitleClick(node) {
     if (node.children.length > 0 || (node.isLeaf != undefined && !node.isLeaf)) {
@@ -472,7 +484,7 @@
       (tabsActiveKey.value == 'business' && businessTreeData.value.length == 0)
     ) {
       if (props.userId != null) {
-        lodingTile.value = '正在获取...';
+        lodingTile.value = t('viwe.getting');
         isGetTree.value = true;
         if (props.isRead) {
           getUserAllPower();
@@ -531,7 +543,7 @@
             });
         }
       } else if (props.roleId != null) {
-        lodingTile.value = '正在获取...';
+        lodingTile.value = t('view.getting');
         isGetTree.value = true;
         roleApi
           .GetRoleAssignPower({
@@ -586,7 +598,7 @@
             }
           });
       } else {
-        message.warning('参数不正确');
+        message.warning(t('view.parametersNotSatisfied'));
       }
     }
   }
@@ -840,7 +852,7 @@
     if (checkIsChanges()) {
       Modal.confirm({
         maskClosable: true,
-        title: '您有未保存的权限，是否切换?',
+        title: t('view.youHaveUnsavedPermissionsWhetherToSwitch'),
         icon: createVNode(ExclamationCircleOutlined),
         content: '',
         onOk() {
@@ -936,7 +948,7 @@
 
   //保存权限
   function savePower(checked, key) {
-    lodingTile.value = '正在保存...';
+    lodingTile.value = t('view.savingNow');
     isGetTree.value = true;
     let isChange = false;
     if (!checked) {
@@ -968,7 +980,7 @@
           })
           .then((data) => {
             isGetTree.value = false;
-            message.success('保存权限成功');
+            message.success(t('view.saveSuccessful'));
             saveDataList = [];
             switch (tabsActiveKey.value) {
               case 'menu':
@@ -1008,7 +1020,7 @@
           })
           .then((data) => {
             isGetTree.value = false;
-            message.success('保存权限成功');
+            message.success(t('view.saveSuccessful'));
             saveDataList = [];
             switch (tabsActiveKey.value) {
               case 'menu':
@@ -1041,14 +1053,14 @@
           });
       }
     } else {
-      message.info('权限未发生改变');
+      message.info(t('view.permissionNotChanged'));
       isGetTree.value = false;
     }
   }
 
   //获取用户只读权限
   function getUserAllPower() {
-    lodingTile.value = '正在获取...';
+    lodingTile.value = t('view.getting');
     isGetTree.value = true;
     userApi
       .GetUserAllPower({

@@ -320,8 +320,16 @@
           label="菜单排序"
           :rules="[
             { required: true, message: '请输入菜单排序' },
-            { validator: formValidator.min, min: -9999, message: '排序值-9999至9999' },
-            { validator: formValidator.max, max: 9999, message: '排序值-9999至9999' },
+            {
+              validator: formValidator.min,
+              min: -9999,
+              message: t('view.sortingValueMustBeBetween9999'),
+            },
+            {
+              validator: formValidator.max,
+              max: 9999,
+              message: t('view.sortingValueMustBeBetween9999'),
+            },
           ]"
         >
           <a-input-number
@@ -335,8 +343,8 @@
       </a-form>
       <template #footer>
         <a-spin :spinning="fromSpinning">
-          <a-button type="primary" @click="saveFrom">保存</a-button>
-          <a-button style="margin-left: 8px" @click="formClose">关闭</a-button>
+          <a-button type="primary" @click="saveFrom">{{ t('view.save') }}</a-button>
+          <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
         </a-spin>
       </template>
     </a-drawer>
@@ -351,7 +359,14 @@
   import iconApi from '@/api/icon';
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
+  const { t } = useI18n();
   defineOptions({ name: 'MenuManage' });
   const { prefixCls } = useDesign('menuManage-');
   const loading = ref(true);

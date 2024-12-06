@@ -192,8 +192,8 @@
         tip="正在保存配置..."
         :spinning="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.runSave"
       >
-        <a-button type="primary" @click="saveConfig">保存</a-button>
-        <a-button style="margin-left: 8px" @click="closeSaveConfig">关闭</a-button>
+        <a-button type="primary" @click="saveConfig">{{ t('view.save') }}</a-button>
+        <a-button style="margin-left: 8px" @click="closeSaveConfig">{{ t('view.close') }}</a-button>
       </a-spin>
     </template>
   </menuDrawer>

@@ -212,7 +212,7 @@
       </div>
       <MyPlay v-else ref="playRef" :class="`${prefixCls}play`" />
       <template #footer>
-        <a-button @click="closeModel">关闭</a-button>
+        <a-button @click="closeModel">{{ t('view.close') }}</a-button>
       </template>
     </a-modal>
   </MyContent>
@@ -227,14 +227,20 @@
   import { CallRecord as callRecordApi } from '@/api/dcOption';
   import dictionariesApi from '@/api/dictionaries';
   import serviceApi from '@/api/software';
-
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
   import zhCN from 'ant-design-vue/es/locale/zh_CN';
   import dayjs from 'dayjs';
   import 'dayjs/locale/zh-cn';
   import { message, Modal } from 'ant-design-vue';
   import { tryOnUnmounted } from '@vueuse/core';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
+  const { t } = useI18n();
   defineOptions({ name: 'DCOptionCallRecord' });
   const { prefixCls } = useDesign('DCOptionCallRecord-');
   const mqttStore = useMqttStoreWithOut();
@@ -243,10 +249,15 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
+      {
+        type: 'seq',
+        title: t('view.serialNumber'),
+        minWidth: locale == 'en-US' ? 110 : 70,
+        fixed: 'left',
+      },
       {
         field: 'callId',
-        title: '记录ID',
+        title: t('view.recordId'),
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,

@@ -7,7 +7,7 @@
       <p v-for="(item, index) in msgs" :key="index" :style="item.style">{{ item.msg }}</p>
     </div>
     <div class="footer">
-      <a-button type="primary" @click="hide">关闭</a-button>
+      <a-button type="primary" @click="hide">{{ t('view.close') }}</a-button>
     </div>
   </div>
 </template>
@@ -239,45 +239,45 @@ tryOnUnmounted(() => {
 <style scoped>
 .bottomRight {
   position: absolute;
-  bottom: 0px;
-  right: 0px;
+  right: 0;
+  bottom: 0;
 }
 
 .content {
   width: 330px;
   height: 230px;
-  background: #fff;
   border-radius: 0;
+  background: #fff;
   box-shadow: inset 1px -1px 4px -2px #000;
 }
 
 .title {
-  border-radius: 3px 0 0 0;
-  box-shadow: inset 1px 1px 4px -2px #000;
-  padding: 10px;
   height: 40px;
-  font-size: 14px;
-  color: #333;
+  padding: 10px;
   overflow: hidden;
+  border-radius: 3px 0 0;
   background-color: #f8f8f8;
+  box-shadow: inset 1px 1px 4px -2px #000;
+  color: #333;
+  font-size: 14px;
 }
 
 .msg {
   width: 100%;
   height: calc(100% - 40px - 40px);
-  overflow: auto;
   padding: 5px 0 0 5px;
+  overflow: auto;
 }
 
 .footer {
   position: absolute;
-  width: 100%;
-  bottom: 0px;
   right: 0;
-  text-align: right;
+  bottom: 0;
+  width: 100%;
   height: 40px;
-  box-shadow: inset 0 1px 4px -3px #000;
   padding: right 5px;
   padding-top: 5px;
+  box-shadow: inset 0 1px 4px -3px #000;
+  text-align: right;
 }
 </style>

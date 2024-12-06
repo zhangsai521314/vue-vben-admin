@@ -1315,8 +1315,8 @@
       />
     </div>
     <template #footer>
-      <a-button type="primary" @click="saveRightMenu">保存</a-button>
-      <a-button style="margin-left: 8px" @click="closeRightMenu">关闭</a-button>
+      <a-button type="primary" @click="saveRightMenu">{{ t('view.save') }}</a-button>
+      <a-button style="margin-left: 8px" @click="closeRightMenu">{{ t('view.close') }}</a-button>
     </template>
   </a-drawer>
 
@@ -1379,8 +1379,8 @@
     </a-form>
     <template #footer>
       <!-- <a-spin :spinning="fromSpinning"> -->
-      <a-button type="primary" @click="saveAllDataConfig">保存</a-button>
-      <a-button style="margin-left: 8px" @click="closeAllDataConfig">关闭</a-button>
+      <a-button type="primary" @click="saveAllDataConfig">{{ t('view.save') }}</a-button>
+      <a-button style="margin-left: 8px" @click="closeAllDataConfig">{{ t('view.close') }}</a-button>
       <!-- </a-spin> -->
     </template>
   </a-drawer>
@@ -1452,8 +1452,8 @@
     </a-form>
     <template #footer>
       <!-- <a-spin :spinning="fromSpinning"> -->
-      <a-button type="primary" @click="saveSelectedObState">保存</a-button>
-      <a-button style="margin-left: 8px" @click="closeSelectedObState">关闭</a-button>
+      <a-button type="primary" @click="saveSelectedObState">{{ t('view.save') }}</a-button>
+      <a-button style="margin-left: 8px" @click="closeSelectedObState">{{ t('view.close') }}</a-button>
       <!-- </a-spin> -->
     </template>
   </a-drawer>
@@ -1509,7 +1509,7 @@
       dataIndex: 'name',
     },
     {
-      title: '操作',
+      title: t('view.action'),
       dataIndex: 'operation',
     },
   ];
@@ -1528,7 +1528,7 @@
       dataIndex: 'color',
     },
     {
-      title: '操作',
+      title: t('view.action'),
       dataIndex: 'operation',
     },
   ];

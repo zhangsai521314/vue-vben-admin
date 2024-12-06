@@ -248,8 +248,16 @@
             name="index"
             label="车站排序"
             :rules="[
-              { validator: formValidator.min, min: -9999, message: '排序值-9999至9999' },
-              { validator: formValidator.max, max: 9999, message: '排序值-9999至9999' },
+              {
+                validator: formValidator.min,
+                min: -9999,
+                message: t('view.sortingValueMustBeBetween9999'),
+              },
+              {
+                validator: formValidator.max,
+                max: 9999,
+                message: t('view.sortingValueMustBeBetween9999'),
+              },
             ]"
           >
             <a-input-number
@@ -428,8 +436,8 @@
         </a-form>
         <template #footer>
           <a-spin :spinning="fromSpinning">
-            <a-button type="primary" @click="saveFrom">保存</a-button>
-            <a-button style="margin-left: 8px" @click="formClose">关闭</a-button>
+            <a-button type="primary" @click="saveFrom">{{ t('view.save') }}</a-button>
+            <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
           </a-spin>
         </template>
       </a-drawer>
@@ -447,7 +455,14 @@
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
+  const { t } = useI18n();
   defineOptions({ name: 'DDServcerStation' });
   const mqttStore = useMqttStoreWithOut();
   const isRunGet = ref(false);
@@ -456,10 +471,15 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
+      {
+        type: 'seq',
+        title: t('view.serialNumber'),
+        minWidth: locale == 'en-US' ? 110 : 70,
+        fixed: 'left',
+      },
       {
         field: 'id',
-        title: '记录ID',
+        title: t('view.recordId'),
         visible: false,
         showHeaderOverflow: true,
         fixed: 'left',
@@ -639,7 +659,7 @@
       },
       {
         field: 'indexOrder',
-        title: '排序',
+        title: t('view.sorting'),
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,

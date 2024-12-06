@@ -339,8 +339,8 @@
       </a-form>
       <template #footer>
         <a-spin :spinning="fromRepaiSpinning">
-          <a-button type="primary" @click="saveFromRepair">保存</a-button>
-          <a-button style="margin-left: 8px" @click="closeRepair">关闭</a-button>
+          <a-button type="primary" @click="saveFromRepair">{{ t('view.save') }}</a-button>
+          <a-button style="margin-left: 8px" @click="closeRepair">{{ t('view.close') }}</a-button>
         </a-spin>
       </template>
     </a-drawer>
@@ -364,7 +364,14 @@
   import { useRouter } from 'vue-router';
   import { message, Modal } from 'ant-design-vue';
   import { useUserStore } from '@/store/modules/user';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
+  const { t } = useI18n();
   defineOptions({ name: 'Message' });
   const userStore = useUserStore();
   const userData = ref(_.cloneDeep(userStore.getUserInfo));
@@ -379,10 +386,15 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
+      {
+        type: 'seq',
+        title: t('view.serialNumber'),
+        minWidth: locale == 'en-US' ? 110 : 70,
+        fixed: 'left',
+      },
       {
         field: 'msgId',
-        title: '记录ID',
+        title: t('view.recordId'),
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -508,7 +520,7 @@
       },
       {
         field: 'createTime',
-        title: '创建时间',
+        title: t('view.creationTime'),
         minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,

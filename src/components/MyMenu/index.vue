@@ -131,8 +131,8 @@
   >
     <template #footer_>
       <a-spin tip="正在保存配置..." :spinning="isRunSaveMenuInfo">
-        <a-button type="primary" @click="saveMenu">保存</a-button>
-        <a-button style="margin-left: 8px" @click="cancelMenuFrom">关闭</a-button>
+        <a-button type="primary" @click="saveMenu">{{ t('view.save') }}</a-button>
+        <a-button style="margin-left: 8px" @click="cancelMenuFrom">{{ t('view.close') }}</a-button>
       </a-spin>
     </template>
   </menuConfig>

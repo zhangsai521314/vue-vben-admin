@@ -145,8 +145,16 @@
           label="软件包排序"
           :rules="[
             { required: true, message: '请输入软件包排序' },
-            { validator: formValidator.min, min: -9999, message: '排序值-9999至9999' },
-            { validator: formValidator.max, max: 9999, message: '排序值-9999至9999' },
+            {
+              validator: formValidator.min,
+              min: -9999,
+              message: t('view.sortingValueMustBeBetween9999'),
+            },
+            {
+              validator: formValidator.max,
+              max: 9999,
+              message: t('view.sortingValueMustBeBetween9999'),
+            },
           ]"
         >
           <a-input-number
@@ -271,8 +279,8 @@
       </a-form>
       <template #footer>
         <a-spin :spinning="fromSpinning">
-          <a-button type="primary" @click="saveFrom">保存</a-button>
-          <a-button style="margin-left: 8px" @click="formClose">关闭</a-button>
+          <a-button type="primary" @click="saveFrom">{{ t('view.save') }}</a-button>
+          <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
         </a-spin>
       </template>
     </a-drawer>
@@ -299,7 +307,14 @@
   import his from './his.vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import formValidator from '@/utils/MyCommon/formValidator';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
+  const { t } = useI18n();
   defineOptions({ name: 'VersionsManage' });
   const { prefixCls } = useDesign('versionsManage-');
   const loading = ref(true);
@@ -307,10 +322,10 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', minWidth: 50, fixed: 'left' },
+      { type: 'seq', title: t('view.serialNumber'), minWidth: 50, fixed: 'left' },
       {
         field: 'versionId',
-        title: '记录ID',
+        title: t('view.recordId'),
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -375,7 +390,7 @@
       },
       {
         field: 'orderIndex',
-        title: '排序',
+        title: t('view.sorting'),
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -384,7 +399,7 @@
       },
       {
         field: 'createTime',
-        title: '创建时间',
+        title: t('view.creationTime'),
         minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -392,7 +407,7 @@
       },
       {
         field: 'createUser',
-        title: '创建人',
+        title: t('view.creator'),
         minWidth: 130,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -401,7 +416,7 @@
       {
         field: 'modifyTime',
         title: '修改时间',
-        minWidth: 150,
+        minWidth: 170,
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,

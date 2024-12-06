@@ -24,7 +24,14 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import commonApi from '@/api/common';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
+  const { t } = useI18n();
   const downData = ref([]);
   commonApi
     .GetDownVersion()

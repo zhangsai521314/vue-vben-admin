@@ -140,7 +140,14 @@
   import serviceApi from '@/api/software';
   import dayjs from 'dayjs';
   import 'dayjs/locale/zh-cn';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
+  const { t } = useI18n();
   defineOptions({ name: 'DCOptionServiceTest' });
   const { prefixCls } = useDesign('DCOptionServiceTest-');
   const loading = ref(true);

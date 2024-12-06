@@ -345,8 +345,8 @@
         </a-form>
         <template #footer>
           <a-spin :spinning="fromSpinning">
-            <a-button type="primary" @click="saveFrom">保存</a-button>
-            <a-button style="margin-left: 8px" @click="formClose">关闭</a-button>
+            <a-button type="primary" @click="saveFrom">{{ t('view.save') }}</a-button>
+            <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
           </a-spin>
         </template>
       </a-drawer>
@@ -363,7 +363,14 @@
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
   import commonApi from '@/api/common';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
+  const { t } = useI18n();
   defineOptions({ name: 'DDServcerLine' });
   const mqttStore = useMqttStoreWithOut();
   const isRunGet = ref(false);
@@ -372,10 +379,15 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
+      {
+        type: 'seq',
+        title: t('view.serialNumber'),
+        minWidth: locale == 'en-US' ? 110 : 70,
+        fixed: 'left',
+      },
       {
         field: 'id',
-        title: '记录ID',
+        title: t('view.recordId'),
         visible: false,
         showHeaderOverflow: true,
         fixed: 'left',

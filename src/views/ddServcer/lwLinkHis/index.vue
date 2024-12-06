@@ -100,7 +100,14 @@
   import zhCN from 'ant-design-vue/es/locale/zh_CN';
   import dayjs from 'dayjs';
   import 'dayjs/locale/zh-cn';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
+  const { t } = useI18n();
   defineOptions({ name: 'DDServcerLwLinkHis' });
   const { prefixCls } = useDesign('DDServcerLwLinkHis-');
   const loading = ref(true);
@@ -108,10 +115,15 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', minWidth: 70, fixed: 'left' },
+      {
+        type: 'seq',
+        title: t('view.serialNumber'),
+        minWidth: locale == 'en-US' ? 110 : 70,
+        fixed: 'left',
+      },
       {
         field: 'id',
-        title: '记录ID',
+        title: t('view.recordId'),
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,

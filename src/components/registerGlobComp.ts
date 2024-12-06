@@ -11,9 +11,26 @@ import VXETable from 'vxe-table';
 import VxeUI from 'vxe-pc-ui';
 import '@/components/MyVXETable/index';
 import IconFontClass from '@/components/MyIcon/index.vue';
+import zhCN from 'vxe-pc-ui/lib/language/zh-CN';
+import enUS from 'vxe-pc-ui/lib/language/en-US';
+import frFR from 'vxe-pc-ui/lib/language/fr-FR';
 import _ from 'lodash-es';
+import { useI18n } from '@/hooks/web/useI18n';
+import { useLocaleStore } from '@/store/modules/locale';
+import type { LocaleType } from '#/config';
 
 export function registerGlobComp(app: App) {
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale: LocaleType = localeStore.getLocale;
+  if (locale == 'fr-FR') {
+    VxeUI.setI18n('fr-FR', frFR);
+  } else if (locale == 'en-US') {
+    VxeUI.setI18n('en-US', enUS);
+  } else {
+    VxeUI.setI18n('zh-CN', zhCN);
+  }
+  VxeUI.setLanguage(locale);
   //全局引用
   window._ = _;
   window.myCommon = myCommon;
@@ -43,7 +60,7 @@ export function registerGlobComp(app: App) {
       stripe: false,
       border: true,
       round: false,
-      emptyText: '暂无数据',
+      emptyText: t('view.noDataAvailable'),
       columnConfig: {
         resizable: true,
         isCurrent: true,
@@ -67,11 +84,14 @@ export function registerGlobComp(app: App) {
         remote: false,
         trigger: 'default',
         orders: ['asc', 'desc', null],
-        sortMethod: null,
+        // sortMethod: null,
+        showIcon: true,
+        iconLayout: 'vertical',
       },
       filterConfig: {
         remote: false,
-        filterMethod: null,
+        showIcon: true,
+        // filterMethod: null,
       },
       expandConfig: {
         trigger: 'default',
@@ -82,7 +102,7 @@ export function registerGlobComp(app: App) {
         parentField: 'parentId',
         children: 'children',
         hasChild: 'hasChild',
-        mapChildren: '_X_ROW_CHILD',
+        mapChildrenField: '_X_ROW_CHILD',
         indent: 20,
         showIcon: true,
       },
@@ -104,6 +124,22 @@ export function registerGlobComp(app: App) {
       },
       customConfig: {
         storage: false,
+        allowVisible: true,
+        allowResizable: true,
+        allowFixed: true,
+        allowSort: true,
+        showFooter: true,
+        placement: 'top-right',
+        //  storage: false,
+        //  checkMethod () {},
+        modalOptions: {
+          title: '1111',
+          showMaximize: true,
+          mask: true,
+          lockView: true,
+          resize: true,
+          escClosable: true,
+        },
       },
       scrollX: {
         gt: 60,
@@ -114,7 +150,7 @@ export function registerGlobComp(app: App) {
       },
       loading: {
         icon: 'vxe-icon-spinner roll',
-        text: '加载中...',
+        text: t('view.loading'),
       },
     },
     grid: {
@@ -158,7 +194,7 @@ export function registerGlobComp(app: App) {
       pageSize: 20,
       //显示页码按钮的数量
       pagerCount: 7,
-      pageSizes: [10, 20, 50, 100, 200, { label: '大量数据', value: 1000 }],
+      pageSizes: [10, 20, 50, 100, 200, { label: t('view.massData'), value: 1000 }],
       //自定义布局顺序
       layouts: ['Home', 'PrevPage', 'JumpNumber', 'NextPage', 'End', 'Sizes', 'Total'],
     },
@@ -244,6 +280,7 @@ export function registerGlobComp(app: App) {
     //   }
     // }
   });
+
   //VXETable全局图标
   VXETable.setIcon({
     // loading
@@ -254,7 +291,6 @@ export function registerGlobComp(app: App) {
     TABLE_FILTER_NONE: 'vxe-icon-funnel',
     TABLE_FILTER_MATCH: 'vxe-icon-funnel',
     TABLE_EDIT: 'iconfont icon-baseui-edit-fill',
-    TABLE_HELP: 'vxe-icon-question-circle-fill',
     TABLE_TREE_LOADED: 'vxe-icon-spinner roll',
     TABLE_TREE_OPEN: 'vxe-icon-caret-right rotate90',
     TABLE_TREE_CLOSE: 'vxe-icon-caret-right',
@@ -285,11 +321,6 @@ export function registerGlobComp(app: App) {
 
     // input
     INPUT_CLEAR: 'vxe-icon-error-circle-fill',
-    INPUT_PWD: 'vxe-icon-eye-fill',
-    INPUT_SHOW_PWD: 'vxe-icon-eye-fill-close',
-    INPUT_PREV_NUM: 'vxe-icon-caret-up',
-    INPUT_NEXT_NUM: 'vxe-icon-caret-down',
-    INPUT_DATE: 'vxe-icon-calendar',
     INPUT_SEARCH: 'vxe-icon-search',
 
     // modal

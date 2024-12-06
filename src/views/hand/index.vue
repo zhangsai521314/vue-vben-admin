@@ -156,8 +156,8 @@
       </a-form>
       <template #footer>
         <a-spin :spinning="fromSpinning">
-          <a-button type="primary" @click="saveHandPower">保存</a-button>
-          <a-button style="margin-left: 8px" @click="formClose">关闭</a-button>
+          <a-button type="primary" @click="saveHandPower">{{ t('view.save') }}</a-button>
+          <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
         </a-spin>
       </template>
     </a-drawer>
@@ -186,7 +186,14 @@
   import 'dayjs/locale/zh-cn';
   import dictionariesApi from '@/api/dictionaries';
   import { Station as stationApi } from '@/api/ddServcer';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
+  const { t } = useI18n();
   defineOptions({ name: 'Hand' });
   const { prefixCls } = useDesign('hand-');
   const loading = ref(true);
@@ -208,10 +215,10 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', minWidth: 50, fixed: 'left' },
+      { type: 'seq', title: t('view.serialNumber'), minWidth: 50, fixed: 'left' },
       {
         field: 'handId',
-        title: '记录ID',
+        title: t('view.recordId'),
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -340,8 +347,8 @@
         visible: false,
       },
       {
-        title: '操作',
-        minWidth: 100,
+        title: t('view.action'),
+        minWidth: 140,
         slots: {
           default: 'default',
         },

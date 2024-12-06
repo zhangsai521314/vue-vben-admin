@@ -76,8 +76,8 @@
         label="菜单排序"
         :rules="[
           { required: true, message: '请输入菜单排序' },
-          { validator: formValidator.min, min: -9999, message: '排序值-9999至9999' },
-          { validator: formValidator.max, max: 9999, message: '排序值-9999至9999' },
+          { validator: formValidator.min, min: -9999, message: t('view.sortingValueMustBeBetween9999') },
+          { validator: formValidator.max, max: 9999, message: t('view.sortingValueMustBeBetween9999') },
         ]"
       >
         <a-input-number

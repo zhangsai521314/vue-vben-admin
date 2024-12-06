@@ -187,8 +187,8 @@
       </a-form>
       <template #footer>
         <a-spin :spinning="fromSpinning">
-          <a-button type="primary" @click="saveFrom()">保存</a-button>
-          <a-button style="margin-left: 8px" @click="formClose">关闭</a-button>
+          <a-button type="primary" @click="saveFrom()">{{ t('view.save') }}</a-button>
+          <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
         </a-spin>
       </template>
     </a-drawer>
@@ -205,7 +205,14 @@
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import { getAppEnvConfig } from '@/utils/env';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
+  const { t } = useI18n();
   //vue3使用defineProps接收传过来的参数
   const props = defineProps({
     //增加组件
@@ -226,10 +233,10 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50 },
+      { type: 'seq', title: t('view.serialNumber'), width: 50 },
       {
         field: 'hisId',
-        title: '记录ID',
+        title: t('view.recordId'),
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -294,7 +301,7 @@
       },
       {
         field: 'createTime',
-        title: '创建时间',
+        title: t('view.creationTime'),
         width: 150,
         showOverflow: true,
         showHeaderOverflow: true,
@@ -302,7 +309,7 @@
       },
       {
         field: 'createUser',
-        title: '创建人',
+        title: t('view.creator'),
         width: 130,
         showOverflow: true,
         showHeaderOverflow: true,

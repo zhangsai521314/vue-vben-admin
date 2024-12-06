@@ -3,7 +3,7 @@
   <div class="selectColorModel" ref="selectColorModelRef">
     <sketchs v-model="sketchsColor" @click="selectedColor" />
     <div class="divSelectColor">
-      <a-button @click="saveColor" type="primary" style="float: right">关闭</a-button>
+      <a-button @click="saveColor" type="primary" style="float: right">{{ t('view.close') }}</a-button>
       <a-button @click="clearColor" style="height: 33px; margin-right: 2px; float: right"
         >清空</a-button
       >

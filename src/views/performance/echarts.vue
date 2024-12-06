@@ -6,7 +6,14 @@
   import { ref, onMounted, watch } from 'vue';
   import { useECharts } from '@/hooks/web/useECharts';
   import dayjs from 'dayjs';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
+  const { t } = useI18n();
   const props = defineProps({
     //全部数据，直接更新
     allData: {

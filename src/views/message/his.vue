@@ -33,7 +33,14 @@
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import messageApi from '@/api/message';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
+  const { t } = useI18n();
   //vue3使用defineProps接收传过来的参数
   const props = defineProps({
     //增加组件
@@ -50,10 +57,10 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: '序号', width: 50, fixed: 'left' },
+      { type: 'seq', title: t('view.serialNumber'), width: 50, fixed: 'left' },
       {
         field: 'msgHisId',
-        title: '记录ID',
+        title: t('view.recordId'),
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,

@@ -91,7 +91,14 @@
   import { useDesign } from '@/hooks/web/useDesign';
   import { ref, reactive, watch } from 'vue';
   import dayjs from 'dayjs';
+  import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
+  const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
+
+  const { t } = useI18n();
   const props = defineProps({
     //最新数据
     newDataInfo: {
