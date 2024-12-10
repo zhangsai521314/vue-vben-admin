@@ -371,7 +371,7 @@
   function remove(row) {
     Modal.confirm({
       maskClosable: true,
-      title: '是否删除?',
+      title: t('view.areYouSureYouWantToDelete'),
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {

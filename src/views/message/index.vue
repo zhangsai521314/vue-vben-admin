@@ -370,15 +370,13 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'Message' });
   const userStore = useUserStore();
   const userData = ref(_.cloneDeep(userStore.getUserInfo));
   const mqttStore = useMqttStoreWithOut();
   const { currentRoute } = useRouter();
   //获取url参数
-  let { msgId } = unref(currentRoute).params;
+  let { msgId, dataTime } = unref(currentRoute).params;
   msgId = msgId ? msgId : null;
   const { prefixCls } = useDesign('message-');
   const loading = ref(true);
@@ -608,6 +606,9 @@
     dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
     dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
   ]);
+  if (dataTime) {
+    timeValue.value = [dayjs(dataTime), dayjs(dataTime).add(1, 'second')];
+  }
   const dictionariesData = ref([]);
   const serviceData = ref([]);
   const page = reactive({

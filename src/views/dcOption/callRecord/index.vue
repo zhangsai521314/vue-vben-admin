@@ -720,7 +720,7 @@
     () => mqttStore.callRecordChange,
     () => {
       if (mqttStore.callRecordChange != null) {
-        const oldData = tableConfig.data.find((m) => m.callId == data.callId);
+        const oldData = tableConfig.data.find((m) => m.callId == mqttStore.callRecordChange.callId);
         if (oldData) {
           myCommon.objectReplace(oldData, mqttStore.callRecordChange);
         }
@@ -743,7 +743,9 @@
         playCallId == mqttStore.newCallRecordPlayFile.callId &&
         !isRunPlay.value
       ) {
-        const oldData = tableConfig.data.find((m) => m.callId == data.callId);
+        const oldData = tableConfig.data.find(
+          (m) => m.callId == mqttStore.newCallRecordPlayFile.callId,
+        );
         if (oldData) {
           myCommon.objectReplace(oldData, mqttStore.newCallRecordPlayFile);
         }

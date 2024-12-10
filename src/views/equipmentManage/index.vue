@@ -441,7 +441,7 @@
   function remove(row) {
     Modal.confirm({
       maskClosable: true,
-      title: '是否删除?',
+      title: t('view.areYouSureYouWantToDelete'),
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {
@@ -450,8 +450,8 @@
           .DeleteEquipment(row.equipmentId)
           .then(() => {
             loading.value = false;
-            tableConfig.data = tableConfig.data?.filter((m) => m.equipmentId != row.equipmentId);
             message.success('删除设备信息成功');
+            getEquipments();
           })
           .catch(() => {
             loading.value = false;
@@ -558,6 +558,7 @@
           tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增设备成功');
+          page.total = page.total + 1;
         });
       } else {
         equipmentApi.UpdateEquipment(formData.value).then((data) => {

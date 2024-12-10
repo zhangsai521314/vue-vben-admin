@@ -64,8 +64,7 @@
   const go = useGo();
   function onNoticeClick(record: MsgData) {
     mqttStore.readMsg(record);
-
-    go(`/message/index/${record.msgId}`);
+    go(`/message/index/${record.msgId}/${record.msgStartTime}`);
   }
 
   //控制声音

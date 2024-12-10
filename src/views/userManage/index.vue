@@ -21,23 +21,23 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>用户名称：</label>
+                      <label>{{ t('view.userName') }}:</label>
                       <a-input
                         @press-enter="getUsers"
                         v-model:value="seacthContent.userName"
-                        placeholder="输入用户名称查询"
+                        :placeholder="t('view.enterUserNameToSearch')"
                       />
                     </a-space>
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>所属部门：</label>
+                      <label>{{ t('view.affiliatedDepartment') }}:</label>
                       <a-tree-select
                         v-model:value="seacthContent.orgId"
                         show-search
                         style="width: 170px"
                         :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                        placeholder="请选择所属部门"
+                        :placeholder="t('view.pleaseSelectTheAffiliatedDepartment')"
                         allow-clear
                         show-arrow
                         :filterTreeNode="AntVueCommon.filterTreeNode"
@@ -47,13 +47,13 @@
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>角色名称：</label>
+                      <label>{{ t('view.roleName') }}:</label>
                       <a-select
                         style="width: 170px"
                         v-model:value="seacthContent.roleId"
                         :options="roles"
                         :allowClear="true"
-                        placeholder="请选择角色名称"
+                        :placeholder="t('view.pleaseSelectRoleName')"
                         show-search
                         :filter-option="AntVueCommon.filterOption"
                       />
@@ -61,8 +61,8 @@
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button @click="initPage" type="primary">查询</a-button>
-                      <a-button @click="resetSeacth">重置表单</a-button>
+                      <a-button @click="initPage" type="primary">{{ t('view.query') }}</a-button>
+                      <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -71,7 +71,9 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button class="ant-btn" @click="showFrom()">新增用户</a-button>
+                      <a-button class="ant-btn" @click="showFrom()">{{
+                        t('view.addUser')
+                      }}</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -90,7 +92,13 @@
         </template>
         <template #status="{ row }">
           <span :style="{ color: row.status == 1 ? 'green' : row.status == 2 ? 'red' : 'red' }"
-            >{{ row.status == 1 ? '正常' : row.status == 2 ? '停用' : '删除' }}
+            >{{
+              row.status == 1
+                ? t('view.normal')
+                : row.status == 2
+                  ? t('view.disable')
+                  : t('view.delete')
+            }}
           </span>
         </template>
         <template #default="{ row }">
@@ -100,7 +108,7 @@
                 name="icon-baseui-show"
                 @click="showPower(row, true)"
                 style="color: #0fc10e"
-                title="查看权限"
+                :title="t('view.viewPermissions')"
               />
             </AuthDom>
             <AuthDom auth="userManage_table_power">
@@ -108,7 +116,7 @@
                 name="icon-baseui-quanxianpeizhi"
                 @click="showPower(row, false)"
                 style="color: #0a61bd"
-                title="分配权限"
+                :title="t('view.assignPermissions')"
               />
             </AuthDom>
             <AuthDom auth="userManage_table_edit">
@@ -116,7 +124,7 @@
                 name="icon-baseui-edit-fill"
                 @click="showFrom(row)"
                 style="color: #0749df"
-                title="编辑"
+                :title="t('view.edit')"
               />
             </AuthDom>
             <AuthDom auth="userManage_table_delete">
@@ -124,7 +132,7 @@
                 name="icon-baseui-guanbicuowu"
                 @click="remove(row)"
                 style="color: red"
-                title="删除"
+                :title="t('view.delete')"
               />
             </AuthDom>
           </div>
@@ -132,69 +140,68 @@
       </vxe-grid>
       <a-drawer
         :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-        :width="500"
+        :width="locale == 'zh-CN' ? 500 : 600"
         :visible="isShowForm"
-        title="配置"
+        :title="t('view.configuration')"
         :footer-style="{ textAlign: 'right' }"
         @close="formClose"
       >
         <a-form
-          :label-col="{ span: 6 }"
+          :label-col="{ span: locale == 'zh-CN' ? 6 : 10 }"
           :style="{ paddingRight: '2px' }"
-          :wrapper-col="{ span: 16 }"
           autocomplete="off"
           ref="formRef"
           :model="formData"
         >
           <a-form-item
-            label="用户姓名"
+            :label="t('view.userFullName')"
             name="userName"
             :rules="[
               { required: true, message: '' },
-              { max: 40, message: '用户姓名称长度超限' },
-              { min: 2, message: '用户姓名最少2位' },
-              { validator: formValidator.empty, message: '请输入用户姓名' },
+              { max: 40, message: t('view.userFullNameLengthExceeded', [40]) },
+              { min: 2, message: t('view.userFullNameMustBeAtLeast2Characters', [2]) },
+              { validator: formValidator.empty, message: t('view.pleaseEnterUserFullName') },
             ]"
           >
             <a-input
-              placeholder="请输入用户姓名"
+              :placeholder="t('view.pleaseEnterUserFullName')"
               v-model:value="formData.userName"
               autocomplete="off"
             />
           </a-form-item>
           <a-form-item
-            label="登录账号"
+            :label="t('view.loginAccount')"
             name="userAccount"
             :rules="[
               { required: true, message: '' },
-              { max: 40, message: '登录账号称长度超限' },
-              { min: 2, message: '登录账号称最少2位' },
-              { validator: formValidator.empty, message: '请输入登录账号' },
+              { max: 40, message: t('view.loginAccountLengthExceeded', [40]) },
+              { min: 2, message: t('view.loginAccountMustBeAtLeast2Characters', [2]) },
+              { validator: formValidator.empty, message: t('view.pleaseEnterLoginAccount') },
             ]"
           >
             <a-input
-              placeholder="请输入登录账号"
+              :placeholder="t('view.pleaseEnterLoginAccount')"
               v-model:value="formData.userAccount"
               autocomplete="off"
             />
           </a-form-item>
           <!-- <a-form-item
-                        label="微信账户" name="wxnumber">
+                        :label="微信账户" name="wxnumber">
                         <a-input v-model:value="formData.wxnumber" autocomplete="off" />
                     </a-form-item> -->
           <template v-if="saveType == 'add'">
             <a-form-item
-              label="登录密码"
+              :label="t('view.loginPassword')"
               name="userpwd"
               :rules="[
                 { required: true, message: '' },
-                { max: 40, message: '密码长度超限' },
-                { min: 5, message: '密码最少5位' },
-                { validator: formValidator.empty, message: '请输入登录密码' },
+                { max: 40, message: t('view.passwordLengthExceeded', [40]) },
+                { min: 5, message: t('view.passwordMustBeAtLeast5Characters', [5]) },
+                { validator: formValidator.empty, message: t('view.pleaseEnterLoginPassword') },
               ]"
             >
               <a-input
-                placeholder="请输入登录密码"
+                :placeholder="t('view.pleaseEnterLoginPassword')"
                 v-model:value="formData.userpwd"
                 type="password"
                 autocomplete="off"
@@ -202,12 +209,12 @@
             </a-form-item>
           </template>
           <a-form-item
-            label="用户状态"
+            :label="t('view.userStatus')"
             name="status"
-            :rules="[{ required: true, message: '请选择用户状态' }]"
+            :rules="[{ required: true, message: t('view.pleaseSelectUserStatus') }]"
           >
             <a-select
-              placeholder="请选择用户状态"
+              :placeholder="t('view.pleaseSelectUserStatus')"
               v-model:value="formData.status"
               :options="statusOptions"
               show-search
@@ -215,8 +222,8 @@
             />
           </a-form-item>
           <a-form-item
-            :rules="[{ required: true, message: '请选择所属部门' }]"
-            label="所属部门"
+            :rules="[{ required: true, message: t('view.pleaseSelectTheAffiliatedDepartment') }]"
+            :label="t('view.affiliatedDepartment')"
             name="orgId"
           >
             <a-tree-select
@@ -224,7 +231,7 @@
               show-search
               style="width: 100%"
               :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-              placeholder="请选择所属部门"
+              :placeholder="t('view.pleaseSelectTheAffiliatedDepartment')"
               allow-clear
               show-arrow
               :filterTreeNode="AntVueCommon.filterTreeNode"
@@ -232,69 +239,72 @@
             />
           </a-form-item>
           <a-form-item
-            :rules="[{ required: true, message: '请选择用户角色' }]"
-            label="用户角色"
+            :rules="[{ required: true, message: t('view.pleaseSelectUserRole') }]"
+            :label="t('view.userRole')"
             name="roleId"
           >
             <a-select
               v-model:value="formData.roleId"
               :options="roles"
               :allowClear="true"
-              placeholder="请选择用户角色"
+              :placeholder="t('view.pleaseSelectUserRole')"
               show-search
               :filter-option="AntVueCommon.filterOption"
             />
           </a-form-item>
           <a-form-item
-            label="用户类型"
+            :label="t('view.userType')"
             name="adminType"
-            :rules="[{ required: true, message: '请选择用户类型' }]"
+            :rules="[{ required: true, message: t('view.pleaseSelectUserType') }]"
           >
             <a-select
-              placeholder="请选择用户类型"
+              :placeholder="t('view.pleaseSelectUserType')"
               v-model:value="formData.adminType"
               show-search
               :filter-option="AntVueCommon.filterOption"
             >
               <a-select-option :value="1" :disabled="userData.adminType > 1">
-                超级管理员
+                {{ t('view.superAdministrator') }}
               </a-select-option>
               <a-select-option :value="2" :disabled="userData.adminType > 2">
-                管理员
+                {{ t('view.administrator') }}
               </a-select-option>
               <a-select-option :value="3" :disabled="userData.adminType > 3">
-                普通用户
+                {{ t('view.regularUser') }}
               </a-select-option>
             </a-select>
           </a-form-item>
           <a-form-item
-            label="联系电话"
+            :label="t('view.contactPhone')"
             name="mobile"
             :rules="[
               { required: true, message: '' },
-              { max: 18, message: '联系电话过长' },
-              { validator: formValidator.positiveInteger, message: '联系电话格式为自然数' },
-              { validator: formValidator.empty, message: '请输入联系电话' },
+              { max: 18, message: t('view.phoneNumberIsTooLong', [18]) },
+              {
+                validator: formValidator.positiveInteger,
+                message: t('view.phoneNumberFormatMustBeANaturalNumber'),
+              },
+              { validator: formValidator.empty, message: t('view.pleaseEnterThePhoneNumber') },
             ]"
           >
             <a-input
-              placeholder="请输入联系电话"
+              :placeholder="t('view.pleaseEnterThePhoneNumber')"
               v-model:value="formData.mobile"
               autocomplete="off"
             />
           </a-form-item>
           <a-form-item
-            label="联系邮箱"
+            :label="t('view.contactEmail')"
             name="email"
             style="margin-bottom: 0"
             :rules="[
-              { required: true, message: '请输入联系邮箱' },
-              { type: 'email', message: '联系邮箱格式不正确' },
-              { max: 64, message: '联系邮箱过长' },
+              { required: true, message: t('view.pleaseEnterContactEmail') },
+              { type: 'email', message: t('view.contactEmailFormatIncorrect') },
+              { max: 64, message: t('view.contactEmailTooLong', [64]) },
             ]"
           >
             <a-input
-              placeholder="请输入联系邮箱"
+              :placeholder="t('view.pleaseEnterContactEmail')"
               v-model:value="formData.email"
               autocomplete="off"
             />
@@ -306,7 +316,7 @@
             >
               <IconFontClass
                 name="icon-baseui-zhankai"
-                :title="isShowPwd ? '不修改密码' : '修改密码'"
+                :title="isShowPwd ? t('view.doNotChangePassword') : t('view.changePassword')"
                 @click="zhanKaiClick"
                 style="position: absolute; top: -2px; left: 16%; cursor: pointer"
                 :class="{
@@ -316,32 +326,32 @@
             </a-form-item>
             <template v-if="isShowPwd">
               <a-form-item
-                label="新密码"
+                :label="t('view.newPassword')"
                 name="userpwd"
                 :rules="[
-                  { required: true, message: '请输入新密码' },
-                  { max: 30, message: '密码长度超限' },
-                  { min: 5, message: '密码最少5位' },
+                  { required: true, message: t('view.pleaseEnterNewPassword') },
+                  { max: 30, message: t('view.passwordTooLong', [30]) },
+                  { min: 5, message: t('view.passwordAtLeastFiveDigits', [5]) },
                   { validator: validate_pwd },
                 ]"
               >
                 <a-input
-                  placeholder="请输入新密码"
+                  :placeholder="t('view.pleaseEnterNewPassword')"
                   v-model:value="formData.userpwd"
                   type="password"
                   autocomplete="off"
                 />
               </a-form-item>
               <a-form-item
-                label="确认密码"
+                :label="t('view.confirmPassword')"
                 name="checkpass"
                 :rules="[
-                  { required: true, message: '请输入确认密码' },
+                  { required: true, message: t('view.pleaseEnterConfirmPassword') },
                   { validator: validate_checkPass },
                 ]"
               >
                 <a-input
-                  placeholder="请输入确认密码"
+                  :placeholder="t('view.pleaseEnterConfirmPassword')"
                   v-model:value="formData.checkpass"
                   type="password"
                   autocomplete="off"
@@ -400,66 +410,65 @@
         title: t('view.serialNumber'),
         minWidth: locale == 'en-US' ? 110 : 70,
         fixed: 'left',
+        showOverflow: true,
       },
       {
         field: 'userId',
-        title: '记录ID',
+        title: t('view.recordId'),
         visible: false,
-        showHeaderOverflow: true,
+        showOverflow: true,
         fixed: 'left',
-        minWidth: 130,
+        minWidth: 140,
       },
       {
         field: 'userName',
-        title: '用户姓名',
+        title: t('view.userFullName'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 130,
+        minWidth: 160,
         fixed: 'left',
       },
       {
         field: 'userAccount',
-        title: '登录账号',
+        title: t('view.loginAccount'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 130,
+        minWidth: 176,
       },
       {
         field: 'orgName',
-        title: '部门名称',
+        title: t('view.departmentName'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 130,
+        minWidth: 176,
       },
       {
         field: 'roleName',
-        title: '角色名称',
+        title: t('view.roleName'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 130,
+        minWidth: 150,
       },
       {
         field: 'adminType',
-        title: '用户类型',
+        title: t('view.userType'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         slots: {
           default: ({ row }) => {
-            return row.adminType == 1 ? '超级管理员' : row.adminType == 2 ? '管理员' : '普通账号';
+            return row.adminType == 1
+              ? t('view.superAdministrator')
+              : row.adminType == 2
+                ? t('view.administrator')
+                : t('view.regularUser');
           },
         },
-        minWidth: 100,
+        minWidth: 160,
       },
       {
         field: 'status',
-        title: '状态',
+        title: t('view.status'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         slots: {
           default: 'status',
@@ -473,27 +482,24 @@
       },
       {
         field: 'mobile',
-        title: '联系电话',
-        minWidth: 130,
+        title: t('view.contactPhone'),
+        minWidth: 174,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'email',
-        title: '联系邮箱',
+        title: t('view.contactEmail'),
         minWidth: 180,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         visible: false,
       },
       {
         field: 'lastLoginTime',
-        title: '最后登录时间',
-        minWidth: 150,
+        title: t('view.lastLoginTime'),
+        minWidth: 160,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       // {
@@ -514,57 +520,51 @@
       // },
       {
         field: 'lastLoginBrowser',
-        title: '最后登录浏览器',
+        title: t('view.lastLoginBrowser'),
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
-        minWidth: 150,
+        minWidth: 156,
       },
       {
         field: 'createTime',
-        title: '创建时间',
+        title: t('view.creationtime'),
         minWidth: 150,
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'createUserName',
-        title: '创建用户',
+        title: t('view.createUser'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 130,
+        minWidth: 156,
       },
       {
         field: 'modifyTime',
-        title: '修改时间',
+        title: t('view.modificationTime'),
         minWidth: 170,
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'modifyUserName',
-        title: '修改用户',
+        title: t('view.modifyUser'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 130,
+        minWidth: 176,
       },
       {
-        title: '操作',
+        title: t('view.action'),
         minWidth: 140,
         slots: {
           default: 'default',
         },
         showOverflow: true,
-        showHeaderOverflow: true,
         fixed: 'right',
       },
     ],
@@ -603,7 +603,6 @@
   const roles = ref([]);
   const userStore = useUserStore();
   const userData = ref(_.cloneDeep(userStore.getUserInfo));
-  const tenants = ref([]);
   const page = reactive({
     current: 1,
     size: 20,
@@ -613,11 +612,11 @@
   const statusOptions = [
     {
       value: 1,
-      label: '正常',
+      label: t('view.normal'),
     },
     {
       value: 2,
-      label: '停用',
+      label: t('view.disable'),
     },
   ];
 
@@ -637,7 +636,7 @@
 
   let validate_pwd = async (_rule, value) => {
     if (myCommon.isnull(value)) {
-      return Promise.reject('密码不能为空');
+      return Promise.reject(t('view.passwordCannotBeEmpty'));
     } else {
       if (formData.value.checkPass !== '') {
         formRef.value.validateFields('checkPass');
@@ -648,9 +647,9 @@
 
   let validate_checkPass = async (_rule, value) => {
     if (myCommon.isnull(value)) {
-      return Promise.reject('密码不能为空');
+      return Promise.reject(t('view.passwordCannotBeEmpty'));
     } else if (value !== formData.value.userpwd) {
-      return Promise.reject('两次新密码不一致');
+      return Promise.reject(t('view.theTwoNewPasswordsDoNotMatch'));
     } else {
       return Promise.resolve();
     }
@@ -689,7 +688,7 @@
   function remove(row) {
     Modal.confirm({
       maskClosable: true,
-      title: '是否删除?',
+      title: t('view.areYouSureYouWantToDelete'),
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {
@@ -702,7 +701,7 @@
             },
           })
           .then(() => {
-            message.success('删除用户信息成功');
+            message.success(t('view.deletionSuccessful'));
             getUsers();
           });
       },
@@ -713,6 +712,7 @@
   //关闭表单
   function formClose() {
     isShowForm.value = false;
+    isShowPwd.value = false;
     formData.value = _.cloneDeep(defFromData);
     formRef.value.clearValidate();
   }
@@ -737,7 +737,7 @@
           saveType.value = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取用户信息失败');
+          message.error(t('view.failedToRetrieveUserInformation'));
         }
       });
   }
@@ -833,7 +833,7 @@
           data.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
           tableConfig.data?.splice(0, 0, data);
           formClose();
-          message.success('新增用户成功');
+          message.success(t('view.additionSuccessful'));
           page.total = page.total + 1;
         });
       } else {
@@ -857,7 +857,7 @@
             oldData.orgName = _organizationDatas.find((m) => m.key == oldData.orgId)?.label;
           }
           formClose();
-          message.success('更新用户信息成功');
+          message.success(t('view.updateSuccessful'));
         });
       }
     });

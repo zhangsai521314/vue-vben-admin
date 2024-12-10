@@ -1,4 +1,11 @@
 {
+  "systemMenu":"system menu",
+  "menu": "menu",
+  "button": "button",
+  "passwordAtLeastFiveDigits": "The password should be at least five characters long",
+  "passwordTooLong":"The password is too long",
+  "userStatus": "user status",
+  "viewPermissions":"check permissions",
   "massData": "massive data",
   "viewAction": "look",
   "permissionNotChanged": "The permissions have not been changed",

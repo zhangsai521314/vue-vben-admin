@@ -114,6 +114,11 @@
           </AuthDom>
         </div>
       </template>
+      <template #isNormal="{ row }">
+        <span :style="{ color: row.isNormal ? 'green' : 'red' }">{{
+          row.isNormal ? '否' : '是'
+        }}</span>
+      </template>
     </vxe-grid>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
@@ -536,7 +541,9 @@
         showOverflow: true,
         showHeaderOverflow: true,
         // sortable: true,
-        cellRender: { name: 'render_isno' },
+        slots: {
+          default: 'isNormal',
+        },
         minWidth: 120,
       },
       {
@@ -743,7 +750,7 @@
   function remove(row) {
     Modal.confirm({
       maskClosable: true,
-      title: '是否删除?',
+      title: t('view.areYouSureYouWantToDelete'),
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {
@@ -752,8 +759,8 @@
           .DeleteService(row.serviceId)
           .then(() => {
             loading.value = false;
-            tableConfig.data = tableConfig.data?.filter((m) => m.serviceId != row.serviceId);
             message.success('删除软件信息成功');
+            getSoftwares();
           })
           .catch(() => {
             loading.value = false;
@@ -836,6 +843,7 @@
           tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success('新增软件成功');
+          page.total = page.total + 1;
         });
       } else {
         softwareApi.UpdateService(formData.value).then((data) => {

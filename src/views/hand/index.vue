@@ -1,5 +1,5 @@
 <template>
-  <MyContent>
+  <MyContent :class="prefixCls">
     <vxe-grid
       :scroll-y="{ enabled: true }"
       v-bind="tableConfig"
@@ -192,8 +192,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'Hand' });
   const { prefixCls } = useDesign('hand-');
   const loading = ref(true);

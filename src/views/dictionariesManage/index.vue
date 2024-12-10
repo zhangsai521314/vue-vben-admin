@@ -611,7 +611,7 @@
     Modal.confirm({
       maskClosable: true,
       // title: '删除该项，子集数据也将被删除，是否删除?',
-      title: '是否删除?',
+      title: t('view.areYouSureYouWantToDelete'),
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {

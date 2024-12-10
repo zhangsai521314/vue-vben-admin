@@ -28,7 +28,7 @@ const message: AppRouteModule = {
       },
     },
     {
-      path: 'index/:msgId',
+      path: 'index/:msgId/:dataTime',
       name: 'message_',
       component: () => import('/@/views/message/index.vue'),
       meta: {

@@ -15,17 +15,17 @@
                   >
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
-                        <label>菜单名称：</label>
+                        <label>{{ t('view.menuName') }}：</label>
                         <a-input
                           @press-enter="getMenus"
                           v-model:value="seacthContent.menuName"
-                          placeholder="输入菜单名称查询"
+                          :placeholder="t('view.enterMenuNameToSearch')"
                         />
                       </a-space>
                     </div>
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
-                        <a-button @click="getMenus" type="primary">查询</a-button>
+                        <a-button @click="getMenus" type="primary">{{ t('view.query') }}</a-button>
                       </a-space>
                     </div>
                   </a-space>
@@ -39,7 +39,9 @@
                   >
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
-                        <a-button class="ant-btn" @click="showFrom('add', null)">新增菜单</a-button>
+                        <a-button class="ant-btn" @click="showFrom('add', null)">{{
+                          t('view.addMenu')
+                        }}</a-button>
                       </a-space>
                     </div>
                   </a-space>
@@ -64,17 +66,17 @@
             :data="tableConfigData"
           >
             >
-            <vxe-column type="seq" title="序号" :minWidth="70" fixed="left" />
+            <vxe-column type="seq" :title="t('view.serialNumber')" :minWidth="70" fixed="left" />
             <vxe-column
               field="menuId"
-              title="记录id"
+              :title="t('view.recordId')"
               :visible="false"
               :minWidth="130"
               fixed="left"
             />
             <vxe-column
               field="menuName"
-              title="菜单名称"
+              :title="t('view.menuName')"
               tree-node
               :sortable="true"
               :minWidth="150"
@@ -89,56 +91,76 @@
                 </span>
               </template>
             </vxe-column>
-            <vxe-column field="menuType" title="菜单类型" :sortable="true" :minWidth="100">
+            <vxe-column
+              field="menuType"
+              :title="t('view.menuType')"
+              :sortable="true"
+              :minWidth="100"
+            >
               <template #default="{ row }">
                 <span
                   :class="{
                     defMenu: row.menuType != 7,
                     menuBtn: row.menuType == 7,
                   }"
-                  >{{ row.menuType == 7 ? '按钮' : '菜单' }}</span
+                  >{{ row.menuType == 7 ? t('view.button') : t('view.menu') }}</span
                 >
               </template>
             </vxe-column>
-            <vxe-column field="menuUrl" title="访问地址" :sortable="true" :minWidth="250" />
-            <vxe-column field="authName" title="权限标识" :sortable="true" :minWidth="150" />
-            <vxe-column field="isValid" title="是否启用" :minWidth="100">
+            <vxe-column
+              field="menuUrl"
+              :title="t('view.accessAddress')"
+              :sortable="true"
+              :minWidth="250"
+            />
+            <vxe-column
+              field="authName"
+              :title="t('view.permissionIdentifier')"
+              :sortable="true"
+              :minWidth="150"
+            />
+            <vxe-column field="isValid" :title="t('view.enableOrDisable')" :minWidth="100">
               <template #default="{ row }">
                 <span :style="{ color: row.isValid ? 'green' : 'red' }">{{
-                  row.isValid ? '是' : '否'
+                  row.isValid ? t('view.yes') : t('view.no')
                 }}</span>
               </template>
             </vxe-column>
-            <vxe-column field="orderIndex" title="菜单排序" :sortable="true" :minWidth="100" />
+            <vxe-column
+              field="orderIndex"
+              :title="t('view.menuSorting')"
+              :sortable="true"
+              :minWidth="100"
+            />
             <vxe-column
               field="createTime"
-              title="创建时间"
+              :title="t('view.creationTime')"
               :visible="false"
               :sortable="true"
               :minWidth="150"
             />
             <vxe-column
               field="createUser"
-              title="创建人"
+              :title="t('view.creator')"
               :visible="false"
               :sortable="true"
               :minWidth="130"
             />
             <vxe-column
               field="modifyTime"
-              title="修改时间"
+              :title="t('view.modificationTime')"
               :visible="false"
               :sortable="true"
               :minWidth="150"
             />
             <vxe-column
               field="modifyUser"
-              title="修改人"
+              :title="t('view.modifier')"
               :visible="false"
               :sortable="true"
               :minWidth="130"
             />
-            <vxe-column title="操作" :minWidth="140" fixed="right">
+            <vxe-column :title="t('view.action')" :minWidth="140" fixed="right">
               <template #default="{ row }">
                 <div :class="`tableStyle`">
                   <AuthDom auth="menuManage_table_add">
@@ -146,7 +168,7 @@
                       name="icon-baseui-tianjiawukuang"
                       @click="showFrom('add', row, row.menuId)"
                       style="color: #0a61bd"
-                      title="增加子集"
+                      :title="t('view.addSubLevel')"
                     />
                   </AuthDom>
                   <AuthDom auth="menuManage_table_edit">
@@ -154,7 +176,7 @@
                       name="icon-baseui-edit-fill"
                       @click="showFrom('edit', row, row.parentId)"
                       style="color: #0a61bd"
-                      title="编辑"
+                      :title="t('view.edit')"
                     />
                   </AuthDom>
                   <AuthDom auth="menuManage_table_delete">
@@ -162,7 +184,7 @@
                       name="icon-baseui-guanbicuowu"
                       @click="remove(row)"
                       style="color: red"
-                      title="删除"
+                      :title="t('view.delete')"
                     />
                   </AuthDom>
                 </div>
@@ -176,7 +198,7 @@
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
       :width="500"
       :visible="isValidForm"
-      title="菜单"
+      :title="t('view.menu')"
       :footer-style="{ textAlign: 'right' }"
       @close="formClose"
     >
@@ -190,12 +212,12 @@
       >
         <a-form-item
           name="menuType"
-          label="菜单类型"
-          :rules="[{ required: true, message: '请选择菜单类型' }]"
+          :label="t('view.menuType')"
+          :rules="[{ required: true, message: t('view.pleaseSelectMenuType') }]"
         >
-          <a-select v-model:value="formData.menuType" placeholder="请选择菜单类型">
-            <a-select-option :value="1">系统菜单</a-select-option>
-            <a-select-option :value="7">操作按钮</a-select-option>
+          <a-select v-model:value="formData.menuType" :placeholder="t('view.pleaseSelectMenuType')">
+            <a-select-option :value="1">{{ t('view.systemMenu') }}</a-select-option>
+            <a-select-option :value="7">{{ t('view.button') }}</a-select-option>
             <a-select-option :value="5">新页面打开外链</a-select-option>
             <a-select-option :value="6">嵌入式打开外链</a-select-option>
           </a-select>
@@ -203,7 +225,7 @@
         <a-form-item
           v-if="formData.menuType == 7"
           name="parentId"
-          label="上级菜单"
+          :label="上级菜单"
           :rules="[
             { required: true, message: '' },
             { validator: formValidator.empty, message: '请选择菜单名称' },
@@ -214,20 +236,20 @@
             show-search
             style="width: 100%"
             :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-            placeholder="请选择上级菜单"
+            :placeholder="请选择上级菜单"
             allow-clear
             show-arrow
             :filterTreeNode="AntVueCommon.filterTreeNode"
             :tree-data="menuTreeDatas"
           />
         </a-form-item>
-        <a-form-item v-else name="parentId" label="上级菜单">
+        <a-form-item v-else name="parentId" :label="上级菜单">
           <a-tree-select
             v-model:value="formData.parentId"
             show-search
             style="width: 100%"
             :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-            placeholder="请选择上级菜单"
+            :placeholder="请选择上级菜单"
             allow-clear
             show-arrow
             :filterTreeNode="AntVueCommon.filterTreeNode"
@@ -236,7 +258,7 @@
         </a-form-item>
         <a-form-item
           name="menuName"
-          :label="formData.menuType == 7 ? '按钮名称' : '菜单名称'"
+          ::label="formData.menuType == 7 ? '按钮名称' : '菜单名称'"
           :rules="[
             { required: true, message: '' },
             { max: 50, message: formData.menuType == 7 ? '按钮名称过长' : '菜单名称过长' },
@@ -248,25 +270,25 @@
         >
           <a-input
             v-model:value="formData.menuName"
-            :placeholder="formData.menuType == 7 ? '请输入按钮名称' : '请输入菜单名称'"
+            ::placeholder="formData.menuType == 7 ? '请输入按钮名称' : '请输入菜单名称'"
             autocomplete="off"
           />
         </a-form-item>
         <template v-if="formData.menuType != 7">
           <a-form-item
             name="menuUrl"
-            label="访问地址"
+            :label="访问地址"
             :rules="[{ max: 1024, message: '访问地址过长' }]"
           >
             <a-input
               v-model:value="formData.menuUrl"
-              placeholder="请输入访问地址"
+              :placeholder="请输入访问地址"
               autocomplete="off"
             />
           </a-form-item>
           <a-form-item
             name="menuIcon"
-            label="菜单图标"
+            :label="菜单图标"
             :rules="[{ required: true, message: '请选择菜单图标' }]"
           >
             <a-select
@@ -275,12 +297,12 @@
               :filter-option="AntVueCommon.filterOption"
               v-model:value="formData.menuIcon"
               style="width: 100%"
-              placeholder="请选择菜单图标"
+              :placeholder="请选择菜单图标"
             >
               <a-select-option
                 v-for="(item, i) in iconDatas"
                 :value="item.label"
-                :label="item.label"
+                ::label="item.label"
                 :key="i"
               >
                 <span>
@@ -294,7 +316,7 @@
         <a-form-item
           v-else
           name="authName"
-          label="权限标识"
+          :label="权限标识"
           :rules="[
             { required: true, message: '' },
             { max: 60, message: '权限标识过长' },
@@ -303,21 +325,21 @@
         >
           <a-input
             v-model:value="formData.authName"
-            placeholder="请输入权限标识"
+            :placeholder="请输入权限标识"
             autocomplete="off"
           />
         </a-form-item>
         <a-form-item
           name="isValid"
-          label="是否启用"
-          placeholder="请选择是否启用"
+          :label="是否启用"
+          :placeholder="请选择是否启用"
           :rules="[{ required: true, message: '请选择是否启用' }]"
         >
           <a-switch v-model:checked="formData.isValid" />
         </a-form-item>
         <a-form-item
           name="orderIndex"
-          label="菜单排序"
+          :label="菜单排序"
           :rules="[
             { required: true, message: '请输入菜单排序' },
             {
@@ -336,7 +358,7 @@
             style="width: 300px"
             :precision="3"
             v-model:value="formData.orderIndex"
-            placeholder="请输入菜单排序"
+            :placeholder="请输入菜单排序"
             autocomplete="off"
           />
         </a-form-item>
