@@ -27,7 +27,7 @@
                     v-model:value="seacthContent.name"
                     placeholder="输入车站名称查询"
                   />
-                  <a-button @click="initPage" type="primary">查询</a-button>
+                  <a-button @click="initPage" type="primary">{{t('view.query')}}</a-button>
                 </a-space>
               </AuthDom>
               <AuthDom auth="ddServcer_station_add">

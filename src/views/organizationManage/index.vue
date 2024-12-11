@@ -65,7 +65,7 @@
               field="orgId"
               :title="t('view.recordId')"
               :visible="false"
-              minWidth="136"
+              :minWidth="136"
               fixed="left"
             />
             <vxe-column

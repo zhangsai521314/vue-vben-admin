@@ -84,8 +84,8 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="initPage()" type="primary">查询</a-button>
-                    <a-button @click="resetSeacth">重置表单</a-button>
+                    <a-button @click="initPage()" type="primary">{{t('view.query')}}</a-button>
+                    <a-button @click="resetSeacth">{{t('view.resetForm')}}</a-button>
                     <a-radio-group v-model:value="refresh" button-style="solid">
                       <a-radio-button value="yes">开启自动刷新</a-radio-button>
                       <a-radio-button value="no">关闭自动刷新</a-radio-button>

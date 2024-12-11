@@ -92,8 +92,8 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="initPage()" type="primary">查询</a-button>
-                    <a-button @click="resetSeacth">重置表单</a-button>
+                    <a-button @click="initPage()" type="primary">{{t('view.query')}}</a-button>
+                    <a-button @click="resetSeacth">{{t('view.resetForm')}}</a-button>
                     <a-spin :spinning="exportDataSpinning">
                       <a-button @click="exportData" type="primary">导出</a-button>
                     </a-spin>

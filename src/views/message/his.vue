@@ -13,23 +13,16 @@
       <template #msgStatus="{ row }">
         <span
           :style="{
-            color:
-              row.msgStatus == '故障'
-                ? 'red'
-                : row.msgStatus == '恢复'
-                  ? 'green'
-                  : row.msgStatus == '确认'
-                    ? '#0960bd '
-                    : '',
+            color: row.msgStatus == 1 ? 'red' : row.msgStatus == 2 ? 'green' : '',
           }"
-          >{{ row.msgStatus }}</span
+          >{{ row.msgStatus == 1 ? '故障' : row.msgStatus == 2 ? '恢复' : row.msgStatus }}</span
         >
       </template>
     </vxe-grid>
   </div>
 </template>
 <script setup lang="ts">
-  import { ref, reactive, createVNode, nextTick, watch } from 'vue';
+  import { ref, reactive, watch } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import messageApi from '@/api/message';
@@ -39,8 +32,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   //vue3使用defineProps接收传过来的参数
   const props = defineProps({
     //增加组件
@@ -57,42 +48,25 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: t('view.serialNumber'), width: 50, fixed: 'left' },
+      { type: 'seq', showOverflow: true, title: t('view.serialNumber'), width: 50, fixed: 'left' },
       {
         field: 'msgHisId',
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
         fixed: 'left',
       },
       {
-        field: 'serviceCode',
-        title: '服务编号',
+        field: 'msgStartTime',
+        title: '告警时间',
+        width: 150,
         showOverflow: true,
-        visible: false,
-        showHeaderOverflow: true,
-        fixed: 'left',
-      },
-      {
-        field: 'serviceName',
-        title: '服务名称',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        fixed: 'left',
-      },
-      {
-        field: 'msgType',
-        title: '信息类型',
-        showHeaderOverflow: true,
-        visible: false,
       },
       {
         field: 'msgStatus',
         title: '信息状态',
-        showOverflow: true,
         width: 100,
-        showHeaderOverflow: true,
+        showOverflow: true,
         slots: {
           default: 'msgStatus',
         },
@@ -100,27 +74,21 @@
       {
         field: 'msgTitle',
         title: '信息标题',
-        showHeaderOverflow: true,
+        width: 150,
+        showOverflow: true,
       },
       {
         field: 'msgContent',
         title: '信息内容',
-        showOverflow: false,
-      },
-      {
-        field: 'msgStartTime',
-        title: '告警时间',
         width: 150,
-        showOverflow: true,
-        showHeaderOverflow: true,
+        showOverflow: false,
       },
       {
         field: 'remark',
         title: '备注信息',
         showOverflow: true,
-        showHeaderOverflow: true,
+        width: 150,
         visible: false,
-        sortable: true,
       },
     ],
     toolbarConfig: {

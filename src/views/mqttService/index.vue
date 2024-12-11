@@ -18,7 +18,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="getMqtts" type="primary">查询</a-button>
+                    <a-button @click="getMqtts" type="primary">{{t('view.query')}}</a-button>
                   </a-space>
                 </div>
               </a-space>

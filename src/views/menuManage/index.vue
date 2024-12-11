@@ -66,12 +66,17 @@
             :data="tableConfigData"
           >
             >
-            <vxe-column type="seq" :title="t('view.serialNumber')" :minWidth="70" fixed="left" />
+            <vxe-column
+              type="seq"
+              :title="t('view.serialNumber')"
+              :minWidth="locale == 'en-US' ? 110 : 70"
+              fixed="left"
+            />
             <vxe-column
               field="menuId"
               :title="t('view.recordId')"
               :visible="false"
-              :minWidth="130"
+              :minWidth="136"
               fixed="left"
             />
             <vxe-column
@@ -92,10 +97,61 @@
               </template>
             </vxe-column>
             <vxe-column
+              field="menuNameCn"
+              :title="t('view.menuNameCn')"
+              tree-node
+              :sortable="true"
+              :minWidth="180"
+              visible="false"
+            >
+              <template #default="{ row }">
+                <span>
+                  <template v-if="row.menuType != 7">
+                    <IconFontClass :name="row.menuIcon" style="margin-right: 2px" />
+                  </template>
+                  <span>{{ row.menuNameCn }}</span>
+                </span>
+              </template>
+            </vxe-column>
+            <vxe-column
+              field="menuNameEn"
+              :title="t('view.menuNameEn')"
+              tree-node
+              :sortable="true"
+              :minWidth="180"
+              visible="false"
+            >
+              <template #default="{ row }">
+                <span>
+                  <template v-if="row.menuType != 7">
+                    <IconFontClass :name="row.menuIcon" style="margin-right: 2px" />
+                  </template>
+                  <span>{{ row.menuNameEn }}</span>
+                </span>
+              </template>
+            </vxe-column>
+            <vxe-column
+              field="menuNameFr"
+              :title="t('view.menuNameFr')"
+              tree-node
+              :sortable="true"
+              :minWidth="184"
+              visible="false"
+            >
+              <template #default="{ row }">
+                <span>
+                  <template v-if="row.menuType != 7">
+                    <IconFontClass :name="row.menuIcon" style="margin-right: 2px" />
+                  </template>
+                  <span>{{ row.menuNameFr }}</span>
+                </span>
+              </template>
+            </vxe-column>
+            <vxe-column
               field="menuType"
               :title="t('view.menuType')"
               :sortable="true"
-              :minWidth="100"
+              :minWidth="130"
             >
               <template #default="{ row }">
                 <span
@@ -117,9 +173,9 @@
               field="authName"
               :title="t('view.permissionIdentifier')"
               :sortable="true"
-              :minWidth="150"
+              :minWidth="194"
             />
-            <vxe-column field="isValid" :title="t('view.enableOrDisable')" :minWidth="100">
+            <vxe-column field="isValid" :title="t('view.enableOrDisable')" :minWidth="130">
               <template #default="{ row }">
                 <span :style="{ color: row.isValid ? 'green' : 'red' }">{{
                   row.isValid ? t('view.yes') : t('view.no')
@@ -128,7 +184,7 @@
             </vxe-column>
             <vxe-column
               field="orderIndex"
-              :title="t('view.menuSorting')"
+              :title="t('view.sorting')"
               :sortable="true"
               :minWidth="100"
             />
@@ -151,7 +207,7 @@
               :title="t('view.modificationTime')"
               :visible="false"
               :sortable="true"
-              :minWidth="150"
+              :minWidth="170"
             />
             <vxe-column
               field="modifyUser"
@@ -196,16 +252,15 @@
     </a-spin>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="500"
+      :width="locale == 'zh-CN' ? 500 : 600"
       :visible="isValidForm"
       :title="t('view.menu')"
       :footer-style="{ textAlign: 'right' }"
       @close="formClose"
     >
       <a-form
-        :label-col="{ span: 6 }"
+        :label-col="{ span: locale == 'zh-CN' ? 6 : 10 }"
         :style="{ paddingRight: '2px' }"
-        :wrapper-col="{ span: 16 }"
         autocomplete="off"
         ref="formRef"
         :model="formData"
@@ -218,17 +273,17 @@
           <a-select v-model:value="formData.menuType" :placeholder="t('view.pleaseSelectMenuType')">
             <a-select-option :value="1">{{ t('view.systemMenu') }}</a-select-option>
             <a-select-option :value="7">{{ t('view.button') }}</a-select-option>
-            <a-select-option :value="5">新页面打开外链</a-select-option>
-            <a-select-option :value="6">嵌入式打开外链</a-select-option>
+            <a-select-option :value="5">{{ t('view.openExternalLinkInNewPage') }}</a-select-option>
+            <a-select-option :value="6">{{ t('view.embedOpenExternalLink') }}</a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item
           v-if="formData.menuType == 7"
           name="parentId"
-          :label="上级菜单"
+          :label="t('view.parentMenu')"
           :rules="[
             { required: true, message: '' },
-            { validator: formValidator.empty, message: '请选择菜单名称' },
+            { validator: formValidator.empty, message: t('view.pleaseSelectParentMenu') },
           ]"
         >
           <a-tree-select
@@ -236,20 +291,20 @@
             show-search
             style="width: 100%"
             :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-            :placeholder="请选择上级菜单"
+            :placeholder="t('view.pleaseSelectParentMenu')"
             allow-clear
             show-arrow
             :filterTreeNode="AntVueCommon.filterTreeNode"
             :tree-data="menuTreeDatas"
           />
         </a-form-item>
-        <a-form-item v-else name="parentId" :label="上级菜单">
+        <a-form-item v-else name="parentId" :label="t('view.parentMenu')">
           <a-tree-select
             v-model:value="formData.parentId"
             show-search
             style="width: 100%"
             :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-            :placeholder="请选择上级菜单"
+            :placeholder="t('view.pleaseSelectParentMenu')"
             allow-clear
             show-arrow
             :filterTreeNode="AntVueCommon.filterTreeNode"
@@ -257,39 +312,114 @@
           />
         </a-form-item>
         <a-form-item
-          name="menuName"
-          ::label="formData.menuType == 7 ? '按钮名称' : '菜单名称'"
+          name="menuNameCn"
+          :label="formData.menuType == 7 ? t('view.buttonNameCn') : t('view.menuNameCn')"
           :rules="[
             { required: true, message: '' },
-            { max: 50, message: formData.menuType == 7 ? '按钮名称过长' : '菜单名称过长' },
+            {
+              max: 50,
+              message:
+                formData.menuType == 7
+                  ? t('view.buttonNameTooLong', [50])
+                  : t('view.menuNameTooLong', [50]),
+            },
             {
               validator: formValidator.empty,
-              message: formData.menuType == 7 ? '请输入按钮名称' : '请输入菜单名称',
+              message:
+                formData.menuType == 7
+                  ? t('view.pleaseEnterButtonName')
+                  : t('view.pleaseEnterMenuName'),
             },
           ]"
         >
           <a-input
-            v-model:value="formData.menuName"
-            ::placeholder="formData.menuType == 7 ? '请输入按钮名称' : '请输入菜单名称'"
+            v-model:value="formData.menuNameCn"
+            :placeholder="
+              formData.menuType == 7
+                ? t('view.pleaseEnterButtonName')
+                : t('view.pleaseEnterMenuName')
+            "
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
+          name="menuNameEn"
+          :label="formData.menuType == 7 ? t('view.buttonNameEn') : t('view.menuNameEn')"
+          :rules="[
+            { required: true, message: '' },
+            {
+              max: 50,
+              message:
+                formData.menuType == 7
+                  ? t('view.buttonNameTooLong', [50])
+                  : t('view.menuNameTooLong', [50]),
+            },
+            {
+              validator: formValidator.empty,
+              message:
+                formData.menuType == 7
+                  ? t('view.pleaseEnterButtonName')
+                  : t('view.pleaseEnterMenuName'),
+            },
+          ]"
+        >
+          <a-input
+            v-model:value="formData.menuNameEn"
+            :placeholder="
+              formData.menuType == 7
+                ? t('view.pleaseEnterButtonName')
+                : t('view.pleaseEnterMenuName')
+            "
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
+          name="menuNameFr"
+          :label="formData.menuType == 7 ? t('view.buttonNameFr') : t('view.menuNameFr')"
+          :rules="[
+            { required: true, message: '' },
+            {
+              max: 50,
+              message:
+                formData.menuType == 7
+                  ? t('view.buttonNameTooLong', [50])
+                  : t('view.menuNameTooLong', [50]),
+            },
+            {
+              validator: formValidator.empty,
+              message:
+                formData.menuType == 7
+                  ? t('view.pleaseEnterButtonName')
+                  : t('view.pleaseEnterMenuName'),
+            },
+          ]"
+        >
+          <a-input
+            v-model:value="formData.menuNameFr"
+            :placeholder="
+              formData.menuType == 7
+                ? t('view.pleaseEnterButtonName')
+                : t('view.pleaseEnterMenuName')
+            "
             autocomplete="off"
           />
         </a-form-item>
         <template v-if="formData.menuType != 7">
           <a-form-item
             name="menuUrl"
-            :label="访问地址"
-            :rules="[{ max: 1024, message: '访问地址过长' }]"
+            :label="t('view.accessAddress')"
+            :rules="[{ max: 1024, message: t('view.accessAddressTooLong', [1024]) }]"
           >
             <a-input
               v-model:value="formData.menuUrl"
-              :placeholder="请输入访问地址"
+              :placeholder="t('view.pleaseEnterAccessAddress')"
               autocomplete="off"
             />
           </a-form-item>
           <a-form-item
             name="menuIcon"
-            :label="菜单图标"
-            :rules="[{ required: true, message: '请选择菜单图标' }]"
+            :label="t('view.menuIcon')"
+            :rules="[{ required: true, message: t('view.pleaseSelectMenuIcon') }]"
           >
             <a-select
               allow-clear
@@ -297,12 +427,12 @@
               :filter-option="AntVueCommon.filterOption"
               v-model:value="formData.menuIcon"
               style="width: 100%"
-              :placeholder="请选择菜单图标"
+              :placeholder="t('view.pleaseSelectMenuIcon')"
             >
               <a-select-option
                 v-for="(item, i) in iconDatas"
                 :value="item.label"
-                ::label="item.label"
+                :label="item.label"
                 :key="i"
               >
                 <span>
@@ -316,32 +446,32 @@
         <a-form-item
           v-else
           name="authName"
-          :label="权限标识"
+          :label="t('view.permissionIdentifier')"
           :rules="[
             { required: true, message: '' },
-            { max: 60, message: '权限标识过长' },
-            { validator: formValidator.empty, message: '请输入权限标识' },
+            { max: 60, message: t('view.permissionIdentifierTooLong', [60]) },
+            { validator: formValidator.empty, message: t('view.pleaseEnterPermissionIdentifier') },
           ]"
         >
           <a-input
             v-model:value="formData.authName"
-            :placeholder="请输入权限标识"
+            :placeholder="t('view.pleaseEnterPermissionIdentifier')"
             autocomplete="off"
           />
         </a-form-item>
         <a-form-item
           name="isValid"
-          :label="是否启用"
-          :placeholder="请选择是否启用"
-          :rules="[{ required: true, message: '请选择是否启用' }]"
+          :label="t('view.enableOrDisable')"
+          :placeholder="t('view.pleaseSelectEnableOrDisable')"
+          :rules="[{ required: true, message: t('view.pleaseSelectEnableOrDisable') }]"
         >
           <a-switch v-model:checked="formData.isValid" />
         </a-form-item>
         <a-form-item
           name="orderIndex"
-          :label="菜单排序"
+          :label="t('view.menuSorting')"
           :rules="[
-            { required: true, message: '请输入菜单排序' },
+            { required: true, message: t('view.pleaseEnterMenuSorting') },
             {
               validator: formValidator.min,
               min: -9999,
@@ -358,7 +488,7 @@
             style="width: 300px"
             :precision="3"
             v-model:value="formData.orderIndex"
-            :placeholder="请输入菜单排序"
+            :placeholder="t('view.pleaseEnterMenuSorting')"
             autocomplete="off"
           />
         </a-form-item>
@@ -387,14 +517,14 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'MenuManage' });
   const { prefixCls } = useDesign('menuManage-');
   const loading = ref(true);
   const tableConfigData = ref([]);
   const defFromData = reactive({
-    menuName: '',
+    menuNameCn: null,
+    menuNameEn: null,
+    menuNameFr: null,
     menuType: null,
     menuUrl: null,
     authName: null,
@@ -421,7 +551,7 @@
 
   function showFrom(type, row, pid = null) {
     if (row != null && row.menuType == 2) {
-      message.info('拓扑图菜单不可编辑和新增');
+      message.info(t('view.topologyMenuCannotBeEditedOrAdded'));
       return;
     }
     getMenuTreeDatas();
@@ -439,7 +569,7 @@
   function remove(row) {
     Modal.confirm({
       maskClosable: true,
-      title: '删除该项，子集数据也将被删除，是否删除?',
+      title: t('view.deleteLevelOk'),
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {
@@ -454,7 +584,7 @@
                   (m) => data.indexOf(m.menuId) == -1,
                 );
               }
-              message.success('删除菜单信息成功');
+              message.success(t('view.deletionSuccessful'));
               getMenuTreeDatas();
             } catch (error) {}
           })
@@ -487,7 +617,7 @@
           saveType = 'edit';
           isValidForm.value = true;
         } else {
-          message.error('获取菜单信息失败');
+          message.error(t('view.failedToRetrieveMenuInformation'));
         }
       })
       .catch(() => {
@@ -531,7 +661,7 @@
         menuApi.AddMenu(d).then((data) => {
           tableConfigData.value.splice(0, 0, data);
           formClose();
-          message.success('新增菜单成功');
+          message.success(t('view.additionSuccessful'));
         });
       } else {
         menuApi.UpdateMenu(d).then((data) => {
@@ -544,7 +674,7 @@
             getMenus();
           }
           formClose();
-          message.success('更新菜单信息成功');
+          message.success(t('view.updateSuccessful'));
         });
       }
     });
@@ -569,7 +699,7 @@
     () => {
       if (isValidForm.value && formData.value.parentId == formData.value.menuId) {
         formData.value.parentId = null;
-        message.warning('父级不能是自己');
+        message.warning(t('view.parentCannotBeItself'));
       }
     },
   );

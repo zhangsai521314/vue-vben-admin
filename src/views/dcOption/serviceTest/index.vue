@@ -42,7 +42,9 @@
                     </div>
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
-                        <a-button @click="initPage()" type="primary">查询</a-button>
+                        <a-button @click="initPage()" type="primary">{{
+                          t('view.query')
+                        }}</a-button>
                         <a-spin :spinning="exportDataSpinning">
                           <a-button @click="exportData" type="primary">导出</a-button>
                         </a-spin>
@@ -71,12 +73,17 @@
             :data="tableConfigData"
             @sort-change="onSortChange"
           >
-            <vxe-column type="seq" title="序号" :minWidth="70" fixed="left" />
+            <vxe-column
+              type="seq"
+              :title="t('view.serialNumber')"
+              :minWidth="locale == 'en-US' ? 110 : 70"
+              fixed="left"
+            />
             <vxe-column
               field="testId"
-              title="记录id"
+              :title="t('view.recordId')"
               :visible="false"
-              :minWidth="130"
+              :minWidth="136"
               fixed="left"
             />
             <vxe-column

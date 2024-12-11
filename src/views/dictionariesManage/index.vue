@@ -6,70 +6,90 @@
         <vxe-toolbar ref="toolbarRef" custom>
           <template #buttons>
             <div :class="`tableBtn`">
-              <a-space
-                direction="horizontal"
-                size="small"
-                style="align-items: flex-end; margin-left: 5px"
-              >
+              <a-space direction="horizontal" size="small" align="start" style="margin: 0 5px">
                 <AuthDom auth="dictionariesManage_query">
                   <a-space
                     direction="horizontal"
                     size="small"
                     :wrap="true"
-                    style="margin-bottom: 0"
+                    style="width: 100%; margin-bottom: 0"
                   >
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
-                        <label>字典名称：</label>
+                        <label>{{ t('view.dictionaryName') }}：</label>
                         <a-input
                           @press-enter="getDictionariess"
                           v-model:value="seacthContent.dictionariesName"
-                          placeholder="输入字典名称查询"
+                          :placeholder="t('view.enterDictionaryNameToSearch')"
                         />
                       </a-space>
                     </div>
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
-                        <label>字典类型：</label>
+                        <label>{{ t('view.dictionaryType') }}：</label>
                         <a-select
-                          placeholder="请选择字典类型"
+                          :placeholder="t('view.pleaseSelectDictionaryType')"
                           style="width: 170px"
                           allow-clear
                           show-search
                           :filter-option="AntVueCommon.filterOption"
                           v-model:value="seacthContent.dictionariesClass"
                         >
-                          <a-select-option value="equipmentType">硬件设备</a-select-option>
-                          <a-select-option value="systemType">操作系统</a-select-option>
-                          <a-select-option value="serviceType">软件服务</a-select-option>
-                          <a-select-option value="msgType">信息提示</a-select-option>
-                          <a-select-option value="commonConfig">通用配置</a-select-option>
-                          <a-select-option value="performanceAlarmType"
-                            >设备性能告警阈值</a-select-option
-                          >
-                          <a-select-option value="collectionFrequency">数据频率</a-select-option>
-                          <a-select-option value="handPower">手持台权限 </a-select-option>
+                          <a-select-option value="equipmentType">{{
+                            t('view.hardwareDevice')
+                          }}</a-select-option>
+                          <a-select-option value="systemType">{{
+                            t('view.operatingSystem')
+                          }}</a-select-option>
+                          <a-select-option value="serviceType">{{
+                            t('view.softwareService')
+                          }}</a-select-option>
+                          <a-select-option value="msgType">{{
+                            t('view.informationPrompt')
+                          }}</a-select-option>
+                          <a-select-option value="commonConfig">{{
+                            t('view.generalConfiguration')
+                          }}</a-select-option>
+                          <a-select-option value="performanceAlarmType">{{
+                            t('view.devicePerformanceAlarmThreshold')
+                          }}</a-select-option>
+                          <a-select-option value="collectionFrequency">{{
+                            t('view.dataFrequency')
+                          }}</a-select-option>
+                          <a-select-option value="handPower"
+                            >{{ t('view.handheldTerminalPermissions') }}
+                          </a-select-option>
 
-                          <a-select-option value="cirType">机车类型</a-select-option>
-                          <a-select-option value="userFunction">用户功能码 </a-select-option>
+                          <a-select-option value="cirType">{{
+                            t('view.locomotiveType')
+                          }}</a-select-option>
+                          <a-select-option value="userFunction"
+                            >{{ t('view.userFunctionCode') }}
+                          </a-select-option>
                           <a-select-option value="dispatchUserFunction"
                             >调度用户功能码
                           </a-select-option>
-                          <a-select-option value="vehicleType">车种类型 </a-select-option>
-                          <a-select-option value="Ln_L4L5">位置类型L4L5 </a-select-option>
-                          <a-select-option value="handPower">手持台权限 </a-select-option>
+                          <a-select-option value="vehicleType"
+                            >{{ t('view.vehicleTypeCategory') }}
+                          </a-select-option>
+                          <a-select-option value="Ln_L4L5"
+                            >{{ t('view.positionTypeL4L5') }}
+                          </a-select-option>
+                          <a-select-option value="handPower"
+                            >{{ t('view.handheldTerminalPermissions') }}
+                          </a-select-option>
                         </a-select>
                       </a-space>
                     </div>
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
-                        <label>归属服务类型：</label>
+                        <label>{{ t('view.belongsToServiceType') }}：</label>
                         <a-select
                           style="width: 170px"
                           allow-clear
                           show-search
                           :filter-option="AntVueCommon.filterOption"
-                          placeholder="请选择服务类型"
+                          :placeholder="t('view.pleaseSelectServiceType')"
                           v-model:value="seacthContent.serviceType"
                           :options="serviceTypeData"
                         />
@@ -77,8 +97,10 @@
                     </div>
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
-                        <a-button @click="getDictionariess" type="primary">查询</a-button>
-                        <a-button @click="resetSeacth">重置表单</a-button>
+                        <a-button @click="getDictionariess" type="primary">{{
+                          t('view.query')
+                        }}</a-button>
+                        <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                       </a-space>
                     </div>
                   </a-space>
@@ -92,9 +114,9 @@
                   >
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
-                        <a-button class="ant-btn" @click="showFrom('add', null, 0)"
-                          >新增字典</a-button
-                        >
+                        <a-button class="ant-btn" @click="showFrom('add', null, 0)">{{
+                          t('view.addDictionary')
+                        }}</a-button>
                         <!-- 新增顶级字典 -->
                       </a-space>
                     </div>
@@ -110,8 +132,10 @@
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
                         <a-spin :spinning="syncMqttPerformance">
-                          <a-button class="ant-btn" @click="syncPerformance('collectionFrequency')"
-                            >同步设备性能上报频率</a-button
+                          <a-button
+                            class="ant-btn"
+                            @click="syncPerformance('collectionFrequency')"
+                            >{{ t('view.synchronizeDevicePerformanceReportFrequency') }}</a-button
                           >
                         </a-spin>
                       </a-space>
@@ -137,172 +161,182 @@
             :tree-config="{ transform: true, rowField: 'dictionariesId', parentField: 'parentId' }"
             :data="tableConfigData"
           >
-            <vxe-column type="seq" title="序号" minWidth="70" fixed="left" />
+            <vxe-column
+              type="seq"
+              :title="t('view.serialNumber')"
+              :minWidth="locale == 'en-US' ? 110 : 70"
+              fixed="left"
+            />
             <vxe-column
               field="dictionariesId"
-              title="记录ID"
+              :title="t('view.recordId')"
               :visible="false"
-              minWidth="130"
+              minWidth="136"
               fixed="left"
             />
             <vxe-column
               field="dictionariesName"
-              title="字典名称"
+              :title="t('view.dictionaryName')"
               tree-node
               :sortable="true"
-              minWidth="130"
+              minWidth="166"
               fixed="left"
             />
             <vxe-column
               field="dictionariesNameCn"
-              title="字典名称(中)"
+              :title="t('view.dictionaryNameCn')"
               tree-node
               :sortable="true"
-              minWidth="130"
+              minWidth="220"
               :visible="false"
             />
             <vxe-column
               field="dictionariesNameEn"
-              title="字典名称(英)"
+              :title="t('view.dictionaryNameEn')"
               tree-node
               :sortable="true"
-              minWidth="130"
+              minWidth="220"
               :visible="false"
             />
             <vxe-column
               field="dictionariesNameFr"
-              title="字典名称(法)"
+              :title="t('view.dictionaryNameFr')"
               tree-node
               :sortable="true"
-              minWidth="130"
+              minWidth="226"
               :visible="false"
             />
-            <vxe-column field="dictionariesClass" title="字典类型" :sortable="true" minWidth="130">
+            <vxe-column
+              field="dictionariesClass"
+              :title="t('view.dictionaryType')"
+              :sortable="true"
+              minWidth="166"
+            >
               <template #default="{ row }">
                 <span>{{
                   row.dictionariesClass == 'equipmentType'
-                    ? '硬件设备'
+                    ? t('view.hardwareDevice')
                     : row.dictionariesClass == 'systemType'
-                      ? '操作系统'
+                      ? t('view.operatingSystem')
                       : row.dictionariesClass == 'serviceType'
-                        ? '软件服务'
+                        ? t('view.softwareService')
                         : row.dictionariesClass == 'msgType'
-                          ? '信息提示'
+                          ? t('view.informationPrompt')
                           : row.dictionariesClass == 'performanceAlarmType'
-                            ? '设备性能告警阈值'
+                            ? t('view.devicePerformanceAlarmThreshold')
                             : row.dictionariesClass == 'collectionFrequency'
-                              ? '数据频率'
+                              ? t('view.dataFrequency')
                               : row.dictionariesClass == 'commonConfig'
-                                ? '通用配置'
+                                ? t('view.generalConfiguration')
                                 : row.dictionariesClass == 'cirType'
-                                  ? '机车类型'
+                                  ? t('view.locomotiveType')
                                   : row.dictionariesClass == 'userFunction'
-                                    ? '用户功能码'
+                                    ? t('view.userFunctionCode')
                                     : row.dictionariesClass == 'dispatchUserFunction'
-                                      ? '调度用户功能码'
+                                      ? t('view.dispatchUserFunctionCode')
                                       : row.dictionariesClass == 'vehicleType'
-                                        ? '车种类型'
+                                        ? t('view.vehicleTypeCategory')
                                         : row.dictionariesClass == 'handPower'
-                                          ? '手持台权限'
+                                          ? t('view.handheldTerminalPermissions')
                                           : row.dictionariesClass == 'Ln_L4L5'
-                                            ? '位置类型L4L5'
+                                            ? t('view.positionTypeL4L5')
                                             : ''
                 }}</span>
               </template>
             </vxe-column>
             <vxe-column
               field="serviceTypeName"
-              title="归属服务类型"
+              :title="t('view.belongsToServiceType')"
               :sortable="true"
-              minWidth="120"
+              minWidth="186"
             />
-            <vxe-column field="isKeyMaster" title="是否自定义主键" minWidth="130">
+            <vxe-column field="isKeyMaster" :title="t('view.isCustomPrimaryKey')" minWidth="186">
               <template #default="{ row }">
                 <span :style="{ color: row.isKeyMaster ? 'green' : 'red' }">{{
-                  row.isKeyMaster ? '是' : '否'
+                  row.isKeyMaster ? t('view.yes') : t('view.no')
                 }}</span>
               </template>
             </vxe-column>
             <vxe-column
               field="dictionariesKey"
-              title="自定义主键值"
+              :title="t('view.customPrimaryKeyValue')"
               :sortable="true"
-              minWidth="180"
+              minWidth="260"
             />
-            <vxe-column field="isSystem" title="是否系统" minWidth="100">
+            <vxe-column field="isSystem" :title="t('view.isSystem')" minWidth="140">
               <template #default="{ row }">
                 <span :style="{ color: row.isSystem ? 'green' : 'red' }">{{
-                  row.isSystem ? '是' : '否'
+                  row.isSystem ? t('view.yes') : t('view.no')
                 }}</span>
               </template>
             </vxe-column>
-            <vxe-column field="isSync" title="是否已同步" minWidth="100">
+            <vxe-column field="isSync" :title="t('view.isSynchronized')" minWidth="170">
               <template #default="{ row }">
                 <span
                   v-if="row.dictionariesClass == 'collectionFrequency'"
                   :style="{ color: row.isSync ? 'green' : 'red' }"
-                  >{{ row.isSync ? '是' : '否' }}</span
+                  >{{ row.isSync ? t('view.yes') : t('view.no') }}</span
                 >
-                <span v-else style="color: green">无需同步</span>
+                <span v-else style="color: green">{{ t('view.noSynchronizationNeeded') }}</span>
               </template>
             </vxe-column>
             <vxe-column
               field="syncTime"
-              title="同步时间"
+              :title="t('view.synchronizationTime')"
               :visible="false"
               :sortable="true"
-              minWidth="150"
+              minWidth="196"
             />
             <vxe-column
               field="orderIndex"
-              title="排序"
+              :title="t('view.sorting')"
               :visible="false"
               :sortable="true"
               minWidth="100"
             />
             <vxe-column
               field="other"
-              title="附属信息"
+              :title="t('view.auxiliaryInformation')"
               :showOverflow="true"
               :sortable="true"
-              minWidth="130"
+              minWidth="196"
             />
             <vxe-column
               field="remark"
-              title="备注信息"
+              :title="t('view.remarks')"
               :showOverflow="true"
               :sortable="true"
-              minWidth="130"
+              minWidth="230"
             />
             <vxe-column
               field="createTime"
-              title="创建时间"
+              :title="t('view.creationTime')"
               :visible="false"
               :sortable="true"
               minWidth="150"
             />
             <vxe-column
               field="createUser"
-              title="创建人"
+              :title="t('view.creator')"
               :visible="false"
               :sortable="true"
               minWidth="130"
             />
             <vxe-column
               field="modifyTime"
-              title="修改时间"
+              :title="t('view.modificationTime')"
               :visible="false"
               :sortable="true"
-              minWidth="150"
+              minWidth="170"
             />
             <vxe-column
               field="modifyUser"
-              title="修改人"
+              :title="t('view.modifier')"
               :visible="false"
               :sortable="true"
               minWidth="130"
             />
-            <vxe-column title="操作" width="140" fixed="right">
+            <vxe-column :title="t('view.action')" width="140" fixed="right">
               <template #default="{ row }">
                 <div :class="`tableStyle`">
                   <template v-if="!row.isSystem">
@@ -311,7 +345,7 @@
                         name="icon-baseui-tianjiawukuang"
                         @click="showFrom('add', row, row.dictionariesId)"
                         style="color: #0a61bd"
-                        title="增加子级"
+                        :title="增加子级"
                       />
                     </AuthDom> -->
                     <AuthDom auth="dictionariesManage_table_edit">
@@ -319,7 +353,7 @@
                         name="icon-baseui-edit-fill"
                         @click="showFrom('edit', row, row.parentId)"
                         style="color: #0a61bd"
-                        title="编辑"
+                        :title="t('view.edit')"
                       />
                     </AuthDom>
                     <AuthDom auth="dictionariesManage_table_delete">
@@ -327,11 +361,13 @@
                         name="icon-baseui-guanbicuowu"
                         @click="remove(row)"
                         style="color: red"
-                        title="删除"
+                        :title="t('view.delete')"
                       />
                     </AuthDom>
                   </template>
-                  <span v-else style="color: red">系统字典不可修改</span>
+                  <span v-else style="color: red">{{
+                    t('view.systemDictionaryCannotBeModified')
+                  }}</span>
                 </div>
               </template>
             </vxe-column>
@@ -341,104 +377,110 @@
     </a-spin>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="500"
+      :width="locale == 'zh-CN' ? 500 : 600"
       :visible="isShowForm"
-      title="字典"
+      :title="t('view.dictionary')"
       :footer-style="{ textAlign: 'right' }"
       @close="formClose"
     >
       <a-form
-        :label-col="{ span: 6 }"
+        :label-col="{ span: locale == 'zh-CN' ? 7 : 10 }"
         :style="{ paddingRight: '2px' }"
-        :wrapper-col="{ span: 16 }"
         autocomplete="off"
         ref="formRef"
         :model="formData"
       >
         <a-form-item
           name="dictionariesName"
-          label="字典名称(中)"
-          :labelCol="{ span: 7 }"
+          :label="t('view.dictionaryNameCn')"
           :rules="[
             { required: true, message: '' },
-            { max: 40, message: '字典名称过长' },
-            { validator: formValidator.empty, message: '请输入字典名称' },
+            { max: 40, message: t('view.dictionaryNameTooLong', [40]) },
+            { validator: formValidator.empty, message: t('view.pleaseEnterDictionaryName') },
           ]"
         >
           <a-input
             v-model:value="formData.dictionariesName"
-            placeholder="请输入字典名称"
+            :placeholder="t('view.pleaseEnterDictionaryName')"
             autocomplete="off"
           />
         </a-form-item>
         <a-form-item
           name="dictionariesNameEn"
-          label="字典名称(英)"
-          :labelCol="{ span: 7 }"
+          :label="t('view.dictionaryNameEn')"
           :rules="[
             { required: true, message: '' },
-            { max: 40, message: '字典名称(英)过长' },
-            { validator: formValidator.empty, message: '请输入字典名称(英)' },
+            { max: 40, message: t('view.dictionaryNameTooLong', [40]) },
+            { validator: formValidator.empty, message: t('view.pleaseEnterDictionaryName') },
           ]"
         >
           <a-input
             v-model:value="formData.dictionariesNameEn"
-            placeholder="请输入字典名称(英)"
+            :placeholder="t('view.pleaseEnterDictionaryName')"
             autocomplete="off"
           />
         </a-form-item>
         <a-form-item
           name="dictionariesNameFr"
-          label="字典名称(法)"
-          :labelCol="{ span: 7 }"
+          :label="t('view.dictionaryNameFr')"
           :rules="[
             { required: true, message: '' },
-            { max: 40, message: '字典名称(法)过长' },
-            { validator: formValidator.empty, message: '请输入字典名称(法)' },
+            { max: 40, message: t('view.dictionaryNameTooLong', [40]) },
+            { validator: formValidator.empty, message: t('view.pleaseEnterDictionaryName') },
           ]"
         >
           <a-input
             v-model:value="formData.dictionariesNameFr"
-            placeholder="请输入字典名称(法)"
+            :placeholder="t('view.pleaseEnterDictionaryName')"
             autocomplete="off"
           />
         </a-form-item>
         <a-form-item
           name="dictionariesClass"
-          label="字典类型"
-          :labelCol="{ span: 7 }"
-          :rules="[{ required: true, message: '请选择字典类型' }]"
+          :label="t('view.dictionaryType')"
+          :rules="[{ required: true, message: t('view.pleaseSelectDictionaryType') }]"
         >
           <a-select
-            placeholder="请选择字典类型"
-            :rules="[{ required: true, message: '请选择字典类型' }]"
+            :placeholder="t('view.pleaseSelectDictionaryType')"
+            :rules="[{ required: true, message: t('view.pleaseSelectDictionaryType') }]"
             v-model:value="formData.dictionariesClass"
             :disabled="dictionariesClass_disabled"
-            :title="dictionariesClass_disabled ? '跟随父级，不可修改' : ''"
+            ::title="dictionariesClass_disabled ? t('view.followParentAndCannotBeModified') : ''"
           >
-            <a-select-option value="equipmentType">硬件设备</a-select-option>
-            <a-select-option value="systemType">操作系统</a-select-option>
-            <a-select-option value="serviceType">软件服务</a-select-option>
-            <a-select-option value="msgType">信息提示</a-select-option>
-            <a-select-option value="commonConfig">通用配置</a-select-option>
+            <a-select-option value="equipmentType">{{ t('view.hardwareDevice') }}</a-select-option>
+            <a-select-option value="systemType">{{ t('view.operatingSystem') }}</a-select-option>
+            <a-select-option value="serviceType">{{ t('view.softwareService') }}</a-select-option>
+            <a-select-option value="msgType">{{ t('view.informationPrompt') }}</a-select-option>
+            <a-select-option value="commonConfig">{{
+              t('view.generalConfiguration')
+            }}</a-select-option>
 
-            <a-select-option value="handPower">手持台权限 </a-select-option>
-            <a-select-option value="cirType">机车类型</a-select-option>
-            <a-select-option value="userFunction">用户功能码 </a-select-option>
-            <a-select-option value="dispatchUserFunction">调度用户功能码 </a-select-option>
-            <a-select-option value="vehicleType">车种类型 </a-select-option>
-            <a-select-option value="Ln_L4L5">位置类型L4L5 </a-select-option>
-            <a-select-option value="handPower">手持台权限 </a-select-option>
+            <a-select-option value="handPower"
+              >{{ t('view.handheldTerminalPermissions') }}
+            </a-select-option>
+            <a-select-option value="cirType">{{ t('view.locomotiveType') }}</a-select-option>
+            <a-select-option value="userFunction"
+              >{{ t('view.userFunctionCode') }}
+            </a-select-option>
+            <a-select-option value="dispatchUserFunction"
+              >{{ t('view.dispatchUserFunctionCode') }}
+            </a-select-option>
+            <a-select-option value="vehicleType"
+              >{{ t('view.vehicleTypeCategory') }}
+            </a-select-option>
+            <a-select-option value="Ln_L4L5">{{ t('view.positionTypeL4L5') }} </a-select-option>
+            <a-select-option value="handPower"
+              >{{ t('view.handheldTerminalPermissions') }}
+            </a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item
           name="isKeyMaster"
-          label="是否自定义主键"
-          :labelCol="{ span: 7 }"
-          :rules="[{ required: true, message: '请选择是否自定义主键' }]"
+          :label="t('view.isCustomPrimaryKey')"
+          :rules="[{ required: true, message: t('view.pleaseSelectWhetherToCustomizePrimaryKey') }]"
         >
           <a-switch
-            :title="dictionariesClass_disabled ? '跟随父级，不可修改' : ''"
+            ::title="dictionariesClass_disabled ? t('view.followParentAndCannotBeModified') : ''"
             :disabled="dictionariesClass_disabled"
             v-model:checked="formData.isKeyMaster"
           />
@@ -446,26 +488,27 @@
         <a-form-item
           v-if="formData.isKeyMaster"
           name="dictionariesKey"
-          label="自定义主键值"
-          :labelCol="{ span: 7 }"
+          :label="t('view.customPrimaryKeyValue')"
           :rules="[
             { required: true, message: '' },
-            { max: 50, message: '自定义主键值过长' },
-            { validator: formValidator.empty, message: '请输入自定义主键值' },
+            { max: 50, message: t('view.customPrimaryKeyValueTooLong', [50]) },
+            {
+              validator: formValidator.empty,
+              message: t('view.pleaseInputCustomizedPrimaryKeyValue'),
+            },
           ]"
         >
           <a-input
             v-model:value="formData.dictionariesKey"
-            placeholder="请输入字典名称"
+            :placeholder="t('view.pleaseEnterDictionaryName')"
             autocomplete="off"
           />
         </a-form-item>
         <a-form-item
           name="orderIndex"
-          label="字典排序"
-          :labelCol="{ span: 7 }"
+          :label="t('view.dictionarySorting')"
           :rules="[
-            { required: true, message: '请输入字典排序' },
+            { required: true, message: t('view.pleaseEnterDictionarySorting') },
             {
               validator: formValidator.min,
               min: -9999,
@@ -482,13 +525,13 @@
             style="width: 300px"
             :precision="3"
             v-model:value="formData.orderIndex"
-            placeholder="请输入字典排序"
+            :placeholder="t('view.pleaseEnterDictionarySorting')"
             autocomplete="off"
           />
         </a-form-item>
-        <a-form-item label="归属服务类型" name="serviceType" :labelCol="{ span: 7 }">
+        <a-form-item :label="t('view.belongsToServiceType')" name="serviceType">
           <a-select
-            placeholder="为空则全部服务都可用"
+            :placeholder="t('view.allServicesWillBeAvailable')"
             allow-clear
             show-search
             :filter-option="AntVueCommon.filterOption"
@@ -498,12 +541,11 @@
         </a-form-item>
         <a-form-item
           name="other"
-          label="附属信息"
-          :labelCol="{ span: 7 }"
-          :rules="[{ max: 250, message: '附属信息过长' }]"
+          :label="t('view.auxiliaryInformation')"
+          :rules="[{ max: 250, message: t('view.attachedInformationTooLong') }]"
         >
           <a-textarea
-            placeholder="请输入附属信息"
+            :placeholder="t('view.pleaseEnterAuxiliaryInformation')"
             :rows="3"
             v-model:value="formData.other"
             autocomplete="off"
@@ -511,12 +553,11 @@
         </a-form-item>
         <a-form-item
           name="remark"
-          label="备注信息"
-          :labelCol="{ span: 7 }"
-          :rules="[{ max: 250, message: '备注信息过长' }]"
+          :label="t('view.remarks')"
+          :rules="[{ max: 250, message: t('view.remarksTooLong', [250]) }]"
         >
           <a-textarea
-            placeholder="请输入备注信息"
+            :placeholder="t('view.pleaseInputRemarkInformation')"
             :rows="3"
             v-model:value="formData.remark"
             autocomplete="off"
@@ -549,10 +590,7 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'DictionariesManage' });
-  const mqttStore = useMqttStoreWithOut();
   const { prefixCls } = useDesign('suitManage-');
   const loading = ref(true);
   const tableConfigData = ref([]);
@@ -626,7 +664,7 @@
                   (m) => data.indexOf(m.dictionariesId) == -1,
                 );
               }
-              message.success('删除字典信息成功');
+              message.success(t('view.deletionSuccessful'));
             } catch (error) {}
           })
           .catch(() => {
@@ -656,7 +694,7 @@
           saveType = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取字典信息失败');
+          message.error(t('view.failedToRetrieveDictionaryInformation'));
         }
       })
       .catch(() => {
@@ -696,7 +734,7 @@
           )?.label;
           tableConfigData.value.splice(0, 0, data);
           formClose();
-          message.success('新增字典成功');
+          message.success(t('view.additionSuccessful'));
         });
       } else {
         dictionariesApi.UpdateDictionaries(formData.value).then((data) => {
@@ -712,7 +750,7 @@
             )?.label;
           }
           formClose();
-          message.success('更新字典信息成功');
+          message.success(t('view.updateSuccessful'));
         });
       }
     });
@@ -726,14 +764,14 @@
       .then((data) => {
         syncMqttPerformance.value = false;
         if (data) {
-          message.success('同步成功');
+          message.success(t('view.synchronizationSuccessful'));
           tableRef.value.getTableData().fullData.forEach((item) => {
             if (item.dictionariesClass == dictionariesClass) {
               item.isSync = true;
             }
           });
         } else {
-          message.success('同步失败');
+          message.successt(t('view.synchronizationFailed'));
         }
       })
       .catch(() => {
@@ -763,15 +801,16 @@
       serviceType: null,
     };
   }
-  watch(
-    () => (formData.value.dictionariesClass, formData.value.isKeyMaster),
-    () => {
-      if (isShowForm.value) {
-        message.info('字典类型、是否自定义键 新增后不可修改');
-      }
-    },
-    { deep: true },
-  );
+
+  // watch(
+  //   () => (formData.value.dictionariesClass, formData.value.isKeyMaster),
+  //   () => {
+  //     if (isShowForm.value) {
+  //       message.info('字典类型、是否自定义键 新增后不可修改');
+  //     }
+  //   },
+  //   { deep: true },
+  // );
 
   onMounted(() => {
     // const elink = document.createElement('a');

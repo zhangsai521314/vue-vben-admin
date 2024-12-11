@@ -139,8 +139,8 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="initPage()" type="primary">查询</a-button>
-                    <a-button @click="resetSeacth">重置表单</a-button>
+                    <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
+                    <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                     <a-spin :spinning="exportDataSpinning">
                       <a-button @click="exportData" type="primary">导出</a-button>
                     </a-spin>
@@ -187,18 +187,25 @@
       <template #msgClass="{ row }">
         <span
           :style="{
-            color: row.msgClass == '告警' ? 'red' : '',
+            color: row.msgClass == 2 ? 'red' : '',
           }"
-          >{{ row.msgClass }}</span
+          >{{ row.msgClass == 1 ? '提示' : row.msgClass == 2 ? '告警' : row.msgClass }}</span
         >
       </template>
       <template #msgStatus="{ row }">
         <span
           :style="{
-            color: row.msgStatus == '故障' ? 'red' : row.msgStatus == '恢复' ? 'green' : '',
+            color: row.msgStatus == 1 ? 'red' : row.msgStatus == 2 ? 'green' : '',
           }"
-          >{{ row.msgStatus }}</span
+          >{{ row.msgStatus == 1 ? '故障' : row.msgStatus == 2 ? '恢复' : row.msgStatus }}</span
         >
+      </template>
+      <template #msgType="{ row }">
+        <span>{{
+          dictionariesData.find((m) => m.dictionariesKey == row.msgType)
+            ? dictionariesData.find((m) => m.dictionariesKey == row.msgType).dictionariesName
+            : row.msgType
+        }}</span>
       </template>
       <template #read="{ row }">
         <a-tag style="width: 38px; margin: 0" :color="row.isRead ? '' : 'red'">{{
@@ -350,7 +357,7 @@
   import his from './his.vue';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import myCommon from '@/utils/MyCommon/common';
-  import { ref, reactive, createVNode, nextTick, watch, onMounted, unref } from 'vue';
+  import { ref, reactive, nextTick, watch, unref } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import messageApi from '@/api/message';
@@ -362,8 +369,7 @@
   import { tryOnUnmounted } from '@vueuse/core';
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
   import { useRouter } from 'vue-router';
-  import { message, Modal } from 'ant-design-vue';
-  import { useUserStore } from '@/store/modules/user';
+  import { message } from 'ant-design-vue';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
 
@@ -371,8 +377,6 @@
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
   defineOptions({ name: 'Message' });
-  const userStore = useUserStore();
-  const userData = ref(_.cloneDeep(userStore.getUserInfo));
   const mqttStore = useMqttStoreWithOut();
   const { currentRoute } = useRouter();
   //获取url参数
@@ -435,6 +439,9 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 200,
+        slots: {
+          default: 'msgType',
+        },
       },
       {
         field: 'msgStatus',

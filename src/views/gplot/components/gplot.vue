@@ -528,29 +528,35 @@
     }
     try {
       gplotStore.gplotKeyOb[gplotKey].containerConfig.runSave = true;
-      return graphOb.toDataURL().then((img) => {
-        const configData = _.cloneDeep(graphOb.getData());
-        for (const key in configData) {
-          configData[key].forEach((item) => {
-            item.states = [];
-          });
-        }
-        return gplotApi
-          .UpdateGplot({
-            globalConfig: JSON.stringify(gplotStore.gplotKeyOb[gplotKey].containerConfig),
-            gplotConfig: JSON.stringify(configData),
-            gplotId: gplotId,
-            mainImg: img,
-            menuId: gplotStore.gplotKeyOb[gplotKey].containerConfig.menuId,
-          })
-          .then(() => {
-            gplotStore.gplotKeyOb[gplotKey].containerConfig.runSave = false;
-            message.success('保存配置成功');
-          })
-          .catch(() => {
-            gplotStore.gplotKeyOb[gplotKey].containerConfig.runSave = false;
-          });
-      });
+      return graphOb
+        .toDataURL()
+        .then((img) => {
+          const configData = _.cloneDeep(graphOb.getData());
+          for (const key in configData) {
+            configData[key].forEach((item) => {
+              item.states = [];
+            });
+          }
+          return gplotApi
+            .UpdateGplot({
+              globalConfig: JSON.stringify(gplotStore.gplotKeyOb[gplotKey].containerConfig),
+              gplotConfig: JSON.stringify(configData),
+              gplotId: gplotId,
+              mainImg: img,
+              menuId: gplotStore.gplotKeyOb[gplotKey].containerConfig.menuId,
+            })
+            .then(() => {
+              gplotStore.gplotKeyOb[gplotKey].containerConfig.runSave = false;
+              message.success('保存配置成功');
+            })
+            .catch(() => {
+              gplotStore.gplotKeyOb[gplotKey].containerConfig.runSave = false;
+            });
+        })
+        .catch((e) => {
+          console.error('图片生成错误', e);
+          message.error('结构有错误，请检查');
+        });
     } catch (error) {
       console.error('动态保存配置错误', error);
       gplotStore.gplotKeyOb[gplotKey].containerConfig.runSave = false;
