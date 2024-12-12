@@ -47,7 +47,7 @@
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button @click="initPage" type="primary">{{t('view.query')}}</a-button>
+                      <a-button @click="initPage" type="primary">{{ t('view.query') }}</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -214,8 +214,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'DDServcerStationLacci' });
   const mqttStore = useMqttStoreWithOut();
   const isRunGet = ref(false);
@@ -256,13 +254,6 @@
         showHeaderOverflow: true,
         sortable: false,
         minWidth: 100,
-      },
-      {
-        field: 'lacciNames',
-        title: 'ECI名称集合',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        minWidth: 200,
       },
       {
         field: 'laccis',
@@ -317,7 +308,7 @@
   const lineDatas = ref([]);
   const stationDatas = ref([]);
   const isRunMushMq = ref(false);
-  getDDServerTLacciSimple();
+  getDDServerStationSimple();
   getDDServerStationTLaccis();
 
   //页码改变
@@ -355,16 +346,23 @@
 
   //显示表单
   function showFrom(row) {
-    getDDServerTLacciSimple();
-    getDDServerLineSimple();
-    getDDServerLacciNoStationSimple();
-    if (myCommon.isnull(row)) {
-      saveType.value = 'add';
-      isShowForm.value = true;
-    } else {
-      //编辑
-      getDDServerStationTLacci(row);
-    }
+    Promise.all([
+      getDDServerLineSimple(),
+      getDDServerStationSimple(),
+      getDDServerLacciNoStationSimple(),
+    ])
+      .then(() => {
+        if (myCommon.isnull(row)) {
+          saveType.value = 'add';
+          isShowForm.value = true;
+        } else {
+          //编辑
+          getDDServerStationTLacci(row);
+        }
+      })
+      .catch(() => {
+        message.error('获取ECI失败');
+      });
   }
 
   //删除ECI信息
@@ -408,6 +406,13 @@
         if (data) {
           data.lacciIds = data.lacciIds.split(',');
           formData.value = data;
+          data.lacciNumbers.split(',').forEach((m, i) => {
+            lacciDatas.value.splice(0, 0, {
+              key: data.lacciIds[i],
+              label: m,
+              value: data.lacciIds[i],
+            });
+          });
           formData.value.longId = row.longId;
           saveType.value = 'edit';
           isShowForm.value = true;
@@ -464,7 +469,7 @@
     });
   }
 
-  function getDDServerTLacciSimple() {
+  function getDDServerStationSimple() {
     stationApi.GetDDServerStationSimple().then((data) => {
       stationDatas.value = data;
     });
