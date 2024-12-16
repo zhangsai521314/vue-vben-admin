@@ -120,7 +120,6 @@ const transform: AxiosTransform = {
           config.data &&
           (Object.keys(config.data).length > 0 || config.data instanceof FormData)
         ) {
-          debugger;
           config.data = data;
           config.params = params;
         } else {

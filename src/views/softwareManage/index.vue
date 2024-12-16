@@ -10,7 +10,15 @@
       :row-config="{ keyField: 'serviceId' }"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"
-      @sort-change="onSortChange"
+      @sort-change="
+        ({ sortList }) =>
+          vxetableMyCommon.onSortChange({ sortList }, page, getSoftwares, [
+            'orgName',
+            'equipmentName',
+            'serviceTypeName',
+            'serviceName',
+          ])
+      "
       :seq-config="{ startIndex: (page.current - 1) * page.size }"
     >
       <template #pager>
@@ -24,43 +32,47 @@
       </template>
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style="margin-left: 5px">
+          <a-space direction="horizontal" size="small" align="start" style="margin: 0 5px">
             <AuthDom auth="softwareManage_query">
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>所属部门：</label>
+                    <label>{{ t('view.affiliatedDevice') }}：</label>
                     <a-tree-select
-                      v-model:value="seacthContent.orgId"
+                      v-model:value="seacthContent.equipmentId"
                       show-search
-                      style="width: 170px"
                       :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                      placeholder="请选择用户部门"
+                      :placeholder="t('view.pleaseSelectAffiliatedDevice')"
                       allow-clear
                       show-arrow
                       :filterTreeNode="AntVueCommon.filterTreeNode"
-                      :tree-data="organizationDatas"
+                      :tree-data="equipmentData"
                     />
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>软件名称：</label>
+                    <label>{{ t('view.softwareName') }}：</label>
                     <a-input
+                      :style="{
+                        width: locale == 'zh-CN' ? '180px' : locale == 'en-US' ? '200px' : '300px',
+                      }"
                       @press-enter="initPage"
                       v-model:value="seacthContent.serviceName"
-                      placeholder="输入软件名称查询"
+                      :placeholder="t('view.inputSoftwareNameQuery')"
                     />
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="initPage" type="primary">{{t('view.query')}}</a-button>
-                    <a-button @click="resetSeacth">{{t('view.resetForm')}}</a-button>
+                    <a-button @click="initPage" type="primary">{{ t('view.query') }}</a-button>
+                    <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                     <a-radio-group v-model:value="refresh" button-style="solid">
-                      <a-radio-button value="yes">开启自动刷新</a-radio-button>
-                      <a-radio-button value="no">关闭自动刷新</a-radio-button>
-                      <a-radio-button value="time" disabled>{{ refreshTime }}秒</a-radio-button>
+                      <a-radio-button value="yes">{{ t('view.enableAutoRefresh') }}</a-radio-button>
+                      <a-radio-button value="no">{{ t('view.disableAutoRefresh') }}</a-radio-button>
+                      <a-radio-button value="yes">{{
+                        t('view.countdownSeconds', [refreshTime])
+                      }}</a-radio-button>
                     </a-radio-group>
                   </a-space>
                 </div>
@@ -70,7 +82,9 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button class="ant-btn" @click="showFrom()">新增软件</a-button>
+                    <a-button class="ant-btn" @click="showFrom()">{{
+                      t('view.addSoftware')
+                    }}</a-button>
                   </a-space>
                 </div>
               </a-space>
@@ -114,124 +128,144 @@
           </AuthDom>
         </div>
       </template>
-      <template #isNormal="{ row }">
-        <span :style="{ color: row.isNormal ? 'green' : 'red' }">{{
-          row.isNormal ? '否' : '是'
+      <template #isAlarm="{ row }">
+        <span :style="{ color: row.isAlarm ? 'red' : 'green' }">{{
+          row.isAlarm ? t('view.yes') : t('view.no')
         }}</span>
       </template>
     </vxe-grid>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="500"
+      :width="locale == 'zh-CN' ? 500 : 600"
       :visible="isShowForm"
-      title="配置"
+      :title="t('view.configuration')"
       :footer-style="{ textAlign: 'right' }"
       @close="formClose"
     >
       <a-form
-        :label-col="{ span: 6 }"
+        :label-col="{ span: locale == 'zh-CN' ? 6 : 10 }"
         :style="{ paddingRight: '2px' }"
-        :wrapper-col="{ span: 16 }"
         autocomplete="off"
         ref="formRef"
         :model="formData"
       >
         <a-form-item
-          :rules="[{ required: true, message: '请选择所属部门' }]"
-          label="所属部门"
-          name="orgId"
-        >
-          <a-tree-select
-            v-model:value="formData.orgId"
-            show-search
-            style="width: 100%"
-            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-            placeholder="请选择所属部门"
-            allow-clear
-            show-arrow
-            :filterTreeNode="AntVueCommon.filterTreeNode"
-            :tree-data="organizationDatas"
-          />
-        </a-form-item>
-        <a-form-item
-          label="服务类型"
-          name="serviceType"
-          :rules="[{ required: true, message: '请选择软件类型' }]"
-        >
-          <a-select
-            show-search
-            :filter-option="AntVueCommon.filterOption"
-            placeholder="请选择服务类型"
-            v-model:value="formData.serviceType"
-            :options="dictionariesData.filter((m) => m.dictionariesClass == 'serviceType')"
-          />
-        </a-form-item>
-        <a-form-item
-          label="所属设备"
+          :label="t('view.affiliatedDevice')"
           name="equipmentId"
-          :rules="[{ required: true, message: '请选择所属设备' }]"
+          :rules="[{ required: true, message: t('view.pleaseSelectAffiliatedDevice') }]"
         >
           <a-select
             allowClear
             show-search
             :filter-option="AntVueCommon.filterOption"
-            placeholder="请选择所属设备"
+            :placeholder="t('view.pleaseSelectAffiliatedDevice')"
             v-model:value="formData.equipmentId"
             :options="equipmentData"
           />
         </a-form-item>
         <a-form-item
-          name="serviceName"
-          label="软件名称"
+          :label="t('view.serviceType')"
+          name="serviceType"
+          :rules="[{ required: true, message: t('view.pleaseSelectSoftwareType') }]"
+        >
+          <a-select
+            show-search
+            :filter-option="AntVueCommon.filterOption"
+            :placeholder="t('view.pleaseSelectSoftwareType')"
+            v-model:value="formData.serviceType"
+            :options="dictionariesData.filter((m) => m.dictionariesClass == 'serviceType')"
+          />
+        </a-form-item>
+        <a-form-item
+          name="serviceNameCn"
+          :label="t('view.softwareNameCn')"
           :rules="[
             { required: true, message: '' },
-            { max: 40, message: '软件名称过长' },
-            { validator: formValidator.empty, message: '请输入软件名称' },
+            { max: 64, message: t('view.softwareNameIsTooLong', [64]) },
+            { validator: formValidator.empty, message: t('view.pleaseEnterSoftwareName') },
           ]"
         >
           <a-input
-            v-model:value="formData.serviceName"
-            placeholder="请输入软件名称"
+            v-model:value="formData.serviceNameCn"
+            :placeholder="t('view.pleaseEnterSoftwareName')"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
+          name="serviceNameEn"
+          :label="t('view.softwareNameEn')"
+          :rules="[
+            { required: true, message: '' },
+            { max: 250, message: t('view.softwareNameIsTooLong', [250]) },
+            { validator: formValidator.empty, message: t('view.pleaseEnterSoftwareName') },
+          ]"
+        >
+          <a-input
+            v-model:value="formData.serviceNameEn"
+            :placeholder="t('view.pleaseEnterSoftwareName')"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
+          name="serviceNameFr"
+          :label="t('view.softwareNameFr')"
+          :rules="[
+            { required: true, message: '' },
+            { max: 250, message: t('view.softwareNameIsTooLong', [250]) },
+            { validator: formValidator.empty, message: t('view.pleaseEnterSoftwareName') },
+          ]"
+        >
+          <a-input
+            v-model:value="formData.serviceNameFr"
+            :placeholder="t('view.pleaseEnterSoftwareName')"
             autocomplete="off"
           />
         </a-form-item>
         <a-form-item
           name="serviceCode"
-          label="唯一编号"
+          :label="t('view.uniqueNumber')"
           :rules="[
             { required: true, message: '' },
-            { max: 20, message: '唯一编号过长' },
-            { validator: formValidator.empty, message: '请输入唯一编号' },
+            { max: 20, message: t('view.uniqueNumberIsTooLong') },
+            { validator: formValidator.empty, message: t('view.pleaseEnterUniqueNumber') },
           ]"
         >
           <a-input
             v-model:value="formData.serviceCode"
-            placeholder="请输入唯一编号"
+            :placeholder="t('view.pleaseEnterUniqueNumber')"
             autocomplete="off"
           />
         </a-form-item>
         <a-form-item
           name="filePath"
-          label="部署路径"
-          :rules="[{ max: 20, message: '部署路径过长' }]"
+          :label="t('view.deploymentPath')"
+          :rules="[{ max: 20, message: t('view.deploymentPathIsTooLong') }]"
         >
           <a-input
-            placeholder="请输入部署路径"
+            :placeholder="t('view.pleaseEnterDeploymentPath')"
             v-model:value="formData.filePath"
             autocomplete="off"
           />
         </a-form-item>
         <a-form-item
           name="port"
-          label="端口号"
+          :label="t('view.portNumber')"
           :rules="[
-            { required: true, message: '请输入端口号' },
-            { validator: formValidator.min, min: 1, message: '端口号1至65535' },
-            { validator: formValidator.max, max: 65535, message: '端口号1至65535' },
+            { required: true, message: t('view.pleaseEnterPortNumber') },
+            {
+              validator: formValidator.min,
+              min: 1,
+              message: t('view.portNumberMustBeBetween1And65535'),
+            },
+            {
+              validator: formValidator.max,
+              max: 65535,
+              message: t('view.portNumberMustBeBetween1And65535'),
+            },
           ]"
         >
           <a-input-number
-            placeholder="请输入端口号"
+            :placeholder="t('view.pleaseEnterPortNumber')"
             v-model:value="formData.port"
             autocomplete="off"
             :precision="0"
@@ -239,16 +273,18 @@
         </a-form-item>
         <a-form-item
           name="isUpPerformance"
-          label="性能上报"
-          :rules="[{ required: true, message: '请选择是否开启性能上报' }]"
+          :label="t('view.performanceReporting')"
+          :rules="[
+            { required: true, message: t('view.pleaseSelectWhetherToEnablePerformanceReporting') },
+          ]"
         >
           <a-switch v-model:checked="formData.isUpPerformance" />
         </a-form-item>
         <a-form-item
           name="orderIndex"
-          label="软件排序"
+          :label="t('view.softwareSorting')"
           :rules="[
-            { required: true, message: '请输入软件排序' },
+            { required: true, message: t('view.pleaseInputSoftwareSorting') },
             {
               validator: formValidator.min,
               min: -9999,
@@ -262,7 +298,7 @@
           ]"
         >
           <a-input-number
-            placeholder="请输入软件排序"
+            :placeholder="t('view.pleaseInputSoftwareSorting')"
             :precision="3"
             style="width: 300px"
             v-model:value="formData.orderIndex"
@@ -270,11 +306,11 @@
         </a-form-item>
         <a-form-item
           name="remark"
-          label="备注信息"
-          :rules="[{ max: 250, message: '备注信息过长' }]"
+          :label="t('view.remarks')"
+          :rules="[{ max: 250, message: t('view.remarksTooLong') }]"
         >
           <a-textarea
-            placeholder="请输入备注信息"
+            :placeholder="t('view.pleaseInputRemarkInformation')"
             :rows="3"
             v-model:value="formData.remark"
             autocomplete="off"
@@ -292,12 +328,12 @@
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
       :width="700"
       :visible="isShowConfig"
-      title="服务配置"
+      :title="t('view.configuration')"
       :footer-style="{ textAlign: 'right' }"
       @close="closeConfig"
     >
       <div :class="`${prefixCls}codemirror`">
-        <a-spin :spinning="isRunGetConfig" tip="正在获取配置...">
+        <a-spin :spinning="isRunGetConfig">
           <codemirror
             ref="codemirrorRef"
             :modelValue="modelValue"
@@ -316,7 +352,7 @@
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
       :width="700"
       :visible="isShowLog"
-      title="服务日志"
+      :title="t('view.serviceLog')"
       :footer-style="{ textAlign: 'right' }"
       @close="closeLog"
     >
@@ -338,11 +374,11 @@
         :row-config="{ isCurrent: true, isHover: true }"
       >
         <vxe-column type="checkbox" width="60" />
-        <vxe-column field="Name" title="名称">
+        <vxe-column field="Name" :title="t('view.name')">
           <template #default="{ row }">
             <span @dblclick="logNamedblclick(row)" class="name">
               <IconFontClass
-                :title="row.IsBack ? '返回上一层目录' : row.Name"
+                :title="row.IsBack ? t('view.returnToThePreviousDirectory') : row.Name"
                 :name="
                   row.IsBack
                     ? 'icon-baseui-fanhuishangyiji'
@@ -366,7 +402,7 @@
             {{ row.Size != -1 ? row.Size : '' }}
           </template>
         </vxe-column>
-        <vxe-column field="Time" title="上次修改时间" align="right">
+        <vxe-column field="Time" :title="t('view.lastModifiedTime')" align="right">
           <template #default="{ row }">
             {{ row.Time ? dayjs(row.Time).format('YYYY-MM-DD HH:mm:ss') : '' }}
           </template>
@@ -374,7 +410,9 @@
       </vxe-table>
       <template #footer>
         <a-spin :spinning="fromSpinning">
-          <a-button style="margin-left: 8px" type="primary" @click="downLogMqtt">下载</a-button>
+          <a-button style="margin-left: 8px" type="primary" @click="downLogMqtt">{{
+            t('view.download')
+          }}</a-button>
           <a-button style="margin-left: 8px" @click="closeLog">{{ t('view.close') }}</a-button>
         </a-spin>
       </template>
@@ -382,21 +420,15 @@
   </MyContent>
 </template>
 <script setup lang="ts">
+  import vxetableMyCommon from '@/utils/MyCommon/VxetableMyCommon';
   import codemirror from '/@/components/MyCodemirror/codemirror.vue';
   import formValidator from '@/utils/MyCommon/formValidator';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import myCommon from '@/utils/MyCommon/common';
-  import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
+  import { ref, reactive, createVNode, nextTick, watch } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import dayjs from 'dayjs';
-  import {
-    VxeGrid,
-    VxeGridProps,
-    VXETable,
-    VxeTablePropTypes,
-    VxeColumnPropTypes,
-    VxeTableEvents,
-  } from 'vxe-table';
+  import { VxeGrid, VxeGridProps } from 'vxe-table';
   import softwareApi from '@/api/software';
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
@@ -412,8 +444,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'SoftwareManage' });
   const { prefixCls } = useDesign('softwareManage-');
   const mqttStore = useMqttStoreWithOut();
@@ -434,149 +464,156 @@
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
-        minWidth: 130,
+        minWidth: 136,
         fixed: 'left',
       },
       {
         field: 'orgName',
-        title: '所属部门',
+        title: t('view.departmentName'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         visible: false,
-        minWidth: 130,
+        minWidth: 176,
         fixed: 'left',
       },
       {
         field: 'equipmentName',
-        title: '所属设备',
+        title: t('view.affiliatedDevice'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         visible: false,
-        minWidth: 130,
+        minWidth: 146,
         fixed: 'left',
       },
       {
-        field: 'serviceType',
-        title: '服务类型',
+        field: 'serviceTypeName',
+        title: t('view.serviceType'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 130,
+        minWidth: 136,
         fixed: 'left',
       },
       {
         field: 'serviceName',
-        title: '软件名称',
+        title: t('view.softwareName'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         minWidth: 200,
         fixed: 'left',
       },
       {
-        field: 'serviceCode',
-        title: '唯一编号',
+        field: 'serviceNameCn',
+        title: t('view.softwareNameCn'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: 200,
+        visible: false,
+      },
+      {
+        field: 'serviceNameEn',
+        title: t('view.softwareNameEn'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 200,
+        visible: false,
+      },
+      {
+        field: 'serviceNameFr',
+        title: t('view.softwareNameFr'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 200,
+        visible: false,
+      },
+      {
+        field: 'serviceCode',
+        title: t('view.uniqueNumber'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 136,
       },
       {
         field: 'filePath',
-        title: '部署路径',
+        title: t('view.deploymentPath'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         visible: false,
-        minWidth: 150,
+        minWidth: 186,
       },
       {
         field: 'newVersion',
-        title: '正式版本',
+        title: t('view.officialVersion'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 110,
+        minWidth: 146,
       },
       {
         field: 'runVersion',
-        title: '终端版本',
+        title: t('view.terminalVersion'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 110,
+        minWidth: 166,
       },
       {
         field: 'port',
-        title: '运行端口',
+        title: t('view.runningPort'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         visible: false,
-        minWidth: 130,
+        minWidth: 200,
       },
       {
         field: 'changeTime',
-        title: '状态时间',
+        title: t('view.statusTime'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         minWidth: 150,
       },
       {
         field: 'isOnline',
-        title: '服务是否在线',
+        title: t('view.isOnline'),
         showOverflow: true,
-        showHeaderOverflow: true,
-        // sortable: true,
+        sortable: true,
         cellRender: { name: 'render_isno' },
-        minWidth: 120,
+        minWidth: 150,
       },
       {
-        field: 'isNormal',
-        title: '是否告警',
+        field: 'isAlarm',
+        title: t('view.isAlert'),
         showOverflow: true,
-        showHeaderOverflow: true,
         // sortable: true,
         slots: {
-          default: 'isNormal',
+          default: 'isAlarm',
         },
-        minWidth: 120,
+        minWidth: 146,
       },
       {
         field: 'isUpPerformance',
-        title: '性能上报',
+        title: t('view.performanceReporting'),
         showOverflow: true,
-        showHeaderOverflow: true,
         cellRender: { name: 'render_isno' },
-        minWidth: 100,
+        minWidth: 216,
       },
       {
         field: 'isPerformanceNormal',
-        title: '性能正常',
+        title: t('view.performanceNormal'),
         showOverflow: true,
-        showHeaderOverflow: true,
         // sortable: true,
         cellRender: { name: 'render_isno' },
-        minWidth: 100,
+        minWidth: 200,
       },
       {
         field: 'orderIndex',
         title: t('view.sorting'),
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
         minWidth: 100,
       },
       {
         field: 'remark',
-        title: '备注信息',
+        title: t('view.remarks'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         visible: false,
         minWidth: 130,
@@ -586,7 +623,6 @@
         title: t('view.creationTime'),
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
       },
@@ -595,36 +631,32 @@
         title: t('view.creator'),
         minWidth: 130,
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
       },
       {
         field: 'modifyTime',
-        title: '修改时间',
+        title: t('view.modificationTime'),
         minWidth: 170,
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
       },
       {
         field: 'modifyUser',
-        title: '修改人',
+        title: t('view.modifier'),
         minWidth: 130,
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
       },
       {
-        title: '操作',
+        title: t('view.action'),
         minWidth: 140,
         slots: {
           default: 'default',
         },
         showOverflow: true,
-        showHeaderOverflow: true,
         fixed: 'right',
       },
     ],
@@ -637,17 +669,19 @@
     data: [],
   });
   const defFromData = reactive({
-    serviceName: '',
+    equipmentId: null,
+    serviceNameCn: null,
+    serviceNameEn: null,
+    serviceNameFr: null,
     projectid: 1,
-    address: '',
-    remark: '',
+    address: null,
+    remark: null,
     orderIndex: null,
-    port: '',
+    port: null,
     serviceType: null,
-    filePath: '',
-    serviceCode: '',
+    filePath: null,
+    serviceCode: null,
     isUpPerformance: false,
-    orgId: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);
@@ -658,8 +692,8 @@
   const dictionariesData = ref([]);
   const equipmentData = ref([]);
   const seacthContent = ref({
-    orgId: null,
-    serviceName: '',
+    equipmentId: null,
+    serviceName: null,
   });
   const refresh = ref('yes');
   const refreshTime = ref(10);
@@ -695,7 +729,7 @@
         [
           {
             code: 'down',
-            name: '下载',
+            name: t('view.download'),
             prefixIcon: 'iconfont icon-baseui-xiazai',
             className: prefixCls + 'logTtable-xiazai-item',
           },
@@ -718,17 +752,18 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['orgName asc', 'serviceType asc', 'serviceName asc'],
+    sortlist: ['orgOrderIndex asc', 'serviceTypeNameCn asc', 'orderIndex asc'],
   });
 
+  getEquipments();
   getOrganization();
   getSoftwares(true);
 
   //重置搜索条件
   function resetSeacth() {
     seacthContent.value = {
-      orgId: null,
-      serviceName: '',
+      equipmentId: null,
+      serviceName: null,
     };
   }
 
@@ -759,7 +794,7 @@
           .DeleteService(row.serviceId)
           .then(() => {
             loading.value = false;
-            message.success('删除软件信息成功');
+            message.success(t('view.deletionSuccessful'));
             getSoftwares();
           })
           .catch(() => {
@@ -790,7 +825,7 @@
           saveType = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取软件信息失败');
+          message.error(t('view.failedToRetrieveSoftwareInformation'));
         }
       })
       .catch(() => {
@@ -807,7 +842,8 @@
     softwareApi
       .GetServices({
         ...seacthContent.value,
-        FullSort: getFullSort(),
+        culture: 'fr-FR',
+        FullSort: page.sortlist.join(','),
         PageIndex: page.current,
         PageSize: page.size,
         execompleteBefore: () => {
@@ -837,12 +873,14 @@
       formData.value['execompleteBefore'] = execompleteBefore;
       if (saveType == 'add') {
         softwareApi.AddService(formData.value).then((data) => {
-          data.serviceType = dictionariesData.value.find((m) => m.key == data.serviceType)?.label;
+          data.serviceTypeName = dictionariesData.value.find(
+            (m) => m.key == data.serviceType,
+          )?.label;
           data.equipmentName = equipmentData.value.find((m) => m.key == data.equipmentId)?.label;
           data.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
           tableConfig.data?.splice(0, 0, data);
           formClose();
-          message.success('新增软件成功');
+          message.success('view.additionSuccessful');
           page.total = page.total + 1;
         });
       } else {
@@ -854,7 +892,7 @@
             myCommon.objectReplace(oldData, data);
             oldData.modifyTime = data.modifyTime;
             oldData.modifyUser = data.modifyUser;
-            oldData.serviceType = dictionariesData.value.find(
+            oldData.serviceTypeName = dictionariesData.value.find(
               (m) => m.key == data.serviceType,
             )?.label;
             oldData.equipmentName = equipmentData.value.find(
@@ -863,7 +901,7 @@
             oldData.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
           }
           formClose();
-          message.success('更新软件信息成功');
+          message.success(t('view.updateSuccessful'));
         });
       }
     });
@@ -897,28 +935,6 @@
       .catch(() => {
         equipmentData.value = [];
       });
-  }
-
-  /**
-   * 排序条件改变
-   */
-  function onSortChange({ field, order, sortList, column, property, $event }) {
-    page.sortlist = [];
-    sortList.forEach((item) => {
-      var tempstr = item.field + ' ' + item.order;
-      page.sortlist.push(tempstr);
-    });
-    getSoftwares();
-  }
-  /**
-   * 获取排序条件
-   */
-  function getFullSort() {
-    let fullsort = '';
-    page.sortlist.forEach((item) => {
-      fullsort += item + ',';
-    });
-    return fullsort.substring(0, fullsort.length - 1);
   }
 
   function initPage() {
@@ -969,11 +985,11 @@
         }),
         function (msg) {
           isRunGetConfig.value = false;
-          msg ? message.error(msg) : message.success('请求已发送');
+          msg ? message.error(msg) : message.success(t('view.requestSent'));
         },
       );
     } else {
-      message.info('服务与网管系统掉线，不可获取');
+      message.info(t('view.serviceOfflineTip'));
     }
   }
 
@@ -1005,11 +1021,11 @@
         }),
         function (msg) {
           isRunGetLog.value = false;
-          msg ? message.error(msg) : message.success('请求已发送');
+          msg ? message.error(msg) : message.success(t('view.requestSent'));
         },
       );
     } else {
-      message.info('服务与网管系统掉线，不可获取');
+      message.info(t('view.serviceOfflineTip'));
     }
   }
 
@@ -1053,11 +1069,11 @@
         }),
         function (msg) {
           isRunGetLog.value = false;
-          msg ? message.error(msg) : message.success('请求已发送');
+          msg ? message.error(msg) : message.success(t('view.requestSent'));
         },
       );
     } else {
-      message.info('请先选中要下载的文件');
+      message.info(t('view.pleaseSelectTheFilesToBeDownloadedFirst'));
     }
   }
 

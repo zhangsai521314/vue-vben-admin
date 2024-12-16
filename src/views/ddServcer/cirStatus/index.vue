@@ -152,9 +152,9 @@
                     <a-button @click="initPage()" type="primary">{{t('view.query')}}</a-button>
                     <a-button @click="resetSeacth">{{t('view.resetForm')}}</a-button>
                     <a-radio-group v-model:value="refresh" button-style="solid">
-                      <a-radio-button value="yes">开启自动刷新</a-radio-button>
-                      <a-radio-button value="no">关闭自动刷新</a-radio-button>
-                      <a-radio-button value="time" disabled>{{ refreshTime }}秒</a-radio-button>
+                      <a-radio-button value="yes">{{t('view.enableAutoRefresh')}}</a-radio-button>
+                      <a-radio-button value="yes">{{t('view.disableAutoRefresh')}}</a-radio-button>
+                      <a-radio-button value="yes">{{t('view.countdownSeconds',[refreshTime])}}</a-radio-button>
                     </a-radio-group>
                   </a-space>
                 </div>
@@ -380,7 +380,7 @@
         sortable: true,
       },
       // {
-      //   title: '操作',
+      //   title: t('view.action'),
       //   width: 140,
       //   slots: {
       //     default: 'default',

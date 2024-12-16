@@ -426,7 +426,7 @@
         },
       },
       {
-        title: '操作',
+        title: t('view.action'),
         minWidth: 90,
         slots: {
           default: 'default',

@@ -174,7 +174,7 @@
         </a-form-item>
         <a-form-item
           name="remark"
-          label="备注信息"
+          :label="t('view.remarks')"
           :rules="[{ max: 250, message: '备注信息过长' }]"
         >
           <a-textarea

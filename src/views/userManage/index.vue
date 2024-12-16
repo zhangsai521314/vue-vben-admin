@@ -12,11 +12,11 @@
         :row-config="{ keyField: 'userId' }"
         :column-config="{ resizable: true }"
         :custom-config="{ storage: true }"
-        @sort-change="onSortChange"
+        @sort-change="({ sortList }) => vxetableMyCommon.onSortChange({ sortList }, page, getUsers)"
       >
         <template #toolbar_buttons>
           <div :class="`tableBtn`">
-            <a-space direction="horizontal" size="small" style="margin-left: 5px">
+            <a-space direction="horizontal" size="small" align="start" style="margin: 0 5px">
               <AuthDom auth="userManage_query">
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
@@ -377,6 +377,7 @@
   </MyContent>
 </template>
 <script setup lang="ts">
+  import vxetableMyCommon from '@/utils/MyCommon/VxetableMyCommon';
   import myCommon from '@/utils/MyCommon/common';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import formValidator from '@/utils/MyCommon/formValidator';
@@ -777,16 +778,6 @@
     });
     getUsers();
   }
-  /**
-   * 获取排序条件
-   */
-  function getFullSort() {
-    let fullsort = '';
-    page.sortlist.forEach((item) => {
-      fullsort += item + ',';
-    });
-    return fullsort.substring(0, fullsort.length - 1);
-  }
 
   function initPage() {
     page.current = 1;
@@ -797,7 +788,7 @@
   function getUsers_() {
     return userApi.GetUsers({
       ...seacthContent.value,
-      FullSort: getFullSort(),
+      FullSort: page.sortlist.join(','),
       execompleteBefore: () => {
         loading.value = false;
       },

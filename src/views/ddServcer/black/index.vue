@@ -95,7 +95,7 @@
         :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
         :width="500"
         :visible="isShowForm"
-        title="配置"
+        :title="t('view.configuration')"
         :footer-style="{ textAlign: 'right' }"
         @close="formClose"
       >
@@ -203,7 +203,7 @@
         sortable: true,
       },
       {
-        title: '操作',
+        title: t('view.action'),
         minWidth: 90,
         slots: {
           default: 'default',

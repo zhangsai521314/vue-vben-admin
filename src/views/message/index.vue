@@ -145,9 +145,9 @@
                       <a-button @click="exportData" type="primary">导出</a-button>
                     </a-spin>
                     <a-radio-group v-model:value="refresh" button-style="solid">
-                      <a-radio-button value="yes">开启自动刷新</a-radio-button>
-                      <a-radio-button value="no">关闭自动刷新</a-radio-button>
-                      <a-radio-button value="time" disabled>{{ refreshTime }}秒</a-radio-button>
+                      <a-radio-button value="yes">{{t('view.enableAutoRefresh')}}</a-radio-button>
+                      <a-radio-button value="yes">{{t('view.disableAutoRefresh')}}</a-radio-button>
+                      <a-radio-button value="yes">{{t('view.countdownSeconds',[refreshTime])}}</a-radio-button>
                     </a-radio-group>
                   </a-space>
                 </div>
@@ -578,7 +578,7 @@
         visible: false,
       },
       {
-        title: '操作',
+        title: t('view.action'),
         slots: {
           default: 'default',
         },

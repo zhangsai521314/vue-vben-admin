@@ -350,7 +350,7 @@ const Common = {
   getJWTDate(timestamp: number) {
     return new Date(timestamp * 1000);
   },
-  // //拷贝对象2中对象1存在的键给对象1
+  //拷贝对象2中对象1存在的键给对象1
   // objectToObject(obj, obj2) {
   //   for (const i in obj2) {
   //     if ($.isPlainObject(obj[i])) {

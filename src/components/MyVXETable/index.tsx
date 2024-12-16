@@ -1,31 +1,33 @@
 //自定义渲染器(render_具体名称)，筛选器(filter_具体名称)。写好后可直接使用，无需引入
 import VXETable from 'vxe-table';
 import IconFontClass from '@/components/MyIcon/index.vue';
-
+import { useI18n } from '@/hooks/web/useI18n';
 //返回是否渲染
 VXETable.renderer.add('render_isno', {
   //默认显示模板
   renderDefault(renderOpts, params) {
+    const { t } = useI18n();
     const { row, column } = params;
-    let { custom } = renderOpts;
+    const { custom } = renderOpts;
     if (custom && custom.status && row[column.field] != undefined) {
       return [
         <label style={{ color: row[column.field] == custom.open ? 'green' : 'red' }}>
-          {row[column.field] == custom.open ? '是' : '否'}
+          {row[column.field] == custom.open ? t('view.yes') : t('view.no')}
         </label>,
       ];
     } else if (row[column.field] != undefined) {
       return [
         <label style={{ color: row[column.field] ? 'green' : 'red' }}>
-          {row[column.field] ? '是' : '否'}
+          {row[column.field] ? t('view.yes') : t('view.no')}
         </label>,
       ];
     }
   },
   //导出模板
   exportMethod(params) {
+    const { t } = useI18n();
     const { row, column } = params;
-    return row[column.field] ? '是' : '否';
+    return row[column.field] ? t('view.yes') : t('view.no');
   },
 });
 

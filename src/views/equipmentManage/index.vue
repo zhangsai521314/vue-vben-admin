@@ -10,7 +10,15 @@
       :row-config="{ keyField: 'equipmentId' }"
       :column-config="{ resizable: true }"
       :custom-config="{ storage: true }"
-      @sort-change="onSortChange"
+      @sort-change="
+        ({ sortList }) =>
+          vxetableMyCommon.onSortChange({ sortList }, page, getEquipments, [
+            'orgName',
+            'equipmentTypeName',
+            'equipmentName',
+            'systemTypeName',
+          ])
+      "
       :seq-config="{ startIndex: (page.current - 1) * page.size }"
     >
       <template #pager>
@@ -24,18 +32,17 @@
       </template>
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style="margin-left: 5px">
+          <a-space direction="horizontal" size="small" align="start" style="margin: 0 5px">
             <AuthDom auth="equipmentManage_query">
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>所属部门：</label>
+                    <label>{{ t('view.affiliatedDepartment') }}：</label>
                     <a-tree-select
                       v-model:value="seacthContent.orgId"
                       show-search
-                      style="width: 170px"
                       :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                      placeholder="请选择所属部门"
+                      :placeholder="t('view.pleaseSelectTheAffiliatedDepartment')"
                       allow-clear
                       show-arrow
                       :filterTreeNode="AntVueCommon.filterTreeNode"
@@ -45,18 +52,21 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>设备名称：</label>
+                    <label>{{ t('view.deviceName') }}：</label>
                     <a-input
+                      :style="{
+                        width: locale == 'zh-CN' ? '180px' : locale == 'en-US' ? '200px' : '350px',
+                      }"
                       @press-enter="initPage"
                       v-model:value="seacthContent.equipmentName"
-                      placeholder="输入设备名称查询"
+                      :placeholder="t('view.inputDeviceNameQuery')"
                     />
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="initPage" type="primary">{{t('view.query')}}</a-button>
-                    <a-button @click="resetSeacth">{{t('view.resetForm')}}</a-button>
+                    <a-button @click="initPage" type="primary">{{ t('view.query') }}</a-button>
+                    <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                   </a-space>
                 </div>
               </a-space>
@@ -65,7 +75,9 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button class="ant-btn" @click="showFrom()">新增设备</a-button>
+                    <a-button class="ant-btn" @click="showFrom()">{{
+                      t('view.addDevice')
+                    }}</a-button>
                   </a-space>
                 </div>
               </a-space>
@@ -96,23 +108,22 @@
     </vxe-grid>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="500"
+      :width="locale == 'zh-CN' ? 500 : 600"
       :visible="isShowForm"
-      title="配置"
+      :title="t('view.configuration')"
       :footer-style="{ textAlign: 'right' }"
       @close="formClose"
     >
       <a-form
-        :label-col="{ span: 6 }"
+        :label-col="{ span: locale == 'zh-CN' ? 6 : 10 }"
         :style="{ paddingRight: '2px' }"
-        :wrapper-col="{ span: 16 }"
         autocomplete="off"
         ref="formRef"
         :model="formData"
       >
         <a-form-item
-          :rules="[{ required: true, message: '请选择所属部门' }]"
-          label="所属部门"
+          :rules="[{ required: true, message: t('view.pleaseSelectTheAffiliatedDepartment') }]"
+          :label="t('view.affiliatedDepartment')"
           name="orgId"
         >
           <a-tree-select
@@ -120,7 +131,7 @@
             show-search
             style="width: 100%"
             :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-            placeholder="请选择所属部门"
+            :placeholder="t('view.pleaseSelectTheAffiliatedDepartment')"
             allow-clear
             show-arrow
             :filterTreeNode="AntVueCommon.filterTreeNode"
@@ -128,27 +139,57 @@
           />
         </a-form-item>
         <a-form-item
-          name="equipmentName"
-          label="设备名称"
+          name="equipmentNameCn"
+          :label="t('view.deviceNameCn')"
           :rules="[
             { required: true, message: '' },
-            { max: 40, message: '设备名称过长' },
-            { validator: formValidator.empty, message: '请输入设备名称' },
+            { max: 64, message: t('view.deviceNameIsTooLong', [64]) },
+            { validator: formValidator.empty, message: t('view.pleaseEnterDeviceName') },
           ]"
         >
           <a-input
-            v-model:value="formData.equipmentName"
-            placeholder="请输入设备名称"
+            v-model:value="formData.equipmentNameCn"
+            :placeholder="t('view.pleaseEnterDeviceName')"
             autocomplete="off"
           />
         </a-form-item>
         <a-form-item
-          label="设备类型"
+          name="equipmentNameEn"
+          :label="t('view.deviceNameEn')"
+          :rules="[
+            { required: true, message: '' },
+            { max: 250, message: t('view.deviceNameIsTooLong', [250]) },
+            { validator: formValidator.empty, message: t('view.pleaseEnterDeviceName') },
+          ]"
+        >
+          <a-input
+            v-model:value="formData.equipmentNameEn"
+            :placeholder="t('view.pleaseEnterDeviceName')"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
+          name="equipmentNameFr"
+          :label="t('view.deviceNameFr')"
+          :rules="[
+            { required: true, message: '' },
+            { max: 250, message: t('view.deviceNameIsTooLong', [250]) },
+            { validator: formValidator.empty, message: t('view.pleaseEnterDeviceName') },
+          ]"
+        >
+          <a-input
+            v-model:value="formData.equipmentNameFr"
+            :placeholder="t('view.pleaseEnterDeviceName')"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
+          :label="t('view.deviceType')"
           name="equipmentType"
-          :rules="[{ required: true, message: '请选择设备类型' }]"
+          :rules="[{ required: true, message: t('view.pleaseSelectDeviceType') }]"
         >
           <a-select
-            placeholder="请选择设备类型"
+            :placeholder="t('view.pleaseSelectDeviceType')"
             show-search
             :filter-option="AntVueCommon.filterOption"
             v-model:value="formData.equipmentType"
@@ -156,38 +197,38 @@
           />
         </a-form-item>
         <a-form-item
-          label="系统类型"
+          :label="t('view.systemType')"
           name="systemType"
-          :rules="[{ required: true, message: '请选择系统类型' }]"
+          :rules="[{ required: true, message: t('view.pleaseSelectSystemType') }]"
         >
           <a-select
             show-search
             :filter-option="AntVueCommon.filterOption"
-            placeholder="请选择系统类型"
+            :placeholder="t('view.pleaseSelectSystemType')"
             v-model:value="formData.systemType"
             :options="dictionariesData.filter((m) => m.dictionariesClass == 'systemType')"
           />
         </a-form-item>
         <a-form-item
           name="address"
-          label="设备地址"
+          :label="t('view.deviceAddress')"
           :rules="[
             { required: true, message: '' },
-            { max: 50, message: '设备地址过长' },
-            { validator: formValidator.empty, message: '请输入设备地址' },
+            { max: 50, message: t('view.deviceAddressIsTooLong') },
+            { validator: formValidator.empty, message: t('view.pleaseEnterDeviceAddress') },
           ]"
         >
           <a-input
             v-model:value="formData.address"
-            placeholder="请输入设备地址"
+            :placeholder="t('view.pleaseEnterDeviceAddress')"
             autocomplete="off"
           />
         </a-form-item>
         <a-form-item
           name="orderIndex"
-          label="设备排序"
+          :label="t('view.deviceSorting')"
           :rules="[
-            { required: true, message: '请输入设备排序' },
+            { required: true, message: t('view.pleaseEnterDeviceSorting') },
             {
               validator: formValidator.min,
               min: -9999,
@@ -201,7 +242,7 @@
           ]"
         >
           <a-input-number
-            placeholder="请输入设备排序"
+            :placeholder="t('view.pleaseEnterDeviceSorting')"
             style="width: 300px"
             :precision="3"
             v-model:value="formData.orderIndex"
@@ -209,11 +250,11 @@
         </a-form-item>
         <a-form-item
           name="remark"
-          label="备注信息"
-          :rules="[{ max: 250, message: '备注信息过长' }]"
+          :label="t('view.remarks')"
+          :rules="[{ max: 250, message: t('view.remarksTooLong') }]"
         >
           <a-textarea
-            placeholder="请输入备注信息"
+            :placeholder="t('view.pleaseInputRemarkInformation')"
             :rows="3"
             v-model:value="formData.remark"
             autocomplete="off"
@@ -231,9 +272,10 @@
 </template>
 <script setup lang="ts">
   import formValidator from '@/utils/MyCommon/formValidator';
+  import vxetableMyCommon from '@/utils/MyCommon/VxetableMyCommon';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import myCommon from '@/utils/MyCommon/common';
-  import { ref, reactive, createVNode, nextTick, watch } from 'vue';
+  import { ref, reactive, createVNode } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import equipmentApi from '@/api/equipment';
@@ -247,8 +289,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'EquipmentManage' });
   const { prefixCls } = useDesign('equipment-');
   const loading = ref(true);
@@ -267,66 +307,83 @@
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
-        minWidth: 130,
+        minWidth: 136,
         fixed: 'left',
       },
       {
         field: 'orgName',
-        title: '所属部门',
+        title: t('view.departmentName'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 130,
+        minWidth: 176,
         fixed: 'left',
       },
       {
-        field: 'equipmentType',
-        title: '硬件类型',
+        field: 'equipmentTypeName',
+        title: t('view.hardwareType'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: 146,
       },
       {
         field: 'equipmentName',
-        title: '设备名称',
+        title: t('view.deviceName'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 130,
+        minWidth: 176,
       },
       {
-        field: 'systemType',
-        title: '系统类型',
+        field: 'equipmentNameCn',
+        title: t('view.deviceNameCn'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: 226,
+        visible: false,
+      },
+      {
+        field: 'equipmentNameEn',
+        title: t('view.deviceNameEn'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 226,
+        visible: false,
+      },
+      {
+        field: 'equipmentNameFr',
+        title: t('view.deviceNameFr'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 236,
+        visible: false,
+      },
+      {
+        field: 'systemTypeName',
+        title: t('view.systemType'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 166,
       },
       {
         field: 'address',
-        title: '设备地址',
+        title: t('view.deviceAddress'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 140,
+        minWidth: 166,
       },
       {
         field: 'orderIndex',
-        title: '设备排序',
+        title: t('view.sorting'),
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
         minWidth: 100,
       },
       {
         field: 'remark',
-        title: '备注信息',
+        title: t('view.remarks'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
+        visible: false,
         minWidth: 120,
       },
       {
@@ -334,7 +391,6 @@
         title: t('view.creationTime'),
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
       },
@@ -343,36 +399,32 @@
         title: t('view.creator'),
         minWidth: 130,
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
       },
       {
         field: 'modifyTime',
-        title: '修改时间',
+        title: t('view.modificationTime'),
         minWidth: 170,
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
       },
       {
         field: 'modifyUser',
-        title: '修改人',
+        title: t('view.modifier'),
         minWidth: 130,
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
       },
       {
-        title: '操作',
+        title: t('view.action'),
         minWidth: 90,
         slots: {
           default: 'default',
         },
         showOverflow: true,
-        showHeaderOverflow: true,
         fixed: 'right',
       },
     ],
@@ -385,12 +437,14 @@
     data: [],
   });
   const defFromData = reactive({
-    equipmentName: '',
+    equipmentNameCn: null,
+    equipmentNameEn: null,
+    equipmentNameFr: null,
     projectid: 1,
     equipmentType: null,
     systemType: null,
-    address: '',
-    remark: '',
+    address: null,
+    remark: null,
     orderIndex: null,
     orgId: null,
   });
@@ -411,7 +465,7 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['orgName asc', 'equipmentType asc', 'equipmentName asc'],
+    sortlist: ['orgOrderIndex asc', 'dicOrderIndex asc', 'orderIndex asc'],
   });
 
   getOrganization();
@@ -450,7 +504,7 @@
           .DeleteEquipment(row.equipmentId)
           .then(() => {
             loading.value = false;
-            message.success('删除设备信息成功');
+            message.success(t('view.deletionSuccessful'));
             getEquipments();
           })
           .catch(() => {
@@ -466,28 +520,6 @@
     isShowForm.value = false;
     formData.value = _.cloneDeep(defFromData);
     formRef.value.clearValidate();
-  }
-
-  /**
-   * 排序条件改变
-   */
-  function onSortChange({ field, order, sortList, column, property, $event }) {
-    page.sortlist = [];
-    sortList.forEach((item) => {
-      var tempstr = item.field + ' ' + item.order;
-      page.sortlist.push(tempstr);
-    });
-    getEquipments();
-  }
-  /**
-   * 获取排序条件
-   */
-  function getFullSort() {
-    let fullsort = '';
-    page.sortlist.forEach((item) => {
-      fullsort += item + ',';
-    });
-    return fullsort.substring(0, fullsort.length - 1);
   }
 
   function initPage() {
@@ -508,7 +540,7 @@
           saveType = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取设备信息失败');
+          message.error(t('view.failedToRetrieveDeviceInformation'));
         }
       })
       .catch(() => {
@@ -525,7 +557,7 @@
         execompleteBefore: () => {
           loading.value = false;
         },
-        FullSort: getFullSort(),
+        FullSort: page.sortlist.join(','),
         PageIndex: page.current,
         PageSize: page.size,
       })
@@ -550,14 +582,14 @@
       formData.value['execompleteBefore'] = execompleteBefore;
       if (saveType == 'add') {
         equipmentApi.AddEquipment(formData.value).then((data) => {
-          data.equipmentType = dictionariesData.value.find(
+          data.equipmentTypeName = dictionariesData.value.find(
             (m) => m.key == data.equipmentType,
           )?.label;
-          data.systemType = dictionariesData.value.find((m) => m.key == data.systemType)?.label;
+          data.systemTypeName = dictionariesData.value.find((m) => m.key == data.systemType)?.label;
           data.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
           tableConfig.data?.splice(0, 0, data);
           formClose();
-          message.success('新增设备成功');
+          message.success(t('view.additionSuccessful'));
           page.total = page.total + 1;
         });
       } else {
@@ -569,10 +601,10 @@
             myCommon.objectReplace(oldData, formData.value);
             oldData.modifyTime = data.modifyTime;
             oldData.modifyUser = data.modifyUser;
-            oldData.equipmentType = dictionariesData.value.find(
+            oldData.equipmentTypeName = dictionariesData.value.find(
               (m) => m.key == data.equipmentType,
             )?.label;
-            oldData.systemType = dictionariesData.value.find(
+            oldData.systemTypeName = dictionariesData.value.find(
               (m) => m.key == data.systemType,
             )?.label;
             oldData.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;

@@ -224,8 +224,8 @@ export const useGplotStore = defineStore({
                 level: 0,
               },
               {
-                name: '故障',
-                code: 'isNormal',
+                name: '告警',
+                code: 'isAlarm',
                 color: '#ECEC0D',
                 open: true,
                 level: 1,
