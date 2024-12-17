@@ -31,7 +31,7 @@
           color="#CB88DE"
         />
         <div>
-          <div :class="`${prefixCls}title`">内存</div>
+          <div :class="`${prefixCls}title`">{{ t('view.memoryCapacity') }}</div>
           <span> {{ props.newDataInfo.MemoryUsage }}%</span>
         </div>
       </div>
@@ -52,7 +52,7 @@
           color="#9ADC69"
         />
         <div>
-          <div :class="`${prefixCls}title`">磁盘:{{ disk.DiskName }}</div>
+          <div :class="`${prefixCls}title`">{{ t('view.diskDrive') }}:{{ disk.DiskName }}</div>
           <span>{{ disk.DiskUsage }}% </span>
         </div>
       </div>
@@ -60,7 +60,7 @@
     <div :class="`${prefixCls}div-max`">
       <div :class="`${prefixCls}div-max-title`">
         <div>{{ props.name }}</div>
-        <div>%{{ selectedMaxShowName }}使用率</div>
+        <div>%{{ selectedMaxShowName }}{{ t('view.usageRate') }}</div>
       </div>
       <echarts
         :isShowYX="true"
@@ -81,7 +81,7 @@
     <IconFontClass
       name="icon-baseui-zanwuneirong"
       :isSvg="true"
-      title="暂无数据"
+      :title="t('view.noDataAvailable')"
       style="margin: 0 auto; font-size: 176px"
     />
   </div>
@@ -97,8 +97,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   const props = defineProps({
     //最新数据
     newDataInfo: {
@@ -189,7 +187,7 @@
     user-select: none;
 
     .@{prefixCls}min-echart {
-      width: 180px;
+      width: 170px;
       height: 70px;
       padding: 0;
     }

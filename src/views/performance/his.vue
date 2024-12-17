@@ -9,7 +9,7 @@
         <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
           <div class="row-div">
             <a-space direction="horizontal" size="small" :wrap="true">
-              <label>数据时间：</label>
+              <label>{{ t('view.dataTime') }}：</label>
               <a-config-provider :locale="zhCN">
                 <a-range-picker
                   :allowClear="false"
@@ -22,9 +22,9 @@
           </div>
           <div class="row-div">
             <a-space direction="horizontal" size="small" :wrap="true">
-              <label>设备名称：</label>
+              <label>{{ t('view.deviceName') }}：</label>
               <a-select
-                placeholder="输入设备名称查询"
+                :placeholder="t('view.pleaseSelectADeviceToQuery')"
                 style="width: 170px"
                 allow-clear
                 show-search
@@ -36,13 +36,13 @@
           </div>
           <div class="row-div">
             <a-space direction="horizontal" size="small" :wrap="true">
-              <a-button @click="initPage()" type="primary">{{t('view.query')}}</a-button>
+              <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
             </a-space>
           </div>
         </a-space>
       </AuthDom>
     </a-space>
-    <a-spin tip="加载中..." :spinning="loading">
+    <a-spin :spinning="loading">
       <a-tabs
         v-model:activeKey="activeKey"
         type="card"
@@ -50,7 +50,7 @@
         @change="tabsChange"
         :class="`${prefixCls}tabs-content-bar`"
       >
-        <a-tab-pane key="table" tab="表格查询">
+        <a-tab-pane key="table" :tab="t('view.tableQuery')">
           <vxe-grid
             :scroll-y="{ enabled: true }"
             :auto-resize="true"
@@ -77,10 +77,12 @@
             </template>
           </vxe-grid>
         </a-tab-pane>
-        <a-tab-pane key="echart" tab="历史曲线">
+        <a-tab-pane key="echart" :tab="t('view.historicalCurve')">
           <div v-show="isDataSource" :class="prefixCls" ref="chartRef" style="height: 100%"></div>
           <div style="height: 100%" v-show="!isDataSource">
-            <div style="height: 30px; padding-top: 20%; text-align: center"> 暂无数据 </div>
+            <div style="height: 30px; padding-top: 20%; text-align: center">
+              {{ t('view.noDataAvailable') }}
+            </div>
           </div>
         </a-tab-pane>
       </a-tabs>
@@ -88,9 +90,8 @@
   </MyContent>
 </template>
 <script setup lang="ts">
-  import myCommon from '@/utils/MyCommon/common';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
-  import { ref, reactive, createVNode, nextTick, onMounted, watch, unref } from 'vue';
+  import { ref, reactive } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import zhCN from 'ant-design-vue/es/locale/zh_CN';
@@ -98,7 +99,7 @@
   import 'dayjs/locale/zh-cn';
   import performanceApi from '@/api/performance';
   import equipmentApi from '@/api/equipment';
-  import { message, Modal } from 'ant-design-vue';
+  import { message } from 'ant-design-vue';
   import { useECharts } from '@/hooks/web/useECharts';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
@@ -106,8 +107,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'PerformanceHis' });
   const { prefixCls } = useDesign('PerformanceHis-');
   const activeKey = ref('table');
@@ -198,7 +197,7 @@
   //获取列表
   function getPerformances() {
     if (seacthContent.value.equipmentId == null) {
-      message.info('请选择设备后查询');
+      message.info(t('view.pleaseSelectADeviceToQuery'));
       return;
     }
     loading.value = true;
@@ -227,49 +226,50 @@
   function assembylData(data) {
     if (data.source.length > 0) {
       baseColumns = [
-        { type: 'seq', title:t('view.serialNumber'), minWidth: locale == 'en-US' ? 110 : 70, fixed: 'left' },
+        {
+          type: 'seq',
+          title: t('view.serialNumber'),
+          minWidth: locale == 'en-US' ? 110 : 70,
+          fixed: 'left',
+        },
         {
           field: 'keyId',
-          title:t('view.recordId'),
+          title: t('view.recordId'),
           visible: false,
           showOverflow: true,
-          showHeaderOverflow: true,
           fixed: 'left',
           minWidth: 130,
         },
         {
           field: 'cpuUsage',
-          title: 'CPU使用率(%)',
+          title: `${t('view.cpuUsageRate')}(%)`,
           showOverflow: true,
-          showHeaderOverflow: true,
           sortable: false,
           minWidth: 110,
         },
         {
           field: 'memorySize',
-          title: '内存大小(G)',
+          title: `${t('view.memorySize')}(G)`,
           showOverflow: false,
-          showHeaderOverflow: true,
           sortable: false,
           minWidth: 110,
         },
         {
           field: 'memoryUsage',
-          title: '内存使用率(%)',
+          title: `${t('view.memoryUsageRate')}(%)`,
           showOverflow: false,
-          showHeaderOverflow: true,
           sortable: false,
           minWidth: 110,
         },
       ];
       baseColumnsChart = [
         {
-          name: 'cpu使用率(%)',
+          name: `${t('view.cpuUsageRate')}(%)`,
           col: 'cpuUsage',
           color: '#84C8DD',
         },
         {
-          name: '内存使用率(%)',
+          name: `${t('view.memoryUsageRate')}(%)`,
           col: 'memoryUsage',
           color: '#CB88DE',
         },
@@ -283,23 +283,21 @@
             if (d == 'DiskSize') {
               baseColumns.push({
                 field: name,
-                title: `${col}盘大小(G)`,
+                title: `${col}${t('view.driveSize')}(G)`,
                 showOverflow: true,
-                showHeaderOverflow: true,
                 sortable: false,
                 minWidth: 110,
               });
             } else {
               baseColumns.push({
                 field: name,
-                title: `${col}盘使用率(%)`,
+                title: `${col}${t('view.driveUsage')}(%)`,
                 showOverflow: true,
-                showHeaderOverflow: true,
                 sortable: false,
                 minWidth: 110,
               });
               baseColumnsChart.push({
-                name: `${col}盘使用率(%)`,
+                name: `${col}${t('view.driveUsage')}(%)`,
                 col: name,
                 color: diskColor[baseColumnsChart.length - 2],
               });
@@ -315,8 +313,8 @@
         isDataSource.value = false;
         baseColumns.push({
           field: 'dataTime',
-          title: '数据时间',
-          minWidth: 150,
+          title: t('view.dataTime'),
+          minWidth: 170,
           showOverflow: true,
           showHeaderOverflow: true,
           sortable: true,
@@ -400,7 +398,7 @@
       series: [
         {
           symbol: 'none',
-          name: 'cpu使用率(%)',
+          name: `${t('view.cpuUsageRate')}(%)`,
           field: 'cpuUsage',
           type: 'line',
           data: [],
@@ -408,7 +406,7 @@
           smooth: 0.2,
         },
         {
-          name: '内存使用率(%)',
+          name: `${t('view.memoryUsageRate')}(%)`,
           field: 'memoryUsage',
           type: 'line',
           data: [],

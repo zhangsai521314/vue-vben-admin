@@ -3,9 +3,9 @@
     <a-spin :spinning="loadingEquipment">
       <div style="width: 100%; padding: 6px; background-color: #fff">
         <AuthDom auth="performance_query">
-          <label>监测设备：</label>
+          <label>{{ t('view.deviceName') }}：</label>
           <a-select
-            style="width: calc(100% - 80px)"
+            style="width: calc(100% - 200px)"
             mode="multiple"
             allow-clear
             show-search
@@ -55,7 +55,7 @@
   import content from './content.vue';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import { useDesign } from '@/hooks/web/useDesign';
-  import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
+  import { ref, watch } from 'vue';
   import performanceApi from '@/api/performance';
   import equipmentApi from '@/api/equipment';
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
@@ -66,8 +66,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'Performance' });
   const { prefixCls } = useDesign('performance-');
 

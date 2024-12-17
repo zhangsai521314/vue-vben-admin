@@ -12,8 +12,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   const props = defineProps({
     //全部数据，直接更新
     allData: {
