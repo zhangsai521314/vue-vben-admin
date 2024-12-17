@@ -255,12 +255,12 @@
             {
               validator: formValidator.min,
               min: 1,
-              message: t('view.portNumberMustBeBetween1And65535'),
+              message: t('view.portNumberMustBeBetweenAnd', [1, 65535]),
             },
             {
               validator: formValidator.max,
               max: 65535,
-              message: t('view.portNumberMustBeBetween1And65535'),
+              message: t('view.portNumberMustBeBetweenAnd', [1, 65535]),
             },
           ]"
         >

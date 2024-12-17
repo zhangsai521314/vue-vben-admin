@@ -27,7 +27,9 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button class="ant-btn" @click="showFrom()">新增通信</a-button>
+                    <a-button class="ant-btn" @click="showFrom()">{{
+                      t('view.newCommunication')
+                    }}</a-button>
                   </a-space>
                 </div>
               </a-space>
@@ -42,7 +44,7 @@
               name="icon-baseui-edit-fill"
               @click="showFrom(row)"
               style="color: #0a61bd"
-              title="编辑"
+              :title="t('view.edit')"
             />
           </AuthDom>
           <AuthDom auth="mqttService_table_delete">
@@ -50,7 +52,7 @@
               name="icon-baseui-guanbicuowu"
               @click="remove(row)"
               style="color: red"
-              title="删除"
+              :title="t('view.delete')"
             />
           </AuthDom>
         </div>
@@ -61,94 +63,97 @@
     </vxe-grid>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="500"
+      :width="locale == 'zh-CN' ? 500 : 600"
       :visible="isShowForm"
-      :title="t('view.configuration')"
+      ::title="t('view.configuration')"
       :footer-style="{ textAlign: 'right' }"
       @close="formClose"
     >
       <a-form
-        :label-col="{ span: 6 }"
+        :label-col="{ span: locale == 'zh-CN' ? 6 : 10 }"
         :style="{ paddingRight: '2px' }"
-        :wrapper-col="{ span: 16 }"
         autocomplete="off"
         ref="formRef"
         :model="formData"
       >
         <a-form-item
-          label="服务类型"
+          :label="t('view.serviceType')"
           name="serviceType"
-          :rules="[{ required: true, message: '请选择服务类型' }]"
+          :rules="[{ required: true, message: t('view.pleaseSelectServiceType') }]"
         >
           <a-select
             :disabled="saveType != 'add'"
             show-search
             :filter-option="AntVueCommon.filterOption"
-            placeholder="请选择服务类型"
+            :placeholder="t('view.pleaseSelectServiceType')"
             v-model:value="formData.serviceType"
             :options="dictionariesData"
           />
         </a-form-item>
-        <a-space>
-          <a-form-item
-            :labelCol="{ span: 8, offset: 2 }"
-            label="通信地址"
-            name="mqttIp"
-            :rules="[
-              { required: true, message: '请输入通信地址Ip' },
-              { validator: formValidator.ip, message: '通信地址Ip地址不正确' },
-            ]"
-          >
-            <a-input
-              placeholder="请输入通信地址IP"
-              v-model:value="formData.mqttIp"
-              style="margin-left: 2px"
-            />
-          </a-form-item>
-          <a-form-item
-            label=""
-            name="mqttPort"
-            :rules="[
-              { required: true, message: '请输入端口号' },
-              { validator: formValidator.min, min: 1, message: '端口号1至65535' },
-              { validator: formValidator.max, max: 65535, message: '端口号1至65535' },
-            ]"
-          >
-            <a-input-number
-              placeholder="请输入端口号"
-              v-model:value="formData.mqttPort"
-              style="width: 134px"
-              :precision="0"
-            />
-          </a-form-item>
-        </a-space>
         <a-form-item
-          label="MQTT用户名"
-          name="mqttName"
-          :rules="[{ required: true, message: '请输入MQTT用户名' }]"
+          :label="t('view.mailingAddress')"
+          name="mqttIp"
+          :rules="[
+            { required: true, message: t('view.pleaseEnterCommunicationAddressIp') },
+            { validator: formValidator.ip, message: t('view.communicationAddressIpIsIncorrect') },
+          ]"
         >
           <a-input
-            placeholder="请输入MQTT用户名"
+            :placeholder="t('view.pleaseEnterCommunicationAddressIp')"
+            v-model:value="formData.mqttIp"
+          />
+        </a-form-item>
+        <a-form-item
+          :label="t('view.connectionPort')"
+          name="mqttPort"
+          :rules="[
+            { required: true, message: t('view.pleaseEnterPortNumber') },
+            {
+              validator: formValidator.min,
+              min: 1,
+              message: t('view.portNumberMustBeBetweenAnd', [1, 65535]),
+            },
+            {
+              validator: formValidator.max,
+              max: 65535,
+              message: t('view.portNumberMustBeBetweenAnd', [1, 65535]),
+            },
+          ]"
+        >
+          <a-input-number
+            :placeholder="t('view.pleaseEnterPortNumber')"
+            v-model:value="formData.mqttPort"
+            style="width: 100px"
+            :precision="0"
+          />
+        </a-form-item>
+        <a-form-item
+          :label="t('view.connectionUserName')"
+          name="mqttName"
+          :rules="[{ required: true, message: t('view.pleaseEnterConnectionUserName') }]"
+        >
+          <a-input
+            :placeholder="t('view.pleaseEnterConnectionUserName')"
             v-model:value="formData.mqttName"
             autocomplete="off"
           />
         </a-form-item>
         <a-form-item
-          label="MQTT密码"
-          name="mqttName"
-          :rules="[{ required: true, message: '请输入MQTT密码' }]"
+          :label="t('view.connectionPassword')"
+          name="mqttPwd"
+          :rules="[{ required: true, message: t('view.pleaseEnterConnectionPassword') }]"
         >
           <a-input
-            placeholder="请输入MQTT密码"
+            :placeholder="t('view.pleaseEnterConnectionPassword')"
             v-model:value="formData.mqttPwd"
             autocomplete="off"
           />
         </a-form-item>
         <a-form-item
           name="orderIndex"
-          label="排序"
+          :label="t('view.sorting')"
           :rules="[
-            { required: true, message: '请输入排序' },
+            { required: true, message: t('view.pleaseInputSorting') },
             {
               validator: formValidator.min,
               min: -9999,
@@ -162,7 +167,7 @@
           ]"
         >
           <a-input-number
-            placeholder="请输入排序"
+            :placeholder="t('view.pleaseInputSorting')"
             style="width: 300px"
             :precision="3"
             v-model:value="formData.orderIndex"
@@ -193,8 +198,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'MqttService' });
   const { prefixCls } = useDesign('mqttService-');
   const loading = ref(true);
@@ -213,50 +216,44 @@
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
-        minWidth: 130,
+        minWidth: 136,
         fixed: 'left',
       },
       {
-        field: 'serviceName',
-        title: '服务类型名称',
+        field: 'serviceTypeName',
+        title: t('view.serviceTypeName'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 130,
+        minWidth: 186,
         fixed: 'left',
       },
       {
         field: 'mqttIp',
-        title: 'MQTT地址',
+        title: t('view.mailingAddress'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         slots: {
           default: 'ipport',
         },
-        minWidth: 130,
+        minWidth: 200,
       },
       {
         field: 'mqttName',
-        title: 'MQTT用户名',
+        title: t('view.connectionUserName'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 120,
+        minWidth: 240,
       },
       {
         field: 'mqttPwd',
-        title: 'MQTT密码',
+        title: t('view.connectionPassword'),
         showOverflow: true,
-        showHeaderOverflow: true,
-        minWidth: 100,
+        minWidth: 240,
       },
       {
         field: 'orderIndex',
         title: t('view.sorting'),
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
         minWidth: 100,
@@ -266,7 +263,6 @@
         title: t('view.creationTime'),
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
@@ -274,7 +270,6 @@
         title: t('view.creator'),
         minWidth: 130,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
@@ -282,7 +277,6 @@
         title: t('view.modificationTime'),
         minWidth: 170,
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
       },
@@ -291,7 +285,6 @@
         title: t('view.modifier'),
         minWidth: 176,
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
       },
@@ -302,7 +295,6 @@
           default: 'default',
         },
         showOverflow: true,
-        showHeaderOverflow: true,
         fixed: 'right',
       },
     ],
@@ -358,7 +350,7 @@
           .then(() => {
             loading.value = false;
             tableConfig.data = tableConfig.data?.filter((m) => m.mqttId != row.mqttId);
-            message.success('删除通信配置成功');
+            message.success(t('view.deletionSuccessful'));
           })
           .catch(() => {
             loading.value = false;
@@ -405,7 +397,7 @@
           data.serviceName = dictionariesData.value.find((m) => m.key == data.serviceType)?.label;
           tableConfig.data?.splice(0, 0, data);
           formClose();
-          message.success('新增通信配置成功');
+          message.success(t('view.additionSuccessful'));
         });
       } else {
         mqttApi.UpdateMqtt(formData.value).then((data) => {
@@ -421,7 +413,7 @@
             )?.label;
           }
           formClose();
-          message.success('更新软件信息成功');
+          message.success(t('view.updateSuccessful'));
         });
       }
     });
@@ -450,7 +442,7 @@
           saveType = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取通信信息失败');
+          message.error(t('view.failedToObtainCommunicationInformation'));
         }
       })
       .catch(() => {
