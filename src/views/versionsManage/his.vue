@@ -17,7 +17,9 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="getVersionsHis" type="primary">{{t('view.query')}}</a-button>
+                    <a-button @click="getVersionsHis" type="primary">{{
+                      t('view.query')
+                    }}</a-button>
                   </a-space>
                 </div>
               </a-space>
@@ -26,7 +28,9 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button class="ant-btn" @click="showFrom()">新增版本</a-button>
+                    <a-button class="ant-btn" @click="showFrom()">{{
+                      t('view.addNewVersion')
+                    }}</a-button>
                   </a-space>
                 </div>
               </a-space>
@@ -37,21 +41,25 @@
       <template #isSync="{ row }">
         <a-space v-if="row.isSync != null">
           <span :style="{ color: row.isSync ? 'green' : 'red' }">{{
-            row.isSync ? '是' : '否'
+            row.isSync ? t('view.yes') : t('view.no')
           }}</span>
           <AuthDom auth="versionsManage_his_table_sync">
             <a-spin v-if="row.isRunSync != undefined" :spinning="row.isRunSync">
-              <a-button title="更改为此版本" type="primary" size="small" @click="syncChange(row)"
-                >开始同步</a-button
+              <a-button
+                :title="t('view.setAsRunningVersion')"
+                type="primary"
+                size="small"
+                @click="syncChange(row)"
+                >{{ t('view.synchronizeVersion') }}</a-button
               >
             </a-spin>
             <a-button
-              title="更改为此版本"
+              :title="t('view.setAsRunningVersion')"
               v-else
               type="primary"
               size="small"
               @click="syncChange(row)"
-              >开始同步</a-button
+              >{{ t('view.synchronizeVersion') }}</a-button
             >
           </AuthDom>
         </a-space>
@@ -67,24 +75,23 @@
     </vxe-grid>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="500"
+      :width="locale == 'zh-CN' ? 500 : 600"
       :visible="isShowForm"
-      title="上传版本文件"
+      :title="t('view.uploadVersionFile')"
       :footer-style="{ textAlign: 'right' }"
       @close="formClose"
     >
       <a-form
-        :label-col="{ span: 6 }"
+        :label-col="{ span: locale == 'zh-CN' ? 6 : 10 }"
         :style="{ paddingRight: '2px' }"
-        :wrapper-col="{ span: 16 }"
         autocomplete="off"
         ref="formRef"
         :model="formData"
       >
         <a-form-item
           name="filePath"
-          label="版本文件"
-          :rules="[{ required: true, message: '请上传版本文件' }]"
+          :label="t('view.versionFile')"
+          :rules="[{ required: true, message: t('view.pleaseUploadVersionFile') }]"
         >
           <a-upload
             :fileList="fileList"
@@ -114,7 +121,10 @@
               </div>
             </div>
             <div v-else>
-              <a-input style="width: 300px; cursor: pointer" placeholder="点击上传版本文件" />
+              <a-input
+                style="width: 300px; cursor: pointer"
+                :placeholder="t('view.clickToUploadVersionFile')"
+              />
               <div
                 style="
                   position: absolute;
@@ -137,48 +147,49 @@
               () => {
                 fileList = [];
                 formData.filePath = null;
+                formData.vNumber = null;
               }
             "
-            title="删除"
+            :title="t('view.delete')"
           />
         </a-form-item>
         <a-form-item
-          label="版本号"
+          :label="t('view.versionNumber')"
           name="vNumber"
           :rules="[
             { required: true, message: '' },
-            { validator: formValidator.empty, message: '请输入版本号' },
-            { max: 20, message: '版本号过长' },
+            { validator: formValidator.empty, message: t('view.pleaseEnterVersionNumber') },
+            { max: 20, message: t('view.versionNumberTooLong', [20]) },
           ]"
         >
           <a-input
             disabled
-            placeholder="版本号在版本文件名称中"
+            :placeholder="t('view.versionFileNameShouldContainVersionNumber')"
             :value="formData.vNumber"
             autocomplete="off"
           />
         </a-form-item>
         <a-form-item
           name="isRun"
-          label="是否运行版本"
-          :rules="[{ required: true, message: '请选择是否运行版本' }]"
+          :label="t('view.isTerminalVersion')"
+          :rules="[{ required: true, message: t('view.pleaseSelectWhetherTerminalVersion') }]"
         >
           <a-switch v-model:checked="formData.isRun" />
         </a-form-item>
         <a-form-item
           name="isForce"
-          label="是否强制升级"
-          :rules="[{ required: true, message: '请选择是否强制升级' }]"
+          :label="t('view.isMandatoryUpgrade')"
+          :rules="[{ required: true, message: t('view.pleaseSelectWhetherMandatoryUpgrade') }]"
         >
           <a-switch v-model:checked="formData.isForce" />
         </a-form-item>
         <a-form-item
           name="remark"
           :label="t('view.remarks')"
-          :rules="[{ max: 250, message: '备注信息过长' }]"
+          :rules="[{ max: 250, message: t('view,remarksTooLong', [250]) }]"
         >
           <a-textarea
-            placeholder="请输入备注信息"
+            :placeholder="t('view.pleaseInputRemarkInformation')"
             :rows="3"
             v-model:value="formData.remark"
             autocomplete="off"
@@ -197,22 +208,17 @@
 <script setup lang="ts">
   import myCommon from '@/utils/MyCommon/common';
   import formValidator from '@/utils/MyCommon/formValidator';
-  import { useUserStore } from '@/store/modules/user';
-  import { ref, reactive, createVNode, nextTick, watch } from 'vue';
+  import { ref, reactive, watch } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import versionsApi from '@/api/versions';
-  import { message, Modal } from 'ant-design-vue';
-  import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
-  import { getAppEnvConfig } from '@/utils/env';
+  import { message } from 'ant-design-vue';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
 
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   //vue3使用defineProps接收传过来的参数
   const props = defineProps({
     //增加组件
@@ -223,96 +229,84 @@
       },
     },
   });
-  const userStore = useUserStore();
-  const token = 'Bearer ' + userStore.getToken;
-  const { VITE_GLOB_API_URL, VITE_GLOB_API_URL_PREFIX } = getAppEnvConfig();
-  const upUrl = `${VITE_GLOB_API_URL}${VITE_GLOB_API_URL_PREFIX}/User/UpdateUserAvatar`;
   const { prefixCls } = useDesign('versionsManage-his');
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: t('view.serialNumber'), width: 50 },
+      { type: 'seq', title: t('view.serialNumber'), minWidth: locale == 'en-US' ? 110 : 70 },
       {
         field: 'hisId',
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
+        minWidth: 136,
         fixed: 'left',
       },
       {
         field: 'vNumber',
-        title: '版本号',
-        width: 100,
+        title: t('view.versionNumber'),
+        minWidth: 100,
         showOverflow: true,
-        showHeaderOverflow: true,
         slots: {
           default: 'vNumber',
         },
       },
       {
         field: 'isRun',
-        title: '是否运行版本',
-        width: 120,
+        title: t('view.isTerminalVersion'),
+        minWidth: 120,
         showOverflow: true,
-        showHeaderOverflow: true,
         cellRender: { name: 'render_isno' },
       },
       {
         field: 'isForce',
-        title: '是否强制升级',
-        width: 120,
+        title: t('view.isForcedUpgradeRequired'),
+        minWidth: 120,
         showOverflow: true,
-        showHeaderOverflow: true,
         cellRender: { name: 'render_isno' },
       },
       {
         field: 'isSync',
-        title: '是否已同步',
-        width: 160,
+        title: t('view.isSynchronized'),
+        minWidth: 220,
         showOverflow: true,
-        showHeaderOverflow: true,
         slots: {
           default: 'isSync',
         },
       },
       {
         field: 'syncTime',
-        title: '同步时间',
-        width: 150,
+        title: t('view.synchronizationTime'),
+        minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
       },
       {
         field: 'syncUserName',
-        title: '同步人员',
-        width: 100,
+        title: t('view.synchronizingPersonnel'),
+        minWidth: 100,
         showOverflow: true,
-        showHeaderOverflow: true,
       },
       {
         field: 'remark',
-        title: '备注信息',
+        title: t('view.remarks'),
         showOverflow: true,
-        showHeaderOverflow: true,
+        minWidth: 100,
         sortable: true,
       },
       {
         field: 'createTime',
         title: t('view.creationTime'),
-        width: 150,
+        minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
       },
       {
         field: 'createUser',
         title: t('view.creator'),
-        width: 130,
+        minWidth: 130,
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
       },
     ],
@@ -371,15 +365,16 @@
 
   //拖拽文件不符合 accept 类型时的回调
   function fileReject() {
-    message.warning('选择文件类型不符合');
+    message.warning(t('view.selectedFileTypeMismatch'));
   }
+
   //上传之前
   function beforeUpload(file) {
     fileList.value = [];
     const isLt5M = file.size / 1024 / 1024 < 100;
     if (!isLt5M) {
       file['remove'] = true;
-      message.error('软件包不可超过100MB');
+      message.error(t('view.softwarePackageShouldNotExceed', [100]));
     } else {
       fileList.value.push(file);
       formData.value.filePath = file.name;
@@ -403,11 +398,14 @@
       }
       versionsApi
         .AddVersionsHis(_formData)
-        .then(() => {
+        .then((data) => {
           fileList.value = [];
           fromSpinning.value = false;
           formClose();
-          message.success('新增软件版本包成功');
+          message.success(t('view.additionSuccessful'));
+          if (data.mqttMsg) {
+            data.syncSuccess ? message.success(data.mqttMsg) : message.error(data.mqttMsg);
+          }
           getVersionsHis();
         })
         .catch(() => {
@@ -423,7 +421,7 @@
       .UpdateRunVersionsHis(row.hisId.toString())
       .then(() => {
         row.isRunSync = false;
-        message.success('更新终端版本成功');
+        message.success(t('view.updateTerminalVersionSuccessfully'));
         getVersionsHis();
       })
       .catch(() => {

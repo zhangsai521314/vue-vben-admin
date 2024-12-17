@@ -17,7 +17,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="getVersions" type="primary">{{t('view.query')}}</a-button>
+                    <a-button @click="getVersions" type="primary">{{ t('view.query') }}</a-button>
                   </a-space>
                 </div>
               </a-space>
@@ -26,7 +26,9 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button class="ant-btn" @click="showFrom()">新增软件包类型</a-button>
+                    <a-button class="ant-btn" @click="showFrom()">{{
+                      t('view.newlyAddedSoftwareVersionType')
+                    }}</a-button>
                   </a-space>
                 </div>
               </a-space>
@@ -41,7 +43,7 @@
               name="icon-baseui-edit-fill"
               @click="showFrom(row)"
               style="color: #0749df"
-              title="编辑"
+              :title="t('view.edit')"
             />
           </AuthDom>
           <AuthDom auth="versionsManage_table_version">
@@ -49,7 +51,7 @@
               name="icon-baseui-jichushezhi"
               @click="showHis(row)"
               style="color: #0a61bd"
-              title="版本管理"
+              :title="t('view.versionManagement')"
             />
           </AuthDom>
           <AuthDom auth="versionsManage_table_delete">
@@ -57,7 +59,7 @@
               name="icon-baseui-guanbicuowu"
               @click="remove(row)"
               style="color: red"
-              title="删除"
+              :title="t('view.delete')"
             />
           </AuthDom>
         </div>
@@ -65,21 +67,25 @@
       <template #isSync="{ row }">
         <a-space v-if="row.isSync != null">
           <span :style="{ color: row.isSync ? 'green' : 'red' }">{{
-            row.isSync ? '是' : '否'
+            row.isSync ? t('view.yes') : t('view.no')
           }}</span>
           <AuthDom auth="versionsManage_table_sync">
             <a-spin v-if="row.isRunSync != undefined" :spinning="row.isRunSync">
-              <a-button title="更改为此版本" type="primary" size="small" @click="syncChange(row)"
-                >开始同步</a-button
+              <a-button
+                :title="t('view.setAsRunningVersion')"
+                type="primary"
+                size="small"
+                @click="syncChange(row)"
+                >{{ t('view.synchronizeVersion') }}</a-button
               >
             </a-spin>
             <a-button
-              title="更改为此版本"
+              :title="t('view.setAsRunningVersion')"
               v-else
               type="primary"
               size="small"
               @click="syncChange(row)"
-              >开始同步</a-button
+              >{{ t('view.synchronizeVersion') }}</a-button
             >
           </AuthDom>
         </a-space>
@@ -95,38 +101,37 @@
     </vxe-grid>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="500"
+      :width="locale == 'zh-CN' ? 500 : 600"
       :visible="isShowForm"
-      :title="t('view.configuration')"
+      ::title="t('view.configuration')"
       :footer-style="{ textAlign: 'right' }"
       @close="formClose"
     >
       <a-form
-        :label-col="{ span: 6 }"
+        :label-col="{ span: locale == 'zh-CN' ? 6 : 10 }"
         :style="{ paddingRight: '2px' }"
-        :wrapper-col="{ span: 16 }"
         autocomplete="off"
         ref="formRef"
         :model="formData"
       >
         <a-form-item
           v-show="saveType == 'add'"
-          label="服务类型"
+          :label="t('view.serviceType')"
           name="serviceType"
-          :rules="[{ required: true, message: '请选择软件类型' }]"
+          :rules="[{ required: true, message: t('view.pleaseSelectSoftwareServiceType') }]"
         >
           <a-select
             show-search
             :filter-option="AntVueCommon.filterOption"
-            placeholder="请选择服务类型"
+            :placeholder="t('view.pleaseSelectSoftwareServiceType')"
             v-model:value="formData.serviceType"
             :options="dictionariesData_add"
           />
         </a-form-item>
         <a-form-item
           name="runPlatform"
-          label="运行平台"
-          :rules="[{ required: true, message: '请选择运行平台' }]"
+          :label="t('view.runningPlatform')"
+          :rules="[{ required: true, message: t('view.pleaseSelectRunningPlatform') }]"
         >
           <a-select v-model:value="formData.runPlatform">
             <a-select-option :value="1"> Windows</a-select-option>
@@ -135,16 +140,21 @@
         </a-form-item>
         <a-form-item
           name="isBrowserDown"
-          label="浏览器下载"
-          :rules="[{ required: true, message: '请选择是否可以浏览下载安装包' }]"
+          :label="t('view.browserDownload')"
+          :rules="[
+            {
+              required: true,
+              message: t('view.pleaseSelectWhetherTheDownloadableInstallationPackageCanBeBrowsed'),
+            },
+          ]"
         >
           <a-switch v-model:checked="formData.isBrowserDown" />
         </a-form-item>
         <a-form-item
           name="orderIndex"
-          label="软件包排序"
+          :label="t('view.versionTypeSorting')"
           :rules="[
-            { required: true, message: '请输入软件包排序' },
+            { required: true, message: t('view.pleaseEnterVersionTypeSorting') },
             {
               validator: formValidator.min,
               min: -9999,
@@ -158,7 +168,7 @@
           ]"
         >
           <a-input-number
-            placeholder="请输入软件包排序"
+            :placeholder="t('view.versionTypeSorting')"
             style="width: 300px"
             :precision="3"
             v-model:value="formData.orderIndex"
@@ -167,8 +177,8 @@
         <a-form-item
           v-if="formData.isBrowserDown"
           name="iconBase64"
-          label="logo图片"
-          :rules="[{ required: true, message: 'logo图片缺失' }]"
+          :label="t('view.logo')"
+          :rules="[{ required: true, message: t('view.logoMissing') }]"
         >
           <a-upload
             style="margin-bottom: 20px"
@@ -200,7 +210,7 @@
               <IconFontClass
                 style="font-size: 25px"
                 name=" icon-baseui-yunshangchuan"
-                title="上传"
+                :title="t('view.upload')"
               />
             </div>
           </a-upload>
@@ -214,10 +224,10 @@
                 formData.iconBase64 = null;
               }
             "
-            title="删除"
+            :title="t('view.delete')"
           />
         </a-form-item>
-        <a-form-item name="configFilePath" label="配置文件">
+        <a-form-item name="configFilePath" :label="t('view.configurationFile')">
           <a-upload
             :fileList="configFileList"
             :maxCount="1"
@@ -248,7 +258,10 @@
               </div>
             </div>
             <div v-else>
-              <a-input style="width: 300px; cursor: pointer" placeholder="点击上传配置文件" />
+              <a-input
+                style="width: 300px; cursor: pointer"
+                :placeholder="t('view.clickToUploadConfigurationFile')"
+              />
               <div
                 style="
                   position: absolute;
@@ -273,7 +286,7 @@
                 formData.configFilePath = null;
               }
             "
-            title="删除"
+            :title="t('view.delete')"
           />
         </a-form-item>
       </a-form>
@@ -288,7 +301,7 @@
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
       :width="1000"
       :visible="isShowVis"
-      title="版本管理"
+      :title="t('view.versionManagement')"
       :footer-style="{ textAlign: 'right' }"
       @close="formCloseHis"
     >
@@ -313,8 +326,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'VersionsManage' });
   const { prefixCls } = useDesign('versionsManage-');
   const loading = ref(true);
@@ -322,30 +333,32 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: t('view.serialNumber'), minWidth: 50, fixed: 'left' },
+      {
+        type: 'seq',
+        title: t('view.serialNumber'),
+        minWidth: locale == 'en-US' ? 110 : 70,
+        fixed: 'left',
+      },
       {
         field: 'versionId',
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
-        minWidth: 130,
+        minWidth: 136,
         fixed: 'left',
       },
       {
-        field: 'serviceName',
-        title: '服务类型名称',
+        field: 'serviceTypeName',
+        title: t('view.serviceTypeName'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 150,
+        minWidth: 186,
         fixed: 'left',
       },
       {
         field: 'runNumber',
-        title: '正式版本',
+        title: t('view.officialVersion'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         slots: {
           default: 'runNumber',
@@ -354,19 +367,17 @@
       },
       {
         field: 'isForce',
-        title: '是否强制升级',
-        minWidth: 120,
+        title: t('view.isForcedUpgradeRequired'),
+        minWidth: 200,
         showOverflow: true,
-        showHeaderOverflow: true,
         // sortable: true,
         cellRender: { name: 'render_isno' },
       },
       {
         field: 'isSync',
-        title: '是否已同步',
-        minWidth: 130,
+        title: t('view.isSynchronized'),
+        minWidth: 220,
         showOverflow: true,
-        showHeaderOverflow: true,
         // sortable: true,
         slots: {
           default: 'isSync',
@@ -374,25 +385,22 @@
       },
       {
         field: 'syncTime',
-        title: '同步时间',
-        minWidth: 150,
+        title: t('view.synchronizationTime'),
+        minWidth: 200,
         showOverflow: true,
         sortable: true,
-        showHeaderOverflow: true,
       },
       {
         field: 'syncUserName',
-        title: '同步人员',
-        minWidth: 130,
+        title: t('view.synchronizingPersonnel'),
+        minWidth: 220,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'orderIndex',
         title: t('view.sorting'),
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
         minWidth: 100,
@@ -402,7 +410,6 @@
         title: t('view.creationTime'),
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
@@ -410,7 +417,6 @@
         title: t('view.creator'),
         minWidth: 130,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
@@ -419,17 +425,15 @@
         minWidth: 170,
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'modifyUser',
-        title: '修改用户',
+        title: t('view.modifyUser'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 130,
+        minWidth: 176,
       },
       {
         title: t('view.action'),
@@ -438,7 +442,6 @@
           default: 'default',
         },
         showOverflow: true,
-        showHeaderOverflow: true,
         fixed: 'right',
       },
     ],
@@ -509,7 +512,7 @@
           saveType.value = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取版本信息失败');
+          message.error(t('view.getVersionInfoFailure'));
         }
       })
       .catch(() => {
@@ -523,7 +526,7 @@
     const isLt5M = file.size / 1024 / 1024 < 5;
     if (!isLt5M) {
       file['remove'] = true;
-      message.error('logo图片不可超过5MB');
+      message.error(t('view.logoShouldNotExceed', [5]));
     } else {
       fileList.value.push(file);
       myCommon.imgBase64(file).then((base64) => {
@@ -535,12 +538,12 @@
   }
   //拖拽文件不符合 accept 类型时的回调
   function fileReject() {
-    message.warning('选择文件类型不符合');
+    message.warning(t('view.selectedFileTypeMismatch'));
   }
 
   //拖拽文件不符合 accept 类型时的回调
   function configFileReject() {
-    message.warning('选择文件类型不符合');
+    message.warning(t('view.selectedFileTypeMismatch'));
   }
   //上传之前
   function configBeforeUpload(file) {
@@ -548,7 +551,7 @@
     const isLt5M = file.size / 1024 / 1024 < 20;
     if (!isLt5M) {
       file['remove'] = true;
-      message.error('软件包不可超过20MB');
+      message.error(t('view.softwarePackageShouldNotExceed', [20]));
     } else {
       configFileList.value.push(file);
       formData.value.configFilePath = file.name;
@@ -570,7 +573,7 @@
           .then(() => {
             loading.value = false;
             tableConfig.data = tableConfig.data?.filter((m) => m.versionId != row.versionId);
-            message.success('删除软件版本包成功');
+            message.success(t('view.deletionSuccessful'));
           })
           .catch(() => {
             loading.value = false;
@@ -631,7 +634,7 @@
             configFileList.value = [];
             getVersions();
             formClose();
-            message.success('新增软件包类型成功');
+            message.success(t('view.additionSuccessful'));
           })
           .catch(() => {
             fromSpinning.value = false;
@@ -642,13 +645,13 @@
           .then((data) => {
             fromSpinning.value = false;
             if (data) {
-              message.success('更新版本信息成功');
+              message.success(t('view.updateSuccessful'));
               fileList.value = [];
               configFileList.value = [];
               formClose();
               getVersions();
             } else {
-              message.error('更新版本信息失败');
+              message.error(t('view.updateFailure'));
             }
           })
           .catch(() => {
@@ -677,7 +680,7 @@
       .UpdateRunVersions(row.versionId.toString())
       .then(() => {
         row.isRunSync = false;
-        message.success('更新终端版本成功');
+        message.success(t('view.updateTerminalVersionSuccessfully'));
         getVersions();
       })
       .catch(() => {

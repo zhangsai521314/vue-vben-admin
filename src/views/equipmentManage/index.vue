@@ -413,7 +413,7 @@
       {
         field: 'modifyUser',
         title: t('view.modifier'),
-        minWidth: 130,
+        minWidth: 176,
         showOverflow: true,
         visible: false,
         sortable: true,
