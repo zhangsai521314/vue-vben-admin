@@ -234,7 +234,7 @@
       },
       {
         field: 'stationName',
-        title: '车站名称',
+         title: t('view.stationName'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: false,
@@ -286,7 +286,7 @@
       },
       {
         field: 'dataTime',
-        title: '心跳时间',
+         title: t('view.heartbeatTime'),
         minWidth: 150,
         showOverflow: true,
         sortable: true,
@@ -337,7 +337,7 @@
       },
       {
         field: 'loginTime',
-        title: '登录时间',
+        title: t('view.loginTime'),
         minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,

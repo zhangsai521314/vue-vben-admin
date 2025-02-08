@@ -382,7 +382,7 @@
         .split('_')
         [
           formData.value.filePath.split('_').length - 1
-        ].substring(0, formData.value.filePath.split('_')[formData.value.filePath.split('_').length - 1].split('.')[0].length);
+        ].substring(0, formData.value.filePath.split('_')[formData.value.filePath.split('_').length - 1].lastIndexOf('.'));
     }
     return false;
   }

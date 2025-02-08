@@ -30,8 +30,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   const downData = ref([]);
   commonApi
     .GetDownVersion()

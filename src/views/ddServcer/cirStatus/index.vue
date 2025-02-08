@@ -83,58 +83,6 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>机车功能号：</label>
-                    <a-input
-                      @press-enter="initPage()"
-                      v-model:value="seacthContent.jcFn"
-                      placeholder="输入机车功能号查询"
-                    />
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>机车号状态：</label>
-                    <a-select
-                      placeholder="请选择机车号状态"
-                      style="width: 170px"
-                      allow-clear
-                      v-model:value="seacthContent.JcFnStatus"
-                    >
-                      <a-select-option :value="1">注册</a-select-option>
-                      <a-select-option :value="0">手动注销</a-select-option>
-                      <a-select-option :value="2">超时注销</a-select-option>
-                      <a-select-option :value="3">强制注销</a-select-option>
-                    </a-select>
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>车次功能号：</label>
-                    <a-input
-                      @press-enter="initPage()"
-                      v-model:value="seacthContent.ccFn"
-                      placeholder="输入车次功能号查询"
-                    />
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>车次号状态：</label>
-                    <a-select
-                      placeholder="请选择车次号状态"
-                      style="width: 170px"
-                      allow-clear
-                      v-model:value="seacthContent.CcFnStatus"
-                    >
-                      <a-select-option :value="1">注册</a-select-option>
-                      <a-select-option :value="0">手动注销</a-select-option>
-                      <a-select-option :value="2">超时注销</a-select-option>
-                      <a-select-option :value="3">强制注销</a-select-option>
-                    </a-select>
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
                     <label>登录状态：</label>
                     <a-select
                       placeholder="请选择登录状态"
@@ -149,12 +97,14 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="initPage()" type="primary">{{t('view.query')}}</a-button>
-                    <a-button @click="resetSeacth">{{t('view.resetForm')}}</a-button>
+                    <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
+                    <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                     <a-radio-group v-model:value="refresh" button-style="solid">
-                      <a-radio-button value="yes">{{t('view.enableAutoRefresh')}}</a-radio-button>
-                      <a-radio-button value="yes">{{t('view.disableAutoRefresh')}}</a-radio-button>
-                      <a-radio-button value="yes">{{t('view.countdownSeconds',[refreshTime])}}</a-radio-button>
+                      <a-radio-button value="yes">{{ t('view.enableAutoRefresh') }}</a-radio-button>
+                      <a-radio-button value="no">{{ t('view.disableAutoRefresh') }}</a-radio-button>
+                      <a-radio-button>{{
+                        t('view.countdownSeconds', [refreshTime])
+                      }}</a-radio-button>
                     </a-radio-group>
                   </a-space>
                 </div>
@@ -182,7 +132,7 @@
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import {
-    CirStatus as cirStatusApi,
+    DDDev as cirStatusApi,
     Line as lineApi,
     Station as stationApi,
     Lacci as lacciApi,
@@ -197,8 +147,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'DDServcerCirStatus' });
   const { prefixCls } = useDesign('DDServcerCirStatus-');
   const loading = ref(true);
@@ -223,7 +171,7 @@
       },
       {
         field: 'lineName',
-        title: '线路名称',
+        title: t('view.lineName'),
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -233,7 +181,7 @@
       },
       {
         field: 'stationCode',
-        title: '车站代码',
+        title: t('view.stationCode'),
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -243,7 +191,7 @@
       },
       {
         field: 'stationName',
-        title: '车站名称',
+        title: t('view.stationName'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -252,24 +200,15 @@
       },
       {
         field: 'stationLocationName',
-        title: '所在位置',
+        title: t('view.currentLocation'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        minWidth: 100,
-      },
-      {
-        field: 'lacciName',
-        title: 'ECI名称',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-        visible: false,
         minWidth: 100,
       },
       {
         field: 'lacci',
-        title: 'ECI号码',
+        title: t('view.eciNumber'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -284,40 +223,8 @@
         minWidth: 90,
       },
       {
-        field: 'jcFn',
-        title: '机车功能号',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-        minWidth: 110,
-      },
-      {
-        field: 'jCFnStatusName',
-        title: '机车号状态',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-        minWidth: 110,
-      },
-      {
-        field: 'ccFn',
-        title: '车次功能号',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-        minWidth: 110,
-      },
-      {
-        field: 'cCFnStatusName',
-        title: '车次号状态',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-        minWidth: 110,
-      },
-      {
         field: 'loginStatusName',
-        title: '登录状态',
+        title: t('view.loginStatus'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -325,7 +232,7 @@
       },
       {
         field: 'glb',
-        title: '公里标',
+        title: t('view.kilometerMarker'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -334,7 +241,7 @@
       },
       {
         field: 'operatorUser',
-        title: '操作员',
+        title: t('view.operator'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -343,7 +250,7 @@
       },
       {
         field: 'longitude',
-        title: '经度',
+        title: t('view.longitude'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -352,7 +259,7 @@
       },
       {
         field: 'latitude',
-        title: '纬度',
+        title: t('view.latitude'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -361,7 +268,7 @@
       },
       {
         field: 'ip',
-        title: 'Ip+端口号',
+        title: t('view.ipAndPortNumber'),
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -372,8 +279,16 @@
         minWidth: 120,
       },
       {
+        field: 'loginTime',
+        title: t('view.loginTime'),
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 150,
+      },
+      {
         field: 'updateTime',
-        title: '心跳时间',
+        title: t('view.heartbeatTime'),
         minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,

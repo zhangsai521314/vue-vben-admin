@@ -56,12 +56,14 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="initPage()" type="primary">{{t('view.query')}}</a-button>
-                    <a-button @click="resetSeacth">{{t('view.resetForm')}}</a-button>
+                    <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
+                    <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                     <a-radio-group v-model:value="refresh" button-style="solid">
-                      <a-radio-button value="yes">{{t('view.enableAutoRefresh')}}</a-radio-button>
-                      <a-radio-button value="yes">{{t('view.disableAutoRefresh')}}</a-radio-button>
-                      <a-radio-button value="yes">{{t('view.countdownSeconds',[refreshTime])}}</a-radio-button>
+                      <a-radio-button value="yes">{{ t('view.enableAutoRefresh') }}</a-radio-button>
+                      <a-radio-button value="no">{{ t('view.disableAutoRefresh') }}</a-radio-button>
+                      <a-radio-button>{{
+                        t('view.countdownSeconds', [refreshTime])
+                      }}</a-radio-button>
                     </a-radio-group>
                   </a-space>
                 </div>
@@ -106,8 +108,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'DDServcerLwLinkHis' });
   const { prefixCls } = useDesign('DDServcerLwLinkHis-');
   const loading = ref(true);

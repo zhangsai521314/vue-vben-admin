@@ -33,7 +33,7 @@
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button @click="initPage" type="primary">{{t('view.query')}}</a-button>
+                      <a-button @click="initPage" type="primary">{{ t('view.query') }}</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -153,8 +153,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'DDServcerBlack' });
   const mqttStore = useMqttStoreWithOut();
   const isRunGet = ref(false);

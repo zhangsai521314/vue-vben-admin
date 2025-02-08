@@ -71,12 +71,13 @@
                       placeholder="请选择操作类型"
                       style="width: 170px"
                       allow-clear
-                      v-model:value="seacthContent.regStatus"
+                      v-model:value="seacthContent.fnType"
                     >
-                      <a-select-option :value="1">注册</a-select-option>
-                      <a-select-option :value="0">手动注销</a-select-option>
-                      <a-select-option :value="2">超时注销</a-select-option>
-                      <a-select-option :value="3">强制注销</a-select-option>
+                      <a-select-option :value="224">注册</a-select-option>
+                      <a-select-option :value="225">手动注销</a-select-option>
+                      <a-select-option :value="226">强制注销</a-select-option>
+                      <a-select-option :value="227">超时注销</a-select-option>
+                      <a-select-option :value="228">全部注销</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
@@ -96,12 +97,14 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="initPage()" type="primary">{{t('view.query')}}</a-button>
-                    <a-button @click="resetSeacth">{{t('view.resetForm')}}</a-button>
+                    <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
+                    <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                     <a-radio-group v-model:value="refresh" button-style="solid">
-                      <a-radio-button value="yes">{{t('view.enableAutoRefresh')}}</a-radio-button>
-                      <a-radio-button value="yes">{{t('view.disableAutoRefresh')}}</a-radio-button>
-                      <a-radio-button value="yes">{{t('view.countdownSeconds',[refreshTime])}}</a-radio-button>
+                      <a-radio-button value="yes">{{ t('view.enableAutoRefresh') }}</a-radio-button>
+                      <a-radio-button value="no">{{ t('view.disableAutoRefresh') }}</a-radio-button>
+                      <a-radio-button>{{
+                        t('view.countdownSeconds', [refreshTime])
+                      }}</a-radio-button>
                     </a-radio-group>
                   </a-space>
                 </div>
@@ -119,9 +122,9 @@
           @page-change="handlePageChange"
         />
       </template>
-      <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? '+' + row.port : '' }} </template>
-      <template #regStatusName="{ row }">
-        {{ row.regStatusName == 'success' ? '成功' : `失败(${row.result})` }}
+      <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? ':' + row.port : '' }} </template>
+      <template #fnTypeName="{ row }">
+        {{ row.fnTypeName == 'success' ? '成功' : `失败(${row.result})` }}
       </template>
     </vxe-grid>
   </MyContent>
@@ -194,14 +197,14 @@
         minWidth: 100,
       },
       {
-        field: 'regStatusName',
+        field: 'fnTypeName',
         title: '操作类型',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 100,
         slots: {
-          default: 'regStatusName',
+          default: 'fnTypeName',
         },
       },
       {
@@ -248,7 +251,7 @@
   const seacthContent = ref({
     isdn: null,
     fn: null,
-    regStatus: null,
+    fnType: null,
     regType: null,
     regResult: null,
     startTime: null,
@@ -314,7 +317,7 @@
     seacthContent.value = {
       isdn: null,
       fn: null,
-      regStatus: null,
+      fnType: null,
       regType: null,
       regResult: null,
       startTime: null,

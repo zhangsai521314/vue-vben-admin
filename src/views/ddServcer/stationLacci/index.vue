@@ -230,7 +230,7 @@
       },
       {
         field: 'lineName',
-        title: '线路名称',
+         title: t('view.lineName'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -240,7 +240,7 @@
       },
       {
         field: 'stationName',
-        title: '车站名称',
+         title: t('view.stationName'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: false,

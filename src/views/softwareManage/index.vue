@@ -70,7 +70,7 @@
                     <a-radio-group v-model:value="refresh" button-style="solid">
                       <a-radio-button value="yes">{{ t('view.enableAutoRefresh') }}</a-radio-button>
                       <a-radio-button value="no">{{ t('view.disableAutoRefresh') }}</a-radio-button>
-                      <a-radio-button value="yes">{{
+                      <a-radio-button>{{
                         t('view.countdownSeconds', [refreshTime])
                       }}</a-radio-button>
                     </a-radio-group>

@@ -27,7 +27,7 @@
                     v-model:value="seacthContent.name"
                     placeholder="输入车站名称查询"
                   />
-                  <a-button @click="initPage" type="primary">{{t('view.query')}}</a-button>
+                  <a-button @click="initPage" type="primary">{{ t('view.query') }}</a-button>
                 </a-space>
               </AuthDom>
               <AuthDom auth="ddServcer_station_add">
@@ -461,8 +461,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'DDServcerStation' });
   const mqttStore = useMqttStoreWithOut();
   const isRunGet = ref(false);
@@ -487,7 +485,7 @@
       },
       {
         field: 'lineName',
-        title: '线路名称',
+        title: t('view.lineName'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -497,7 +495,7 @@
       },
       {
         field: 'name',
-        title: '车站名称',
+         title: t('view.stationName'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -533,7 +531,7 @@
       },
       {
         field: 'code',
-        title: '车站代码',
+         title: t('view.stationCode'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -557,7 +555,7 @@
       },
       {
         field: 'longitude',
-        title: '经度',
+         title: t('view.longitude'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -566,7 +564,7 @@
       },
       {
         field: 'latitude',
-        title: '纬度',
+         title: t('view.latitude'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -588,6 +586,22 @@
         showHeaderOverflow: true,
         sortable: true,
         minWidth: 100,
+      },
+      {
+        field: 'sosCallNumber',
+        title: '紧急组呼号码',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 150,
+      },
+      {
+        field: 'sosCallPriority',
+        title: '紧急组呼优先级',
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 170,
       },
       {
         field: 'groupCallNumber',

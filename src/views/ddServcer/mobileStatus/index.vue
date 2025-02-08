@@ -56,12 +56,14 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="initPage()" type="primary">{{t('view.query')}}</a-button>
-                    <a-button @click="resetSeacth">{{t('view.resetForm')}}</a-button>
+                    <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
+                    <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                     <a-radio-group v-model:value="refresh" button-style="solid">
-                      <a-radio-button value="yes">{{t('view.enableAutoRefresh')}}</a-radio-button>
-                      <a-radio-button value="yes">{{t('view.disableAutoRefresh')}}</a-radio-button>
-                      <a-radio-button value="yes">{{t('view.countdownSeconds',[refreshTime])}}</a-radio-button>
+                      <a-radio-button value="yes">{{ t('view.enableAutoRefresh') }}</a-radio-button>
+                      <a-radio-button value="no">{{ t('view.disableAutoRefresh') }}</a-radio-button>
+                      <a-radio-button>{{
+                        t('view.countdownSeconds', [refreshTime])
+                      }}</a-radio-button>
                     </a-radio-group>
                   </a-space>
                 </div>
@@ -79,7 +81,7 @@
           @page-change="handlePageChange"
         />
       </template>
-      <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? '+' + row.port : '' }} </template>
+      <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? ':' + row.port : '' }} </template>
     </vxe-grid>
   </MyContent>
 </template>
@@ -89,7 +91,7 @@
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import {
-    MobileStatus as mobileStatusApi,
+    DDDev as mobileStatusApi,
     Line as lineApi,
     Station as stationApi,
     Lacci as lacciApi,
@@ -101,8 +103,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'DDServcerMobileStatus' });
   const { prefixCls } = useDesign('DDServcerMobileStatus-');
   const loading = ref(true);
@@ -127,7 +127,7 @@
       },
       {
         field: 'lineName',
-        title: '线路名称',
+        title: t('view.lineName'),
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -136,8 +136,18 @@
         minWidth: 200,
       },
       {
+        field: 'stationCode',
+        title: t('view.stationCode'),
+        showOverflow: true,
+        showHeaderOverflow: true,
+        visible: false,
+        sortable: true,
+        minWidth: 130,
+        fixed: 'left',
+      },
+      {
         field: 'stationName',
-        title: '车站名称',
+        title: t('view.stationName'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -153,24 +163,8 @@
         minWidth: 100,
       },
       {
-        field: 'typeName',
-        title: '手持台类型',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-        minWidth: 130,
-      },
-      {
         field: 'lacci',
-        title: 'ECI号',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-        minWidth: 130,
-      },
-      {
-        field: 'lacciName',
-        title: 'ECI名称',
+        title: t('view.eciNumber'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -178,7 +172,7 @@
       },
       {
         field: 'stationLocationName',
-        title: '所在位置',
+        title: t('view.currentLocation'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -186,7 +180,7 @@
       },
       {
         field: 'longitude',
-        title: '经度',
+        title: t('view.longitude'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -194,7 +188,7 @@
       },
       {
         field: 'latitude',
-        title: '纬度',
+        title: t('view.latitude'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -202,13 +196,29 @@
       },
       {
         field: 'ip',
-        title: 'Ip+端口号',
+        title: t('view.ipAndPortNumber'),
         showOverflow: true,
         showHeaderOverflow: true,
         minWidth: 154,
         slots: {
           default: 'ipport',
         },
+        sortable: true,
+      },
+      {
+        field: 'loginTime',
+        title: t('view.loginTime'),
+        showOverflow: true,
+        showHeaderOverflow: true,
+        sortable: true,
+        minWidth: 150,
+      },
+      {
+        field: 'updateTime',
+        title: t('view.heartbeatTime'),
+        minWidth: 150,
+        showOverflow: true,
+        showHeaderOverflow: true,
         sortable: true,
       },
       // {

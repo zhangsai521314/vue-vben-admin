@@ -43,7 +43,7 @@
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button @click="initPage" type="primary">{{t('view.query')}}</a-button>
+                      <a-button @click="initPage" type="primary">{{ t('view.query') }}</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -203,8 +203,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'DDServcerLacci' });
   const mqttStore = useMqttStoreWithOut();
   const isRunGet = ref(false);
@@ -246,7 +244,7 @@
       },
       {
         field: 'longitude',
-        title: '经度',
+         title: t('view.longitude'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -255,7 +253,7 @@
 
       {
         field: 'latitude',
-        title: '纬度',
+         title: t('view.latitude'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

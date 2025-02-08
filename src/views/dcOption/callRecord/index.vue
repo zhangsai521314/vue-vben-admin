@@ -92,8 +92,8 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="initPage()" type="primary">{{t('view.query')}}</a-button>
-                    <a-button @click="resetSeacth">{{t('view.resetForm')}}</a-button>
+                    <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
+                    <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                     <a-spin :spinning="exportDataSpinning">
                       <a-button @click="exportData" type="primary">导出</a-button>
                     </a-spin>
@@ -239,8 +239,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'DCOptionCallRecord' });
   const { prefixCls } = useDesign('DCOptionCallRecord-');
   const mqttStore = useMqttStoreWithOut();

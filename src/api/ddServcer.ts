@@ -40,20 +40,26 @@ const Black = {
     });
   },
 };
-const CirStatus = {
-  //获取列表
-  GetDDCirStatus: function (params) {
+
+const DDDev = {
+  //获取调度台\值班台列表
+  GetDDServerDCStatus: function (params) {
     return defHttp.post({
-      url: '/DDServerCirStatus/GetDDCirStatus',
+      url: '/DDDev/GetDDServerDCStatus',
       params,
     });
   },
-};
-const DCStatus = {
-  //获取列表
+  //获取CIR列表
   GetDDCirStatus: function (params) {
     return defHttp.post({
-      url: '/DDServerDCStatus/GetDDServerDCStatus',
+      url: '/DDDev/GetDDCirStatus',
+      params,
+    });
+  },
+  //获取列表
+  GetDDServerMobileStatus: function (params) {
+    return defHttp.post({
+      url: '/DDDev/GetDDServerMobileStatus',
       params,
     });
   },
@@ -144,15 +150,6 @@ const Line = {
   DeleteDDServerLine: function (params) {
     return defHttp.post({
       url: '/DDServerLine/DeleteDDServerLine/',
-      params,
-    });
-  },
-};
-const MobileStatus = {
-  //获取列表
-  GetDDServerMobileStatus: function (params) {
-    return defHttp.post({
-      url: '/DDServerMobileStatus/GetDDServerMobileStatus',
       params,
     });
   },
@@ -279,11 +276,9 @@ const LwStatusHis = {
 };
 export {
   Black,
-  CirStatus,
-  DCStatus,
+  DDDev,
   Lacci,
   Line,
-  MobileStatus,
   RegisterHistory,
   Station,
   StationLacci,

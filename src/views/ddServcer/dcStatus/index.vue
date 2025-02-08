@@ -67,20 +67,6 @@
                     />
                   </a-space>
                 </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>类型：</label>
-                    <a-select
-                      placeholder="请选择类型"
-                      style="width: 170px"
-                      allow-clear
-                      v-model:value="seacthContent._type"
-                    >
-                      <a-select-option :value="1">调度台</a-select-option>
-                      <a-select-option :value="2">车站值班台</a-select-option>
-                    </a-select>
-                  </a-space>
-                </div>
                 <!-- <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>注册状态：</label>
@@ -99,12 +85,14 @@
                 </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="initPage()" type="primary">{{t('view.query')}}</a-button>
-                    <a-button @click="resetSeacth">{{t('view.resetForm')}}</a-button>
+                    <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
+                    <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                     <a-radio-group v-model:value="refresh" button-style="solid">
-                      <a-radio-button value="yes">{{t('view.enableAutoRefresh')}}</a-radio-button>
-                      <a-radio-button value="yes">{{t('view.disableAutoRefresh')}}</a-radio-button>
-                      <a-radio-button value="yes">{{t('view.countdownSeconds',[refreshTime])}}</a-radio-button>
+                      <a-radio-button value="yes">{{ t('view.enableAutoRefresh') }}</a-radio-button>
+                      <a-radio-button value="no">{{ t('view.disableAutoRefresh') }}</a-radio-button>
+                      <a-radio-button>{{
+                        t('view.countdownSeconds', [refreshTime])
+                      }}</a-radio-button>
                     </a-radio-group>
                   </a-space>
                 </div>
@@ -122,12 +110,7 @@
           @page-change="handlePageChange"
         />
       </template>
-      <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? ':' + row.port : '' }} </template>
-      <template #regStatusName="{ row }">
-        <span :style="{ color: row.regStatusName == '启用' ? 'green' : 'red' }"
-          >{{ row.regStatusName }}
-        </span></template
-      >
+      <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? ':' + row.port : '' }} </template>>
     </vxe-grid>
   </MyContent>
 </template>
@@ -136,7 +119,7 @@
   import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
-  import { DCStatus as dcStatusApi, Line as lineApi, Station as stationApi } from '@/api/ddServcer';
+  import { DDDev as dcStatusApi, Line as lineApi, Station as stationApi } from '@/api/ddServcer';
   import { tryOnUnmounted } from '@vueuse/core';
   import zhCN from 'ant-design-vue/es/locale/zh_CN';
   import dayjs from 'dayjs';
@@ -147,8 +130,6 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-
-  const { t } = useI18n();
   defineOptions({ name: 'DDServcerDCStatus' });
   const { prefixCls } = useDesign('DDServcerDCStatus-');
   const loading = ref(true);
@@ -173,7 +154,7 @@
       },
       {
         field: 'lineName',
-        title: '线路名称',
+        title: t('view.lineName'),
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -183,7 +164,7 @@
       },
       {
         field: 'stationCode',
-        title: '线路/车站代码',
+        title: t('view.lineORstationCode'),
         showOverflow: true,
         showHeaderOverflow: true,
         visible: false,
@@ -193,7 +174,7 @@
       },
       {
         field: 'stationName',
-        title: '车站名称',
+        title: t('view.stationName'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -209,27 +190,8 @@
         minWidth: 90,
       },
       {
-        field: 'typeName',
-        title: '类型',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: true,
-        minWidth: 120,
-      },
-      //20240603-郭彦军指示不显示
-      // {
-      //   field: 'regStatusName',
-      //   title: '注册状态',
-      //   showOverflow: true,
-      //   showHeaderOverflow: true,
-      //   sortable: true,
-      //   // slots: {
-      //   //   default: 'regStatusName',
-      //   // },
-      // },
-      {
         field: 'ip',
-        title: 'Ip+端口号',
+        title: t('view.ipAndPortNumber'),
         showOverflow: true,
         showHeaderOverflow: true,
         slots: {
@@ -240,7 +202,7 @@
       },
       {
         field: 'loginTime',
-        title: '登录时间',
+        title: t('view.loginTime'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -248,7 +210,7 @@
       },
       {
         field: 'updateTime',
-        title: '心跳时间',
+        title: t('view.heartbeatTime'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -315,7 +277,7 @@
       timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
     loading.value = true;
     dcStatusApi
-      .GetDDCirStatus({
+      .GetDDServerDCStatus({
         PageIndex: page.current,
         PageSize: page.size,
         fullSort: getFullSort(),
