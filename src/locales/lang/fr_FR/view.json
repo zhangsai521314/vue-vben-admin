@@ -277,6 +277,7 @@
   "stationName": "Nom de la gare",
   "pleaseSelectStationName": "Veuillez choisir le nom de la gare",
   "isdn": "ISDN",
+  "pleaseEnterIdsn": "Veuillez saisir l'IDSN",
   "inputIsdnNumberForQuery": "Recherche de numéro ISDN",
   "pleaseSelectType": "Veuillez choisir un type",
   "enableAutomaticQuery": "Activer la recherche automatique",

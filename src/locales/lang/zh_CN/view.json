@@ -1,5 +1,5 @@
 {
-  "day":"天",
+  "day": "天",
   "uploadAuthorizationFileFailed": "上传授权文件失败",
   "uploadAuthorizationFileSuccessfully": "上传授权文件成功",
   "pleaseSelectAuthorizationFileBeforeUploading": "请选择授权文件后再上传",
@@ -277,6 +277,7 @@
   "stationName": "车站名称",
   "pleaseSelectStationName": "请选择车站名称",
   "isdn": "ISDN",
+  "pleaseEnterIdsn": "请输入idsn",
   "inputIsdnNumberForQuery": "输入ISDN号查询",
   "pleaseSelectType": "请选择类型",
   "enableAutomaticQuery": "开启自动查询",

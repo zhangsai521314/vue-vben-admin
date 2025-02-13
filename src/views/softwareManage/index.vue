@@ -237,6 +237,17 @@
           />
         </a-form-item>
         <a-form-item
+          name="isdn"
+          :label="t('view.isdn')"
+          :rules="[{ max: 20, message: t('view.pleaseEnterIdsn') }]"
+        >
+          <a-input
+            :placeholder="t('view.pleaseEnterIdsn')"
+            v-model:value="formData.isdn"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
           name="filePath"
           :label="t('view.deploymentPath')"
           :rules="[{ max: 20, message: t('view.deploymentPathIsTooLong') }]"
@@ -533,6 +544,13 @@
         minWidth: 136,
       },
       {
+        field: 'isdn',
+        title: t('view.isdn'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 136,
+      },
+      {
         field: 'filePath',
         title: t('view.deploymentPath'),
         showOverflow: true,
@@ -682,6 +700,7 @@
     filePath: null,
     serviceCode: null,
     isUpPerformance: false,
+    isdn: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);

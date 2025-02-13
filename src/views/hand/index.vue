@@ -119,7 +119,7 @@
                   size="small"
                   :title="row.isDisable ? '启用' : '禁用'"
                   v-model:checked="row.isDisable"
-                  @change="(c) => disableChange(c, row)"
+                  @change="(c) => disableChange(v, row)"
                 /> </a-spin
             ></div>
           </AuthDom>
@@ -548,14 +548,13 @@
     });
   }
 
-  function disableChange(c, row) {
-    debugger
+  function disableChange(v, row) {
     const d = row.isDisable;
     disableSpinning.value = true;
     handApi
       .UpdateHandDisable({
         handId: row.handId,
-        isDisable: c,
+        isDisable: v,
         execompleteBefore: () => {
           disableSpinning.value = false;
         },
