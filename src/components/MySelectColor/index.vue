@@ -1,19 +1,23 @@
 <template>
   <div class="divColor" :id="domid" :style="backgroundColor" @click="showSelectColor"></div>
   <div class="selectColorModel" ref="selectColorModelRef">
-    <sketchs v-model="sketchsColor" @click="selectedColor" />
+    <sketchs v-model="sketchsColor" />
     <div class="divSelectColor">
-      <a-button @click="saveColor" type="primary" style="float: right">{{ t('view.close') }}</a-button>
-      <a-button @click="clearColor" style="height: 33px; margin-right: 2px; float: right"
-        >清空</a-button
-      >
+      <a-button @click="saveColor" type="primary" style="float: right">{{
+        t('view.close')
+      }}</a-button>
+      <a-button @click="clearColor" style="height: 33px; margin-right: 2px; float: right">{{
+        t('view.clear')
+      }}</a-button>
     </div>
   </div>
 </template>
 <script setup>
   import { Sketch as sketchs } from '@ckpack/vue-color';
   import { ref, watch, onMounted } from 'vue';
+  import { useI18n } from '@/hooks/web/useI18n';
 
+  const { t } = useI18n();
   const emits = defineEmits(['change']);
   const props = defineProps({
     //默认颜色
@@ -78,7 +82,7 @@
   function clearColor() {
     sketchsColor.value = {};
     backgroundColor.value.backgroundColor = '';
-    $('.selectColor').remove();
+    // $('.selectColor').remove();
     emits('change', '');
   }
 

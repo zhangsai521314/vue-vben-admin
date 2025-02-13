@@ -20,7 +20,7 @@
         <vxe-column field="msgId" title="告警id" :visible="false" />
         <vxe-column field="serviceId" title="服务id" :visible="false" />
         <vxe-column field="serviceCode" title="服务编号" :visible="false" />
-        <vxe-column field="serviceName" title="服务名称" />
+        <vxe-column field="serviceName" title="软件服务名称" />
         <vxe-column field="msgType" title="信息类型" :visible="false">
           <template #default="{ row }">
             {{

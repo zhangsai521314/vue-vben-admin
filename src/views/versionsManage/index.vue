@@ -101,7 +101,7 @@
     </vxe-grid>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="locale == 'zh-CN' ? 500 : 600"
+      :width="locale == 'zh-CN' ? 500 : 610"
       :visible="isShowForm"
       ::title="t('view.configuration')"
       :footer-style="{ textAlign: 'right' }"
@@ -244,41 +244,17 @@
                   formData.configFilePath.split('/')[formData.configFilePath.split('/').length - 1]
                 "
               />
-              <div
-                style="
-                  position: absolute;
-                  z-index: 20;
-                  top: 0;
-                  left: 0;
-                  width: 300px;
-                  height: 32px;
-                  cursor: pointer;
-                "
-              >
-              </div>
             </div>
             <div v-else>
               <a-input
                 style="width: 300px; cursor: pointer"
-                :placeholder="t('view.clickToUploadConfigurationFile')"
+                :placeholder="t('view.clickToSelectConfigurationFile')"
               />
-              <div
-                style="
-                  position: absolute;
-                  z-index: 20;
-                  top: 0;
-                  left: 0;
-                  width: 300px;
-                  height: 32px;
-                  cursor: pointer;
-                "
-              >
-              </div>
             </div>
           </a-upload>
           <IconFontClass
             v-if="formData.configFilePath"
-            style="position: absolute; right: -20px; font-size: 18px; cursor: pointer"
+            style="margin-left: 4px; font-size: 18px; cursor: pointer"
             name=" icon-baseui-delete"
             @click="
               () => {

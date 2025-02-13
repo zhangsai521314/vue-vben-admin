@@ -143,7 +143,7 @@
       @close="formClose"
     >
       <a-form
-        :label-col="{ span: locale == 'zh-CN' ? 6 : 10 }"
+        :label-col="{ span: locale == 'zh-CN' ? 7 : 10 }"
         :style="{ paddingRight: '2px' }"
         autocomplete="off"
         ref="formRef"

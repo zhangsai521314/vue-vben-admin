@@ -1470,7 +1470,9 @@
   import { useGplotStoreWithOut } from '@/store/modules/gplot';
   import softwareApi from '@/api/software';
   import _ from 'lodash-es';
-
+  import { useI18n } from '@/hooks/web/useI18n';
+  
+  const { t } = useI18n();
   const { prefixCls } = useDesign('GplotManage-');
   const props = defineProps({
     //拓扑对象

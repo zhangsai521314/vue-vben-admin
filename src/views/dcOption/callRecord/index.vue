@@ -33,9 +33,9 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>服务名称：</label>
+                    <label>软件服务名称：</label>
                     <a-select
-                      placeholder="请选择服务名称"
+                      placeholder="请选择软件服务名称"
                       style="width: 170px"
                       allow-clear
                       show-search
@@ -274,7 +274,7 @@
       },
       {
         field: 'serviceName',
-        title: '服务名称',
+        title: '软件服务名称',
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,

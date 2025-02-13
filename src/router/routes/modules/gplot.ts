@@ -16,17 +16,18 @@ const GplotRouter: AppRouteModule = {
   },
   children: [
     {
-      path: 'manage',
+      path: 'manage/:menuId',
       name: 'GplotManage',
       component: () => import('/@/views/gplot/manage.vue'),
       meta: {
         title: '拓扑配置',
         hideMenu: true,
+        ignoreKeepAlive: false,
       },
     },
     {
       path: 'index/:menuId',
-      name: 'Gplot',
+      name: 'GplotIndex',
       component: () => import('/@/views/gplot/index.vue'),
       meta: {
         title: t('网元监控'),
