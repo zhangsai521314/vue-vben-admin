@@ -30,5 +30,12 @@ const Hand = {
       params,
     });
   },
+  //更改手持台禁用启用
+  UpdateHandDisable: function (params) {
+    return defHttp.post({
+      url: '/Hand/UpdateHandDisable',
+      params,
+    });
+  },
 };
 export default Hand;

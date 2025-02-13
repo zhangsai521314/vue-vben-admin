@@ -166,12 +166,12 @@
         <a-form-item
           :label="t('view.serviceType')"
           name="serviceType"
-          :rules="[{ required: true, message: t('view.pleaseSelectSoftwareType') }]"
+          :rules="[{ required: true, message: t('view.pleaseSelectSoftwareServiceType') }]"
         >
           <a-select
             show-search
             :filter-option="AntVueCommon.filterOption"
-            :placeholder="t('view.pleaseSelectSoftwareType')"
+            :placeholder="t('view.pleaseSelectSoftwareServiceType')"
             v-model:value="formData.serviceType"
             :options="dictionariesData.filter((m) => m.dictionariesClass == 'serviceType')"
           />

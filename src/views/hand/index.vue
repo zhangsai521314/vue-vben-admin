@@ -83,8 +83,8 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="initPage()" type="primary">{{t('view.query')}}</a-button>
-                    <a-button @click="resetSeacth">{{t('view.resetForm')}}</a-button>
+                    <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
+                    <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                   </a-space>
                 </div>
               </a-space>
@@ -109,6 +109,19 @@
               style="color: #0a61bd"
               title="分配权限"
             />
+          </AuthDom>
+          <AuthDom auth="roleManage_table_disable">
+            <div
+              style="width: 30px; display: inline-block; position: relative; left: 8px; top: -2px"
+            >
+              <a-spin :spinning="disableSpinning">
+                <a-switch
+                  size="small"
+                  :title="row.isDisable ? '启用' : '禁用'"
+                  v-model:checked="row.isDisable"
+                  @change="(c) => disableChange(c, row)"
+                /> </a-spin
+            ></div>
           </AuthDom>
         </div>
       </template>
@@ -209,6 +222,7 @@
     isOnline: null,
     eci: null,
   });
+  const disableSpinning = ref(false);
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
     columns: [
@@ -234,7 +248,7 @@
       },
       {
         field: 'stationName',
-         title: t('view.stationName'),
+        title: t('view.stationName'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: false,
@@ -286,7 +300,7 @@
       },
       {
         field: 'dataTime',
-         title: t('view.heartbeatTime'),
+        title: t('view.heartbeatTime'),
         minWidth: 150,
         showOverflow: true,
         sortable: true,
@@ -532,6 +546,28 @@
     stationApi.GetDDServerStationTreeCode().then((data) => {
       stationDatas.value = data;
     });
+  }
+
+  function disableChange(c, row) {
+    debugger
+    const d = row.isDisable;
+    disableSpinning.value = true;
+    handApi
+      .UpdateHandDisable({
+        handId: row.handId,
+        isDisable: c,
+        execompleteBefore: () => {
+          disableSpinning.value = false;
+        },
+      })
+      .then((data) => {
+        if (data) {
+          message.success(t('view.success'));
+        } else {
+          row.isDisable = d;
+          message.error(t('view.failure'));
+        }
+      });
   }
 </script>
 <style lang="less" scoped>

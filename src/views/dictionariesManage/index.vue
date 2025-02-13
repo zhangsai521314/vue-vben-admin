@@ -67,16 +67,13 @@
                             >{{ t('view.userFunctionCode') }}
                           </a-select-option>
                           <a-select-option value="dispatchUserFunction"
-                            >调度用户功能码
+                            >{{ t('view.dispatchUserFunctionCode') }}
                           </a-select-option>
                           <a-select-option value="vehicleType"
                             >{{ t('view.vehicleTypeCategory') }}
                           </a-select-option>
                           <a-select-option value="Ln_L4L5"
                             >{{ t('view.positionTypeL4L5') }}
-                          </a-select-option>
-                          <a-select-option value="handPower"
-                            >{{ t('view.handheldTerminalPermissions') }}
                           </a-select-option>
                         </a-select>
                       </a-space>
@@ -391,7 +388,7 @@
         :model="formData"
       >
         <a-form-item
-          name="dictionariesName"
+          name="dictionariesNameCn"
           :label="t('view.dictionaryNameCn')"
           :rules="[
             { required: true, message: '' },
@@ -400,7 +397,7 @@
           ]"
         >
           <a-input
-            v-model:value="formData.dictionariesName"
+            v-model:value="formData.dictionariesNameCn"
             :placeholder="t('view.pleaseEnterDictionaryName')"
             autocomplete="off"
           />
@@ -445,7 +442,7 @@
             :rules="[{ required: true, message: t('view.pleaseSelectDictionaryType') }]"
             v-model:value="formData.dictionariesClass"
             :disabled="dictionariesClass_disabled"
-            ::title="dictionariesClass_disabled ? t('view.followParentAndCannotBeModified') : ''"
+            :title="dictionariesClass_disabled ? t('view.followParentAndCannotBeModified') : ''"
           >
             <a-select-option value="equipmentType">{{ t('view.hardwareDevice') }}</a-select-option>
             <a-select-option value="systemType">{{ t('view.operatingSystem') }}</a-select-option>
@@ -480,7 +477,7 @@
           :rules="[{ required: true, message: t('view.pleaseSelectWhetherToCustomizePrimaryKey') }]"
         >
           <a-switch
-            ::title="dictionariesClass_disabled ? t('view.followParentAndCannotBeModified') : ''"
+            :title="dictionariesClass_disabled ? t('view.followParentAndCannotBeModified') : ''"
             :disabled="dictionariesClass_disabled"
             v-model:checked="formData.isKeyMaster"
           />
@@ -595,14 +592,14 @@
   const loading = ref(true);
   const tableConfigData = ref([]);
   const defFromData = reactive({
-    dictionariesName: '',
+    dictionariesNameCn: null,
     dictionariesNameEn: null,
     dictionariesNameFr: null,
     dictionariesClass: null,
     orderIndex: null,
     parentId: 0,
     isKeyMaster: false,
-    dictionariesKey: '',
+    dictionariesKey: null,
     remark: null,
     other: null,
     serviceType: null,
@@ -796,7 +793,7 @@
   //重置搜索条件
   function resetSeacth() {
     seacthContent.value = {
-      dictionariesName: '',
+      dictionariesName: null,
       dictionariesClass: null,
       serviceType: null,
     };

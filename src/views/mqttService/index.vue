@@ -65,7 +65,7 @@
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
       :width="locale == 'zh-CN' ? 500 : 600"
       :visible="isShowForm"
-      ::title="t('view.configuration')"
+      :title="t('view.configuration')"
       :footer-style="{ textAlign: 'right' }"
       @close="formClose"
     >
