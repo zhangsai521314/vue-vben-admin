@@ -112,14 +112,14 @@
           </AuthDom>
           <AuthDom auth="roleManage_table_disable">
             <div
-              style="width: 30px; display: inline-block; position: relative; left: 8px; top: -2px"
+              style=" display: inline-block; position: relative; top: -2px; left: 8px;width: 30px"
             >
               <a-spin :spinning="disableSpinning">
                 <a-switch
                   size="small"
-                  :title="row.isDisable ? '启用' : '禁用'"
-                  v-model:checked="row.isDisable"
-                  @change="(c) => disableChange(v, row)"
+                  :title="row.isEnable ? '禁用' : '启用'"
+                  v-model:checked="row.isEnable"
+                  @change="(v) => disableChange(v, row)"
                 /> </a-spin
             ></div>
           </AuthDom>
@@ -549,12 +549,12 @@
   }
 
   function disableChange(v, row) {
-    const d = row.isDisable;
+    const d = row.isEnable;
     disableSpinning.value = true;
     handApi
       .UpdateHandDisable({
         handId: row.handId,
-        isDisable: v,
+        isEnable: v,
         execompleteBefore: () => {
           disableSpinning.value = false;
         },
@@ -563,7 +563,7 @@
         if (data) {
           message.success(t('view.success'));
         } else {
-          row.isDisable = d;
+          row.isEnable = d;
           message.error(t('view.failure'));
         }
       });
