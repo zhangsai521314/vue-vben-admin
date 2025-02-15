@@ -579,8 +579,6 @@
   import dictionariesApi from '@/api/dictionaries';
   import { message, Modal } from 'ant-design-vue';
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
-  import { useMqttStoreWithOut } from '@/store/modules/mqtt';
-  import softwareApi from '@/api/software';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
 

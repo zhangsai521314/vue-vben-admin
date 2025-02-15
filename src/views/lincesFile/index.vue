@@ -29,14 +29,14 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.isdn') }}：</label>
+                    <label>{{ t('view.equipmentNumber') }}：</label>
                     <a-input
                       :style="{
                         width: locale == 'zh-CN' ? '180px' : locale == 'en-US' ? '200px' : '350px',
                       }"
                       @press-enter="initPage"
-                      v-model:value="seacthContent.isdn"
-                      :placeholder="t('view.inputIsdnNumberForQuery')"
+                      v-model:value="seacthContent.equipmentCode"
+                      :placeholder="t('view.queryByInputtingEquipmentNumber')"
                     />
                   </a-space>
                 </div>
@@ -92,9 +92,9 @@
           :style="{
             fontSize: '20px',
             fontWeight: 500,
-            color: row.remainingDays == 0 ? 'red' : row.remainingDays <= 30 ? '#adad00' : 'green',
+            color: row.remainingDays <= 0 ? 'red' : row.remainingDays <= 30 ? '#adad00' : 'green',
           }"
-          >{{ row.remainingDays }}</span
+          >{{ row.remainingDays <= 0 ? '已过期' : row.remainingDays }}</span
         >
       </template>
       <template #bindClientType="{ row }">
@@ -190,8 +190,8 @@
         sortable: true,
       },
       {
-        field: 'isdn',
-        title: t('view.isdn'),
+        field: 'equipmentCode',
+        title: t('view.equipmentNumber'),
         showOverflow: true,
         minWidth: 136,
         fixed: 'left',
@@ -204,26 +204,26 @@
         sortable: true,
         minWidth: 186,
       },
+      // {
+      //   field: 'isBindClient',
+      //   title: t('view.isBound'),
+      //   showOverflow: true,
+      //   minWidth: 136,
+      //   cellRender: { name: 'render_isno' },
+      // },
+      // {
+      //   field: 'bindClientType',
+      //   title: t('view.bindingType'),
+      //   showOverflow: true,
+      //   minWidth: 136,
+      //   slots: {
+      //     default: 'bindClientType',
+      //   },
+      //   sortable: true,
+      // },
       {
-        field: 'isBindClient',
-        title: t('view.isBound'),
-        showOverflow: true,
-        minWidth: 136,
-        cellRender: { name: 'render_isno' },
-      },
-      {
-        field: 'bindClientType',
-        title: t('view.bindingType'),
-        showOverflow: true,
-        minWidth: 136,
-        slots: {
-          default: 'bindClientType',
-        },
-        sortable: true,
-      },
-      {
-        field: 'isdn',
-        title: t('view.isdn'),
+        field: 'equipmentCode',
+        title: t('view.equipmentNumber'),
         visible: false,
         showOverflow: true,
         minWidth: 136,
@@ -248,7 +248,7 @@
       },
       {
         field: 'lastGetTime',
-        title: t('view.lastAcquisitionTime'),
+        title: t('view.getTime'),
         minWidth: 210,
         showOverflow: true,
         sortable: true,
@@ -308,10 +308,10 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['isdn asc'],
+    sortlist: ['equipmentCode asc'],
   });
   const seacthContent = ref({
-    isdn: null,
+    equipmentCode: null,
     SearchParameters: [],
   });
   const durationQueryType = ref(5);

@@ -1,140 +1,159 @@
 <template>
   <MyContent :class="prefixCls">
-    <vxe-grid
-      :scroll-y="{ enabled: true }"
-      v-bind="tableConfig"
-      id="handLog"
-      :auto-resize="true"
-      ref="tableRef"
-      :loading="loading"
-      :seq-config="{ startIndex: (page.current - 1) * page.size }"
-      :row-config="{ keyField: 'handId' }"
-      :column-config="{ resizable: true }"
-      :custom-config="{ storage: true }"
-      @sort-change="onSortChange"
-    >
-      <template #toolbar_buttons>
-        <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style="margin-left: 5px">
-            <AuthDom auth="ddServcer_dcStatus_query">
-              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>心跳时间：</label>
-                    <a-config-provider :locale="zhCN">
-                      <a-range-picker
-                        :allowClear="false"
-                        v-model:value="timeValue"
-                        :showTime="true"
-                        format="YYYY-MM-DD HH:mm:ss"
+    <a-spin :spinning="loading">
+      <vxe-grid
+        :scroll-y="{ enabled: true }"
+        v-bind="tableConfig"
+        id="handLog"
+        :auto-resize="true"
+        ref="tableRef"
+        :loading="loading"
+        :seq-config="{ startIndex: (page.current - 1) * page.size }"
+        :row-config="{ keyField: 'handId' }"
+        :column-config="{ resizable: true }"
+        :custom-config="{ storage: true }"
+        @sort-change="onSortChange"
+      >
+        <template #toolbar_buttons>
+          <div :class="`tableBtn`">
+            <a-space direction="horizontal" size="small" style="margin-left: 5px">
+              <AuthDom auth="hand_query">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>{{ t('view.heartbeatTime') }}：</label>
+                      <a-config-provider :locale="zhCN">
+                        <a-range-picker
+                          :allowClear="true"
+                          v-model:value="timeValue"
+                          :showTime="true"
+                          format="YYYY-MM-DD HH:mm:ss"
+                        />
+                      </a-config-provider>
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>ISDN：</label>
+                      <a-input
+                        @press-enter="initPage()"
+                        v-model:value="seacthContent.handIsdn"
+                        :placeholder="t('view.inputIsdnNumberForQuery')"
                       />
-                    </a-config-provider>
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>ISDN：</label>
-                    <a-input
-                      @press-enter="initPage()"
-                      v-model:value="seacthContent.handIsdn"
-                      placeholder="输入ISDN号查询"
-                    />
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>车站名称：</label>
-                    <a-tree-select
-                      v-model:value="seacthContent.stationCode"
-                      show-search
-                      style="width: 220px"
-                      :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                      placeholder="请选择车站名称"
-                      allow-clear
-                      show-arrow
-                      :filterTreeNode="AntVueCommon.filterTreeNode"
-                      :tree-data="stationDatas"
-                    />
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>ECI：</label>
-                    <a-input
-                      @press-enter="initPage()"
-                      v-model:value="seacthContent.eci"
-                      placeholder="输入ECI号查询"
-                    />
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>是否在线：</label>
-                    <a-select
-                      placeholder="请选择是否在线"
-                      style="width: 170px"
-                      allow-clear
-                      v-model:value="seacthContent.isOnline"
-                    >
-                      <a-select-option :value="true">在线</a-select-option>
-                      <a-select-option :value="false">离线</a-select-option>
-                    </a-select>
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
-                    <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
-                  </a-space>
-                </div>
-              </a-space>
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>{{ t('view.stationName') }}：</label>
+                      <a-tree-select
+                        v-model:value="seacthContent.stationCode"
+                        show-search
+                        style="width: 220px"
+                        :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                        :placeholder="t('view.pleaseSelectStationName')"
+                        allow-clear
+                        show-arrow
+                        :filterTreeNode="AntVueCommon.filterTreeNode"
+                        :tree-data="stationDatas"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>ECI：</label>
+                      <a-input
+                        @press-enter="initPage()"
+                        v-model:value="seacthContent.eci"
+                        :placeholder="t('view.inputECINumberToQuery')"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>{{ t('view.isOnline') }}：</label>
+                      <a-select
+                        :placeholder="t('view.pleaseSelectWhetherOnline')"
+                        style="width: 170px"
+                        allow-clear
+                        v-model:value="seacthContent.isOnline"
+                      >
+                        <a-select-option :value="true">{{ t('view.online') }}</a-select-option>
+                        <a-select-option :value="false">{{ t('view.offline') }}</a-select-option>
+                      </a-select>
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
+                      <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
+                    </a-space>
+                  </div>
+                </a-space>
+              </AuthDom>
+              <AuthDom auth="hand_add">
+                <a-space
+                  direction="horizontal"
+                  size="small"
+                  :wrap="true"
+                  style="margin-right: 2px; margin-bottom: 0"
+                >
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button class="ant-btn" @click="showFrom()">{{
+                        t('view.addHandheldTerminal')
+                      }}</a-button>
+                    </a-space>
+                  </div>
+                </a-space>
+              </AuthDom>
+            </a-space>
+          </div>
+        </template>
+        <template #default="{ row }">
+          <div :class="`tableOption`">
+            <AuthDom auth="softwareManage_table_showlog">
+              <IconFontClass
+                name="icon-baseui-flowcontrol-log"
+                @click="showLog(row)"
+                style="color: #0fc10e"
+                :title="t('view.viewLog')"
+              />
             </AuthDom>
-          </a-space>
-        </div>
-      </template>
-      <template #default="{ row }">
-        <div :class="`tableOption`">
-          <AuthDom auth="softwareManage_table_showlog">
-            <IconFontClass
-              name="icon-baseui-flowcontrol-log"
-              @click="showLog(row)"
-              style="color: #0fc10e"
-              title="查看日志"
-            />
-          </AuthDom>
-          <AuthDom auth="roleManage_table_power">
-            <IconFontClass
-              name="icon-baseui-quanxianpeizhi"
-              @click="formShow(row)"
-              style="color: #0a61bd"
-              title="分配权限"
-            />
-          </AuthDom>
-          <AuthDom auth="roleManage_table_disable">
+            <AuthDom auth="hand_edit">
+              <IconFontClass
+                name="icon-baseui-edit-fill"
+                @click="showFrom(row)"
+                style="color: #0a61bd"
+                :title="t('view.assignPermissions')"
+              />
+            </AuthDom>
+          </div>
+        </template>
+        <template #isEnable="{ row }">
+          <AuthDom auth="hand_disable">
             <div
-              style=" display: inline-block; position: relative; top: -2px; left: 8px;width: 30px"
+              style="display: inline-block; position: relative; top: -2px; left: 8px; width: 30px"
             >
               <a-spin :spinning="disableSpinning">
                 <a-switch
                   size="small"
-                  :title="row.isEnable ? '禁用' : '启用'"
                   v-model:checked="row.isEnable"
                   @change="(v) => disableChange(v, row)"
                 /> </a-spin
             ></div>
           </AuthDom>
-        </div>
-      </template>
-      <template #pager>
-        <vxe-pager
-          background
-          v-model:current-page="page.current"
-          v-model:page-size="page.size"
-          :total="page.total"
-          @page-change="handlePageChange"
-        />
-      </template>
-    </vxe-grid>
+        </template>
+        <template #pager>
+          <vxe-pager
+            background
+            v-model:current-page="page.current"
+            v-model:page-size="page.size"
+            :total="page.total"
+            @page-change="handlePageChange"
+          />
+        </template>
+      </vxe-grid>
+    </a-spin>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
       :width="500"
@@ -152,16 +171,35 @@
         :model="formData"
       >
         <a-form-item
-          label="权限类型"
+          name="isdn"
+          :label="t('view.isdn')"
+          :rules="[{ max: 20, message: t('view.pleaseEnterIdsn') }]"
+        >
+          <a-input
+            :disabled="saveType == 'edit'"
+            :placeholder="t('view.pleaseEnterIdsn')"
+            v-model:value="formData.handIsdn"
+            autocomplete="off"
+          />
+        </a-form-item>
+        <a-form-item
+          name="isEnable"
+          :label="t('view.enableOrDisable')"
+          :rules="[{ required: true, message: t('view.pleaseSelectEnableOrDisable') }]"
+        >
+          <a-switch v-model:checked="formData.isEnable" />
+        </a-form-item>
+        <a-form-item
+          :label="t('view.permissionType')"
           name="powerKeys"
-          :rules="[{ required: true, message: '请选择权限类型' }]"
+          :rules="[{ required: true, message: t('view.pleaseSelectPermissionType') }]"
         >
           <a-select
             show-search
             :allowClear="true"
             mode="multiple"
             :filter-option="AntVueCommon.filterOption"
-            placeholder="请选择权限类型"
+            :placeholder="t('view.pleaseSelectPermissionType')"
             v-model:value="formData.powerKeys"
             :options="dictionariesData"
           />
@@ -178,7 +216,7 @@
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
       :width="600"
       :visible="isShowLog"
-      title="日志查看"
+      :title="t('view.viewLog')"
       :footer-style="{ textAlign: 'right' }"
       @close="formCloseLog"
     >
@@ -227,14 +265,19 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: t('view.serialNumber'), minWidth: 50, fixed: 'left' },
+      {
+        type: 'seq',
+        title: t('view.serialNumber'),
+        minWidth: locale == 'zh-CN' ? 70 : 160,
+        fixed: 'left',
+      },
       {
         field: 'handId',
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
         showHeaderOverflow: true,
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
         fixed: 'left',
       },
       {
@@ -256,35 +299,8 @@
         fixed: 'left',
       },
       {
-        field: 'stationNameCn',
-        title: '车站名称(中)',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: false,
-        minWidth: 200,
-        visible: false,
-      },
-      {
-        field: 'stationNameEn',
-        title: '车站名称(英)',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: false,
-        minWidth: 200,
-        visible: false,
-      },
-      {
-        field: 'stationNameFr',
-        title: '车站名称(法)',
-        showOverflow: true,
-        showHeaderOverflow: true,
-        sortable: false,
-        minWidth: 200,
-        visible: false,
-      },
-      {
         field: 'stationXiaQu',
-        title: '车站辖区',
+        title: t('view.stationArea'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: false,
@@ -301,24 +317,32 @@
       {
         field: 'dataTime',
         title: t('view.heartbeatTime'),
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 220,
         showOverflow: true,
         sortable: true,
         showHeaderOverflow: true,
       },
       {
-        field: 'isOnline',
-        title: '是否在线',
-        minWidth: 100,
+        title: t('view.enableOrDisable'),
+        minWidth: 140,
+        slots: {
+          default: 'isEnable',
+        },
         showOverflow: true,
         showHeaderOverflow: true,
-        // sortable: true,
+      },
+      {
+        field: 'isOnline',
+        title: t('view.isOnline'),
+        minWidth: locale == 'zh-CN' ? 100 : 150,
+        showOverflow: true,
+        showHeaderOverflow: true,
         cellRender: { name: 'render_isno' },
       },
       {
         field: 'isCoerceOut',
-        title: '强制注销',
-        minWidth: 100,
+        title: t('view.forcedLogout'),
+        minWidth: locale == 'zh-CN' ? 100 : 140,
         showOverflow: true,
         showHeaderOverflow: true,
         // sortable: true,
@@ -326,8 +350,8 @@
       },
       {
         field: 'coerceOutTime',
-        title: '强制注销时间',
-        minWidth: 150,
+        title: t('view.forcedLogoutTime'),
+        minWidth: locale == 'zh-CN' ? 150 : 240,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
@@ -335,28 +359,97 @@
       },
       {
         field: 'runVersion',
-        title: '正式版本',
+        title: t('view.officialVersion'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 170,
       },
       {
         field: 'currentVersion',
-        title: '终端版本',
+        title: t('view.terminalVersion'),
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 170,
       },
       {
         field: 'loginTime',
         title: t('view.loginTime'),
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 170,
         showOverflow: true,
         showHeaderOverflow: true,
         sortable: true,
         visible: false,
+      },
+      {
+        field: 'isAutoRegister',
+        title: t('view.autoRegister'),
+        minWidth: locale == 'zh-CN' ? 100 : 200,
+        showOverflow: true,
+        showHeaderOverflow: true,
+        cellRender: { name: 'render_isno' },
+        visible: false,
+      },
+
+      {
+        field: 'isAutoRegister',
+        title: t('view.autoRegister'),
+        minWidth: locale == 'zh-CN' ? 100 : 200,
+        showOverflow: true,
+        showHeaderOverflow: true,
+        cellRender: { name: 'render_isno' },
+        visible: false,
+      },
+      {
+        field: 'isGetLinces',
+        title: t('view.obtainAuthorization'),
+        minWidth: locale == 'zh-CN' ? 100 : 200,
+        showOverflow: true,
+        showHeaderOverflow: true,
+        cellRender: { name: 'render_isno' },
+        visible: false,
+      },
+      {
+        field: 'getLincesTime',
+        title: t('view.getTime'),
+        minWidth: locale == 'zh-CN' ? 150 : 200,
+        showOverflow: true,
+        showHeaderOverflow: true,
+        visible: false,
+        sortable: true,
+      },
+      {
+        field: 'lincesName',
+        title: t('view.authorizationFile'),
+        minWidth: 150,
+        showOverflow: true,
+        visible: false,
+        sortable: true,
+      },
+      {
+        field: 'createUserName',
+        title: t('view.creator'),
+        minWidth: 130,
+        showOverflow: true,
+        visible: false,
+        sortable: true,
+      },
+      {
+        field: 'modifyTime',
+        title: t('view.modificationTime'),
+        minWidth: 170,
+        showOverflow: true,
+        visible: false,
+        sortable: true,
+      },
+      {
+        field: 'modifyUserName',
+        title: t('view.modifier'),
+        minWidth: 176,
+        showOverflow: true,
+        visible: false,
+        sortable: true,
       },
       {
         title: t('view.action'),
@@ -379,6 +472,8 @@
   });
   const defFromData = reactive({
     handId: null,
+    handIsdn: null,
+    isEnable: true,
     powerKeys: [],
   });
   const handId = ref(null);
@@ -394,6 +489,8 @@
   ]);
   const dictionariesData = ref([]);
   const stationDatas = ref([]);
+  const saveType = ref('add');
+  const newRow = ref(null);
 
   getHandList();
   getDicHandPower();
@@ -405,18 +502,23 @@
   }
   function formCloseLog() {
     handId.value = null;
+    newRow.value = null;
     isShowLog.value = false;
   }
 
-  //显示表单
-  function formShow(row) {
-    formData.value = row;
-    isShowForm.value = true;
-    getHandPower(row);
+  function showFrom(row) {
+    if (myCommon.isnull(row)) {
+      saveType.value = 'add';
+      isShowForm.value = true;
+    } else {
+      //编辑
+      getHand(row);
+    }
   }
 
   //关闭表单
   function formClose() {
+    formData.value = _.cloneDeep(defFromData);
     isShowForm.value = false;
     formRef.value.clearValidate();
   }
@@ -512,14 +614,20 @@
   }
 
   //获取手持台权限
-  function getHandPower(row) {
+  function getHand(row) {
+    loading.value = true;
     handApi
-      .GetHandPower(row.handId)
+      .GetHand(row.handId)
       .then((data) => {
-        formData.value.powerKeys = data;
+        newRow.value = row;
+        saveType.value = 'edit';
+        loading.value = false;
+        formData.value = data;
+        isShowForm.value = true;
       })
       .catch(() => {
-        formData.value.powerKeys = [];
+        loading.value = false;
+        message.error(t('view.failedToGetHandheldTerminalInfo'));
       });
   }
 
@@ -527,18 +635,29 @@
   function saveHandPower() {
     formRef.value.validate().then(() => {
       fromSpinning.value = true;
-      const execompleteBefore = () => {
+      formData.value.execompleteBefore = () => {
         fromSpinning.value = false;
       };
-      formData.value['execompleteBefore'] = execompleteBefore;
-      handApi.SaveHandPower(formData.value).then((data) => {
-        if (data) {
+      if (saveType.value == 'add') {
+        dictionariesApi.AddDictionaries(formData.value).then((data) => {
+          data.serviceTypeName = serviceTypeData.value.find(
+            (m) => m.key == data.serviceType,
+          )?.label;
+          tableConfigData.value.splice(0, 0, data);
           formClose();
-          message.success('保存权限成功');
-        } else {
-          message.error('保存权限失败');
-        }
-      });
+          message.success(t('view.additionSuccessful'));
+        });
+      } else {
+        handApi.UpdateHand(formData.value).then((data) => {
+          if (data) {
+            newRow.value.isEnable = formData.value.isEnable;
+            formClose();
+            message.success(t('view.updateSuccessful'));
+          } else {
+            message.error(t('view.updateFailure'));
+          }
+        });
+      }
     });
   }
 

@@ -58,18 +58,19 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: t('view.serialNumber'), width: 50 },
+      { type: 'seq', title: t('view.serialNumber'), minWidth: locale == 'zh-CN' ? 70 : 160 },
       {
         field: 'dataTime',
-        title: '文件时间',
-        width: 150,
+        title: t('view.fileTime'),
+        minWidth: 150,
         showOverflow: true,
         showHeaderOverflow: true,
       },
       {
         field: 'fileName',
-        title: '文件名称',
+        title: t('view.fileName'),
         showOverflow: true,
+        minWidth: 200,
         showHeaderOverflow: true,
         slots: {
           default: 'fileName',

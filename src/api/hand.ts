@@ -17,16 +17,16 @@ const Hand = {
     });
   },
   //获取手持台的权限
-  GetHandPower: function (params) {
+  GetHand: function (params) {
     return defHttp.get({
-      url: '/Hand/GetHandPower/',
+      url: '/Hand/GetHand/',
       params,
     });
   },
-  //保存手持台权限
-  SaveHandPower: function (params) {
+  //更新手持台
+  UpdateHand: function (params) {
     return defHttp.post({
-      url: '/Hand/SaveHandPower',
+      url: '/Hand/UpdateHand',
       params,
     });
   },

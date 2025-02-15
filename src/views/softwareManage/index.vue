@@ -544,13 +544,6 @@
         minWidth: 136,
       },
       {
-        field: 'isdn',
-        title: t('view.isdn'),
-        showOverflow: true,
-        sortable: true,
-        minWidth: 136,
-      },
-      {
         field: 'filePath',
         title: t('view.deploymentPath'),
         showOverflow: true,
@@ -591,7 +584,6 @@
         field: 'isOnline',
         title: t('view.isOnline'),
         showOverflow: true,
-        sortable: true,
         cellRender: { name: 'render_isno' },
         minWidth: 150,
       },
@@ -621,6 +613,32 @@
         minWidth: 200,
       },
       {
+        field: 'isGetLinces',
+        title: t('view.obtainAuthorization'),
+        minWidth: locale == 'zh-CN' ? 100 : 200,
+        showOverflow: true,
+        showHeaderOverflow: true,
+        cellRender: { name: 'render_isno' },
+        visible: false,
+      },
+      {
+        field: 'getLincesTime',
+        title: t('view.getTime'),
+        minWidth: locale == 'zh-CN' ? 150 : 200,
+        showOverflow: true,
+        showHeaderOverflow: true,
+        visible: false,
+        sortable: true,
+      },
+      {
+        field: 'lincesName',
+        title: t('view.authorizationFile'),
+        minWidth: 150,
+        showOverflow: true,
+        visible: false,
+        sortable: true,
+      },
+      {
         field: 'orderIndex',
         title: t('view.sorting'),
         showOverflow: true,
@@ -645,7 +663,7 @@
         sortable: true,
       },
       {
-        field: 'createUser',
+        field: 'createUserName',
         title: t('view.creator'),
         minWidth: 130,
         showOverflow: true,
@@ -661,7 +679,7 @@
         sortable: true,
       },
       {
-        field: 'modifyUser',
+        field: 'modifyUserName',
         title: t('view.modifier'),
         minWidth: 176,
         showOverflow: true,
@@ -907,10 +925,10 @@
           const oldData = tableConfig.data.find((m) => m.serviceId == data.serviceId);
           if (oldData) {
             delete data.createtTime;
-            delete data.createUser;
+            delete data.CreateUserName;
             myCommon.objectReplace(oldData, data);
             oldData.modifyTime = data.modifyTime;
-            oldData.modifyUser = data.modifyUser;
+            oldData.modifyUser = data.modifyUserName;
             oldData.serviceTypeName = dictionariesData.value.find(
               (m) => m.key == data.serviceType,
             )?.label;
