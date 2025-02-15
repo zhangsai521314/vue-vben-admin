@@ -88,10 +88,10 @@
             />
             <vxe-column
               field="serviceCode"
-              title="服务编号"
+              :title="t('view.serviceNumber')"
               :visible="false"
               :sortable="true"
-              :minWidth="100"
+              :minWidth="160"
               fixed="left"
             />
             <vxe-column field="serviceName" title="软件服务名称" :sortable="true" :minWidth="200" />

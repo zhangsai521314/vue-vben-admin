@@ -264,12 +264,11 @@
       },
       {
         field: 'serviceCode',
-        title: '服务编号',
+        title: t('view.serviceNumber'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: 166,
         fixed: 'left',
       },
       {

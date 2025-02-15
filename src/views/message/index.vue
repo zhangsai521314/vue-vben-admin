@@ -20,7 +20,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>开始时间：</label>
+                    <label>{{ t('view.startTime') }}：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         :allowClear="false"
@@ -33,9 +33,9 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>软件服务名称：</label>
+                    <label>{{ t('view.softwareName') }}：</label>
                     <a-select
-                      placeholder="请选择软件服务名称"
+                      :placeholder="t('view.pleaseSelectServiceName')"
                       style="width: 170px"
                       allow-clear
                       show-search
@@ -52,9 +52,9 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>信息类型：</label>
+                    <label>{{ t('view.informationType') }}：</label>
                     <a-select
-                      placeholder="请选择信息类型"
+                      :placeholder="t('view.pleaseSelectInformationType')"
                       style="width: 170px"
                       allow-clear
                       show-search
@@ -77,43 +77,43 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>信息大类：</label>
+                    <label>{{ t('view.informationCategory') }}：</label>
                     <a-select
-                      placeholder="请选择信息大类"
+                      :placeholder="t('view.pleaseSelectInformationCategory')"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.msgClass"
                     >
-                      <a-select-option :value="2">告警</a-select-option>
-                      <a-select-option :value="1">提示</a-select-option>
+                      <a-select-option :value="2">{{ t('view.alarm') }}</a-select-option>
+                      <a-select-option :value="1">{{ t('view.tip') }}</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>信息状态：</label>
+                    <label>{{ t('view.informationStatus') }}：</label>
                     <a-select
-                      placeholder="请选择信息状态"
+                      :placeholder="t('view.pleaseSelectInformationStatus')"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.msgStatus"
                     >
-                      <a-select-option :value="1">故障</a-select-option>
-                      <a-select-option :value="2">恢复</a-select-option>
+                      <a-select-option :value="1">{{ t('view.fault') }}</a-select-option>
+                      <a-select-option :value="2">{{ t('view.recovery') }}</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>确认状态：</label>
+                    <label>{{ t('view.confirmationStatus') }}：</label>
                     <a-select
-                      placeholder="请选择确认状态"
+                      :placeholder="t('view.pleaseSelectConfirmationStatus')"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.isConfirm"
                     >
-                      <a-select-option :value="true">已确认</a-select-option>
-                      <a-select-option :value="false">未确认</a-select-option>
+                      <a-select-option :value="true">{{ t('view.confirmed') }}</a-select-option>
+                      <a-select-option :value="false">{{ t('view.unconfirmed') }}</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
@@ -123,17 +123,17 @@
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.msgTitle"
-                      placeholder="输入信息标题查询"
+                      :placeholder="输入信息标题查询"
                     />
                   </a-space>
                 </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>信息内容：</label>
+                    <label>{{ t('view.informationContent') }}：</label>
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.msgContent"
-                      placeholder="输入信息内容查询"
+                      :placeholder="t('view.queryByInputtingInformationContent')"
                     />
                   </a-space>
                 </div>
@@ -142,7 +142,7 @@
                     <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
                     <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                     <a-spin :spinning="exportDataSpinning">
-                      <a-button @click="exportData" type="primary">导出</a-button>
+                      <a-button @click="exportData" type="primary">{{ t('view.export') }}</a-button>
                     </a-spin>
                     <a-radio-group v-model:value="refresh" button-style="solid">
                       <a-radio-button value="yes">{{ t('view.enableAutoRefresh') }}</a-radio-button>
@@ -178,20 +178,22 @@
             ].time.isAfter(dayjs())
           "
           style="color: red"
-          >否.{{
+          >{{ t('view.no') }}.{{
             mqttStore.msgStrongPromptingTime[
               `${row.serviceId}_${row.msgCategory}_${row.msgClass}_${row.msgStatus}`
             ].time.format('YYYY-MM-DD HH:mm:ss')
           }}</span
         >
-        <span v-else style="color: green">是</span>
+        <span v-else style="color: green">{{ t('view.yes') }}</span>
       </template>
       <template #msgClass="{ row }">
         <span
           :style="{
             color: row.msgClass == 2 ? 'red' : '',
           }"
-          >{{ row.msgClass == 1 ? '提示' : row.msgClass == 2 ? '告警' : row.msgClass }}</span
+          >{{
+            row.msgClass == 1 ? t('view.tip') : row.msgClass == 2 ? t('view.alarm') : row.msgClass
+          }}</span
         >
       </template>
       <template #msgStatus="{ row }">
@@ -199,7 +201,13 @@
           :style="{
             color: row.msgStatus == 1 ? 'red' : row.msgStatus == 2 ? 'green' : '',
           }"
-          >{{ row.msgStatus == 1 ? '故障' : row.msgStatus == 2 ? '恢复' : row.msgStatus }}</span
+          >{{
+            row.msgStatus == 1
+              ? t('view.fault')
+              : row.msgStatus == 2
+                ? t('view.recovery')
+                : row.msgStatus
+          }}</span
         >
       </template>
       <template #msgType="{ row }">
@@ -211,7 +219,7 @@
       </template>
       <template #read="{ row }">
         <a-tag style="width: 38px; margin: 0" :color="row.isRead ? '' : 'red'">{{
-          row.isRead ? '已读' : '未读'
+          row.isRead ? t('view.read') : t('view.unread')
         }}</a-tag>
       </template>
       <!-- <template #msgDuration="{ row }">
@@ -236,71 +244,27 @@
               name="icon-baseui-queren"
               :style="{ color: row.confirmTime ? '#d9d9d9' : '#0749df' }"
               @click="okMsg(row)"
-              :title="row.confirmTime ? '该告警已被确认' : '确认告警'"
+              ::title="row.confirmTime ? t('view.confirmed') : t('view.unconfirmed')"
             />
           </AuthDom>
           <AuthDom auth="message_show_detail">
             <IconFontClass
-              :class="{ 'not-click': row.msgClass == '提示' }"
+              :class="{ 'not-click': row.msgClass == t('view.tip') }"
               name="icon-baseui-show"
               @click="showMgsHis(row)"
               style="color: #0fc10e"
-              title="查看告警记录"
+              ::title="t('view.viewAlarmRecords')"
             />
           </AuthDom>
           <AuthDom auth="message_repair">
             <IconFontClass
-              :class="{ 'not-click': row.msgClass == '提示' }"
+              :class="{ 'not-click': row.msgClass == t('view.tip') }"
               name="icon-baseui-zijianrizhi"
               @click="showRepair(row)"
               style="color: #0749df"
-              title="告警处理"
+              ::title="t('view.alarmHandling')"
             />
           </AuthDom>
-          <!-- <AuthDom auth="message_show_read">
-            <IconFontClass
-              name="icon-baseui-zijianrizhi"
-              @click="showFrom(row)"
-              style="color: #0fc10e"
-              title="查看消息已读"
-            />
-          </AuthDom> -->
-          <!-- <div>
-            <a-select
-              placeholder="信息强提示设置"
-              @change="(value) => changeStrongPrompting(value, row)"
-              style="width: 100%"
-              v-if="
-                mqttStore.msgStrongPromptingTime[
-                  `${row.serviceId}_${row.msgCategory}_${row.msgClass}_${row.msgStatus}`
-                ] != null &&
-                mqttStore.msgStrongPromptingTime[
-                  `${row.serviceId}_${row.msgCategory}_${row.msgClass}_${row.msgStatus}`
-                ].time.isAfter(dayjs())
-              "
-              :value="
-                mqttStore.msgStrongPromptingTime[
-                  `${row.serviceId}_${row.msgCategory}_${row.msgClass}_${row.msgStatus}`
-                ].timeFrequency
-              "
-            >
-              <a-select-option value="">立即提示</a-select-option>
-              <a-select-option :value="10">10分钟后提示</a-select-option>
-              <a-select-option :value="30">30分钟后提示</a-select-option>
-              <a-select-option :value="60">1小时后提示</a-select-option>
-            </a-select>
-            <a-select
-              v-else
-              placeholder="信息强提示设置"
-              style="width: 100%"
-              @change="(value) => changeStrongPrompting(value, row)"
-            >
-              <a-select-option value="">立即提示</a-select-option>
-              <a-select-option :value="10">10分钟后提示</a-select-option>
-              <a-select-option :value="30">30分钟后提示</a-select-option>
-              <a-select-option :value="60">1小时后提示</a-select-option>
-            </a-select>
-          </div> -->
         </div>
       </template>
     </vxe-grid>
@@ -308,7 +272,7 @@
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
       :width="1000"
       :visible="isShowVis"
-      title="消息历史"
+      :title="t('view.messageHistory')"
       :footer-style="{ textAlign: 'right' }"
       @close="closeHis"
     >
@@ -318,7 +282,7 @@
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
       :width="500"
       :visible="isShowRepair"
-      title="处理内容"
+      :title="t('view.processingContent')"
       :footer-style="{ textAlign: 'right' }"
       @close="closeRepair"
     >
@@ -332,14 +296,14 @@
       >
         <a-form-item
           name="briefRepairMethods"
-          label="处理内容"
+          :label="t('view.processingContent')"
           :rules="[
-            { required: true, message: '请输入处理内容' },
-            { max: 1063, message: '处理内容过长' },
+            { required: true, message: t('view.pleaseEnterProcessingContent') },
+            { max: 1063, message: t('view.processingContentTooLong') },
           ]"
         >
           <a-textarea
-            placeholder="请输入处理内容"
+            :placeholder="t('view.pleaseEnterProcessingContent')"
             :rows="20"
             v-model:value="formData.briefRepairMethods"
             autocomplete="off"
@@ -401,44 +365,39 @@
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
-        minWidth: 130,
+        minWidth: 140,
         fixed: 'left',
       },
       {
         field: 'serviceCode',
-        title: '服务编号',
+        title: t('view.serviceNumber'),
         showOverflow: true,
         visible: false,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: 166,
         fixed: 'left',
       },
       {
         field: 'serviceName',
-        title: '软件服务名称',
+        title: t('view.softwareName'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         minWidth: 150,
         fixed: 'left',
       },
       {
         field: 'msgClass',
-        title: '信息大类',
+        title: t('view.informationCategory'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 200,
         slots: {
           default: 'msgClass',
         },
       },
       {
         field: 'msgType',
-        title: '信息类型',
-        showHeaderOverflow: true,
+        title: t('view.informationType'),
         sortable: true,
         minWidth: 200,
         slots: {
@@ -447,80 +406,68 @@
       },
       {
         field: 'msgStatus',
-        title: '信息状态',
+        title: t('view.informationStatus'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 166,
         slots: {
           default: 'msgStatus',
         },
       },
       {
         field: 'msgTitle',
-        title: '信息标题',
-        showHeaderOverflow: true,
+        title: t('view.informationTitle'),
         sortable: true,
         visible: false,
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 180,
       },
       {
         field: 'msgContent',
-        title: '信息内容',
+        title: t('view.informationContent'),
         showOverflow: false,
-        showHeaderOverflow: true,
         sortable: true,
         minWidth: 200,
       },
       {
         field: 'msgStartTime',
-        title: '开始时间',
+        title: t('view.startTime'),
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'msgEndTime',
-        title: '结束时间',
+        title: t('view.endTime'),
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'msgDuration',
-        title: '持续时长(秒)',
+        title: t('view.duration_seconds'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        // slots: {
-        //   default: 'msgDuration',
-        // },
-        minWidth: 120,
+        minWidth: locale == 'zh-CN' ? 120 : 156,
       },
       {
         field: 'confirmUserName',
-        title: '确认人员',
+        title: t('view.confirmedBy'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         visible: false,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 180,
       },
       {
         field: 'confirmTime',
-        title: '确认时间',
-        minWidth: 150,
+        title: t('view.confirmationTime'),
+        minWidth: locale == 'zh-CN' ? 150 : 190,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'remark',
-        title: '备注信息',
+        title: t('view.remarks'),
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
         minWidth: 150,
@@ -530,53 +477,31 @@
         title: t('view.creationTime'),
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
         visible: false,
         sortable: true,
       },
-      // {
-      //   title: '告警强提示',
-      //   minWidth: 180,
-      //   slots: {
-      //     default: 'strongPrompting',
-      //   },
-      //   showOverflow: true,
-      //   showHeaderOverflow: true,
-      //   visible: false,
-      // },
-      // {
-      //   title: '是否已读',
-      //   slots: {
-      //     default: 'read',
-      //   },
-      //   showHeaderOverflow: true,
-      //   fixed: 'right',
-      // },
       {
         field: 'briefRepairMethods',
-        title: '处理内容',
+        title: t('view.processingContent'),
         showOverflow: false,
-        showHeaderOverflow: true,
         sortable: true,
         minWidth: 200,
         visible: false,
       },
       {
         field: 'briefRepairUserName',
-        title: '处理人员',
+        title: t('view.processor'),
         showOverflow: false,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 186,
         visible: false,
       },
       {
         field: 'briefRepairTime',
-        title: '处理时间',
+        title: t('view.processingTime'),
         showOverflow: false,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 150,
+        minWidth: 166,
         visible: false,
       },
       {
@@ -584,7 +509,6 @@
         slots: {
           default: 'default',
         },
-        showHeaderOverflow: true,
         fixed: 'right',
         minWidth: 110,
       },
@@ -808,7 +732,7 @@
       messageApi
         .OkMsg(row.msgId)
         .then((data) => {
-          message.success('确认告警成功');
+          message.success(t('view.confirmAlarmSuccessfully'));
           const oldData = tableConfig.data.find((m) => m.msgId == data.msgId);
           if (oldData) {
             oldData.confirmTime = data.confirmTime;
@@ -816,10 +740,10 @@
           }
         })
         .catch(() => {
-          message.error('确认告警失败');
+          message.error(t('view.failToConfirmAlarm'));
         });
     } else {
-      message.info('该告警已被确认');
+      message.info(t('view.thisAlarmHasBeenConfirmed'));
     }
   }
 
@@ -858,14 +782,14 @@
               oldData.briefRepairTime = data.briefRepairTime;
               oldData.briefRepairUserName = data.name;
             }
-            message.success('更改处理内容成功');
+            message.success(t('view.successfullyChangeProcessingContent'));
             isShowRepair.value = false;
           } else {
-            message.error('更改处理内容失败');
+            message.error(t('view.failedToChangeProcessingContent'));
           }
         })
         .catch(() => {
-          message.error('更改处理内容出错');
+          message.error(t('view.errorChangingProcessingContent'));
         });
     });
   }
