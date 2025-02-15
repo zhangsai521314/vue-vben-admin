@@ -64,14 +64,14 @@
         title: t('view.fileTime'),
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
+        
       },
       {
         field: 'fileName',
         title: t('view.fileName'),
         showOverflow: true,
         minWidth: 200,
-        showHeaderOverflow: true,
+        
         slots: {
           default: 'fileName',
         },

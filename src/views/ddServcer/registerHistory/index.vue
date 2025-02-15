@@ -167,15 +167,14 @@
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
         fixed: 'left',
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
       },
       {
         field: 'regTypeName',
         title: '功能号类型',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         fixed: 'left',
         minWidth: 110,
@@ -184,7 +183,7 @@
         field: 'fn',
         title: '功能号',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -192,7 +191,7 @@
         field: 'isdn',
         title: 'ISDN',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -200,7 +199,7 @@
         field: 'fnTypeName',
         title: '操作类型',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
         slots: {
@@ -211,7 +210,7 @@
         field: 'regResultName',
         title: '操作结果',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -220,7 +219,7 @@
         title: '操作时间',
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
       },
       // {
@@ -230,7 +229,7 @@
       //     default: 'default',
       //   },
       //   showOverflow: true,
-      //   showHeaderOverflow: true,
+      //
       //   fixed: 'right',
       // },
     ],

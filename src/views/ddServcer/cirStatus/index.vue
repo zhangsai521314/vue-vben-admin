@@ -165,15 +165,14 @@
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
         fixed: 'left',
       },
       {
         field: 'lineName',
         title: t('view.lineName'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         visible: false,
         sortable: true,
         minWidth: 200,
@@ -183,7 +182,7 @@
         field: 'stationCode',
         title: t('view.stationCode'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         visible: false,
         sortable: true,
         minWidth: 130,
@@ -193,7 +192,7 @@
         field: 'stationName',
         title: t('view.stationName'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 200,
         fixed: 'left',
@@ -202,7 +201,7 @@
         field: 'stationLocationName',
         title: t('view.currentLocation'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -210,7 +209,7 @@
         field: 'lacci',
         title: t('view.eciNumber'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -218,7 +217,7 @@
         field: 'isdn',
         title: 'ISDN',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 90,
       },
@@ -226,7 +225,7 @@
         field: 'loginStatusName',
         title: t('view.loginStatus'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -234,7 +233,7 @@
         field: 'glb',
         title: t('view.kilometerMarker'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         visible: false,
         minWidth: 100,
@@ -243,7 +242,7 @@
         field: 'operatorUser',
         title: t('view.operator'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         visible: false,
         minWidth: 100,
@@ -252,7 +251,7 @@
         field: 'longitude',
         title: t('view.longitude'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         visible: false,
         minWidth: 80,
@@ -261,7 +260,7 @@
         field: 'latitude',
         title: t('view.latitude'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         visible: false,
         minWidth: 80,
@@ -270,7 +269,7 @@
         field: 'ip',
         title: t('view.ipAndPortNumber'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         visible: false,
         slots: {
           default: 'ipport',
@@ -282,7 +281,7 @@
         field: 'loginTime',
         title: t('view.loginTime'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 150,
       },
@@ -291,7 +290,7 @@
         title: t('view.heartbeatTime'),
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
       },
       // {
@@ -301,7 +300,7 @@
       //     default: 'default',
       //   },
       //   showOverflow: true,
-      //   showHeaderOverflow: true,
+      //
       //   fixed: 'right',
       // },
     ],

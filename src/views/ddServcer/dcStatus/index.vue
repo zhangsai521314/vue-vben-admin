@@ -148,15 +148,14 @@
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
         fixed: 'left',
       },
       {
         field: 'lineName',
         title: t('view.lineName'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         visible: false,
         sortable: true,
         minWidth: 200,
@@ -166,7 +165,7 @@
         field: 'stationCode',
         title: t('view.lineORstationCode'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         visible: false,
         sortable: true,
         minWidth: 130,
@@ -176,7 +175,7 @@
         field: 'stationName',
         title: t('view.stationName'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 200,
         fixed: 'left',
@@ -185,7 +184,7 @@
         field: 'isdn',
         title: 'ISDN',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 90,
       },
@@ -193,7 +192,7 @@
         field: 'ip',
         title: t('view.ipAndPortNumber'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         slots: {
           default: 'ipport',
         },
@@ -204,7 +203,7 @@
         field: 'loginTime',
         title: t('view.loginTime'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 150,
       },
@@ -212,7 +211,7 @@
         field: 'updateTime',
         title: t('view.heartbeatTime'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 150,
       },
@@ -223,7 +222,7 @@
       //     default: 'default',
       //   },
       //   showOverflow: true,
-      //   showHeaderOverflow: true,
+      //
       //   fixed: 'right',
       // },
     ],

@@ -232,7 +232,7 @@
         field: 'lineName',
          title: t('view.lineName'),
         showOverflow: true,
-        showHeaderOverflow: true,
+        
         sortable: true,
         visible: false,
         minWidth: 200,
@@ -242,7 +242,7 @@
         field: 'stationName',
          title: t('view.stationName'),
         showOverflow: true,
-        showHeaderOverflow: true,
+        
         sortable: false,
         minWidth: 200,
         fixed: 'left',
@@ -251,7 +251,7 @@
         field: 'typeName',
         title: '管辖区间',
         showOverflow: true,
-        showHeaderOverflow: true,
+        
         sortable: false,
         minWidth: 100,
       },
@@ -259,7 +259,7 @@
         field: 'laccis',
         title: 'ECI集合',
         showOverflow: true,
-        showHeaderOverflow: true,
+        
         minWidth: 200,
       },
       {
@@ -269,7 +269,7 @@
           default: 'default',
         },
         showOverflow: true,
-        showHeaderOverflow: true,
+        
         fixed: 'right',
       },
     ],

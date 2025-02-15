@@ -126,15 +126,14 @@
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
         fixed: 'left',
       },
       {
         field: 'typeName',
         title: '设备类型',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 130,
         fixed: 'left',
@@ -143,7 +142,7 @@
         field: 'srcNumber',
         title: '源设备ID',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 130,
         fixed: 'left',
@@ -152,7 +151,7 @@
         field: 'srcIp',
         title: '源Ip+端口号',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         slots: {
           default: 'srcipport',
@@ -163,7 +162,7 @@
         field: 'desNumber',
         title: '目的设备ID',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 130,
       },
@@ -171,7 +170,7 @@
         field: 'desIp',
         title: '目的Ip+端口号',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         slots: {
           default: 'desipport',
@@ -182,7 +181,7 @@
         field: 'linkResultName',
         title: '寻址结果',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
         slots: {
@@ -193,7 +192,7 @@
         field: 'addTime',
         title: '寻址时间',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 150,
       },
@@ -204,7 +203,7 @@
       //     default: 'default',
       //   },
       //   showOverflow: true,
-      //   showHeaderOverflow: true,
+      //
       //   fixed: 'right',
       // },
     ],

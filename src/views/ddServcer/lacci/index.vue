@@ -221,15 +221,14 @@
         field: 'id',
         title: t('view.recordId'),
         visible: false,
-        showHeaderOverflow: true,
         fixed: 'left',
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
       },
       {
         field: 'name',
         title: 'ECI名称',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
         fixed: 'left',
@@ -238,24 +237,24 @@
         field: 'lacci',
         title: 'ECI',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
       {
         field: 'longitude',
-         title: t('view.longitude'),
+        title: t('view.longitude'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
 
       {
         field: 'latitude',
-         title: t('view.latitude'),
+        title: t('view.latitude'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -263,7 +262,7 @@
         field: 'reamrk',
         title: '备注信息',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         visible: false,
         sortable: true,
         minWidth: 100,
@@ -275,7 +274,7 @@
           default: 'default',
         },
         showOverflow: true,
-        showHeaderOverflow: true,
+
         fixed: 'right',
       },
     ],

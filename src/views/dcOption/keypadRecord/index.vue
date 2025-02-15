@@ -106,8 +106,7 @@
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
         fixed: 'left',
       },
       {
@@ -121,9 +120,9 @@
       },
       {
         field: 'serviceName',
-        title: '软件服务名称',
+        title: t('view.softwareName'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 200,
         fixed: 'left',
@@ -132,7 +131,7 @@
         field: 'content',
         title: '按键内容',
         showOverflow: false,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 200,
       },
@@ -141,7 +140,7 @@
         title: '按键开始时间',
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
       },
       {
@@ -149,7 +148,7 @@
         title: '按键结束时间',
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
       },
     ],

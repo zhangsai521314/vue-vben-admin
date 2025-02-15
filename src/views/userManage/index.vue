@@ -419,7 +419,7 @@
         visible: false,
         showOverflow: true,
         fixed: 'left',
-        minWidth: 140,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
       },
       {
         field: 'userName',
@@ -507,7 +507,7 @@
       //   field: 'lastLoginIp',
       //   title: '最后登录IP',
       //   showOverflow: true,
-      //   showHeaderOverflow: true,
+      //
       //   sortable: true,
       //   visible: false,
       // },
@@ -515,7 +515,7 @@
       //   field: 'lastLoginOs',
       //   title: '最后登录客户端',
       //   showOverflow: true,
-      //   showHeaderOverflow: true,
+      //
       //   visible: false,
       //   sortable: true,
       // },

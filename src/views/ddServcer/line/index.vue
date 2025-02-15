@@ -387,15 +387,14 @@
         field: 'id',
         title: t('view.recordId'),
         visible: false,
-        showHeaderOverflow: true,
         fixed: 'left',
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
       },
       {
         field: 'name',
         title: t('view.lineName'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 200,
         fixed: 'left',
@@ -404,7 +403,7 @@
         field: 'nameCn',
         title: '线路名称(中)',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 200,
         visible: false,
@@ -413,7 +412,7 @@
         field: 'nameEn',
         title: '线路名称(英)',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 200,
         visible: false,
@@ -422,7 +421,7 @@
         field: 'nameFr',
         title: '线路名称(法)',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 200,
         visible: false,
@@ -431,7 +430,7 @@
         field: 'code',
         title: '线路代码',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -439,7 +438,7 @@
         field: 'dcFn',
         title: '功能号',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -447,7 +446,7 @@
         field: 'dcIsdn',
         title: '调度台ISDN',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 120,
       },
@@ -455,7 +454,7 @@
         field: 'groupAllCirNumber',
         title: '全呼CIR组呼号',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 150,
       },
@@ -463,7 +462,7 @@
         field: 'groupAllCirPriority',
         title: '全呼CIR组呼优先级',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 160,
       },
@@ -471,7 +470,7 @@
         field: 'groupAllDcNumber',
         title: '全呼车站组呼号',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 150,
       },
@@ -479,7 +478,7 @@
         field: 'groupAllDcPriority',
         title: '全呼调度台组优先级',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 170,
       },
@@ -487,7 +486,7 @@
         field: 'groupAllBroadcastNumber',
         title: '线路广播组呼号',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 170,
       },
@@ -495,7 +494,7 @@
         field: 'groupAllBroadcastPriority',
         title: '线路广播组呼优先级',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 170,
       },
@@ -503,7 +502,7 @@
         field: 'reamrk',
         title: '备注信息',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         visible: false,
         sortable: true,
         minWidth: 150,
@@ -512,7 +511,7 @@
         field: 'updateTime',
         title: '更新时间',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 150,
         visible: false,
@@ -524,7 +523,7 @@
           default: 'default',
         },
         showOverflow: true,
-        showHeaderOverflow: true,
+
         fixed: 'right',
       },
     ],

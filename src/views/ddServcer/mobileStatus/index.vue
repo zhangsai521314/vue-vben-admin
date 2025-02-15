@@ -121,15 +121,14 @@
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
         fixed: 'left',
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
       },
       {
         field: 'lineName',
         title: t('view.lineName'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         visible: false,
         sortable: true,
         fixed: 'left',
@@ -139,7 +138,7 @@
         field: 'stationCode',
         title: t('view.stationCode'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         visible: false,
         sortable: true,
         minWidth: 130,
@@ -149,7 +148,7 @@
         field: 'stationName',
         title: t('view.stationName'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         fixed: 'left',
         minWidth: 200,
@@ -158,7 +157,7 @@
         field: 'isdn',
         title: 'ISDN',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -166,7 +165,7 @@
         field: 'lacci',
         title: t('view.eciNumber'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 130,
       },
@@ -174,7 +173,7 @@
         field: 'stationLocationName',
         title: t('view.currentLocation'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -182,7 +181,7 @@
         field: 'longitude',
         title: t('view.longitude'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -190,7 +189,7 @@
         field: 'latitude',
         title: t('view.latitude'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -198,7 +197,7 @@
         field: 'ip',
         title: t('view.ipAndPortNumber'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         minWidth: 154,
         slots: {
           default: 'ipport',
@@ -209,7 +208,7 @@
         field: 'loginTime',
         title: t('view.loginTime'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 150,
       },
@@ -218,7 +217,7 @@
         title: t('view.heartbeatTime'),
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
       },
       // {
@@ -228,7 +227,7 @@
       //     default: 'default',
       //   },
       //   showOverflow: true,
-      //   showHeaderOverflow: true,
+      //
       //   fixed: 'right',
       // },
     ],

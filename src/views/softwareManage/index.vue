@@ -475,7 +475,7 @@
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        minWidth: 136,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
         fixed: 'left',
       },
       {
@@ -617,7 +617,7 @@
         title: t('view.obtainAuthorization'),
         minWidth: locale == 'zh-CN' ? 100 : 200,
         showOverflow: true,
-        showHeaderOverflow: true,
+
         cellRender: { name: 'render_isno' },
         visible: false,
       },
@@ -626,7 +626,7 @@
         title: t('view.getTime'),
         minWidth: locale == 'zh-CN' ? 150 : 200,
         showOverflow: true,
-        showHeaderOverflow: true,
+
         visible: false,
         sortable: true,
       },

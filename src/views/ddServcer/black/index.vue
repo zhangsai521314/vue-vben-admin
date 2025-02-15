@@ -171,15 +171,14 @@
         field: 'id',
         title: t('view.recordId'),
         visible: false,
-        showHeaderOverflow: true,
         fixed: 'left',
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
       },
       {
         field: 'ip',
         title: 'IP',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
         fixed: 'left',
@@ -188,7 +187,7 @@
         field: 'remark',
         title: '备注信息',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 130,
       },
@@ -197,7 +196,7 @@
         title: '更新时间',
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
       },
       {
@@ -207,7 +206,7 @@
           default: 'default',
         },
         showOverflow: true,
-        showHeaderOverflow: true,
+
         fixed: 'right',
       },
     ],

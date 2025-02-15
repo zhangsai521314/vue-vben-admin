@@ -118,15 +118,14 @@
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
         fixed: 'left',
       },
       {
         field: 'typeName',
         title: '设备类型',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 130,
         fixed: 'left',
@@ -135,7 +134,7 @@
         field: 'number',
         title: '设备ID',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 130,
         fixed: 'left',
@@ -144,7 +143,7 @@
         field: 'ip',
         title: '设备Ip+端口号',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         slots: {
           default: 'ipport',
@@ -155,7 +154,7 @@
         field: 'addTime',
         title: '上报时间',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 150,
       },
@@ -166,7 +165,7 @@
       //     default: 'default',
       //   },
       //   showOverflow: true,
-      //   showHeaderOverflow: true,
+      //
       //   fixed: 'right',
       // },
     ],

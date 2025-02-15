@@ -238,7 +238,7 @@
           visible: false,
           showOverflow: true,
           fixed: 'left',
-          minWidth: 130,
+          minWidth: locale == 'zh-CN' ? 130 : 150,
         },
         {
           field: 'cpuUsage',
@@ -316,7 +316,7 @@
           title: t('view.dataTime'),
           minWidth: 170,
           showOverflow: true,
-          showHeaderOverflow: true,
+
           sortable: true,
         });
         tableConfig.data = data.source;

@@ -55,6 +55,7 @@
         visible: false,
         showOverflow: true,
         fixed: 'left',
+        minWidth: locale == 'zh-CN' ? 130 : 150,
       },
       {
         field: 'msgStartTime',

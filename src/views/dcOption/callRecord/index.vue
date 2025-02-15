@@ -20,7 +20,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>拨打时间：</label>
+                    <label>{{ t('view.callTime') }}：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         :allowClear="false"
@@ -33,9 +33,9 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>软件服务名称：</label>
+                    <label>{{ t('view.softwareName') }}：</label>
                     <a-select
-                      placeholder="请选择软件服务名称"
+                      :placeholder="t('view.pleaseSelectServiceName')"
                       style="width: 170px"
                       allow-clear
                       show-search
@@ -47,21 +47,21 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>主叫名称：</label>
+                    <label>{{ t('view.callerName') }}：</label>
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.mainCallName"
-                      placeholder="输入主叫名称查询"
+                      :placeholder="t('view.enterCallerNameToSearch')"
                     />
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>被叫名称：</label>
+                    <label>{{ t('view.calledName') }}：</label>
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.calledName"
-                      placeholder="输入被叫名称查询"
+                      :placeholder="t('view.enterCalledNameToSearch')"
                     />
                   </a-space>
                 </div>
@@ -73,18 +73,22 @@
                       v-model:value="duration"
                       :min="0"
                       :max="3000"
-                      :placeholder="durationUnit == 'ss' ? '秒' : '分钟'"
+                      ::placeholder="durationUnit == 'ss' ? t('view.seconds') : t('view.minutes')"
                     >
                       <template #addonBefore>
-                        <a-select v-model:value="durationQueryType" style="width: 130px">
-                          <a-select-option :value="3">{{ '通话时长 >=' }}</a-select-option>
-                          <a-select-option :value="5">{{ '通话时长 <=' }}</a-select-option>
+                        <a-select v-model:value="durationQueryType" style="width: 140px">
+                          <a-select-option :value="3"
+                            >{{ t('view.callDuration') }}>=</a-select-option
+                          >
+                          <a-select-option :value="5"
+                            >{{ t('view.callDuration') }}<=</a-select-option
+                          >
                         </a-select>
                       </template>
                       <template #addonAfter>
-                        <a-select v-model:value="durationUnit" style="width: 60px">
-                          <a-select-option value="ss">秒</a-select-option>
-                          <a-select-option value="mm">分</a-select-option>
+                        <a-select v-model:value="durationUnit" style="width: 100px">
+                          <a-select-option value="ss">{{ t('view.seconds') }}</a-select-option>
+                          <a-select-option value="mm">{{ t('view.minutes') }}</a-select-option>
                         </a-select>
                       </template>
                     </a-input-number>
@@ -95,7 +99,7 @@
                     <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
                     <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                     <a-spin :spinning="exportDataSpinning">
-                      <a-button @click="exportData" type="primary">导出</a-button>
+                      <a-button @click="exportData" type="primary">{{ t('view.export') }}</a-button>
                     </a-spin>
                   </a-space>
                 </div>
@@ -127,32 +131,17 @@
           }"
           >{{
             row.recordFileStatus == 4
-              ? '获取失败'
+              ? t('view.failedToRetrieve')
               : row.recordFileStatus == 2
-                ? '正在获取'
+                ? t('view.getting')
                 : row.recordFileStatus == 3
-                  ? '存储中'
+                  ? t('view.storing')
                   : row.recordFileStatus == 1
-                    ? '获取成功 '
+                    ? t('view.successfulRetrieval')
                     : ''
           }}</span
         >
       </template>
-      <!-- <template #duration="{ row }">
-        {{
-          row.duration == null
-            ? ''
-            : row.duration >= 0 && row.duration <= 60
-              ? `${parseInt(row.duration)} 秒`
-              : row.duration > 60 && row.duration <= 3600
-                ? `${parseFloat(row.duration / 60).toFixed(1)} 分`
-                : row.duration > 3600 && row.duration <= 86400
-                  ? `${parseFloat(row.duration / 60 / 60).toFixed(1)} 时`
-                  : row.duration > 86400
-                    ? `${parseFloat(row.duration / 60 / 60 / 24).toFixed(1)} 天`
-                    : ''
-        }}
-      </template> -->
       <template #default="{ row }">
         <div :class="`tableOption`">
           <AuthDom auth="DCOptionCallRecord_play">
@@ -160,7 +149,7 @@
               name="icon-baseui-bofang"
               @click="getCallRecordFilePath(row, 'play')"
               style="color: #0fc10e"
-              title="播放"
+              :title="t('view.play')"
             />
           </AuthDom>
           <AuthDom auth="DCOptionCallRecord_down">
@@ -168,14 +157,51 @@
               name="icon-baseui-xiazai"
               @click="getCallRecordFilePath(row, 'down')"
               style="color: #0960bd"
-              title="下载"
+              :title="t('view.download')"
             />
           </AuthDom>
         </div>
       </template>
+      <template #callDirection="{ row }">
+        <span>{{
+          row.callDirection == 1
+            ? t('view.exhale')
+            : row.callDirection == 2
+              ? t('view.inhale')
+              : '-'
+        }}</span>
+      </template>
+      <template #callType="{ row }">
+        <span>{{
+          row.callType == 10
+            ? t('view.makePersonalCall')
+            : row.callType == 100
+              ? t('view.intraStationGroupCall')
+              : row.callType == 101
+                ? t('view.neighborStationGroupCall')
+                : row.callType == 1000
+                  ? t('view.quanhuStation')
+                  : row.callType == 1001
+                    ? t('view.quanhuLocomotive')
+                    : row.callType == 1002
+                      ? t('view.wholeLineBroadcast')
+                      : row.callType == 10000
+                        ? t('view.emergencyCall')
+                        : '-'
+        }}</span>
+      </template>
+      <template #record_state="{ row }">
+        <span>{{
+          row.recordState == '0'
+            ? t('view.noRecordingFile')
+            : row.recordState == '2'
+              ? t('view.recordingEnded')
+              : '-'
+        }}</span>
+      </template>
     </vxe-grid>
     <a-modal
-      title="播放"
+      :title="t('view.play')"
       ref="modalRef"
       v-model:open="modelShow"
       width="700px"
@@ -200,14 +226,14 @@
         />
         <p style="font-size: 38px">{{
           playFileStatus == 1
-            ? '录音准备完成'
+            ? t('view.recordingPreparationComplete')
             : playFileStatus == 2
-              ? '录音文件获取中'
+              ? t('view.recordingFileRetrievalInProgress')
               : playFileStatus == 3
-                ? '录音文件存储中'
+                ? t('view.recordingFileStorageInProgress')
                 : playFileStatus == 4
-                  ? '录音文件获取失败，请重新获取'
-                  : '录音文件状态未知'
+                  ? t('view.PleaseTryAgain')
+                  : t('view.recordingFileStatusUnknown')
         }}</p>
       </div>
       <MyPlay v-else ref="playRef" :class="`${prefixCls}play`" />
@@ -221,7 +247,7 @@
   import MyPlay from '@/components/MyPlay/index.vue';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import myCommon from '@/utils/MyCommon/common';
-  import { ref, reactive, createVNode, nextTick, onMounted, watch, unref } from 'vue';
+  import { ref, reactive, nextTick, watch, unref } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import { CallRecord as callRecordApi } from '@/api/dcOption';
@@ -231,7 +257,7 @@
   import zhCN from 'ant-design-vue/es/locale/zh_CN';
   import dayjs from 'dayjs';
   import 'dayjs/locale/zh-cn';
-  import { message, Modal } from 'ant-design-vue';
+  import { message } from 'ant-design-vue';
   import { tryOnUnmounted } from '@vueuse/core';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
@@ -258,8 +284,7 @@
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
         fixed: 'left',
       },
       {
@@ -273,149 +298,138 @@
       },
       {
         field: 'serviceName',
-        title: '软件服务名称',
+        title: t('view.softwareName'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         minWidth: 150,
         fixed: 'left',
       },
       {
         field: 'callStateDescription',
-        title: '通话状态',
+        title: t('view.callStatus'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 140,
       },
       {
-        field: 'callDirectionDescription',
-        title: '呼叫方向',
+        field: 'callDirection',
+        title: t('view.callDirection'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 180,
+        slots: {
+          default: 'callDirection',
+        },
       },
       {
         field: 'mainCallName',
-        title: '主叫名称',
+        title: t('view.callerName'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 160,
       },
       {
         field: 'calledName',
-        title: '被叫名称',
+        title: t('view.calledName'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 170,
       },
       {
-        field: 'callTypeDescription',
-        title: '呼叫类型',
+        field: 'callType',
+        title: t('view.callType'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 130,
+        slots: {
+          default: 'callType',
+        },
       },
       {
         field: 'callTimeSpan',
-        title: '持续时长',
+        title: t('view.duration'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        // slots: {
-        //   default: 'duration',
-        // },
-        minWidth: 120,
+        minWidth: locale == 'zh-CN' ? 120 : 160,
       },
       {
         field: 'startTime',
-        title: '拨打时间',
+        title: t('view.callTime'),
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'acceptTime',
-        title: '接通时间',
-        minWidth: 150,
+        title: t('view.connectionTime'),
+        minWidth: locale == 'zh-CN' ? 150 : 170,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'endTime',
-        title: '结束时间',
+        title: t('view.endTime'),
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
       },
       {
         field: 'remoteName',
-        title: '对端用户名',
+        title: t('view.counterpartUsername'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         visible: false,
-        minWidth: 120,
+        minWidth: locale == 'zh-CN' ? 120 : 260,
       },
       {
         field: 'remoteNumber',
-        title: '对端ISDN号',
+        title: t('view.counterpartIsdnNumber'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         visible: false,
-        minWidth: 120,
+        minWidth: locale == 'zh-CN' ? 120 : 240,
       },
       {
         field: 'isOnline',
-        title: '是否在线',
+        title: t('view.isOnline'),
         showOverflow: true,
-        showHeaderOverflow: true,
         cellRender: { name: 'render_isno' },
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 160,
       },
       {
-        field: 'recordStateDescription',
-        title: '录音状态',
+        field: 'record_state',
+        title: t('view.recordingStatus'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 200,
+        slots: {
+          default: 'record_state',
+        },
       },
       {
         field: 'logKey',
-        title: '录音文件地址',
+        title: t('view.recordingFileAddress'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         visible: false,
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 190,
       },
       {
         field: 'recordFileStatus',
-        title: '录音文件状态',
+        title: t('view.recordingFileStatus'),
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         slots: {
           default: 'recordFileStatus',
         },
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 170,
       },
       {
         field: 'recordFileTime',
-        title: '录音文件状态时间',
-        minWidth: 150,
+        title: t('view.recordingFileStatusTime'),
+        minWidth: locale == 'zh-CN' ? 150 : 220,
         showOverflow: true,
-        showHeaderOverflow: true,
         sortable: true,
         visible: false,
         formatter: ({ cellValue }) => {
@@ -429,7 +443,6 @@
           default: 'default',
         },
         showOverflow: true,
-        showHeaderOverflow: true,
         fixed: 'right',
       },
     ],
@@ -525,12 +538,12 @@
                 message.info(
                   data.message == null
                     ? data.recordFileStatus == 1
-                      ? '获取成功'
+                      ? t('view.successfulRetrieval')
                       : data.recordFileStatus == 2
-                        ? '正在获取'
+                        ? t('view.getting')
                         : data.recordFileStatus == 3
-                          ? '正在存储'
-                          : '获取失败'
+                          ? t('view.storing')
+                          : t('view.failedToRetrieve')
                     : data.message,
                 );
               }
@@ -540,19 +553,19 @@
               message.info(
                 data.message == null
                   ? data.recordFileStatus == 1
-                    ? '获取成功'
+                    ? t('view.successfulRetrieval')
                     : data.recordFileStatus == 2
-                      ? '正在获取'
+                      ? t('view.getting')
                       : data.recordFileStatus == 3
-                        ? '正在存储'
-                        : '获取失败'
+                        ? t('view.storing')
+                        : t('view.failedToRetrieve')
                   : data.message,
               );
             }
           });
       }
     } else {
-      message.info('服务与网管系统掉线，不可获取');
+      message.info(t('view.serviceOfflineTip'));
     }
   }
 

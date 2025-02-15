@@ -479,15 +479,14 @@
         field: 'id',
         title: t('view.recordId'),
         visible: false,
-        showHeaderOverflow: true,
         fixed: 'left',
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
       },
       {
         field: 'lineName',
         title: t('view.lineName'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         visible: false,
         minWidth: 200,
@@ -495,9 +494,9 @@
       },
       {
         field: 'name',
-         title: t('view.stationName'),
+        title: t('view.stationName'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 200,
         fixed: 'left',
@@ -506,7 +505,7 @@
         field: 'nameCn',
         title: '车站名称(中)',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 200,
         visible: false,
@@ -515,7 +514,7 @@
         field: 'nameEn',
         title: '车站名称(英)',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 200,
         visible: false,
@@ -524,16 +523,16 @@
         field: 'nameFr',
         title: '车站名称(法)',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 200,
         visible: false,
       },
       {
         field: 'code',
-         title: t('view.stationCode'),
+        title: t('view.stationCode'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -541,7 +540,7 @@
         field: 'dcFn',
         title: '功能号',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -549,24 +548,24 @@
         field: 'dcIsdn',
         title: 'ISDN号',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
       {
         field: 'longitude',
-         title: t('view.longitude'),
+        title: t('view.longitude'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         visible: false,
         minWidth: 100,
       },
       {
         field: 'latitude',
-         title: t('view.latitude'),
+        title: t('view.latitude'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         visible: false,
         minWidth: 100,
@@ -575,7 +574,7 @@
         field: 'prevStationName',
         title: '上一站',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -583,7 +582,7 @@
         field: 'nextStationName',
         title: '下一站',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -591,7 +590,7 @@
         field: 'sosCallNumber',
         title: '紧急组呼号码',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 150,
       },
@@ -599,7 +598,7 @@
         field: 'sosCallPriority',
         title: '紧急组呼优先级',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 170,
       },
@@ -607,7 +606,7 @@
         field: 'groupCallNumber',
         title: '站内组呼号码',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 150,
       },
@@ -615,7 +614,7 @@
         field: 'groupCallPriority',
         title: '站内组呼优先级',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 170,
       },
@@ -623,7 +622,7 @@
         field: 'tempCallNumber',
         title: '邻站组呼号码',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 150,
       },
@@ -631,7 +630,7 @@
         field: 'tempCallPriority',
         title: '邻站组呼优先级',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 170,
       },
@@ -639,7 +638,7 @@
         field: 'startGlb',
         title: '起始公里标(米)',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         visible: false,
         minWidth: 150,
@@ -648,7 +647,7 @@
         field: 'endGlb',
         title: '终止公里标(米)',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         visible: false,
         minWidth: 150,
@@ -657,7 +656,7 @@
         field: 'remark',
         title: '备注信息',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         visible: false,
         sortable: true,
         minWidth: 150,
@@ -666,7 +665,7 @@
         field: 'updateTime',
         title: '更新时间',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 150,
         visible: false,
@@ -675,7 +674,7 @@
         field: 'indexOrder',
         title: t('view.sorting'),
         showOverflow: true,
-        showHeaderOverflow: true,
+
         visible: false,
         sortable: true,
         minWidth: 90,
@@ -687,7 +686,7 @@
           default: 'default',
         },
         showOverflow: true,
-        showHeaderOverflow: true,
+
         fixed: 'right',
       },
     ],

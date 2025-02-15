@@ -149,15 +149,14 @@
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        showHeaderOverflow: true,
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
         fixed: 'left',
       },
       {
         field: 'typeName',
         title: '寻址类型',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 160,
       },
@@ -165,7 +164,7 @@
         field: 'srcFn',
         title: '主叫功能号',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 120,
       },
@@ -173,7 +172,7 @@
         field: 'srcIsdn',
         title: '主叫ISDN',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 120,
       },
@@ -181,7 +180,7 @@
         field: 'srcLacci',
         title: '主叫ECI',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -189,7 +188,7 @@
         field: 'desFn',
         title: '被叫功能号/短号码',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         slots: {
           default: 'desFn',
@@ -199,7 +198,7 @@
       {
         field: 'desIsdn',
         title: '被叫ISDN/组呼号',
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 150,
       },
@@ -207,7 +206,7 @@
         field: 'resultName',
         title: '寻址结果',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 120,
         slots: {
@@ -218,7 +217,7 @@
         field: 'addTime',
         title: '寻址时间',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 150,
       },
@@ -229,7 +228,7 @@
       //     default: 'default',
       //   },
       //   showOverflow: true,
-      //   showHeaderOverflow: true,
+      //
       //   fixed: 'right',
       // },
     ],

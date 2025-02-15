@@ -184,7 +184,7 @@
         field: 'lincesId',
         title: t('view.recordId'),
         showOverflow: true,
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
         visible: false,
         fixed: 'left',
         sortable: true,

@@ -365,7 +365,7 @@
         title: t('view.recordId'),
         visible: false,
         showOverflow: true,
-        minWidth: 140,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
         fixed: 'left',
       },
       {

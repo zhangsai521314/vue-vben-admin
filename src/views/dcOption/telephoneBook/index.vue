@@ -178,15 +178,14 @@
         field: 'phoneId',
         title: t('view.recordId'),
         visible: false,
-        showHeaderOverflow: true,
         fixed: 'left',
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
       },
       {
         field: 'userName',
         title: '联系名称',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 200,
         fixed: 'left',
@@ -195,7 +194,7 @@
         field: 'phoneNumber',
         title: '联系电话',
         showOverflow: true,
-        showHeaderOverflow: true,
+
         sortable: true,
         minWidth: 100,
       },
@@ -204,7 +203,7 @@
         title: t('view.creationTime'),
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
+
         visible: false,
         sortable: true,
       },
@@ -213,7 +212,7 @@
         title: t('view.creator'),
         minWidth: 130,
         showOverflow: true,
-        showHeaderOverflow: true,
+
         visible: false,
         sortable: true,
       },
@@ -222,7 +221,7 @@
         title: t('view.modificationTime'),
         minWidth: 150,
         showOverflow: true,
-        showHeaderOverflow: true,
+
         visible: false,
         sortable: true,
       },
@@ -231,7 +230,7 @@
         title: t('view.modifier'),
         minWidth: 176,
         showOverflow: true,
-        showHeaderOverflow: true,
+
         visible: false,
         sortable: true,
       },
@@ -242,7 +241,7 @@
           default: 'default',
         },
         showOverflow: true,
-        showHeaderOverflow: true,
+
         fixed: 'right',
       },
     ],
