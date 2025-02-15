@@ -1,4 +1,5 @@
 {
+  "hasExpired": "A expiré",
   "queryByInputtingEquipmentNumber":"Rechercher en saisissant le numéro d'équipement",
   "equipmentNumber": "Numéro d'équipement",
   "obtainAuthorization": "Obtenir l'autorisation",

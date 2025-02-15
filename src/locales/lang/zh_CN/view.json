@@ -1,5 +1,6 @@
 {
-  "queryByInputtingEquipmentNumber":"输入设备编号查询",
+  "hasExpired": "已过期",
+  "queryByInputtingEquipmentNumber": "输入设备编号查询",
   "equipmentNumber": "设备编号",
   "obtainAuthorization": "获取授权",
   "failedToGetHandheldTerminalInfo": "获取手持台信息失败",

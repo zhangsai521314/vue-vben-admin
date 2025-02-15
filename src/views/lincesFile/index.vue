@@ -94,7 +94,7 @@
             fontWeight: 500,
             color: row.remainingDays <= 0 ? 'red' : row.remainingDays <= 30 ? '#adad00' : 'green',
           }"
-          >{{ row.remainingDays <= 0 ? '已过期' : row.remainingDays }}</span
+          >{{ row.remainingDays <= 0 ? t('view.hasExpired') : row.remainingDays }}</span
         >
       </template>
       <template #bindClientType="{ row }">
@@ -177,7 +177,7 @@
       {
         type: 'seq',
         title: t('view.serialNumber'),
-        minWidth: locale == 'en-US' ? 110 : 70,
+        minWidth: locale == 'zh-CN' ? 70 : 160,
         fixed: 'left',
       },
       {
@@ -193,7 +193,7 @@
         field: 'equipmentCode',
         title: t('view.equipmentNumber'),
         showOverflow: true,
-        minWidth: 136,
+        minWidth: locale == 'zh-CN' ? 136 : 180,
         fixed: 'left',
         sortable: true,
       },
@@ -203,31 +203,6 @@
         showOverflow: true,
         sortable: true,
         minWidth: 186,
-      },
-      // {
-      //   field: 'isBindClient',
-      //   title: t('view.isBound'),
-      //   showOverflow: true,
-      //   minWidth: 136,
-      //   cellRender: { name: 'render_isno' },
-      // },
-      // {
-      //   field: 'bindClientType',
-      //   title: t('view.bindingType'),
-      //   showOverflow: true,
-      //   minWidth: 136,
-      //   slots: {
-      //     default: 'bindClientType',
-      //   },
-      //   sortable: true,
-      // },
-      {
-        field: 'equipmentCode',
-        title: t('view.equipmentNumber'),
-        visible: false,
-        showOverflow: true,
-        minWidth: 136,
-        sortable: true,
       },
       {
         field: 'timeValid',
