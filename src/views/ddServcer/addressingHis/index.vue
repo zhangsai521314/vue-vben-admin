@@ -19,7 +19,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>寻址时间 ：</label>
+                    <label>{{ t('view.addressingTime') }}：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         :allowClear="false"
@@ -32,53 +32,63 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>寻址类型：</label>
+                    <label>{{ t('view.addressingType') }}：</label>
                     <a-select
-                      placeholder="请选择寻址类型"
+                      :placeholder="t('view.pleaseSelectAddressingType')"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.dataType"
                     >
-                      <a-select-option :value="226">短号码</a-select-option>
-                      <a-select-option :value="224">车次功能号</a-select-option>
-                      <a-select-option :value="225">机车功能号</a-select-option>
-                      <a-select-option :value="241">站内组呼</a-select-option>
-                      <a-select-option :value="242">邻站组呼</a-select-option>
-                      <a-select-option :value="243">紧急组呼</a-select-option>
+                      <a-select-option :value="226">{{ t('view.shortNumber') }}</a-select-option>
+                      <a-select-option :value="224">{{
+                        t('view.trainFunctionNumber')
+                      }}</a-select-option>
+                      <a-select-option :value="225">{{
+                        t('view.engineFunctionNum')
+                      }}</a-select-option>
+                      <a-select-option :value="241">{{
+                        t('view.intraStationGroupCall')
+                      }}</a-select-option>
+                      <a-select-option :value="242">{{
+                        t('view.neighborStationGroupCall')
+                      }}</a-select-option>
+                      <a-select-option :value="243">{{
+                        t('view.emergencyGroupCall')
+                      }}</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>主叫功能号：</label>
+                    <label>{{ t('view.callingFunctionNumber') }}：</label>
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.srcFn"
-                      placeholder="输入主叫功能号查询"
+                      :placeholder="t('view.inputCallingFunctionNumberForQuery')"
                     />
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>主叫ISDN：</label>
+                    <label>{{ t('view.callingIsdn') }}：</label>
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.srcIsdn"
-                      placeholder="输入主叫ISDN查询"
+                      :placeholder="t('view.inputCallingISDNQuery')"
                     />
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>寻址结果：</label>
+                    <label>{{ t('view.addressingResult') }}：</label>
                     <a-select
-                      placeholder="寻址结果"
+                      :placeholder="t('view.pleaseSelectAddressingResult')"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.result"
                     >
-                      <a-select-option :value="0">成功</a-select-option>
-                      <a-select-option :value="1">失败</a-select-option>
+                      <a-select-option :value="0">{{ t('view.success') }}</a-select-option>
+                      <a-select-option :value="1">{{ t('view.failure') }}</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
@@ -110,14 +120,31 @@
         />
       </template>
       <template #desFn="{ row }"> {{ row.desFn ? row.desFn : '-' }} </template>
-      <template #resultName="{ row }">
-        {{ row.resultName == 'success' ? '成功' : `失败(${row.result})` }}
+      <template #result="{ row }">
+        {{ row.result == 0 ? t('view.success') : t('view.failure', [`失败(${row.result})`]) }}
+      </template>
+      <template #type="{ row }">
+        {{
+          row.type == 1
+            ? t('view.shortNumberAddressing')
+            : row.type == 2
+              ? t('view.trainNumberAddressing')
+              : row.type == 3
+                ? t('view.locomotiveNumberAddressing')
+                : row.type == 4
+                  ? t('view.wagonNumberAddressing')
+                  : row.type == 6
+                    ? t('view.shuntingTeamAddressing')
+                    : row.type == 91
+                      ? t('view.dispatchAddressing')
+                      : row.type
+        }}
       </template>
     </vxe-grid>
   </MyContent>
 </template>
 <script setup lang="ts">
-  import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
+  import { ref, reactive, nextTick, watch } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import { AddressingHis as addressingHisApi } from '@/api/ddServcer';
@@ -153,73 +180,68 @@
         fixed: 'left',
       },
       {
-        field: 'typeName',
-        title: '寻址类型',
+        field: 'type',
+        title: t('view.addressingType'),
         showOverflow: true,
-
         sortable: true,
         minWidth: 160,
+        slots: {
+          default: 'type',
+        },
       },
       {
         field: 'srcFn',
-        title: '主叫功能号',
+        title: t('view.callingFunctionNumber'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 120,
+        minWidth: locale == 'zh-CN' ? 120 : 220,
       },
       {
         field: 'srcIsdn',
-        title: '主叫ISDN',
+        title: t('view.callingIsdn'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 120,
+        minWidth: 130,
       },
       {
         field: 'srcLacci',
-        title: '主叫ECI',
+        title: t('view.callingEci'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 120,
       },
       {
         field: 'desFn',
-        title: '被叫功能号/短号码',
+        title: t('view.calledFunctionNumberShortNumber'),
         showOverflow: true,
-
         sortable: true,
         slots: {
           default: 'desFn',
         },
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 310,
       },
       {
         field: 'desIsdn',
-        title: '被叫ISDN/组呼号',
-
+        title: t('view.calledIsdnGroupCallNumber'),
         sortable: true,
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 298,
       },
       {
-        field: 'resultName',
-        title: '寻址结果',
+        field: 'result',
+        title: t('view.addressingResult'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 120,
+        minWidth: locale == 'zh-CN' ? 120 : 180,
         slots: {
-          default: 'resultName',
+          default: 'result',
         },
       },
       {
         field: 'addTime',
-        title: '寻址时间',
+        title: t('view.addressingTime'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 150,
+        minWidth: 156,
       },
       // {
       //   title: t('view.action'),
