@@ -15,7 +15,7 @@
                   >
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
-                        <label>自检时间：</label>
+                        <label>{{ t('view.selfCheckTime') }}：</label>
                         <a-config-provider :locale="zhCN">
                           <a-range-picker
                             :allowClear="false"
@@ -28,9 +28,9 @@
                     </div>
                     <div class="row-div">
                       <a-space direction="horizontal" size="small" :wrap="true">
-                        <label>软件服务名称：</label>
+                        <label>{{ t('view.softwareName') }}：</label>
                         <a-select
-                          placeholder="请选择软件服务名称"
+                          :placeholder="t('view.pleaseSelectServiceName')"
                           style="width: 170px"
                           allow-clear
                           show-search
@@ -46,7 +46,9 @@
                           t('view.query')
                         }}</a-button>
                         <a-spin :spinning="exportDataSpinning">
-                          <a-button @click="exportData" type="primary">导出</a-button>
+                          <a-button @click="exportData" type="primary">{{
+                            t('view.export')
+                          }}</a-button>
                         </a-spin>
                       </a-space>
                     </div>
@@ -94,16 +96,26 @@
               :minWidth="160"
               fixed="left"
             />
-            <vxe-column field="serviceName" title="软件服务名称" :sortable="true" :minWidth="200" />
+            <vxe-column
+              field="serviceName"
+              :title="t('view.softwareName')"
+              :sortable="true"
+              :minWidth="200"
+            />
             <vxe-column
               field="testStepName"
-              title="自检名称"
+              :title="t('view.selfCheckName')"
               tree-node
               :sortable="true"
               :minWidth="150"
               fixed="left"
             />
-            <vxe-column field="testStatus" title="自检状态" :sortable="true" :minWidth="100">
+            <vxe-column
+              field="testStatus"
+              :title="t('view.selfCheckStatus')"
+              :sortable="true"
+              :minWidth="100"
+            >
               <template #default="{ row }">
                 <span
                   :class="{
@@ -113,18 +125,28 @@
                   }"
                   >{{
                     row.testStatus == 0
-                      ? '未自检'
+                      ? t('view.notSelfChecked')
                       : row.testStatus == 1
-                        ? '通过'
+                        ? t('view.pass')
                         : row.testStatus == 2
-                          ? '跳过'
-                          : '失败'
+                          ? t('view.skip')
+                          : t('view.failure')
                   }}</span
                 >
               </template>
             </vxe-column>
-            <vxe-column field="testStep" title="自检步骤" :sortable="true" :minWidth="150" />
-            <vxe-column field="dataTime" title="自检时间" :sortable="true" :minWidth="150" />
+            <vxe-column
+              field="testStep"
+              :title="t('view.selfCheckSteps')"
+              :sortable="true"
+              :minWidth="150"
+            />
+            <vxe-column
+              field="dataTime"
+              :title="t('view.selfCheckTime')"
+              :sortable="true"
+              :minWidth="150"
+            />
           </vxe-table>
           <vxe-pager
             background
