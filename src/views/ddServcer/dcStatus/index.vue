@@ -32,7 +32,7 @@
                   </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>登录时间：</label>
+                    <label>{{ t('view.loginTime') }}：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         :allowClear="false"
@@ -45,9 +45,9 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>车站名称：</label>
+                    <label>{{ t('view.stationName') }}：</label>
                     <a-select
-                      placeholder="请选择车站名称"
+                      :placeholder="t('view.pleaseSelectStationName')"
                       style="width: 170px"
                       allow-clear
                       show-search
@@ -59,11 +59,11 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>ISDN：</label>
+                    <label>{{ t('view.isdn') }}：</label>
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.isdn"
-                      placeholder="输入ISDN号查询"
+                      :placeholder="t('view.inputIsdnNumberForQuery')"
                     />
                   </a-space>
                 </div>
@@ -155,7 +155,6 @@
         field: 'lineName',
         title: t('view.lineName'),
         showOverflow: true,
-
         visible: false,
         sortable: true,
         minWidth: 200,
@@ -165,10 +164,9 @@
         field: 'stationCode',
         title: t('view.lineORstationCode'),
         showOverflow: true,
-
         visible: false,
         sortable: true,
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 210,
         fixed: 'left',
       },
       {
@@ -184,7 +182,6 @@
         field: 'isdn',
         title: 'ISDN',
         showOverflow: true,
-
         sortable: true,
         minWidth: 90,
       },
@@ -192,28 +189,25 @@
         field: 'ip',
         title: t('view.ipAndPortNumber'),
         showOverflow: true,
-
         slots: {
           default: 'ipport',
         },
         sortable: true,
-        minWidth: 120,
+        minWidth: locale == 'zh-CN' ? 120 : 170,
       },
       {
         field: 'loginTime',
         title: t('view.loginTime'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 150,
+        minWidth: 170,
       },
       {
         field: 'updateTime',
         title: t('view.heartbeatTime'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 218,
       },
       // {
       //   title: t('view.action'),
