@@ -50,7 +50,7 @@
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.srcNumber"
-                      :placeholder="t('view.inputDeviceIdForQuery')"
+                      :placeholder="t('view.inputSourceDeviceIDQuery')"
                     />
                   </a-space>
                 </div>

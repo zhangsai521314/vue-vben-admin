@@ -1,4 +1,5 @@
 {
+  "inputSourceDeviceIDQuery": "Input Source Device ID Query",
   "emergencyCall": "Emergency Call",
   "wholeLineBroadcast":"Whole - line Broadcast",
   "quanhuStation": "Quanhu Locomotive",
@@ -372,7 +373,7 @@
   "inputDeviceIdForQuery": "Input Device ID for Query",
   "cabRadio": "Cab Radio",
   "eot": "EOT",
-  "deviceIp+PortNumber": "Device IP + Port Number",
+  "deviceIpPortNumber": "Device IP + Port Number",
   "sourceDeviceId": "Source Device ID",
   "sourceIpPortNumber": "Source IP + Port Number",
   "destinationDeviceId": "Destination Device ID",

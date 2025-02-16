@@ -1,4 +1,5 @@
 {
+  "inputSourceDeviceIDQuery": "Recherche de l'ID du dispositif source d'entrée",
   "emergencyCall": "Appel d'urgence",
   "wholeLineBroadcast":"Diffusion sur toute la ligne",
   "quanhuLocomotive": "Locomotive de Quanhu",
@@ -372,7 +373,7 @@
   "inputDeviceIdForQuery": "Saisir l'ID de dispositif pour la recherche",
   "cabRadio": "Radio locomotive",
   "eot": "Hôte de queue",
-  "deviceIp+PortNumber": "Appareil IP + numéro de port",
+  "deviceIpPortNumber": "Appareil IP + numéro de port",
   "sourceDeviceId": "Appareil source ID",
   "sourceIpPortNumber": "Source IP + Numéro de port",
   "destinationDeviceId": "ID Appareil cible",

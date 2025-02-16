@@ -19,7 +19,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>上报时间：</label>
+                    <label>{{ t('view.reportingTime') }}：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         :allowClear="false"
@@ -32,25 +32,25 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>设备类型：</label>
+                    <label>{{ t('view.deviceType') }}：</label>
                     <a-select
-                      placeholder="请选择设备类型"
+                      :placeholder="t('view.pleaseSelectDeviceType')"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.dataType"
                     >
-                      <a-select-option :value="1">机车电台</a-select-option>
-                      <a-select-option :value="2">列尾主机</a-select-option>
+                      <a-select-option :value="1">{{ t('view.cabRadio') }}</a-select-option>
+                      <a-select-option :value="2">{{ t('view.eot') }}</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>设备ID：</label>
+                    <label>{{ t('view.deviceId') }}：</label>
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.number"
-                      placeholder="输入设备ID查询"
+                      :placeholder="t('view.inputDeviceIdForQuery')"
                     />
                   </a-space>
                 </div>
@@ -82,11 +82,14 @@
         />
       </template>
       <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? ':' + row.port : '' }} </template>
+      <template #type="{ row }">
+        {{ row.type == 1 ? t('view.cabRadio') : row.type == 1 ? t('view.eot') : '-' }}
+      </template>
     </vxe-grid>
   </MyContent>
 </template>
 <script setup lang="ts">
-  import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
+  import { ref, reactive, nextTick, watch } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import { LwStatusHis as lwStatusHisApi } from '@/api/ddServcer';
@@ -122,52 +125,41 @@
         fixed: 'left',
       },
       {
-        field: 'typeName',
-        title: '设备类型',
+        field: 'type',
+        title: t('view.deviceType'),
         showOverflow: true,
-
         sortable: true,
         minWidth: 130,
         fixed: 'left',
+        slots: {
+          default: 'type',
+        },
       },
       {
         field: 'number',
-        title: '设备ID',
+        title: t('view.deviceId'),
         showOverflow: true,
-
         sortable: true,
         minWidth: 130,
         fixed: 'left',
       },
       {
         field: 'ip',
-        title: '设备Ip+端口号',
+        title: t('view.deviceIpPortNumber'),
         showOverflow: true,
-
         sortable: true,
         slots: {
           default: 'ipport',
         },
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
       },
       {
         field: 'addTime',
-        title: '上报时间',
+        title: t('view.reportingTime'),
         showOverflow: true,
-
         sortable: true,
         minWidth: 150,
       },
-      // {
-      //   title: t('view.action'),
-      //   width: 140,
-      //   slots: {
-      //     default: 'default',
-      //   },
-      //   showOverflow: true,
-      //
-      //   fixed: 'right',
-      // },
     ],
     toolbarConfig: {
       custom: true,

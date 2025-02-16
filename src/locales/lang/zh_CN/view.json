@@ -1,4 +1,5 @@
 {
+  "inputSourceDeviceIDQuery": "输入源设备ID查询",
   "emergencyCall": "紧急呼叫",
   "wholeLineBroadcast": "全线广播",
   "quanhuLocomotive": "全呼机车",
@@ -369,10 +370,10 @@
   "deviceType": "设备类型",
   "pleaseSelectDeviceType": "请选择设备类型",
   "deviceId": "设备ID",
-  "inputDeviceIdForQuery": "输入源设备ID查询",
+  "inputDeviceIdForQuery": "输入设备ID查询",
   "cabRadio": "机车电台",
   "eot": "列尾主机",
-  "deviceIp+PortNumber": "设备Ip+端口号",
+  "deviceIpPortNumber": "设备Ip+端口号",
   "sourceDeviceId": "源设备ID",
   "sourceIpPortNumber": "源Ip+端口号",
   "destinationDeviceId": "目的设备ID",
