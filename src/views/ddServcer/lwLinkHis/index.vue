@@ -19,7 +19,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>寻址时间：</label>
+                    <label>{{ t('view.addressingTime') }}：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         :allowClear="false"
@@ -32,25 +32,25 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>设备类型：</label>
+                    <label>{{ t('view.deviceType') }}：</label>
                     <a-select
-                      placeholder="请选择设备类型"
+                      :placeholder="t('view.pleaseSelectDeviceType')"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.dataType"
                     >
-                      <a-select-option :value="1">机车电台</a-select-option>
-                      <a-select-option :value="2">列尾主机</a-select-option>
+                      <a-select-option :value="1">{{ t('view.cabRadio') }}</a-select-option>
+                      <a-select-option :value="2">{{ t('view.eot') }}</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>源设备ID：</label>
+                    <label>{{ t('view.sourceDeviceId') }}：</label>
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.srcNumber"
-                      placeholder="输入源设备ID查询"
+                      :placeholder="t('view.inputDeviceIdForQuery')"
                     />
                   </a-space>
                 </div>
@@ -87,14 +87,17 @@
       <template #desipport="{ row }">
         {{ row.desIp }}{{ row.desPort ? ':' + row.desPort : '' }}
       </template>
-      <template #linkResultName="{ row }">
-        {{ row.linkResultName == 'success' ? '成功' : `失败(${row.result})` }}
+      <template #linkResult="{ row }">
+        {{ row.linkResult == 0 ? t('view.success') : t('view.failure', [`(${row.linkResult})`]) }}
+      </template>
+      <template #type="{ row }">
+        {{ row.type == 1 ? t('view.cabRadio') : row.type == 1 ? t('view.eot') : '-' }}
       </template>
     </vxe-grid>
   </MyContent>
 </template>
 <script setup lang="ts">
-  import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
+  import { ref, reactive, nextTick, watch } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import { LwLinkHis as lwLinkHisApi } from '@/api/ddServcer';
@@ -130,82 +133,68 @@
         fixed: 'left',
       },
       {
-        field: 'typeName',
-        title: '设备类型',
+        field: 'type',
+        title: t('view.deviceType'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
         fixed: 'left',
+        slots: {
+          default: 'type',
+        },
       },
       {
         field: 'srcNumber',
-        title: '源设备ID',
+        title: t('view.sourceDeviceId'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 156,
         fixed: 'left',
       },
       {
         field: 'srcIp',
-        title: '源Ip+端口号',
+        title: t('view.sourceIpPortNumber'),
         showOverflow: true,
-
         sortable: true,
         slots: {
           default: 'srcipport',
         },
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 220,
       },
       {
         field: 'desNumber',
-        title: '目的设备ID',
+        title: t('view.destinationDeviceId'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 176,
       },
       {
         field: 'desIp',
-        title: '目的Ip+端口号',
+        title: t('view.destinationIpPortNumber'),
         showOverflow: true,
-
         sortable: true,
         slots: {
           default: 'desipport',
         },
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 226,
       },
       {
-        field: 'linkResultName',
-        title: '寻址结果',
+        field: 'linkResult',
+        title: t('view.addressingResult'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 220,
         slots: {
-          default: 'linkResultName',
+          default: 'linkResult',
         },
       },
       {
         field: 'addTime',
-        title: '寻址时间',
+        title: t('view.addressingTime'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 160,
       },
-      // {
-      //   title: t('view.action'),
-      //   minWidth: 140,
-      //   slots: {
-      //     default: 'default',
-      //   },
-      //   showOverflow: true,
-      //
-      //   fixed: 'right',
-      // },
     ],
     toolbarConfig: {
       custom: true,
