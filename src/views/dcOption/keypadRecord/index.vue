@@ -20,7 +20,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>按键时间：</label>
+                    <label>{{ t('view.keyPressTime') }}：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         :allowClear="false"
@@ -33,9 +33,9 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>软件服务名称：</label>
+                    <label>{{ t('view.softwareName') }}：</label>
                     <a-select
-                      placeholder="请选择软件服务名称"
+                      :placeholder="t('view.pleaseSelectServiceName')"
                       style="width: 170px"
                       allow-clear
                       show-search
@@ -73,7 +73,7 @@
 <script setup lang="ts">
   import myCommon from '@/utils/MyCommon/common';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
-  import { ref, reactive, createVNode, nextTick, onMounted, watch, unref } from 'vue';
+  import { ref, reactive } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import { KeypadRecord as keypadRecordApi } from '@/api/dcOption';
@@ -81,7 +81,6 @@
   import zhCN from 'ant-design-vue/es/locale/zh_CN';
   import dayjs from 'dayjs';
   import 'dayjs/locale/zh-cn';
-  import { message, Modal } from 'ant-design-vue';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
 
@@ -129,26 +128,23 @@
       },
       {
         field: 'content',
-        title: '按键内容',
+        title: t('view.keyPressContent'),
         showOverflow: false,
-
         sortable: true,
-        minWidth: 200,
+        minWidth: locale == 'zh-CN' ? 200 : 256,
       },
       {
         field: 'startTime',
-        title: '按键开始时间',
-        minWidth: 150,
+        title: t('view.keyPressStartTime'),
+        minWidth: locale == 'zh-CN' ? 150 : 220,
         showOverflow: true,
-
         sortable: true,
       },
       {
         field: 'endTime',
-        title: '按键结束时间',
-        minWidth: 150,
+        title: t('view.keyPressEndTime'),
+        minWidth: locale == 'zh-CN' ? 150 : 200,
         showOverflow: true,
-
         sortable: true,
       },
     ],
