@@ -18,7 +18,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>操作时间：</label>
+                    <label>{{ t('view.operationTime') }}：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         :allowClear="false"
@@ -31,26 +31,32 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>功能号类型：</label>
+                    <label>{{ t('view.functionNumberType') }}：</label>
                     <a-select
-                      placeholder="请选择功能号类型"
+                      :placeholder="t('view.pleaseSelectFunctionNumberType')"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.regType"
                     >
-                      <a-select-option :value="91">调度功能号</a-select-option>
-                      <a-select-option :value="2">机车功能号</a-select-option>
-                      <a-select-option :value="3">车次功能号</a-select-option>
+                      <a-select-option :value="91">{{
+                        t('view.dispatchingFunctionNumber')
+                      }}</a-select-option>
+                      <a-select-option :value="2">{{
+                        t('view.engineFunctionNum')
+                      }}</a-select-option>
+                      <a-select-option :value="3">{{
+                        t('view.trainFunctionNumber')
+                      }}</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>功能号：</label>
+                    <label>{{ t('view.functionNumber') }}：</label>
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.fn"
-                      placeholder="输入功能号查询"
+                      :placeholder="t('view.inputFunctionNumberForQuery')"
                     />
                   </a-space>
                 </div>
@@ -60,38 +66,40 @@
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.isdn"
-                      placeholder="输入ISDN号查询"
+                      :placeholder="t('view.inputIsdnNumberForQuery')"
                     />
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>操作类型：</label>
+                    <label>{{ t('view.operationType') }}：</label>
                     <a-select
-                      placeholder="请选择操作类型"
+                      :placeholder="t('view.pleaseSelectOperationType')"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.fnType"
                     >
-                      <a-select-option :value="224">注册</a-select-option>
-                      <a-select-option :value="225">手动注销</a-select-option>
-                      <a-select-option :value="226">强制注销</a-select-option>
-                      <a-select-option :value="227">超时注销</a-select-option>
-                      <a-select-option :value="228">全部注销</a-select-option>
+                      <a-select-option :value="224">{{ t('view.register') }}</a-select-option>
+                      <a-select-option :value="225">{{ t('view.manualLogout') }}</a-select-option>
+                      <a-select-option :value="226">{{ t('view.forcedLogout') }}</a-select-option>
+                      <a-select-option :value="227">{{ t('view.timeoutLogout') }}</a-select-option>
+                      <a-select-option :value="228">{{
+                        t('view.allCancellation')
+                      }}</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>操作结果：</label>
+                    <label>{{ t('view.operationResult') }}：</label>
                     <a-select
-                      placeholder="请选择操作结果"
+                      :placeholder="t('view.pleaseSelectOperationResult')"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.regResult"
                     >
-                      <a-select-option :value="0">成功</a-select-option>
-                      <a-select-option :value="1">失败</a-select-option>
+                      <a-select-option :value="0">{{ t('view.success') }}</a-select-option>
+                      <a-select-option :value="1">{{ t('view.failure') }}</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
@@ -123,14 +131,44 @@
         />
       </template>
       <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? ':' + row.port : '' }} </template>
-      <template #fnTypeName="{ row }">
-        {{ row.fnTypeName == 'success' ? '成功' : `失败(${row.result})` }}
+      <template #regResult="{ row }">
+        {{ row.regResult == 0 ? t('view.success') : t('view.failure', [`(${row.regResult})`]) }}
+      </template>
+
+      <template #regType="{ row }">
+        {{
+          row.regType == 224
+            ? t('view.register')
+            : row.regType == 225
+              ? t('view.generalLogout')
+              : row.regType == 226
+                ? t('view.forcedLogout')
+                : row.regType == 227
+                  ? t('view.timeoutLogout')
+                  : row.regType == 228
+                    ? t('view.allCancellation')
+                    : row.regType
+        }}
+      </template>
+      <template #fnType="{ row }">
+        {{
+          row.fnType == 2
+            ? t('view.trainFunctionNumber')
+            : row.fnType == 3
+              ? t('view.engineFunctionNum')
+              : row.fnType == 4
+                ? t('view.carNumberFunctionNumber')
+                : row.fnType == 6
+                  ? t('view.shuntingTeamFunctionNumber')
+                  : row.fnType == 91
+                    ? t('view.dispatchingFunctionNumber')
+                    : row.fnType
+        }}
       </template>
     </vxe-grid>
   </MyContent>
 </template>
 <script setup lang="ts">
-  import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
@@ -171,52 +209,53 @@
         minWidth: locale == 'zh-CN' ? 130 : 150,
       },
       {
-        field: 'regTypeName',
-        title: '功能号类型',
+        field: 'regType',
+        title: t('view.functionNumberType'),
         showOverflow: true,
-
         sortable: true,
         fixed: 'left',
-        minWidth: 110,
-      },
-      {
-        field: 'fn',
-        title: '功能号',
-        showOverflow: true,
-
-        sortable: true,
-        minWidth: 100,
-      },
-      {
-        field: 'isdn',
-        title: 'ISDN',
-        showOverflow: true,
-
-        sortable: true,
-        minWidth: 100,
-      },
-      {
-        field: 'fnTypeName',
-        title: '操作类型',
-        showOverflow: true,
-
-        sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 110 : 210,
         slots: {
-          default: 'fnTypeName',
+          default: 'regType',
         },
       },
       {
-        field: 'regResultName',
-        title: '操作结果',
+        field: 'fn',
+        title: t('view.functionNumber'),
         showOverflow: true,
-
+        sortable: true,
+        minWidth: locale == 'zh-CN' ? 100 : 160,
+      },
+      {
+        field: 'isdn',
+        title: t('view.isdn'),
+        showOverflow: true,
         sortable: true,
         minWidth: 100,
       },
       {
+        field: 'fnType',
+        title: t('view.operationType'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: locale == 'zh-CN' ? 100 : 140,
+        slots: {
+          default: 'fnType',
+        },
+      },
+      {
+        field: 'regResult',
+        title: t('view.operationResult'),
+        showOverflow: true,
+        slots: {
+          default: 'regResult',
+        },
+        sortable: true,
+        minWidth: locale == 'zh-CN' ? 100 : 170,
+      },
+      {
         field: 'regTime',
-        title: '操作时间',
+        title: t('view.operationTime'),
         minWidth: 150,
         showOverflow: true,
 
