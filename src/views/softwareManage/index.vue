@@ -679,6 +679,7 @@
         field: 'timeValid',
         title: t('view.validityPeriod'),
         showOverflow: true,
+        visible: false,
         sortable: true,
         minWidth: 160,
       },
@@ -688,6 +689,7 @@
         minWidth: 200,
         showOverflow: true,
         sortable: true,
+        visible: false,
         slots: {
           default: 'remainingDays',
         },

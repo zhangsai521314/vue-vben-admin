@@ -1,196 +1,192 @@
 <template>
   <MyContent :class="prefixCls">
-    <a-spin :spinning="loading">
-      <vxe-grid
-        :scroll-y="{ enabled: true }"
-        v-bind="tableConfig"
-        id="handLog"
-        :auto-resize="true"
-        ref="tableRef"
-        :loading="loading"
-        :seq-config="{ startIndex: (page.current - 1) * page.size }"
-        :row-config="{ keyField: 'handId' }"
-        :column-config="{ resizable: true }"
-        :custom-config="{ storage: true }"
-        @sort-change="onSortChange"
-      >
-        <template #toolbar_buttons>
-          <div :class="`tableBtn`">
-            <a-space direction="horizontal" size="small" style="margin-left: 5px">
-              <AuthDom auth="hand_query">
-                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
-                  <div class="row-div">
-                    <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>{{ t('view.heartbeatTime') }}：</label>
-                      <a-config-provider :locale="zhCN">
-                        <a-range-picker
-                          :allowClear="true"
-                          v-model:value="timeValue"
-                          :showTime="true"
-                          format="YYYY-MM-DD HH:mm:ss"
-                        />
-                      </a-config-provider>
-                    </a-space>
-                  </div>
-                  <div class="row-div">
-                    <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>ISDN：</label>
-                      <a-input
-                        @press-enter="initPage()"
-                        v-model:value="seacthContent.handIsdn"
-                        :placeholder="t('view.inputIsdnNumberForQuery')"
+    <vxe-grid
+      :scroll-y="{ enabled: true }"
+      v-bind="tableConfig"
+      id="handLog"
+      :auto-resize="true"
+      ref="tableRef"
+      :loading="loading"
+      :seq-config="{ startIndex: (page.current - 1) * page.size }"
+      :row-config="{ keyField: 'handId' }"
+      :column-config="{ resizable: true }"
+      :custom-config="{ storage: true }"
+      @sort-change="onSortChange"
+    >
+      <template #toolbar_buttons>
+        <div :class="`tableBtn`">
+          <a-space direction="horizontal" size="small" style="margin-left: 5px">
+            <AuthDom auth="hand_query">
+              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>{{ t('view.heartbeatTime') }}：</label>
+                    <a-config-provider :locale="zhCN">
+                      <a-range-picker
+                        :allowClear="true"
+                        v-model:value="timeValue"
+                        :showTime="true"
+                        format="YYYY-MM-DD HH:mm:ss"
                       />
-                    </a-space>
-                  </div>
-                  <div class="row-div">
-                    <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>{{ t('view.stationName') }}：</label>
-                      <a-tree-select
-                        v-model:value="seacthContent.stationCode"
-                        show-search
-                        style="width: 220px"
-                        :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                        :placeholder="t('view.pleaseSelectStationName')"
-                        allow-clear
-                        show-arrow
-                        :filterTreeNode="AntVueCommon.filterTreeNode"
-                        :tree-data="stationDatas"
-                      />
-                    </a-space>
-                  </div>
-                  <div class="row-div">
-                    <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>ECI：</label>
-                      <a-input
-                        @press-enter="initPage()"
-                        v-model:value="seacthContent.eci"
-                        :placeholder="t('view.inputECINumberToQuery')"
-                      />
-                    </a-space>
-                  </div>
-                  <div class="row-div">
-                    <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>{{ t('view.isOnline') }}：</label>
-                      <a-select
-                        :placeholder="t('view.pleaseSelectWhetherOnline')"
-                        style="width: 170px"
-                        allow-clear
-                        v-model:value="seacthContent.isOnline"
-                      >
-                        <a-select-option :value="true">{{ t('view.online') }}</a-select-option>
-                        <a-select-option :value="false">{{ t('view.offline') }}</a-select-option>
-                      </a-select>
-                    </a-space>
-                  </div>
-                  <div class="row-div">
-                    <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
-                      <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
-                    </a-space>
-                  </div>
-                  <div class="row-div">
-                    <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-input-number
-                        class="duration"
-                        @press-enter="initPage()"
-                        v-model:value="remainingDays"
-                        :min="0"
-                        :max="3000"
-                        :placeholder="t('view.day')"
-                      >
-                        <template #addonBefore>
-                          <a-select
-                            v-model:value="durationQueryType"
-                            :style="{ width: locale == 'zh-CN' ? '130px' : '160px' }"
+                    </a-config-provider>
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>ISDN：</label>
+                    <a-input
+                      @press-enter="initPage()"
+                      v-model:value="seacthContent.handIsdn"
+                      :placeholder="t('view.inputIsdnNumberForQuery')"
+                    />
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>{{ t('view.stationName') }}：</label>
+                    <a-tree-select
+                      v-model:value="seacthContent.stationCode"
+                      show-search
+                      style="width: 220px"
+                      :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                      :placeholder="t('view.pleaseSelectStationName')"
+                      allow-clear
+                      show-arrow
+                      :filterTreeNode="AntVueCommon.filterTreeNode"
+                      :tree-data="stationDatas"
+                    />
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>ECI：</label>
+                    <a-input
+                      @press-enter="initPage()"
+                      v-model:value="seacthContent.eci"
+                      :placeholder="t('view.inputECINumberToQuery')"
+                    />
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>{{ t('view.isOnline') }}：</label>
+                    <a-select
+                      :placeholder="t('view.pleaseSelectWhetherOnline')"
+                      style="width: 170px"
+                      allow-clear
+                      v-model:value="seacthContent.isOnline"
+                    >
+                      <a-select-option :value="true">{{ t('view.online') }}</a-select-option>
+                      <a-select-option :value="false">{{ t('view.offline') }}</a-select-option>
+                    </a-select>
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
+                    <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <a-input-number
+                      class="duration"
+                      @press-enter="initPage()"
+                      v-model:value="remainingDays"
+                      :min="0"
+                      :max="3000"
+                      :placeholder="t('view.day')"
+                    >
+                      <template #addonBefore>
+                        <a-select
+                          v-model:value="durationQueryType"
+                          :style="{ width: locale == 'zh-CN' ? '130px' : '160px' }"
+                        >
+                          <a-select-option :value="3"
+                            >{{ t('view.remainingDays') }}{{ '>=' }}</a-select-option
                           >
-                            <a-select-option :value="3"
-                              >{{ t('view.remainingDays') }}{{ '>=' }}</a-select-option
-                            >
-                            <a-select-option :value="5"
-                              >{{ t('view.remainingDays') }}{{ '<=' }}</a-select-option
-                            >
-                          </a-select>
-                        </template>
-                      </a-input-number>
-                    </a-space>
-                  </div>
-                </a-space>
-              </AuthDom>
-              <AuthDom auth="hand_add">
-                <a-space
-                  direction="horizontal"
-                  size="small"
-                  :wrap="true"
-                  style="margin-right: 2px; margin-bottom: 0"
-                >
-                  <div class="row-div">
-                    <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button class="ant-btn" @click="showFrom()">{{
-                        t('view.addHandheldTerminal')
-                      }}</a-button>
-                    </a-space>
-                  </div>
-                </a-space>
-              </AuthDom>
-            </a-space>
-          </div>
-        </template>
-        <template #default="{ row }">
-          <div :class="`tableOption`">
-            <AuthDom auth="softwareManage_table_showlog">
-              <IconFontClass
-                name="icon-baseui-flowcontrol-log"
-                @click="showLog(row)"
-                style="color: #0fc10e"
-                :title="t('view.viewLog')"
-              />
+                          <a-select-option :value="5"
+                            >{{ t('view.remainingDays') }}{{ '<=' }}</a-select-option
+                          >
+                        </a-select>
+                      </template>
+                    </a-input-number>
+                  </a-space>
+                </div>
+              </a-space>
             </AuthDom>
-            <AuthDom auth="hand_edit">
-              <IconFontClass
-                name="icon-baseui-edit-fill"
-                @click="showFrom(row)"
-                style="color: #0a61bd"
-                :title="t('view.assignPermissions')"
-              />
+            <AuthDom auth="hand_add">
+              <a-space
+                direction="horizontal"
+                size="small"
+                :wrap="true"
+                style="margin-right: 2px; margin-bottom: 0"
+              >
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <a-button class="ant-btn" @click="showFrom()">{{
+                      t('view.addHandheldTerminal')
+                    }}</a-button>
+                  </a-space>
+                </div>
+              </a-space>
             </AuthDom>
-          </div>
-        </template>
-        <template #isEnable="{ row }">
-          <AuthDom auth="hand_disable">
-            <div
-              style="display: inline-block; position: relative; top: -2px; left: 8px; width: 30px"
-            >
-              <a-spin :spinning="disableSpinning">
-                <a-switch
-                  size="small"
-                  v-model:checked="row.isEnable"
-                  @change="(v) => disableChange(v, row)"
-                /> </a-spin
-            ></div>
+          </a-space>
+        </div>
+      </template>
+      <template #default="{ row }">
+        <div :class="`tableOption`">
+          <AuthDom auth="softwareManage_table_showlog">
+            <IconFontClass
+              name="icon-baseui-flowcontrol-log"
+              @click="showLog(row)"
+              style="color: #0fc10e"
+              :title="t('view.viewLog')"
+            />
           </AuthDom>
-        </template>
-        <template #pager>
-          <vxe-pager
-            background
-            v-model:current-page="page.current"
-            v-model:page-size="page.size"
-            :total="page.total"
-            @page-change="handlePageChange"
-          />
-        </template>
-        <template #remainingDays="{ row }">
-          <span
-            v-if="row.timeValid != null"
-            :style="{
-              fontSize: '20px',
-              fontWeight: 500,
-              color: row.remainingDays <= 0 ? 'red' : row.remainingDays <= 30 ? '#adad00' : 'green',
-            }"
-            >{{ row.remainingDays <= 0 ? t('view.hasExpired') : row.remainingDays }}</span
-          >
-        </template>
-      </vxe-grid>
-    </a-spin>
+          <AuthDom auth="hand_edit">
+            <IconFontClass
+              name="icon-baseui-edit-fill"
+              @click="showFrom(row)"
+              style="color: #0a61bd"
+              :title="t('view.assignPermissions')"
+            />
+          </AuthDom>
+        </div>
+      </template>
+      <template #isEnable="{ row }">
+        <AuthDom auth="hand_disable">
+          <div style="display: inline-block; position: relative; top: -2px; left: 8px; width: 30px">
+            <a-spin :spinning="disableSpinning">
+              <a-switch
+                size="small"
+                v-model:checked="row.isEnable"
+                @change="(v) => disableChange(v, row)"
+              /> </a-spin
+          ></div>
+        </AuthDom>
+      </template>
+      <template #pager>
+        <vxe-pager
+          background
+          v-model:current-page="page.current"
+          v-model:page-size="page.size"
+          :total="page.total"
+          @page-change="handlePageChange"
+        />
+      </template>
+      <template #remainingDays="{ row }">
+        <span
+          v-if="row.timeValid != null"
+          :style="{
+            fontSize: '20px',
+            fontWeight: 500,
+            color: row.remainingDays <= 0 ? 'red' : row.remainingDays <= 30 ? '#adad00' : 'green',
+          }"
+          >{{ row.remainingDays <= 0 ? t('view.hasExpired') : row.remainingDays }}</span
+        >
+      </template>
+    </vxe-grid>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
       :width="500"
@@ -453,6 +449,7 @@
         title: t('view.validityPeriod'),
         showOverflow: true,
         sortable: true,
+        visible: false,
         minWidth: 160,
       },
       {
@@ -461,6 +458,7 @@
         minWidth: 200,
         showOverflow: true,
         sortable: true,
+        visible: false,
         slots: {
           default: 'remainingDays',
         },
