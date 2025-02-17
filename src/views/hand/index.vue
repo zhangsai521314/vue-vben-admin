@@ -88,6 +88,32 @@
                       <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                     </a-space>
                   </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-input-number
+                        class="duration"
+                        @press-enter="initPage()"
+                        v-model:value="remainingDays"
+                        :min="0"
+                        :max="3000"
+                        :placeholder="t('view.day')"
+                      >
+                        <template #addonBefore>
+                          <a-select
+                            v-model:value="durationQueryType"
+                            :style="{ width: locale == 'zh-CN' ? '130px' : '160px' }"
+                          >
+                            <a-select-option :value="3"
+                              >{{ t('view.remainingDays') }}{{ '>=' }}</a-select-option
+                            >
+                            <a-select-option :value="5"
+                              >{{ t('view.remainingDays') }}{{ '<=' }}</a-select-option
+                            >
+                          </a-select>
+                        </template>
+                      </a-input-number>
+                    </a-space>
+                  </div>
                 </a-space>
               </AuthDom>
               <AuthDom auth="hand_add">
@@ -151,6 +177,17 @@
             :total="page.total"
             @page-change="handlePageChange"
           />
+        </template>
+        <template #remainingDays="{ row }">
+          <span
+            v-if="row.timeValid != null"
+            :style="{
+              fontSize: '20px',
+              fontWeight: 500,
+              color: row.remainingDays <= 0 ? 'red' : row.remainingDays <= 30 ? '#adad00' : 'green',
+            }"
+            >{{ row.remainingDays <= 0 ? t('view.hasExpired') : row.remainingDays }}</span
+          >
         </template>
       </vxe-grid>
     </a-spin>
@@ -259,6 +296,7 @@
     endTime: null,
     isOnline: null,
     eci: null,
+    SearchParameters: [],
   });
   const disableSpinning = ref(false);
   const tableConfig = reactive<VxeGridProps>({
@@ -411,7 +449,24 @@
         sortable: true,
       },
       {
-        field: 'createUserName',
+        field: 'timeValid',
+        title: t('view.validityPeriod'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 160,
+      },
+      {
+        field: 'remainingDays',
+        title: t('view.remainingDays'),
+        minWidth: 200,
+        showOverflow: true,
+        sortable: true,
+        slots: {
+          default: 'remainingDays',
+        },
+      },
+      {
+        field: 'createUser',
         title: t('view.creator'),
         minWidth: 130,
         showOverflow: true,
@@ -427,7 +482,7 @@
         sortable: true,
       },
       {
-        field: 'modifyUserName',
+        field: 'modifyUser',
         title: t('view.modifier'),
         minWidth: 176,
         showOverflow: true,
@@ -473,6 +528,8 @@
   const stationDatas = ref([]);
   const saveType = ref('add');
   const newRow = ref(null);
+  const remainingDays = ref(null);
+  const durationQueryType = ref(5);
 
   getHandList();
   getDicHandPower();
@@ -538,6 +595,18 @@
       timeValue.value == null ? null : timeValue.value[0].format('YYYY-MM-DD HH:mm:ss');
     seacthContent.value.endTime =
       timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
+    if (!myCommon.isnull(remainingDays.value)) {
+      seacthContent.value.SearchParameters = [
+        {
+          CSharpTypeName: 'int',
+          FieldName: 'RemainingDays',
+          ConditionalType: durationQueryType.value,
+          FieldValue: remainingDays.value,
+        },
+      ];
+    } else {
+      seacthContent.value.SearchParameters = [];
+    }
     handApi
       .GetHandList({
         ...seacthContent.value,

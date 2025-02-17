@@ -243,7 +243,7 @@
         sortable: true,
       },
       {
-        field: 'createUser',
+        field: 'createUserName',
         title: t('view.creator'),
         minWidth: 130,
         showOverflow: true,
@@ -258,7 +258,7 @@
         sortable: true,
       },
       {
-        field: 'modifyUser',
+        field: 'modifyUserName',
         title: t('view.modifyUser'),
         visible: false,
         showOverflow: true,
@@ -363,7 +363,7 @@
           CSharpTypeName: 'int',
           FieldName: 'RemainingDays',
           ConditionalType: durationQueryType.value,
-          FieldValue: RemainingDays.value,
+          FieldValue: remainingDays.value,
         },
       ];
     } else {
