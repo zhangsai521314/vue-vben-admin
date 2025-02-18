@@ -19,7 +19,7 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>心跳时间：</label>
+                    <label>{{ t('view.heartbeatTime') }}：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         :allowClear="false"
@@ -45,9 +45,9 @@
                 </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>车站名称：</label>
+                    <label>{{ t('view.stationName') }}：</label>
                     <a-select
-                      placeholder="请选择车站名称"
+                      :placeholder="t('view.pleaseSelectStationName')"
                       style="width: 170px"
                       allow-clear
                       show-search
@@ -73,25 +73,25 @@
                 </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>ISDN：</label>
+                    <label>{{ t('view.isdn') }}：</label>
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.isdn"
-                      placeholder="输入ISDN号查询"
+                      :placeholder="t('view.inputIsdnNumberForQuery')"
                     />
                   </a-space>
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>登录状态：</label>
+                    <label>{{ t('view.loginStatus') }}：</label>
                     <a-select
-                      placeholder="请选择登录状态"
+                      :placeholder="t('view.pleaseSelectLoginStatus')"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.LoginStatus"
                     >
-                      <a-select-option :value="1">登录</a-select-option>
-                      <a-select-option :value="0">未登录</a-select-option>
+                      <a-select-option :value="1">{{ t('view.login') }}</a-select-option>
+                      <a-select-option :value="0">{{ t('view.notLoggedIn') }}</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
@@ -128,15 +128,10 @@
 </template>
 <script setup lang="ts">
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
-  import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
+  import { ref, reactive, nextTick, watch } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
-  import {
-    DDDev as cirStatusApi,
-    Line as lineApi,
-    Station as stationApi,
-    Lacci as lacciApi,
-  } from '@/api/ddServcer';
+  import { DDDev as cirStatusApi, Line as lineApi, Station as stationApi } from '@/api/ddServcer';
   import { tryOnUnmounted } from '@vueuse/core';
   import zhCN from 'ant-design-vue/es/locale/zh_CN';
   import dayjs from 'dayjs';
@@ -172,7 +167,6 @@
         field: 'lineName',
         title: t('view.lineName'),
         showOverflow: true,
-
         visible: false,
         sortable: true,
         minWidth: 200,
@@ -182,17 +176,15 @@
         field: 'stationCode',
         title: t('view.stationCode'),
         showOverflow: true,
-
         visible: false,
         sortable: true,
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 140,
         fixed: 'left',
       },
       {
         field: 'stationName',
         title: t('view.stationName'),
         showOverflow: true,
-
         sortable: true,
         minWidth: 200,
         fixed: 'left',
@@ -201,23 +193,20 @@
         field: 'stationLocationName',
         title: t('view.currentLocation'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 150,
       },
       {
         field: 'lacci',
         title: t('view.eciNumber'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 140,
       },
       {
         field: 'isdn',
         title: 'ISDN',
         showOverflow: true,
-
         sortable: true,
         minWidth: 90,
       },
@@ -225,72 +214,64 @@
         field: 'loginStatusName',
         title: t('view.loginStatus'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 150,
       },
       {
         field: 'glb',
         title: t('view.kilometerMarker'),
         showOverflow: true,
-
         sortable: true,
         visible: false,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 176,
       },
       {
         field: 'operatorUser',
         title: t('view.operator'),
         showOverflow: true,
-
         sortable: true,
         visible: false,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 110,
       },
       {
         field: 'longitude',
         title: t('view.longitude'),
         showOverflow: true,
-
         sortable: true,
         visible: false,
-        minWidth: 80,
+        minWidth: locale == 'zh-CN' ? 80 : 110,
       },
       {
         field: 'latitude',
         title: t('view.latitude'),
         showOverflow: true,
-
         sortable: true,
         visible: false,
-        minWidth: 80,
+        minWidth: locale == 'zh-CN' ? 80 : 100,
       },
       {
         field: 'ip',
         title: t('view.ipAndPortNumber'),
         showOverflow: true,
-
         visible: false,
         slots: {
           default: 'ipport',
         },
         sortable: true,
-        minWidth: 120,
+        minWidth: locale == 'zh-CN' ? 120 : 170,
       },
       {
         field: 'loginTime',
         title: t('view.loginTime'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 170,
       },
       {
         field: 'updateTime',
         title: t('view.heartbeatTime'),
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 220,
         showOverflow: true,
-
         sortable: true,
       },
       // {
