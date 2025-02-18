@@ -1,4 +1,9 @@
 {
+  "contactNumberTooLong": "The contact number is too long",
+  "updatePhoneSuccess":"Update phone successfully",
+  "addPhoneSuccess":"Add phone successfully",
+  "getPhoneFailed":"Get phone failed",
+  "deletePhoneSuccess": "Delete phone successfully",
   "skip":"Skip",
   "pass": "Pass",
   "notSelfChecked": "Not Self - checked",

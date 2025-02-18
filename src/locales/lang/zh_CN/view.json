@@ -1,5 +1,10 @@
 {
-  "skip":"跳过",
+  "contactNumberTooLong": "联系电话过长",
+  "updatePhoneSuccess": "更新电话成功",
+  "addPhoneSuccess": "新增电话成功",
+  "getPhoneFailed": "获取电话失败",
+  "deletePhoneSuccess": "删除电话成功",
+  "skip": "跳过",
   "pass": "通过",
   "notSelfChecked": "未自检",
   "pleaseSelectAddressingResult": "请选择寻址结果",

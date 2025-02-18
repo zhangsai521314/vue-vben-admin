@@ -1,6 +1,6 @@
 <template>
   <MyContent :class="prefixCls">
-    <a-spin :spinning="isRunGet" title="正在执行...">
+    <a-spin :spinning="isRunGet">
       <!-- 开启多字段排序 -->
       <!-- :sort-config="{ multiple: true }" -->
       <vxe-grid
@@ -23,11 +23,11 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>联系名称：</label>
+                      <label>{{ t('view.contactName') }}：</label>
                       <a-input
                         @press-enter="initPage"
                         v-model:value="seacthContent.userName"
-                        placeholder="输入联系名称查询"
+                        :placeholder="t('view.enterContactNameToSearch')"
                       />
                     </a-space>
                   </div>
@@ -42,7 +42,9 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button class="ant-btn" @click="showFrom()">新增电话</a-button>
+                      <a-button class="ant-btn" @click="showFrom()">{{
+                        t('view.addPhone')
+                      }}</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -66,7 +68,7 @@
                 name="icon-baseui-edit-fill"
                 @click="showFrom(row)"
                 style="color: #0749df"
-                title="编辑"
+                :title="t('view.edit')"
               />
             </AuthDom>
             <AuthDom auth="dcOption_telephoneBook_delete">
@@ -74,7 +76,7 @@
                 name="icon-baseui-guanbicuowu"
                 @click="remove(row)"
                 style="color: red"
-                title="删除"
+                :title="t('view.delete')"
               />
             </AuthDom>
           </div>
@@ -97,30 +99,33 @@
           :model="formData"
         >
           <a-form-item
-            label="联系名称"
+            :label="t('view.contactName')"
             name="userName"
             :rules="[
-              { required: true, message: '请输入联系名称' },
-              { max: 40, message: '联系名称过长' },
+              { required: true, message: t('view.pleaseEnterTheContactName') },
+              { max: 40, message: t('view.contactNameIsTooLong') },
             ]"
           >
             <a-input
-              placeholder="请输入联系名称"
+              :placeholder="t('view.pleaseEnterTheContactName')"
               v-model:value="formData.userName"
               autocomplete="off"
             />
           </a-form-item>
           <a-form-item
-            label="联系电话"
+            :label="t('view.contactPhone')"
             name="phoneNumber"
             :rules="[
-              { required: true, message: '请输入联系电话' },
-              { max: 18, message: '联系电话过长' },
-              { validator: formValidator.positiveInteger, message: '联系电话格式为自然数' },
+              { required: true, message: t('view.pleaseEnterThePhoneNumber') },
+              { max: 18, message: t('view.contactNumberTooLong') },
+              {
+                validator: formValidator.positiveInteger,
+                message: t('view.phoneNumberFormatMustBeANaturalNumber'),
+              },
             ]"
           >
             <a-input
-              placeholder="请输入联系电话"
+              :placeholder="t('view.pleaseEnterThePhoneNumber')"
               v-model:value="formData.phoneNumber"
               autocomplete="off"
             />
@@ -147,7 +152,7 @@
 <script setup lang="ts">
   import myCommon from '@/utils/MyCommon/common';
   import formValidator from '@/utils/MyCommon/formValidator';
-  import { ref, reactive, createVNode, nextTick, watch } from 'vue';
+  import { ref, reactive, createVNode } from 'vue';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import { TelephoneBook as telephoneBookApi } from '@/api/dcOption';
   import { message, Modal } from 'ant-design-vue';
@@ -183,27 +188,24 @@
       },
       {
         field: 'userName',
-        title: '联系名称',
+        title: t('view.contactName'),
         showOverflow: true,
-
         sortable: true,
         minWidth: 200,
         fixed: 'left',
       },
       {
         field: 'phoneNumber',
-        title: '联系电话',
+        title: t('view.contactPhone'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 180,
       },
       {
         field: 'createTime',
         title: t('view.creationTime'),
         minWidth: 150,
         showOverflow: true,
-
         visible: false,
         sortable: true,
       },
@@ -212,16 +214,14 @@
         title: t('view.creator'),
         minWidth: 130,
         showOverflow: true,
-
         visible: false,
         sortable: true,
       },
       {
         field: 'modifyTime',
         title: t('view.modificationTime'),
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 180,
         showOverflow: true,
-
         visible: false,
         sortable: true,
       },
@@ -230,7 +230,6 @@
         title: t('view.modifier'),
         minWidth: 176,
         showOverflow: true,
-
         visible: false,
         sortable: true,
       },
@@ -241,7 +240,6 @@
           default: 'default',
         },
         showOverflow: true,
-
         fixed: 'right',
       },
     ],
@@ -334,7 +332,7 @@
           .DeleteDCOptionTelephoneBook(row.phoneId.toString())
           .then(() => {
             isRunGet.value = false;
-            message.success('删除电话信息成功');
+            message.success(t('view.deletePhoneSuccess'));
             getDCOptionTelephoneBooks();
           })
           .catch(() => {
@@ -364,7 +362,7 @@
           saveType.value = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取电话信息失败');
+          message.error(t('view.getPhoneFailed'));
         }
       })
       .catch(() => {
@@ -403,7 +401,7 @@
         telephoneBookApi.AddDCOptionTelephoneBook(formData.value).then((data) => {
           tableConfig.data?.splice(0, 0, data);
           formClose();
-          message.success('新增电话成功');
+          message.success(t('view.addPhoneSuccess'));
           page.total = page.total + 1;
         });
       } else {
@@ -417,7 +415,7 @@
             oldData.modifyUser = data.modifyUser;
           }
           formClose();
-          message.success('更新电话信息成功');
+          message.success(t('view.updatePhoneSuccess'));
         });
       }
     });

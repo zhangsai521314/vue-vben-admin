@@ -1,4 +1,9 @@
 {
+  "contactNumberTooLong": "Le numéro de contact est trop long",
+  "updatePhoneSuccess":"Mise à jour du numéro de téléphone réussie",
+  "addPhoneSuccess":"Ajout du numéro de téléphone réussi",
+  "getPhoneFailed":"Échec de la récupération du numéro de téléphone",
+  "deletePhoneSuccess": "Suppression du téléphone réussie",
   "skip":"Sauter",
   "pass": "Approuvé",
   "notSelfChecked": "Non auto - vérifié",
