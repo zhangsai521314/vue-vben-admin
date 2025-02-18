@@ -161,7 +161,7 @@
             <vxe-column
               type="seq"
               :title="t('view.serialNumber')"
-              :minWidth="locale == 'en-US' ? 110 : 70"
+              :minWidth="locale == 'zh-CN' ? 70 : 160"
               fixed="left"
             />
             <vxe-column

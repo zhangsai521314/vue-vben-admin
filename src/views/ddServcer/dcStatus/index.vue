@@ -32,7 +32,7 @@
                   </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.loginTime') }}：</label>
+                    <label>{{ t('view.heartbeatTime') }}：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
                         :allowClear="false"
@@ -111,6 +111,14 @@
         />
       </template>
       <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? ':' + row.port : '' }} </template>>
+      <template #loginStatus="{ row }">
+        <span
+          :style="{
+            color: row.loginStatus == 1 ? 'green' : 'red',
+          }"
+          >{{ row.loginStatus == 1 ? t('view.login') : t('view.notLoggedIn') }}</span
+        >
+      </template>
     </vxe-grid>
   </MyContent>
 </template>
@@ -196,6 +204,16 @@
         minWidth: locale == 'zh-CN' ? 120 : 170,
       },
       {
+        field: 'loginStatus',
+        title: t('view.loginStatus'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: locale == 'zh-CN' ? 100 : 150,
+        slots: {
+          default: 'loginStatus',
+        },
+      },
+      {
         field: 'loginTime',
         title: t('view.loginTime'),
         showOverflow: true,
@@ -247,7 +265,7 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['loginTime desc'],
+    sortlist: ['updateTime desc'],
   });
   const refresh = ref('yes');
   const refreshTime = ref(10);

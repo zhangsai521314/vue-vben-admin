@@ -18,9 +18,22 @@
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>车站名称：</label>
+                    <label>{{ t('view.heartbeatTime') }}：</label>
+                    <a-config-provider :locale="zhCN">
+                      <a-range-picker
+                        :allowClear="false"
+                        v-model:value="timeValue"
+                        :showTime="true"
+                        format="YYYY-MM-DD HH:mm:ss"
+                      />
+                    </a-config-provider>
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>{{ t('view.stationName') }}：</label>
                     <a-select
-                      placeholder="请选择车站名称"
+                      :placeholder="t('view.pleaseSelectStationName')"
                       style="width: 170px"
                       allow-clear
                       show-search
@@ -30,27 +43,13 @@
                     />
                   </a-space>
                 </div>
-                <!-- <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>ECI名称：</label>
-                    <a-select
-                      style="width: 400px"
-                      allow-clear
-                      show-search
-                      mode="tags"
-                      :filter-option="AntVueCommon.filterOption"
-                      v-model:value="seacthContent.lacciName"
-                      :options="dictionariesData"
-                    />
-                  </a-space>
-                </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>ISDN：</label>
+                    <label>{{ t('view.pleaseSelectStationName') }}：</label>
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.isdn"
-                      placeholder="输入ISDN号查询"
+                      :placeholder="t('view.inputIsdnNumberForQuery')"
                     />
                   </a-space>
                 </div>
@@ -82,23 +81,44 @@
         />
       </template>
       <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? ':' + row.port : '' }} </template>
+      <template #loginStatus="{ row }">
+        <span
+          :style="{
+            color: row.loginStatus == 1 ? 'green' : 'red',
+          }"
+          >{{ row.loginStatus == 1 ? t('view.login') : t('view.notLoggedIn') }}</span
+        >
+      </template>
+      <template #stationLocation="{ row }">
+        {{
+          row.stationLocation == 1
+            ? t('view.inStation')
+            : row.stationLocation == 2
+              ? t('view.leftInterval')
+              : row.stationLocation == 3
+                ? t('view.rightInterval')
+                : row.stationLocation
+        }}
+      </template>
     </vxe-grid>
   </MyContent>
 </template>
 <script setup lang="ts">
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
-  import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
+  import { ref, reactive, nextTick, watch } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import {
     DDDev as mobileStatusApi,
     Line as lineApi,
     Station as stationApi,
-    Lacci as lacciApi,
   } from '@/api/ddServcer';
   import { tryOnUnmounted } from '@vueuse/core';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
+  import zhCN from 'ant-design-vue/es/locale/zh_CN';
+  import dayjs from 'dayjs';
+  import 'dayjs/locale/zh-cn';
 
   const { t } = useI18n();
   const localeStore = useLocaleStore();
@@ -128,7 +148,6 @@
         field: 'lineName',
         title: t('view.lineName'),
         showOverflow: true,
-
         visible: false,
         sortable: true,
         fixed: 'left',
@@ -138,26 +157,23 @@
         field: 'stationCode',
         title: t('view.stationCode'),
         showOverflow: true,
-
         visible: false,
         sortable: true,
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 140,
         fixed: 'left',
       },
       {
         field: 'stationName',
         title: t('view.stationName'),
         showOverflow: true,
-
         sortable: true,
         fixed: 'left',
         minWidth: 200,
       },
       {
         field: 'isdn',
-        title: 'ISDN',
+        title: t('view.isdn'),
         showOverflow: true,
-
         sortable: true,
         minWidth: 100,
       },
@@ -165,59 +181,65 @@
         field: 'lacci',
         title: t('view.eciNumber'),
         showOverflow: true,
-
         sortable: true,
         minWidth: 130,
       },
       {
-        field: 'stationLocationName',
+        field: 'stationLocation',
         title: t('view.currentLocation'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 150,
+        slots: {
+          default: 'stationLocation',
+        },
       },
       {
         field: 'longitude',
         title: t('view.longitude'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 80 : 110,
       },
       {
         field: 'latitude',
         title: t('view.latitude'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 80 : 100,
       },
       {
         field: 'ip',
         title: t('view.ipAndPortNumber'),
         showOverflow: true,
-
-        minWidth: 154,
+        minWidth: locale == 'zh-CN' ? 120 : 170,
         slots: {
           default: 'ipport',
         },
         sortable: true,
       },
       {
+        field: 'loginStatus',
+        title: t('view.loginStatus'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: locale == 'zh-CN' ? 100 : 150,
+        slots: {
+          default: 'loginStatus',
+        },
+      },
+      {
         field: 'loginTime',
         title: t('view.loginTime'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 170,
       },
       {
         field: 'updateTime',
         title: t('view.heartbeatTime'),
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 220,
         showOverflow: true,
-
         sortable: true,
       },
       // {
@@ -251,8 +273,12 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['stationName asc'],
+    sortlist: ['updateTime desc'],
   });
+  const timeValue = ref([
+    dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
+    dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
+  ]);
   const refresh = ref('yes');
   const refreshTime = ref(10);
   let refreshTimeId;
@@ -268,6 +294,10 @@
     if (!isAuto) {
       refresh.value = 'no';
     }
+    seacthContent.value.startTime =
+      timeValue.value == null ? null : timeValue.value[0].format('YYYY-MM-DD HH:mm:ss');
+    seacthContent.value.endTime =
+      timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
     loading.value = true;
     mobileStatusApi
       .GetDDServerMobileStatus({

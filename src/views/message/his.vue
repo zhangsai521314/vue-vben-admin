@@ -48,7 +48,13 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', showOverflow: true, title: t('view.serialNumber'), width: 50, fixed: 'left' },
+      {
+        type: 'seq',
+        showOverflow: true,
+        title: t('view.serialNumber'),
+        minWidth: locale == 'zh-CN' ? 70 : 160,
+        fixed: 'left',
+      },
       {
         field: 'msgHisId',
         title: t('view.recordId'),

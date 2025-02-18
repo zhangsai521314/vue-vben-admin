@@ -1,4 +1,6 @@
 {
+  "rightInterval": "Intervalle droit",
+  "leftInterval": "Intervalle gauche",
   "contactNumberTooLong": "Le numéro de contact est trop long",
   "updatePhoneSuccess":"Mise à jour du numéro de téléphone réussie",
   "addPhoneSuccess":"Ajout du numéro de téléphone réussi",
@@ -493,7 +495,7 @@
   "eciCollection": "Ensemble d'ECI",
   "pleaseSelectTheAffiliatedStation": "Veuillez choisir la gare d'appartenance",
   "pleaseSelectTheRelationshipType": "Veuillez choisir le type de relation",
-  "in-station": "Dans la gare",
+  "inStation": "Dans la gare",
   "leftSideOfThisStation": "Côté gauche de la gare",
   "rightSideOfThisStation": "Côté droit de la gare",
   "pleaseSelectEciNameCollection": "Veuillez choisir l'ensemble des noms ECI.",

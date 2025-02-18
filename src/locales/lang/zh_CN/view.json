@@ -1,4 +1,6 @@
 {
+  "rightInterval": "右区间",
+  "leftInterval": "左区间",
   "contactNumberTooLong": "联系电话过长",
   "updatePhoneSuccess": "更新电话成功",
   "addPhoneSuccess": "新增电话成功",
@@ -493,7 +495,7 @@
   "eciCollection": "ECI集合",
   "pleaseSelectTheAffiliatedStation": "请选择所属车站",
   "pleaseSelectTheRelationshipType": "请选择关系类型",
-  "in-station": "站内",
+  "inStation": "站内",
   "leftSideOfThisStation": "本站左侧",
   "rightSideOfThisStation": "本站右侧",
   "pleaseSelectEciNameCollection": "请选择ECI名称集合",

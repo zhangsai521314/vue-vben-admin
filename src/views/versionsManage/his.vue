@@ -223,7 +223,7 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: t('view.serialNumber'), minWidth: locale == 'en-US' ? 110 : 70 },
+      { type: 'seq', title: t('view.serialNumber'), minWidth: locale == 'zh-CN' ? 70 : 160 },
       {
         field: 'hisId',
         title: t('view.recordId'),
@@ -235,7 +235,7 @@
       {
         field: 'vNumber',
         title: t('view.versionNumber'),
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 150,
         showOverflow: true,
         slots: {
           default: 'vNumber',
@@ -244,14 +244,14 @@
       {
         field: 'isRun',
         title: t('view.isTerminalVersion'),
-        minWidth: 120,
+        minWidth: locale == 'zh-CN' ? 120 : 220,
         showOverflow: true,
         cellRender: { name: 'render_isno' },
       },
       {
         field: 'isForce',
         title: t('view.isForcedUpgradeRequired'),
-        minWidth: 120,
+        minWidth: locale == 'zh-CN' ? 120 : 170,
         showOverflow: true,
         cellRender: { name: 'render_isno' },
       },
@@ -267,14 +267,15 @@
       {
         field: 'syncTime',
         title: t('view.synchronizationTime'),
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 176,
         showOverflow: true,
       },
       {
         field: 'syncUserName',
         title: t('view.synchronizingPersonnel'),
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 220,
         showOverflow: true,
+        visible: false,
       },
       {
         field: 'remark',

@@ -372,6 +372,7 @@
         minWidth: 220,
         showOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'orderIndex',
@@ -387,6 +388,7 @@
         minWidth: 150,
         showOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'createUser',
@@ -394,6 +396,7 @@
         minWidth: 130,
         showOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'modifyTime',

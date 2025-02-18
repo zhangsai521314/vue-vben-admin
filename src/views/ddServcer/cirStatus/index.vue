@@ -57,20 +57,6 @@
                     />
                   </a-space>
                 </div>
-                <!-- <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>ECI名称：</label>
-                    <a-select
-                      style="width: 400px"
-                      allow-clear
-                      show-search
-                      mode="tags"
-                      :filter-option="AntVueCommon.filterOption"
-                      v-model:value="seacthContent.lacciName"
-                      :options="dictionariesData"
-                    />
-                  </a-space>
-                </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>{{ t('view.isdn') }}：</label>
@@ -123,6 +109,25 @@
         />
       </template>
       <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? ':' + row.port : '' }} </template>
+      <template #loginStatus="{ row }">
+        <span
+          :style="{
+            color: row.loginStatus == 1 ? 'green' : 'red',
+          }"
+          >{{ row.loginStatus == 1 ? t('view.login') : t('view.notLoggedIn') }}</span
+        >
+      </template>
+      <template #stationLocation="{ row }">
+        {{
+          row.stationLocation == 1
+            ? t('view.inStation')
+            : row.stationLocation == 2
+              ? t('view.leftInterval')
+              : row.stationLocation == 3
+                ? t('view.rightInterval')
+                : row.stationLocation
+        }}
+      </template>
     </vxe-grid>
   </MyContent>
 </template>
@@ -190,11 +195,14 @@
         fixed: 'left',
       },
       {
-        field: 'stationLocationName',
+        field: 'stationLocation',
         title: t('view.currentLocation'),
         showOverflow: true,
         sortable: true,
         minWidth: locale == 'zh-CN' ? 100 : 150,
+        slots: {
+          default: 'stationLocation',
+        },
       },
       {
         field: 'lacci',
@@ -209,13 +217,6 @@
         showOverflow: true,
         sortable: true,
         minWidth: 90,
-      },
-      {
-        field: 'loginStatusName',
-        title: t('view.loginStatus'),
-        showOverflow: true,
-        sortable: true,
-        minWidth: locale == 'zh-CN' ? 100 : 150,
       },
       {
         field: 'glb',
@@ -259,6 +260,16 @@
         },
         sortable: true,
         minWidth: locale == 'zh-CN' ? 120 : 170,
+      },
+      {
+        field: 'loginStatus',
+        title: t('view.loginStatus'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: locale == 'zh-CN' ? 100 : 150,
+        slots: {
+          default: 'loginStatus',
+        },
       },
       {
         field: 'loginTime',
@@ -316,7 +327,7 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['stationName asc'],
+    sortlist: ['updateTime desc'],
   });
   const refresh = ref('yes');
   const refreshTime = ref(10);
