@@ -1,0 +1,128 @@
+{
+  "app": {
+    "searchNotData": "Aucun résultat de recherche",
+    "toSearch": "Confirmer",
+    "toNavigate": "Changer"
+  },
+  "countdown": {
+    "normalText": "Obtenir le code de vérification",
+    "sendText": "Récupérer dans {0} secondes"
+  },
+  "cropper": {
+    "selectImage": "Choisir une image",
+    "uploadSuccess": "Téléchargement réussi",
+    "imageTooBig": "Image en dépassant de la limite",
+    "modalTitle": "Téléchargement de la photo de profil",
+    "okText": "Confirmer et télécharger",
+    "btn_reset": "Réinitialiser",
+    "btn_rotate_left": "Rotation dans le sens anti - horaire",
+    "btn_rotate_right": "Rotation dans le sens horaire",
+    "btn_scale_x": "Inversion horizontale",
+    "btn_scale_y": "Inversion verticale",
+    "btn_zoom_in": "Zoom avant",
+    "btn_zoom_out": "Zoom arrière",
+    "preview": "Aperçu"
+  },
+  "drawer": {
+    "loadingText": "Chargement en cours...",
+    "cancelText": "Fermer",
+    "okText": "Confirmer"
+  },
+  "excel": {
+    "exportModalTitle": "Exporter les données",
+    "fileType": "Type de fichier",
+    "fileName": "Nom de fichier"
+  },
+  "form": {
+    "putAway": "Réduire",
+    "unfold": "Développer",
+    "maxTip": "Le nombre de caractères doit être inférieur à {0} caractères",
+    "apiSelectNotFound": "Veuillez attendre la fin du chargement des données..."
+  },
+  "icon": {
+    "placeholder": "Cliquez pour choisir une icône",
+    "search": "Rechercher une icône",
+    "copy": "Icône copiée avec succès!"
+  },
+  "menu": {
+    "search": "Recherche dans le menu"
+  },
+  "modal": {
+    "cancelText": "Fermer",
+    "okText": "Confirmer",
+    "close": "Fermer",
+    "maximize": "Maximiser",
+    "restore": "Restaurer"
+  },
+  "table": {
+    "settingDens": "Densité",
+    "settingDensDefault": "Par défaut",
+    "settingDensMiddle": "Moyenne",
+    "settingDensSmall": "Compacte",
+    "settingColumn": "Paramètres de colonne",
+    "settingColumnShow": "Affichage de colonne",
+    "settingIndexColumnShow": "Colonne d'indice",
+    "settingSelectColumnShow": "Colonne de sélection",
+    "settingFixedLeft": "Fixer à gauche",
+    "settingFixedRight": "Fixer à droite",
+    "settingFullScreen": "Plein écran",
+    "index": "Indice",
+    "total": "Au total {total} données",
+    "selectionBarTips": "{count} enregistrements sélectionnés",
+    "selectionBarClear": "Effacer",
+    "selectionBarEmpty": "Aucun enregistrement sélectionné"
+  },
+  "time": {
+    "before": "avant",
+    "after": "après",
+    "just": "tout juste",
+    "seconds": "secondes",
+    "minutes": "minutes",
+    "hours": "heures",
+    "days": "jours"
+  },
+  "tree": {
+    "selectAll": "Tout sélectionner",
+    "unSelectAll": "Annuler la sélection",
+    "expandAll": "Tout déplier",
+    "unExpandAll": "Tout replier",
+    "checkStrictly": "Association hiérarchique",
+    "checkUnStrictly": "Indépendance hiérarchique"
+  },
+  "upload": {
+    "save": "Sauvegarder",
+    "upload": "Télécharger",
+    "imgUpload": "Téléchargement d'image",
+    "uploaded": "Téléchargé",
+    "operating": "Opération",
+    "del": "Supprimer",
+    "download": "Télécharger",
+    "saveWarn": "Veuillez attendre la fin du téléchargement du fichier avant de le sauvegarder!",
+    "saveError": "Aucun fichier téléchargé avec succès, impossible de sauvegarder!",
+    "preview": "Aperçu",
+    "choose": "Choisir un fichier",
+    "accept": "Prise en charge des formats {0}",
+    "acceptUpload": "Seuls les fichiers au format {0} peuvent être téléchargés",
+    "maxSize": "Un fichier ne doit pas dépasser {0} Mo",
+    "maxSizeMultiple": "Seuls les fichiers ne dépassant pas {0} Mo peuvent être téléchargés!",
+    "maxNumber": "Au maximum {0} fichiers peuvent être téléchargés",
+    "legend": "Miniature",
+    "fileName": "Nom de fichier",
+    "fileSize": "Taille du fichier",
+    "fileStatue": "État",
+    "pending": "En attente de téléchargement",
+    "startUpload": "Démarrer le téléchargement",
+    "uploadSuccess": "Téléchargement réussi",
+    "uploadError": "Échec du téléchargement",
+    "uploading": "Téléchargement en cours",
+    "uploadWait": "Veuillez attendre la fin du téléchargement du fichier avant d'effectuer une opération",
+    "reUploadFailed": "Ré - télécharger les fichiers ayant échoué"
+  },
+  "verify": {
+    "error": "Échec de la vérification!",
+    "time": "Vérification réussie, durée de {time} secondes!",
+    "redoTip": "Cliquez sur l'image pour actualiser",
+    "dragText": "Veuillez maintenir le curseur et le faire glisser",
+    "successText": "Vérification réussie"
+  }
+}
