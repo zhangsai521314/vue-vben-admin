@@ -9,12 +9,21 @@ const lincesFile = {
       params,
     });
   },
-  //上传手持台日志文件
+  //上传授权文件
   AddOrUpdateLinces: function (params) {
     return defHttp.post({
       url: '/Linces/AddOrUpdateLinces',
       params,
       headers: { 'Content-Type': ContentTypeEnum.FORM_DATA },
+    });
+  },
+  //下载授权文件
+  DownLincesSourceFile: function (params) {
+    return defHttp.post({
+      url: '/Linces/DownLincesSourceFile',
+      params,
+      headers: { 'Content-Type': ContentTypeEnum.FORM_DATA },
+      responseType: 'blob',
     });
   },
 };

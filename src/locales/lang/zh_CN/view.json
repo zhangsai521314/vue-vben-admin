@@ -1,4 +1,5 @@
 {
+  "downloadAuthorizationInfo": "下载授权信息",
   "deleteLineInformationSuccessfully": "删除线路信息成功",
   "remarkIsTooLong": "备注过长",
   "remark": "备注",

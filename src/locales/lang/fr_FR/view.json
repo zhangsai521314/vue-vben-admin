@@ -1,4 +1,5 @@
 {
+  "downloadAuthorizationInfo": "Télécharger les informations d'autorisation",
   "deleteLineInformationSuccessfully": "Supprimer les informations de ligne avec succès",
   "remarkIsTooLong": "La Remarque est trop longue",
   "remark": "Remarque",

@@ -84,6 +84,19 @@
                 </div>
               </a-space>
             </AuthDom>
+            <AuthDom auth="lincesFile_down">
+              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <a-spin :spinning="downLinceSourceSpinning">
+                      <a-button class="ant-btn" @click="downLinceSource" type="primary">{{
+                        t('view.downloadAuthorizationInfo')
+                      }}</a-button>
+                    </a-spin>
+                  </a-space>
+                </div>
+              </a-space>
+            </AuthDom>
           </a-space>
         </div>
       </template>
@@ -291,6 +304,7 @@
   });
   const durationQueryType = ref(5);
   const remainingDays = ref(null);
+  const downLinceSourceSpinning = ref(false);
 
   getLincesList();
 
@@ -415,8 +429,25 @@
           fromSpinning.value = false;
         });
     } else {
-      message.info('请选择授权文件后再上传');
+      message.info(t('view.pleaseSelectAuthorizationFileBeforeUploading'));
     }
+  }
+
+  function downLinceSource() {
+    downLinceSourceSpinning.value = true;
+    lincesFileApi
+      .DownLincesSourceFile({
+        execompleteBefore: () => {
+          downLinceSourceSpinning.value = false;
+        },
+      })
+      .then((data) => {
+        debugger;
+        myCommon.downLoadFile(data);
+      })
+      .catch((e) => {
+        debugger;
+      });
   }
 </script>
 <style lang="less" scoped>
