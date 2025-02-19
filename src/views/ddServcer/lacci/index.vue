@@ -87,7 +87,7 @@
                 name="icon-baseui-edit-fill"
                 @click="showFrom(row)"
                 style="color: #0749df"
-                title="编辑"
+                :title="t('view.edit')"
               />
             </AuthDom>
             <AuthDom auth="ddServcer_lacci_table_delete">
@@ -95,7 +95,7 @@
                 name="icon-baseui-guanbicuowu"
                 @click="remove(row)"
                 style="color: red"
-                title="删除"
+                :title="t('view.delete')"
               />
             </AuthDom>
           </div>

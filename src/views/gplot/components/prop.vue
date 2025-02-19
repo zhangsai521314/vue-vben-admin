@@ -1003,7 +1003,7 @@
                                 <IconFontClass
                                   name="icon-baseui-edit-fill"
                                   @click="showAddRightMenu(node.param, false, 'edit')"
-                                  title="编辑"
+                                  :title="t('view.edit')"
                                   style="color: #10893e"
                                 />
                                 <IconFontClass
@@ -1016,7 +1016,7 @@
                                   @click="removeRightMenu(node.param)"
                                   name="icon-baseui-shanchu"
                                   style="color: red"
-                                  title="删除"
+                                  :title="t('view.delete')"
                                 />
                               </template>
                             </myTree>

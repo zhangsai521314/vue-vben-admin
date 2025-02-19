@@ -1,6 +1,6 @@
 <template>
   <MyContent>
-    <a-spin :spinning="isRunGet" title="正在执行...">
+    <a-spin :spinning="isRunGet">
       <!-- 开启多字段排序 -->
       <!-- :sort-config="{ multiple: true }" -->
       <vxe-grid
@@ -23,11 +23,11 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>线路名称：</label>
+                      <label>{{ t('view.lineName') }}：</label>
                       <a-input
                         @press-enter="initPage"
                         v-model:value="seacthContent.name"
-                        placeholder="输入线路名称查询"
+                        :placeholder="t('view.inputLineNameForQuery')"
                       />
                     </a-space>
                   </div>
@@ -39,11 +39,11 @@
                 </a-space>
               </AuthDom>
               <AuthDom auth="ddServcer_line_add">
-                <a-button class="ant-btn" @click="showFrom()">新增线路</a-button>
+                <a-button class="ant-btn" @click="showFrom()">{{ t('view.addNewLine') }}</a-button>
               </AuthDom>
               <AuthDom auth="ddServcer_line_pusMq">
-                <a-spin :spinning="isRunMushMq" title="命令发送中">
-                  <a-button class="ant-btn" @click="pushMq()">同步命令</a-button>
+                <a-spin :spinning="isRunMushMq" :title="t('view.commandSending')">
+                  <a-button class="ant-btn" @click="pushMq()">{{ t('view.syncCommand') }}</a-button>
                 </a-spin>
               </AuthDom>
             </a-space>
@@ -65,7 +65,7 @@
                 name="icon-baseui-edit-fill"
                 @click="showFrom(row)"
                 style="color: #0749df"
-                title="编辑"
+                :title="t('view.edit')"
               />
             </AuthDom>
             <AuthDom auth="ddServcer_line_table_delete">
@@ -73,7 +73,7 @@
                 name="icon-baseui-guanbicuowu"
                 @click="remove(row)"
                 style="color: red"
-                title="删除"
+                :title="t('view.delete')"
               />
             </AuthDom>
           </div>
@@ -81,14 +81,14 @@
       </vxe-grid>
       <a-drawer
         :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-        :width="500"
+        :width="locale == 'fr-FR' ? 800 : locale == 'zh-CN' ? 500 : 700"
         :visible="isShowForm"
         :title="t('view.configuration')"
         :footer-style="{ textAlign: 'right' }"
         @close="formClose"
       >
         <a-form
-          :label-col="{ span: 8 }"
+          :label-col="{ span: locale == 'fr-FR' ? 12 : locale == 'zh-CN' ? 8 : 10 }"
           :style="{ paddingRight: '2px' }"
           :wrapper-col="{ span: 14 }"
           autocomplete="off"
@@ -96,93 +96,106 @@
           :model="formData"
         >
           <a-form-item
-            label="线路名称(中)"
+            :label="t('view.lineNameCn')"
             name="nameCn"
             :rules="[
               { required: true, message: '' },
-              { max: 40, message: '线路名称(中)过长' },
-              { validator: formValidator.empty, message: '请输入线路名称(中)' },
+              { max: 40, message: t('view.lineNameCnIsTooLong') },
+              { validator: formValidator.empty, message: t('view.pleaseInputLineNameCn') },
             ]"
           >
             <a-input
-              placeholder="请输入线路名称(中)"
+              :placeholder="t('view.pleaseInputLineNameCn')"
               v-model:value="formData.nameCn"
               autocomplete="off"
             />
           </a-form-item>
           <a-form-item
-            label="线路名称(英)"
+            :label="t('view.lineNameEn')"
             name="nameEn"
             :rules="[
               { required: true, message: '' },
-              { max: 40, message: '线路名称(英)过长' },
-              { validator: formValidator.empty, message: '请输入线路名称(英)' },
+              { max: 40, message: t('view.lineNameEnIsTooLong') },
+              { validator: formValidator.empty, message: t('view.pleaseInputLineNameEn') },
             ]"
           >
             <a-input
-              placeholder="请输入线路名称(英)"
+              :placeholder="t('view.pleaseInputLineNameEn')"
               v-model:value="formData.nameEn"
               autocomplete="off"
             />
           </a-form-item>
           <a-form-item
-            label="线路名称(法)"
+            :label="t('view.lineNameFr')"
             name="nameFr"
             :rules="[
               { required: true, message: '' },
-              { max: 40, message: '线路名称(法)过长' },
-              { validator: formValidator.empty, message: '请输入线路名称(法)' },
+              { max: 40, message: t('view.lineNameFrIsTooLong') },
+              { validator: formValidator.empty, message: t('view.pleaseInputLineNameFr') },
             ]"
           >
             <a-input
-              placeholder="请输入线路名称(法)"
+              :placeholder="t('view.pleaseInputLineNameFr')"
               v-model:value="formData.nameFr"
               autocomplete="off"
             />
           </a-form-item>
           <a-form-item
-            label="线路代码"
+            :label="t('view.lineCode')"
             name="code"
             :rules="[
               { required: true, message: '' },
-              { min: 3, message: '线路代码是3至6位' },
-              { max: 6, message: '线路代码是3至6位' },
-              { validator: formValidator.positiveInteger, message: '线路代码格式为自然数' },
-              { validator: formValidator.empty, message: '请输入线路代码' },
+              { min: 3, message: t('view.lineCodeMustBe3To6Digits') },
+              { max: 6, message: t('view.lineCodeMustBe3To6Digits') },
+              {
+                validator: formValidator.positiveInteger,
+                message: t('view.lineCodeFormatMustBeANaturalNumber'),
+              },
+              { validator: formValidator.empty, message: t('view.pleaseEnterLineCode') },
             ]"
           >
             <a-input
-              placeholder="请输入线路代码"
+              :placeholder="t('view.pleaseEnterLineCode')"
               v-model:value="formData.code"
               autocomplete="off"
             />
           </a-form-item>
           <a-form-item
             name="dcFn"
-            label="功能号"
+            :label="t('view.functionNumber')"
             :rules="[
               { required: true, message: '' },
-              { min: 5, message: '功能号名称是5至9位' },
-              { max: 9, message: '功能号名称是5至9位' },
-              { validator: formValidator.positiveInteger, message: '功能号格式为自然数' },
-              { validator: formValidator.empty, message: '请输入功能号' },
-            ]"
-          >
-            <a-input placeholder="请输入功能号" v-model:value="formData.dcFn" autocomplete="off" />
-          </a-form-item>
-          <a-form-item
-            name="dcIsdn"
-            label="调度台ISDN"
-            :rules="[
-              { required: true, message: '' },
-              { min: 4, message: '调度台ISDN名称是4至11位' },
-              { max: 11, message: '调度台ISDN名称是4至11位' },
-              { validator: formValidator.positiveInteger, message: '调度台ISDN格式为自然数' },
-              { validator: formValidator.empty, message: '请输入调度台ISDN' },
+              { min: 5, message: t('view.functionCodeNameMustBe5To9Digits') },
+              { max: 9, message: t('view.functionCodeNameMustBe5To9Digits') },
+              {
+                validator: formValidator.positiveInteger,
+                message: t('view.functionCodeFormatMustBeANaturalNumber'),
+              },
+              { validator: formValidator.empty, message: t('view.pleaseEnterFunctionCode') },
             ]"
           >
             <a-input
-              placeholder="请输入调度台ISDN"
+              :placeholder="t('view.pleaseEnterFunctionCode')"
+              v-model:value="formData.dcFn"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="dcIsdn"
+            :label="t('view.dispatchConsoleIsdn')"
+            :rules="[
+              { required: true, message: '' },
+              { min: 4, message: t('view.dispatchConsoleIsdnNameMustBe4To11Digits') },
+              { max: 11, message: t('view.dispatchConsoleIsdnNameMustBe4To11Digits') },
+              {
+                validator: formValidator.positiveInteger,
+                message: t('view.dispatchConsoleIsdnFormatMustBeANaturalNumber'),
+              },
+              { validator: formValidator.empty, message: t('view.pleaseEnterDispatchConsoleIsdn') },
+            ]"
+          >
+            <a-input
+              :placeholder="t('view.pleaseEnterDispatchConsoleIsdn')"
               v-model:value="formData.dcIsdn"
               autocomplete="off"
             />
@@ -194,7 +207,11 @@
           >
             <IconFontClass
               name="icon-baseui-zhankai"
-              :title="isShowUpdate ? '修改二级信息' : '不修改二级信息'"
+              :title="
+                isShowUpdate
+                  ? t('view.modifySecondaryInformation')
+                  : t('view.doNotModifySecondaryInformation')
+              "
               @click="
                 () => {
                   isShowUpdate = !isShowUpdate;
@@ -210,48 +227,67 @@
             <a-form-item
               v-if="saveType == 'edit'"
               name="programUpdatePassWord"
-              label="二级修改密码"
-              :rules="[{ required: true, message: '修改信息请输入二级密码' }]"
+              :label="t('view.secondaryModificationPassword')"
+              :rules="[
+                {
+                  required: true,
+                  message: t('view.pleaseEnterSecondaryPasswordToModifyInformation'),
+                },
+              ]"
             >
               <a-input
-                placeholder="修改信息请输入二级密码"
+                :placeholder="t('view.pleaseEnterSecondaryPasswordToModifyInformation')"
                 v-model:value="formData.programUpdatePassWord"
                 autocomplete="off"
               />
             </a-form-item>
             <a-form-item
               name="groupAllCirNumber"
-              label="全呼机车组呼号码"
+              :label="t('view.allCallLocomotiveGroupCallNumber')"
               :rules="[
                 { required: true, message: '' },
-                { min: 3, message: '全呼机车组呼号码是3至10位' },
-                { max: 10, message: '全呼机车组呼号码是3至10位' },
+                { min: 3, message: t('view.fullCallLocomotiveGroupCallNumberMustBe3To10Digits') },
+                { max: 10, message: t('view.fullCallLocomotiveGroupCallNumberMustBe3To10Digits') },
                 {
                   validator: formValidator.positiveInteger,
-                  message: '全呼机车组呼号码格式为自然数',
+                  message: t('view.fullCallLocomotiveGroupCallNumberFormatMustBeANaturalNumber'),
                 },
-                { validator: formValidator.empty, message: '请输入全呼机车组呼号码' },
+                {
+                  validator: formValidator.empty,
+                  message: t('view.pleaseEnterFullCallLocomotiveGroupCallNumber'),
+                },
               ]"
             >
               <a-input
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
-                placeholder="请输入全呼机车组呼号码"
+                :placeholder="t('view.pleaseEnterFullCallLocomotiveGroupCallNumber')"
                 v-model:value="formData.groupAllCirNumber"
                 autocomplete="off"
               />
             </a-form-item>
             <a-form-item
               name="groupAllCirPriority"
-              label="全呼机车组呼优先级"
+              :label="t('view.allCallLocomotiveGroupCallPriority')"
               :rules="[
-                { required: true, message: '请输入全呼机车组呼优先级' },
-                { validator: formValidator.min, min: 1, message: '全呼机车组呼优先级1至15' },
-                { validator: formValidator.max, max: 15, message: '全呼机车组呼优先级1至15' },
+                {
+                  required: true,
+                  message: t('view.pleaseEnterFullCallLocomotiveGroupCallPriority'),
+                },
+                {
+                  validator: formValidator.min,
+                  min: 1,
+                  message: t('view.fullCallLocomotiveGroupCallPriority1To15'),
+                },
+                {
+                  validator: formValidator.max,
+                  max: 15,
+                  message: t('view.fullCallLocomotiveGroupCallPriority1To15'),
+                },
               ]"
             >
               <a-input-number
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
-                placeholder="请输入全呼机车组呼优先级"
+                :placeholder="t('view.pleaseEnterFullCallLocomotiveGroupCallPriority')"
                 style="width: 262px"
                 :precision="0"
                 v-model:value="formData.groupAllCirPriority"
@@ -259,37 +295,48 @@
             </a-form-item>
             <a-form-item
               name="groupAllDcNumber"
-              label="全呼车站组呼号码"
+              :label="t('view.allCallStationGroupCallNumber')"
               :rules="[
                 { required: true, message: '' },
-                { min: 3, message: '全呼车站组呼号码是3至10位' },
-                { max: 10, message: '全呼车站组呼号码是3至10位' },
+                { min: 3, message: t('view.fullCallStationGroupCallNumberMustBe3To10Digits') },
+                { max: 10, message: t('view.fullCallStationGroupCallNumberMustBe3To10Digits') },
                 {
                   validator: formValidator.positiveInteger,
-                  message: '全呼车站组呼号码格式为正整数',
+                  message: t('view.fullCallStationGroupCallNumberFormatMustBeAPositiveInteger'),
                 },
-                { validator: formValidator.empty, message: '请输入全呼车站组呼号码' },
+                {
+                  validator: formValidator.empty,
+                  message: t('view.pleaseEnterFullCallStationGroupCallNumber'),
+                },
               ]"
             >
               <a-input
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
-                placeholder="请输入全呼车站组呼号码"
+                :placeholder="t('view.pleaseEnterFullCallStationGroupCallNumber')"
                 v-model:value="formData.groupAllDcNumber"
                 autocomplete="off"
               />
             </a-form-item>
             <a-form-item
               name="groupAllDcPriority"
-              label="全呼车站组呼优先级"
+              :label="t('view.allCallStationGroupCallPriority')"
               :rules="[
-                { required: true, message: '请输入全呼车站组呼优先级' },
-                { validator: formValidator.min, min: 1, message: '全呼车站组呼优先级1至15' },
-                { validator: formValidator.max, max: 15, message: '全呼车站组呼优先级1至15' },
+                { required: true, message: t('view.pleaseEnterFullCallStationGroupCallPriority') },
+                {
+                  validator: formValidator.min,
+                  min: 1,
+                  message: t('view.fullCallStationGroupCallPriority1To15'),
+                },
+                {
+                  validator: formValidator.max,
+                  max: 15,
+                  message: t('view.fullCallStationGroupCallPriority1To15'),
+                },
               ]"
             >
               <a-input-number
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
-                placeholder="请输入全呼车站组呼优先级"
+                :placeholder="t('view.pleaseEnterFullCallStationGroupCallPriority')"
                 style="width: 262px"
                 :precision="0"
                 v-model:value="formData.groupAllDcPriority"
@@ -297,46 +344,64 @@
             </a-form-item>
             <a-form-item
               name="groupAllBroadcastNumber"
-              label="全线广播组呼号码"
+              :label="t('view.fullLineBroadcastGroupCallNumber')"
               :rules="[
-                { required: true, message: '' },
-                { min: 3, message: '全线广播组呼号码是3至10位' },
-                { max: 10, message: '全线广播组呼号码是3至10位' },
+                { required: true, message: t('view.pleaseEnterFullLineBroadcastGroupCallNumber') },
+                { min: 3, message: t('view.fullLineBroadcastGroupCallNumberMustBe3To10Digits') },
+                { max: 10, message: t('view.fullLineBroadcastGroupCallNumberMustBe3To10Digits') },
                 {
                   validator: formValidator.positiveInteger,
-                  message: '全线广播组呼号码格式为自然数',
+                  message: t('view.fullLineBroadcastGroupCallNumberFormatMustBeANaturalNumber'),
                 },
-                { validator: formValidator.empty, message: '请输入全线广播组呼号码' },
+                {
+                  validator: formValidator.empty,
+                  message: t('view.pleaseEnterFullLineBroadcastGroupCallNumber'),
+                },
               ]"
             >
               <a-input
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
-                placeholder="请输入全线广播组呼号码"
+                :placeholder="t('view.pleaseEnterFullLineBroadcastGroupCallNumber')"
                 v-model:value="formData.groupAllBroadcastNumber"
                 autocomplete="off"
               />
             </a-form-item>
             <a-form-item
               name="groupAllBroadcastPriority"
-              label="全线广播组呼优先级"
+              :label="t('view.fullLineBroadcastGroupCallPriority')"
               :rules="[
-                { required: true, message: '请输入全线广播组呼优先级' },
-                { validator: formValidator.min, min: 1, message: '全线广播组呼优先级1至15' },
-                { validator: formValidator.max, max: 15, message: '全线广播组呼优先级1至15' },
+                {
+                  required: true,
+                  message: t('view.pleaseEnterFullLineBroadcastGroupCallPriority'),
+                },
+                {
+                  validator: formValidator.min,
+                  min: 1,
+                  message: t('view.fullLineBroadcastGroupCallPriority1To15'),
+                },
+                {
+                  validator: formValidator.max,
+                  max: 15,
+                  message: t('view.fullLineBroadcastGroupCallPriority1To15'),
+                },
               ]"
             >
               <a-input-number
                 :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
-                placeholder="请输入全线广播组呼优先级"
+                :placeholder="t('view.pleaseEnterFullLineBroadcastGroupCallPriority')"
                 style="width: 262px"
                 :precision="0"
                 v-model:value="formData.groupAllBroadcastPriority"
               />
             </a-form-item>
           </template>
-          <a-form-item name="reamrk" label="备注" :rules="[{ max: 250, message: '备注过长' }]">
+          <a-form-item
+            name="reamrk"
+            :label="t('view.remark')"
+            :rules="[{ max: 250, message: t('view.remarkIsTooLong') }]"
+          >
             <a-textarea
-              placeholder="请输入备注"
+              :placeholder="t('view.pleaseInputRemarkInformation')"
               :rows="3"
               v-model:value="formData.reamrk"
               autocomplete="off"
@@ -394,126 +459,111 @@
         field: 'name',
         title: t('view.lineName'),
         showOverflow: true,
-
         sortable: true,
         minWidth: 200,
         fixed: 'left',
       },
       {
         field: 'nameCn',
-        title: '线路名称(中)',
+        title: t('view.lineNameCn'),
         showOverflow: true,
-
         sortable: true,
         minWidth: 200,
         visible: false,
       },
       {
         field: 'nameEn',
-        title: '线路名称(英)',
+        title: t('view.lineNameEn'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 200,
+        minWidth: locale == 'zh-CN' ? 200 : 220,
         visible: false,
       },
       {
         field: 'nameFr',
-        title: '线路名称(法)',
+        title: t('view.lineNameFr'),
         showOverflow: true,
-
         sortable: true,
         minWidth: 200,
         visible: false,
       },
       {
         field: 'code',
-        title: '线路代码',
+        title: t('view.lineCode'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 130,
       },
       {
         field: 'dcFn',
-        title: '功能号',
+        title: t('view.functionNumber'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 170,
       },
       {
         field: 'dcIsdn',
-        title: '调度台ISDN',
+        title: t('view.dispatchConsoleIsdn'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 120,
+        minWidth: locale == 'zh-CN' ? 120 : 246,
       },
       {
         field: 'groupAllCirNumber',
-        title: '全呼CIR组呼号',
+        title: t('view.fullCallCirGroupCallSign'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 340,
       },
       {
         field: 'groupAllCirPriority',
-        title: '全呼CIR组呼优先级',
+        title: t('view.fullCallCirGroupCallPriority'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 160,
+        minWidth: locale == 'zh-CN' ? 160 : 340,
       },
       {
         field: 'groupAllDcNumber',
-        title: '全呼车站组呼号',
+        title: t('view.fullCallStationGroupCallSign'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 380,
       },
       {
         field: 'groupAllDcPriority',
-        title: '全呼调度台组优先级',
+        title: t('view.fullCallDispatchConsoleGroupPriority'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 170,
+        minWidth: locale == 'zh-CN' ? 170 : 420,
       },
       {
         field: 'groupAllBroadcastNumber',
-        title: '线路广播组呼号',
+        title: t('view.lineBroadcastGroupCallSign'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 170,
+        minWidth: locale == 'zh-CN' ? 170 : 340,
       },
       {
         field: 'groupAllBroadcastPriority',
-        title: '线路广播组呼优先级',
+        title: t('view.lineBroadcastGroupCallPriority'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 170,
+        minWidth: locale == 'zh-CN' ? 170 : 340,
       },
       {
         field: 'reamrk',
-        title: '备注信息',
+        title: t('view.remarks'),
         showOverflow: true,
-
         visible: false,
         sortable: true,
         minWidth: 150,
       },
       {
         field: 'updateTime',
-        title: '更新时间',
+        title: t('view.updateTime'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 150,
+        minWidth: 170,
         visible: false,
       },
       {
@@ -627,7 +677,7 @@
           .DeleteDDServerLine(row.id.toString())
           .then(() => {
             isRunGet.value = false;
-            message.success('删除线路信息成功');
+            message.success(t('view.deletionSuccessful'));
             getDDServerLines();
           })
           .catch(() => {
@@ -658,7 +708,7 @@
           saveType.value = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取线路信息失败');
+          message.error(t('view.failedToRetrieveLineInformation'));
         }
       })
       .catch(() => {
@@ -697,7 +747,7 @@
         lineApi.AddDDServerLine(formData.value).then((data) => {
           tableConfig.data?.splice(0, 0, data);
           formClose();
-          message.success('新增线路成功');
+          message.success(t('view.additionSuccessful'));
           page.total = page.total + 1;
         });
       } else {
@@ -709,7 +759,7 @@
             oldData.updateTime = data.updateTime;
           }
           formClose();
-          message.success('更新线路信息成功');
+          message.success(t('view.updateSuccessful'));
         });
       }
     });

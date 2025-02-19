@@ -92,7 +92,7 @@
                           node.powerType.indexOf('1') == -1,
                       }"
                       name="icon-baseui-edit-fill"
-                      title="编辑"
+                      :title="t('view.edit')"
                       style="color: #0a61bd"
                       @click="showMenuForm('edit', node)"
                     />
@@ -106,7 +106,7 @@
                             node.powerType.indexOf('1') == -1),
                       }"
                       name="icon-baseui-guanbicuowu"
-                      title="删除"
+                      :title="t('view.delete')"
                       style="color: red"
                       @click="removeMenu(node)"
                     />
