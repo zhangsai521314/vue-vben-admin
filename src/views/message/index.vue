@@ -816,7 +816,9 @@
     const $table = tableRef.value;
     if ($table) {
       $table.exportData({
+        filename: `告警信息导出${dayjs().format('YYYYMMDDHHmmss')}`,
         type: 'xlsx',
+        excludeFields: ['seq'],
       });
     }
   }

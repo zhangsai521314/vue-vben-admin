@@ -276,24 +276,32 @@
   }
 
   function exportData() {
-    exportDataSpinning.value = true;
-    seacthContent.value.startTime =
-      timeValue.value == null ? null : timeValue.value[0].format('YYYY-MM-DD HH:mm:ss');
-    seacthContent.value.endTime =
-      timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
-    serviceTestApi
-      .ExportData({
-        ...seacthContent.value,
-        PageIndex: page.current,
-        PageSize: page.size,
-        fullSort: getFullSort(),
-        execompleteBefore: () => {
-          exportDataSpinning.value = false;
-        },
-      })
-      .then((data) => {
-        myCommon.downLoadFile(data);
+    // exportDataSpinning.value = true;
+    // seacthContent.value.startTime =
+    //   timeValue.value == null ? null : timeValue.value[0].format('YYYY-MM-DD HH:mm:ss');
+    // seacthContent.value.endTime =
+    //   timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
+    // serviceTestApi
+    //   .ExportData({
+    //     ...seacthContent.value,
+    //     PageIndex: page.current,
+    //     PageSize: page.size,
+    //     fullSort: getFullSort(),
+    //     execompleteBefore: () => {
+    //       exportDataSpinning.value = false;
+    //     },
+    //   })
+    //   .then((data) => {
+    //     myCommon.downLoadFile(data);
+    //   });
+    const $table = tableRef.value;
+    if ($table) {
+      $table.exportData({
+        filename: `自检记录信息导出${dayjs().format('YYYYMMDDHHmmss')}`,
+        type: 'xlsx',
+        excludeFields: ['seq'],
       });
+    }
   }
 
   onMounted(() => {
