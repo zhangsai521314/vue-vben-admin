@@ -41,7 +41,16 @@
             borderRadius: '20px',
           }"
         ></div>
-        <span style="color: black">通信{{ mqttStore.mqttStatus }}</span>
+        <span style="color: black"
+          >{{ t('view.communication') }}
+          <span v-if="mqttStore.mqttStatus == '未连接'"> {{ t('view.notConnected') }} </span>
+          <span v-if="mqttStore.mqttStatus == '已连接'"> {{ t('view.connected') }} </span>
+          <span v-if="mqttStore.mqttStatus == '连接中'"> {{ t('view.connecting') }} </span>
+          <span v-if="mqttStore.mqttStatus == '连接失败'"> {{ t('view.connectionFailed') }} </span>
+          <span v-if="mqttStore.mqttStatus == '连接断开'">
+            {{ t('view.connectionDisconnected') }}
+          </span>
+        </span>
       </a-space>
     </div>
 
@@ -103,7 +112,9 @@
   import { ErrorAction, FullScreen, LayoutBreadcrumb, Notify, UserDropDown } from './components';
 
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
+  import { useI18n } from '@/hooks/web/useI18n';
 
+  const { t } = useI18n();
   const SettingDrawer = createAsyncComponent(() => import('@/layouts/default/setting/index.vue'), {
     loading: true,
   });

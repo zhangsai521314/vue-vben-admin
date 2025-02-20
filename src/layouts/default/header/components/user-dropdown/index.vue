@@ -11,7 +11,7 @@
 
     <template #overlay>
       <Menu @click="handleMenuClick">
-        <MenuItem key="userInfo" :text="'用户中心'" icon="icon-baseui-geren" />
+        <MenuItem key="userInfo" :text="t('view.userCenter')" icon="icon-baseui-geren" />
         <!-- <MenuItem
           v-if="getUseLockPage"
           key="lock"

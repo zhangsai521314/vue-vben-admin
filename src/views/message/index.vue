@@ -280,16 +280,15 @@
     </a-drawer>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="500"
+      :width="locale == 'zh-CN' ? 500 : 500"
       :visible="isShowRepair"
       :title="t('view.processingContent')"
       :footer-style="{ textAlign: 'right' }"
       @close="closeRepair"
     >
       <a-form
-        :label-col="{ span: 4 }"
+        :label-col="{ span: locale == 'zh-CN' ? 6 : 8 }"
         :style="{ paddingRight: '2px' }"
-        :wrapper-col="{ span: 20 }"
         autocomplete="off"
         ref="formRef"
         :model="formData"
@@ -633,7 +632,7 @@
   function resetSeacth() {
     seacthContent.value = {
       serviceId: null,
-      msgType: '',
+      msgType: null,
       msgStatus: null,
       msgTitle: '',
       msgContent: '',

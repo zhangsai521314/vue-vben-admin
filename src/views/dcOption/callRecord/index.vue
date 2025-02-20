@@ -171,6 +171,41 @@
               : '-'
         }}</span>
       </template>
+      <template #callState="{ row }">
+        <span>{{
+          row.callState == 0
+            ? t('view.freetimeIdle')
+            : row.callState == 1
+              ? t('view.incomingRinging')
+              : row.callState == 2
+                ? t('view.outgoingRinging')
+                : row.callState == 3
+                  ? t('view.incomingHangUp')
+                  : row.callState == 4
+                    ? t('view.outgoingHangUp')
+                    : row.callState == 5
+                      ? t('view.incomingAnswerIncomingAccept')
+                      : row.callState == 6
+                        ? t('view.outgoingAnswerOutgoingAccept')
+                        : row.callState == 7
+                          ? t('view.callNumberNotFound')
+                          : row.callState == 8
+                            ? t('view.callNumberIsOffline')
+                            : row.callState == 9
+                              ? t('view.groupCallCreationSucceeded')
+                              : row.callState == 10
+                                ? t('view.groupCallCreationFailed')
+                                : row.callState == 11
+                                  ? t('view.groupCallTalkRightChange')
+                                  : row.callState == 12
+                                    ? t('view.groupCallEnded')
+                                    : row.callState == 13
+                                      ? t('view.groupCallReplaced')
+                                      : row.callState == 14
+                                        ? t('view.voiceServiceInterruption')
+                                        : row.callState
+        }}</span>
+      </template>
       <template #callType="{ row }">
         <span>{{
           row.callType == 10
@@ -305,12 +340,15 @@
         fixed: 'left',
       },
       {
-        field: 'callStateDescription',
+        field: 'callState',
         title: t('view.callStatus'),
         visible: false,
         showOverflow: true,
         sortable: true,
         minWidth: locale == 'zh-CN' ? 100 : 140,
+        slots: {
+          default: 'callState',
+        },
       },
       {
         field: 'callDirection',

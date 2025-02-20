@@ -1,9 +1,13 @@
+import { useI18n } from '@/hooks/web/useI18n';
+
+const { t } = useI18n();
+
 //自定义的表单验证
 const FormValidator = {
   //非空校验。vue自带空对0也是空
   empty: async (rule, value, callback) => {
     if (myCommon.isnull(value)) {
-      return Promise.reject('内容不能为空');
+      return Promise.reject(t('view.contentCannotBeEmpty'));
     } else {
       return Promise.resolve();
     }
@@ -15,7 +19,7 @@ const FormValidator = {
     if (myCommon.isnull(value) || reg.test(value)) {
       return Promise.resolve();
     } else {
-      return Promise.reject('ip地址不正确');
+      return Promise.reject(t('view.ipAddressIsIncorrect'));
     }
   },
   //手机号码校验
@@ -25,7 +29,7 @@ const FormValidator = {
     if (myCommon.isnull(value) || mobilePhone.test(value)) {
       return Promise.resolve();
     } else {
-      return Promise.reject('手机号码格式不正确');
+      return Promise.reject(t('view.mobileNumberFormatError'));
     }
   },
   //电话校验
@@ -37,7 +41,7 @@ const FormValidator = {
     if (myCommon.isnull(value) || mobilePhone.test(value) || telePhone.test(value)) {
       return Promise.resolve();
     } else {
-      return Promise.reject('电话号码格式不正确');
+      return Promise.reject(t('view.phoneNumberFormatError'));
     }
   },
   //正整数校验
@@ -46,7 +50,7 @@ const FormValidator = {
     if (myCommon.isnull(value) || number_int.test(value)) {
       return Promise.resolve();
     } else {
-      return Promise.reject('不是自然数');
+      return Promise.reject(t('view.notANaturalNumber'));
     }
   },
   //经度校验
@@ -55,7 +59,7 @@ const FormValidator = {
     if (myCommon.isnull(value) || longitude.test(value)) {
       return Promise.resolve();
     } else {
-      return Promise.reject('经度范围是-180至180，不超过16位小数');
+      return Promise.reject(t('view.longitudeRules'));
     }
   },
   //纬度校验
@@ -64,20 +68,20 @@ const FormValidator = {
     if (myCommon.isnull(value) || latitude.test(value)) {
       return Promise.resolve();
     } else {
-      return Promise.reject('纬度范围是-90至90，不超过16位小数');
+      return Promise.reject(t('view.latitudeRules'));
     }
   },
   //最小值
   min: async (rule, value, callback) => {
     if (parseFloat(value) < rule.min) {
-      return Promise.reject(`最小值应大于${rule.min}`);
+      return Promise.reject(t('view.La valeur minimale doit être supérieure à', [rule.min]));
     }
     return Promise.resolve();
   },
   //最大值
   max: async (rule, value, callback) => {
     if (parseFloat(value) > rule.max) {
-      return Promise.reject(`最大值应小于${rule.max}`);
+      return Promise.reject(t('view.maxValueShouldBeLessThan', [rule.max]));
     }
     return Promise.resolve();
   },

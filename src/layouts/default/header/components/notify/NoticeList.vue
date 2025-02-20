@@ -14,13 +14,13 @@
             <IconFontClass
               :title="
                 row.msgClass == 1
-                  ? '提示'
+                  ? t('view.tip')
                   : row.msgStatus == 1
-                    ? '告警'
+                    ? t('view.alarm')
                     : row.msgStatus == 2
-                      ? '正常'
+                      ? t('view.normal')
                       : row.msgStatus == 3
-                        ? '未知 '
+                        ? t('view.unknown')
                         : ''
               "
               v-if="row.msgIcon"
@@ -40,9 +40,9 @@
               }"
             />
             <a-tag
-              style="display: block; width: 38px; margin-left: 2px"
+              style="display: block; width: 52px; margin-left: 2px"
               :color="row.isRead ? 'green' : 'red'"
-              >{{ row.isRead ? '已读' : '未读' }}</a-tag
+              >{{ row.isRead ? t('view.read') : t('view.unread') }}</a-tag
             >
           </div>
           <!-- <a-select
@@ -86,21 +86,21 @@
         <div
           style="position: relative; width: 100%; padding-left: 8px; overflow: hidden"
           @click="handleTitleClick(row)"
-          title="点击查看详情"
+          :title="t('view.clickToViewDetails')"
         >
           <div style="position: absolute; top: 4px; right: 0">
             <a-tag
-              style="font-size: 15px; cursor: pointer"
+              style="position: relative; top: 10px; right: -6px; font-size: 12px; cursor: pointer"
               v-if="row.msgClass == 2 && row.confirmTime == null"
               @click="(e) => okMsg(e, row)"
               color="#108ee9"
-              >确认告警</a-tag
+              >{{ t('view.confirmAlarm') }}</a-tag
             >
             <IconFontClass
               v-else-if="row.msgClass == 2"
               style="margin: 0 3px; color: green; font-size: 23px"
               name="icon-baseui-xuanzhongduihao"
-              title="已确认"
+              :title="t('view.confirmed')"
             />
           </div>
           <div
@@ -158,14 +158,15 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { ref, reactive, onMounted, computed, PropType, watch, nextTick } from 'vue';
-  import { useDesign } from '@/hooks/web/useDesign';
-  import { List, Avatar, Tag, Typography, message } from 'ant-design-vue';
-  import { isNumber } from '@/utils/is';
+  import { ref, reactive, onMounted, PropType, watch } from 'vue';
+  import { message } from 'ant-design-vue';
   import type { MsgData } from '#/store';
   import dayjs from 'dayjs';
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
   import messageApi from '@/api/message';
+  import { useI18n } from '@/hooks/web/useI18n';
+
+  const { t } = useI18n();
 
   const mqttStore = useMqttStoreWithOut();
 
@@ -246,13 +247,13 @@
     messageApi
       .OkMsg(row.msgId)
       .then((data) => {
-        message.success('确认告警成功');
+        message.success(t('view.confirmAlarmSuccessfully'));
         row.confirmTime = data.confirmTime;
         row.confirmUser = data.confirmUser;
         row.isRead = data.isRead;
       })
       .catch(() => {
-        message.error('确认告警失败');
+        message.error(t('view.failToConfirmAlarm'));
       });
   }
 

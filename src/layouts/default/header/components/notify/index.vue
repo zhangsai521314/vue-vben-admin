@@ -25,15 +25,16 @@
           <template v-for="item in tabsName" :key="item.key">
             <Tabs.TabPane style="width: 360px">
               <template #tab>
-                {{ item }}
+                {{ t('view.alarm') }}
                 <span v-if="item == '告警'">({{ mqttStore.getAlarmData.length }})</span>
               </template>
               <!-- 绑定title-click事件的通知列表中标题是“可点击”的-->
               <a-space style="margin-bottom: 2px">
                 <a-button @click="controlSound"
-                  >{{ mqttStore.msgIsMute ? '开启' : '关闭' }}声音提示</a-button
+                  >{{ mqttStore.msgIsMute ? t('view.open') : t('view.close')
+                  }}{{ t('view.soundPrompt') }}</a-button
                 >
-                <a-button @click="allRead">全部已读</a-button>
+                <a-button @click="allRead">{{ t('view.allRead') }}</a-button>
               </a-space>
               <div style="height: 690px; overflow: hidden">
                 <NoticeList :list="mqttStore.getAlarmData" @title-click="onNoticeClick" />
@@ -46,17 +47,16 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { tryOnUnmounted } from '@vueuse/core';
-  import { computed, ref, onMounted } from 'vue';
+  import { onMounted } from 'vue';
   import { Popover, Tabs, Badge, notification } from 'ant-design-vue';
-  import { BellOutlined } from '@ant-design/icons-vue';
   import NoticeList from './NoticeList.vue';
   import { useDesign } from '@/hooks/web/useDesign';
-  import { useMessage } from '@/hooks/web/useMessage';
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
   import type { MsgData } from '#/store';
-  import { useGo, useRedo } from '/@/hooks/web/usePage';
+  import { useGo } from '/@/hooks/web/usePage';
+  import { useI18n } from '@/hooks/web/useI18n';
 
+  const { t } = useI18n();
   const mqttStore = useMqttStoreWithOut();
   mqttStore.msgAudioIsShow = true;
   const { prefixCls } = useDesign('header-notify');
@@ -75,7 +75,7 @@
   function openNotification() {
     notification.open({
       message: '',
-      description: '点击任意区域交互-以开启信息声音提示',
+      description: t('view.clickAnyAreaToInteractToEnableMessageSoundPrompt'),
       placement: 'top',
       style: {
         width: '320px',

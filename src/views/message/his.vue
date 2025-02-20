@@ -15,7 +15,13 @@
           :style="{
             color: row.msgStatus == 1 ? 'red' : row.msgStatus == 2 ? 'green' : '',
           }"
-          >{{ row.msgStatus == 1 ? '故障' : row.msgStatus == 2 ? '恢复' : row.msgStatus }}</span
+          >{{
+            row.msgStatus == 1
+              ? t('view.fault')
+              : row.msgStatus == 2
+                ? t('view.recovery')
+                : row.msgStatus
+          }}</span
         >
       </template>
     </vxe-grid>
@@ -65,14 +71,14 @@
       },
       {
         field: 'msgStartTime',
-        title: '告警时间',
-        width: 150,
+        title: t('view.startTime'),
+        minWidth: 150,
         showOverflow: true,
       },
       {
         field: 'msgStatus',
-        title: '信息状态',
-        width: 100,
+        title: t('view.informationStatus'),
+        minWidth: locale == 'zh-CN' ? 100 : 166,
         showOverflow: true,
         slots: {
           default: 'msgStatus',
@@ -80,21 +86,21 @@
       },
       {
         field: 'msgTitle',
-        title: '信息标题',
-        width: 150,
+        title: t('view.informationTitle'),
+        minWidth: locale == 'zh-CN' ? 150 : 180,
         showOverflow: true,
       },
       {
         field: 'msgContent',
-        title: '信息内容',
-        width: 150,
+        title: t('view.informationContent'),
+        minWidth: 200,
         showOverflow: false,
       },
       {
         field: 'remark',
-        title: '备注信息',
+        title: t('view.remarks'),
         showOverflow: true,
-        width: 150,
+        minWidth: 150,
         visible: false,
       },
     ],

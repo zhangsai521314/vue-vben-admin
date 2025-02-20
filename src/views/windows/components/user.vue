@@ -31,64 +31,67 @@
         </a-upload>
       </a-form-item>
       <a-form-item
-        label="用户名称"
+        :label="t('view.userName')"
         name="userName"
         :rules="[
-          { required: true, message: '请输入用户名称' },
-          { max: 40, message: '用户名称长度超限' },
-          { min: 2, message: '用户名称最少2位' },
+          { required: true, message: t('view.pleaseEnterUserName') },
+          { max: 40, message: t('view.userNameLengthExceedsLimit') },
+          { min: 2, message: t('view.userNameRequiresAtLeastTwoCharacters') },
         ]"
       >
         <a-input v-model:value="userData.userName" autocomplete="off" />
       </a-form-item>
       <a-form-item
-        label="登录名称"
+        :label="t('view.loginName')"
         name="userAccount"
         :rules="[
           { required: true, message: '' },
-          { max: 40, message: '登录名称长度超限' },
-          { min: 2, message: '登录名称最少2位' },
-          { validator: formValidator.empty, message: '请输入登录名称' },
+          { max: 40, message: t('view.loginNameLengthExceedsLimit') },
+          { min: 2, message: t('view.loginNameRequiresAtLeastTwoCharacters') },
+          { validator: formValidator.empty, message: t('view.pleaseEnterLoginName') },
         ]"
       >
         <a-input v-model:value="userData.userAccount" autocomplete="off" />
       </a-form-item>
       <a-form-item
-        label="联系电话"
+        :label="t('view.contactPhone')"
         name="mobile"
         :rules="[
           { required: true, message: '' },
-          { max: 18, message: '联系电话过长' },
-          { validator: formValidator.positiveInteger, message: '联系电话格式为自然数' },
-          { validator: formValidator.empty, message: '请输入联系电话' },
+          { max: 18, message: t('view.contactNumberTooLong') },
+          {
+            validator: formValidator.positiveInteger,
+            message: t('view.phoneNumberFormatMustBeANaturalNumber'),
+          },
+          { validator: formValidator.empty, message: t('view.pleaseEnterThePhoneNumber') },
         ]"
       >
         <a-input v-model:value="userData.mobile" autocomplete="off" />
       </a-form-item>
       <a-form-item
-        label="联系邮箱"
+        :label="t('view.contactEmail')"
         name="email"
         :rules="[
-          { required: true, message: '请输入联系邮箱' },
-          { type: 'email', message: '邮箱格式不正确' },
-          { max: 64, message: '联系邮箱过长' },
+          { required: true, message: t('view.pleaseEnterContactEmail') },
+          { type: 'email', message: t('view.contactEmailFormatIncorrect') },
+          { max: 64, message: t('view.contactEmailTooLong', [64]) },
         ]"
       >
         <a-input v-model:value="userData.email" autocomplete="off" />
       </a-form-item>
-      <a-form-item label="用户部门" name="orgName">
+      <a-form-item :label="t('view.userDepartment')" name="orgName">
         <a-input :disabled="true" v-model:value="userData.orgName" autocomplete="off" />
       </a-form-item>
-      <a-form-item label="用户角色" name="roleName">
+      <a-form-item :label="t('view.userRole')" name="roleName">
         <a-input :disabled="true" v-model:value="userData.roleName" autocomplete="off" />
       </a-form-item>
-      <a-form-item label="用户类型" name="adminTypeName" style="margin-bottom: 0">
+      <a-form-item :label="t('view.userType')" name="adminTypeName" style="margin-bottom: 0">
         <a-input :disabled="true" v-model:value="userData.adminTypeName" autocomplete="off" />
       </a-form-item>
       <a-form-item :wrapper-col="{ span: 20, offset: 12 }" style="position: relative; height: 0">
         <IconFontClass
           name="icon-baseui-zhankai"
-          :title="isShowPwd ? '不修改密码' : '修改密码'"
+          :title="isShowPwd ? t('view.doNotChangePassword') : t('view.changePassword')"
           @click="zhanKaiClick"
           style="position: absolute; top: -2px; left: 16%; cursor: pointer"
           :class="{
@@ -98,31 +101,31 @@
       </a-form-item>
       <template v-if="isShowPwd">
         <a-form-item
-          label="旧密码"
+          :label="t('view.oldPassword')"
           name="oldPwd"
           :rules="[
             { required: true, message: '' },
-            { max: 40, message: '密码长度超限' },
-            { min: 5, message: '密码最少5位' },
-            { validator: formValidator.empty, message: '请输入旧密码' },
+            { max: 40, message: t('view.passwordTooLong') },
+            { min: 5, message: t('view.passwordAtLeastFiveDigits') },
+            { validator: formValidator.empty, message: t('view.pleaseEnterOldPassword') },
           ]"
         >
           <a-input v-model:value="userData.oldPwd" type="password" autocomplete="off" />
         </a-form-item>
         <a-form-item
-          label="新密码"
+          :label="t('view.newPassword')"
           name="userpwd"
           :rules="[
             { required: true, message: '' },
-            { max: 40, message: '密码长度超限' },
-            { min: 5, message: '密码最少5位' },
+            { max: 40, message: t('view.passwordLengthExceeded', [40]) },
+            { min: 5, message: t('view.passwordMustBeAtLeast5Characters', [5]) },
             { validator: validate_pwd },
           ]"
         >
           <a-input v-model:value="userData.userpwd" type="password" autocomplete="off" />
         </a-form-item>
         <a-form-item
-          label="确认密码"
+          :label="t('view.confirmPassword')"
           name="checkPass"
           :rules="[{ required: true, message: '' }, { validator: validate_checkPass }]"
         >
@@ -130,8 +133,8 @@
         </a-form-item>
       </template>
       <a-form-item :wrapper-col="{ span: 24, offset: 4 }" style="text-align: center">
-        <a-spin tip="正在保存用户信息..." :spinning="isRunSave">
-          <a-button @click="saveClick" type="primary">提交</a-button>
+        <a-spin :spinning="isRunSave">
+          <a-button @click="saveClick" type="primary">{{ t('view.submit') }}</a-button>
         </a-spin>
       </a-form-item>
     </a-form>
@@ -153,6 +156,9 @@
   import { sm2 } from 'sm-crypto-v2';
   import commonApi from '@/api/common';
   import headerImg from '@/assets/images/header.png';
+  import { useI18n } from '@/hooks/web/useI18n';
+
+  const { t } = useI18n();
 
   const props = defineProps({
     backgroundColor: {
@@ -179,7 +185,7 @@
 
   let validate_pwd = async (_rule, value) => {
     if (myCommon.isnull(value)) {
-      return Promise.reject('请输入新密码');
+      return Promise.reject(t('view.pleaseEnterNewPassword'));
     } else {
       if (userData.value.checkPass !== '') {
         formRef.value.validateFields('checkPass');
@@ -189,9 +195,9 @@
   };
   let validate_checkPass = async (_rule, value) => {
     if (myCommon.isnull(value)) {
-      return Promise.reject('请输入确认密码');
+      return Promise.reject(t('view.pleaseEnterConfirmPassword'));
     } else if (value !== userData.value.userpwd) {
-      return Promise.reject('新密码与确认密码不一致');
+      return Promise.reject(t('view.newAndConfirmPasswordsNotMatch'));
     } else {
       return Promise.resolve();
     }
@@ -222,14 +228,14 @@
         p_data.oldPwd = sm2.doEncrypt(p_data.oldPwd, myCommon.getCryptogramKey().sm2.publicKey, 1);
         userApi.UpdateUser(p_data).then((data) => {
           if (data > 0) {
-            message.success('保存信息成功');
+            message.success(t('view.saveSuccessful'));
             userData.value['userpwd'] = '';
             userData.value['oldPwd'] = '';
             userData.value['checkPass'] = '';
             //因为现在后台没用使用用户名称和用户账户的情况，如果有，此处需要强制用户重新登录
             userStore.setUserInfo(Object.assign(userStore.getUserInfo, userData.value));
           } else {
-            message.warning('保存信息失败');
+            message.warning(t('view.saveFailed'));
           }
         });
       })
@@ -244,7 +250,7 @@
     if (!isLt5M) {
       file['remove'] = true;
       fileList.value = [];
-      message.error('头像不可超过1MB');
+      message.error(t('view.avatarShouldNotExceed1MB'));
       return false;
     }
     return true;
@@ -262,7 +268,7 @@
         }
       } else if (fileInfo.file.status === 'error') {
         fileList.value = [];
-        message.warning('头像上传失败');
+        message.warning(t('view.avatarUploadFailed'));
       }
     } else {
       fileList.value = [];
