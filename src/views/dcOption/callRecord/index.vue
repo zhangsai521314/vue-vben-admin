@@ -739,21 +739,27 @@
   }
 
   function exportData() {
-    exportDataSpinning.value = true;
-    getSelectWhere();
-    callRecordApi
-      .ExportData({
-        PageIndex: page.current,
-        PageSize: page.size,
-        ...seacthContent.value,
-        fullSort: getFullSort(),
-        execompleteBefore: () => {
-          exportDataSpinning.value = false;
-        },
-      })
-      .then((data) => {
-        myCommon.downLoadFile(data);
+    // exportDataSpinning.value = true;
+    // getSelectWhere();
+    // callRecordApi
+    //   .ExportData({
+    //     PageIndex: page.current,
+    //     PageSize: page.size,
+    //     ...seacthContent.value,
+    //     fullSort: getFullSort(),
+    //     execompleteBefore: () => {
+    //       exportDataSpinning.value = false;
+    //     },
+    //   })
+    //   .then((data) => {
+    //     myCommon.downLoadFile(data);
+    //   });
+    const $table = tableRef.value;
+    if ($table) {
+      $table.exportData({
+        type: 'xlsx',
       });
+    }
   }
 
   //页面卸载后

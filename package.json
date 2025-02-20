@@ -85,6 +85,7 @@
     "@vben/hooks": "workspace:*",
     "@vue/shared": "^3.4.19",
     "@vueuse/core": "^10.7.2",
+    "@vxe-ui/plugin-export-xlsx": "^4.0.13",
     "@zxcvbn-ts/core": "^3.0.4",
     "ant-design-vue": "^4.2.3",
     "axios": "^1.6.7",

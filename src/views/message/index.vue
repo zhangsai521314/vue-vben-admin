@@ -794,25 +794,31 @@
   }
 
   function exportData() {
-    exportDataSpinning.value = true;
-    seacthContent.value.startTime =
-      timeValue.value == null ? null : timeValue.value[0].format('YYYY-MM-DD HH:mm:ss');
-    seacthContent.value.endTime =
-      timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
-    messageApi
-      .ExportData({
-        msgId,
-        PageIndex: page.current,
-        PageSize: page.size,
-        ...seacthContent.value,
-        fullSort: getFullSort(),
-        execompleteBefore: () => {
-          exportDataSpinning.value = false;
-        },
-      })
-      .then((data) => {
-        myCommon.downLoadFile(data);
+    // exportDataSpinning.value = true;
+    // seacthContent.value.startTime =
+    //   timeValue.value == null ? null : timeValue.value[0].format('YYYY-MM-DD HH:mm:ss');
+    // seacthContent.value.endTime =
+    //   timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
+    // messageApi
+    //   .ExportData({
+    //     msgId,
+    //     PageIndex: page.current,
+    //     PageSize: page.size,
+    //     ...seacthContent.value,
+    //     fullSort: getFullSort(),
+    //     execompleteBefore: () => {
+    //       exportDataSpinning.value = false;
+    //     },
+    //   })
+    //   .then((data) => {
+    //     myCommon.downLoadFile(data);
+    //   });
+    const $table = tableRef.value;
+    if ($table) {
+      $table.exportData({
+        type: 'xlsx',
       });
+    }
   }
 
   watch(

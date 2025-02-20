@@ -18,6 +18,8 @@ import _ from 'lodash-es';
 import { useI18n } from '@/hooks/web/useI18n';
 import { useLocaleStore } from '@/store/modules/locale';
 import type { LocaleType } from '#/config';
+import VxeUIPluginExportXLSX from '@vxe-ui/plugin-export-xlsx';
+import ExcelJS from 'exceljs';
 
 export function registerGlobComp(app: App) {
   const { t } = useI18n();
@@ -31,6 +33,9 @@ export function registerGlobComp(app: App) {
     VxeUI.setI18n('zh-CN', zhCN);
   }
   VxeUI.setLanguage(locale);
+  VxeUI.use(VxeUIPluginExportXLSX, {
+    ExcelJS,
+  });
   //全局引用
   window._ = _;
   window.myCommon = myCommon;
