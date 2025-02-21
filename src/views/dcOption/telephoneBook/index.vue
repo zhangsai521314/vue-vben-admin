@@ -84,16 +84,15 @@
       </vxe-grid>
       <a-drawer
         :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-        :width="500"
+        :width="locale == 'zh-CN' ? 500 : 500"
         :visible="isShowForm"
         :title="t('view.configuration')"
         :footer-style="{ textAlign: 'right' }"
         @close="formClose"
       >
         <a-form
-          :label-col="{ span: 6 }"
+          :label-col="{ span: locale == 'zh-CN' ? 6 : 10 }"
           :style="{ paddingRight: '2px' }"
-          :wrapper-col="{ span: 16 }"
           autocomplete="off"
           ref="formRef"
           :model="formData"

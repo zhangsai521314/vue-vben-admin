@@ -58,7 +58,6 @@
             :border="true"
             ref="tableRef"
             height="100%"
-            show-overflow
             :custom-config="{ storage: true }"
             :row-config="{ keyField: 'menuId' }"
             :column-config="{ resizable: true }"

@@ -76,7 +76,10 @@
                       ::placeholder="durationUnit == 'ss' ? t('view.seconds') : t('view.minutes')"
                     >
                       <template #addonBefore>
-                        <a-select v-model:value="durationQueryType" style="width: 140px">
+                        <a-select
+                          v-model:value="durationQueryType"
+                          :style="{ width: locale == 'zh-CN' ? ' 140px' : '164px' }"
+                        >
                           <a-select-option :value="3"
                             >{{ t('view.callDuration') }}>=</a-select-option
                           >
@@ -86,7 +89,10 @@
                         </a-select>
                       </template>
                       <template #addonAfter>
-                        <a-select v-model:value="durationUnit" style="width: 100px">
+                        <a-select
+                          v-model:value="durationUnit"
+                          :style="{ width: locale == 'zh-CN' ? ' 100px' : '104px' }"
+                        >
                           <a-select-option value="ss">{{ t('view.seconds') }}</a-select-option>
                           <a-select-option value="mm">{{ t('view.minutes') }}</a-select-option>
                         </a-select>

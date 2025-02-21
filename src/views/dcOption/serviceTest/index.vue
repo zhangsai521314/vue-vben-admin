@@ -1,169 +1,97 @@
 <template>
   <MyContent :class="prefixCls">
-    <a-spin :spinning="loading">
-      <div style="width: 100%; height: 100%">
-        <vxe-toolbar ref="toolbarRef" custom>
-          <template #buttons>
-            <div :class="`tableBtn`">
-              <a-space direction="horizontal" size="small" style="margin-left: 5px">
-                <AuthDom auth="dcOption_serviceTest_query">
-                  <a-space
-                    direction="horizontal"
-                    size="small"
-                    :wrap="true"
-                    style="margin-bottom: 0"
-                  >
-                    <div class="row-div">
-                      <a-space direction="horizontal" size="small" :wrap="true">
-                        <label>{{ t('view.selfCheckTime') }}：</label>
-                        <a-config-provider :locale="zhCN">
-                          <a-range-picker
-                            :allowClear="false"
-                            v-model:value="timeValue"
-                            :showTime="true"
-                            format="YYYY-MM-DD HH:mm:ss"
-                          />
-                        </a-config-provider>
-                      </a-space>
-                    </div>
-                    <div class="row-div">
-                      <a-space direction="horizontal" size="small" :wrap="true">
-                        <label>{{ t('view.softwareName') }}：</label>
-                        <a-select
-                          :placeholder="t('view.pleaseSelectServiceName')"
-                          style="width: 170px"
-                          allow-clear
-                          show-search
-                          :filter-option="AntVueCommon.filterOption"
-                          v-model:value="seacthContent.serviceId"
-                          :options="serviceData"
-                        />
-                      </a-space>
-                    </div>
-                    <div class="row-div">
-                      <a-space direction="horizontal" size="small" :wrap="true">
-                        <a-button @click="initPage()" type="primary">{{
-                          t('view.query')
-                        }}</a-button>
-                        <a-spin :spinning="exportDataSpinning">
-                          <a-button @click="exportData" type="primary">{{
-                            t('view.export')
-                          }}</a-button>
-                        </a-spin>
-                      </a-space>
-                    </div>
+    <vxe-grid
+      :scroll-y="{ enabled: true }"
+      v-bind="tableConfig"
+      :auto-resize="true"
+      id="ddServcerCallRecord"
+      ref="tableRef"
+      :loading="loading"
+      :seq-config="{ startIndex: (page.current - 1) * page.size }"
+      :row-config="{ isHover: true, useKey: true, keyField: 'testId' }"
+      :column-config="{ resizable: true }"
+      :custom-config="{ storage: true }"
+      @sort-change="onSortChange"
+    >
+      <template #toolbar_buttons>
+        <div :class="`tableBtn`">
+          <a-space direction="horizontal" size="small" style="margin-left: 5px">
+            <AuthDom auth="dcOption_serviceTest_query">
+              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>{{ t('view.selfCheckTime') }}：</label>
+                    <a-config-provider :locale="zhCN">
+                      <a-range-picker
+                        :allowClear="false"
+                        v-model:value="timeValue"
+                        :showTime="true"
+                        format="YYYY-MM-DD HH:mm:ss"
+                      />
+                    </a-config-provider>
                   </a-space>
-                </AuthDom>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <label>{{ t('view.softwareName') }}：</label>
+                    <a-select
+                      :placeholder="t('view.pleaseSelectServiceName')"
+                      style="width: 170px"
+                      allow-clear
+                      show-search
+                      :filter-option="AntVueCommon.filterOption"
+                      v-model:value="seacthContent.serviceId"
+                      :options="serviceData"
+                    />
+                  </a-space>
+                </div>
+                <div class="row-div">
+                  <a-space direction="horizontal" size="small" :wrap="true">
+                    <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
+                    <a-spin :spinning="exportDataSpinning">
+                      <a-button @click="exportData" type="primary">{{ t('view.export') }}</a-button>
+                    </a-spin>
+                  </a-space>
+                </div>
               </a-space>
-            </div>
-          </template>
-        </vxe-toolbar>
-        <div style="width: 100%; height: calc(100% - 80px)">
-          <vxe-table
-            :scroll-y="{ enabled: true }"
-            id="serviceTest"
-            :auto-resize="true"
-            :border="true"
-            height="100%"
-            ref="tableRef"
-            show-overflow
-            :seq-config="{ startIndex: (page.current - 1) * page.size }"
-            :custom-config="{ storage: true }"
-            :row-config="{ isHover: true, useKey: true, keyField: 'testId' }"
-            :column-config="{ resizable: true }"
-            :tree-config="{ transform: true, rowField: 'testId', parentField: 'parentId' }"
-            :data="tableConfigData"
-            @sort-change="onSortChange"
-          >
-            <vxe-column
-              type="seq"
-              :title="t('view.serialNumber')"
-              :minWidth="locale == 'zh-CN' ? 70 : 160"
-              fixed="left"
-            />
-            <vxe-column
-              field="testId"
-              :title="t('view.recordId')"
-              :visible="false"
-              :minWidth="136"
-              fixed="left"
-            />
-            <vxe-column
-              field="serviceCode"
-              :title="t('view.serviceNumber')"
-              :visible="false"
-              :sortable="true"
-              :minWidth="160"
-              fixed="left"
-            />
-            <vxe-column
-              field="serviceName"
-              :title="t('view.softwareName')"
-              :sortable="true"
-              :minWidth="200"
-            />
-            <vxe-column
-              field="testStepName"
-              :title="t('view.selfCheckName')"
-              tree-node
-              :sortable="true"
-              :minWidth="150"
-              fixed="left"
-            />
-            <vxe-column
-              field="testStatus"
-              :title="t('view.selfCheckStatus')"
-              :sortable="true"
-              :minWidth="100"
-            >
-              <template #default="{ row }">
-                <span
-                  :class="{
-                    defStatus: row.testStatus == 1,
-                    jinGaoStatus: row.testStatus == 2,
-                    errorStatus: row.testStatus != 2 && row.testStatus != 1,
-                  }"
-                  >{{
-                    row.testStatus == 0
-                      ? t('view.notSelfChecked')
-                      : row.testStatus == 1
-                        ? t('view.pass')
-                        : row.testStatus == 2
-                          ? t('view.skip')
-                          : t('view.failure')
-                  }}</span
-                >
-              </template>
-            </vxe-column>
-            <vxe-column
-              field="testStep"
-              :title="t('view.selfCheckSteps')"
-              :sortable="true"
-              :minWidth="150"
-            />
-            <vxe-column
-              field="dataTime"
-              :title="t('view.selfCheckTime')"
-              :sortable="true"
-              :minWidth="150"
-            />
-          </vxe-table>
-          <vxe-pager
-            background
-            v-model:current-page="page.current"
-            v-model:page-size="page.size"
-            :total="page.total"
-            @page-change="handlePageChange"
-          />
+            </AuthDom>
+          </a-space>
         </div>
-      </div>
-    </a-spin>
+      </template>
+      <template #pager>
+        <vxe-pager
+          background
+          v-model:current-page="page.current"
+          v-model:page-size="page.size"
+          :total="page.total"
+          @page-change="handlePageChange"
+        />
+      </template>
+      <template #testStatus="{ row }">
+        <span
+          :class="{
+            defStatus: row.testStatus == 1,
+            jinGaoStatus: row.testStatus == 2,
+            errorStatus: row.testStatus != 2 && row.testStatus != 1,
+          }"
+          >{{
+            row.testStatus == 0
+              ? t('view.notSelfChecked')
+              : row.testStatus == 1
+                ? t('view.pass')
+                : row.testStatus == 2
+                  ? t('view.skip')
+                  : t('view.failure')
+          }}</span
+        >
+      </template>
+    </vxe-grid>
   </MyContent>
 </template>
 <script setup lang="ts">
   import zhCN from 'ant-design-vue/es/locale/zh_CN';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
-  import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
+  import { ref, reactive, onMounted } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { ServiceTest as serviceTestApi } from '@/api/dcOption';
   import serviceApi from '@/api/software';
@@ -171,6 +99,7 @@
   import 'dayjs/locale/zh-cn';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
+  import { VxeGrid, VxeGridProps } from 'vxe-table';
 
   const { t } = useI18n();
   const localeStore = useLocaleStore();
@@ -198,6 +127,87 @@
     sortlist: ['dataTime desc,testStep asc'],
   });
   const exportDataSpinning = ref(false);
+  const tableConfig = reactive<VxeGridProps>({
+    height: 'auto',
+    treeConfig: {
+      rowField: 'testId',
+      childrenField: 'children',
+    },
+    columns: [
+      //基础
+      {
+        type: 'seq',
+        title: t('view.serialNumber'),
+        minWidth: locale == 'zh-CN' ? 70 : 160,
+        fixed: 'left',
+      },
+      {
+        field: 'testId',
+        title: t('view.recordId'),
+        visible: false,
+        showOverflow: true,
+        minWidth: locale == 'zh-CN' ? 130 : 150,
+        fixed: 'left',
+      },
+      {
+        field: 'serviceCode',
+        title: t('view.serviceNumber'),
+        visible: false,
+        showOverflow: true,
+        sortable: true,
+        minWidth: 160,
+        fixed: 'left',
+      },
+      {
+        field: 'serviceName',
+        title: t('view.softwareName'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 150,
+        fixed: 'left',
+        treeNode: true,
+      },
+      {
+        field: 'testStepName',
+        title: t('view.selfCheckName'),
+        visible: false,
+        showOverflow: true,
+        sortable: true,
+        minWidth: 150,
+      },
+      {
+        field: 'testStatus',
+        title: t('view.selfCheckStatus'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: locale == 'zh-CN' ? 100 : 130,
+        slots: {
+          default: 'testStatus',
+        },
+      },
+      {
+        field: 'testStep',
+        title: t('view.selfCheckSteps'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 150,
+      },
+      {
+        field: 'dataTime',
+        title: t('view.selfCheckTime'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 150,
+      },
+    ],
+    toolbarConfig: {
+      custom: true,
+      slots: {
+        buttons: 'toolbar_buttons',
+      },
+    },
+    data: [],
+  });
 
   getDCOptionServiceTests();
   getServices();
@@ -220,12 +230,12 @@
         },
       })
       .then((data) => {
-        tableConfigData.value = data.source;
+        tableConfig.data = data.source;
         page.total = data.totalCount;
         page.current = data.pageIndex;
       })
       .catch(() => {
-        tableConfigData.value = [];
+        tableConfig.value.data = [];
         page.total = 0;
       });
   }
@@ -305,12 +315,12 @@
   }
 
   onMounted(() => {
-    // 将表格和工具栏进行关联
-    const $table = tableRef.value;
-    const $toolbar = toolbarRef.value;
-    if ($table && $toolbar) {
-      $table.connect($toolbar);
-    }
+    // // 将表格和工具栏进行关联
+    // const $table = tableRef.value;
+    // const $toolbar = toolbarRef.value;
+    // if ($table && $toolbar) {
+    //   $table.connect($toolbar);
+    // }
   });
 </script>
 <style lang="less" scoped>
