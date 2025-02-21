@@ -31,9 +31,6 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>{{ t('view.equipmentNumber') }}：</label>
                     <a-input
-                      :style="{
-                        width: locale == 'zh-CN' ? '180px' : locale == 'en-US' ? '200px' : '350px',
-                      }"
                       @press-enter="initPage"
                       v-model:value="seacthContent.equipmentCode"
                       :placeholder="t('view.queryByInputtingEquipmentNumber')"
@@ -90,7 +87,7 @@
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <a-spin :spinning="downLinceSourceSpinning">
                       <a-button class="ant-btn" @click="downLinceSource" type="primary">{{
-                        t('view.downloadAuthorizationInfo')
+                        t('view.downloadDeviceInformation')
                       }}</a-button>
                     </a-spin>
                   </a-space>

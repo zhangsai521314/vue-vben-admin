@@ -411,15 +411,6 @@
         cellRender: { name: 'render_isno' },
         visible: false,
       },
-
-      {
-        field: 'isAutoRegister',
-        title: t('view.autoRegister'),
-        minWidth: locale == 'zh-CN' ? 100 : 200,
-        showOverflow: true,
-        cellRender: { name: 'render_isno' },
-        visible: false,
-      },
       {
         field: 'isGetLinces',
         title: t('view.obtainAuthorization'),

@@ -39,7 +39,7 @@
   "outgoingRinging": "呼出响铃",
   "incomingRinging": "呼入响铃",
   "freetimeIdle": "空闲",
-  "downloadAuthorizationInfo": "下载授权信息",
+  "downloadDeviceInformation": "下载设备信息",
   "deleteLineInformationSuccessfully": "删除线路信息成功",
   "remarkIsTooLong": "备注过长",
   "remark": "备注",

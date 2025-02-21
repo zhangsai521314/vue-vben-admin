@@ -39,7 +39,7 @@
   "outgoingRinging": "Outgoing Ringing",
   "incomingRinging": "Incoming Ringing",
   "freetimeIdle": "Free time Idle",
-  "downloadAuthorizationInfo": "Download Authorization Information",
+  "downloadDeviceInformation": "Download device information",
   "deleteLineInformationSuccessfully": "Delete line information successfully",
   "remarkIsTooLong": "Remark is too long",
   "remark": "Remark",

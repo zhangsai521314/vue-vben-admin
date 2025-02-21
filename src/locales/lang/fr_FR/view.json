@@ -39,7 +39,7 @@
   "outgoingRinging": "Sonnerie d'appel sortant",
   "incomingRinging": "Sonnerie d'appel entrant",
   "freetimeIdle": "Libre",
-  "downloadAuthorizationInfo": "Télécharger les informations d'autorisation",
+  "downloadDeviceInformation": "Téléchargez les informations sur l'appareil",
   "deleteLineInformationSuccessfully": "Supprimer les informations de ligne avec succès",
   "remarkIsTooLong": "La Remarque est trop longue",
   "remark": "Remarque",
