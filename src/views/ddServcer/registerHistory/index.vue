@@ -34,7 +34,7 @@
                     <label>{{ t('view.functionNumberType') }}：</label>
                     <a-select
                       :placeholder="t('view.pleaseSelectFunctionNumberType')"
-                      style="width: 170px"
+                      :style="{ width: locale == 'zh-CN' ? '170px' : '260px' }"
                       allow-clear
                       v-model:value="seacthContent.regType"
                     >
@@ -75,7 +75,7 @@
                     <label>{{ t('view.operationType') }}：</label>
                     <a-select
                       :placeholder="t('view.pleaseSelectOperationType')"
-                      style="width: 170px"
+                      :style="{ width: locale == 'zh-CN' ? '170px' : '190px' }"
                       allow-clear
                       v-model:value="seacthContent.fnType"
                     >
@@ -238,7 +238,7 @@
         title: t('view.operationType'),
         showOverflow: true,
         sortable: true,
-        minWidth: locale == 'zh-CN' ? 100 : 140,
+        minWidth: locale == 'zh-CN' ? 100 : 220,
         slots: {
           default: 'fnType',
         },

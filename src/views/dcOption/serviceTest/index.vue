@@ -180,7 +180,7 @@
         title: t('view.selfCheckStatus'),
         showOverflow: true,
         sortable: true,
-        minWidth: locale == 'zh-CN' ? 100 : 130,
+        minWidth: locale == 'zh-CN' ? 100 : 140,
         slots: {
           default: 'testStatus',
         },

@@ -1,6 +1,6 @@
 <template>
   <MyContent>
-    <a-spin :spinning="isRunGet" title="正在执行...">
+    <a-spin :spinning="isRunGet">
       <!-- 开启多字段排序 -->
       <!-- :sort-config="{ multiple: true }" -->
       <vxe-grid
@@ -23,9 +23,9 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>车站名称：</label>
+                      <label>{{ t('view.stationName') }}：</label>
                       <a-select
-                        placeholder="请选择车站名称"
+                        :placeholder="t('view.pleaseSelectStationName')"
                         style="width: 170px"
                         allow-clear
                         show-search
@@ -37,11 +37,11 @@
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>ECI：</label>
+                      <label>{{ t('view.eciNumber') }}：</label>
                       <a-input
                         @press-enter="initPage()"
                         v-model:value="seacthContent.lacci"
-                        placeholder="输入ECI查询"
+                        :placeholder="t('view.inputECINumberToQuery')"
                       />
                     </a-space>
                   </div>
@@ -56,7 +56,9 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button class="ant-btn" @click="showFrom()">新增车站ECI关系</a-button>
+                      <a-button class="ant-btn" @click="showFrom()">{{
+                        t('view.addStationECIRelationship')
+                      }}</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -65,8 +67,10 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-spin :spinning="isRunMushMq" title="命令发送中">
-                        <a-button class="ant-btn" @click="pushMq()">同步命令</a-button>
+                      <a-spin :spinning="isRunMushMq" :title="t('view.commandSending')">
+                        <a-button class="ant-btn" @click="pushMq()">{{
+                          t('view.syncCommand')
+                        }}</a-button>
                       </a-spin>
                     </a-space>
                   </div>
@@ -122,8 +126,8 @@
           :model="formData"
         >
           <a-form-item
-            :rules="[{ required: true, message: '请选择所属线路' }]"
-            label="所属线路"
+            :rules="[{ required: true, message: t('view.pleaseSelectTheAssociatedLine') }]"
+            :label="t('view.belongsToLine')"
             name="lineId"
           >
             <a-select
@@ -134,12 +138,12 @@
               :options="lineDatas"
               :allowClear="true"
               @change="changeLine()"
-              placeholder="请选择所属线路"
+              :placeholder="t('view.pleaseSelectTheAssociatedLine')"
             />
           </a-form-item>
           <a-form-item
-            :rules="[{ required: true, message: '请选择车站' }]"
-            label="车站名称"
+            :rules="[{ required: true, message: t('view.pleaseSelectStationName') }]"
+            :label="t('view.stationName')"
             name="stationId"
           >
             <a-select
@@ -147,29 +151,29 @@
               v-model:value="formData.stationId"
               :options="stationDatas.filter((m) => m.lineId == formData.lineId)"
               :allowClear="true"
-              placeholder="请选择车站"
+              :placeholder="t('view.pleaseSelectStationName')"
               show-search
               :filter-option="AntVueCommon.filterOption"
             />
           </a-form-item>
           <a-form-item
-            :rules="[{ required: true, message: '请选择关系类型' }]"
-            label="关系类型"
+            :rules="[{ required: true, message: t('view.pleaseSelectTheAssociationType') }]"
+            :label="t('view.associationType')"
             name="type"
           >
             <a-select
               v-model:value="formData.type"
               :disabled="saveType != 'add'"
-              placeholder="请选择关系类型"
+              :placeholder="t('view.pleaseSelectTheAssociationType')"
             >
-              <a-select-option :value="1">站内</a-select-option>
-              <a-select-option :value="2">本站左侧</a-select-option>
-              <a-select-option :value="3">本站右侧</a-select-option>
+              <a-select-option :value="1">{{ t('view.inStation') }}</a-select-option>
+              <a-select-option :value="2">{{ t('view.leftSideOfThisStation') }}</a-select-option>
+              <a-select-option :value="3">{{ t('view.rightSideOfThisStation') }}</a-select-option>
             </a-select>
           </a-form-item>
           <a-form-item
             :rules="[{ required: true, message: '请选择ECI名称集合' }]"
-            label="ECI名称集合"
+            :label="t('view.eciNumber')"
             name="lacciIds"
           >
             <a-select
@@ -179,7 +183,7 @@
               :allowClear="true"
               show-search
               :filter-option="AntVueCommon.filterOption"
-              placeholder="请选择ECI名称集合"
+              :placeholder="t('view.pleaseSelectECINumber')"
             />
           </a-form-item>
         </a-form>
@@ -196,7 +200,7 @@
 <script setup lang="ts">
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import myCommon from '@/utils/MyCommon/common';
-  import { ref, reactive, createVNode, nextTick, watch, unref } from 'vue';
+  import { ref, reactive, createVNode } from 'vue';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import commonApi from '@/api/common';
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
@@ -230,9 +234,9 @@
       },
       {
         field: 'lineName',
-         title: t('view.lineName'),
+        title: t('view.lineName'),
         showOverflow: true,
-        
+
         sortable: true,
         visible: false,
         minWidth: 200,
@@ -240,9 +244,9 @@
       },
       {
         field: 'stationName',
-         title: t('view.stationName'),
+        title: t('view.stationName'),
         showOverflow: true,
-        
+
         sortable: false,
         minWidth: 200,
         fixed: 'left',
@@ -251,7 +255,7 @@
         field: 'typeName',
         title: '管辖区间',
         showOverflow: true,
-        
+
         sortable: false,
         minWidth: 100,
       },
@@ -259,7 +263,7 @@
         field: 'laccis',
         title: 'ECI集合',
         showOverflow: true,
-        
+
         minWidth: 200,
       },
       {
@@ -269,7 +273,7 @@
           default: 'default',
         },
         showOverflow: true,
-        
+
         fixed: 'right',
       },
     ],
@@ -361,7 +365,7 @@
         }
       })
       .catch(() => {
-        message.error('获取ECI失败');
+        message.error(t('view.failedToGetECIInformation'));
       });
   }
 
@@ -378,7 +382,7 @@
           .DeleteDDServerStationLacci({ StationId: row.stationId, Type: row.type })
           .then(() => {
             isRunGet.value = false;
-            message.success('删除ECI信息成功');
+            message.success(t('view.deletionSuccessful'));
             getDDServerStationTLaccis();
           })
           .catch(() => {
@@ -417,7 +421,7 @@
           saveType.value = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取ECI信息失败');
+          message.error(t('view.failedToGetECIInformation'));
         }
       })
       .catch(() => {
@@ -455,14 +459,14 @@
       if (saveType.value == 'add') {
         stationLacciApi.AUDDServerStationLacci(formData.value).then((data) => {
           formClose();
-          message.success('新增ECI成功');
+          message.success(t('view.additionSuccessful'));
           getDDServerStationTLaccis();
           page.total = page.total + 1;
         });
       } else {
         stationLacciApi.AUDDServerStationLacci(formData.value).then((data) => {
           formClose();
-          message.success('更新ECI信息成功');
+          message.success(t('view.updateSuccessful'));
           getDDServerStationTLaccis();
         });
       }

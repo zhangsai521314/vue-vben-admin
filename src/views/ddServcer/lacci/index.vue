@@ -1,6 +1,6 @@
 <template>
   <MyContent>
-    <a-spin :spinning="isRunGet" title="正在执行...">
+    <a-spin :spinning="isRunGet">
       <!-- 开启多字段排序 -->
       <!-- :sort-config="{ multiple: true }" -->
       <vxe-grid
@@ -23,21 +23,21 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>ECI名称：</label>
+                      <label>{{ t('view.eciNumber') }}：</label>
                       <a-input
-                        @press-enter="getDDServerTLaccis"
-                        v-model:value="seacthContent.name"
-                        placeholder="输入ECI名称查询"
+                        @press-enter="initPage()"
+                        v-model:value="seacthContent.lacci"
+                        :placeholder="t('view.inputECINumberToQuery')"
                       />
                     </a-space>
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>ECI：</label>
+                      <label>{{ t('view.eciName') }}：</label>
                       <a-input
-                        @press-enter="initPage()"
-                        v-model:value="seacthContent.lacci"
-                        placeholder="输入ECI查询"
+                        @press-enter="getDDServerTLaccis"
+                        v-model:value="seacthContent.name"
+                        :placeholder="t('view.enterEciNameToQuery')"
                       />
                     </a-space>
                   </div>
@@ -52,7 +52,9 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button class="ant-btn" @click="showFrom()">新增ECI</a-button>
+                      <a-button class="ant-btn" @click="showFrom()">{{
+                        t('view.addEci')
+                      }}</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -61,8 +63,10 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-spin :spinning="isRunMushMq" title="命令发送中">
-                        <a-button class="ant-btn" @click="pushMq()">同步命令</a-button>
+                      <a-spin :spinning="isRunMushMq" :title="t('view.commandSending')">
+                        <a-button class="ant-btn" @click="pushMq()">{{
+                          t('view.syncCommand')
+                        }}</a-button>
                       </a-spin>
                     </a-space>
                   </div>
@@ -118,59 +122,67 @@
           :model="formData"
         >
           <a-form-item
-            label="名称"
+            :label="t('view.eciName')"
             name="name"
             :rules="[
               { required: true, message: '' },
-              { max: 40, message: 'ECI名称过长' },
-              { validator: formValidator.empty, message: '请输入ECI名称' },
-            ]"
-          >
-            <a-input placeholder="请输入ECI名称" v-model:value="formData.name" autocomplete="off" />
-          </a-form-item>
-          <a-form-item
-            label="ECI"
-            name="lacci"
-            :rules="[
-              { required: true, message: '' },
-              { min: 4, message: 'ECI号码是4至8位' },
-              { max: 8, message: 'ECI号码是4至8位' },
-              { validator: formValidator.empty, message: '请输入ECI号码' },
+              { max: 40, message: t('view.eciNameIsTooLong') },
+              { validator: formValidator.empty, message: t('view.pleaseEnterEciName') },
             ]"
           >
             <a-input
-              placeholder="请输入ECI号码"
+              :placeholder="t('view.pleaseEnterEciName')"
+              v-model:value="formData.name"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            :label="t('view.eciNumber')"
+            name="lacci"
+            :rules="[
+              { required: true, message: '' },
+              { min: 4, message: t('view.eciNumberMustBe4To8Digits') },
+              { max: 8, message: t('view.eciNumberMustBe4To8Digits') },
+              { validator: formValidator.empty, message: t('view.pleaseEnterEciNumber') },
+            ]"
+          >
+            <a-input
+              :placeholder="t('view.pleaseEnterEciNumber')"
               v-model:value="formData.lacci"
               autocomplete="off"
             />
           </a-form-item>
           <a-form-item
             name="longitude"
-            label="经度"
+            :label="t('view.longitude')"
             :rules="[{ validator: formValidator.longitude }]"
           >
             <a-input
               style="width: 262px"
-              placeholder="请输入经度"
+              :placeholder="t('view.pleaseEnterLongitude')"
               v-model:value="formData.longitude"
               autocomplete="off"
             />
           </a-form-item>
           <a-form-item
             name="latitude"
-            label="纬度"
+            :label="t('view.latitude')"
             :rules="[{ validator: formValidator.latitude }]"
           >
             <a-input
               style="width: 262px"
-              placeholder="请输入纬度"
+              :placeholder="t('view.pleaseEnterLatitude')"
               v-model:value="formData.latitude"
               autocomplete="off"
             />
           </a-form-item>
-          <a-form-item name="reamrk" label="备注" :rules="[{ max: 250, message: '备注过长' }]">
+          <a-form-item
+            name="reamrk"
+            :label="t('view.remark')"
+            :rules="[{ max: 250, message: t('view.remarkIsTooLong') }]"
+          >
             <a-textarea
-              placeholder="请输入备注"
+              :placeholder="t('view.pleaseInputRemarkInformation')"
               :rows="3"
               v-model:value="formData.reamrk"
               autocomplete="off"
@@ -190,9 +202,9 @@
 <script setup lang="ts">
   import myCommon from '@/utils/MyCommon/common';
   import formValidator from '@/utils/MyCommon/formValidator';
-  import { ref, reactive, createVNode, nextTick, watch, unref } from 'vue';
+  import { ref, reactive, createVNode } from 'vue';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
-  import { Line as lineApi, Station as stationApi, Lacci as lacciApi } from '@/api/ddServcer';
+  import { Lacci as lacciApi } from '@/api/ddServcer';
   import commonApi from '@/api/common';
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
   import { message, Modal } from 'ant-design-vue';
@@ -226,26 +238,23 @@
       },
       {
         field: 'name',
-        title: 'ECI名称',
+        title: t('view.eciName'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 110,
         fixed: 'left',
       },
       {
         field: 'lacci',
-        title: 'ECI',
+        title: t('view.eciNumber'),
         showOverflow: true,
-
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 120,
       },
       {
         field: 'longitude',
         title: t('view.longitude'),
         showOverflow: true,
-
         sortable: true,
         minWidth: 100,
       },
@@ -254,15 +263,13 @@
         field: 'latitude',
         title: t('view.latitude'),
         showOverflow: true,
-
         sortable: true,
         minWidth: 100,
       },
       {
         field: 'reamrk',
-        title: '备注信息',
+        title: t('view.remarks'),
         showOverflow: true,
-
         visible: false,
         sortable: true,
         minWidth: 100,
@@ -365,7 +372,7 @@
           .DeleteDDServerTLacci(row.id.toString())
           .then(() => {
             isRunGet.value = false;
-            message.success('删除ECI信息成功');
+            message.success(t('view.deletionSuccessful'));
             getDDServerTLaccis();
           })
           .catch(() => {
@@ -395,7 +402,7 @@
           saveType.value = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取ECI信息失败');
+          message.error(t('view.failedToRetrieveEciInformation'));
         }
       })
       .catch(() => {
@@ -440,7 +447,7 @@
         lacciApi.AddDDServerTLacci(formData.value).then((data) => {
           tableConfig.data?.splice(0, 0, data);
           formClose();
-          message.success('新增ECI成功');
+          message.success(t('view.additionSuccessful'));
           page.total = page.total + 1;
         });
       } else {
@@ -450,7 +457,7 @@
             myCommon.objectReplace(oldData, formData.value);
           }
           formClose();
-          message.success('更新ECI信息成功');
+          message.success(t('view.updateSuccessful'));
         });
       }
     });

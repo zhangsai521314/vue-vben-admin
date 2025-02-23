@@ -1,6 +1,6 @@
 <template>
   <MyContent>
-    <a-spin :spinning="isRunGet" title="正在执行...">
+    <a-spin :spinning="isRunGet">
       <!-- 开启多字段排序 -->
       <!-- :sort-config="{ multiple: true }" -->
       <vxe-grid
@@ -23,11 +23,11 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>IP：</label>
+                      <label>{{ t('view.ip') }}：</label>
                       <a-input
                         @press-enter="initPage"
                         v-model:value="seacthContent.ip"
-                        placeholder="输入IP查询"
+                        :placeholder="t('view.inputIpQuery')"
                       />
                     </a-space>
                   </div>
@@ -42,7 +42,9 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button class="ant-btn" @click="showFrom()">新增黑名单</a-button>
+                      <a-button class="ant-btn" @click="showFrom()">{{
+                        t('view.addBlacklist')
+                      }}</a-button>
                     </a-space>
                   </div>
                 </a-space>
@@ -51,8 +53,10 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-spin :spinning="isRunMushMq" title="命令发送中">
-                        <a-button class="ant-btn" @click="pushMq()">同步命令</a-button>
+                      <a-spin :spinning="isRunMushMq" :title="t('view.commandSending')">
+                        <a-button class="ant-btn" @click="pushMq()">{{
+                          t('view.syncCommand')
+                        }}</a-button>
                       </a-spin>
                     </a-space>
                   </div>
@@ -108,19 +112,27 @@
           :model="formData"
         >
           <a-form-item
-            label="IP"
+            :label="t('view.ip')"
             name="ip"
             :rules="[
               { required: true, message: '' },
-              { validator: formValidator.ip, message: 'IP地址不正确' },
-              { validator: formValidator.empty, message: '请输入黑名单IP' },
+              { validator: formValidator.ip, message: t('view.ipAddressIsIncorrect') },
+              { validator: formValidator.empty, message: t('view.pleaseEnterBlacklistIp') },
             ]"
           >
-            <a-input placeholder="请输入黑名单IP" v-model:value="formData.ip" autocomplete="off" />
+            <a-input
+              :placeholder="t('view.pleaseEnterBlacklistIp')"
+              v-model:value="formData.ip"
+              autocomplete="off"
+            />
           </a-form-item>
-          <a-form-item name="remark" label="备注" :rules="[{ max: 250, message: '备注过长' }]">
+          <a-form-item
+            name="remark"
+            :label="t('view.remark')"
+            :rules="[{ max: 250, message: t('view.remarkIsTooLong') }]"
+          >
             <a-textarea
-              placeholder="请输入备注"
+              :placeholder="t('view.pleaseInputRemarkInformation')"
               :rows="3"
               v-model:value="formData.remark"
               autocomplete="off"
@@ -140,7 +152,7 @@
 <script setup lang="ts">
   import myCommon from '@/utils/MyCommon/common';
   import formValidator from '@/utils/MyCommon/formValidator';
-  import { ref, reactive, createVNode, nextTick, watch } from 'vue';
+  import { ref, reactive, createVNode } from 'vue';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import { Black as blackApi } from '@/api/ddServcer';
   import { message, Modal } from 'ant-design-vue';
@@ -178,25 +190,22 @@
         field: 'ip',
         title: 'IP',
         showOverflow: true,
-
         sortable: true,
         minWidth: 100,
         fixed: 'left',
       },
       {
         field: 'remark',
-        title: '备注信息',
+        title: t('view.remarks'),
         showOverflow: true,
-
         sortable: true,
         minWidth: 130,
       },
       {
         field: 'updateTime',
-        title: '更新时间',
-        minWidth: 150,
+        title: t('view.updateTime'),
+        minWidth: locale == 'zh-CN' ? 150 : 170,
         showOverflow: true,
-
         sortable: true,
       },
       {
@@ -291,7 +300,7 @@
           .DeleteDDServerBlack(row.id.toString())
           .then(() => {
             isRunGet.value = false;
-            message.success('删除黑名单信息成功');
+            message.success(t('view.deletionSuccessful'));
             getDDServerBlacks();
           })
           .catch(() => {
@@ -321,7 +330,7 @@
           saveType.value = 'edit';
           isShowForm.value = true;
         } else {
-          message.error('获取黑名单信息失败');
+          message.error(t('view.failedToRetrieveBlacklistInformation'));
         }
       })
       .catch(() => {
@@ -360,7 +369,7 @@
         blackApi.AddDDServerBlack(formData.value).then((data) => {
           tableConfig.data?.splice(0, 0, data);
           formClose();
-          message.success('新增黑名单成功');
+          message.success(t('view.additionSuccessful'));
           page.total = page.total + 1;
         });
       } else {
@@ -371,7 +380,7 @@
             oldData.updateTime = data.updateTime;
           }
           formClose();
-          message.success('更新黑名单信息成功');
+          message.success(t('view.updateSuccessful'));
         });
       }
     });

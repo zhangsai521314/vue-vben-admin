@@ -121,7 +121,7 @@
       </template>
       <template #desFn="{ row }"> {{ row.desFn ? row.desFn : '-' }} </template>
       <template #result="{ row }">
-        {{ row.result == 0 ? t('view.success') : t('view.failure', [`失败(${row.result})`]) }}
+        {{ row.result == 0 ? t('view.success') : t('view.failure', [`(${row.result})`]) }}
       </template>
       <template #type="{ row }">
         {{
