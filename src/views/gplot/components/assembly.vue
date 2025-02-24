@@ -7,7 +7,7 @@
           <IconFontClass :name="item.icon" />
         </div>
         <div>
-          {{ item.name }}
+          <!-- {{ item.name }} -->
         </div>
       </div>
     </div>
@@ -27,7 +27,7 @@
             }).key == 'Sys'
           "
         >
-          <a-spin tip="加载中..." :spinning="isLoadSys">
+          <a-spin :spinning="isLoadSys">
             <div :class="`${prefixCls}sys-item`">
               <div v-for="(t, index) in userAssemblySys" :key="index">
                 <div>
@@ -60,6 +60,9 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import gplotApi from '@/api/gplot';
   import { useGplotStoreWithOut } from '@/store/modules/gplot';
+  import { useI18n } from '@/hooks/web/useI18n';
+
+  const { t } = useI18n();
 
   const props = defineProps({
     //拓扑对象
@@ -77,7 +80,7 @@
   //全部的assembly
   const assemblyAll = ref([
     {
-      name: '素材',
+      name: t('view.material'),
       key: 'Sys',
       icon: 'icon-baseui-sucai',
       isSelected: true,

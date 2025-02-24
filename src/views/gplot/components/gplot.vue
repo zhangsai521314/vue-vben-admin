@@ -1,5 +1,5 @@
 <template>
-  <a-spin tip="渲染中..." :spinning="rendering">
+  <a-spin :spinning="rendering">
     <!-- <button @click="executeCode">执行后端代码</button> -->
     <div
       onclick=""
@@ -19,14 +19,10 @@
 
 <script setup lang="ts">
   import { useAppStore } from '@/store/modules/app';
-  import { Circle } from '@antv/g';
-  import { CubicHorizontal, ExtensionCategory, Graph, register, subStyleProps } from '@antv/g6';
-  import { Renderer } from '@antv/g-svg';
-  import dayjs from 'dayjs';
+  import { Graph } from '@antv/g6';
   import ContextMenu from '@imengyu/vue3-context-menu';
-  import { onMounted, ref, nextTick, createVNode, watch, unref, onBeforeUnmount } from 'vue';
-  import { message, Modal } from 'ant-design-vue';
-  import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
+  import { onMounted, ref, watch } from 'vue';
+  import { message } from 'ant-design-vue';
   import { tryOnUnmounted } from '@vueuse/core';
   import { useGplotStoreWithOut } from '@/store/modules/gplot';
   import html2Canvas from 'html2canvas';
@@ -34,9 +30,11 @@
   //快捷键监控
   import shortcutKey from 'keymaster';
   import gplotApi from '@/api/gplot';
-  import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils';
   import softwareApi from '@/api/software';
   import messageApi from '@/api/message';
+  import { useI18n } from '@/hooks/web/useI18n';
+
+  const { t } = useI18n();
 
   const props = defineProps({
     viewType: {
@@ -105,7 +103,7 @@
           gplotStore.gplotKeyOb[gplotKey].containerConfig.runSave = false;
         }
       } catch (error) {
-        message.warning('获取配置信息失败');
+        message.warning(t('view.failedToRetrieveConfigurationInformation'));
       }
     }
     // //自定义边上的marker的渲染规则
@@ -242,7 +240,7 @@
           },
           onCreate: (e) => {
             if (e.source == e.target) {
-              message.info('同一节点不可连线');
+              message.info(t('view.cannotConnectTheSameNode'));
               return null;
             }
             const data = graphOb.getData();
@@ -264,7 +262,7 @@
                 };
                 return e;
               } else {
-                message.info('该节点直接已有连线');
+                message.info(t('view.thereIsAlreadyAConnectionBetweenTheNodes'));
                 return null;
               }
             }
@@ -296,14 +294,14 @@
                     //   },
                     // },
                     {
-                      label: '删除',
+                      label: t('view.delete'),
                       icon: '',
                       onClick: () => {
                         deleteGplot(gplotStore.gplotKeyOb[gplotKey].selectedOb);
                       },
                     },
                     {
-                      label: '组合',
+                      label: t('view.group'),
                       icon: '',
                       // disabled: true,
                       onClick: () => {
@@ -311,7 +309,7 @@
                       },
                     },
                     {
-                      label: '拆分',
+                      label: t('view.split'),
                       icon: '',
                       // disabled: true,
                       onClick: () => {
@@ -547,7 +545,7 @@
             })
             .then(() => {
               gplotStore.gplotKeyOb[gplotKey].containerConfig.runSave = false;
-              message.success('保存配置成功');
+              message.success(t('view.saveSuccessful'));
             })
             .catch(() => {
               gplotStore.gplotKeyOb[gplotKey].containerConfig.runSave = false;
@@ -555,7 +553,7 @@
         })
         .catch((e) => {
           console.error('图片生成错误', e);
-          message.error('结构有错误，请检查');
+          message.error(t('view.thereIsAnErrorInTheStructurePleaseCheck'));
         });
     } catch (error) {
       console.error('动态保存配置错误', error);
@@ -649,7 +647,7 @@
         //图标
         iconText: eval(`'${ob.iconUnicode}'`),
         lineWidth: 0,
-        labelText: '默认文字',
+        labelText: t('view.defaultText'),
       },
       //自定义信息
       data: {
@@ -738,7 +736,7 @@
         graphOb.updateNodeData(nodes);
         graphOb.draw();
       } else {
-        message.info('不支持此组合');
+        message.info(t('view.thisCombinationIsNotSupported'));
       }
       //有组合有节点:另外的组合形式
     }

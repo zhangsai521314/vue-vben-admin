@@ -12,14 +12,14 @@
           v-model:activeKey="nodeTabsActiveKey"
           :tabBarStyle="{ height: '32px', marginBottom: '0.5px', background: '#fff' }"
         >
-          <a-tab-pane key="attr" tab="属性">
+          <a-tab-pane key="attr" :tab="t('view.attribute')">
             <a-form
               :label-col="{ span: 10 }"
               :wrapper-col="{ span: 14 }"
               autocomplete="off"
               :model="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style"
             >
-              <a-form-item style="margin-top: 1px" name="id" label="节点id">
+              <a-form-item style="margin-top: 1px" name="id" :label="t('view.nodeId')">
                 <a-input
                   disabled
                   :value="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.id"
@@ -32,7 +32,7 @@
                     'node',
                 }"
                 name="size"
-                label="整体大小"
+                :label="t('view.overallSize')"
               >
                 <a-input-number
                   v-model:value="
@@ -51,8 +51,10 @@
                     'node',
                 }"
                 name="x"
-                label="水平位置X"
-                :rules="[{ required: true, message: '请输入水平位置' }]"
+                :label="t('view.horizontalPositionX')"
+                :rules="[
+                  { required: true, message: t('view.pleaseEnterTheHorizontalPosition', ['X']) },
+                ]"
               >
                 <a-input-number
                   style="width: 100px"
@@ -69,8 +71,10 @@
                     'node',
                 }"
                 name="y"
-                label="水平位置Y"
-                :rules="[{ required: true, message: '请输入水平位置y' }]"
+                :label="t('view.horizontalPositionY')"
+                :rules="[
+                  { required: true, message: t('view.pleaseEnterTheHorizontalPosition', ['Y']) },
+                ]"
               >
                 <a-input-number
                   v-model:value="
@@ -88,7 +92,7 @@
                       'combo',
                 }"
                 name="fill"
-                label="背景颜色"
+                :label="背景颜色"
               >
                 <div>
                   <selectColor
@@ -109,7 +113,7 @@
                     'node',
                 }"
                 name="iconFill"
-                label="图标颜色"
+                :label="t('view.iconColor')"
               >
                 <div>
                   <selectColor
@@ -132,7 +136,7 @@
                     'node',
                 }"
                 name="iconFontSize"
-                label="图标大小"
+                :label="t('view.iconSize')"
                 :autoLink="false"
               >
                 <a-row>
@@ -165,7 +169,7 @@
                     'node',
                 }"
                 name="stroke"
-                label="线条颜色"
+                :label="t('view.lineColor')"
               >
                 <div>
                   <selectColor
@@ -181,15 +185,16 @@
                   />
                 </div>
               </a-form-item>
-              <a-form-item
+
+              <!-- <a-form-item
                 :class="{
                   'not-click':
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
                     'node',
                 }"
                 name="lineWidth"
-                label="线条宽度"
-                :rules="[{ required: true, message: '请输入线条宽度' }]"
+                :label="t('view.lineWidth')"
+                :rules="[{ required: true, message: t('view.pleaseEnterTheLineWidthk') }]"
                 :autoLink="false"
               >
                 <a-row>
@@ -213,12 +218,12 @@
                     :max="50"
                   />
                 </a-row>
-              </a-form-item>
+              </a-form-item> -->
 
               <a-form-item
                 name="opacity"
-                label="透明度"
-                :rules="[{ required: true, message: '请输入透明度' }]"
+                :label="t('view.transparency')"
+                :rules="[{ required: true, message: t('view.pleaseEnterTheTransparency') }]"
                 :autoLink="false"
               >
                 <a-row>
@@ -251,7 +256,7 @@
                     'combo',
                 }"
                 name="labelText"
-                label="文字内容"
+                :label="t('view.textContent')"
               >
                 <!-- <a-input
                   v-model:value="
@@ -263,7 +268,7 @@
                   v-model:value="
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelText
                   "
-                  placeholder="文字内容"
+                  :placeholder="t('view.textContent')"
                 />
               </a-form-item>
               <a-form-item
@@ -273,7 +278,7 @@
                     'combo',
                 }"
                 name="labelFill"
-                label="文字颜色"
+                :label="t('view.textColor')"
               >
                 <div>
                   <selectColor
@@ -297,7 +302,7 @@
                     'combo',
                 }"
                 name="labelFontSize"
-                label="文字大小"
+                :label="t('view.textSize')"
                 :autoLink="false"
               >
                 <a-row>
@@ -332,7 +337,7 @@
                     'combo',
                 }"
                 name="labelOffsetX"
-                label="文字位移X"
+                :label="t('view.textOffsetX')"
               >
                 <a-input-number
                   v-model:value="
@@ -348,7 +353,7 @@
                     'combo',
                 }"
                 name="labelOffsetY"
-                label="文字位移Y"
+                :label="t('view.textOffsetY')"
               >
                 <a-input-number
                   v-model:value="
@@ -357,14 +362,15 @@
                   addon-after="px"
                 />
               </a-form-item>
-              <a-form-item
+              <!-- 
+               <a-form-item
                 :class="{
                   'not-click':
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
                     'combo',
                 }"
                 name="labelBackground"
-                label="文字背景"
+                :label="t('view.textBackground')"
               >
                 <a-checkbox
                   v-model:checked="
@@ -375,7 +381,7 @@
               </a-form-item>
               <a-form-item
                 name="labelBackgroundFill"
-                label="文字背景色"
+                :label="t('view.textColorBackground')"
                 v-show="
                   gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelBackground
                 "
@@ -403,7 +409,7 @@
                     'combo',
                 }"
                 name="labelBackgroundStroke"
-                label="文字边框颜色"
+                :label="文字边框颜色"
                 v-show="
                   gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelBackground
                 "
@@ -431,7 +437,7 @@
                     'combo',
                 }"
                 name="labelBackgroundLineWidth"
-                label="文字边框宽度"
+                :label="文字边框宽度"
                 v-show="
                   gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelBackground
                 "
@@ -469,7 +475,7 @@
                     'combo',
                 }"
                 name="labelBackgroundRadius"
-                label="文字边框圆角"
+                :label="文字边框圆角"
                 v-show="
                   gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelBackground
                 "
@@ -507,7 +513,7 @@
                     'combo',
                 }"
                 name="labelBackgroundOpacity"
-                label="文字边框透明"
+                :label="文字边框透明"
                 v-show="
                   gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelBackground
                 "
@@ -545,7 +551,7 @@
                     'combo',
                 }"
                 name="labelBackgroundLineDash"
-                label="文字边框分割"
+                :label="文字边框分割"
                 v-show="
                   gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelBackground
                 "
@@ -575,7 +581,7 @@
                     :precision="0"
                   />
                 </a-row>
-              </a-form-item>
+              </a-form-item> -->
               <a-form-item
                 :class="{
                   'not-click':
@@ -583,7 +589,7 @@
                     'edge',
                 }"
                 name="startArrow"
-                label="开始箭头"
+                :label="t('view.startArrow')"
               >
                 <a-checkbox
                   v-model:checked="
@@ -591,9 +597,9 @@
                   "
                 />
               </a-form-item>
-              <a-form-item
+              <!-- <a-form-item
                 name="startArrowType"
-                label="开始箭头类型"
+                :label="开始箭头类型"
                 v-show="
                   gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.startArrow
                 "
@@ -646,10 +652,11 @@
                     </span>
                   </a-select-option>
                 </a-select>
-              </a-form-item>
-              <a-form-item
+              </a-form-item> -->
+
+              <!-- <a-form-item
                 name="startArrowSize"
-                label="开始箭头大小"
+                :label="开始箭头大小"
                 v-show="
                   gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.startArrow
                 "
@@ -679,7 +686,7 @@
                     :precision="0"
                   />
                 </a-row>
-              </a-form-item>
+              </a-form-item> -->
               <a-form-item
                 :class="{
                   'not-click':
@@ -687,7 +694,7 @@
                     'edge',
                 }"
                 name="endArrow"
-                label="结束箭头"
+                :label="t('view.endArrow')"
               >
                 <a-checkbox
                   v-model:checked="
@@ -695,9 +702,10 @@
                   "
                 />
               </a-form-item>
+              <!--
               <a-form-item
                 name="endArrowType"
-                label="结束箭头类型"
+                :label="结束箭头类型"
                 v-show="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.endArrow"
               >
                 <a-select
@@ -751,7 +759,7 @@
               </a-form-item>
               <a-form-item
                 name="endArrowSize"
-                label="结束箭头大小"
+                :label="结束箭头大小"
                 v-show="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.endArrow"
                 :autoLink="false"
               >
@@ -778,8 +786,10 @@
                   />
                 </a-row>
               </a-form-item>
-              <a-divider orientation="center">状态配置</a-divider>
-              <!-- <a-form-item name="startArrow" label="灵活绑定">
+              -->
+
+              <a-divider orientation="center">{{ t('view.statusConfiguration') }}</a-divider>
+              <!-- <a-form-item name="startArrow" :label="灵活绑定">
                 <a-checkbox
                   v-model:checked="
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myIsAgileState
@@ -790,7 +800,7 @@
                 v-show="
                   !gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myIsAgileState
                 "
-                label="绑定服务"
+                :label="t('view.bindingService')"
                 name="myServiceId"
               >
                 <a-tree-select
@@ -1065,7 +1075,7 @@
           v-model:activeKey="containerTabsActiveKey"
           :tabBarStyle="{ height: '32px', marginBottom: '0.5px', background: '#fff' }"
         >
-          <a-tab-pane key="containerConfig" tab="容器配置">
+          <a-tab-pane key="containerConfig" :tab="t('view.containerConfiguration')">
             <a-form
               :label-col="{ span: 10 }"
               :wrapper-col="{ span: 14 }"
@@ -1073,14 +1083,14 @@
               :model="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig"
             >
               <!-- <a-divider orientation="center">编辑配置</a-divider> -->
-              <a-form-item name="gridShow" label="网格显示">
+              <a-form-item name="gridShow" :label="t('view.gridDisplay')">
                 <a-switch
                   v-model:checked="
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.grid.myIsShow
                   "
                 />
               </a-form-item>
-              <a-form-item name="background" label="背景颜色">
+              <a-form-item name="background" :label="t('view.backgroundColor')">
                 <div>
                   <selectColor
                     :color="
@@ -1097,7 +1107,7 @@
                   />
                 </div>
               </a-form-item>
-              <a-form-item name="backgroundImg" label="背景图片">
+              <a-form-item name="backgroundImg" :label="t('view.backgroundImage')">
                 <div class="upbackimg">
                   <a-upload
                     v-model:fileList="fileList"
@@ -1145,7 +1155,7 @@
                   />
                 </div>
               </a-form-item>
-              <a-form-item name="zoom" label="缩放大小" :autoLink="false">
+              <a-form-item name="zoom" :label="t('view.zoomSize')" :autoLink="false">
                 <a-row>
                   <a-slider
                     class="aSlider"
@@ -1182,7 +1192,9 @@
                 <a-row style="margin: 2px 0">
                   <a-space size="1">
                     <a-tooltip>
-                      <template #title>将图平移至视口中心</template>
+                      <template #title>{{
+                        t('view.translateTheGraphToTheCenterOfTheViewport')
+                      }}</template>
                       <a-tag
                         @click="
                           () => {
@@ -1195,7 +1207,9 @@
                       >
                     </a-tooltip>
                     <a-tooltip>
-                      <template #title>将图缩放至合适大小并平移至视口中心</template>
+                      <template #title>{{
+                        t('view.scaleGraphToFitAndTranslateToViewportCenter')
+                      }}</template>
                       <a-tag
                         @click="
                           () => {
@@ -1210,25 +1224,25 @@
                   </a-space>
                 </a-row>
               </a-form-item>
-              <a-divider orientation="center">展示配置</a-divider>
-              <a-form-item name="runType" label="画布">
+              <a-divider orientation="center">{{ t('view.displayConfiguration') }}</a-divider>
+              <a-form-item name="runType" :label="t('view.canvas')">
                 <a-checkbox-group
                   v-model:value="
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.runType
                   "
                 >
-                  <a-checkbox value="zommCanvas">锁定画布缩放</a-checkbox>
-                  <a-checkbox value="dragCanvas">锁定画布平移</a-checkbox>
+                  <a-checkbox value="zommCanvas">{{ t('view.lockCanvasZoom') }}</a-checkbox>
+                  <a-checkbox value="dragCanvas">{{ t('view.lockCanvasPan') }}</a-checkbox>
                 </a-checkbox-group>
               </a-form-item>
-              <a-form-item name="fit" label="图平移中心">
+              <a-form-item name="fit" :label="t('view.imagePanCenter')">
                 <a-radio-group
                   v-model:value="
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.fit
                   "
                 >
-                  <a-radio value="fitCenter">平移至视口中心</a-radio>
-                  <a-radio value="fitView">缩放并平移至视口中心</a-radio>
+                  <a-radio value="fitCenter">{{ t('view.panToViewportCenter') }}</a-radio>
+                  <a-radio value="fitView">{{ t('view.zoomAndPanToViewportCenter') }}</a-radio>
                 </a-radio-group>
               </a-form-item>
               <!-- <a-divider orientation="center">数据源配置</a-divider> 
@@ -1293,7 +1307,7 @@
           :isSvg="true"
           style="margin: 0 auto; font-size: 176px"
         />
-        <div style="font-size: 16px"> 多项不支持更改</div>
+        <div style="font-size: 16px"> {{ t('view.multipleItemsAreNotSupportedToBeChanged') }}</div>
       </div>
     </template>
   </div>
@@ -1303,7 +1317,7 @@
     :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
     :width="320"
     :visible="isShowRightMneu"
-    title="右键菜单"
+    :title="t('view.rightClickMenu')"
     :footer-style="{ textAlign: 'right' }"
     @close="closeRightMenu"
   >
@@ -1319,7 +1333,7 @@
       <a-button style="margin-left: 8px" @click="closeRightMenu">{{ t('view.close') }}</a-button>
     </template>
   </a-drawer>
-
+  <!-- 
   <a-drawer
     :bodyStyle="{ overflow: 'hidden' }"
     :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
@@ -1339,7 +1353,7 @@
       <a-form-item
         name="key"
         :rules="[{ required: true, message: '请输入全数据配置唯一主键' }]"
-        label="主键"
+        :label="主键"
       >
         <a-input
           :disabled="!isSaveAllDataConfigAdd"
@@ -1347,23 +1361,23 @@
           v-model:value="newAllDataConfig.key"
         />
       </a-form-item>
-      <a-form-item name="name" label="名称">
+      <a-form-item name="name" :label="名称">
         <a-input placeholder="请输入名称" v-model:value="newAllDataConfig.name" />
       </a-form-item>
-      <!-- <a-form-item
+     <a-form-item
         name="topic"
         :rules="[{ required: true, message: '请选择通信主题' }]"
-        label="通信主题"
+        :label="通信主题"
       >
         <a-select placeholder="请选择通信主题" v-model:value="newAllDataConfig.topic">
           <a-select-option value="Data/Monitor/WebMsg/+">服务报警</a-select-option>
         </a-select>
-      </a-form-item> -->
+      </a-form-item> 
       <a-form-item
         :labelCol="{ span: 24 }"
         name="getValue"
-        :rules="[{ required: true, message: '请输入数据处理' }]"
-        label="请输入数据处理:"
+        :rules="[{ required: true, message: t('view.pleaseEnterDataProcessing') }]"
+        :label="t('view.pleaseEnterDataProcessing')"
       >
         <codemirror
           :modelValue="newAllDataConfig.getValue"
@@ -1378,12 +1392,10 @@
       </a-form-item>
     </a-form>
     <template #footer>
-      <!-- <a-spin :spinning="fromSpinning"> -->
       <a-button type="primary" @click="saveAllDataConfig">{{ t('view.save') }}</a-button>
       <a-button style="margin-left: 8px" @click="closeAllDataConfig">{{
         t('view.close')
       }}</a-button>
-      <!-- </a-spin> -->
     </template>
   </a-drawer>
   <a-drawer
@@ -1404,14 +1416,14 @@
     >
       <a-form-item
         name="name"
-        label="状态名称"
+        :label="状态名称"
         :rules="[{ required: true, message: '请输入状态名称' }]"
       >
         <a-input placeholder="请输入状态名称" v-model:value="newSelectedObState.name" />
       </a-form-item>
       <a-form-item
         name="level"
-        label="优先级"
+        :label="优先级"
         :rules="[{ required: true, message: '请输入优先级' }]"
       >
         <a-input-number
@@ -1422,7 +1434,7 @@
           v-model:value="newSelectedObState.level"
         />
       </a-form-item>
-      <a-form-item name="color" label="变化颜色">
+      <a-form-item name="color" :label="变化颜色">
         <div>
           <selectColor
             :color="newSelectedObState.color"
@@ -1437,8 +1449,8 @@
       <a-form-item
         :labelCol="{ span: 24 }"
         name="isChange"
-        :rules="[{ required: true, message: '请输入数据处理' }]"
-        label="请输入数据处理:"
+        :rules="[{ required: true, message: t('view.pleaseEnterDataProcessing') }]"
+        :label="t('view.pleaseEnterDataProcessing')"
       >
         <codemirror
           :modelValue="newSelectedObState.isChange"
@@ -1453,14 +1465,12 @@
       </a-form-item>
     </a-form>
     <template #footer>
-      <!-- <a-spin :spinning="fromSpinning"> -->
       <a-button type="primary" @click="saveSelectedObState">{{ t('view.save') }}</a-button>
       <a-button style="margin-left: 8px" @click="closeSelectedObState">{{
         t('view.close')
       }}</a-button>
-      <!-- </a-spin> -->
     </template>
-  </a-drawer>
+  </a-drawer> -->
 </template>
 <script setup>
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
@@ -1507,11 +1517,11 @@
 
   const allDataConfigColumns = [
     {
-      title: '属性键',
+      title: t('view.attributeKey'),
       dataIndex: 'key',
     },
     {
-      title: '名称',
+      title: t('view.name'),
       dataIndex: 'name',
     },
     {
@@ -1526,11 +1536,11 @@
 
   const selectedObStateColumns = [
     {
-      title: '名称',
+      title: t('view.name'),
       dataIndex: 'name',
     },
     {
-      title: '颜色',
+      title: t('view.color'),
       dataIndex: 'color',
     },
     {
@@ -1540,19 +1550,19 @@
   ];
   const selectedObAgileStateColumns = [
     {
-      title: '状态',
+      title: t('view.status'),
       dataIndex: 'name',
     },
     {
-      title: '优先级',
+      title: t('view.priority'),
       dataIndex: 'level',
     },
     {
-      title: '颜色',
+      title: t('view.color'),
       dataIndex: 'color',
     },
     {
-      title: '开启',
+      title: t('view.open'),
       dataIndex: 'open',
     },
   ];
@@ -1574,9 +1584,9 @@
   //容器背景图片上传
   function beforeUpload(file, attr) {
     return new Promise((resolve, reject) => {
-      const isLt5M = file.size / 1024 / 1024 < 5;
+      const isLt5M = file.size / 1024 / 1024 < 3;
       if (!isLt5M) {
-        message.error('文件大小不可超过 5MB');
+        message.error(t('view.fileSizeMustNotExceed', ['3MB']));
       } else {
         myCommon
           .imgBase64(file)
@@ -1586,7 +1596,7 @@
           })
           .catch((error) => {
             console.error(error);
-            message.error('图片转换失败');
+            message.error(t('view.imageConversionFailed'));
           });
       }
       //解决这个组件上传的个数超过限制时会报：warning.js:6 Warning: [antdv: Checkbox] `value` is not validate prop, do you mean `checked`?
@@ -1608,7 +1618,7 @@
             (m) => m.key == newAllDataConfig.value.key,
           )
         ) {
-          message.warning('主键重复，不可添加');
+          message.warning(t('view.primaryKeyDuplicatedCannotAdd'));
           return;
         }
       }
@@ -1619,13 +1629,13 @@
           gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.allDataConfig.push(
             newAllDataConfig.value,
           );
-          message.success('添加成功');
+          message.success(t('view.additionSuccessful'));
         } else {
           const oldData = gplotStore.gplotKeyOb[
             props.graphObRef.gplotKey
           ].containerConfig.allDataConfig.find((m) => m.key == newAllDataConfig.value.key);
           myCommon.objectReplace(oldData, newAllDataConfig.value);
-          message.success('编辑成功');
+          message.success(t('view.updateSuccessful'));
         }
         isShowSourceDataConfig.value = false;
       } catch (error) {
@@ -1697,13 +1707,13 @@
             gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myAgileState.push(
               newSelectedObState.value,
             );
-            message.success('添加成功');
+            message.success(t('view.additionSuccessful'));
           } else {
             const oldData = gplotStore.gplotKeyOb[
               props.graphObRef.gplotKey
             ].selectedOb.data.myAgileState.find((m) => m.key == newSelectedObState.value.key);
             myCommon.objectReplace(oldData, newSelectedObState.value);
-            message.success('编辑成功');
+            message.success('view.updateSuccessful');
           }
           isShowSelectedObState.value = false;
         } else {

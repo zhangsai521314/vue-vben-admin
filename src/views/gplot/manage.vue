@@ -29,7 +29,6 @@
     <a-modal
       wrap-class-name="gplot-full-modal"
       v-model:open="openView"
-      title="预览"
       width="100%"
       :footer="null"
       @on-cancel="viewCancel"
@@ -53,13 +52,13 @@
   import gplot from './components/gplot.vue';
   import { ref, unref, watch, nextTick } from 'vue';
   import { useI18n } from '@/hooks/web/useI18n';
-  
+
   const { t } = useI18n();
   defineOptions({ name: 'GplotManage' });
   const { prefixCls } = useDesign('GplotManage-');
   //获取url参数
   const { currentRoute } = useRouter();
-   const { menuId } = unref(currentRoute).params;
+  const { menuId } = unref(currentRoute).params;
   const gplotId = ref(null);
   const graphObRef = ref(null);
   const openView = ref(false);

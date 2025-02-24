@@ -143,7 +143,7 @@
         </div> -->
         <div>
           <a-tooltip placement="top">
-            <template #title>保存</template>
+            <template #title>{{ t('view.save') }}</template>
             <div style="float: right">
               <!-- @click="saveClick" -->
               <a-spin :spinning="isShowSaveMenu">
@@ -180,7 +180,7 @@
     v-if="false"
     :isShow="isShowSaveMenu"
     :cancel="closeSaveConfig"
-    :ztitle="'保存配置'"
+    :ztitle="t('view.configuration')"
     :menuType="2"
     :openSizeType="2"
     :isPageEditing="true"
@@ -188,10 +188,7 @@
     :footerStyle="{ height: '55px', textAlign: 'right' }"
   >
     <template #footer_>
-      <a-spin
-        tip="正在保存配置..."
-        :spinning="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.runSave"
-      >
+      <a-spin :spinning="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.runSave">
         <a-button type="primary" @click="saveConfig">{{ t('view.save') }}</a-button>
         <a-button style="margin-left: 8px" @click="closeSaveConfig">{{ t('view.close') }}</a-button>
       </a-spin>

@@ -1,6 +1,7 @@
 //拓扑图公用属性
 import { defineStore } from 'pinia';
 import { store } from '@/store';
+import { t } from '@/hooks/web/useI18n';
 
 export interface GplotState {
   //根据画布key存储画布的对象
@@ -217,21 +218,21 @@ export const useGplotStore = defineStore({
             //简单状态控制
             mySimpleState: [
               {
-                name: '中断',
+                name: t('view.interrupt'),
                 code: 'isOnline',
                 color: '#B1B1B1',
                 open: true,
                 level: 0,
               },
               {
-                name: '告警',
+                name: t('view.alarm'),
                 code: 'isAlarm',
                 color: '#ECEC0D',
                 open: true,
                 level: 1,
               },
               {
-                name: '性能超出',
+                name: t('view.performanceExceeded'),
                 code: 'isPerformanceNormal',
                 color: '#F58854',
                 open: true,
