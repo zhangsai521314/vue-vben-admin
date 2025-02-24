@@ -1077,8 +1077,8 @@
         >
           <a-tab-pane key="containerConfig" :tab="t('view.containerConfiguration')">
             <a-form
-              :label-col="{ span: 10 }"
-              :wrapper-col="{ span: 14 }"
+              :label-col="{ span: locale == 'fr-FR' ? 14 : locale == 'zh-CN' ? 10 : 12 }"
+              :wrapper-col="{ span: locale == 'fr-FR' ? 12 : locale == 'zh-CN' ? 14 : 12 }"
               autocomplete="off"
               :model="gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig"
             >
@@ -1485,8 +1485,11 @@
   import softwareApi from '@/api/software';
   import _ from 'lodash-es';
   import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
   const { t } = useI18n();
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
   const { prefixCls } = useDesign('GplotManage-');
   const props = defineProps({
     //拓扑对象
@@ -1797,6 +1800,12 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
+
+    :deep(.ant-radio-group) {
+      display: flex;
+      flex-direction: column;
+      white-space: nowrap;
+    }
 
     :deep(.ant-collapse-header) {
       font-weight: 900;

@@ -689,7 +689,7 @@
   "lockCanvasPan": "锁定画布平移",
   "imagePanCenter": "图平移中心",
   "panToViewportCenter": "平移至视口中心",
-  "zoomAndPanToViewportCenter": "缩放并平移至视口中心",
+  "zoomAndPanToViewportCenter": "缩放平移至视口中心",
   "dataSourceConfiguration": "数据源配置",
   "attributeKey": "属性键",
   "configuration": "配置",
