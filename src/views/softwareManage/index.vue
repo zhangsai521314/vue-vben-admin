@@ -76,7 +76,7 @@
                     </a-radio-group>
                   </a-space>
                 </div>
-                <div class="row-div">
+                <!-- <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <a-input-number
                       class="duration"
@@ -101,7 +101,7 @@
                       </template>
                     </a-input-number>
                   </a-space>
-                </div>
+                </div> -->
               </a-space>
             </AuthDom>
             <AuthDom auth="softwareManage_add">
@@ -159,7 +159,7 @@
           row.isAlarm ? t('view.yes') : t('view.no')
         }}</span>
       </template>
-      <template #remainingDays="{ row }">
+      <!-- <template #remainingDays="{ row }">
         <span
           v-if="row.timeValid != null"
           :style="{
@@ -169,7 +169,7 @@
           }"
           >{{ row.remainingDays <= 0 ? t('view.hasExpired') : row.remainingDays }}</span
         >
-      </template>
+      </template> -->
     </vxe-grid>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
@@ -675,25 +675,25 @@
         visible: false,
         sortable: true,
       },
-      {
-        field: 'timeValid',
-        title: t('view.validityPeriod'),
-        showOverflow: true,
-        visible: false,
-        sortable: true,
-        minWidth: 160,
-      },
-      {
-        field: 'remainingDays',
-        title: t('view.remainingDays'),
-        minWidth: 200,
-        showOverflow: true,
-        sortable: true,
-        visible: false,
-        slots: {
-          default: 'remainingDays',
-        },
-      },
+      // {
+      //   field: 'timeValid',
+      //   title: t('view.validityPeriod'),
+      //   showOverflow: true,
+      //   visible: false,
+      //   sortable: true,
+      //   minWidth: 160,
+      // },
+      // {
+      //   field: 'remainingDays',
+      //   title: t('view.remainingDays'),
+      //   minWidth: 200,
+      //   showOverflow: true,
+      //   sortable: true,
+      //   visible: false,
+      //   slots: {
+      //     default: 'remainingDays',
+      //   },
+      // },
       {
         field: 'orderIndex',
         title: t('view.sorting'),

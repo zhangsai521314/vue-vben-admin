@@ -37,7 +37,7 @@
                     />
                   </a-space>
                 </div>
-                <div class="row-div">
+                <!-- <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <a-input-number
                       class="duration"
@@ -62,7 +62,7 @@
                       </template>
                     </a-input-number>
                   </a-space>
-                </div>
+                </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <a-button @click="getLincesList" type="primary">{{ t('view.query') }}</a-button>
@@ -97,7 +97,7 @@
           </a-space>
         </div>
       </template>
-      <template #remainingDays="{ row }">
+      <!-- <template #remainingDays="{ row }">
         <span
           :style="{
             fontSize: '20px',
@@ -106,7 +106,7 @@
           }"
           >{{ row.remainingDays <= 0 ? t('view.hasExpired') : row.remainingDays }}</span
         >
-      </template>
+      </template> -->
       <template #bindClientType="{ row }">
         {{ t('view.' + row.bindClientType) }}
       </template>
@@ -214,23 +214,23 @@
         sortable: true,
         minWidth: 186,
       },
-      {
-        field: 'timeValid',
-        title: t('view.validityPeriod'),
-        showOverflow: true,
-        sortable: true,
-        minWidth: 160,
-      },
-      {
-        field: 'remainingDays',
-        title: t('view.remainingDays'),
-        minWidth: 200,
-        showOverflow: true,
-        sortable: true,
-        slots: {
-          default: 'remainingDays',
-        },
-      },
+      // {
+      //   field: 'timeValid',
+      //   title: t('view.validityPeriod'),
+      //   showOverflow: true,
+      //   sortable: true,
+      //   minWidth: 160,
+      // },
+      // {
+      //   field: 'remainingDays',
+      //   title: t('view.remainingDays'),
+      //   minWidth: 200,
+      //   showOverflow: true,
+      //   sortable: true,
+      //   slots: {
+      //     default: 'remainingDays',
+      //   },
+      // },
       {
         field: 'lastGetTime',
         title: t('view.getTime'),
@@ -439,11 +439,7 @@
         },
       })
       .then((data) => {
-        debugger;
         myCommon.downLoadFile(data);
-      })
-      .catch((e) => {
-        debugger;
       });
   }
 </script>

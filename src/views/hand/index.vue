@@ -59,7 +59,7 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>ECI：</label>
+                    <label>{{ t('view.eciNumber') }}：</label>
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.eci"
@@ -87,7 +87,7 @@
                     <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                   </a-space>
                 </div>
-                <div class="row-div">
+                <!-- <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <a-input-number
                       class="duration"
@@ -112,7 +112,7 @@
                       </template>
                     </a-input-number>
                   </a-space>
-                </div>
+                </div> -->
               </a-space>
             </AuthDom>
             <AuthDom auth="hand_add">
@@ -175,17 +175,17 @@
           @page-change="handlePageChange"
         />
       </template>
-      <template #remainingDays="{ row }">
+      <!-- <template #remainingDays="{ row }">
         <span
           v-if="row.timeValid != null"
           :style="{
             fontSize: '20px',
             fontWeight: 500,
-            color: row.remainingDays <= 0 ? 'red' : row.remainingDays <= 30 ? '#adad00' : 'green',
+            color: row. <= 0 ? 'red' : row.remainingDays <= 30 ? '#adad00' : 'green',
           }"
           >{{ row.remainingDays <= 0 ? t('view.hasExpired') : row.remainingDays }}</span
         >
-      </template>
+      </template> -->
     </vxe-grid>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
@@ -327,6 +327,7 @@
         showOverflow: true,
         sortable: false,
         minWidth: 200,
+        visible: false,
         fixed: 'left',
       },
       {
@@ -334,14 +335,16 @@
         title: t('view.stationArea'),
         showOverflow: true,
         sortable: false,
+        visible: false,
         minWidth: 100,
       },
       {
         field: 'eci',
-        title: 'ECI',
+        title: t('view.eciNumber'),
         showOverflow: true,
         sortable: true,
         minWidth: 100,
+        visible: false,
       },
       {
         field: 'dataTime',
@@ -435,25 +438,25 @@
         visible: false,
         sortable: true,
       },
-      {
-        field: 'timeValid',
-        title: t('view.validityPeriod'),
-        showOverflow: true,
-        sortable: true,
-        visible: false,
-        minWidth: 160,
-      },
-      {
-        field: 'remainingDays',
-        title: t('view.remainingDays'),
-        minWidth: 200,
-        showOverflow: true,
-        sortable: true,
-        visible: false,
-        slots: {
-          default: 'remainingDays',
-        },
-      },
+      // {
+      //   field: 'timeValid',
+      //   title: t('view.validityPeriod'),
+      //   showOverflow: true,
+      //   sortable: true,
+      //   visible: false,
+      //   minWidth: 160,
+      // },
+      // {
+      //   field: 'remainingDays',
+      //   title: t('view.remainingDays'),
+      //   minWidth: 200,
+      //   showOverflow: true,
+      //   sortable: true,
+      //   visible: false,
+      //   slots: {
+      //     default: 'remainingDays',
+      //   },
+      // },
       {
         field: 'createUser',
         title: t('view.creator'),

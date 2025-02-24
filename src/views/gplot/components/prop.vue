@@ -779,13 +779,13 @@
                 </a-row>
               </a-form-item>
               <a-divider orientation="center">状态配置</a-divider>
-              <a-form-item name="startArrow" label="灵活绑定">
+              <!-- <a-form-item name="startArrow" label="灵活绑定">
                 <a-checkbox
                   v-model:checked="
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myIsAgileState
                   "
                 />
-              </a-form-item>
+              </a-form-item> -->
               <a-form-item
                 v-show="
                   !gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myIsAgileState
@@ -1231,8 +1231,8 @@
                   <a-radio value="fitView">缩放并平移至视口中心</a-radio>
                 </a-radio-group>
               </a-form-item>
-              <a-divider orientation="center">数据源配置</a-divider>
-              <a-table
+              <!-- <a-divider orientation="center">数据源配置</a-divider> 
+            <a-table
                 :columns="allDataConfigColumns"
                 :data-source="
                   gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.allDataConfig
@@ -1280,7 +1280,7 @@
                     </a-popconfirm>
                   </div>
                 </template>
-              </a-table>
+              </a-table> -->
             </a-form>
           </a-tab-pane>
         </a-tabs>
@@ -1380,7 +1380,9 @@
     <template #footer>
       <!-- <a-spin :spinning="fromSpinning"> -->
       <a-button type="primary" @click="saveAllDataConfig">{{ t('view.save') }}</a-button>
-      <a-button style="margin-left: 8px" @click="closeAllDataConfig">{{ t('view.close') }}</a-button>
+      <a-button style="margin-left: 8px" @click="closeAllDataConfig">{{
+        t('view.close')
+      }}</a-button>
       <!-- </a-spin> -->
     </template>
   </a-drawer>
@@ -1453,7 +1455,9 @@
     <template #footer>
       <!-- <a-spin :spinning="fromSpinning"> -->
       <a-button type="primary" @click="saveSelectedObState">{{ t('view.save') }}</a-button>
-      <a-button style="margin-left: 8px" @click="closeSelectedObState">{{ t('view.close') }}</a-button>
+      <a-button style="margin-left: 8px" @click="closeSelectedObState">{{
+        t('view.close')
+      }}</a-button>
       <!-- </a-spin> -->
     </template>
   </a-drawer>
@@ -1471,7 +1475,7 @@
   import softwareApi from '@/api/software';
   import _ from 'lodash-es';
   import { useI18n } from '@/hooks/web/useI18n';
-  
+
   const { t } = useI18n();
   const { prefixCls } = useDesign('GplotManage-');
   const props = defineProps({
