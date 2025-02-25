@@ -1,4 +1,6 @@
 {
+  "clickToSelectRouteDataFile":"点击选择线路数据文件",
+  "lineMap": "线路地图",
   "primaryKeyDuplicatedCannotAdd": "主键重复，不可添加",
   "rightClickMenu": "右键菜单",
   "multipleItemsAreNotSupportedToBeChanged": "多项不支持更改",

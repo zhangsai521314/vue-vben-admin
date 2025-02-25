@@ -153,6 +153,14 @@ const Line = {
       params,
     });
   },
+  //线路经纬度地图信息
+  LineMapChange: function (params) {
+    return defHttp.post({
+      url: '/DDServerLine/LineMapChange',
+      params,
+      headers: { 'Content-Type': ContentTypeEnum.FORM_DATA },
+    });
+  },
 };
 const RegisterHistory = {
   //获取列表

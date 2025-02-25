@@ -1,4 +1,6 @@
 {
+  "clickToSelectRouteDataFile":"Click to select the route data file",
+  "lineMap": "Line Map",
   "primaryKeyDuplicatedCannotAdd": "Primary key duplicated, cannot add",
   "rightClickMenu": "Right-click menu",
   "multipleItemsAreNotSupportedToBeChanged": "Multiple items are not supported to be changed",

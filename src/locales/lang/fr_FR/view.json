@@ -1,4 +1,6 @@
 {
+  "clickToSelectRouteDataFile":"Cliquez pour sélectionner le fichier de données de ligne",
+  "lineMap": "Carte d'itinéraire",
   "primaryKeyDuplicatedCannotAdd": "Clé primaire dupliquée, impossible d'ajouter",
   "rightClickMenu": "Menu contextuel du clic droit",
   "multipleItemsAreNotSupportedToBeChanged": "Plusieurs éléments ne peuvent pas être modifiés",

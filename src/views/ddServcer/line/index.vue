@@ -60,6 +60,14 @@
         </template>
         <template #default="{ row }">
           <div :class="`tableOption`">
+            <AuthDom auth="ddServcer_line_table_map">
+              <IconFontClass
+                name="icon-baseui-guidao"
+                @click="showMap(row)"
+                style="color: rgb(81 66 2)"
+                :title="t('view.lineMap')"
+              />
+            </AuthDom>
             <AuthDom auth="ddServcer_line_table_edit">
               <IconFontClass
                 name="icon-baseui-edit-fill"
@@ -79,6 +87,65 @@
           </div>
         </template>
       </vxe-grid>
+      <a-drawer
+        :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+        :width="locale == 'zh-CN' ? 500 : 610"
+        :visible="isShowMap"
+        :title="t('view.configuration')"
+        :footer-style="{ textAlign: 'right' }"
+        @close="formMapClose"
+      >
+        <a-form
+          :label-col="{ span: locale == 'zh-CN' ? 6 : 10 }"
+          :style="{ paddingRight: '2px' }"
+          autocomplete="off"
+          ref="formRef"
+          :model="formData"
+        >
+          <a-form-item name="lineMap" :label="t('view.lineMap')">
+            <a-upload
+              :fileList="lineMapFileList"
+              :maxCount="1"
+              name="file"
+              :multiple="false"
+              accept=".mdb"
+              :before-upload="lineMapBeforeUpload"
+              @reject="lineMapFileReject"
+            >
+              <div v-if="!myCommon.isnull(lineMapFilePath)" style="position: relative">
+                <a-input
+                  style="width: 300px"
+                  :value="lineMapFilePath.split('/')[lineMapFilePath.split('/').length - 1]"
+                />
+              </div>
+              <div v-else>
+                <a-input
+                  style="width: 300px; cursor: pointer"
+                  :placeholder="t('view.clickToSelectRouteDataFile')"
+                />
+              </div>
+            </a-upload>
+            <IconFontClass
+              v-if="lineMapFilePath"
+              style="margin-left: 4px; font-size: 18px; cursor: pointer"
+              name=" icon-baseui-delete"
+              @click="
+                () => {
+                  lineMapFileList = [];
+                  lineMapFilePath = null;
+                }
+              "
+              :title="t('view.delete')"
+            />
+          </a-form-item>
+        </a-form>
+        <template #footer>
+          <a-spin :spinning="fromSpinning">
+            <a-button type="primary" @click="saveMap">{{ t('view.save') }}</a-button>
+            <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
+          </a-spin>
+        </template>
+      </a-drawer>
       <a-drawer
         :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
         :width="locale == 'fr-FR' ? 800 : locale == 'zh-CN' ? 500 : 700"
@@ -409,9 +476,11 @@
           </a-form-item>
         </a-form>
         <template #footer>
-          <a-spin :spinning="fromSpinning">
+          <a-spin :spinning="fromMapSpinning">
             <a-button type="primary" @click="saveFrom">{{ t('view.save') }}</a-button>
-            <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
+            <a-button style="margin-left: 8px" @click="formMapClose">{{
+              t('view.close')
+            }}</a-button>
           </a-spin>
         </template>
       </a-drawer>
@@ -421,7 +490,7 @@
 <script setup lang="ts">
   import myCommon from '@/utils/MyCommon/common';
   import formValidator from '@/utils/MyCommon/formValidator';
-  import { ref, reactive, createVNode, nextTick, watch, unref } from 'vue';
+  import { ref, reactive, createVNode } from 'vue';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import { Line as lineApi } from '@/api/ddServcer';
   import { message, Modal } from 'ant-design-vue';
@@ -568,7 +637,7 @@
       },
       {
         title: t('view.action'),
-        minWidth: 90,
+        minWidth: 110,
         slots: {
           default: 'default',
         },
@@ -618,6 +687,11 @@
   });
   const isShowUpdate = ref(false);
   const isRunMushMq = ref(false);
+  const lineMapFilePath = ref(null);
+  const lineMapFileList = ref([]);
+  const isShowMap = ref(false);
+  const fromMapSpinning = ref(false);
+  let mapRow = null;
   getDDServerLines();
 
   //页码改变
@@ -664,6 +738,11 @@
     }
   }
 
+  function showMap(row) {
+    mapRow = row;
+    isShowMap.value = true;
+  }
+
   //删除线路信息
   function remove(row) {
     Modal.confirm({
@@ -694,6 +773,11 @@
     isShowUpdate.value = false;
     formData.value = _.cloneDeep(defFromData);
     formRef.value.clearValidate();
+  }
+
+  function formMapClose() {
+    lineMapFilePath.value = null;
+    isShowMap.value = false;
   }
 
   //获取线路
@@ -764,6 +848,7 @@
       }
     });
   }
+
   //发送命令
   function pushMq() {
     isRunMushMq.value = true;
@@ -777,9 +862,51 @@
       },
     });
   }
+
+  //拖拽文件不符合 accept 类型时的回调
+  function lineMapFileReject() {
+    message.warning(t('view.selectedFileTypeMismatch'));
+  }
+  //上传之前
+  function lineMapBeforeUpload(file) {
+    lineMapFileList.value = [];
+    const isLt5M = file.size / 1024 / 1024 < 20;
+    if (!isLt5M) {
+      file['remove'] = true;
+      message.error(t('view.softwarePackageShouldNotExceed', [20]));
+    } else {
+      lineMapFileList.value.push(file);
+      lineMapFilePath.value = file.name;
+    }
+    return false;
+  }
+
+  function saveMap() {
+    fromMapSpinning.value = true;
+    let _formData = new FormData();
+    if (lineMapFileList.value.length > 0) {
+      _formData.append('file', lineMapFileList.value[0]);
+    }
+    _formData.append('lineId', mapRow.id);
+    lineApi
+      .LineMapChange(_formData)
+      .then(() => {
+        fromMapSpinning.value = false;
+        lineMapFileList.value = [];
+        formMapClose();
+        message.success(t('view.success'));
+      })
+      .catch(() => {
+        fromMapSpinning.value = false;
+      });
+  }
 </script>
 <style lang="less" scoped>
   @prefixCls: ~'@{namespace}-DDServcerLine-';
+
+  :deep(.ant-upload-list) {
+    display: none;
+  }
 
   .fanZhun {
     display: inline-block;

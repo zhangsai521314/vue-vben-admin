@@ -483,7 +483,7 @@
       },
       {
         title: t('view.action'),
-        minWidth: 140,
+        minWidth: 90,
         slots: {
           default: 'default',
         },
