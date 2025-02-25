@@ -33,9 +33,11 @@
   import softwareApi from '@/api/software';
   import messageApi from '@/api/message';
   import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
   const { t } = useI18n();
-
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
   const props = defineProps({
     viewType: {
       type: String,
@@ -97,6 +99,19 @@
         gplotId = config.gplotId;
         if (config.gplotConfig) {
           gplotConfig = JSON.parse(config.gplotConfig);
+          gplotConfig.nodes.forEach((item) => {
+            switch (locale) {
+              case 'zh-CN':
+                item.style.labelText = item.style.labelTextCn;
+                break;
+              case 'en-US':
+                item.style.labelText = item.style.labelTextEn;
+                break;
+              case 'fr-FR':
+                item.style.labelText = item.style.labelTextFr;
+                break;
+            }
+          });
         }
         if (config.globalConfig) {
           gplotStore.gplotKeyOb[gplotKey].containerConfig = JSON.parse(config.globalConfig);
@@ -648,6 +663,9 @@
         iconText: eval(`'${ob.iconUnicode}'`),
         lineWidth: 0,
         labelText: t('view.defaultText'),
+        labelTextCn: '默认文本',
+        labelTextEn: 'Default text',
+        labelTextFr: 'Txt par def',
       },
       //自定义信息
       data: {

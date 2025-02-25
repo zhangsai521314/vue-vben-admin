@@ -105,6 +105,12 @@ export const useGplotStore = defineStore({
             label: true,
             //文字
             labelText: '',
+            //文字中
+            labelTextCn: '',
+            //文字英
+            labelTextEn: '',
+            //文字法
+            labelTextFr: '',
             //文字颜色
             labelFill: '#000',
             //文字大小

@@ -255,20 +255,49 @@
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
                     'combo',
                 }"
-                name="labelText"
-                :label="t('view.textContent')"
+                name="labelTextCn"
+                :label="t('view.textContentCn')"
               >
-                <!-- <a-input
-                  v-model:value="
-                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelText
-                  "
-                  placeholder="文字内容"
-                /> -->
                 <a-textarea
                   v-model:value="
-                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelText
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelTextCn
                   "
-                  :placeholder="t('view.textContent')"
+                  @change="(v) => labelTextChange('cn')"
+                  :placeholder="t('view.textContentCn')"
+                />
+              </a-form-item>
+              <a-form-item
+                :class="{
+                  'not-click':
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
+                    'combo',
+                }"
+                name="labelTextEn"
+                :label="t('view.textContentEn')"
+              >
+                <a-textarea
+                  v-model:value="
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelTextEn
+                  "
+                  @change="(v) => labelTextChange('en')"
+                  :placeholder="t('view.textContentEn')"
+                />
+              </a-form-item>
+              <a-form-item
+                :class="{
+                  'not-click':
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
+                    'combo',
+                }"
+                name="labelTextFr"
+                :label="t('view.textContentFr')"
+              >
+                <a-textarea
+                  v-model:value="
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelTextFr
+                  "
+                  @change="(v) => labelTextChange('fr')"
+                  :placeholder="t('view.textContentFr')"
                 />
               </a-form-item>
               <a-form-item
@@ -823,7 +852,9 @@
                 "
                 :columns="selectedObAgileStateColumns"
                 :data-source="
-                  gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.mySimpleState
+                  selectedObAgileStateDatasource(
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.mySimpleState,
+                  )
                 "
                 bordered
                 size="small"
@@ -1772,6 +1803,38 @@
     softwareApi.GetEServiceTreeDatas().then((data) => {
       serviceTreeData.value = data;
     });
+  }
+
+  //简单绑定数据表格，中英法名称列转换
+  function selectedObAgileStateDatasource(data) {
+    data.forEach((item) => {
+      switch (item.code) {
+        case 'isOnline':
+          item.name = t('view.interrupt');
+          break;
+        case 'isAlarm':
+        case 'isNormal':
+          item.name = t('view.alarm');
+          break;
+        case 'isPerformanceNormal':
+          item.name = t('view.performanceExceeded');
+          break;
+      }
+    });
+    return data;
+  }
+
+  function labelTextChange(l) {
+    if (locale == 'zh-CN' && l == 'cn') {
+      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelText =
+        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelTextCn;
+    } else if (locale == 'en-US' && l == 'en') {
+      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelText =
+        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelTextEn;
+    } else if (locale == 'fr-FR' && l == 'fr') {
+      gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelText =
+        gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelTextFr;
+    }
   }
 </script>
 <style lang="less" scoped>
