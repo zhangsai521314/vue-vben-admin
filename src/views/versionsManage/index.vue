@@ -318,6 +318,7 @@
       {
         field: 'versionId',
         title: t('view.recordId'),
+        sortable: true,
         visible: false,
         showOverflow: true,
         minWidth: locale == 'zh-CN' ? 130 : 150,

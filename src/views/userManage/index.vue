@@ -416,6 +416,7 @@
       {
         field: 'userId',
         title: t('view.recordId'),
+        sortable: true,
         visible: false,
         showOverflow: true,
         fixed: 'left',

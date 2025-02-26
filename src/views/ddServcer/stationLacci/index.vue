@@ -88,6 +88,17 @@
             @page-change="handlePageChange"
           />
         </template>
+        <template #stationArea="{ row }">
+          <span>{{
+            row.stationArea == 1
+              ? t('view.inStation')
+              : row.stationArea == 2
+                ? t('view.leftSideOfThisStation')
+                : row.stationArea == 3
+                  ? t('view.rightSideOfThisStation')
+                  : ''
+          }}</span>
+        </template>
         <template #default="{ row }">
           <div :class="`tableOption`">
             <AuthDom auth="ddServcer_stationLacci_table_edit">
@@ -252,18 +263,16 @@
         fixed: 'left',
       },
       {
-        field: 'typeName',
-        title: '管辖区间',
+        field: 'stationArea',
+        title: t('view.jurisdictionRange'),
         showOverflow: true,
-
         sortable: false,
         minWidth: 100,
       },
       {
         field: 'laccis',
-        title: 'ECI集合',
+        title: t('view.eciCollection'),
         showOverflow: true,
-
         minWidth: 200,
       },
       {

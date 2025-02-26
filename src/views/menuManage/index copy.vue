@@ -716,8 +716,6 @@
   @prefixCls: ~'@{namespace}-menuManage-';
 
   .@{prefixCls} {
-    overflow-x: hidden;
-
     .@{prefixCls}tableBtn {
       width: 100%;
     }

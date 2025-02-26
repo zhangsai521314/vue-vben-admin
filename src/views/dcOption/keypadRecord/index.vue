@@ -104,6 +104,7 @@
         field: 'keyId',
         title: t('view.recordId'),
         visible: false,
+        sortable: true,
         showOverflow: true,
         minWidth: locale == 'zh-CN' ? 130 : 150,
         fixed: 'left',

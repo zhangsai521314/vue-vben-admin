@@ -175,6 +175,17 @@
           @page-change="handlePageChange"
         />
       </template>
+      <template #stationArea="{ row }">
+        <span>{{
+          row.stationArea == 1
+            ? t('view.inStation')
+            : row.stationArea == 2
+              ? t('view.leftSideOfThisStation')
+              : row.stationArea == 3
+                ? t('view.rightSideOfThisStation')
+                : ''
+        }}</span>
+      </template>
       <!-- <template #remainingDays="{ row }">
         <span
           v-if="row.timeValid != null"
@@ -203,10 +214,20 @@
         ref="formRef"
         :model="formData"
       >
+        <!-- { min: 4, message: t('view.isdnNumberIs4Digits') },
+            { max: 4, message: t('view.isdnNumberIs4Digits') }, -->
+
         <a-form-item
-          name="isdn"
-          :label="t('view.isdn')"
-          :rules="[{ max: 20, message: t('view.pleaseEnterIdsn') }]"
+          name="handIsdn"
+          :label="t('view.isdnNumber')"
+          :rules="[
+            { required: true, message: '' },
+            { validator: formValidator.empty, message: t('view.pleaseEnterTheIsdnNumber') },
+            {
+              validator: formValidator.positiveInteger,
+              message: t('view.isdnNumberFormatIsANaturalNumber'),
+            },
+          ]"
         >
           <a-input
             :disabled="saveType == 'edit'"
@@ -272,6 +293,7 @@
   import { Station as stationApi } from '@/api/ddServcer';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
+  import formValidator from '@/utils/MyCommon/formValidator';
 
   const { t } = useI18n();
   const localeStore = useLocaleStore();
@@ -308,6 +330,7 @@
       {
         field: 'handId',
         title: t('view.recordId'),
+        sortable: true,
         visible: false,
         showOverflow: true,
         minWidth: locale == 'zh-CN' ? 130 : 150,
@@ -315,7 +338,7 @@
       },
       {
         field: 'handIsdn',
-        title: 'ISDN',
+        title: t('view.isdnNumber'),
         showOverflow: true,
         sortable: true,
         minWidth: 90,
@@ -325,7 +348,6 @@
         field: 'stationName',
         title: t('view.stationName'),
         showOverflow: true,
-        sortable: false,
         minWidth: 200,
         visible: false,
         fixed: 'left',
@@ -334,9 +356,11 @@
         field: 'stationXiaQu',
         title: t('view.stationArea'),
         showOverflow: true,
-        sortable: false,
         visible: false,
         minWidth: 100,
+        slots: {
+          default: 'stationArea',
+        },
       },
       {
         field: 'eci',
@@ -458,7 +482,7 @@
       //   },
       // },
       {
-        field: 'createUser',
+        field: 'createUserName',
         title: t('view.creator'),
         minWidth: 130,
         showOverflow: true,
@@ -474,7 +498,7 @@
         sortable: true,
       },
       {
-        field: 'modifyUser',
+        field: 'modifyUserName',
         title: t('view.modifier'),
         minWidth: 176,
         showOverflow: true,
@@ -682,23 +706,19 @@
         fromSpinning.value = false;
       };
       if (saveType.value == 'add') {
-        dictionariesApi.AddDictionaries(formData.value).then((data) => {
-          data.serviceTypeName = serviceTypeData.value.find(
-            (m) => m.key == data.serviceType,
-          )?.label;
-          tableConfigData.value.splice(0, 0, data);
+        handApi.AddHand(formData.value).then((data) => {
+          tableConfig.data.splice(0, 0, data);
           formClose();
           message.success(t('view.additionSuccessful'));
         });
       } else {
         handApi.UpdateHand(formData.value).then((data) => {
-          if (data) {
-            newRow.value.isEnable = formData.value.isEnable;
-            formClose();
-            message.success(t('view.updateSuccessful'));
-          } else {
-            message.error(t('view.updateFailure'));
+          const oldData = tableConfig.data.find((m) => m.handId == data.HandId);
+          if (oldData) {
+            myCommon.objectReplace(oldData, data);
           }
+          formClose();
+          message.success(t('view.updateSuccessful'));
         });
       }
     });

@@ -273,7 +273,7 @@
             autocomplete="off"
           />
         </a-form-item>
-        <a-form-item
+        <!-- <a-form-item
           name="isdn"
           :label="t('view.isdn')"
           :rules="[{ max: 20, message: t('view.pleaseEnterIdsn') }]"
@@ -283,7 +283,7 @@
             v-model:value="formData.isdn"
             autocomplete="off"
           />
-        </a-form-item>
+        </a-form-item> -->
         <a-form-item
           name="filePath"
           :label="t('view.deploymentPath')"
@@ -510,6 +510,7 @@
       {
         field: 'serviceId',
         title: t('view.recordId'),
+        sortable: true,
         visible: false,
         showOverflow: true,
         minWidth: locale == 'zh-CN' ? 130 : 150,
@@ -539,6 +540,7 @@
         showOverflow: true,
         sortable: true,
         minWidth: 136,
+        visible: false,
         fixed: 'left',
       },
       {
@@ -611,13 +613,6 @@
         minWidth: 200,
       },
       {
-        field: 'changeTime',
-        title: t('view.statusTime'),
-        showOverflow: true,
-        sortable: true,
-        minWidth: 150,
-      },
-      {
         field: 'isOnline',
         title: t('view.isOnline'),
         showOverflow: true,
@@ -648,6 +643,13 @@
         // sortable: true,
         cellRender: { name: 'render_isno' },
         minWidth: 200,
+      },
+      {
+        field: 'changeTime',
+        title: t('view.statusTime'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 150,
       },
       {
         field: 'isGetLinces',
@@ -774,7 +776,7 @@
     filePath: null,
     serviceCode: null,
     isUpPerformance: false,
-    isdn: null,
+    // isdn: null,
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);
@@ -988,7 +990,7 @@
           data.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
           tableConfig.data?.splice(0, 0, data);
           formClose();
-          message.success('view.additionSuccessful');
+          message.success(t('view.additionSuccessful'));
           page.total = page.total + 1;
         });
       } else {

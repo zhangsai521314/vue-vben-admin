@@ -541,6 +541,8 @@
       {
         field: 'id',
         title: t('view.recordId'),
+        showOverflow: true,
+        sortable: true,
         visible: false,
         fixed: 'left',
         minWidth: locale == 'zh-CN' ? 130 : 150,

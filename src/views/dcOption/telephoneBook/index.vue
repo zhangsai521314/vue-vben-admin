@@ -181,6 +181,7 @@
       {
         field: 'phoneId',
         title: t('view.recordId'),
+        sortable: true,
         visible: false,
         fixed: 'left',
         minWidth: locale == 'zh-CN' ? 130 : 150,

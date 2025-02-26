@@ -214,6 +214,7 @@
       {
         field: 'mqttId',
         title: t('view.recordId'),
+        sortable: true,
         visible: false,
         showOverflow: true,
         minWidth: locale == 'zh-CN' ? 130 : 150,
@@ -394,7 +395,9 @@
       formData.value['execompleteBefore'] = execompleteBefore;
       if (saveType == 'add') {
         mqttApi.AddMqtt(formData.value).then((data) => {
-          data.serviceName = dictionariesData.value.find((m) => m.key == data.serviceType)?.label;
+          data.serviceTypeName = dictionariesData.value.find(
+            (m) => m.key == data.serviceType,
+          )?.label;
           tableConfig.data?.splice(0, 0, data);
           formClose();
           message.success(t('view.additionSuccessful'));
@@ -408,7 +411,7 @@
             myCommon.objectReplace(oldData, data);
             oldData.modifyTime = data.modifyTime;
             oldData.modifyUser = data.modifyUser;
-            oldData.serviceName = dictionariesData.value.find(
+            oldData.serviceTypeName = dictionariesData.value.find(
               (m) => m.key == data.serviceType,
             )?.label;
           }

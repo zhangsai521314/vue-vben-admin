@@ -23,6 +23,13 @@ const Hand = {
       params,
     });
   },
+  //新增手持台
+  AddHand: function (params) {
+    return defHttp.post({
+      url: '/Hand/AddHand',
+      params,
+    });
+  },
   //更新手持台
   UpdateHand: function (params) {
     return defHttp.post({
