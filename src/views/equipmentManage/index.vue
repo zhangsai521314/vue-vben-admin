@@ -395,7 +395,7 @@
         sortable: true,
       },
       {
-        field: 'createUser',
+        field: 'createUserName',
         title: t('view.creator'),
         minWidth: 130,
         showOverflow: true,
@@ -411,7 +411,7 @@
         sortable: true,
       },
       {
-        field: 'modifyUser',
+        field: 'modifyUserName',
         title: t('view.modifier'),
         minWidth: 176,
         showOverflow: true,
@@ -596,11 +596,11 @@
         equipmentApi.UpdateEquipment(formData.value).then((data) => {
           const oldData = tableConfig.data.find((m) => m.equipmentId == data.equipmentId);
           if (oldData) {
-            delete formData.value.createUser;
+            delete formData.value.createUserName;
             delete formData.value.createTime;
             myCommon.objectReplace(oldData, formData.value);
             oldData.modifyTime = data.modifyTime;
-            oldData.modifyUser = data.modifyUser;
+            oldData.modifyUserName = data.modifyUserName;
             oldData.equipmentTypeName = dictionariesData.value.find(
               (m) => m.key == data.equipmentType,
             )?.label;

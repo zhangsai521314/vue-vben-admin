@@ -1,4 +1,5 @@
 {
+  "sysTitle": "车站集群调度网管",
   "api": {
     "operationSuccess": "Opération réussie",
     "operationFailed": "Échec de l'opération",

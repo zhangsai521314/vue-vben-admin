@@ -15,7 +15,8 @@ const Hand: AppRouteModule = {
     orderNo: 1,
     icon: 'ion:grid-outline',
     //配置名称，可直接输入字符串，也可使用
-    title: '授权文件管理',
+    //授权文件管理
+    title: '',
   },
   children: [
     {
@@ -23,7 +24,8 @@ const Hand: AppRouteModule = {
       name: 'LincesFile',
       component: () => import('/@/views/lincesFile/index.vue'),
       meta: {
-        title: '授权文件管理',
+        //授权文件管理
+        title: '',
         hideMenu: true,
       },
     },

@@ -67,6 +67,8 @@ declare global {
     VITE_USE_MOCK: boolean;
     VITE_PUBLIC_PATH: string;
     VITE_GLOB_APP_TITLE: string;
+    VITE_GLOB_APP_TITLE_EN: string;
+    VITE_GLOB_APP_TITLE_FR: string;
     VITE_BUILD_COMPRESS: 'gzip' | 'brotli' | 'none';
   }
 

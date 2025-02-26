@@ -15,7 +15,8 @@ const networkMonitor: AppRouteModule = {
     orderNo: 1,
     icon: 'ion:grid-outline',
     //配置名称，可直接输入字符串，也可使用
-    title: '网元监控',
+    //网元监控
+    title: '',
   },
   children: [
     {
@@ -25,7 +26,8 @@ const networkMonitor: AppRouteModule = {
       meta: {
         // 是否固定标签
         // affix: true,
-        title: '网元监控',
+        //网元监控
+        title: '',
         hideMenu: true,
       },
     },

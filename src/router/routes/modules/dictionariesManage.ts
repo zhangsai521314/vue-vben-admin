@@ -15,7 +15,8 @@ const dictionariesManage: AppRouteModule = {
     orderNo: 1,
     icon: 'ion:grid-outline',
     //配置名称，可直接输入字符串，也可使用
-    title: '字典管理',
+    //字典管理
+    title: '',
   },
   children: [
     {
@@ -23,7 +24,8 @@ const dictionariesManage: AppRouteModule = {
       name: 'DictionariesManage',
       component: () => import('/@/views/dictionariesManage/index.vue'),
       meta: {
-        title: '字典管理',
+        //字典管理
+        title: '',
         hideMenu: true,
       },
     },

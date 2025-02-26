@@ -2,7 +2,7 @@
   <div :class="prefixCls" class="relative w-full h-full px-4">
     <img src="/@/assets/images/long01.png" class="imgLeft" />
     <AppLocalePicker
-      class="absolute text-white top-4 right-4 enter-x xl:text-gray-600"
+      class="absolute text-blcak top-4 right-4 enter-x xl:text-gray-600"
       :showText="false"
       v-if="!sessionTimeout && showLocale"
     />
@@ -14,7 +14,7 @@
       <AppLogo :alwaysShowTitle="true" />
       <div class="minWindth">
         <div class="font-medium -enter-x">
-          <span style="font-size: 18px"> {{ title }}</span>
+          <span style="font-size: 18px"> {{ t('sys.sysTitle') }}</span>
           <span style="position: relative; top: 4px; margin-top: 5px; margin-left: 8px">
             {{ version }}
           </span>
@@ -27,7 +27,7 @@
         <div class="hidden min-h-full pl-4 mr-4 xl:flex xl:flex-col xl:w-6/12">
           <AppLogo class="-enter-x" />
           <div class="minWindth">
-            <span style="font-size: 18px"> {{ title }}</span>
+            <span style="font-size: 18px"> {{ t('sys.sysTitle') }}</span>
             <span style="position: relative; top: 4px; margin-top: 5px; margin-left: 8px">
               {{ version }}
             </span>
@@ -73,7 +73,6 @@
   const localeStore = useLocaleStore();
   const showLocale = localeStore.getShowPicker;
   const version = computed(() => globSetting?.version ?? '');
-  const title = computed(() => globSetting?.title ?? '');
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-login';

@@ -34,6 +34,8 @@ export function getAppEnvConfig() {
       : (import.meta.env as unknown as GlobEnvConfig)) as unknown as GlobEnvConfig;
   const {
     VITE_GLOB_APP_TITLE,
+    VITE_GLOB_APP_TITLE_EN,
+    VITE_GLOB_APP_TITLE_FR,
     VITE_GLOB_API_URL_PREFIX,
     VITE_GLOB_UPLOAD_URL,
     VITE_GLOB_APP_VERSION,
@@ -48,6 +50,8 @@ export function getAppEnvConfig() {
   }
   return {
     VITE_GLOB_APP_TITLE: VITE_GLOB_APP_TITLE,
+    VITE_GLOB_APP_TITLE_EN: VITE_GLOB_APP_TITLE_EN,
+    VITE_GLOB_APP_TITLE_FR: VITE_GLOB_APP_TITLE_FR,
     VITE_GLOB_API_URL,
     VITE_GLOB_API_URL_PREFIX,
     VITE_GLOB_UPLOAD_URL,

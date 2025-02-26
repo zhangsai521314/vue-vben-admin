@@ -15,7 +15,8 @@ const equipmentManage: AppRouteModule = {
     orderNo: 1,
     icon: 'ion:grid-outline',
     //配置名称，可直接输入字符串，也可使用
-    title: '硬件管理',
+    //硬件管理
+    title: '',
   },
   children: [
     {
@@ -23,7 +24,8 @@ const equipmentManage: AppRouteModule = {
       name: 'EquipmentManage',
       component: () => import('/@/views/equipmentManage/index.vue'),
       meta: {
-        title: '硬件管理',
+        //硬件管理
+        title: '',
         hideMenu: true,
       },
     },

@@ -141,6 +141,8 @@ export interface ProjectConfig {
 export interface GlobConfig {
   // Site title
   title: string;
+  titleEn: string;
+  titleFr: string;
   // Service interface url
   apiUrl: string;
   //版本号
@@ -157,6 +159,8 @@ export interface GlobConfig {
 export interface GlobEnvConfig {
   // Site title
   VITE_GLOB_APP_TITLE: string;
+  VITE_GLOB_APP_TITLE_EN: string;
+  VITE_GLOB_APP_TITLE_FR: string;
   // Service interface url
   VITE_GLOB_API_URL: string;
   // Service interface url prefix

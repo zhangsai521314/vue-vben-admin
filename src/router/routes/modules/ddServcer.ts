@@ -9,8 +9,8 @@ const ddServcer: AppRouteModule = {
   component: LAYOUT,
   redirect: '/ddServcer/black',
   meta: {
-    icon: 'ion:grid-outline',
-    title: '调度服务',
+    //调度服务
+    title: '',
   },
   children: [
     {
@@ -18,7 +18,8 @@ const ddServcer: AppRouteModule = {
       name: 'DDServcerBlack',
       component: () => import('/@/views/ddServcer/black/index.vue'),
       meta: {
-        title: '黑名单管理',
+        //黑名单管理
+        title: '',
       },
     },
     {
@@ -26,7 +27,8 @@ const ddServcer: AppRouteModule = {
       name: 'DDServcerCirStatus',
       component: () => import('/@/views/ddServcer/cirStatus/index.vue'),
       meta: {
-        title: 'cir在线状态',
+        //cir在线状态
+        title: '',
       },
     },
     {
@@ -34,7 +36,8 @@ const ddServcer: AppRouteModule = {
       name: 'DDServcerDCStatus',
       component: () => import('/@/views/ddServcer/dcStatus/index.vue'),
       meta: {
-        title: '调度台/值班台在线状态',
+        //调度台/值班台在线状态
+        title: '',
       },
     },
     {
@@ -42,7 +45,8 @@ const ddServcer: AppRouteModule = {
       name: 'DDServcerLacci',
       component: () => import('/@/views/ddServcer/lacci/index.vue'),
       meta: {
-        title: 'ECI管理',
+        //ECI管理
+        title: '',
       },
     },
     {
@@ -50,7 +54,8 @@ const ddServcer: AppRouteModule = {
       name: 'DDServcerStationLacci',
       component: () => import('/@/views/ddServcer/stationLacci/index.vue'),
       meta: {
-        title: '车站ECI管理',
+        //车站ECI管理
+        title: '',
       },
     },
     {
@@ -58,7 +63,8 @@ const ddServcer: AppRouteModule = {
       name: 'DDServcerLine',
       component: () => import('/@/views/ddServcer/line/index.vue'),
       meta: {
-        title: '线路管理',
+        //线路管理
+        title: '',
       },
     },
     {
@@ -66,7 +72,8 @@ const ddServcer: AppRouteModule = {
       name: 'DDServcerMobileStatus',
       component: () => import('/@/views/ddServcer/mobileStatus/index.vue'),
       meta: {
-        title: '手持台在线状态',
+        //手持台在线状态
+        title: '',
       },
     },
     {
@@ -74,7 +81,8 @@ const ddServcer: AppRouteModule = {
       name: 'DDServcerRegisterHistory',
       component: () => import('/@/views/ddServcer/registerHistory/index.vue'),
       meta: {
-        title: '注册注销记录',
+        //注册注销记录
+        title: '',
       },
     },
     {
@@ -82,7 +90,8 @@ const ddServcer: AppRouteModule = {
       name: 'DDServcerStation',
       component: () => import('/@/views/ddServcer/station/index.vue'),
       meta: {
-        title: '车站管理',
+        //车站管理
+        title: '',
       },
     },
     {
@@ -90,7 +99,8 @@ const ddServcer: AppRouteModule = {
       name: 'DDServcerAddressingHis',
       component: () => import('/@/views/ddServcer/addressingHis/index.vue'),
       meta: {
-        title: '功能号寻址记录',
+        //功能号寻址记录
+        title: '',
       },
     },
     {
@@ -98,7 +108,8 @@ const ddServcer: AppRouteModule = {
       name: 'DDServcerLwLinkHis',
       component: () => import('/@/views/ddServcer/lwLinkHis/index.vue'),
       meta: {
-        title: '列尾寻址记录',
+        //列尾寻址记录
+        title: '',
       },
     },
     {
@@ -106,7 +117,8 @@ const ddServcer: AppRouteModule = {
       name: 'DDServcerLwStatusHis',
       component: () => import('/@/views/ddServcer/lwStatusHis/index.vue'),
       meta: {
-        title: '列尾身份上报记录',
+        //列尾身份上报记录
+        title: '',
       },
     },
   ],

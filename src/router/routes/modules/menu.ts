@@ -15,7 +15,8 @@ const menuManage: AppRouteModule = {
     orderNo: 1,
     icon: 'ion:grid-outline',
     //配置名称，可直接输入字符串，也可使用
-    title: '菜单管理',
+    //菜单管理
+    title: '',
   },
   children: [
     {
@@ -23,7 +24,8 @@ const menuManage: AppRouteModule = {
       name: 'MenuManage',
       component: () => import('/@/views/menuManage/index.vue'),
       meta: {
-        title: '菜单管理',
+        //菜单管理
+        title: '',
         hideMenu: true,
       },
     },

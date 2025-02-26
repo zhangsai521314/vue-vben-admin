@@ -15,7 +15,7 @@ const performance: AppRouteModule = {
     orderNo: 1,
     icon: 'ion:grid-outline',
     //配置名称，可直接输入字符串，也可使用
-    title: '性能监测',
+    title: '',
   },
   children: [
     {
@@ -23,7 +23,8 @@ const performance: AppRouteModule = {
       name: 'Performance',
       component: () => import('/@/views/performance/index.vue'),
       meta: {
-        title: '性能监测',
+        //性能监测
+        title: '',
         hideMenu: true,
       },
     },
@@ -32,7 +33,8 @@ const performance: AppRouteModule = {
       name: 'PerformanceHis',
       component: () => import('/@/views/performance/his.vue'),
       meta: {
-        title: '性能监测历史',
+        //性能监测历史
+        title: '',
         hideMenu: true,
       },
     },

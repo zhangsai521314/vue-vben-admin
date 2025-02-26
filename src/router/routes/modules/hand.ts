@@ -15,7 +15,8 @@ const Hand: AppRouteModule = {
     orderNo: 1,
     icon: 'ion:grid-outline',
     //配置名称，可直接输入字符串，也可使用
-    title: '手持台',
+    //手持台
+    title: '',
   },
   children: [
     {
@@ -23,7 +24,8 @@ const Hand: AppRouteModule = {
       name: 'Hand',
       component: () => import('/@/views/hand/index.vue'),
       meta: {
-        title: '手持台',
+        //手持台
+        title: '',
         hideMenu: true,
       },
     },

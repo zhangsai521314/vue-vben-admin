@@ -15,7 +15,8 @@ const versionsManage: AppRouteModule = {
     orderNo: 1,
     icon: 'ion:grid-outline',
     //配置名称，可直接输入字符串，也可使用
-    title: '版本管理',
+    // 版本管理
+    title: '',
   },
   children: [
     {
@@ -23,7 +24,8 @@ const versionsManage: AppRouteModule = {
       name: 'VersionsManage',
       component: () => import('/@/views/versionsManage/index.vue'),
       meta: {
-        title: '版本管理',
+        // 版本管理
+        title: '',
         hideMenu: true,
       },
     },

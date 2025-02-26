@@ -6,7 +6,7 @@
   <div class="anticon" :class="getAppLogoClass" @click="goHome">
     <img src="../../../assets/images/header.png" style="width: 30px; height: 30px" />
     <div class="ml-2 truncate md:opacity-100" :class="getTitleClass" v-show="showTitle">
-      {{ title }}
+      {{ t('sys.sysTitle') }}
     </div>
     <!-- <div v-show="showTitle" style="margin: 9px 0 0 2px; color: #fff">{{ version }}</div> -->
   </div>
@@ -20,6 +20,7 @@
   import { useDesign } from '@/hooks/web/useDesign';
   import { PageEnum } from '@/enums/pageEnum';
   import { useUserStore } from '@/store/modules/user';
+  import { useI18n } from '@/hooks/web/useI18n';
 
   const props = defineProps({
     /**
@@ -41,6 +42,7 @@
   const userStore = useUserStore();
   //zs 本地放需要能从数据库获取更改logo和title。2023-03-08
   const { title, version } = useGlobSetting();
+  const { t } = useI18n();
   const go = useGo();
 
   const getAppLogoClass = computed(() => [

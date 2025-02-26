@@ -15,7 +15,8 @@ const softwareManage: AppRouteModule = {
     orderNo: 1,
     icon: 'ion:grid-outline',
     //配置名称，可直接输入字符串，也可使用
-    title: '软件管理',
+    //软件管理
+    title: '',
   },
   children: [
     {
@@ -23,7 +24,8 @@ const softwareManage: AppRouteModule = {
       name: 'SoftwareManage',
       component: () => import('/@/views/softwareManage/index.vue'),
       meta: {
-        title: '软件管理',
+        //软件管理
+        title: '',
         hideMenu: true,
       },
     },

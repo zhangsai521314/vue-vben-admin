@@ -9,8 +9,8 @@ const dcOption: AppRouteModule = {
   component: LAYOUT,
   redirect: '/dcOption/telephoneBook',
   meta: {
-    icon: 'ion:grid-outline',
-    title: '调度台',
+    //调度台
+    title: '',
   },
   children: [
     {
@@ -18,7 +18,8 @@ const dcOption: AppRouteModule = {
       name: 'DCOptionTelephoneBook',
       component: () => import('/@/views/dcOption/telephoneBook/index.vue'),
       meta: {
-        title: '电话薄管理',
+        //电话薄管理
+        title: '',
       },
     },
     {
@@ -26,7 +27,8 @@ const dcOption: AppRouteModule = {
       name: 'DCOptionCallRecord',
       component: () => import('/@/views/dcOption/callRecord/index.vue'),
       meta: {
-        title: '通话记录',
+        //通话记录
+        title: '',
       },
     },
     {
@@ -34,7 +36,8 @@ const dcOption: AppRouteModule = {
       name: 'DCOptionKeypadRecord',
       component: () => import('/@/views/dcOption/keypadRecord/index.vue'),
       meta: {
-        title: '按键记录',
+        //按键记录
+        title: '',
       },
     },
     {
@@ -42,7 +45,8 @@ const dcOption: AppRouteModule = {
       name: 'DCOptionServiceTest',
       component: () => import('/@/views/dcOption/serviceTest/index.vue'),
       meta: {
-        title: '服务自检',
+        //服务自检
+        title: '',
       },
     },
   ],

@@ -15,7 +15,8 @@ const message: AppRouteModule = {
     orderNo: 1,
     icon: 'ion:grid-outline',
     //配置名称，可直接输入字符串，也可使用
-    title: '告警管理',
+    //告警管理
+    title: '',
   },
   children: [
     {
@@ -23,7 +24,8 @@ const message: AppRouteModule = {
       name: 'Message',
       component: () => import('/@/views/message/index.vue'),
       meta: {
-        title: '告警管理',
+        //告警管理
+        title: '',
         hideMenu: true,
       },
     },

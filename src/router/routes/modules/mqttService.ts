@@ -15,7 +15,8 @@ const mqttService: AppRouteModule = {
     orderNo: 1,
     icon: 'ion:grid-outline',
     //配置名称，可直接输入字符串，也可使用
-    title: '通信管理',
+    //通信管理
+    title: '',
   },
   children: [
     {
@@ -23,7 +24,8 @@ const mqttService: AppRouteModule = {
       name: 'MqttService',
       component: () => import('/@/views/mqttService/index.vue'),
       meta: {
-        title: '通信管理',
+        //通信管理
+        title: '',
         hideMenu: true,
       },
     },

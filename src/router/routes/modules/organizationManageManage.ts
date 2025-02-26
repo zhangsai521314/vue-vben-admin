@@ -15,7 +15,8 @@ const organizationManage: AppRouteModule = {
     orderNo: 1,
     icon: 'ion:grid-outline',
     //配置名称，可直接输入字符串，也可使用
-    title: '部门管理',
+    //部门管理
+    title: '',
   },
   children: [
     {
@@ -23,7 +24,8 @@ const organizationManage: AppRouteModule = {
       name: 'OrganizationManage',
       component: () => import('/@/views/organizationManage/index.vue'),
       meta: {
-        title: '部门管理',
+        //部门管理
+        title: '',
         hideMenu: true,
       },
     },
