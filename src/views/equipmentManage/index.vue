@@ -40,6 +40,7 @@
                     <a-space direction="horizontal" size="small" :wrap="true">
                       <label>{{ t('view.affiliatedDepartment') }}：</label>
                       <a-tree-select
+                        style="width: 180px"
                         v-model:value="seacthContent.orgId"
                         show-search
                         :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
@@ -56,8 +57,7 @@
                       <label>{{ t('view.deviceName') }}：</label>
                       <a-input
                         :style="{
-                          width:
-                            locale == 'zh-CN' ? '180px' : locale == 'en-US' ? '200px' : '350px',
+                          width: '200px',
                         }"
                         @press-enter="initPage"
                         v-model:value="seacthContent.equipmentName"
@@ -418,7 +418,7 @@
       {
         field: 'modifyUserName',
         title: t('view.modifier'),
-        minWidth: 176,
+        minWidth: 130,
         showOverflow: true,
         visible: false,
         sortable: true,

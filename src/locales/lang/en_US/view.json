@@ -1,4 +1,6 @@
 {
+  "commandSendingFailed": "The command sending failed",
+  "commandHasBeenSentSuccessfully": "The command has been sent successfully",
   "userManual":"User Manual",
   "emergencyGroupCallPriority1To15": "Emergency group call priority 1 to 15",
   "pleaseEnterEmergencyGroupCallPriority": "Please enter the emergency group call priority",
@@ -651,7 +653,7 @@
   "pleaseSelectWhetherToEnablePerformanceReporting": "Please select whether to enable performance reporting",
   "gettingConfiguration...": "Getting configuration...",
   "returnToThePreviousDirectory": "Return to the previous directory",
-  "size(kb)": "Size (KB)",
+  "size_kb": "Size (KB)",
   "lastModifiedTime": "Last modified time",
   "download": "Download",
   "close": "Close",

@@ -34,8 +34,8 @@
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <label>ISDN：</label>
-                      <a-input
+                      <label>{{ t('view.isdn') }}：</label>
+                      <a-input-number
                         @press-enter="initPage()"
                         v-model:value="seacthContent.handIsdn"
                         :placeholder="t('view.inputIsdnNumberForQuery')"
@@ -346,7 +346,7 @@
         title: t('view.isdnNumber'),
         showOverflow: true,
         sortable: true,
-        minWidth: 90,
+        minWidth: locale == 'zh-CN' ? 100 : 130,
         fixed: 'left',
       },
       {
@@ -358,11 +358,11 @@
         fixed: 'left',
       },
       {
-        field: 'stationXiaQu',
+        field: 'stationArea',
         title: t('view.stationArea'),
         showOverflow: true,
         visible: false,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 130,
         slots: {
           default: 'stationArea',
         },
@@ -372,7 +372,7 @@
         title: t('view.eciNumber'),
         showOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 130,
         visible: false,
       },
       {
@@ -462,7 +462,7 @@
       {
         field: 'lincesName',
         title: t('view.authorizationFile'),
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 160,
         showOverflow: true,
         visible: false,
         sortable: true,
@@ -487,6 +487,13 @@
       //   },
       // },
       {
+        field: 'createTime',
+        title: t('view.creationTime'),
+        minWidth: 150,
+        showOverflow: true,
+        sortable: true,
+      },
+      {
         field: 'createUserName',
         title: t('view.creator'),
         minWidth: 130,
@@ -505,7 +512,7 @@
       {
         field: 'modifyUserName',
         title: t('view.modifier'),
-        minWidth: 176,
+        minWidth: 130,
         showOverflow: true,
         visible: false,
         sortable: true,
@@ -718,7 +725,7 @@
         });
       } else {
         handApi.UpdateHand(formData.value).then((data) => {
-          const oldData = tableConfig.data.find((m) => m.handId == data.HandId);
+          const oldData = tableConfig.data.find((m) => m.handId == data.handId);
           if (oldData) {
             myCommon.objectReplace(oldData, data);
           }

@@ -1,9 +1,10 @@
 // 公共api
 import { defHttp } from '@/utils/http/axios';
-import { ContentTypeEnum } from '@/enums/httpEnum';
 import { ErrorMessageMode } from '/#/axios';
 import { message } from 'ant-design-vue';
+import { useI18n } from '@/hooks/web/useI18n';
 
+const { t } = useI18n();
 const common = {
   //指定获取数据的url,请求类型
   Request: function name(
@@ -51,13 +52,13 @@ const common = {
       })
       .then((data) => {
         if (data) {
-          message.success('命令发送成功');
+          message.success(t('view.commandHasBeenSentSuccessfully'));
         } else {
-          message.error('命令发送失败');
+          message.error(t('view.commandSendingFailed'));
         }
       })
       .catch(() => {
-        message.error('命令发送失败');
+        message.error(t('view.commandSendingFailed'));
       });
   },
   //获取可以下载的版本文件

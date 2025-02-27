@@ -40,6 +40,7 @@
                     <a-space direction="horizontal" size="small" :wrap="true">
                       <label>{{ t('view.affiliatedDevice') }}：</label>
                       <a-tree-select
+                        style="width: 180px"
                         v-model:value="seacthContent.equipmentId"
                         show-search
                         :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
@@ -56,8 +57,7 @@
                       <label>{{ t('view.softwareName') }}：</label>
                       <a-input
                         :style="{
-                          width:
-                            locale == 'zh-CN' ? '180px' : locale == 'en-US' ? '200px' : '300px',
+                          width: '180px',
                         }"
                         @press-enter="initPage"
                         v-model:value="seacthContent.serviceName"
@@ -454,7 +454,7 @@
               </span>
             </template>
           </vxe-column>
-          <vxe-column field="Size" title="大小(KB)" align="right">
+          <vxe-column field="Size" :title="t('view.size_kb')" align="right">
             <template #default="{ row }">
               {{ row.Size != -1 ? row.Size : '' }}
             </template>
@@ -683,7 +683,7 @@
       {
         field: 'lincesName',
         title: t('view.authorizationFile'),
-        minWidth: 150,
+        minWidth: locale == 'zh-CN' ? 150 : 170,
         showOverflow: true,
         visible: false,
         sortable: true,
@@ -750,7 +750,7 @@
       {
         field: 'modifyUserName',
         title: t('view.modifier'),
-        minWidth: 176,
+        minWidth: 130,
         showOverflow: true,
         visible: false,
         sortable: true,

@@ -273,7 +273,7 @@
         visible: false,
         showOverflow: true,
         sortable: true,
-        minWidth: 176,
+        minWidth: 130,
       },
     ],
     toolbarConfig: {

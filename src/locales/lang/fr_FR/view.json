@@ -1,4 +1,6 @@
 {
+  "commandSendingFailed": "L'envoi de la commande a échoué",
+  "commandHasBeenSentSuccessfully": "La commande a été envoyée avec succès",
   "userManual":"Manuel utilisateur",
   "emergencyGroupCallPriority1To15": "Priorité d'appel de groupe d'urgence 1 à 15",
   "pleaseEnterEmergencyGroupCallPriority": "Veuillez entrer la priorité de l'appel de groupe d'urgence",
@@ -652,7 +654,7 @@
   "pleaseSelectWhetherToEnablePerformanceReporting": "Veuillez choisir si vous souhaitez activer le rapport de performance",
   "gettingConfiguration...": "Obtention de la configuration...",
   "returnToThePreviousDirectory": "Retour au répertoire précédent",
-  "size(kb)": "Taille (Ko)",
+  "size_kb": "Taille (Ko)",
   "lastModifiedTime": "Dernière date de modification",
   "download": "Télécharger",
   "close": "Fermer",
