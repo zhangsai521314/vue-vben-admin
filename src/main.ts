@@ -20,7 +20,7 @@ import '@/design/myVbencss.less';
 import '@/design/myContextMenu.less';
 import '@/design/myDraggableResizable.less';
 
-import { createApp, unref, watch } from 'vue';
+import { createApp, watch } from 'vue';
 import { registerGlobComp } from '@/components/registerGlobComp';
 import { setupGlobDirectives } from '@/directives';
 import { setupI18n } from '@/locales/setupI18n';
@@ -35,12 +35,8 @@ import { getAppEnvConfig } from '@/utils/env';
 import { useMqttStoreWithOut } from '@/store/modules/mqtt';
 import { useGplotStoreWithOut } from '@/store/modules/gplot';
 import messageApi from '@/api/message';
-import dayjs from 'dayjs';
 import { useUserStore } from '@/store/modules/user';
-import { createLocalStorage } from '@/utils/cache';
 import { message } from 'ant-design-vue';
-import { find } from 'xe-utils';
-import type { MsgData, UserInfo } from '#/store';
 
 const userStore = useUserStore();
 const mqttStore = useMqttStoreWithOut();
