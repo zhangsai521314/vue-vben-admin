@@ -137,7 +137,7 @@
         </template>
         <template #default="{ row }">
           <div :class="`tableOption`">
-            <AuthDom auth="softwareManage_table_showlog">
+            <AuthDom auth="hand_table_showlog">
               <IconFontClass
                 name="icon-baseui-flowcontrol-log"
                 @click="showLog(row)"
