@@ -1,6 +1,6 @@
 <template>
   <MyContent :class="prefixCls">
-    <a-spin :spinning="loading">
+    <a-spin :spinning="isRunLoading">
       <div style="width: 100%; height: 100%">
         <vxe-toolbar ref="toolbarRef" custom>
           <template #buttons>
@@ -58,6 +58,7 @@
             :border="true"
             ref="tableRef"
             height="100%"
+            :loading="loading"
             :custom-config="{ storage: true }"
             :row-config="{ keyField: 'menuId' }"
             :column-config="{ resizable: true }"
@@ -519,6 +520,7 @@
   defineOptions({ name: 'MenuManage' });
   const { prefixCls } = useDesign('menuManage-');
   const loading = ref(true);
+  const isRunLoading = ref(false);
   const tableConfigData = ref([]);
   const defFromData = reactive({
     menuNameCn: null,
@@ -572,11 +574,11 @@
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {
-        loading.value = true;
+        isRunLoading.value = true;
         menuApi
           .DeleteMenu(row.menuId)
           .then((data) => {
-            loading.value = false;
+            isRunLoading.value = false;
             try {
               if (data) {
                 tableConfigData.value = tableConfigData.value?.filter(
@@ -588,7 +590,7 @@
             } catch (error) {}
           })
           .catch(() => {
-            loading.value = false;
+            isRunLoading.value = false;
           });
       },
       onCancel() {},
@@ -605,11 +607,11 @@
 
   //获取菜单
   function getByid(id) {
-    loading.value = true;
+    isRunLoading.value = true;
     menuApi
       .GetMenu(id.toString())
       .then((data) => {
-        loading.value = false;
+        isRunLoading.value = false;
         if (data) {
           data.parentId = data.parentId == 0 ? null : data.parentId;
           formData.value = data;
@@ -620,7 +622,7 @@
         }
       })
       .catch(() => {
-        loading.value = false;
+        isRunLoading.value = false;
       });
   }
 

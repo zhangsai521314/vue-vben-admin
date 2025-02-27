@@ -1,273 +1,276 @@
 <template>
   <MyContent :class="prefixCls">
-    <vxe-grid
-      :scroll-y="{ enabled: true }"
-      v-bind="tableConfig"
-      id="equipmentManage"
-      :auto-resize="true"
-      ref="tableRef"
-      :loading="loading"
-      :row-config="{ keyField: 'equipmentId' }"
-      :column-config="{ resizable: true }"
-      :custom-config="{ storage: true }"
-      @sort-change="
-        ({ sortList }) =>
-          vxetableMyCommon.onSortChange({ sortList }, page, getEquipments, [
-            'orgName',
-            'equipmentTypeName',
-            'equipmentName',
-            'systemTypeName',
-          ])
-      "
-      :seq-config="{ startIndex: (page.current - 1) * page.size }"
-    >
-      <template #pager>
-        <vxe-pager
-          background
-          v-model:current-page="page.current"
-          v-model:page-size="page.size"
-          :total="page.total"
-          @page-change="getEquipments()"
-        />
-      </template>
-      <template #toolbar_buttons>
-        <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" align="start" style="margin: 0 5px">
-            <AuthDom auth="equipmentManage_query">
-              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.affiliatedDepartment') }}：</label>
-                    <a-tree-select
-                      v-model:value="seacthContent.orgId"
-                      show-search
-                      :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                      :placeholder="t('view.pleaseSelectTheAffiliatedDepartment')"
-                      allow-clear
-                      show-arrow
-                      :filterTreeNode="AntVueCommon.filterTreeNode"
-                      :tree-data="organizationDatas"
-                    />
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.deviceName') }}：</label>
-                    <a-input
-                      :style="{
-                        width: locale == 'zh-CN' ? '180px' : locale == 'en-US' ? '200px' : '350px',
-                      }"
-                      @press-enter="initPage"
-                      v-model:value="seacthContent.equipmentName"
-                      :placeholder="t('view.inputDeviceNameQuery')"
-                    />
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="initPage" type="primary">{{ t('view.query') }}</a-button>
-                    <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
-                  </a-space>
-                </div>
-              </a-space>
-            </AuthDom>
-            <AuthDom auth="equipmentManage_add">
-              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button class="ant-btn" @click="showFrom()">{{
-                      t('view.addDevice')
-                    }}</a-button>
-                  </a-space>
-                </div>
-              </a-space>
-            </AuthDom>
-          </a-space>
-        </div>
-      </template>
-      <template #default="{ row }">
-        <div :class="`tableOption`">
-          <AuthDom auth="equipmentManage_table_edit">
-            <IconFontClass
-              name="icon-baseui-edit-fill"
-              @click="showFrom(row)"
-              style="color: #0a61bd"
-              :title="t('view.edit')"
-            />
-          </AuthDom>
-          <AuthDom auth="equipmentManage_table_delete">
-            <IconFontClass
-              name="icon-baseui-guanbicuowu"
-              @click="remove(row)"
-              style="color: red"
-              :title="t('view.delete')"
-            />
-          </AuthDom>
-        </div>
-      </template>
-    </vxe-grid>
-    <a-drawer
-      :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="locale == 'zh-CN' ? 500 : 600"
-      :visible="isShowForm"
-      :title="t('view.configuration')"
-      :footer-style="{ textAlign: 'right' }"
-      @close="formClose"
-    >
-      <a-form
-        :label-col="{ span: locale == 'zh-CN' ? 6 : 10 }"
-        :style="{ paddingRight: '2px' }"
-        autocomplete="off"
-        ref="formRef"
-        :model="formData"
+    <a-spin :spinning="isRunLoading">
+      <vxe-grid
+        :scroll-y="{ enabled: true }"
+        v-bind="tableConfig"
+        id="equipmentManage"
+        :auto-resize="true"
+        ref="tableRef"
+        :loading="loading"
+        :row-config="{ keyField: 'equipmentId' }"
+        :column-config="{ resizable: true }"
+        :custom-config="{ storage: true }"
+        @sort-change="
+          ({ sortList }) =>
+            vxetableMyCommon.onSortChange({ sortList }, page, getEquipments, [
+              'orgName',
+              'equipmentTypeName',
+              'equipmentName',
+              'systemTypeName',
+            ])
+        "
+        :seq-config="{ startIndex: (page.current - 1) * page.size }"
       >
-        <a-form-item
-          :rules="[{ required: true, message: t('view.pleaseSelectTheAffiliatedDepartment') }]"
-          :label="t('view.affiliatedDepartment')"
-          name="orgId"
-        >
-          <a-tree-select
-            v-model:value="formData.orgId"
-            show-search
-            style="width: 100%"
-            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-            :placeholder="t('view.pleaseSelectTheAffiliatedDepartment')"
-            allow-clear
-            show-arrow
-            :filterTreeNode="AntVueCommon.filterTreeNode"
-            :tree-data="organizationDatas"
+        <template #pager>
+          <vxe-pager
+            background
+            v-model:current-page="page.current"
+            v-model:page-size="page.size"
+            :total="page.total"
+            @page-change="getEquipments()"
           />
-        </a-form-item>
-        <a-form-item
-          name="equipmentNameCn"
-          :label="t('view.deviceNameCn')"
-          :rules="[
-            { required: true, message: '' },
-            { max: 64, message: t('view.deviceNameIsTooLong', [64]) },
-            { validator: formValidator.empty, message: t('view.pleaseEnterDeviceName') },
-          ]"
+        </template>
+        <template #toolbar_buttons>
+          <div :class="`tableBtn`">
+            <a-space direction="horizontal" size="small" align="start" style="margin: 0 5px">
+              <AuthDom auth="equipmentManage_query">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>{{ t('view.affiliatedDepartment') }}：</label>
+                      <a-tree-select
+                        v-model:value="seacthContent.orgId"
+                        show-search
+                        :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                        :placeholder="t('view.pleaseSelectTheAffiliatedDepartment')"
+                        allow-clear
+                        show-arrow
+                        :filterTreeNode="AntVueCommon.filterTreeNode"
+                        :tree-data="organizationDatas"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>{{ t('view.deviceName') }}：</label>
+                      <a-input
+                        :style="{
+                          width:
+                            locale == 'zh-CN' ? '180px' : locale == 'en-US' ? '200px' : '350px',
+                        }"
+                        @press-enter="initPage"
+                        v-model:value="seacthContent.equipmentName"
+                        :placeholder="t('view.inputDeviceNameQuery')"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button @click="initPage" type="primary">{{ t('view.query') }}</a-button>
+                      <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
+                    </a-space>
+                  </div>
+                </a-space>
+              </AuthDom>
+              <AuthDom auth="equipmentManage_add">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button class="ant-btn" @click="showFrom()">{{
+                        t('view.addDevice')
+                      }}</a-button>
+                    </a-space>
+                  </div>
+                </a-space>
+              </AuthDom>
+            </a-space>
+          </div>
+        </template>
+        <template #default="{ row }">
+          <div :class="`tableOption`">
+            <AuthDom auth="equipmentManage_table_edit">
+              <IconFontClass
+                name="icon-baseui-edit-fill"
+                @click="showFrom(row)"
+                style="color: #0a61bd"
+                :title="t('view.edit')"
+              />
+            </AuthDom>
+            <AuthDom auth="equipmentManage_table_delete">
+              <IconFontClass
+                name="icon-baseui-guanbicuowu"
+                @click="remove(row)"
+                style="color: red"
+                :title="t('view.delete')"
+              />
+            </AuthDom>
+          </div>
+        </template>
+      </vxe-grid>
+      <a-drawer
+        :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+        :width="locale == 'zh-CN' ? 500 : 600"
+        :visible="isShowForm"
+        :title="t('view.configuration')"
+        :footer-style="{ textAlign: 'right' }"
+        @close="formClose"
+      >
+        <a-form
+          :label-col="{ span: locale == 'zh-CN' ? 6 : 10 }"
+          :style="{ paddingRight: '2px' }"
+          autocomplete="off"
+          ref="formRef"
+          :model="formData"
         >
-          <a-input
-            v-model:value="formData.equipmentNameCn"
-            :placeholder="t('view.pleaseEnterDeviceName')"
-            autocomplete="off"
-          />
-        </a-form-item>
-        <a-form-item
-          name="equipmentNameEn"
-          :label="t('view.deviceNameEn')"
-          :rules="[
-            { required: true, message: '' },
-            { max: 250, message: t('view.deviceNameIsTooLong', [250]) },
-            { validator: formValidator.empty, message: t('view.pleaseEnterDeviceName') },
-          ]"
-        >
-          <a-input
-            v-model:value="formData.equipmentNameEn"
-            :placeholder="t('view.pleaseEnterDeviceName')"
-            autocomplete="off"
-          />
-        </a-form-item>
-        <a-form-item
-          name="equipmentNameFr"
-          :label="t('view.deviceNameFr')"
-          :rules="[
-            { required: true, message: '' },
-            { max: 250, message: t('view.deviceNameIsTooLong', [250]) },
-            { validator: formValidator.empty, message: t('view.pleaseEnterDeviceName') },
-          ]"
-        >
-          <a-input
-            v-model:value="formData.equipmentNameFr"
-            :placeholder="t('view.pleaseEnterDeviceName')"
-            autocomplete="off"
-          />
-        </a-form-item>
-        <a-form-item
-          :label="t('view.deviceType')"
-          name="equipmentType"
-          :rules="[{ required: true, message: t('view.pleaseSelectDeviceType') }]"
-        >
-          <a-select
-            :placeholder="t('view.pleaseSelectDeviceType')"
-            show-search
-            :filter-option="AntVueCommon.filterOption"
-            v-model:value="formData.equipmentType"
-            :options="dictionariesData.filter((m) => m.dictionariesClass == 'equipmentType')"
-          />
-        </a-form-item>
-        <a-form-item
-          :label="t('view.systemType')"
-          name="systemType"
-          :rules="[{ required: true, message: t('view.pleaseSelectSystemType') }]"
-        >
-          <a-select
-            show-search
-            :filter-option="AntVueCommon.filterOption"
-            :placeholder="t('view.pleaseSelectSystemType')"
-            v-model:value="formData.systemType"
-            :options="dictionariesData.filter((m) => m.dictionariesClass == 'systemType')"
-          />
-        </a-form-item>
-        <a-form-item
-          name="address"
-          :label="t('view.deviceAddress')"
-          :rules="[
-            { required: true, message: '' },
-            { max: 50, message: t('view.deviceAddressIsTooLong') },
-            { validator: formValidator.empty, message: t('view.pleaseEnterDeviceAddress') },
-          ]"
-        >
-          <a-input
-            v-model:value="formData.address"
-            :placeholder="t('view.pleaseEnterDeviceAddress')"
-            autocomplete="off"
-          />
-        </a-form-item>
-        <a-form-item
-          name="orderIndex"
-          :label="t('view.deviceSorting')"
-          :rules="[
-            { required: true, message: t('view.pleaseEnterDeviceSorting') },
-            {
-              validator: formValidator.min,
-              min: -9999,
-              message: t('view.sortingValueMustBeBetween9999'),
-            },
-            {
-              validator: formValidator.max,
-              max: 9999,
-              message: t('view.sortingValueMustBeBetween9999'),
-            },
-          ]"
-        >
-          <a-input-number
-            :placeholder="t('view.pleaseEnterDeviceSorting')"
-            style="width: 300px"
-            :precision="3"
-            v-model:value="formData.orderIndex"
-          />
-        </a-form-item>
-        <a-form-item
-          name="remark"
-          :label="t('view.remarks')"
-          :rules="[{ max: 250, message: t('view.remarksTooLong') }]"
-        >
-          <a-textarea
-            :placeholder="t('view.pleaseInputRemarkInformation')"
-            :rows="3"
-            v-model:value="formData.remark"
-            autocomplete="off"
-          />
-        </a-form-item>
-      </a-form>
-      <template #footer>
-        <a-spin :spinning="fromSpinning">
-          <a-button type="primary" @click="saveFrom">{{ t('view.save') }}</a-button>
-          <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
-        </a-spin>
-      </template>
-    </a-drawer>
+          <a-form-item
+            :rules="[{ required: true, message: t('view.pleaseSelectTheAffiliatedDepartment') }]"
+            :label="t('view.affiliatedDepartment')"
+            name="orgId"
+          >
+            <a-tree-select
+              v-model:value="formData.orgId"
+              show-search
+              style="width: 100%"
+              :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+              :placeholder="t('view.pleaseSelectTheAffiliatedDepartment')"
+              allow-clear
+              show-arrow
+              :filterTreeNode="AntVueCommon.filterTreeNode"
+              :tree-data="organizationDatas"
+            />
+          </a-form-item>
+          <a-form-item
+            name="equipmentNameCn"
+            :label="t('view.deviceNameCn')"
+            :rules="[
+              { required: true, message: '' },
+              { max: 64, message: t('view.deviceNameIsTooLong', [64]) },
+              { validator: formValidator.empty, message: t('view.pleaseEnterDeviceName') },
+            ]"
+          >
+            <a-input
+              v-model:value="formData.equipmentNameCn"
+              :placeholder="t('view.pleaseEnterDeviceName')"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="equipmentNameEn"
+            :label="t('view.deviceNameEn')"
+            :rules="[
+              { required: true, message: '' },
+              { max: 250, message: t('view.deviceNameIsTooLong', [250]) },
+              { validator: formValidator.empty, message: t('view.pleaseEnterDeviceName') },
+            ]"
+          >
+            <a-input
+              v-model:value="formData.equipmentNameEn"
+              :placeholder="t('view.pleaseEnterDeviceName')"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="equipmentNameFr"
+            :label="t('view.deviceNameFr')"
+            :rules="[
+              { required: true, message: '' },
+              { max: 250, message: t('view.deviceNameIsTooLong', [250]) },
+              { validator: formValidator.empty, message: t('view.pleaseEnterDeviceName') },
+            ]"
+          >
+            <a-input
+              v-model:value="formData.equipmentNameFr"
+              :placeholder="t('view.pleaseEnterDeviceName')"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            :label="t('view.deviceType')"
+            name="equipmentType"
+            :rules="[{ required: true, message: t('view.pleaseSelectDeviceType') }]"
+          >
+            <a-select
+              :placeholder="t('view.pleaseSelectDeviceType')"
+              show-search
+              :filter-option="AntVueCommon.filterOption"
+              v-model:value="formData.equipmentType"
+              :options="dictionariesData.filter((m) => m.dictionariesClass == 'equipmentType')"
+            />
+          </a-form-item>
+          <a-form-item
+            :label="t('view.systemType')"
+            name="systemType"
+            :rules="[{ required: true, message: t('view.pleaseSelectSystemType') }]"
+          >
+            <a-select
+              show-search
+              :filter-option="AntVueCommon.filterOption"
+              :placeholder="t('view.pleaseSelectSystemType')"
+              v-model:value="formData.systemType"
+              :options="dictionariesData.filter((m) => m.dictionariesClass == 'systemType')"
+            />
+          </a-form-item>
+          <a-form-item
+            name="address"
+            :label="t('view.deviceAddress')"
+            :rules="[
+              { required: true, message: '' },
+              { max: 50, message: t('view.deviceAddressIsTooLong') },
+              { validator: formValidator.empty, message: t('view.pleaseEnterDeviceAddress') },
+            ]"
+          >
+            <a-input
+              v-model:value="formData.address"
+              :placeholder="t('view.pleaseEnterDeviceAddress')"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="orderIndex"
+            :label="t('view.deviceSorting')"
+            :rules="[
+              { required: true, message: t('view.pleaseEnterDeviceSorting') },
+              {
+                validator: formValidator.min,
+                min: -9999,
+                message: t('view.sortingValueMustBeBetween9999'),
+              },
+              {
+                validator: formValidator.max,
+                max: 9999,
+                message: t('view.sortingValueMustBeBetween9999'),
+              },
+            ]"
+          >
+            <a-input-number
+              :placeholder="t('view.pleaseEnterDeviceSorting')"
+              style="width: 300px"
+              :precision="3"
+              v-model:value="formData.orderIndex"
+            />
+          </a-form-item>
+          <a-form-item
+            name="remark"
+            :label="t('view.remarks')"
+            :rules="[{ max: 250, message: t('view.remarksTooLong') }]"
+          >
+            <a-textarea
+              :placeholder="t('view.pleaseInputRemarkInformation')"
+              :rows="3"
+              v-model:value="formData.remark"
+              autocomplete="off"
+            />
+          </a-form-item>
+        </a-form>
+        <template #footer>
+          <a-spin :spinning="fromSpinning">
+            <a-button type="primary" @click="saveFrom">{{ t('view.save') }}</a-button>
+            <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
+          </a-spin>
+        </template>
+      </a-drawer>
+    </a-spin>
   </MyContent>
 </template>
 <script setup lang="ts">
@@ -292,6 +295,7 @@
   defineOptions({ name: 'EquipmentManage' });
   const { prefixCls } = useDesign('equipment-');
   const loading = ref(true);
+  const isRunLoading = ref(false);
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
     columns: [
@@ -500,16 +504,16 @@
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {
-        loading.value = true;
+        isRunLoading.value = true;
         equipmentApi
           .DeleteEquipment(row.equipmentId)
           .then(() => {
-            loading.value = false;
+            isRunLoading.value = false;
             message.success(t('view.deletionSuccessful'));
             getEquipments();
           })
           .catch(() => {
-            loading.value = false;
+            isRunLoading.value = false;
           });
       },
       onCancel() {},
@@ -531,11 +535,11 @@
 
   //获取设备列表
   function getByid(id) {
-    loading.value = true;
+    isRunLoading.value = true;
     equipmentApi
       .GetEquipment(id)
       .then((data) => {
-        loading.value = false;
+        isRunLoading.value = false;
         if (data) {
           formData.value = data;
           saveType = 'edit';
@@ -545,7 +549,7 @@
         }
       })
       .catch(() => {
-        loading.value = false;
+        isRunLoading.value = false;
       });
   }
 
@@ -611,7 +615,7 @@
             oldData.orgName = _organizationDatas.find((m) => m.key == data.orgId)?.label;
           }
           formClose();
-          message.success('更新设备信息成功');
+          message.success(t('view.updateSuccessful'));
         });
       }
     });

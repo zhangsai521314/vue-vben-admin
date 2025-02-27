@@ -332,7 +332,7 @@
           .DeleteDCOptionTelephoneBook(row.phoneId.toString())
           .then(() => {
             isRunGet.value = false;
-            message.success(t('view.deletePhoneSuccess'));
+            message.success(t('view.deletionSuccessful'));
             getDCOptionTelephoneBooks();
           })
           .catch(() => {
@@ -401,7 +401,7 @@
         telephoneBookApi.AddDCOptionTelephoneBook(formData.value).then((data) => {
           tableConfig.data?.splice(0, 0, data);
           formClose();
-          message.success(t('view.addPhoneSuccess'));
+          message.success(t('view.additionSuccessful'));
           page.total = page.total + 1;
         });
       } else {
@@ -415,7 +415,7 @@
             oldData.modifyUser = data.modifyUser;
           }
           formClose();
-          message.success(t('view.updatePhoneSuccess'));
+          message.success(t('view.updateSuccessful'));
         });
       }
     });

@@ -383,6 +383,55 @@
               />
             </a-form-item>
             <a-form-item
+              name="sosCallNumber"
+              :label="t('view.emergencyGroupCallNumber')"
+              :rules="[
+                { required: true, message: '' },
+                { min: 3, message: t('view.emergencyGroupCallNumberIs3To10Digits') },
+                { max: 10, message: t('view.emergencyGroupCallNumberIs3To10Digits') },
+                {
+                  validator: formValidator.positiveInteger,
+                  message: t('view.emergencyGroupCallNumFormatIsNaturalNum'),
+                },
+                {
+                  validator: formValidator.empty,
+                  message: t('view.pleaseEnterEmergencyGroupCallNumber'),
+                },
+              ]"
+            >
+              <a-input
+                :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
+                :placeholder="t('view.pleaseEnterEmergencyGroupCallNumber')"
+                v-model:value="formData.sosCallNumber"
+                autocomplete="off"
+              />
+            </a-form-item>
+            <a-form-item
+              name="sosCallPriority"
+              :label="t('view.emergencyGroupCallPriority')"
+              :rules="[
+                { required: true, message: t('view.pleaseEnterEmergencyGroupCallPriority') },
+                {
+                  validator: formValidator.min,
+                  min: 1,
+                  message: t('view.emergencyGroupCallPriority1To15'),
+                },
+                {
+                  validator: formValidator.max,
+                  max: 15,
+                  message: t('view.emergencyGroupCallPriority1To15'),
+                },
+              ]"
+            >
+              <a-input-number
+                :disabled="myCommon.isnull(formData.programUpdatePassWord) && saveType == 'edit'"
+                :placeholder="t('view.pleaseEnterEmergencyGroupCallPriority')"
+                style="width: 262px"
+                :precision="0"
+                v-model:value="formData.sosCallPriority"
+              />
+            </a-form-item>
+            <a-form-item
               name="groupCallNumber"
               :label="t('view.inStationGroupCallNumber')"
               :rules="[
@@ -759,6 +808,8 @@
     endGlb: null,
     tempCallPriority: null,
     tempCallNumber: null,
+    sosCallPriority: null,
+    sosCallNumber: null,
     groupCallPriority: null,
     groupCallNumber: null,
     prevStationId: null,

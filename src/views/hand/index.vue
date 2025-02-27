@@ -1,93 +1,94 @@
 <template>
   <MyContent :class="prefixCls">
-    <vxe-grid
-      :scroll-y="{ enabled: true }"
-      v-bind="tableConfig"
-      id="handLog"
-      :auto-resize="true"
-      ref="tableRef"
-      :loading="loading"
-      :seq-config="{ startIndex: (page.current - 1) * page.size }"
-      :row-config="{ keyField: 'handId' }"
-      :column-config="{ resizable: true }"
-      :custom-config="{ storage: true }"
-      @sort-change="onSortChange"
-    >
-      <template #toolbar_buttons>
-        <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style="margin-left: 5px">
-            <AuthDom auth="hand_query">
-              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.heartbeatTime') }}：</label>
-                    <a-config-provider :locale="zhCN">
-                      <a-range-picker
-                        :allowClear="true"
-                        v-model:value="timeValue"
-                        :showTime="true"
-                        format="YYYY-MM-DD HH:mm:ss"
+    <a-spin :spinning="isRunLoading">
+      <vxe-grid
+        :scroll-y="{ enabled: true }"
+        v-bind="tableConfig"
+        id="handLog"
+        :auto-resize="true"
+        ref="tableRef"
+        :loading="loading"
+        :seq-config="{ startIndex: (page.current - 1) * page.size }"
+        :row-config="{ keyField: 'handId' }"
+        :column-config="{ resizable: true }"
+        :custom-config="{ storage: true }"
+        @sort-change="onSortChange"
+      >
+        <template #toolbar_buttons>
+          <div :class="`tableBtn`">
+            <a-space direction="horizontal" size="small" style="margin-left: 5px">
+              <AuthDom auth="hand_query">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>{{ t('view.heartbeatTime') }}：</label>
+                      <a-config-provider :locale="zhCN">
+                        <a-range-picker
+                          :allowClear="true"
+                          v-model:value="timeValue"
+                          :showTime="true"
+                          format="YYYY-MM-DD HH:mm:ss"
+                        />
+                      </a-config-provider>
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>ISDN：</label>
+                      <a-input
+                        @press-enter="initPage()"
+                        v-model:value="seacthContent.handIsdn"
+                        :placeholder="t('view.inputIsdnNumberForQuery')"
                       />
-                    </a-config-provider>
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>ISDN：</label>
-                    <a-input
-                      @press-enter="initPage()"
-                      v-model:value="seacthContent.handIsdn"
-                      :placeholder="t('view.inputIsdnNumberForQuery')"
-                    />
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.stationName') }}：</label>
-                    <a-tree-select
-                      v-model:value="seacthContent.stationCode"
-                      show-search
-                      style="width: 220px"
-                      :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                      :placeholder="t('view.pleaseSelectStationName')"
-                      allow-clear
-                      show-arrow
-                      :filterTreeNode="AntVueCommon.filterTreeNode"
-                      :tree-data="stationDatas"
-                    />
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.eciNumber') }}：</label>
-                    <a-input
-                      @press-enter="initPage()"
-                      v-model:value="seacthContent.eci"
-                      :placeholder="t('view.inputECINumberToQuery')"
-                    />
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.isOnline') }}：</label>
-                    <a-select
-                      :placeholder="t('view.pleaseSelectWhetherOnline')"
-                      style="width: 170px"
-                      allow-clear
-                      v-model:value="seacthContent.isOnline"
-                    >
-                      <a-select-option :value="true">{{ t('view.online') }}</a-select-option>
-                      <a-select-option :value="false">{{ t('view.offline') }}</a-select-option>
-                    </a-select>
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
-                    <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
-                  </a-space>
-                </div>
-                <!-- <div class="row-div">
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>{{ t('view.stationName') }}：</label>
+                      <a-tree-select
+                        v-model:value="seacthContent.stationCode"
+                        show-search
+                        style="width: 220px"
+                        :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                        :placeholder="t('view.pleaseSelectStationName')"
+                        allow-clear
+                        show-arrow
+                        :filterTreeNode="AntVueCommon.filterTreeNode"
+                        :tree-data="stationDatas"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>{{ t('view.eciNumber') }}：</label>
+                      <a-input
+                        @press-enter="initPage()"
+                        v-model:value="seacthContent.eci"
+                        :placeholder="t('view.inputECINumberToQuery')"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>{{ t('view.isOnline') }}：</label>
+                      <a-select
+                        :placeholder="t('view.pleaseSelectWhetherOnline')"
+                        style="width: 170px"
+                        allow-clear
+                        v-model:value="seacthContent.isOnline"
+                      >
+                        <a-select-option :value="true">{{ t('view.online') }}</a-select-option>
+                        <a-select-option :value="false">{{ t('view.offline') }}</a-select-option>
+                      </a-select>
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
+                      <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
+                    </a-space>
+                  </div>
+                  <!-- <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <a-input-number
                       class="duration"
@@ -113,80 +114,82 @@
                     </a-input-number>
                   </a-space>
                 </div> -->
-              </a-space>
+                </a-space>
+              </AuthDom>
+              <AuthDom auth="hand_add">
+                <a-space
+                  direction="horizontal"
+                  size="small"
+                  :wrap="true"
+                  style="margin-right: 2px; margin-bottom: 0"
+                >
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button class="ant-btn" @click="showFrom()">{{
+                        t('view.addHandheldTerminal')
+                      }}</a-button>
+                    </a-space>
+                  </div>
+                </a-space>
+              </AuthDom>
+            </a-space>
+          </div>
+        </template>
+        <template #default="{ row }">
+          <div :class="`tableOption`">
+            <AuthDom auth="softwareManage_table_showlog">
+              <IconFontClass
+                name="icon-baseui-flowcontrol-log"
+                @click="showLog(row)"
+                style="color: #0fc10e"
+                :title="t('view.viewLog')"
+              />
             </AuthDom>
-            <AuthDom auth="hand_add">
-              <a-space
-                direction="horizontal"
-                size="small"
-                :wrap="true"
-                style="margin-right: 2px; margin-bottom: 0"
-              >
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button class="ant-btn" @click="showFrom()">{{
-                      t('view.addHandheldTerminal')
-                    }}</a-button>
-                  </a-space>
-                </div>
-              </a-space>
+            <AuthDom auth="hand_edit">
+              <IconFontClass
+                name="icon-baseui-edit-fill"
+                @click="showFrom(row)"
+                style="color: #0a61bd"
+                :title="t('view.assignPermissions')"
+              />
             </AuthDom>
-          </a-space>
-        </div>
-      </template>
-      <template #default="{ row }">
-        <div :class="`tableOption`">
-          <AuthDom auth="softwareManage_table_showlog">
-            <IconFontClass
-              name="icon-baseui-flowcontrol-log"
-              @click="showLog(row)"
-              style="color: #0fc10e"
-              :title="t('view.viewLog')"
-            />
+          </div>
+        </template>
+        <template #isEnable="{ row }">
+          <AuthDom auth="hand_disable">
+            <div
+              style="display: inline-block; position: relative; top: -2px; left: 8px; width: 30px"
+            >
+              <a-spin :spinning="disableSpinning">
+                <a-switch
+                  size="small"
+                  v-model:checked="row.isEnable"
+                  @change="(v) => disableChange(v, row)"
+                /> </a-spin
+            ></div>
           </AuthDom>
-          <AuthDom auth="hand_edit">
-            <IconFontClass
-              name="icon-baseui-edit-fill"
-              @click="showFrom(row)"
-              style="color: #0a61bd"
-              :title="t('view.assignPermissions')"
-            />
-          </AuthDom>
-        </div>
-      </template>
-      <template #isEnable="{ row }">
-        <AuthDom auth="hand_disable">
-          <div style="display: inline-block; position: relative; top: -2px; left: 8px; width: 30px">
-            <a-spin :spinning="disableSpinning">
-              <a-switch
-                size="small"
-                v-model:checked="row.isEnable"
-                @change="(v) => disableChange(v, row)"
-              /> </a-spin
-          ></div>
-        </AuthDom>
-      </template>
-      <template #pager>
-        <vxe-pager
-          background
-          v-model:current-page="page.current"
-          v-model:page-size="page.size"
-          :total="page.total"
-          @page-change="handlePageChange"
-        />
-      </template>
-      <template #stationArea="{ row }">
-        <span>{{
-          row.stationArea == 1
-            ? t('view.inStation')
-            : row.stationArea == 2
-              ? t('view.leftSideOfThisStation')
-              : row.stationArea == 3
-                ? t('view.rightSideOfThisStation')
-                : ''
-        }}</span>
-      </template>
-      <!-- <template #remainingDays="{ row }">
+        </template>
+        <template #pager>
+          <vxe-pager
+            background
+            v-model:current-page="page.current"
+            v-model:page-size="page.size"
+            :total="page.total"
+            @page-change="handlePageChange"
+          />
+        </template>
+        <template #stationArea="{ row }">
+          <span>{{
+            row.stationArea == 1
+              ? t('view.inStation')
+              : row.stationArea == 2
+                ? t('view.leftSideOfThisStation')
+                : row.stationArea == 3
+                  ? t('view.rightSideOfThisStation')
+                  : ''
+          }}</span>
+        </template>
+        <!-- <template #remainingDays="{ row }">
         <span
           v-if="row.timeValid != null"
           :style="{
@@ -197,85 +200,86 @@
           >{{ row.remainingDays <= 0 ? t('view.hasExpired') : row.remainingDays }}</span
         >
       </template> -->
-    </vxe-grid>
-    <a-drawer
-      :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="500"
-      :visible="isShowForm"
-      :title="t('view.configuration')"
-      :footer-style="{ textAlign: 'right' }"
-      @close="formClose"
-    >
-      <a-form
-        :label-col="{ span: 6 }"
-        :style="{ paddingRight: '2px' }"
-        :wrapper-col="{ span: 16 }"
-        autocomplete="off"
-        ref="formRef"
-        :model="formData"
+      </vxe-grid>
+      <a-drawer
+        :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+        :width="500"
+        :visible="isShowForm"
+        :title="t('view.configuration')"
+        :footer-style="{ textAlign: 'right' }"
+        @close="formClose"
       >
-        <!-- { min: 4, message: t('view.isdnNumberIs4Digits') },
+        <a-form
+          :label-col="{ span: 6 }"
+          :style="{ paddingRight: '2px' }"
+          :wrapper-col="{ span: 16 }"
+          autocomplete="off"
+          ref="formRef"
+          :model="formData"
+        >
+          <!-- { min: 4, message: t('view.isdnNumberIs4Digits') },
             { max: 4, message: t('view.isdnNumberIs4Digits') }, -->
 
-        <a-form-item
-          name="handIsdn"
-          :label="t('view.isdnNumber')"
-          :rules="[
-            { required: true, message: '' },
-            { validator: formValidator.empty, message: t('view.pleaseEnterTheIsdnNumber') },
-            {
-              validator: formValidator.positiveInteger,
-              message: t('view.isdnNumberFormatIsANaturalNumber'),
-            },
-          ]"
-        >
-          <a-input
-            :disabled="saveType == 'edit'"
-            :placeholder="t('view.pleaseEnterIdsn')"
-            v-model:value="formData.handIsdn"
-            autocomplete="off"
-          />
-        </a-form-item>
-        <a-form-item
-          name="isEnable"
-          :label="t('view.enableOrDisable')"
-          :rules="[{ required: true, message: t('view.pleaseSelectEnableOrDisable') }]"
-        >
-          <a-switch v-model:checked="formData.isEnable" />
-        </a-form-item>
-        <a-form-item
-          :label="t('view.permissionType')"
-          name="powerKeys"
-          :rules="[{ required: true, message: t('view.pleaseSelectPermissionType') }]"
-        >
-          <a-select
-            show-search
-            :allowClear="true"
-            mode="multiple"
-            :filter-option="AntVueCommon.filterOption"
-            :placeholder="t('view.pleaseSelectPermissionType')"
-            v-model:value="formData.powerKeys"
-            :options="dictionariesData"
-          />
-        </a-form-item>
-      </a-form>
-      <template #footer>
-        <a-spin :spinning="fromSpinning">
-          <a-button type="primary" @click="saveHandPower">{{ t('view.save') }}</a-button>
-          <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
-        </a-spin>
-      </template>
-    </a-drawer>
-    <a-drawer
-      :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="600"
-      :visible="isShowLog"
-      :title="t('view.viewLog')"
-      :footer-style="{ textAlign: 'right' }"
-      @close="formCloseLog"
-    >
-      <log :handId="handId" />
-    </a-drawer>
+          <a-form-item
+            name="handIsdn"
+            :label="t('view.isdnNumber')"
+            :rules="[
+              { required: true, message: '' },
+              { validator: formValidator.empty, message: t('view.pleaseEnterTheIsdnNumber') },
+              {
+                validator: formValidator.positiveInteger,
+                message: t('view.isdnNumberFormatIsANaturalNumber'),
+              },
+            ]"
+          >
+            <a-input
+              :disabled="saveType == 'edit'"
+              :placeholder="t('view.pleaseEnterIdsn')"
+              v-model:value="formData.handIsdn"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="isEnable"
+            :label="t('view.enableOrDisable')"
+            :rules="[{ required: true, message: t('view.pleaseSelectEnableOrDisable') }]"
+          >
+            <a-switch v-model:checked="formData.isEnable" />
+          </a-form-item>
+          <a-form-item
+            :label="t('view.permissionType')"
+            name="powerKeys"
+            :rules="[{ required: true, message: t('view.pleaseSelectPermissionType') }]"
+          >
+            <a-select
+              show-search
+              :allowClear="true"
+              mode="multiple"
+              :filter-option="AntVueCommon.filterOption"
+              :placeholder="t('view.pleaseSelectPermissionType')"
+              v-model:value="formData.powerKeys"
+              :options="dictionariesData"
+            />
+          </a-form-item>
+        </a-form>
+        <template #footer>
+          <a-spin :spinning="fromSpinning">
+            <a-button type="primary" @click="saveHandPower">{{ t('view.save') }}</a-button>
+            <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
+          </a-spin>
+        </template>
+      </a-drawer>
+      <a-drawer
+        :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+        :width="600"
+        :visible="isShowLog"
+        :title="t('view.viewLog')"
+        :footer-style="{ textAlign: 'right' }"
+        @close="formCloseLog"
+      >
+        <log :handId="handId" />
+      </a-drawer>
+    </a-spin>
   </MyContent>
 </template>
 <script setup lang="ts">
@@ -301,6 +305,7 @@
   defineOptions({ name: 'Hand' });
   const { prefixCls } = useDesign('hand-');
   const loading = ref(true);
+  const isRunLoading = ref(false);
   const page = reactive({
     current: 1,
     size: 20,
@@ -682,18 +687,18 @@
 
   //获取手持台权限
   function getHand(row) {
-    loading.value = true;
+    isRunLoading.value = true;
     handApi
       .GetHand(row.handId)
       .then((data) => {
         newRow.value = row;
         saveType.value = 'edit';
-        loading.value = false;
+        isRunLoading.value = false;
         formData.value = data;
         isShowForm.value = true;
       })
       .catch(() => {
-        loading.value = false;
+        isRunLoading.value = false;
         message.error(t('view.failedToGetHandheldTerminalInfo'));
       });
   }

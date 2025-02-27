@@ -12,6 +12,7 @@
     <template #overlay>
       <Menu @click="handleMenuClick">
         <MenuItem key="userInfo" :text="t('view.userCenter')" icon="icon-baseui-geren" />
+        <MenuItem key="helpWord" :text="t('view.userManual')" icon="icon-baseui-zidianguanli" />
         <!-- <MenuItem
           v-if="getUseLockPage"
           key="lock"
@@ -98,6 +99,9 @@
 
   function handleMenuClick(e: MenuInfo) {
     switch (e.key) {
+      case 'helpWord':
+        myCommon.downLoadFileByUrl('./resource/file/车站集群调度网管用户手册.doc');
+        break;
       case 'logout':
         handleLoginOut();
         break;

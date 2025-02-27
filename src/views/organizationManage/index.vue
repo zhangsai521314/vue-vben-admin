@@ -1,6 +1,6 @@
 <template>
   <MyContent :class="prefixCls">
-    <a-spin :spinning="loading">
+    <a-spin :spinning="isRunLoading">
       <div style="width: 100%; height: 100%">
         <vxe-toolbar ref="toolbarRef" custom>
           <template #buttons>
@@ -48,6 +48,7 @@
             :border="true"
             height="100%"
             ref="tableRef"
+            :loading="loading"
             show-overflow
             :custom-config="{ storage: true }"
             :row-config="{ isHover: true, useKey: true, keyField: 'orgId' }"
@@ -281,6 +282,7 @@
   const userData = ref(_.cloneDeep(userStore.getUserInfo));
   const { prefixCls } = useDesign('organizationManage-');
   const loading = ref(true);
+  const isRunLoading = ref(false);
   const tableConfigData = ref([]);
   const defFromData = reactive({
     orgNameCn: null,
@@ -329,11 +331,11 @@
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {
-        loading.value = true;
+        isRunLoading.value = true;
         organizationApi
           .DeleteOrganization(row.orgId)
           .then((data) => {
-            loading.value = false;
+            isRunLoading.value = false;
             try {
               if (data) {
                 tableConfigData.value = tableConfigData.value?.filter(
@@ -344,7 +346,7 @@
             } catch (error) {}
           })
           .catch(() => {
-            loading.value = false;
+            isRunLoading.value = false;
           });
       },
       onCancel() {},
@@ -360,11 +362,11 @@
 
   //获取部门
   function getByid(id) {
-    loading.value = true;
+    isRunLoading.value = true;
     organizationApi
       .GetOrganization(id.toString())
       .then((data) => {
-        loading.value = false;
+        isRunLoading.value = false;
         if (data) {
           formData.value = data;
           formData.value.idType = null;
@@ -376,7 +378,7 @@
         }
       })
       .catch(() => {
-        loading.value = false;
+        isRunLoading.value = false;
       });
   }
 
@@ -458,6 +460,8 @@
   @prefixCls: ~'@{namespace}-organizationManage-';
 
   .@{prefixCls} {
+    overflow-x: hidden;
+
     .@{prefixCls}tableBtn {
       width: 100%;
     }

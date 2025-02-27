@@ -1,82 +1,88 @@
 <template>
   <MyContent>
-    <vxe-grid
-      :scroll-y="{ enabled: true }"
-      v-bind="tableConfig"
-      id="softwareManage"
-      :auto-resize="true"
-      ref="tableRef"
-      :loading="loading"
-      :row-config="{ keyField: 'serviceId' }"
-      :column-config="{ resizable: true }"
-      :custom-config="{ storage: true }"
-      @sort-change="
-        ({ sortList }) =>
-          vxetableMyCommon.onSortChange({ sortList }, page, getSoftwares, [
-            'orgName',
-            'equipmentName',
-            'serviceTypeName',
-            'serviceName',
-          ])
-      "
-      :seq-config="{ startIndex: (page.current - 1) * page.size }"
-    >
-      <template #pager>
-        <vxe-pager
-          background
-          v-model:current-page="page.current"
-          v-model:page-size="page.size"
-          :total="page.total"
-          @page-change="getSoftwares()"
-        />
-      </template>
-      <template #toolbar_buttons>
-        <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" align="start" style="margin: 0 5px">
-            <AuthDom auth="softwareManage_query">
-              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.affiliatedDevice') }}：</label>
-                    <a-tree-select
-                      v-model:value="seacthContent.equipmentId"
-                      show-search
-                      :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                      :placeholder="t('view.pleaseSelectAffiliatedDevice')"
-                      allow-clear
-                      show-arrow
-                      :filterTreeNode="AntVueCommon.filterTreeNode"
-                      :tree-data="equipmentData"
-                    />
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.softwareName') }}：</label>
-                    <a-input
-                      :style="{
-                        width: locale == 'zh-CN' ? '180px' : locale == 'en-US' ? '200px' : '300px',
-                      }"
-                      @press-enter="initPage"
-                      v-model:value="seacthContent.serviceName"
-                      :placeholder="t('view.inputSoftwareNameQuery')"
-                    />
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="initPage" type="primary">{{ t('view.query') }}</a-button>
-                    <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
-                    <a-radio-group v-model:value="refresh" button-style="solid">
-                      <a-radio-button value="yes">{{ t('view.enableAutoRefresh') }}</a-radio-button>
-                      <a-radio-button value="no">{{ t('view.disableAutoRefresh') }}</a-radio-button>
-                      <a-radio-button>{{
-                        t('view.countdownSeconds', [refreshTime])
-                      }}</a-radio-button>
-                    </a-radio-group>
-                  </a-space>
-                </div>
-                <!-- <div class="row-div">
+    <a-spin :spinning="isRunLoading">
+      <vxe-grid
+        :scroll-y="{ enabled: true }"
+        v-bind="tableConfig"
+        id="softwareManage"
+        :auto-resize="true"
+        ref="tableRef"
+        :loading="loading"
+        :row-config="{ keyField: 'serviceId' }"
+        :column-config="{ resizable: true }"
+        :custom-config="{ storage: true }"
+        @sort-change="
+          ({ sortList }) =>
+            vxetableMyCommon.onSortChange({ sortList }, page, getSoftwares, [
+              'orgName',
+              'equipmentName',
+              'serviceTypeName',
+              'serviceName',
+            ])
+        "
+        :seq-config="{ startIndex: (page.current - 1) * page.size }"
+      >
+        <template #pager>
+          <vxe-pager
+            background
+            v-model:current-page="page.current"
+            v-model:page-size="page.size"
+            :total="page.total"
+            @page-change="getSoftwares()"
+          />
+        </template>
+        <template #toolbar_buttons>
+          <div :class="`tableBtn`">
+            <a-space direction="horizontal" size="small" align="start" style="margin: 0 5px">
+              <AuthDom auth="softwareManage_query">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>{{ t('view.affiliatedDevice') }}：</label>
+                      <a-tree-select
+                        v-model:value="seacthContent.equipmentId"
+                        show-search
+                        :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                        :placeholder="t('view.pleaseSelectAffiliatedDevice')"
+                        allow-clear
+                        show-arrow
+                        :filterTreeNode="AntVueCommon.filterTreeNode"
+                        :tree-data="equipmentData"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>{{ t('view.softwareName') }}：</label>
+                      <a-input
+                        :style="{
+                          width:
+                            locale == 'zh-CN' ? '180px' : locale == 'en-US' ? '200px' : '300px',
+                        }"
+                        @press-enter="initPage"
+                        v-model:value="seacthContent.serviceName"
+                        :placeholder="t('view.inputSoftwareNameQuery')"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button @click="initPage" type="primary">{{ t('view.query') }}</a-button>
+                      <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
+                      <a-radio-group v-model:value="refresh" button-style="solid">
+                        <a-radio-button value="yes">{{
+                          t('view.enableAutoRefresh')
+                        }}</a-radio-button>
+                        <a-radio-button value="no">{{
+                          t('view.disableAutoRefresh')
+                        }}</a-radio-button>
+                        <a-radio-button>{{
+                          t('view.countdownSeconds', [refreshTime])
+                        }}</a-radio-button>
+                      </a-radio-group>
+                    </a-space>
+                  </div>
+                  <!-- <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <a-input-number
                       class="duration"
@@ -102,64 +108,64 @@
                     </a-input-number>
                   </a-space>
                 </div> -->
-              </a-space>
+                </a-space>
+              </AuthDom>
+              <AuthDom auth="softwareManage_add">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button class="ant-btn" @click="showFrom()">{{
+                        t('view.addSoftware')
+                      }}</a-button>
+                    </a-space>
+                  </div>
+                </a-space>
+              </AuthDom>
+            </a-space>
+          </div>
+        </template>
+        <template #default="{ row }">
+          <div :class="`tableOption`">
+            <AuthDom auth="softwareManage_table_showconfig">
+              <IconFontClass
+                name="icon-baseui-wenben1"
+                @click="showConfig(row)"
+                style="color: #0fc10e"
+                title="查看配置"
+              />
             </AuthDom>
-            <AuthDom auth="softwareManage_add">
-              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button class="ant-btn" @click="showFrom()">{{
-                      t('view.addSoftware')
-                    }}</a-button>
-                  </a-space>
-                </div>
-              </a-space>
+            <AuthDom auth="softwareManage_table_showlog">
+              <IconFontClass
+                name="icon-baseui-flowcontrol-log"
+                @click="showLog(row)"
+                style="color: #0fc10e"
+                title="查看日志"
+              />
             </AuthDom>
-          </a-space>
-        </div>
-      </template>
-      <template #default="{ row }">
-        <div :class="`tableOption`">
-          <AuthDom auth="softwareManage_table_showconfig">
-            <IconFontClass
-              name="icon-baseui-wenben1"
-              @click="showConfig(row)"
-              style="color: #0fc10e"
-              title="查看配置"
-            />
-          </AuthDom>
-          <AuthDom auth="softwareManage_table_showlog">
-            <IconFontClass
-              name="icon-baseui-flowcontrol-log"
-              @click="showLog(row)"
-              style="color: #0fc10e"
-              title="查看日志"
-            />
-          </AuthDom>
-          <AuthDom auth="softwareManage_table_edit">
-            <IconFontClass
-              name="icon-baseui-edit-fill"
-              @click="showFrom(row)"
-              style="color: #0a61bd"
-              :title="t('view.edit')"
-            />
-          </AuthDom>
-          <AuthDom auth="softwareManage_table_delete">
-            <IconFontClass
-              name="icon-baseui-guanbicuowu"
-              @click="remove(row)"
-              style="color: red"
-              :title="t('view.delete')"
-            />
-          </AuthDom>
-        </div>
-      </template>
-      <template #isAlarm="{ row }">
-        <span :style="{ color: row.isAlarm ? 'red' : 'green' }">{{
-          row.isAlarm ? t('view.yes') : t('view.no')
-        }}</span>
-      </template>
-      <!-- <template #remainingDays="{ row }">
+            <AuthDom auth="softwareManage_table_edit">
+              <IconFontClass
+                name="icon-baseui-edit-fill"
+                @click="showFrom(row)"
+                style="color: #0a61bd"
+                :title="t('view.edit')"
+              />
+            </AuthDom>
+            <AuthDom auth="softwareManage_table_delete">
+              <IconFontClass
+                name="icon-baseui-guanbicuowu"
+                @click="remove(row)"
+                style="color: red"
+                :title="t('view.delete')"
+              />
+            </AuthDom>
+          </div>
+        </template>
+        <template #isAlarm="{ row }">
+          <span :style="{ color: row.isAlarm ? 'red' : 'green' }">{{
+            row.isAlarm ? t('view.yes') : t('view.no')
+          }}</span>
+        </template>
+        <!-- <template #remainingDays="{ row }">
         <span
           v-if="row.timeValid != null"
           :style="{
@@ -170,110 +176,110 @@
           >{{ row.remainingDays <= 0 ? t('view.hasExpired') : row.remainingDays }}</span
         >
       </template> -->
-    </vxe-grid>
-    <a-drawer
-      :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="locale == 'zh-CN' ? 500 : 600"
-      :visible="isShowForm"
-      :title="t('view.configuration')"
-      :footer-style="{ textAlign: 'right' }"
-      @close="formClose"
-    >
-      <a-form
-        :label-col="{ span: locale == 'zh-CN' ? 7 : 10 }"
-        :style="{ paddingRight: '2px' }"
-        autocomplete="off"
-        ref="formRef"
-        :model="formData"
+      </vxe-grid>
+      <a-drawer
+        :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+        :width="locale == 'zh-CN' ? 500 : 600"
+        :visible="isShowForm"
+        :title="t('view.configuration')"
+        :footer-style="{ textAlign: 'right' }"
+        @close="formClose"
       >
-        <a-form-item
-          :label="t('view.affiliatedDevice')"
-          name="equipmentId"
-          :rules="[{ required: true, message: t('view.pleaseSelectAffiliatedDevice') }]"
+        <a-form
+          :label-col="{ span: locale == 'zh-CN' ? 7 : 10 }"
+          :style="{ paddingRight: '2px' }"
+          autocomplete="off"
+          ref="formRef"
+          :model="formData"
         >
-          <a-select
-            allowClear
-            show-search
-            :filter-option="AntVueCommon.filterOption"
-            :placeholder="t('view.pleaseSelectAffiliatedDevice')"
-            v-model:value="formData.equipmentId"
-            :options="equipmentData"
-          />
-        </a-form-item>
-        <a-form-item
-          :label="t('view.serviceType')"
-          name="serviceType"
-          :rules="[{ required: true, message: t('view.pleaseSelectSoftwareServiceType') }]"
-        >
-          <a-select
-            show-search
-            :filter-option="AntVueCommon.filterOption"
-            :placeholder="t('view.pleaseSelectSoftwareServiceType')"
-            v-model:value="formData.serviceType"
-            :options="dictionariesData.filter((m) => m.dictionariesClass == 'serviceType')"
-          />
-        </a-form-item>
-        <a-form-item
-          name="serviceNameCn"
-          :label="t('view.softwareNameCn')"
-          :rules="[
-            { required: true, message: '' },
-            { max: 64, message: t('view.softwareNameIsTooLong', [64]) },
-            { validator: formValidator.empty, message: t('view.pleaseEnterSoftwareName') },
-          ]"
-        >
-          <a-input
-            v-model:value="formData.serviceNameCn"
-            :placeholder="t('view.pleaseEnterSoftwareName')"
-            autocomplete="off"
-          />
-        </a-form-item>
-        <a-form-item
-          name="serviceNameEn"
-          :label="t('view.softwareNameEn')"
-          :rules="[
-            { required: true, message: '' },
-            { max: 250, message: t('view.softwareNameIsTooLong', [250]) },
-            { validator: formValidator.empty, message: t('view.pleaseEnterSoftwareName') },
-          ]"
-        >
-          <a-input
-            v-model:value="formData.serviceNameEn"
-            :placeholder="t('view.pleaseEnterSoftwareName')"
-            autocomplete="off"
-          />
-        </a-form-item>
-        <a-form-item
-          name="serviceNameFr"
-          :label="t('view.softwareNameFr')"
-          :rules="[
-            { required: true, message: '' },
-            { max: 250, message: t('view.softwareNameIsTooLong', [250]) },
-            { validator: formValidator.empty, message: t('view.pleaseEnterSoftwareName') },
-          ]"
-        >
-          <a-input
-            v-model:value="formData.serviceNameFr"
-            :placeholder="t('view.pleaseEnterSoftwareName')"
-            autocomplete="off"
-          />
-        </a-form-item>
-        <a-form-item
-          name="serviceCode"
-          :label="t('view.uniqueNumber')"
-          :rules="[
-            { required: true, message: '' },
-            { max: 20, message: t('view.uniqueNumberIsTooLong') },
-            { validator: formValidator.empty, message: t('view.pleaseEnterUniqueNumber') },
-          ]"
-        >
-          <a-input
-            v-model:value="formData.serviceCode"
-            :placeholder="t('view.pleaseEnterUniqueNumber')"
-            autocomplete="off"
-          />
-        </a-form-item>
-        <!-- <a-form-item
+          <a-form-item
+            :label="t('view.affiliatedDevice')"
+            name="equipmentId"
+            :rules="[{ required: true, message: t('view.pleaseSelectAffiliatedDevice') }]"
+          >
+            <a-select
+              allowClear
+              show-search
+              :filter-option="AntVueCommon.filterOption"
+              :placeholder="t('view.pleaseSelectAffiliatedDevice')"
+              v-model:value="formData.equipmentId"
+              :options="equipmentData"
+            />
+          </a-form-item>
+          <a-form-item
+            :label="t('view.serviceType')"
+            name="serviceType"
+            :rules="[{ required: true, message: t('view.pleaseSelectSoftwareServiceType') }]"
+          >
+            <a-select
+              show-search
+              :filter-option="AntVueCommon.filterOption"
+              :placeholder="t('view.pleaseSelectSoftwareServiceType')"
+              v-model:value="formData.serviceType"
+              :options="dictionariesData.filter((m) => m.dictionariesClass == 'serviceType')"
+            />
+          </a-form-item>
+          <a-form-item
+            name="serviceNameCn"
+            :label="t('view.softwareNameCn')"
+            :rules="[
+              { required: true, message: '' },
+              { max: 64, message: t('view.softwareNameIsTooLong', [64]) },
+              { validator: formValidator.empty, message: t('view.pleaseEnterSoftwareName') },
+            ]"
+          >
+            <a-input
+              v-model:value="formData.serviceNameCn"
+              :placeholder="t('view.pleaseEnterSoftwareName')"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="serviceNameEn"
+            :label="t('view.softwareNameEn')"
+            :rules="[
+              { required: true, message: '' },
+              { max: 250, message: t('view.softwareNameIsTooLong', [250]) },
+              { validator: formValidator.empty, message: t('view.pleaseEnterSoftwareName') },
+            ]"
+          >
+            <a-input
+              v-model:value="formData.serviceNameEn"
+              :placeholder="t('view.pleaseEnterSoftwareName')"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="serviceNameFr"
+            :label="t('view.softwareNameFr')"
+            :rules="[
+              { required: true, message: '' },
+              { max: 250, message: t('view.softwareNameIsTooLong', [250]) },
+              { validator: formValidator.empty, message: t('view.pleaseEnterSoftwareName') },
+            ]"
+          >
+            <a-input
+              v-model:value="formData.serviceNameFr"
+              :placeholder="t('view.pleaseEnterSoftwareName')"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="serviceCode"
+            :label="t('view.uniqueNumber')"
+            :rules="[
+              { required: true, message: '' },
+              { max: 20, message: t('view.uniqueNumberIsTooLong') },
+              { validator: formValidator.empty, message: t('view.pleaseEnterUniqueNumber') },
+            ]"
+          >
+            <a-input
+              v-model:value="formData.serviceCode"
+              :placeholder="t('view.pleaseEnterUniqueNumber')"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <!-- <a-form-item
           name="isdn"
           :label="t('view.isdn')"
           :rules="[{ max: 20, message: t('view.pleaseEnterIdsn') }]"
@@ -284,187 +290,191 @@
             autocomplete="off"
           />
         </a-form-item> -->
-        <a-form-item
-          name="filePath"
-          :label="t('view.deploymentPath')"
-          :rules="[{ max: 20, message: t('view.deploymentPathIsTooLong') }]"
-        >
-          <a-input
-            :placeholder="t('view.pleaseEnterDeploymentPath')"
-            v-model:value="formData.filePath"
-            autocomplete="off"
-          />
-        </a-form-item>
-        <a-form-item
-          name="port"
-          :label="t('view.portNumber')"
-          :rules="[
-            { required: true, message: t('view.pleaseEnterPortNumber') },
-            {
-              validator: formValidator.min,
-              min: 1,
-              message: t('view.portNumberMustBeBetweenAnd', [1, 65535]),
-            },
-            {
-              validator: formValidator.max,
-              max: 65535,
-              message: t('view.portNumberMustBeBetweenAnd', [1, 65535]),
-            },
-          ]"
-        >
-          <a-input-number
-            :placeholder="t('view.pleaseEnterPortNumber')"
-            v-model:value="formData.port"
-            autocomplete="off"
-            :precision="0"
-          />
-        </a-form-item>
-        <a-form-item
-          name="isUpPerformance"
-          :label="t('view.performanceReporting')"
-          :rules="[
-            { required: true, message: t('view.pleaseSelectWhetherToEnablePerformanceReporting') },
-          ]"
-        >
-          <a-switch v-model:checked="formData.isUpPerformance" />
-        </a-form-item>
-        <a-form-item
-          name="orderIndex"
-          :label="t('view.softwareSorting')"
-          :rules="[
-            { required: true, message: t('view.pleaseInputSoftwareSorting') },
-            {
-              validator: formValidator.min,
-              min: -9999,
-              message: t('view.sortingValueMustBeBetween9999'),
-            },
-            {
-              validator: formValidator.max,
-              max: 9999,
-              message: t('view.sortingValueMustBeBetween9999'),
-            },
-          ]"
-        >
-          <a-input-number
-            :placeholder="t('view.pleaseInputSoftwareSorting')"
-            :precision="3"
-            style="width: 300px"
-            v-model:value="formData.orderIndex"
-          />
-        </a-form-item>
-        <a-form-item
-          name="remark"
-          :label="t('view.remarks')"
-          :rules="[{ max: 250, message: t('view.remarksTooLong') }]"
-        >
-          <a-textarea
-            :placeholder="t('view.pleaseInputRemarkInformation')"
-            :rows="3"
-            v-model:value="formData.remark"
-            autocomplete="off"
-          />
-        </a-form-item>
-      </a-form>
-      <template #footer>
-        <a-spin :spinning="fromSpinning">
-          <a-button type="primary" @click="saveFrom">{{ t('view.save') }}</a-button>
-          <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
-        </a-spin>
-      </template>
-    </a-drawer>
-    <a-drawer
-      :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="700"
-      :visible="isShowConfig"
-      :title="t('view.configuration')"
-      :footer-style="{ textAlign: 'right' }"
-      @close="closeConfig"
-    >
-      <div :class="`${prefixCls}codemirror`">
-        <a-spin :spinning="isRunGetConfig">
-          <codemirror
-            ref="codemirrorRef"
-            :modelValue="modelValue"
-            :style="{ height: '100%', overflow: 'auto' }"
-            :language="codemirrorLanguage"
-          />
-        </a-spin>
-      </div>
-      <template #footer>
-        <a-spin :spinning="fromSpinning">
-          <a-button style="margin-left: 8px" @click="closeConfig">{{ t('view.close') }}</a-button>
-        </a-spin>
-      </template>
-    </a-drawer>
-    <a-drawer
-      :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="700"
-      :visible="isShowLog"
-      :title="t('view.serviceLog')"
-      :footer-style="{ textAlign: 'right' }"
-      @close="closeLog"
-    >
-      <vxe-table
-        height="100%"
-        :scroll-y="{ enabled: true }"
-        :auto-resize="true"
-        :class="`${prefixCls}logTable`"
-        ref="logTableRef"
-        :loading="isRunGetLog"
-        :data="logCollectionData"
-        border="none"
-        :show-header="true"
-        :show-overflow="true"
-        :show-footer="false"
-        :menu-config="logMenuConfig"
-        :checkbox-config="checkboxConfig"
-        @menu-click="contextMenuClickEvent"
-        :row-config="{ isCurrent: true, isHover: true }"
+          <a-form-item
+            name="filePath"
+            :label="t('view.deploymentPath')"
+            :rules="[{ max: 20, message: t('view.deploymentPathIsTooLong') }]"
+          >
+            <a-input
+              :placeholder="t('view.pleaseEnterDeploymentPath')"
+              v-model:value="formData.filePath"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="port"
+            :label="t('view.portNumber')"
+            :rules="[
+              { required: true, message: t('view.pleaseEnterPortNumber') },
+              {
+                validator: formValidator.min,
+                min: 1,
+                message: t('view.portNumberMustBeBetweenAnd', [1, 65535]),
+              },
+              {
+                validator: formValidator.max,
+                max: 65535,
+                message: t('view.portNumberMustBeBetweenAnd', [1, 65535]),
+              },
+            ]"
+          >
+            <a-input-number
+              :placeholder="t('view.pleaseEnterPortNumber')"
+              v-model:value="formData.port"
+              autocomplete="off"
+              :precision="0"
+            />
+          </a-form-item>
+          <a-form-item
+            name="isUpPerformance"
+            :label="t('view.performanceReporting')"
+            :rules="[
+              {
+                required: true,
+                message: t('view.pleaseSelectWhetherToEnablePerformanceReporting'),
+              },
+            ]"
+          >
+            <a-switch v-model:checked="formData.isUpPerformance" />
+          </a-form-item>
+          <a-form-item
+            name="orderIndex"
+            :label="t('view.softwareSorting')"
+            :rules="[
+              { required: true, message: t('view.pleaseInputSoftwareSorting') },
+              {
+                validator: formValidator.min,
+                min: -9999,
+                message: t('view.sortingValueMustBeBetween9999'),
+              },
+              {
+                validator: formValidator.max,
+                max: 9999,
+                message: t('view.sortingValueMustBeBetween9999'),
+              },
+            ]"
+          >
+            <a-input-number
+              :placeholder="t('view.pleaseInputSoftwareSorting')"
+              :precision="3"
+              style="width: 300px"
+              v-model:value="formData.orderIndex"
+            />
+          </a-form-item>
+          <a-form-item
+            name="remark"
+            :label="t('view.remarks')"
+            :rules="[{ max: 250, message: t('view.remarksTooLong') }]"
+          >
+            <a-textarea
+              :placeholder="t('view.pleaseInputRemarkInformation')"
+              :rows="3"
+              v-model:value="formData.remark"
+              autocomplete="off"
+            />
+          </a-form-item>
+        </a-form>
+        <template #footer>
+          <a-spin :spinning="fromSpinning">
+            <a-button type="primary" @click="saveFrom">{{ t('view.save') }}</a-button>
+            <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
+          </a-spin>
+        </template>
+      </a-drawer>
+      <a-drawer
+        :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+        :width="700"
+        :visible="isShowConfig"
+        :title="t('view.configuration')"
+        :footer-style="{ textAlign: 'right' }"
+        @close="closeConfig"
       >
-        <vxe-column type="checkbox" width="60" />
-        <vxe-column field="Name" :title="t('view.name')">
-          <template #default="{ row }">
-            <span @dblclick="logNamedblclick(row)" class="name">
-              <IconFontClass
-                :title="row.IsBack ? t('view.returnToThePreviousDirectory') : row.Name"
-                :name="
-                  row.IsBack
-                    ? 'icon-baseui-fanhuishangyiji'
-                    : row.IsParent
-                      ? 'icon-baseui-wenjianjia'
-                      : row.Name.lastIndexOf('.') == -1
-                        ? 'icon-baseui-weizhiwenjian'
-                        : ['txt', 'log'].includes(
-                              row.Name.substring(row.Name.lastIndexOf('.') + 1).toLowerCase(),
-                            )
-                          ? 'icon-baseui-wenben1'
-                          : 'icon-baseui-weizhiwenjian'
-                "
-              />
-              {{ row.Name }}
-            </span>
-          </template>
-        </vxe-column>
-        <vxe-column field="Size" title="大小(KB)" align="right">
-          <template #default="{ row }">
-            {{ row.Size != -1 ? row.Size : '' }}
-          </template>
-        </vxe-column>
-        <vxe-column field="Time" :title="t('view.lastModifiedTime')" align="right">
-          <template #default="{ row }">
-            {{ row.Time ? dayjs(row.Time).format('YYYY-MM-DD HH:mm:ss') : '' }}
-          </template>
-        </vxe-column>
-      </vxe-table>
-      <template #footer>
-        <a-spin :spinning="fromSpinning">
-          <a-button style="margin-left: 8px" type="primary" @click="downLogMqtt">{{
-            t('view.download')
-          }}</a-button>
-          <a-button style="margin-left: 8px" @click="closeLog">{{ t('view.close') }}</a-button>
-        </a-spin>
-      </template>
-    </a-drawer>
+        <div :class="`${prefixCls}codemirror`">
+          <a-spin :spinning="isRunGetConfig">
+            <codemirror
+              ref="codemirrorRef"
+              :modelValue="modelValue"
+              :style="{ height: '100%', overflow: 'auto' }"
+              :language="codemirrorLanguage"
+            />
+          </a-spin>
+        </div>
+        <template #footer>
+          <a-spin :spinning="fromSpinning">
+            <a-button style="margin-left: 8px" @click="closeConfig">{{ t('view.close') }}</a-button>
+          </a-spin>
+        </template>
+      </a-drawer>
+      <a-drawer
+        :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+        :width="700"
+        :visible="isShowLog"
+        :title="t('view.serviceLog')"
+        :footer-style="{ textAlign: 'right' }"
+        @close="closeLog"
+      >
+        <vxe-table
+          height="100%"
+          :scroll-y="{ enabled: true }"
+          :auto-resize="true"
+          :class="`${prefixCls}logTable`"
+          ref="logTableRef"
+          :loading="isRunGetLog"
+          :data="logCollectionData"
+          border="none"
+          :show-header="true"
+          :show-overflow="true"
+          :show-footer="false"
+          :menu-config="logMenuConfig"
+          :checkbox-config="checkboxConfig"
+          @menu-click="contextMenuClickEvent"
+          :row-config="{ isCurrent: true, isHover: true }"
+        >
+          <vxe-column type="checkbox" width="60" />
+          <vxe-column field="Name" :title="t('view.name')">
+            <template #default="{ row }">
+              <span @dblclick="logNamedblclick(row)" class="name">
+                <IconFontClass
+                  :title="row.IsBack ? t('view.returnToThePreviousDirectory') : row.Name"
+                  :name="
+                    row.IsBack
+                      ? 'icon-baseui-fanhuishangyiji'
+                      : row.IsParent
+                        ? 'icon-baseui-wenjianjia'
+                        : row.Name.lastIndexOf('.') == -1
+                          ? 'icon-baseui-weizhiwenjian'
+                          : ['txt', 'log'].includes(
+                                row.Name.substring(row.Name.lastIndexOf('.') + 1).toLowerCase(),
+                              )
+                            ? 'icon-baseui-wenben1'
+                            : 'icon-baseui-weizhiwenjian'
+                  "
+                />
+                {{ row.Name }}
+              </span>
+            </template>
+          </vxe-column>
+          <vxe-column field="Size" title="大小(KB)" align="right">
+            <template #default="{ row }">
+              {{ row.Size != -1 ? row.Size : '' }}
+            </template>
+          </vxe-column>
+          <vxe-column field="Time" :title="t('view.lastModifiedTime')" align="right">
+            <template #default="{ row }">
+              {{ row.Time ? dayjs(row.Time).format('YYYY-MM-DD HH:mm:ss') : '' }}
+            </template>
+          </vxe-column>
+        </vxe-table>
+        <template #footer>
+          <a-spin :spinning="fromSpinning">
+            <a-button style="margin-left: 8px" type="primary" @click="downLogMqtt">{{
+              t('view.download')
+            }}</a-button>
+            <a-button style="margin-left: 8px" @click="closeLog">{{ t('view.close') }}</a-button>
+          </a-spin>
+        </template>
+      </a-drawer>
+    </a-spin>
   </MyContent>
 </template>
 <script setup lang="ts">
@@ -497,6 +507,7 @@
   const mqttStore = useMqttStoreWithOut();
   const userStore = useUserStore();
   const loading = ref(true);
+  const isRunLoading = ref(false);
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
     columns: [
@@ -887,16 +898,16 @@
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {
-        loading.value = true;
+        isRunLoading.value = true;
         softwareApi
           .DeleteService(row.serviceId)
           .then(() => {
-            loading.value = false;
+            isRunLoading.value = false;
             message.success(t('view.deletionSuccessful'));
             getSoftwares();
           })
           .catch(() => {
-            loading.value = false;
+            isRunLoading.value = false;
           });
       },
       onCancel() {},
@@ -913,11 +924,11 @@
 
   //获取软件列表
   function getByid(id) {
-    loading.value = true;
+    isRunLoading.value = true;
     softwareApi
       .GetService(id)
       .then((data) => {
-        loading.value = false;
+        isRunLoading.value = false;
         if (data) {
           formData.value = data;
           saveType = 'edit';
@@ -927,7 +938,7 @@
         }
       })
       .catch(() => {
-        loading.value = false;
+        isRunLoading.value = false;
       });
   }
 

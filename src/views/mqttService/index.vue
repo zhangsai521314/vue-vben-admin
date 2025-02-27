@@ -1,186 +1,188 @@
 <template>
   <MyContent>
-    <vxe-grid
-      :scroll-y="{ enabled: true }"
-      v-bind="tableConfig"
-      id="mqttService"
-      :auto-resize="true"
-      ref="tableRef"
-      :loading="loading"
-      :row-config="{ keyField: 'mqttId' }"
-      :column-config="{ resizable: true }"
-      :custom-config="{ storage: true }"
-    >
-      <template #toolbar_buttons>
-        <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style="margin-left: 5px">
-            <AuthDom auth="mqttService_query">
-              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="getMqtts" type="primary">{{ t('view.query') }}</a-button>
-                  </a-space>
-                </div>
-              </a-space>
-            </AuthDom>
-            <AuthDom auth="mqttService_add">
-              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button class="ant-btn" @click="showFrom()">{{
-                      t('view.newCommunication')
-                    }}</a-button>
-                  </a-space>
-                </div>
-              </a-space>
-            </AuthDom>
-          </a-space>
-        </div>
-      </template>
-      <template #default="{ row }">
-        <div :class="`tableOption`">
-          <AuthDom auth="mqttService_table_edit">
-            <IconFontClass
-              name="icon-baseui-edit-fill"
-              @click="showFrom(row)"
-              style="color: #0a61bd"
-              :title="t('view.edit')"
-            />
-          </AuthDom>
-          <AuthDom auth="mqttService_table_delete">
-            <IconFontClass
-              name="icon-baseui-guanbicuowu"
-              @click="remove(row)"
-              style="color: red"
-              :title="t('view.delete')"
-            />
-          </AuthDom>
-        </div>
-      </template>
-      <template #ipport="{ row }">
-        {{ row.mqttIp }}{{ row.mqttPort ? ':' + row.mqttPort : '' }}
-      </template>
-    </vxe-grid>
-    <a-drawer
-      :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="locale == 'zh-CN' ? 500 : 600"
-      :visible="isShowForm"
-      :title="t('view.configuration')"
-      :footer-style="{ textAlign: 'right' }"
-      @close="formClose"
-    >
-      <a-form
-        :label-col="{ span: locale == 'zh-CN' ? 6 : 10 }"
-        :style="{ paddingRight: '2px' }"
-        autocomplete="off"
-        ref="formRef"
-        :model="formData"
+    <a-spin :spinning="isRunLoading">
+      <vxe-grid
+        :scroll-y="{ enabled: true }"
+        v-bind="tableConfig"
+        id="mqttService"
+        :auto-resize="true"
+        ref="tableRef"
+        :loading="loading"
+        :row-config="{ keyField: 'mqttId' }"
+        :column-config="{ resizable: true }"
+        :custom-config="{ storage: true }"
       >
-        <a-form-item
-          :label="t('view.serviceType')"
-          name="serviceType"
-          :rules="[{ required: true, message: t('view.pleaseSelectServiceType') }]"
+        <template #toolbar_buttons>
+          <div :class="`tableBtn`">
+            <a-space direction="horizontal" size="small" style="margin-left: 5px">
+              <AuthDom auth="mqttService_query">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button @click="getMqtts" type="primary">{{ t('view.query') }}</a-button>
+                    </a-space>
+                  </div>
+                </a-space>
+              </AuthDom>
+              <AuthDom auth="mqttService_add">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button class="ant-btn" @click="showFrom()">{{
+                        t('view.newCommunication')
+                      }}</a-button>
+                    </a-space>
+                  </div>
+                </a-space>
+              </AuthDom>
+            </a-space>
+          </div>
+        </template>
+        <template #default="{ row }">
+          <div :class="`tableOption`">
+            <AuthDom auth="mqttService_table_edit">
+              <IconFontClass
+                name="icon-baseui-edit-fill"
+                @click="showFrom(row)"
+                style="color: #0a61bd"
+                :title="t('view.edit')"
+              />
+            </AuthDom>
+            <AuthDom auth="mqttService_table_delete">
+              <IconFontClass
+                name="icon-baseui-guanbicuowu"
+                @click="remove(row)"
+                style="color: red"
+                :title="t('view.delete')"
+              />
+            </AuthDom>
+          </div>
+        </template>
+        <template #ipport="{ row }">
+          {{ row.mqttIp }}{{ row.mqttPort ? ':' + row.mqttPort : '' }}
+        </template>
+      </vxe-grid>
+      <a-drawer
+        :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+        :width="locale == 'zh-CN' ? 500 : 600"
+        :visible="isShowForm"
+        :title="t('view.configuration')"
+        :footer-style="{ textAlign: 'right' }"
+        @close="formClose"
+      >
+        <a-form
+          :label-col="{ span: locale == 'zh-CN' ? 6 : 10 }"
+          :style="{ paddingRight: '2px' }"
+          autocomplete="off"
+          ref="formRef"
+          :model="formData"
         >
-          <a-select
-            :disabled="saveType != 'add'"
-            show-search
-            :filter-option="AntVueCommon.filterOption"
-            :placeholder="t('view.pleaseSelectServiceType')"
-            v-model:value="formData.serviceType"
-            :options="dictionariesData"
-          />
-        </a-form-item>
-        <a-form-item
-          :label="t('view.mailingAddress')"
-          name="mqttIp"
-          :rules="[
-            { required: true, message: t('view.pleaseEnterCommunicationAddressIp') },
-            { validator: formValidator.ip, message: t('view.communicationAddressIpIsIncorrect') },
-          ]"
-        >
-          <a-input
-            :placeholder="t('view.pleaseEnterCommunicationAddressIp')"
-            v-model:value="formData.mqttIp"
-          />
-        </a-form-item>
-        <a-form-item
-          :label="t('view.connectionPort')"
-          name="mqttPort"
-          :rules="[
-            { required: true, message: t('view.pleaseEnterPortNumber') },
-            {
-              validator: formValidator.min,
-              min: 1,
-              message: t('view.portNumberMustBeBetweenAnd', [1, 65535]),
-            },
-            {
-              validator: formValidator.max,
-              max: 65535,
-              message: t('view.portNumberMustBeBetweenAnd', [1, 65535]),
-            },
-          ]"
-        >
-          <a-input-number
-            :placeholder="t('view.pleaseEnterPortNumber')"
-            v-model:value="formData.mqttPort"
-            style="width: 100px"
-            :precision="0"
-          />
-        </a-form-item>
-        <a-form-item
-          :label="t('view.connectionUserName')"
-          name="mqttName"
-          :rules="[{ required: true, message: t('view.pleaseEnterConnectionUserName') }]"
-        >
-          <a-input
-            :placeholder="t('view.pleaseEnterConnectionUserName')"
-            v-model:value="formData.mqttName"
-            autocomplete="off"
-          />
-        </a-form-item>
-        <a-form-item
-          :label="t('view.connectionPassword')"
-          name="mqttPwd"
-          :rules="[{ required: true, message: t('view.pleaseEnterConnectionPassword') }]"
-        >
-          <a-input
-            :placeholder="t('view.pleaseEnterConnectionPassword')"
-            v-model:value="formData.mqttPwd"
-            autocomplete="off"
-          />
-        </a-form-item>
-        <a-form-item
-          name="orderIndex"
-          :label="t('view.sorting')"
-          :rules="[
-            { required: true, message: t('view.pleaseInputSorting') },
-            {
-              validator: formValidator.min,
-              min: -9999,
-              message: t('view.sortingValueMustBeBetween9999'),
-            },
-            {
-              validator: formValidator.max,
-              max: 9999,
-              message: t('view.sortingValueMustBeBetween9999'),
-            },
-          ]"
-        >
-          <a-input-number
-            :placeholder="t('view.pleaseInputSorting')"
-            style="width: 300px"
-            :precision="3"
-            v-model:value="formData.orderIndex"
-          />
-        </a-form-item>
-      </a-form>
-      <template #footer>
-        <a-spin :spinning="fromSpinning">
-          <a-button type="primary" @click="saveFrom">{{ t('view.save') }}</a-button>
-          <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
-        </a-spin>
-      </template>
-    </a-drawer>
+          <a-form-item
+            :label="t('view.serviceType')"
+            name="serviceType"
+            :rules="[{ required: true, message: t('view.pleaseSelectServiceType') }]"
+          >
+            <a-select
+              :disabled="saveType != 'add'"
+              show-search
+              :filter-option="AntVueCommon.filterOption"
+              :placeholder="t('view.pleaseSelectServiceType')"
+              v-model:value="formData.serviceType"
+              :options="dictionariesData"
+            />
+          </a-form-item>
+          <a-form-item
+            :label="t('view.mailingAddress')"
+            name="mqttIp"
+            :rules="[
+              { required: true, message: t('view.pleaseEnterCommunicationAddressIp') },
+              { validator: formValidator.ip, message: t('view.communicationAddressIpIsIncorrect') },
+            ]"
+          >
+            <a-input
+              :placeholder="t('view.pleaseEnterCommunicationAddressIp')"
+              v-model:value="formData.mqttIp"
+            />
+          </a-form-item>
+          <a-form-item
+            :label="t('view.connectionPort')"
+            name="mqttPort"
+            :rules="[
+              { required: true, message: t('view.pleaseEnterPortNumber') },
+              {
+                validator: formValidator.min,
+                min: 1,
+                message: t('view.portNumberMustBeBetweenAnd', [1, 65535]),
+              },
+              {
+                validator: formValidator.max,
+                max: 65535,
+                message: t('view.portNumberMustBeBetweenAnd', [1, 65535]),
+              },
+            ]"
+          >
+            <a-input-number
+              :placeholder="t('view.pleaseEnterPortNumber')"
+              v-model:value="formData.mqttPort"
+              style="width: 100px"
+              :precision="0"
+            />
+          </a-form-item>
+          <a-form-item
+            :label="t('view.connectionUserName')"
+            name="mqttName"
+            :rules="[{ required: true, message: t('view.pleaseEnterConnectionUserName') }]"
+          >
+            <a-input
+              :placeholder="t('view.pleaseEnterConnectionUserName')"
+              v-model:value="formData.mqttName"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            :label="t('view.connectionPassword')"
+            name="mqttPwd"
+            :rules="[{ required: true, message: t('view.pleaseEnterConnectionPassword') }]"
+          >
+            <a-input
+              :placeholder="t('view.pleaseEnterConnectionPassword')"
+              v-model:value="formData.mqttPwd"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="orderIndex"
+            :label="t('view.sorting')"
+            :rules="[
+              { required: true, message: t('view.pleaseInputSorting') },
+              {
+                validator: formValidator.min,
+                min: -9999,
+                message: t('view.sortingValueMustBeBetween9999'),
+              },
+              {
+                validator: formValidator.max,
+                max: 9999,
+                message: t('view.sortingValueMustBeBetween9999'),
+              },
+            ]"
+          >
+            <a-input-number
+              :placeholder="t('view.pleaseInputSorting')"
+              style="width: 300px"
+              :precision="3"
+              v-model:value="formData.orderIndex"
+            />
+          </a-form-item>
+        </a-form>
+        <template #footer>
+          <a-spin :spinning="fromSpinning">
+            <a-button type="primary" @click="saveFrom">{{ t('view.save') }}</a-button>
+            <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
+          </a-spin>
+        </template>
+      </a-drawer>
+    </a-spin>
   </MyContent>
 </template>
 <script setup lang="ts">
@@ -201,6 +203,7 @@
   defineOptions({ name: 'MqttService' });
   const { prefixCls } = useDesign('mqttService-');
   const loading = ref(true);
+  const isRunLoading = ref(false);
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
     columns: [
@@ -345,16 +348,16 @@
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {
-        loading.value = true;
+        isRunLoading.value = true;
         mqttApi
           .DeleteMqtt(row.mqttId)
           .then(() => {
-            loading.value = false;
+            isRunLoading.value = false;
             tableConfig.data = tableConfig.data?.filter((m) => m.mqttId != row.mqttId);
             message.success(t('view.deletionSuccessful'));
           })
           .catch(() => {
-            loading.value = false;
+            isRunLoading.value = false;
           });
       },
       onCancel() {},
@@ -435,11 +438,11 @@
   }
 
   function getByid(id) {
-    loading.value = true;
+    isRunLoading.value = true;
     mqttApi
       .GetMqtt(id)
       .then((data) => {
-        loading.value = false;
+        isRunLoading.value = false;
         if (data) {
           formData.value = data;
           saveType = 'edit';
@@ -449,7 +452,7 @@
         }
       })
       .catch(() => {
-        loading.value = false;
+        isRunLoading.value = false;
       });
   }
 </script>

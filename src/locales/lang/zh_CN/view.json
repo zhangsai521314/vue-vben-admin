@@ -1,4 +1,11 @@
 {
+  "userManual":"用户手册",
+  "emergencyGroupCallPriority1To15": "紧急组呼优先级1至15",
+  "pleaseEnterEmergencyGroupCallPriority": "请输入紧急组呼优先级",
+  "emergencyGroupCallNumFormatIsNaturalNum": "紧急组呼号码格式为自然数",
+  "pleaseEnterEmergencyGroupCallNumber": "请输入紧急组呼号码",
+  "emergencyGroupCallNumberIs3To10Digits": "紧急组呼号码是3至10位",
+  "pleaseEnterTheEnglishNameOfTheStationk": "请输入车站名称(英)",
   "clickToSelectRouteDataFile": "点击选择线路数据文件",
   "lineMap": "线路地图",
   "primaryKeyDuplicatedCannotAdd": "主键重复，不可添加",

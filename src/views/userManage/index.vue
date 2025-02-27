@@ -278,13 +278,11 @@
             :label="t('view.contactPhone')"
             name="mobile"
             :rules="[
-              { required: true, message: '' },
               { max: 18, message: t('view.phoneNumberIsTooLong', [18]) },
               {
                 validator: formValidator.positiveInteger,
                 message: t('view.phoneNumberFormatMustBeANaturalNumber'),
               },
-              { validator: formValidator.empty, message: t('view.pleaseEnterThePhoneNumber') },
             ]"
           >
             <a-input
@@ -298,9 +296,8 @@
             name="email"
             style="margin-bottom: 0"
             :rules="[
-              { required: true, message: t('view.pleaseEnterContactEmail') },
               { type: 'email', message: t('view.contactEmailFormatIncorrect') },
-              { max: 64, message: t('view.contactEmailTooLong', [64]) },
+              { max: 120, message: t('view.contactEmailTooLong', [120]) },
             ]"
           >
             <a-input
@@ -530,7 +527,7 @@
       },
       {
         field: 'createTime',
-        title: t('view.creationtime'),
+        title: t('view.creationTime'),
         minWidth: 150,
         visible: false,
         showOverflow: true,

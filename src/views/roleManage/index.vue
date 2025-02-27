@@ -1,179 +1,187 @@
 <template>
   <MyContent :class="prefixCls">
-    <vxe-grid
-      :scroll-y="{ enabled: true }"
-      v-bind="tableConfig"
-      id="roleManage"
-      :auto-resize="true"
-      ref="tableRef"
-      :loading="loading"
-      :row-config="{ keyField: 'roleId' }"
-      :column-config="{ resizable: true }"
-      :custom-config="{ storage: true }"
-    >
-      <template #toolbar_buttons>
-        <div :class="`tableBtn`">
-          <a-space direction="horizontal" size="small" style="margin-left: 5px">
-            <AuthDom auth="roleManage_query">
-              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.roleName') }}：</label>
-                    <a-input
-                      @press-enter="getRoles"
-                      v-model:value="seacthContent.name"
-                      :placeholder="t('view.inputRoleNameQuery')"
-                    />
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button @click="getRoles" type="primary"> {{ t('view.query') }}</a-button>
-                  </a-space>
-                </div>
-              </a-space>
-            </AuthDom>
-            <AuthDom auth="roleManage_add">
-              <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-button class="ant-btn" @click="showFrom()">{{ t('view.addRole') }}</a-button>
-                  </a-space>
-                </div>
-              </a-space>
-            </AuthDom>
-          </a-space>
-        </div>
-      </template>
-      <template #default="{ row }">
-        <div :class="`tableOption`">
-          <AuthDom auth="roleManage_table_power">
-            <IconFontClass
-              name="icon-baseui-quanxianpeizhi"
-              @click="showPower(row)"
-              style="color: #0a61bd"
-              :title="t('view.assignPermissions')"
-            />
-          </AuthDom>
-          <AuthDom auth="roleManage_table_edit">
-            <IconFontClass
-              name="icon-baseui-edit-fill"
-              @click="showFrom(row)"
-              style="color: #0a61bd"
-              :title="t('view.edit')"
-            />
-          </AuthDom>
-          <AuthDom auth="roleManage_table_delete">
-            <IconFontClass
-              name="icon-baseui-guanbicuowu"
-              @click="remove(row)"
-              style="color: red"
-              :title="t('view.delete')"
-            />
-          </AuthDom>
-        </div>
-      </template>
-    </vxe-grid>
-    <a-drawer
-      :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="500"
-      :visible="isShowForm"
-      :title="t('view.configuration')"
-      :footer-style="{ textAlign: 'right' }"
-      @close="formClose"
-    >
-      <a-form
-        :label-col="{ span: 8 }"
-        :style="{ paddingRight: '2px' }"
-        autocomplete="off"
-        ref="formRef"
-        :model="formData"
+    <a-spin :spinning="isRunLoading">
+      <vxe-grid
+        :scroll-y="{ enabled: true }"
+        v-bind="tableConfig"
+        id="roleManage"
+        :auto-resize="true"
+        ref="tableRef"
+        :loading="loading"
+        :row-config="{ keyField: 'roleId' }"
+        :column-config="{ resizable: true }"
+        :custom-config="{ storage: true }"
       >
-        <a-form-item
-          name="nameCn"
-          :label="t('view.roleName')"
-          :rules="[
-            { required: true, message: '' },
-            { max: 40, message: t('view.roleNameTooLong') },
-            { validator: formValidator.empty, message: t('view.pleaseEnterRoleName') },
-          ]"
+        <template #toolbar_buttons>
+          <div :class="`tableBtn`">
+            <a-space direction="horizontal" size="small" style="margin-left: 5px">
+              <AuthDom auth="roleManage_query">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>{{ t('view.roleName') }}：</label>
+                      <a-input
+                        @press-enter="getRoles"
+                        v-model:value="seacthContent.name"
+                        :placeholder="t('view.inputRoleNameQuery')"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button @click="getRoles" type="primary"> {{ t('view.query') }}</a-button>
+                    </a-space>
+                  </div>
+                </a-space>
+              </AuthDom>
+              <AuthDom auth="roleManage_add">
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-button class="ant-btn" @click="showFrom()">{{
+                        t('view.addRole')
+                      }}</a-button>
+                    </a-space>
+                  </div>
+                </a-space>
+              </AuthDom>
+            </a-space>
+          </div>
+        </template>
+        <template #default="{ row }">
+          <div :class="`tableOption`">
+            <AuthDom auth="roleManage_table_power">
+              <IconFontClass
+                name="icon-baseui-quanxianpeizhi"
+                @click="showPower(row)"
+                style="color: #0a61bd"
+                :title="t('view.assignPermissions')"
+              />
+            </AuthDom>
+            <AuthDom auth="roleManage_table_edit">
+              <IconFontClass
+                name="icon-baseui-edit-fill"
+                @click="showFrom(row)"
+                style="color: #0a61bd"
+                :title="t('view.edit')"
+              />
+            </AuthDom>
+            <AuthDom auth="roleManage_table_delete">
+              <IconFontClass
+                name="icon-baseui-guanbicuowu"
+                @click="remove(row)"
+                style="color: red"
+                :title="t('view.delete')"
+              />
+            </AuthDom>
+          </div>
+        </template>
+      </vxe-grid>
+      <a-drawer
+        :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+        :width="500"
+        :visible="isShowForm"
+        :title="t('view.configuration')"
+        :footer-style="{ textAlign: 'right' }"
+        @close="formClose"
+      >
+        <a-form
+          :label-col="{ span: 8 }"
+          :style="{ paddingRight: '2px' }"
+          autocomplete="off"
+          ref="formRef"
+          :model="formData"
         >
-          <a-input
-            v-model:value="formData.nameCn"
-            :placeholder="t('view.pleaseEnterRoleName')"
-            autocomplete="off"
-          />
-        </a-form-item>
-        <a-form-item
-          name="nameEn"
-          :label="t('view.roleName')"
-          :rules="[
-            { required: true, message: '' },
-            { max: 40, message: t('view.roleNameTooLong') },
-            { validator: formValidator.empty, message: t('view.pleaseEnterRoleName') },
-          ]"
-        >
-          <a-input
-            v-model:value="formData.nameEn"
-            :placeholder="t('view.pleaseEnterRoleName')"
-            autocomplete="off"
-          />
-        </a-form-item>
-        <a-form-item
-          name="nameFr"
-          :label="t('view.roleName')"
-          :rules="[
-            { required: true, message: '' },
-            { max: 40, message: t('view.roleNameTooLong') },
-            { validator: formValidator.empty, message: t('view.pleaseEnterRoleName') },
-          ]"
-        >
-          <a-input
-            v-model:value="formData.nameFr"
-            :placeholder="t('view.pleaseEnterRoleName')"
-            autocomplete="off"
-          />
-        </a-form-item>
-        <a-form-item
-          name="isValid"
-          :label="t('view.enableOrDisable')"
-          :rules="[{ required: true, message: t('view.pleaseSelectEnableOrDisable') }]"
-        >
-          <a-switch v-model:checked="formData.isValid" />
-        </a-form-item>
-        <a-form-item
-          name="orderIndex"
-          :label="t('view.roleSorting')"
-          :rules="[
-            { required: true, message: t('view.pleaseEnterRoleSorting') },
-            {
-              validator: formValidator.min,
-              min: -9999,
-              message: t('view.sortingValueMustBeBetween9999'),
-            },
-            {
-              validator: formValidator.max,
-              max: 9999,
-              message: t('view.sortingValueMustBeBetween9999'),
-            },
-          ]"
-        >
-          <a-input-number
-            :placeholder="t('view.pleaseInputSorting')"
-            style="width: 300px"
-            :precision="3"
-            v-model:value="formData.orderIndex"
-          />
-        </a-form-item>
-      </a-form>
-      <template #footer>
-        <a-spin :spinning="fromSpinning">
-          <a-button type="primary" @click="saveFrom">{{ t('view.save') }}</a-button>
-          <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
-        </a-spin>
-      </template>
-    </a-drawer>
-    <AssignPower v-if="isShowAssignPower" :isShow="isShowAssignPower" :roleId="assignPowerRoleId" />
+          <a-form-item
+            name="nameCn"
+            :label="t('view.roleName')"
+            :rules="[
+              { required: true, message: '' },
+              { max: 40, message: t('view.roleNameTooLong') },
+              { validator: formValidator.empty, message: t('view.pleaseEnterRoleName') },
+            ]"
+          >
+            <a-input
+              v-model:value="formData.nameCn"
+              :placeholder="t('view.pleaseEnterRoleName')"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="nameEn"
+            :label="t('view.roleName')"
+            :rules="[
+              { required: true, message: '' },
+              { max: 40, message: t('view.roleNameTooLong') },
+              { validator: formValidator.empty, message: t('view.pleaseEnterRoleName') },
+            ]"
+          >
+            <a-input
+              v-model:value="formData.nameEn"
+              :placeholder="t('view.pleaseEnterRoleName')"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="nameFr"
+            :label="t('view.roleName')"
+            :rules="[
+              { required: true, message: '' },
+              { max: 40, message: t('view.roleNameTooLong') },
+              { validator: formValidator.empty, message: t('view.pleaseEnterRoleName') },
+            ]"
+          >
+            <a-input
+              v-model:value="formData.nameFr"
+              :placeholder="t('view.pleaseEnterRoleName')"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
+            name="isValid"
+            :label="t('view.enableOrDisable')"
+            :rules="[{ required: true, message: t('view.pleaseSelectEnableOrDisable') }]"
+          >
+            <a-switch v-model:checked="formData.isValid" />
+          </a-form-item>
+          <a-form-item
+            name="orderIndex"
+            :label="t('view.roleSorting')"
+            :rules="[
+              { required: true, message: t('view.pleaseEnterRoleSorting') },
+              {
+                validator: formValidator.min,
+                min: -9999,
+                message: t('view.sortingValueMustBeBetween9999'),
+              },
+              {
+                validator: formValidator.max,
+                max: 9999,
+                message: t('view.sortingValueMustBeBetween9999'),
+              },
+            ]"
+          >
+            <a-input-number
+              :placeholder="t('view.pleaseInputSorting')"
+              style="width: 300px"
+              :precision="3"
+              v-model:value="formData.orderIndex"
+            />
+          </a-form-item>
+        </a-form>
+        <template #footer>
+          <a-spin :spinning="fromSpinning">
+            <a-button type="primary" @click="saveFrom">{{ t('view.save') }}</a-button>
+            <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
+          </a-spin>
+        </template>
+      </a-drawer>
+      <AssignPower
+        v-if="isShowAssignPower"
+        :isShow="isShowAssignPower"
+        :roleId="assignPowerRoleId"
+      />
+    </a-spin>
   </MyContent>
 </template>
 <script setup lang="ts">
@@ -194,6 +202,7 @@
 
   defineOptions({ name: 'RoleManage' });
   const { prefixCls } = useDesign('roleManage-');
+  const isRunLoading = ref(false);
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
     height: 'auto',
@@ -355,16 +364,16 @@
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {
-        loading.value = true;
+        isRunLoading.value = true;
         roleApi
           .DeleteRole(row.roleId)
           .then(() => {
-            loading.value = false;
+            isRunLoading.value = false;
             tableConfig.data = tableConfig.data?.filter((m) => m.roleId != row.roleId);
             message.success(t('view.deletionSuccessful'));
           })
           .catch(() => {
-            loading.value = false;
+            isRunLoading.value = false;
           });
       },
       onCancel() {},
@@ -380,11 +389,11 @@
 
   //获取角色列表
   function getByid(id) {
-    loading.value = true;
+    isRunLoading.value = true;
     roleApi
       .GetRole(id)
       .then((data) => {
-        loading.value = false;
+        isRunLoading.value = false;
         if (data) {
           formData.value = data;
           saveType = 'edit';
@@ -394,7 +403,7 @@
         }
       })
       .catch(() => {
-        loading.value = false;
+        isRunLoading.value = false;
       });
   }
 

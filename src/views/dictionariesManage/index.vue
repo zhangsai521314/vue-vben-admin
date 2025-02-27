@@ -1,6 +1,6 @@
 <template>
   <MyContent :class="prefixCls">
-    <a-spin :spinning="loading">
+    <a-spin :spinning="isRunLoading">
       <div style="width: 100%; height: 100%">
         <!-- :refresh="{ queryMethod: getDictionariess }" -->
         <vxe-toolbar ref="toolbarRef" custom>
@@ -152,6 +152,7 @@
             height="100%"
             ref="tableRef"
             show-overflow
+            :loading="loading"
             :custom-config="{ storage: true }"
             :row-config="{ isHover: true, useKey: true, keyField: 'dictionariesId' }"
             :column-config="{ resizable: true }"
@@ -588,6 +589,7 @@
   defineOptions({ name: 'DictionariesManage' });
   const { prefixCls } = useDesign('suitManage-');
   const loading = ref(true);
+  const isRunLoading = ref(false);
   const tableConfigData = ref([]);
   const defFromData = reactive({
     dictionariesNameCn: null,
@@ -648,11 +650,11 @@
       icon: createVNode(ExclamationCircleOutlined),
       content: '',
       onOk() {
-        loading.value = true;
+        isRunLoading.value = true;
         dictionariesApi
           .DeleteDictionaries(row.dictionariesId)
           .then((data) => {
-            loading.value = false;
+            isRunLoading.value = false;
             try {
               if (data) {
                 tableConfigData.value = tableConfigData.value?.filter(
@@ -663,7 +665,7 @@
             } catch (error) {}
           })
           .catch(() => {
-            loading.value = false;
+            isRunLoading.value = false;
           });
       },
       onCancel() {},
@@ -679,11 +681,11 @@
 
   //获取字典
   function getByid(id) {
-    loading.value = true;
+    isRunLoading.value = true;
     dictionariesApi
       .GetDictionaries(id.toString())
       .then((data) => {
-        loading.value = false;
+        isRunLoading.value = false;
         if (data) {
           formData.value = data;
           saveType = 'edit';
@@ -693,7 +695,7 @@
         }
       })
       .catch(() => {
-        loading.value = false;
+        isRunLoading.value = false;
       });
   }
 

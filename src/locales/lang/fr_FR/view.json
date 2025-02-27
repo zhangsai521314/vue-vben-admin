@@ -1,4 +1,11 @@
 {
+  "userManual":"Manuel utilisateur",
+  "emergencyGroupCallPriority1To15": "Priorité d'appel de groupe d'urgence 1 à 15",
+  "pleaseEnterEmergencyGroupCallPriority": "Veuillez entrer la priorité de l'appel de groupe d'urgence",
+  "emergencyGroupCallNumFormatIsNaturalNum":"Le format du num. d'appel de groupe d'urgence est un num. naturel",
+  "pleaseEnterEmergencyGroupCallNumber": "Veuillez saisir le numéro d'appel de groupe d'urgence",
+  "emergencyGroupCallNumberIs3To10Digits": "Le numéro d'appel de groupe d'urgence est composé de 3 à 10 chiffres",
+  "pleaseEnterTheEnglishNameOfTheStationk":"Veuillez saisir le nom de la gare en anglais",
   "clickToSelectRouteDataFile":"Cliquez pour sélectionner le fichier de données de ligne",
   "lineMap": "Carte d'itinéraire",
   "primaryKeyDuplicatedCannotAdd": "Clé primaire dupliquée, impossible d'ajouter",

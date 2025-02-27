@@ -1,4 +1,11 @@
 {
+  "userManual":"User Manual",
+  "emergencyGroupCallPriority1To15": "Emergency group call priority 1 to 15",
+  "pleaseEnterEmergencyGroupCallPriority": "Please enter the emergency group call priority",
+  "emergencyGroupCallNumFormatIsNaturalNum":"Emergency group call number format is natural number",
+  "pleaseEnterEmergencyGroupCallNumber": "Please enter the emergency group call number",
+  "emergencyGroupCallNumberIs3To10Digits": "The emergency group call number is 3 to 10 digits",
+  "pleaseEnterTheEnglishNameOfTheStationk":"Please enter the station name in English",
   "clickToSelectRouteDataFile":"Click to select the route data file",
   "lineMap": "Line Map",
   "primaryKeyDuplicatedCannotAdd": "Primary key duplicated, cannot add",
