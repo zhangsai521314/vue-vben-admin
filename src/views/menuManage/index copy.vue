@@ -549,10 +549,10 @@
   getIconSimple();
 
   function showFrom(type, row, pid = null) {
-    if (row != null && row.menuType == 2) {
-      message.info(t('view.topologyMenuCannotBeEditedOrAdded'));
-      return;
-    }
+    // if (row != null && row.menuType == 2) {
+    //   message.info(t('view.topologyMenuCannotBeEditedOrAdded'));
+    //   return;
+    // }
     getMenuTreeDatas();
     saveType = type;
     if (type == 'add') {
