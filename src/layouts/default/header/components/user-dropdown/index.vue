@@ -100,7 +100,7 @@
   function handleMenuClick(e: MenuInfo) {
     switch (e.key) {
       case 'helpWord':
-        myCommon.downLoadFileByUrl('./resource/file/车站集群调度网管用户手册.doc');
+        myCommon.downLoadFileByUrl('./resource/file/用户帮助文档.zip');
         break;
       case 'logout':
         handleLoginOut();

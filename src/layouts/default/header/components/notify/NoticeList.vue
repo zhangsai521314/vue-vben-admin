@@ -114,9 +114,15 @@
               -webkit-line-clamp: 1; /* 限制为1行 */
               cursor: pointer;
             "
-            v-if="row.serviceName"
+            v-if="row.serviceNameCn || row.serviceNameEn || row.serviceNameFr"
           >
-            {{ row.serviceName }}</div
+            {{
+              locale == 'zh-CN'
+                ? row.serviceNameCn
+                : locale == 'en-US'
+                  ? row.serviceNameEn
+                  : row.serviceNameFr
+            }}</div
           >
           <div
             style="
@@ -165,9 +171,11 @@
   import { useMqttStoreWithOut } from '@/store/modules/mqtt';
   import messageApi from '@/api/message';
   import { useI18n } from '@/hooks/web/useI18n';
+  import { useLocaleStore } from '@/store/modules/locale';
 
   const { t } = useI18n();
-
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
   const mqttStore = useMqttStoreWithOut();
 
   const props = defineProps({

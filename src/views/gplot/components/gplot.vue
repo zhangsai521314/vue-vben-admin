@@ -877,7 +877,7 @@
               let color = null;
               for (let i = 0; i < stateOb.data.mySimpleState.filter((m) => m.open).length; i++) {
                 const element = stateOb.data.mySimpleState[i];
-                if (!serviceStatus[element.code]) {
+                if (serviceStatus[element.code] == element.value) {
                   color = element.color;
                   break;
                 }

@@ -229,6 +229,7 @@ export const useGplotStore = defineStore({
                 color: '#B1B1B1',
                 open: true,
                 level: 0,
+                value: false,
               },
               {
                 name: t('view.alarm'),
@@ -236,6 +237,7 @@ export const useGplotStore = defineStore({
                 color: '#ECEC0D',
                 open: true,
                 level: 1,
+                value: true,
               },
               {
                 name: t('view.performanceExceeded'),
@@ -243,6 +245,7 @@ export const useGplotStore = defineStore({
                 color: '#F58854',
                 open: true,
                 level: 2,
+                value: false,
               },
             ],
           },
