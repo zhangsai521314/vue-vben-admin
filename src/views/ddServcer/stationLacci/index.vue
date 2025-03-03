@@ -257,7 +257,6 @@
         field: 'stationName',
         title: t('view.stationName'),
         showOverflow: true,
-
         sortable: false,
         minWidth: 200,
         fixed: 'left',
@@ -268,6 +267,9 @@
         showOverflow: true,
         sortable: false,
         minWidth: 100,
+        slots: {
+          default: 'stationArea',
+        },
       },
       {
         field: 'laccis',

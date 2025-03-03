@@ -733,7 +733,7 @@
   "statusConfiguration": "状态配置",
   "flexibleBinding": "灵活绑定",
   "bindingService": "绑定服务",
-  "interrupt": "中断",
+  "interrupt": "离线",
   "performanceExceeded": "性能超出",
   "status": "状态",
   "priority": "优先级",
