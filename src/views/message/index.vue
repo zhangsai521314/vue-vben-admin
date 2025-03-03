@@ -535,7 +535,7 @@
     startTime: null,
     endTime: null,
     isConfirm: null,
-    msgClass: msgId == null ? 2 : null,
+    msgClass: serverId ? null : msgId == null ? 2 : null,
   });
   const timeValue = ref([
     dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
