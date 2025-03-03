@@ -30,11 +30,20 @@ const message: AppRouteModule = {
       },
     },
     {
+      path: 'index/:serverId',
+      name: 'message_server',
+      component: () => import('/@/views/message/index.vue'),
+      meta: {
+        title: '',
+        hideMenu: true,
+      },
+    },
+    {
       path: 'index/:msgId/:dataTime',
       name: 'message_',
       component: () => import('/@/views/message/index.vue'),
       meta: {
-        title: '告警管理',
+        title: '',
         hideMenu: true,
       },
     },

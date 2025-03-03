@@ -62,6 +62,7 @@
                       v-model:value="seacthContent.msgType"
                       :options="
                         seacthContent.serviceId != null &&
+                        serviceData.length > 0 &&
                         serviceData.find((m) => m.key == seacthContent.serviceId).serviceType !=
                           null
                           ? dictionariesData.filter(
@@ -345,8 +346,9 @@
   const mqttStore = useMqttStoreWithOut();
   const { currentRoute } = useRouter();
   //获取url参数
-  let { msgId, dataTime } = unref(currentRoute).params;
+  let { msgId, dataTime, serverId } = unref(currentRoute).params;
   msgId = msgId ? msgId : null;
+  serverId = serverId ? serverId : null;
   const { prefixCls } = useDesign('message-');
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
@@ -525,7 +527,7 @@
   const myContentRef = ref({});
   const formRef = ref({});
   const seacthContent = ref({
-    serviceId: null,
+    serviceId: serverId,
     msgType: null,
     msgStatus: null,
     msgTitle: '',

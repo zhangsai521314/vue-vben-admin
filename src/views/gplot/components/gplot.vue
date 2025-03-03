@@ -34,7 +34,9 @@
   import messageApi from '@/api/message';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
+  import { useGo } from '/@/hooks/web/usePage';
 
+  const go = useGo();
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
@@ -372,26 +374,33 @@
     graphOb = new Graph(graphConfig);
     //监控事件
     graphOb.on('click', (e) => {
-      console.log('点击', e.target);
-      if (e.target?.nodeName == 'document' && !e.target.hasOwnProperty('type')) {
-        //点击了画布
-        gplotStore.gplotKeyOb[gplotKey].selectedOb = null;
-      } else {
-        let selectedObs = getAllSelectOb(true);
-        if (selectedObs.length == 0) {
-        } else if (selectedObs.length > 1) {
-          gplotStore.gplotKeyOb[gplotKey].selectedOb = selectedObs;
+      if (props.viewType == 'edit') {
+        console.log('点击', e.target);
+        if (e.target?.nodeName == 'document' && !e.target.hasOwnProperty('type')) {
+          //点击了画布
+          gplotStore.gplotKeyOb[gplotKey].selectedOb = null;
         } else {
-          const selectedOb = graphOb.getElementData(e.target.id);
-          gplotStore.gplotKeyOb[gplotKey].selectedOb = {
-            id: selectedOb.id,
-            style: _.cloneDeep(selectedOb.style),
-            data: _.cloneDeep(selectedOb.data),
-          };
+          let selectedObs = getAllSelectOb(true);
+          if (selectedObs.length == 0) {
+          } else if (selectedObs.length > 1) {
+            gplotStore.gplotKeyOb[gplotKey].selectedOb = selectedObs;
+          } else {
+            const selectedOb = graphOb.getElementData(e.target.id);
+            gplotStore.gplotKeyOb[gplotKey].selectedOb = {
+              id: selectedOb.id,
+              style: _.cloneDeep(selectedOb.style),
+              data: _.cloneDeep(selectedOb.data),
+            };
+          }
+        }
+        // const contextmenu = graphOb.getPluginInstance('ContextMenu');
+        // contextmenu?.hide();
+      } else {
+        const clickOb = graphOb.getElementData(e.target.id);
+        if (clickOb && clickOb.data && clickOb.data.myServiceId) {
+          go(`/message/index/${clickOb.data.myServiceId}`);
         }
       }
-      // const contextmenu = graphOb.getPluginInstance('ContextMenu');
-      // contextmenu?.hide();
     });
     // graphOb.on('contextmenu', (a, b, c) => {
     //   //阻止系统右键事件
