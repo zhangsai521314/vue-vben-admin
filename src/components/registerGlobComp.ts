@@ -105,7 +105,7 @@ export function registerGlobComp(app: App) {
       treeConfig: {
         rowField: 'id',
         parentField: 'parentId',
-        children: 'children',
+        childrenField: 'children',
         hasChild: 'hasChild',
         mapChildrenField: '_X_ROW_CHILD',
         indent: 20,

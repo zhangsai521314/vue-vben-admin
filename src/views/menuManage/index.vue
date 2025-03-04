@@ -99,7 +99,6 @@
             <vxe-column
               field="menuNameCn"
               :title="t('view.menuNameCn')"
-              tree-node
               :sortable="true"
               :minWidth="180"
               visible="false"
@@ -116,7 +115,6 @@
             <vxe-column
               field="menuNameEn"
               :title="t('view.menuNameEn')"
-              tree-node
               :sortable="true"
               :minWidth="180"
               visible="false"
@@ -133,7 +131,6 @@
             <vxe-column
               field="menuNameFr"
               :title="t('view.menuNameFr')"
-              tree-node
               :sortable="true"
               :minWidth="184"
               visible="false"
@@ -216,7 +213,7 @@
               :sortable="true"
               :minWidth="130"
             />
-            <vxe-column :title="t('view.action')" :minWidth="140" fixed="right">
+            <vxe-column field="action_" :title="t('view.action')" :minWidth="140" fixed="right">
               <template #default="{ row }">
                 <div :class="`tableStyle`">
                   <AuthDom auth="menuManage_table_add">

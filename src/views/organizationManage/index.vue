@@ -49,7 +49,6 @@
             height="100%"
             ref="tableRef"
             :loading="loading"
-            show-overflow
             :custom-config="{ storage: true }"
             :row-config="{ isHover: true, useKey: true, keyField: 'orgId' }"
             :column-config="{ resizable: true }"
@@ -73,26 +72,12 @@
               field="orgName"
               :title="t('view.departmentName')"
               tree-node
-              minWidth="210"
+              :minWidth="210"
+              fixed="left"
             />
-            <vxe-column
-              field="orgNameCn"
-              :title="t('view.departmentNameCn')"
-              tree-node
-              minWidth="210"
-            />
-            <vxe-column
-              field="orgNameEn"
-              :title="t('view.departmentNameEn')"
-              tree-node
-              minWidth="210"
-            />
-            <vxe-column
-              field="orgNameFr"
-              :title="t('view.departmentNameFr')"
-              tree-node
-              minWidth="210"
-            />
+            <vxe-column field="orgNameCn" :title="t('view.departmentNameCn')" :minWidth="210" />
+            <vxe-column field="orgNameEn" :title="t('view.departmentNameEn')" :minWidth="210" />
+            <vxe-column field="orgNameFr" :title="t('view.departmentNameFr')" :minWidth="210" />
             <vxe-column
               field="typeLineOrStationId"
               :title="t('view.departmentManagesLinesOrStations')"
@@ -113,13 +98,13 @@
               field="orderIndex"
               :title="t('view.sorting')"
               :visible="false"
-              minWidth="100"
+              :minWidth="100"
             />
-            <vxe-column field="createTime" :title="t('view.creationTime')" minWidth="150" />
-            <vxe-column field="createUser" :title="t('view.creator')" minWidth="130" />
-            <vxe-column field="modifyTime" :title="t('view.modificationTime')" minWidth="170" />
-            <vxe-column field="modifyUser" :title="t('view.modifier')" minWidth="130" />
-            <vxe-column :title="t('view.action')" minWidth="140" fixed="right">
+            <vxe-column field="createTime" :title="t('view.creationTime')" :minWidth="150" />
+            <vxe-column field="createUser" :title="t('view.creator')" :minWidth="130" />
+            <vxe-column field="modifyTime" :title="t('view.modificationTime')" :minWidth="170" />
+            <vxe-column field="modifyUser" :title="t('view.modifier')" :minWidth="130" />
+            <vxe-column field="action_" :title="t('view.action')" :minWidth="140" fixed="right">
               <template #default="{ row }">
                 <div :class="`tableStyle`">
                   <AuthDom auth="organizationManage_table_add">

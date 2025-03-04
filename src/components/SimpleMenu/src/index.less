@@ -29,8 +29,11 @@
   &-sub-title {
     overflow: hidden;
     transition: all 0.3s;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    // white-space: nowrap;
+    //法文长菜单换行
+    line-height: initial;
+    // text-overflow: ellipsis;
+    white-space: break-spaces;
   }
 
   &-tag {
