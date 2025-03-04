@@ -148,7 +148,8 @@
           }}</span
         >
       </template>
-      <template #default="{ row }">
+      <template #action="{ row }">
+        1
         <div :class="`tableOption`">
           <AuthDom auth="DCOptionCallRecord_play">
             <IconFontClass
@@ -311,6 +312,8 @@
   const mqttStore = useMqttStoreWithOut();
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
+    showOverflow: true,
+    showHeaderOverflow: true,
     height: 'auto',
     columns: [
       //基础
@@ -353,9 +356,9 @@
         showOverflow: true,
         sortable: true,
         minWidth: locale == 'zh-CN' ? 100 : 140,
-        slots: {
-          default: 'callState',
-        },
+        // slots: {
+        //   default: 'callState',
+        // },
       },
       {
         field: 'callDirection',
@@ -363,9 +366,9 @@
         showOverflow: true,
         sortable: true,
         minWidth: locale == 'zh-CN' ? 100 : 180,
-        slots: {
-          default: 'callDirection',
-        },
+        // slots: {
+        //   default: 'callDirection',
+        // },
       },
       {
         field: 'mainCallName',
@@ -387,9 +390,9 @@
         showOverflow: true,
         sortable: true,
         minWidth: locale == 'zh-CN' ? 100 : 130,
-        slots: {
-          default: 'callType',
-        },
+        // slots: {
+        //   default: 'callType',
+        // },
       },
       {
         field: 'callTimeSpan',
@@ -448,9 +451,9 @@
         showOverflow: true,
         sortable: true,
         minWidth: locale == 'zh-CN' ? 100 : 200,
-        slots: {
-          default: 'record_state',
-        },
+        // slots: {
+        //   default: 'record_state',
+        // },
       },
       {
         field: 'logKey',
@@ -465,9 +468,9 @@
         title: t('view.recordingFileStatus'),
         showOverflow: true,
         sortable: true,
-        slots: {
-          default: 'recordFileStatus',
-        },
+        // slots: {
+        //   default: 'recordFileStatus',
+        // },
         minWidth: locale == 'zh-CN' ? 150 : 170,
       },
       {
@@ -477,15 +480,16 @@
         showOverflow: true,
         sortable: true,
         visible: false,
-        formatter: ({ cellValue }) => {
-          return cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : '';
-        },
+        // formatter: ({ cellValue }) => {
+        //   return cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : '';
+        // },
       },
       {
+        field: 'action',
         title: t('view.action'),
         minWidth: 90,
         slots: {
-          default: 'default',
+          default: 'action',
         },
         showOverflow: true,
         fixed: 'right',
@@ -520,7 +524,7 @@
   const serviceData = ref([]);
   const page = reactive({
     current: 1,
-    size: 20,
+    size: 101,
     total: 0,
     sortlist: ['endTime desc', 'startTime desc'],
   });
@@ -654,6 +658,7 @@
         tableConfig.data = data.source;
         page.total = data.totalCount;
         page.current = data.pageIndex;
+        debugger;
       })
       .catch(() => {
         tableConfig.data = [];

@@ -55,6 +55,8 @@
   });
 
   const tableConfig = reactive<VxeGridProps>({
+    showOverflow: true,
+    showHeaderOverflow: true,
     height: 'auto',
     columns: [
       //基础
@@ -64,14 +66,13 @@
         title: t('view.fileTime'),
         minWidth: 150,
         showOverflow: true,
-        
       },
       {
         field: 'fileName',
         title: t('view.fileName'),
         showOverflow: true,
         minWidth: 200,
-        
+
         slots: {
           default: 'fileName',
         },

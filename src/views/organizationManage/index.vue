@@ -42,6 +42,8 @@
         </vxe-toolbar>
         <div style="width: 100%; height: calc(100% - 62px)">
           <vxe-table
+            :show-overflow="true"
+            :show-header-overflow="true"
             id="organizationManage"
             :scroll-y="{ enabled: true }"
             :auto-resize="true"

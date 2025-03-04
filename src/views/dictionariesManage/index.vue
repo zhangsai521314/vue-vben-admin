@@ -151,7 +151,8 @@
             :auto-resize="true"
             height="100%"
             ref="tableRef"
-            show-overflow
+            :show-overflow="true"
+            :show-header-overflow="true"
             :loading="loading"
             :custom-config="{ storage: true }"
             :row-config="{ isHover: true, useKey: true, keyField: 'dictionariesId' }"

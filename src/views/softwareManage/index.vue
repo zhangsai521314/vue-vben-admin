@@ -414,6 +414,7 @@
         @close="closeLog"
       >
         <vxe-table
+          :show-header-overflow="true"
           height="100%"
           :scroll-y="{ enabled: true }"
           :auto-resize="true"
@@ -509,6 +510,8 @@
   const loading = ref(true);
   const isRunLoading = ref(false);
   const tableConfig = reactive<VxeGridProps>({
+    showOverflow: true,
+    showHeaderOverflow: true,
     height: 'auto',
     columns: [
       //基础

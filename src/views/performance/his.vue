@@ -135,6 +135,8 @@
   ];
   const { getInstance, resize, setOptions, echarts } = useECharts(chartRef);
   const tableConfig = reactive<VxeGridProps>({
+    showOverflow: true,
+    showHeaderOverflow: true,
     height: 'auto',
     columns: [],
     // toolbarConfig: {

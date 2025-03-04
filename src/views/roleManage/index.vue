@@ -205,6 +205,8 @@
   const isRunLoading = ref(false);
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
+    showOverflow: true,
+    showHeaderOverflow: true,
     height: 'auto',
     columns: [
       {
