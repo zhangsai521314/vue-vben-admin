@@ -58,7 +58,7 @@
             v-bind="tableConfig"
             ref="tableRef"
             :seq-config="{ startIndex: (page.current - 1) * page.size }"
-            :row-config="{ keyField: 'keyId' }"
+            :row-config="{ keyField: 'performanceId' }"
             :column-config="{ resizable: true }"
             :custom-config="{ storage: true }"
             @sort-change="onSortChange"
@@ -232,35 +232,35 @@
           minWidth: locale == 'zh-CN' ? 70 : 160,
           fixed: 'left',
         },
-        {
-          field: 'keyId',
-          title: t('view.recordId'),
-          sortable: true,
-          visible: false,
-          showOverflow: true,
-          fixed: 'left',
-          minWidth: locale == 'zh-CN' ? 130 : 150,
-        },
+        // {
+        //   field: 'keyId',
+        //   title: t('view.recordId'),
+        //   sortable: true,
+        //   visible: false,
+        //   showOverflow: true,
+        //   fixed: 'left',
+        //   minWidth: locale == 'zh-CN' ? 130 : 240,
+        // },
         {
           field: 'cpuUsage',
           title: `${t('view.cpuUsageRate')}(%)`,
           showOverflow: true,
           sortable: false,
-          minWidth: 110,
+          minWidth: locale == 'zh-CN' ? 110 : 180,
         },
         {
           field: 'memorySize',
           title: `${t('view.memorySize')}(G)`,
           showOverflow: false,
           sortable: false,
-          minWidth: 110,
+          minWidth: locale == 'zh-CN' ? 110 : 150,
         },
         {
           field: 'memoryUsage',
           title: `${t('view.memoryUsageRate')}(%)`,
           showOverflow: false,
           sortable: false,
-          minWidth: 110,
+          minWidth: locale == 'zh-CN' ? 110 : 230,
         },
       ];
       baseColumnsChart = [
@@ -287,7 +287,7 @@
                 title: `${col}${t('view.driveSize')}(G)`,
                 showOverflow: true,
                 sortable: false,
-                minWidth: 110,
+                minWidth: locale == 'zh-CN' ? 110 : 150,
               });
             } else {
               baseColumns.push({
@@ -295,7 +295,7 @@
                 title: `${col}${t('view.driveUsage')}(%)`,
                 showOverflow: true,
                 sortable: false,
-                minWidth: 110,
+                minWidth: locale == 'zh-CN' ? 110 : 210,
               });
               baseColumnsChart.push({
                 name: `${col}${t('view.driveUsage')}(%)`,

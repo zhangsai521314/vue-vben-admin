@@ -212,9 +212,19 @@
         >
       </template>
       <template #msgType="{ row }">
-        <span>{{
-          dictionariesData.find((m) => m.dictionariesKey == row.msgType)
-            ? dictionariesData.find((m) => m.dictionariesKey == row.msgType).dictionariesName
+        <span v-if="locale == 'zh-CN'">{{
+          dictionariesData.find((m) => m.key == row.msgType)
+            ? dictionariesData.find((m) => m.key == row.msgType).dictionariesNameCn
+            : row.msgType
+        }}</span>
+        <span v-else-if="locale == 'en-US'">{{
+          dictionariesData.find((m) => m.key == row.msgType)
+            ? dictionariesData.find((m) => m.key == row.msgType).dictionariesNameEn
+            : row.msgType
+        }}</span>
+        <span v-else>{{
+          dictionariesData.find((m) => m.key == row.msgType)
+            ? dictionariesData.find((m) => m.key == row.msgType).dictionariesNameFr
             : row.msgType
         }}</span>
       </template>

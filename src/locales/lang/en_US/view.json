@@ -439,7 +439,7 @@
   "lineORstationCode": "Line/Station Code",
   "belongsToLine/station": "Belongs to Line/Station",
   "type": "Type",
-  "ipAndPortNumber": "IP + port number",
+  "ipAndPortNumber": "IP + Port number",
   "heartbeatTime": "Heartbeat Time",
   "engineFunctionNum": "Engine Function Num",
   "inputLocomotiveFunctionNumber": "Input Locomotive Function Number",
