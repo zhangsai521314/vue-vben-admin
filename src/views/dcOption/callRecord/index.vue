@@ -149,7 +149,6 @@
         >
       </template>
       <template #action="{ row }">
-        1
         <div :class="`tableOption`">
           <AuthDom auth="DCOptionCallRecord_play">
             <IconFontClass
@@ -524,7 +523,7 @@
   const serviceData = ref([]);
   const page = reactive({
     current: 1,
-    size: 101,
+    size: 20,
     total: 0,
     sortlist: ['endTime desc', 'startTime desc'],
   });
