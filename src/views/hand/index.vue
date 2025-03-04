@@ -145,7 +145,7 @@
                 :title="t('view.viewLog')"
               />
             </AuthDom>
-            <AuthDom auth="hand_edit">
+            <AuthDom auth="hand_permissions">
               <IconFontClass
                 name="icon-baseui-edit-fill"
                 @click="showFrom(row)"
