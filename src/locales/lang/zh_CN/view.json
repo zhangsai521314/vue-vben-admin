@@ -439,7 +439,7 @@
   "lineORstationCode": "线路/车站代码",
   "belongsToLine/station": "所属线路/车站",
   "type": "类型",
-  "ipAndPortNumber": "Ip+端口号",
+  "ipAndPortNumber": "IP+端口号",
   "heartbeatTime": "心跳时间",
   "engineFunctionNum": "机车功能号",
   "inputLocomotiveFunctionNumber": "输入机车功能号",

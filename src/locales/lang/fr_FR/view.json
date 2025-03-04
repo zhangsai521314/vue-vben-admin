@@ -439,7 +439,7 @@
   "lineORstationCode": "Code de la ligne\\de la gare",
   "belongsToLine/station": "Ligne/gare associée",
   "type": "Type",
-  "ipAndPortNumber": "Ip + numéro de port",
+  "ipAndPortNumber": "IP + numéro de port",
   "heartbeatTime": "Temps de battement de cœur",
   "engineFunctionNum": "Numéro de fonction de locomotive",
   "inputLocomotiveFunctionNumber": "Saisir le numéro de fonction de locomotive",

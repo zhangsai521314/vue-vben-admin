@@ -52,7 +52,7 @@
                       allow-clear
                       show-search
                       :filter-option="AntVueCommon.filterOption"
-                      v-model:value="seacthContent.stationCode"
+                      v-model:value="seacthContent.stationId"
                       :options="stationDatas"
                     />
                   </a-space>
@@ -313,7 +313,7 @@
   ]);
   const seacthContent = ref({
     lineCode: null,
-    stationCode: null,
+    stationId: null,
     laccis: [],
     isdn: null,
     jcFn: null,
@@ -337,7 +337,7 @@
   const stationDatas = ref([]);
 
   getStatus(true);
-  getDDServerStationCodeSimple();
+  getDDServerStationSimple();
   getDDServerLineCodeSimple();
 
   //获取列表
@@ -377,7 +377,7 @@
   function resetSeacth() {
     seacthContent.value = {
       lineCode: null,
-      stationCode: null,
+      stationId: null,
       laccis: [],
       isdn: null,
       jcFn: null,
@@ -444,8 +444,8 @@
     refreshTime.value = 10;
   }
 
-  function getDDServerStationCodeSimple() {
-    stationApi.GetDDServerStationCodeSimple().then((data) => {
+  function getDDServerStationSimple() {
+    stationApi.GetDDServerStationSimple().then((data) => {
       stationDatas.value = data;
     });
   }

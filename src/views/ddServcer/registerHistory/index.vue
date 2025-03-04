@@ -160,7 +160,7 @@
                 ? t('view.carNumberFunctionNumber')
                 : row.fnType == 6
                   ? t('view.shuntingTeamFunctionNumber')
-                  : row.fnType == 91
+                  : row.fnType == 145
                     ? t('view.dispatchingFunctionNumber')
                     : row.fnType
         }}
@@ -306,10 +306,8 @@
   const refreshTime = ref(10);
   let refreshTimeId;
   const lineDatas = ref([]);
-  const stationDatas = ref([]);
 
   getStatus(true);
-  getDDServerStationCodeSimple();
   getDDServerLineCodeSimple();
 
   //获取列表
@@ -416,12 +414,6 @@
     clearTimeout(refreshTimeId);
     refresh.value = 'no';
     refreshTime.value = 10;
-  }
-
-  function getDDServerStationCodeSimple() {
-    stationApi.GetDDServerStationCodeSimple().then((data) => {
-      stationDatas.value = data;
-    });
   }
 
   function getDDServerLineCodeSimple() {

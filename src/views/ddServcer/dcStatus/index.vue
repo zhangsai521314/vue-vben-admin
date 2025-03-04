@@ -52,7 +52,7 @@
                       allow-clear
                       show-search
                       :filter-option="AntVueCommon.filterOption"
-                      v-model:value="seacthContent.stationCode"
+                      v-model:value="seacthContent.stationId"
                       :options="stationDatas"
                     />
                   </a-space>
@@ -202,7 +202,7 @@
           default: 'ipport',
         },
         sortable: true,
-        minWidth: locale == 'zh-CN' ? 120 : 170,
+        minWidth: locale == 'zh-CN' ? 140 : 170,
       },
       {
         field: 'loginStatus',
@@ -255,7 +255,7 @@
   ]);
   const seacthContent = ref({
     lineCode: null,
-    stationCode: null,
+    stationId: null,
     isdn: null,
     startTime: null,
     endTime: null,
@@ -275,7 +275,7 @@
   const stationDatas = ref([]);
 
   getStatus(true);
-  getDDServerStationCodeSimple();
+  getDDServerStationSimple();
   getDDServerLineCodeSimple();
 
   //获取列表
@@ -315,7 +315,7 @@
   function resetSeacth() {
     seacthContent.value = {
       lineCode: null,
-      stationCode: null,
+      stationId: null,
       isdn: null,
       startTime: null,
       endTime: null,
@@ -384,8 +384,8 @@
     refreshTime.value = 10;
   }
 
-  function getDDServerStationCodeSimple() {
-    stationApi.GetDDServerStationCodeSimple().then((data) => {
+  function getDDServerStationSimple() {
+    stationApi.GetDDServerStationSimple().then((data) => {
       stationDatas.value = data;
     });
   }

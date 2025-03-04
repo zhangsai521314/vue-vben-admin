@@ -213,7 +213,7 @@
         field: 'ip',
         title: t('view.ipAndPortNumber'),
         showOverflow: true,
-        minWidth: locale == 'zh-CN' ? 120 : 170,
+        minWidth: locale == 'zh-CN' ? 140 : 170,
         slots: {
           default: 'ipport',
         },
