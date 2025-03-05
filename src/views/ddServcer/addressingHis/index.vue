@@ -39,21 +39,32 @@
                       allow-clear
                       v-model:value="seacthContent.dataType"
                     >
-                      <a-select-option :value="226">{{ t('view.shortNumber') }}</a-select-option>
-                      <a-select-option :value="224">{{
-                        t('view.trainFunctionNumber')
+                      <a-select-option :value="1">{{
+                        t('view.shortNumberAddressing')
                       }}</a-select-option>
-                      <a-select-option :value="225">{{
-                        t('view.engineFunctionNum')
+                      <a-select-option :value="2">{{
+                        t('view.trainNumberAddressing')
+                      }}</a-select-option>
+                      <a-select-option :value="3">{{
+                        t('view.locomotiveNumberAddressing')
                       }}</a-select-option>
                       <a-select-option :value="241">{{
-                        t('view.intraStationGroupCall')
+                        t('view.inSiteGroupCallAddressing')
                       }}</a-select-option>
                       <a-select-option :value="242">{{
-                        t('view.neighborStationGroupCall')
+                        t('view.adjacentStationGroupCallAddressing')
                       }}</a-select-option>
                       <a-select-option :value="243">{{
-                        t('view.emergencyGroupCall')
+                        t('view.emergencyGroupCallAddressing')
+                      }}</a-select-option>
+                      <a-select-option :value="4">{{
+                        t('view.wagonNumberAddressing')
+                      }}</a-select-option>
+                      <a-select-option :value="6">{{
+                        t('view.shuntingTeamAddressing')
+                      }}</a-select-option>
+                      <a-select-option :value="91">{{
+                        t('view.dispatchAddressing')
                       }}</a-select-option>
                     </a-select>
                   </a-space>
@@ -137,7 +148,13 @@
                     ? t('view.shuntingTeamAddressing')
                     : row.type == 91
                       ? t('view.dispatchAddressing')
-                      : row.type
+                      : row.type == 241
+                        ? t('view.inSiteGroupCallAddressing')
+                        : row.type == 242
+                          ? t('view.adjacentStationGroupCallAddressing')
+                          : row.type == 243
+                            ? t('view.emergencyGroupCallAddressing')
+                            : row.type
         }}
       </template>
     </vxe-grid>

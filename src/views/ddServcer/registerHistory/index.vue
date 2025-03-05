@@ -31,21 +31,19 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.functionNumberType') }}：</label>
+                    <label>{{ t('view.operationType') }}：</label>
                     <a-select
-                      :placeholder="t('view.pleaseSelectFunctionNumberType')"
+                      :placeholder="t('view.pleaseSelectOperationType')"
                       :style="{ width: locale == 'zh-CN' ? '170px' : '260px' }"
                       allow-clear
                       v-model:value="seacthContent.regType"
                     >
-                      <a-select-option :value="91">{{
-                        t('view.dispatchingFunctionNumber')
-                      }}</a-select-option>
-                      <a-select-option :value="2">{{
-                        t('view.engineFunctionNum')
-                      }}</a-select-option>
-                      <a-select-option :value="3">{{
-                        t('view.trainFunctionNumber')
+                      <a-select-option :value="224">{{ t('view.register') }}</a-select-option>
+                      <a-select-option :value="225">{{ t('view.generalLogout') }}</a-select-option>
+                      <a-select-option :value="226">{{ t('view.forcedLogout') }}</a-select-option>
+                      <a-select-option :value="227">{{ t('view.timeoutLogout') }}</a-select-option>
+                      <a-select-option :value="228">{{
+                        t('view.allCancellation')
                       }}</a-select-option>
                     </a-select>
                   </a-space>
@@ -72,19 +70,27 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.operationType') }}：</label>
+                    <label>{{ t('view.functionNumberType') }}：</label>
                     <a-select
-                      :placeholder="t('view.pleaseSelectOperationType')"
+                      :placeholder="t('view.pleaseSelectFunctionNumberType')"
                       :style="{ width: locale == 'zh-CN' ? '170px' : '190px' }"
                       allow-clear
                       v-model:value="seacthContent.fnType"
                     >
-                      <a-select-option :value="224">{{ t('view.register') }}</a-select-option>
-                      <a-select-option :value="225">{{ t('view.manualLogout') }}</a-select-option>
-                      <a-select-option :value="226">{{ t('view.forcedLogout') }}</a-select-option>
-                      <a-select-option :value="227">{{ t('view.timeoutLogout') }}</a-select-option>
-                      <a-select-option :value="228">{{
-                        t('view.allCancellation')
+                      <a-select-option :value="2">{{
+                        t('view.trainFunctionNumber')
+                      }}</a-select-option>
+                      <a-select-option :value="3">{{
+                        t('view.engineFunctionNum')
+                      }}</a-select-option>
+                      <a-select-option :value="4">{{
+                        t('view.carNumberFunctionNumber')
+                      }}</a-select-option>
+                      <a-select-option :value="6">{{
+                        t('view.shuntingTeamFunctionNumber')
+                      }}</a-select-option>
+                      <a-select-option :value="91">{{
+                        t('view.dispatchingFunctionNumber')
                       }}</a-select-option>
                     </a-select>
                   </a-space>
@@ -160,7 +166,7 @@
                 ? t('view.carNumberFunctionNumber')
                 : row.fnType == 6
                   ? t('view.shuntingTeamFunctionNumber')
-                  : row.fnType == 145
+                  : row.fnType == 91
                     ? t('view.dispatchingFunctionNumber')
                     : row.fnType
         }}
@@ -213,10 +219,9 @@
       },
       {
         field: 'regType',
-        title: t('view.functionNumberType'),
+        title: t('view.operationType'),
         showOverflow: true,
         sortable: true,
-        fixed: 'left',
         minWidth: locale == 'zh-CN' ? 110 : 210,
         slots: {
           default: 'regType',
@@ -230,21 +235,21 @@
         minWidth: locale == 'zh-CN' ? 100 : 160,
       },
       {
-        field: 'isdn',
-        title: t('view.isdn'),
-        showOverflow: true,
-        sortable: true,
-        minWidth: 100,
-      },
-      {
         field: 'fnType',
-        title: t('view.operationType'),
+        title: t('view.functionNumberType'),
         showOverflow: true,
         sortable: true,
         minWidth: locale == 'zh-CN' ? 100 : 220,
         slots: {
           default: 'fnType',
         },
+      },
+      {
+        field: 'isdn',
+        title: t('view.isdn'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 100,
       },
       {
         field: 'regResult',
