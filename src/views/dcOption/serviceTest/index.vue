@@ -138,6 +138,7 @@
     columns: [
       //基础
       {
+        field: 'seq_',
         type: 'seq',
         title: t('view.serialNumber'),
         minWidth: locale == 'zh-CN' ? 70 : 160,
@@ -312,7 +313,7 @@
       $table.exportData({
         filename: `自检记录信息导出${dayjs().format('YYYYMMDDHHmmss')}`,
         type: 'xlsx',
-        excludeFields: ['seq'],
+        excludeFields: ['seq_', 'action_'],
       });
     }
   }

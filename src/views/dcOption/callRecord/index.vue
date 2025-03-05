@@ -317,6 +317,7 @@
     columns: [
       //基础
       {
+        field: 'seq_',
         type: 'seq',
         title: t('view.serialNumber'),
         minWidth: locale == 'zh-CN' ? 70 : 160,
@@ -484,7 +485,7 @@
         },
       },
       {
-        field: 'action',
+        field: 'action_',
         title: t('view.action'),
         minWidth: 90,
         slots: {
@@ -770,7 +771,7 @@
       $table.exportData({
         filename: `通话记录导出${dayjs().format('YYYYMMDDHHmmss')}`,
         type: 'xlsx',
-        excludeFields: ['seq'],
+        excludeFields: ['seq_', 'action_'],
       });
     }
   }

@@ -519,6 +519,7 @@
         visible: false,
       },
       {
+        field: 'action_',
         title: t('view.action'),
         slots: {
           default: 'default',
@@ -833,7 +834,7 @@
       $table.exportData({
         filename: `告警信息导出${dayjs().format('YYYYMMDDHHmmss')}`,
         type: 'xlsx',
-        excludeFields: ['seq'],
+        excludeFields: ['seq_', 'action_'],
       });
     }
   }

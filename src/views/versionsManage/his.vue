@@ -225,7 +225,12 @@
     height: 'auto',
     columns: [
       //基础
-      { type: 'seq', title: t('view.serialNumber'), minWidth: locale == 'zh-CN' ? 70 : 160 },
+      {
+        field: 'seq_',
+        type: 'seq',
+        title: t('view.serialNumber'),
+        minWidth: locale == 'zh-CN' ? 70 : 160,
+      },
       {
         field: 'hisId',
         title: t('view.recordId'),

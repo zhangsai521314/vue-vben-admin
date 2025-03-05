@@ -514,6 +514,7 @@
     columns: [
       //基础
       {
+        field: 'seq_',
         type: 'seq',
         title: t('view.serialNumber'),
         minWidth: locale == 'zh-CN' ? 70 : 160,
@@ -640,6 +641,7 @@
         visible: false,
       },
       {
+        field: 'action_',
         title: t('view.action'),
         minWidth: 110,
         slots: {

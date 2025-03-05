@@ -1559,6 +1559,7 @@
       dataIndex: 'name',
     },
     {
+      field: 'action_',
       title: t('view.action'),
       dataIndex: 'operation',
     },
@@ -1578,6 +1579,7 @@
       dataIndex: 'color',
     },
     {
+      field: 'action_',
       title: t('view.action'),
       dataIndex: 'operation',
     },

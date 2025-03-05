@@ -560,6 +560,7 @@
         minWidth: 130,
       },
       {
+        field: 'action_',
         title: t('view.action'),
         minWidth: 140,
         slots: {

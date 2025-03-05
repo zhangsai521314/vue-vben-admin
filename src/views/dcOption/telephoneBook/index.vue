@@ -174,6 +174,7 @@
     height: 'auto',
     columns: [
       {
+        field: 'seq_',
         type: 'seq',
         title: t('view.serialNumber'),
         minWidth: locale == 'zh-CN' ? 70 : 160,
@@ -236,6 +237,7 @@
         sortable: true,
       },
       {
+        field: 'action_',
         title: t('view.action'),
         minWidth: 90,
         slots: {

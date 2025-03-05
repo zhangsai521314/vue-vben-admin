@@ -295,6 +295,7 @@
         sortable: true,
       },
       {
+        field: 'action_',
         title: t('view.action'),
         minWidth: 90,
         slots: {
