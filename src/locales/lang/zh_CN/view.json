@@ -1,4 +1,7 @@
 {
+  "emergencyGroupCallAddressing": "紧急组呼寻址",
+  "adjacentStationGroupCallAddressing": "邻站组呼寻址",
+  "inSiteGroupCallAddressing": "站内组呼寻址",
   "commandSendingFailed": "命令发送失败",
   "commandHasBeenSentSuccessfully": "命令发送成功",
   "userManual": "用户手册",
@@ -170,7 +173,7 @@
   "addOrUpdateAuthorization": "新增或更新授权",
   "dispatchingFunctionNumber": "调度功能号",
   "shuntingTeamFunctionNumber": "调车组功能号",
-  "carNumberFunctionNumber ": "车号功能号",
+  "carNumberFunctionNumber": "车号功能号",
   "wagonNumberAddressing": "车号寻址",
   "dispatchAddressing": "调度寻址",
   "shuntingTeamAddressing": "调车组寻址",

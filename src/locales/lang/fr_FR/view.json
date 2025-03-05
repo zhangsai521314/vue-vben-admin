@@ -1,4 +1,7 @@
 {
+  "emergencyGroupCallAddressing": "AGU",
+  "adjacentStationGroupCallAddressing": "AGVS",
+  "inSiteGroupCallAddressing": "AGIS",
   "commandSendingFailed": "L'envoi de la commande a échoué",
   "commandHasBeenSentSuccessfully": "La commande a été envoyée avec succès",
   "userManual":"Manuel utilisateur",
@@ -170,7 +173,7 @@
   "addOrUpdateAuthorization": "Ajouter ou mettre à jour l'autorisation",
   "dispatchingFunctionNumber": "Numéro de fonction de dispatching",
   "shuntingTeamFunctionNumber": "Numéro de fonction de l'équipe de manutention ferroviaire",
-  "carNumberFunctionNumber ": "Numéro de fonction du numéro de voiture",
+  "carNumberFunctionNumber": "Numéro de fonction du numéro de voiture",
   "wagonNumberAddressing": "L'adressage par numéro de wagon",
   "dispatchAddressing": "L'adressage de la dispatching",
   "shuntingTeamAddressing": "L'adressage de l'équipe de manœuvre",
