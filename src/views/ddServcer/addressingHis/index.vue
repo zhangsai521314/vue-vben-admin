@@ -66,6 +66,15 @@
                       <a-select-option :value="91">{{
                         t('view.dispatchAddressing')
                       }}</a-select-option>
+                      <a-select-option :value="244">{{
+                        t('view.fullCallStationAddressing')
+                      }}</a-select-option>
+                      <a-select-option :value="245">{{
+                        t('view.fullCallDriverAddressing')
+                      }}</a-select-option>
+                      <a-select-option :value="246">{{
+                        t('view.fullLineBroadcastAddressing')
+                      }}</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
@@ -154,7 +163,13 @@
                           ? t('view.adjacentStationGroupCallAddressing')
                           : row.type == 243
                             ? t('view.emergencyGroupCallAddressing')
-                            : row.type
+                            : row.type == 244
+                              ? t('view.fullCallStationAddressing')
+                              : row.type == 245
+                                ? t('view.fullCallDriverAddressing')
+                                : row.type == 246
+                                  ? t('view.fullLineBroadcastAddressing')
+                                  : row.type
         }}
       </template>
     </vxe-grid>

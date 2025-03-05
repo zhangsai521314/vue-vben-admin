@@ -169,15 +169,14 @@
         sortable: true,
         minWidth: 150,
         fixed: 'left',
-        treeNode: true,
       },
       {
         field: 'testStepName',
         title: t('view.selfCheckName'),
-        visible: false,
         showOverflow: true,
         sortable: true,
         minWidth: 150,
+        treeNode: true,
       },
       {
         field: 'testStatus',

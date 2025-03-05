@@ -1,4 +1,7 @@
 {
+  "fullLineBroadcastAddressing": "ADTL",
+  "fullCallDriverAddressing": "ACAG",
+  "fullCallStationAddressing": "ASAG",
   "emergencyGroupCallAddressing": "AGU",
   "adjacentStationGroupCallAddressing": "AGVS",
   "inSiteGroupCallAddressing": "AGIS",

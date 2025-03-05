@@ -1,4 +1,7 @@
 {
+  "fullLineBroadcastAddressing": "全线广播寻址",
+  "fullCallDriverAddressing": "全呼司机寻址",
+  "fullCallStationAddressing": "全呼车站寻址",
   "emergencyGroupCallAddressing": "紧急组呼寻址",
   "adjacentStationGroupCallAddressing": "邻站组呼寻址",
   "inSiteGroupCallAddressing": "站内组呼寻址",

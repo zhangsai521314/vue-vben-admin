@@ -91,7 +91,7 @@
         {{ row.linkResult == 0 ? t('view.success') : t('view.failure', [`(${row.linkResult})`]) }}
       </template>
       <template #type="{ row }">
-        {{ row.type == 1 ? t('view.cabRadio') : row.type == 1 ? t('view.eot') : '-' }}
+        {{ row.type == 1 ? t('view.cabRadio') : row.type == 2 ? t('view.eot') : '-' }}
       </template>
     </vxe-grid>
   </MyContent>

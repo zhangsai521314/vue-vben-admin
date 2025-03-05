@@ -1,4 +1,7 @@
 {
+  "fullLineBroadcastAddressing": "FLBA",
+  "fullCallDriverAddressing": "FCDA",
+  "fullCallStationAddressing": "FCSA",
   "emergencyGroupCallAddressing": "EGCA",
   "adjacentStationGroupCallAddressing": "ASGCA",
   "inSiteGroupCallAddressing": "ISGCA",

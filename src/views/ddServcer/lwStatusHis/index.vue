@@ -83,7 +83,7 @@
       </template>
       <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? ':' + row.port : '' }} </template>
       <template #type="{ row }">
-        {{ row.type == 1 ? t('view.cabRadio') : row.type == 1 ? t('view.eot') : '-' }}
+        {{ row.type == 1 ? t('view.cabRadio') : row.type == 2 ? t('view.eot') : '-' }}
       </template>
     </vxe-grid>
   </MyContent>
