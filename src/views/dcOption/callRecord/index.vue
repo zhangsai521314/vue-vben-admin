@@ -231,7 +231,7 @@
                         : '-'
         }}</span>
       </template>
-      <template #record_state="{ row }">
+      <template #recordState="{ row }">
         <span>{{
           row.recordState == '0'
             ? t('view.noRecordingFile')
@@ -355,9 +355,9 @@
         showOverflow: true,
         sortable: true,
         minWidth: locale == 'zh-CN' ? 100 : 140,
-        // slots: {
-        //   default: 'callState',
-        // },
+        slots: {
+          default: 'callState',
+        },
       },
       {
         field: 'callDirection',
@@ -365,9 +365,9 @@
         showOverflow: true,
         sortable: true,
         minWidth: locale == 'zh-CN' ? 100 : 180,
-        // slots: {
-        //   default: 'callDirection',
-        // },
+        slots: {
+          default: 'callDirection',
+        },
       },
       {
         field: 'mainCallName',
@@ -389,9 +389,9 @@
         showOverflow: true,
         sortable: true,
         minWidth: locale == 'zh-CN' ? 100 : 130,
-        // slots: {
-        //   default: 'callType',
-        // },
+        slots: {
+          default: 'callType',
+        },
       },
       {
         field: 'callTimeSpan',
@@ -445,14 +445,14 @@
         minWidth: locale == 'zh-CN' ? 100 : 160,
       },
       {
-        field: 'record_state',
+        field: 'recordState',
         title: t('view.recordingStatus'),
         showOverflow: true,
         sortable: true,
         minWidth: locale == 'zh-CN' ? 100 : 200,
-        // slots: {
-        //   default: 'record_state',
-        // },
+        slots: {
+          default: 'recordState',
+        },
       },
       {
         field: 'logKey',
@@ -467,9 +467,9 @@
         title: t('view.recordingFileStatus'),
         showOverflow: true,
         sortable: true,
-        // slots: {
-        //   default: 'recordFileStatus',
-        // },
+        slots: {
+          default: 'recordFileStatus',
+        },
         minWidth: locale == 'zh-CN' ? 150 : 170,
       },
       {
@@ -479,9 +479,9 @@
         showOverflow: true,
         sortable: true,
         visible: false,
-        // formatter: ({ cellValue }) => {
-        //   return cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : '';
-        // },
+        formatter: ({ cellValue }) => {
+          return cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : '';
+        },
       },
       {
         field: 'action',
