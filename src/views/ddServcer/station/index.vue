@@ -833,7 +833,7 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['lineNameCn asc,indexOrder asc'],
+    sortlist: ['indexOrder asc'],
   });
   const seacthContent = ref({
     name: '',

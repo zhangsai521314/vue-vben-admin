@@ -296,7 +296,7 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['equipmentCode asc'],
+    sortlist: ['createTime desc'],
   });
   const seacthContent = ref({
     equipmentCode: null,

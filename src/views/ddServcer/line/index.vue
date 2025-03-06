@@ -686,7 +686,7 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['updateTime desc'],
+    sortlist: ['id asc'],
   });
   const seacthContent = ref({
     name: '',

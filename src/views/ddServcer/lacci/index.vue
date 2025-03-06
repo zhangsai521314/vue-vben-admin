@@ -317,7 +317,7 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['lineName asc', 'lineName asc'],
+    sortlist: ['lacci asc'],
   });
   const seacthContent = ref({
     name: '',

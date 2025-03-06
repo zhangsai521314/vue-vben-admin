@@ -436,7 +436,6 @@
         minWidth: locale == 'zh-CN' ? 150 : 170,
         showOverflow: true,
         sortable: true,
-        visible: false,
       },
       {
         field: 'isAutoRegister',
@@ -444,7 +443,6 @@
         minWidth: locale == 'zh-CN' ? 100 : 200,
         showOverflow: true,
         cellRender: { name: 'render_isno' },
-        visible: false,
       },
       {
         field: 'isGetLinces',
@@ -495,6 +493,7 @@
         minWidth: 150,
         showOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'createUserName',

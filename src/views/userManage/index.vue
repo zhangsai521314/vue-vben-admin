@@ -487,6 +487,7 @@
         minWidth: 174,
         showOverflow: true,
         sortable: true,
+        visible: false,
       },
       {
         field: 'email',
@@ -609,7 +610,7 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['modifyTime desc', 'createTime desc'],
+    sortlist: ['lastLoginTime desc'],
   });
   const statusOptions = [
     {
