@@ -258,6 +258,7 @@
             name="index"
             :label="t('view.stationSorting')"
             :rules="[
+              { required: true, message: t('view.pleaseInputSorting') },
               {
                 validator: formValidator.min,
                 min: -9999,
