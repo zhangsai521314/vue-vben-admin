@@ -35,6 +35,7 @@
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
   import { useGo } from '/@/hooks/web/usePage';
+  import { forEach } from '@/utils/helper/treeHelper';
 
   const go = useGo();
   const { t } = useI18n();
@@ -101,19 +102,21 @@
         gplotId = config.gplotId;
         if (config.gplotConfig) {
           gplotConfig = JSON.parse(config.gplotConfig);
-          gplotConfig.nodes.forEach((item) => {
-            switch (locale) {
-              case 'zh-CN':
-                item.style.labelText = item.style.labelTextCn;
-                break;
-              case 'en-US':
-                item.style.labelText = item.style.labelTextEn;
-                break;
-              case 'fr-FR':
-                item.style.labelText = item.style.labelTextFr;
-                break;
-            }
-          });
+          for (const key in gplotConfig) {
+            gplotConfig[key].forEach((item) => {
+              switch (locale) {
+                case 'zh-CN':
+                  item.style.labelText = item.style.labelTextCn;
+                  break;
+                case 'en-US':
+                  item.style.labelText = item.style.labelTextEn;
+                  break;
+                case 'fr-FR':
+                  item.style.labelText = item.style.labelTextFr;
+                  break;
+              }
+            });
+          }
         }
         if (config.globalConfig) {
           gplotStore.gplotKeyOb[gplotKey].containerConfig = JSON.parse(config.globalConfig);
@@ -275,7 +278,7 @@
                   myEvent: [],
                   myAgileState: [],
                   myIsAgileState: false,
-                  mySimpleState: gplotStore.gplotKeyOb[gplotKey].nodeConfig.mySimpleState,
+                  mySimpleState: gplotStore.gplotKeyOb[gplotKey].nodeConfig.data.mySimpleState,
                 };
                 return e;
               } else {
@@ -374,8 +377,8 @@
     graphOb = new Graph(graphConfig);
     //监控事件
     graphOb.on('click', (e) => {
+      console.log('点击', e.target);
       if (props.viewType == 'edit') {
-        console.log('点击', e.target);
         if (e.target?.nodeName == 'document' && !e.target.hasOwnProperty('type')) {
           //点击了画布
           gplotStore.gplotKeyOb[gplotKey].selectedOb = null;
@@ -698,6 +701,7 @@
       if (comboSelectedObs.length == 0 && selectObCombo.length == 0) {
         //目前选中的对象都没组合
         const comboId = myCommon.uniqueId();
+        debugger;
         graphOb.addComboData([
           {
             id: comboId,
@@ -720,7 +724,7 @@
               myEvent: [],
               myAgileState: [],
               myIsAgileState: false,
-              mySimpleState: gplotStore.gplotKeyOb[gplotKey].nodeConfig.mySimpleState,
+              mySimpleState: gplotStore.gplotKeyOb[gplotKey].nodeConfig.data.mySimpleState,
             },
           },
         ]);

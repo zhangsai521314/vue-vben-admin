@@ -226,7 +226,7 @@ export const useGplotStore = defineStore({
               {
                 name: t('view.interrupt'),
                 code: 'isOnline',
-                color: '#B1B1B1',
+                color: '#5D5D5D',
                 open: true,
                 level: 0,
                 value: false,

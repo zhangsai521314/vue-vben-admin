@@ -13,6 +13,7 @@
           :tabBarStyle="{ height: '32px', marginBottom: '0.5px', background: '#fff' }"
         >
           <a-tab-pane key="attr" :tab="t('view.attribute')">
+            1111
             <a-form
               :label-col="{ span: 10 }"
               :wrapper-col="{ span: 14 }"

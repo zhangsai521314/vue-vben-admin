@@ -41,6 +41,7 @@
 <style lang="less" scoped>
   @prefixCls: ~'@{namespace}-GplotIndex-';
   .@{prefixCls} {
+    height: calc(100vh - 48px);
     > div {
       display: flex;
       flex-direction: column;
