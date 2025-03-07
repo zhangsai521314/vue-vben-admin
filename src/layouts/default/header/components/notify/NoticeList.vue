@@ -88,9 +88,9 @@
           @click="handleTitleClick(row)"
           :title="t('view.clickToViewDetails')"
         >
-          <div style="position: absolute; top: 4px; right: 0">
+          <div style="position: absolute; top: 66px; right: 0">
             <a-tag
-              style="position: relative; top: 10px; right: -6px; font-size: 12px; cursor: pointer"
+              style="position: relative; right: -6px; font-size: 12px; cursor: pointer"
               v-if="row.msgClass == 2 && row.confirmTime == null"
               @click="(e) => okMsg(e, row)"
               color="#108ee9"
@@ -98,7 +98,7 @@
             >
             <IconFontClass
               v-else-if="row.msgClass == 2"
-              style="margin: 0 3px; color: green; font-size: 23px"
+              style="position: relative; top: -6px; margin: 0 3px; color: green; font-size: 23px"
               name="icon-baseui-xuanzhongduihao"
               :title="t('view.confirmed')"
             />
