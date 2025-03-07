@@ -174,42 +174,11 @@
               fixed="left"
             />
             <vxe-column
-              field="dictionariesName"
-              :title="t('view.dictionaryName')"
-              tree-node
-              :sortable="true"
-              minWidth="166"
-              fixed="left"
-            />
-            <vxe-column
-              field="dictionariesNameCn"
-              :title="t('view.dictionaryNameCn')"
-              tree-node
-              :sortable="true"
-              minWidth="220"
-              :visible="false"
-            />
-            <vxe-column
-              field="dictionariesNameEn"
-              :title="t('view.dictionaryNameEn')"
-              tree-node
-              :sortable="true"
-              minWidth="220"
-              :visible="false"
-            />
-            <vxe-column
-              field="dictionariesNameFr"
-              :title="t('view.dictionaryNameFr')"
-              tree-node
-              :sortable="true"
-              minWidth="226"
-              :visible="false"
-            />
-            <vxe-column
               field="dictionariesClass"
               :title="t('view.dictionaryType')"
               :sortable="true"
               minWidth="166"
+              fixed="left"
             >
               <template #default="{ row }">
                 <span>{{
@@ -244,6 +213,38 @@
               </template>
             </vxe-column>
             <vxe-column
+              field="dictionariesName"
+              :title="t('view.dictionaryName')"
+              tree-node
+              :sortable="true"
+              minWidth="166"
+              fixed="left"
+            />
+            <vxe-column
+              field="dictionariesNameCn"
+              :title="t('view.dictionaryNameCn')"
+              tree-node
+              :sortable="true"
+              minWidth="220"
+              :visible="false"
+            />
+            <vxe-column
+              field="dictionariesNameEn"
+              :title="t('view.dictionaryNameEn')"
+              tree-node
+              :sortable="true"
+              minWidth="220"
+              :visible="false"
+            />
+            <vxe-column
+              field="dictionariesNameFr"
+              :title="t('view.dictionaryNameFr')"
+              tree-node
+              :sortable="true"
+              minWidth="226"
+              :visible="false"
+            />
+            <vxe-column
               field="serviceTypeName"
               :title="t('view.belongsToServiceType')"
               :sortable="true"
@@ -269,7 +270,12 @@
                 }}</span>
               </template>
             </vxe-column>
-            <vxe-column field="isSync" :title="t('view.isSynchronized')" minWidth="170">
+            <vxe-column
+              field="isSync"
+              :title="t('view.isSynchronized')"
+              minWidth="170"
+              :visible="false"
+            >
               <template #default="{ row }">
                 <span
                   v-if="row.dictionariesClass == 'collectionFrequency'"

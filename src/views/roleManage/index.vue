@@ -94,7 +94,7 @@
         >
           <a-form-item
             name="nameCn"
-            :label="t('view.roleName')"
+            :label="t('view.roleNameCn')"
             :rules="[
               { required: true, message: '' },
               { max: 40, message: t('view.roleNameTooLong') },
@@ -109,7 +109,7 @@
           </a-form-item>
           <a-form-item
             name="nameEn"
-            :label="t('view.roleName')"
+            :label="t('view.roleNameEn')"
             :rules="[
               { required: true, message: '' },
               { max: 40, message: t('view.roleNameTooLong') },
@@ -124,7 +124,7 @@
           </a-form-item>
           <a-form-item
             name="nameFr"
-            :label="t('view.roleName')"
+            :label="t('view.roleNameFr')"
             :rules="[
               { required: true, message: '' },
               { max: 40, message: t('view.roleNameTooLong') },
@@ -445,6 +445,8 @@
         });
       } else {
         roleApi.UpdateRole(formData.value).then((data) => {
+          delete data.createUser;
+          delete data.createTime;
           const oldData = tableConfig.data.find((m) => m.roleId == data.roleId);
           if (oldData) {
             myCommon.objectReplace(oldData, data);

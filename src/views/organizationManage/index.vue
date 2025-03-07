@@ -329,7 +329,7 @@
                   (m) => data.indexOf(m.orgId) == -1,
                 );
               }
-              message.success(t('view.deletionDepartmentInformationSuccessful'));
+              message.success(t('view.deletionSuccessful'));
             } catch (error) {}
           })
           .catch(() => {
@@ -417,7 +417,7 @@
         organizationApi.AddOrganization(formData.value).then((data) => {
           tableConfigData.value.splice(0, 0, data);
           formClose();
-          message.success(t('view.additionDepartmentSuccessful'));
+          message.success(t('view.additionSuccessful'));
         });
       } else {
         organizationApi.UpdateOrganization(formData.value).then((data) => {
@@ -428,7 +428,7 @@
             myCommon.objectReplace(oldData, data);
           }
           formClose();
-          message.success(t('view.updateDepartmentInformationSuccessful'));
+          message.success(t('view.updateSuccessful'));
         });
       }
     });

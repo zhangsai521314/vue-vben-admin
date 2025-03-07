@@ -468,7 +468,7 @@
       },
       {
         field: 'status',
-        title: t('view.status'),
+        title: t('view.userStatus'),
         showOverflow: true,
         sortable: true,
         slots: {
