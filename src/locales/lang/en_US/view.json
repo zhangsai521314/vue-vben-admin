@@ -1,4 +1,12 @@
 {
+  "pleaseSelectTheTimeOfPuttingIntoUse": "Please select the time of putting into use",
+  "putIntoUse": "Put into use",
+  "maintenance": "Maintenance",
+  "inUse":"In use",
+  "pleaseSelectTheDeviceStatus":"Please select the device status",
+  "deviceStatus": "Device status",
+  "theDeviceNumberIsTooLong": "The device number is too long",
+  "pleaseEnterTheDeviceNumber": "Please enter the device number",
   "fullLineBroadcastAddressing": "FLBA",
   "fullCallDriverAddressing": "FCDA",
   "fullCallStationAddressing": "FCSA",

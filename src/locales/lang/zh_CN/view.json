@@ -1,4 +1,12 @@
 {
+  "pleaseSelectTheTimeOfPuttingIntoUse": "请选择投入使用时间",
+  "putIntoUse": "投入使用",
+  "maintenance": "维修",
+  "inUse": "在用",
+  "pleaseSelectTheDeviceStatus": "请选择设备状态",
+  "deviceStatus": "设备状态",
+  "theDeviceNumberIsTooLong": "设备编号过长",
+  "pleaseEnterTheDeviceNumber": "请输入设备编号",
   "fullLineBroadcastAddressing": "全线广播寻址",
   "fullCallDriverAddressing": "全呼司机寻址",
   "fullCallStationAddressing": "全呼车站寻址",

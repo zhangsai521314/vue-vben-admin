@@ -220,6 +220,21 @@
             />
           </a-form-item>
           <a-form-item
+            name="serviceCode"
+            :label="t('view.uniqueNumber')"
+            :rules="[
+              { required: true, message: '' },
+              { max: 20, message: t('view.uniqueNumberIsTooLong') },
+              { validator: formValidator.empty, message: t('view.pleaseEnterUniqueNumber') },
+            ]"
+          >
+            <a-input
+              v-model:value="formData.serviceCode"
+              :placeholder="t('view.pleaseEnterUniqueNumber')"
+              autocomplete="off"
+            />
+          </a-form-item>
+          <a-form-item
             name="serviceNameCn"
             :label="t('view.softwareNameCn')"
             :rules="[
@@ -264,21 +279,6 @@
               autocomplete="off"
             />
           </a-form-item>
-          <a-form-item
-            name="serviceCode"
-            :label="t('view.uniqueNumber')"
-            :rules="[
-              { required: true, message: '' },
-              { max: 20, message: t('view.uniqueNumberIsTooLong') },
-              { validator: formValidator.empty, message: t('view.pleaseEnterUniqueNumber') },
-            ]"
-          >
-            <a-input
-              v-model:value="formData.serviceCode"
-              :placeholder="t('view.pleaseEnterUniqueNumber')"
-              autocomplete="off"
-            />
-          </a-form-item>
           <!-- <a-form-item
           name="isdn"
           :label="t('view.isdn')"
@@ -301,7 +301,7 @@
               autocomplete="off"
             />
           </a-form-item>
-          <a-form-item
+          <!-- <a-form-item
             name="port"
             :label="t('view.portNumber')"
             :rules="[
@@ -324,7 +324,7 @@
               autocomplete="off"
               :precision="0"
             />
-          </a-form-item>
+          </a-form-item> -->
           <a-form-item
             name="isUpPerformance"
             :label="t('view.performanceReporting')"
@@ -618,14 +618,14 @@
         sortable: true,
         minWidth: 166,
       },
-      {
-        field: 'port',
-        title: t('view.runningPort'),
-        showOverflow: true,
-        sortable: true,
-        visible: false,
-        minWidth: 200,
-      },
+      // {
+      //   field: 'port',
+      //   title: t('view.runningPort'),
+      //   showOverflow: true,
+      //   sortable: true,
+      //   visible: false,
+      //   minWidth: 200,
+      // },
       {
         field: 'isOnline',
         title: t('view.isOnline'),

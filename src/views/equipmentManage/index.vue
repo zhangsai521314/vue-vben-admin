@@ -54,6 +54,19 @@
                   </div>
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>{{ t('view.equipmentNumber') }}：</label>
+                      <a-input
+                        :style="{
+                          width: '200px',
+                        }"
+                        @press-enter="initPage"
+                        v-model:value="seacthContent.equipmentCode"
+                        :placeholder="t('view.queryByInputtingEquipmentNumber')"
+                      />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
                       <label>{{ t('view.deviceName') }}：</label>
                       <a-input
                         :style="{
@@ -63,6 +76,23 @@
                         v-model:value="seacthContent.equipmentName"
                         :placeholder="t('view.inputDeviceNameQuery')"
                       />
+                    </a-space>
+                  </div>
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <label>{{ t('view.deviceStatus') }}：</label>
+                      <a-select
+                        style="width: 160px"
+                        allow-clear
+                        show-search
+                        :filter-option="AntVueCommon.filterOption"
+                        v-model:value="seacthContent.equipmentStatus"
+                        :placeholder="t('view.pleaseSelectTheDeviceStatus')"
+                      >
+                        <a-select-option :value="1">{{ t('view.inUse') }}</a-select-option>
+                        <a-select-option :value="2">{{ t('view.disable') }}</a-select-option>
+                        <!-- <a-select-option :value="3">{{ t('view.maintenance') }}</a-select-option> -->
+                      </a-select>
                     </a-space>
                   </div>
                   <div class="row-div">
@@ -107,6 +137,11 @@
             </AuthDom>
           </div>
         </template>
+        <template #equipmentStatus="{ row }">
+          <span :style="{ color: row.equipmentStatus == 1 ? 'green' : 'red' }">
+            {{ row.equipmentStatus == 1 ? t('view.inUse') : t('view.disable') }}
+          </span>
+        </template>
       </vxe-grid>
       <a-drawer
         :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
@@ -138,6 +173,21 @@
               show-arrow
               :filterTreeNode="AntVueCommon.filterTreeNode"
               :tree-data="organizationDatas"
+            />
+          </a-form-item>
+          <a-form-item
+            name="equipmentCode"
+            :label="t('view.equipmentNumber')"
+            :rules="[
+              { required: true, message: '' },
+              { max: 160, message: t('view.theDeviceNumberIsTooLong') },
+              { validator: formValidator.empty, message: t('view.pleaseEnterTheDeviceNumber') },
+            ]"
+          >
+            <a-input
+              v-model:value="formData.equipmentCode"
+              :placeholder="t('view.pleaseEnterTheDeviceNumber')"
+              autocomplete="off"
             />
           </a-form-item>
           <a-form-item
@@ -198,7 +248,7 @@
               :options="dictionariesData.filter((m) => m.dictionariesClass == 'equipmentType')"
             />
           </a-form-item>
-          <a-form-item
+          <!-- <a-form-item
             :label="t('view.systemType')"
             name="systemType"
             :rules="[{ required: true, message: t('view.pleaseSelectSystemType') }]"
@@ -210,8 +260,8 @@
               v-model:value="formData.systemType"
               :options="dictionariesData.filter((m) => m.dictionariesClass == 'systemType')"
             />
-          </a-form-item>
-          <a-form-item
+          </a-form-item> -->
+          <!-- <a-form-item
             name="address"
             :label="t('view.deviceAddress')"
             :rules="[
@@ -225,6 +275,30 @@
               :placeholder="t('view.pleaseEnterDeviceAddress')"
               autocomplete="off"
             />
+          </a-form-item> -->
+
+          <a-form-item
+            :rules="[{ required: true, message: t('view.pleaseSelectTheDeviceStatus') }]"
+            :label="t('view.deviceStatus')"
+            name="equipmentStatus"
+          >
+            <a-select
+              v-model:value="formData.equipmentStatus"
+              :placeholder="t('view.pleaseSelectTheDeviceStatus')"
+            >
+              <a-select-option :value="1">{{ t('view.inUse') }}</a-select-option>
+              <a-select-option :value="2">{{ t('view.disable') }}</a-select-option>
+              <!-- <a-select-option :value="3">{{ t('view.maintenance') }}</a-select-option> -->
+            </a-select>
+          </a-form-item>
+          <a-form-item :label="t('view.putIntoUse')" name="putIntoUse">
+            <a-config-provider :locale="zhCN">
+              <a-date-picker
+                style="width: 332px"
+                v-model:value="formData.usageTime"
+                :placeholder="t('view.pleaseSelectTheTimeOfPuttingIntoUse')"
+              />
+            </a-config-provider>
           </a-form-item>
           <a-form-item
             name="orderIndex"
@@ -288,6 +362,9 @@
   import organizationApi from '@/api/organization';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
+  import zhCN from 'ant-design-vue/es/locale/zh_CN';
+  import dayjs from 'dayjs';
+  import 'dayjs/locale/zh-cn';
 
   const { t } = useI18n();
   const localeStore = useLocaleStore();
@@ -334,6 +411,13 @@
         minWidth: 146,
       },
       {
+        field: 'equipmentCode',
+        title: t('view.equipmentNumber'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 176,
+      },
+      {
         field: 'equipmentName',
         title: t('view.deviceName'),
         showOverflow: true,
@@ -364,19 +448,41 @@
         minWidth: 236,
         visible: false,
       },
+      // {
+      //   field: 'systemTypeName',
+      //   title: t('view.systemType'),
+      //   showOverflow: true,
+      //   sortable: true,
+      //   minWidth: 166,
+      // },
+      // {
+      //   field: 'address',
+      //   title: t('view.deviceAddress'),
+      //   showOverflow: true,
+      //   sortable: true,
+      //   minWidth: 166,
+      // },
       {
-        field: 'systemTypeName',
-        title: t('view.systemType'),
+        field: 'equipmentStatus',
+        title: t('view.deviceStatus'),
         showOverflow: true,
         sortable: true,
         minWidth: 166,
+        slots: {
+          default: 'equipmentStatus',
+        },
       },
       {
-        field: 'address',
-        title: t('view.deviceAddress'),
+        field: 'usageTime',
+        title: t('view.putIntoUse'),
         showOverflow: true,
         sortable: true,
         minWidth: 166,
+        slots: {
+          default: ({ row }) => {
+            return !row.usageTime ? row.usageTime : dayjs(row.usageTime).format('YYYY-MM-DD');
+          },
+        },
       },
       {
         field: 'orderIndex',
@@ -456,6 +562,9 @@
     remark: null,
     orderIndex: null,
     orgId: null,
+    equipmentCode: null,
+    equipmentStatus: 1,
+    usageTime: dayjs(dayjs().format('YYYY-MM-DD')),
   });
   const formData = ref(_.cloneDeep(defFromData));
   const formRef = ref(null);
@@ -466,7 +575,9 @@
   const dictionariesData = ref([]);
   const seacthContent = ref({
     orgId: null,
-    equipmentName: '',
+    equipmentName: null,
+    equipmentStatus: null,
+    equipmentCode: null,
   });
   const organizationDatas = ref([]);
   let _organizationDatas = [];
@@ -484,7 +595,9 @@
   function resetSeacth() {
     seacthContent.value = {
       orgId: null,
-      equipmentName: '',
+      equipmentName: null,
+      equipmentStatus: null,
+      equipmentCode: null,
     };
   }
 
@@ -545,6 +658,7 @@
       .then((data) => {
         isRunLoading.value = false;
         if (data) {
+          data.usageTime = !data.usageTime ? data.usageTime : dayjs(data.usageTime);
           formData.value = data;
           saveType = 'edit';
           isShowForm.value = true;

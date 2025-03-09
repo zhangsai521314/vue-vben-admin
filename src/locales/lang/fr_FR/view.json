@@ -1,4 +1,12 @@
 {
+  "pleaseSelectTheTimeOfPuttingIntoUse": "Veuillez sélectionner la date de mise en service",
+  "putIntoUse": "Mettre en service",
+  "maintenance": "Réparation",
+  "inUse": "En cours d'utilisation",
+  "pleaseSelectTheDeviceStatus": "Veuillez sélectionner l'état de l'appareil",
+  "deviceStatus": "État de l'appareil",
+  "theDeviceNumberIsTooLong": "Le numéro de l'appareil est trop long",
+  "pleaseEnterTheDeviceNumber": "Veuillez saisir le numéro de l'appareil",
   "fullLineBroadcastAddressing": "ADTL",
   "fullCallDriverAddressing": "ACAG",
   "fullCallStationAddressing": "ASAG",

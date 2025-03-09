@@ -20,6 +20,12 @@ import { useLocaleStore } from '@/store/modules/locale';
 import type { LocaleType } from '#/config';
 import VxeUIPluginExportXLSX from '@vxe-ui/plugin-export-xlsx';
 import ExcelJS from 'exceljs';
+// import 'dayjs/locale/zh-cn';
+// import 'dayjs/locale/en-Us';
+// import 'dayjs/locale/fr-Fr';
+// import ant_zhCN from 'ant-design-vue/es/locale/zh_CN';
+// import ant_enUS from 'ant-design-vue/es/locale/en-Us';
+// import ant_frFr from 'ant-design-vue/es/locale/fr-Fr';
 
 export function registerGlobComp(app: App) {
   const { t } = useI18n();
