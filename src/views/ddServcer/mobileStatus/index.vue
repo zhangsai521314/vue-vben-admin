@@ -176,7 +176,7 @@
       },
       {
         field: 'isdn',
-        title: t('view.isdn'),
+        title: t('view.isdnNumber'),
         showOverflow: true,
         sortable: true,
         minWidth: 100,

@@ -281,7 +281,7 @@
           </a-form-item>
           <!-- <a-form-item
           name="isdn"
-          :label="t('view.isdn')"
+          :label="t('view.isdnNumber')"
           :rules="[{ max: 20, message: t('view.pleaseEnterIdsn') }]"
         >
           <a-input
