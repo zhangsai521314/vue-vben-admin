@@ -1,4 +1,8 @@
 {
+  "blacklistDataSynchronizationSuccessful":"Blacklist data synchronization successful",
+  "eciDataSynchronizationSuccessful":"Synchronisation des données ECI réussie",
+  "stationDataSynchronizationSuccessful":"Station data synchronization successful",
+  "lineDataSynchronizationSuccessful": "Line data synchronization successful",
   "yourAccountLoggedOutElsewhereIfNotYouChangePassword": "Your account logged out elsewhere. If not you, change password",
   "yourAccountSLoggedInElsewhereIfNotYouChangePwd": "Your account's logged in elsewhere. If not you, change pwd",
   "pleaseSelectTheTimeOfPuttingIntoUse": "Please select the time of putting into use",

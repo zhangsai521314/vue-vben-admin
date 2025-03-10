@@ -1,4 +1,8 @@
 {
+  "blacklistDataSynchronizationSuccessful":"黑名单数据同步成功",
+  "eciDataSynchronizationSuccessful":"ECI数据同步成功",
+  "stationDataSynchronizationSuccessful":"车站数据同步成功",
+  "lineDataSynchronizationSuccessful": "线路数据同步成功",
   "yourAccountLoggedOutElsewhereIfNotYouChangePassword": "您的账户已在别处退出登录，如非自己操作，请更改密码",
   "yourAccountSLoggedInElsewhereIfNotYouChangePwd": "您的账户已在别处登录，如非自己登录，请更改密码",
   "pleaseSelectTheTimeOfPuttingIntoUse": "请选择投入使用时间",

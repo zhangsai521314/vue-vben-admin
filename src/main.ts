@@ -39,14 +39,12 @@ import { useUserStore } from '@/store/modules/user';
 import { message } from 'ant-design-vue';
 import { useI18n } from '@/hooks/web/useI18n';
 
-const { t } = useI18n();
 const userStore = useUserStore();
 const mqttStore = useMqttStoreWithOut();
 const gplotStore = useGplotStoreWithOut();
 let dataInitTimeId;
 const errTopic: Array<string> = [];
 let isDataInit = false;
-
 async function bootstrap() {
   const app = createApp(App);
 
@@ -89,7 +87,9 @@ async function bootstrap() {
 
   app.mount('#app');
 }
+
 interval();
+
 errTopicRetry();
 
 //监控用户登录退出
@@ -195,6 +195,7 @@ function initMq() {
   try {
     const { VITE_GLOB_MQTT } = getAppEnvConfig();
     const mqttConfig = JSON.parse(VITE_GLOB_MQTT);
+    const { t } = useI18n();
     mqttStore.setMqttConfig(mqttConfig);
     const decoder = new TextDecoder('utf-8');
     if (mqttConfig.IsOpen) {
@@ -253,10 +254,9 @@ function initMq() {
       });
       //接收信息
       client.on('message', function (topic, _message) {
-        // console.log('getAllMsgData', mqttStore.getAllMsgData);
         if (isDataInit) {
           let msg = decoder.decode(_message);
-          // console.log(msg);
+          console.log('接收到信息', msg);
           if (!myCommon.isnull(msg)) {
             try {
               msg = JSON.parse(msg);
@@ -369,8 +369,24 @@ function initMq() {
                 '/' + client.options.clientId,
               )
             ) {
+              debugger;
               //调度服务数据变更，更改回复
-              msg.Result == 0 ? message.success(msg.Msg) : message.error(msg.Msg);
+              let tMsg = msg.Msg;
+              switch (tMsg) {
+                case '线路数据同步成功！':
+                  tMsg = t('view.lineDataSynchronizationSuccessful');
+                  break;
+                case '车站数据同步成功！':
+                  tMsg = t('view.stationDataSynchronizationSuccessful');
+                  break;
+                case 'ECI数据同步成功！':
+                  tMsg = t('view.eciDataSynchronizationSuccessful');
+                  break;
+                case '黑名单数据同步成功！':
+                  tMsg = t('view.blacklistDataSynchronizationSuccessful');
+                  break;
+              }
+              msg.Result == 0 ? message.success(tMsg) : message.error(tMsg);
             } else {
               console.warn(`mqtt_${topic}_非匹配主题_丢弃`);
             }

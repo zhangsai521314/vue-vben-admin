@@ -1,4 +1,8 @@
 {
+  "blacklistDataSynchronizationSuccessful":"Synchronisation des données de la liste noire réussie",
+  "eciDataSynchronizationSuccessful":"ECI data synchronization successful",
+  "stationDataSynchronizationSuccessful":"Synchronisation des données de la station réussie",
+  "lineDataSynchronizationSuccessful": "Synchronisation des données de ligne réussie",
   "yourAccountLoggedOutElsewhereIfNotYouChangePassword": "Votre compte déconnecté ailleurs. Si ce n'est pas vous, changez le mot de passe",
   "yourAccountSLoggedInElsewhereIfNotYouChangePwd": "Votre compte est connecté ailleurs. Si ce n'est pas vous, changez le mdp",
   "pleaseSelectTheTimeOfPuttingIntoUse": "Veuillez sélectionner la date de mise en service",
