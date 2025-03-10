@@ -45,7 +45,7 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.pleaseSelectStationName') }}：</label>
+                    <label>{{ t('view.isdnNumber') }}：</label>
                     <a-input
                       @press-enter="initPage()"
                       v-model:value="seacthContent.isdn"
