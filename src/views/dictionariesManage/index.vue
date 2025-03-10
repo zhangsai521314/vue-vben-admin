@@ -838,6 +838,8 @@
   @prefixCls: ~'@{namespace}-suitManage-';
 
   .@{prefixCls} {
+    overflow-x: hidden;
+
     .@{prefixCls}tableBtn {
       width: 100%;
     }

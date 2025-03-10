@@ -1,4 +1,6 @@
 {
+  "pleaseSelectTheSuperiorDepartment":"PleaseSelectTheSuperiorDepartment",
+  "superiorDepartment": "SuperiorDepartment",
   "blacklistDataSynchronizationSuccessful":"Blacklist data synchronization successful",
   "eciDataSynchronizationSuccessful":"Synchronisation des données ECI réussie",
   "stationDataSynchronizationSuccessful":"Station data synchronization successful",
@@ -799,7 +801,7 @@
   "linkAddress": "Link Address",
   "departmentName": "Department Name",
   "enterDepartmentNameToSearch": "Enter Department Name to Search",
-  "addTopLevelDepartment": "Add Top-level Department",
+  "addADepartment": "Add a department",
   "departmentSorting": "Department Sorting",
   "addSubLevel": "Add Sub-level",
   "departmentNameTooLong": "Department Name Too Long",

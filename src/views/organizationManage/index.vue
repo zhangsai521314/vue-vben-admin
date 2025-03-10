@@ -30,8 +30,8 @@
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
-                      <a-button class="ant-btn" @click="showFrom('add', null, 0)">{{
-                        t('view.addTopLevelDepartment')
+                      <a-button class="ant-btn" @click="showFrom('add', null, null)">{{
+                        t('view.addADepartment')
                       }}</a-button>
                     </a-space>
                   </div>
@@ -155,6 +155,19 @@
         ref="formRef"
         :model="formData"
       >
+        <a-form-item name="parentId" :label="t('view.superiorDepartment')">
+          <a-tree-select
+            v-model:value="formData.parentId"
+            show-search
+            style="width: 100%"
+            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+            :placeholder="t('view.pleaseSelectTheSuperiorDepartment')"
+            allow-clear
+            show-arrow
+            :filterTreeNode="AntVueCommon.filterTreeNode"
+            :tree-data="organizationDatas"
+          />
+        </a-form-item>
         <a-form-item
           name="orgNameCn"
           :label="t('view.departmentNameCn')"
@@ -276,7 +289,7 @@
     orgNameEn: null,
     orgNameFr: null,
     orderIndex: null,
-    parentId: 0,
+    parentId: null,
     typeLineOrStationId: null,
     idType: null,
     lineOrStationId: null,
@@ -292,6 +305,7 @@
   });
   const lintStationDats = ref([]);
   const _lintStationDats = ref([]);
+  const organizationDatas = ref([]);
 
   let saveType = 'add';
 
@@ -300,10 +314,11 @@
   getLineStationSimple();
 
   function showFrom(type, row, pid) {
+    getOrganizationTree();
     saveType = type;
     if (type == 'add') {
       isShowForm.value = true;
-      formData.value.parentId = pid == null ? 0 : pid;
+      formData.value.parentId = pid;
     } else {
       //编辑
       getByid(row.orgId);
@@ -355,6 +370,7 @@
       .then((data) => {
         isRunLoading.value = false;
         if (data) {
+          data.parentId = data.parentId == 0 ? null : data.parentId;
           formData.value = data;
           formData.value.idType = null;
           formData.value.lineOrStationId = null;
@@ -413,19 +429,23 @@
         formData.value.idType = parseInt(formData.value.typeLineOrStationId.split('_')[0]);
         formData.value.lineOrStationId = parseInt(formData.value.typeLineOrStationId.split('_')[1]);
       }
+      const d = _.cloneDeep(formData.value);
+      d.parentId = d.parentId == null ? 0 : d.parentId;
       if (saveType == 'add') {
-        organizationApi.AddOrganization(formData.value).then((data) => {
+        organizationApi.AddOrganization(d).then((data) => {
           tableConfigData.value.splice(0, 0, data);
           formClose();
           message.success(t('view.additionSuccessful'));
         });
       } else {
-        organizationApi.UpdateOrganization(formData.value).then((data) => {
+        organizationApi.UpdateOrganization(d).then((data) => {
           const oldData = tableConfigData.value.find((m) => m.orgId == data.orgId);
-          if (oldData) {
+          if (oldData && oldData.parentId == data.parentId) {
             delete data.createtTime;
             delete data.createUser;
             myCommon.objectReplace(oldData, data);
+          } else {
+            getOrganizations();
           }
           formClose();
           message.success(t('view.updateSuccessful'));
@@ -433,6 +453,23 @@
       }
     });
   }
+
+  //获取部门
+  function getOrganizationTree() {
+    organizationApi.GetOrganizationTree({}).then((data) => {
+      organizationDatas.value = data;
+    });
+  }
+
+  watch(
+    () => formData.value.parentId,
+    () => {
+      if (isShowForm.value && formData.value.parentId == formData.value.orgId) {
+        formData.value.parentId = null;
+        message.warning(t('view.parentCannotBeItself'));
+      }
+    },
+  );
 
   onMounted(() => {
     // 将表格和工具栏进行关联
