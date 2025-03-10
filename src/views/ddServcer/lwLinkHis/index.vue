@@ -88,7 +88,9 @@
         {{ row.desIp }}{{ row.desPort ? ':' + row.desPort : '' }}
       </template>
       <template #linkResult="{ row }">
-        {{ row.linkResult == 0 ? t('view.success') : t('view.failure', [`(${row.linkResult})`]) }}
+        <span :style="{ color: row.linkResult == 0 ? 'green' : 'red' }">
+          {{ row.linkResult == 0 ? t('view.success') : t('view.failure', [`(${row.linkResult})`]) }}
+        </span>
       </template>
       <template #type="{ row }">
         {{ row.type == 1 ? t('view.cabRadio') : row.type == 2 ? t('view.eot') : '-' }}

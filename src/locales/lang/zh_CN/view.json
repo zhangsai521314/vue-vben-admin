@@ -1,4 +1,6 @@
 {
+  "yourAccountLoggedOutElsewhereIfNotYouChangePassword": "您的账户已在别处退出登录，如非自己操作，请更改密码",
+  "yourAccountSLoggedInElsewhereIfNotYouChangePwd": "您的账户已在别处登录，如非自己登录，请更改密码",
   "pleaseSelectTheTimeOfPuttingIntoUse": "请选择投入使用时间",
   "putIntoUse": "投入使用",
   "maintenance": "维修",
@@ -83,7 +85,7 @@
   "soundPrompt": "声音",
   "clickToViewDetails": "点击查看详情",
   "unknown": "未知",
-  "communication": "通信",
+  "communication": "子系统通信服务",
   "alarmTime": "告警时间",
   "voiceServiceInterruption": "语音服务中断",
   "groupCallReplaced": "组呼被替代",

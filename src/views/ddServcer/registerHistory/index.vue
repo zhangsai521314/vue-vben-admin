@@ -138,7 +138,9 @@
       </template>
       <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? ':' + row.port : '' }} </template>
       <template #regResult="{ row }">
-        {{ row.regResult == 0 ? t('view.success') : t('view.failure', [`(${row.regResult})`]) }}
+        <span :style="{ color: row.regResult == 0 ? 'green' : 'red' }">
+          {{ row.regResult == 0 ? t('view.success') : t('view.failure', [`(${row.regResult})`]) }}
+        </span>
       </template>
 
       <template #regType="{ row }">

@@ -1,4 +1,6 @@
 {
+  "yourAccountLoggedOutElsewhereIfNotYouChangePassword": "Votre compte déconnecté ailleurs. Si ce n'est pas vous, changez le mot de passe",
+  "yourAccountSLoggedInElsewhereIfNotYouChangePwd": "Votre compte est connecté ailleurs. Si ce n'est pas vous, changez le mdp",
   "pleaseSelectTheTimeOfPuttingIntoUse": "Veuillez sélectionner la date de mise en service",
   "putIntoUse": "Mettre en service",
   "maintenance": "Réparation",
@@ -83,7 +85,7 @@
   "soundPrompt": "avertissement sonore",
   "clickToViewDetails": "Cliquez pour addicher les détails",
   "unknown": "inconnu",
-  "communication": "Communicaton",
+  "communication": "SCS",
   "alarmTime": "heure d'alarme",
   "voiceServiceInterruption": "Interruption du service vocal",
   "groupCallReplaced": "Appel de groupe remplacé",

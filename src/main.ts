@@ -37,7 +37,9 @@ import { useGplotStoreWithOut } from '@/store/modules/gplot';
 import messageApi from '@/api/message';
 import { useUserStore } from '@/store/modules/user';
 import { message } from 'ant-design-vue';
+import { useI18n } from '@/hooks/web/useI18n';
 
+const { t } = useI18n();
 const userStore = useUserStore();
 const mqttStore = useMqttStoreWithOut();
 const gplotStore = useGplotStoreWithOut();
@@ -272,7 +274,7 @@ function initMq() {
               ) {
                 //用户在别处退出登录
                 userStore.logout(true);
-                message.info('您的账户已在别处退出登录，如非自己操作，请更改密码', 10);
+                message.info(t('view.yourAccountLoggedOutElsewhereIfNotYouChangePassword'), 10);
               }
             } else if (topic == mqttConfig.WebUserLoginTokenChange) {
               //token改变
@@ -286,7 +288,7 @@ function initMq() {
               ) {
                 //用户在别处已登录
                 userStore.logout(true);
-                message.info('您的账户已在别处登录，如非自己登录，请更改密码', 10);
+                message.info(t('view.yourAccountSLoggedInElsewhereIfNotYouChangePwd'), 10);
               }
             } else if (topic == mqttConfig.WebUserInfoChange) {
               if (
