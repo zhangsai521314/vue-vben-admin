@@ -210,7 +210,7 @@
         @close="formClose"
       >
         <a-form
-          :label-col="{ span: 6 }"
+          :width="locale == 'zh-CN' ? 500 : 600"
           :style="{ paddingRight: '2px' }"
           :wrapper-col="{ span: 16 }"
           autocomplete="off"
@@ -246,11 +246,7 @@
           >
             <a-switch v-model:checked="formData.isEnable" />
           </a-form-item>
-          <a-form-item
-            :label="t('view.permissionType')"
-            name="powerKeys"
-            :rules="[{ required: true, message: t('view.pleaseSelectPermissionType') }]"
-          >
+          <a-form-item :label="t('view.permissionType')" name="powerKeys">
             <a-select
               show-search
               :allowClear="true"
@@ -728,7 +724,10 @@
         });
       } else {
         handApi.UpdateHand(formData.value).then((data) => {
+          delete data.createUserName;
+          delete data.createTime;
           const oldData = tableConfig.data.find((m) => m.handId == data.handId);
+          debugger;
           if (oldData) {
             myCommon.objectReplace(oldData, data);
           }

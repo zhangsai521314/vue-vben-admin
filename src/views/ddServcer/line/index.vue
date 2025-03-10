@@ -413,7 +413,7 @@
               name="groupAllBroadcastNumber"
               :label="t('view.fullLineBroadcastGroupCallNumber')"
               :rules="[
-                { required: true, message: t('view.pleaseEnterFullLineBroadcastGroupCallNumber') },
+                { required: true, message: '' },
                 { min: 3, message: t('view.fullLineBroadcastGroupCallNumberMustBe3To10Digits') },
                 { max: 10, message: t('view.fullLineBroadcastGroupCallNumberMustBe3To10Digits') },
                 {
