@@ -174,7 +174,7 @@
       },
       {
         field: 'stationCode',
-        title: t('view.lineORstationCode'),
+        title: t('view.stationCode'),
         showOverflow: true,
         visible: false,
         sortable: true,
