@@ -45,7 +45,7 @@
               console.error(`按钮权限解析错误：${error}`);
             }
           } else {
-            return getSlot(slots);
+            return null;
           }
         }
         return getSlot(slots);
