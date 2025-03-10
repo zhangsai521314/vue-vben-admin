@@ -1280,6 +1280,9 @@
         isRunGetLog.value = false;
         nextTick(() => {
           logCollectionData.value = mqttStore.newServiceLogShowDirectory.LogCollection;
+          if (logCollectionData.value) {
+            logCollectionData.value = _.orderBy(logCollectionData.value, ['Time'], ['desc']);
+          }
           LogDirectory = mqttStore.newServiceLogShowDirectory.LogDirectory;
           logTableStepData.push(logCollectionData.value);
         });
