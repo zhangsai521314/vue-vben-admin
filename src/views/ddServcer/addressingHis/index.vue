@@ -35,7 +35,7 @@
                     <label>{{ t('view.addressingType') }}：</label>
                     <a-select
                       :placeholder="t('view.pleaseSelectAddressingType')"
-                      :style="{ width: locale == 'zh-CN' ? '140px' : '260px' }"
+                      :style="{ width: locale == 'zh-CN' ? '140px' : '280px' }"
                       allow-clear
                       v-model:value="seacthContent.dataType"
                     >

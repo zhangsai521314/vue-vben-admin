@@ -73,7 +73,9 @@
                     <label>{{ t('view.functionNumberType') }}：</label>
                     <a-select
                       :placeholder="t('view.pleaseSelectFunctionNumberType')"
-                      :style="{ width: locale == 'zh-CN' ? '170px' : '190px' }"
+                      :style="{
+                        width: locale == 'zh-CN' ? '170px' : locale == 'en-US' ? '250px' : '330px',
+                      }"
                       allow-clear
                       v-model:value="seacthContent.fnType"
                     >
@@ -100,7 +102,7 @@
                     <label>{{ t('view.operationResult') }}：</label>
                     <a-select
                       :placeholder="t('view.pleaseSelectOperationResult')"
-                      style="width: 170px"
+                      style="width: 120px"
                       allow-clear
                       v-model:value="seacthContent.regResult"
                     >
