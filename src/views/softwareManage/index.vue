@@ -1013,7 +1013,7 @@
           const oldData = tableConfig.data.find((m) => m.serviceId == data.serviceId);
           if (oldData) {
             delete data.createtTime;
-            delete data.CreateUserName;
+            delete data.createUserName;
             myCommon.objectReplace(oldData, data);
             oldData.modifyTime = data.modifyTime;
             oldData.modifyUser = data.modifyUserName;

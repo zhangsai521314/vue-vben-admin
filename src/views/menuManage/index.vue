@@ -697,7 +697,11 @@
   watch(
     () => formData.value.parentId,
     () => {
-      if (isValidForm.value && formData.value.parentId == formData.value.menuId) {
+      if (
+        isValidForm.value &&
+        formData.value.parentId != null &&
+        formData.value.parentId == formData.value.menuId
+      ) {
         formData.value.parentId = null;
         message.warning(t('view.parentCannotBeItself'));
       }

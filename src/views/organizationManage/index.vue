@@ -464,7 +464,11 @@
   watch(
     () => formData.value.parentId,
     () => {
-      if (isShowForm.value && formData.value.parentId == formData.value.orgId) {
+      if (
+        isShowForm.value &&
+        formData.value.parentId != null &&
+        formData.value.parentId == formData.value.orgId
+      ) {
         formData.value.parentId = null;
         message.warning(t('view.parentCannotBeItself'));
       }

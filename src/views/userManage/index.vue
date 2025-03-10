@@ -479,7 +479,7 @@
         //     return row.status == 1 ? '正常' : row.status == 2 ? '停用' : '删除';
         //   },
         // },
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 150,
       },
       {
         field: 'mobile',
@@ -558,7 +558,7 @@
         visible: false,
         showOverflow: true,
         sortable: true,
-        minWidth: 130,
+        minWidth: locale == 'zh-CN' ? 130 : 180,
       },
       {
         field: 'action_',

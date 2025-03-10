@@ -29,7 +29,7 @@
                         <label>{{ t('view.dictionaryType') }}：</label>
                         <a-select
                           :placeholder="t('view.pleaseSelectDictionaryType')"
-                          style="width: 170px"
+                          :style="{ width: locale == 'zh-CN' ? '170px' : '300px' }"
                           allow-clear
                           show-search
                           :filter-option="AntVueCommon.filterOption"
@@ -82,7 +82,7 @@
                       <a-space direction="horizontal" size="small" :wrap="true">
                         <label>{{ t('view.belongsToServiceType') }}：</label>
                         <a-select
-                          style="width: 170px"
+                          :style="{ width: locale == 'zh-CN' ? '170px' : '260px' }"
                           allow-clear
                           show-search
                           :filter-option="AntVueCommon.filterOption"
@@ -382,7 +382,7 @@
     </a-spin>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-      :width="locale == 'zh-CN' ? 500 : 600"
+      :width="locale == 'zh-CN' ? 500 : 640"
       :visible="isShowForm"
       :title="t('view.dictionary')"
       :footer-style="{ textAlign: 'right' }"
