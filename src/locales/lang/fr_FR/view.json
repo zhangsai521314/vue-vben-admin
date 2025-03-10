@@ -310,7 +310,7 @@
   "updateDepartmentInformationSuccessful": "La mise à jour des informations du département est réussie.",
   "additionDepartmentSuccessful": "L'ajout du département est réussi",
   "deletionDepartmentInformationSuccessful": "The deletion of department information is successful",
-  "save": "sauvegarde",
+  "save": "Sauvegarde",
   "pleaseSelectDepartmentManagedLinesOrStations": "Veuillez sélectionner les lignes ou les gares gérées par le département.",
   "jurisdictionalLinesAndStations": "Lignes et gares sous juridiction",
   "department": "département",

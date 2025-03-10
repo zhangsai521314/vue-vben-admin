@@ -310,7 +310,7 @@
   "updateDepartmentInformationSuccessful": "The update of department information is successful",
   "additionDepartmentSuccessful": "The addition of the department is successful",
   "deletionDepartmentInformationSuccessful": "The deletion of department information is successful",
-  "save": "save",
+  "save": "Save",
   "pleaseSelectDepartmentManagedLinesOrStations": "Please select the lines or stations managed by the department",
   "jurisdictionalLinesAndStations": "Jurisdictional lines and stations",
   "department": "department",
