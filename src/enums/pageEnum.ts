@@ -1,10 +1,10 @@
 export enum PageEnum {
   //版本文件下载页面
-  DownVersion = '/downVersion',
+  DownVersion = '/downversion',
   //登录页
   BASE_LOGIN = '/login',
   //首页地址
-  BASE_HOME = '/userInfo/index',
+  BASE_HOME = '/userinfo/index',
   //错误页
   ERROR_PAGE = '/exception',
   //错误日志页

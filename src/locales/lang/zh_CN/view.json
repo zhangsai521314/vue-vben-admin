@@ -451,7 +451,7 @@
   "stationName": "车站名称",
   "pleaseSelectStationName": "请选择车站名称",
   "isdn": "ISDN",
-  "pleaseEnterIdsn": "请输入idsn",
+  "pleaseEnterIdsn": "请输入isdn",
   "inputIsdnNumberForQuery": "输入ISDN号查询",
   "pleaseSelectType": "请选择类型",
   "enableAutomaticQuery": "开启自动查询",

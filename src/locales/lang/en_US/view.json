@@ -451,7 +451,7 @@
   "stationName": "Station Name",
   "pleaseSelectStationName": "Please Select Station Name",
   "isdn": "ISDN",
-  "pleaseEnterIdsn": "Please enter IDSN",
+  "pleaseEnterIdsn": "Please enter ISDN",
   "inputIsdnNumberForQuery": "Input ISDN Number for Query",
   "pleaseSelectType": "Please Select Type",
   "enableAutomaticQuery": "Enable Automatic Query",

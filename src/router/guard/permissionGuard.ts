@@ -23,9 +23,9 @@ export function createPermissionGuard(router: Router) {
   router.beforeEach(async (to, from, next) => {
     if (
       from.path === ROOT_PATH &&
-      to.path === PageEnum.BASE_HOME &&
+      to.path.toLowerCase() === PageEnum.BASE_HOME &&
       userStore.getUserInfo.homePath &&
-      userStore.getUserInfo.homePath !== PageEnum.BASE_HOME
+      userStore.getUserInfo.homePath.toLowerCase() !== PageEnum.BASE_HOME
     ) {
       next(userStore.getUserInfo.homePath);
       return;
@@ -34,7 +34,7 @@ export function createPermissionGuard(router: Router) {
     const token = userStore.getToken;
 
     // Whitelist can be directly entered
-    if (whitePathList.includes(to.path as PageEnum)) {
+    if (whitePathList.includes(to.path.toLowerCase() as PageEnum)) {
       if (to.path === LOGIN_PATH && token) {
         const isSessionTimeout = userStore.getSessionTimeout;
         try {
