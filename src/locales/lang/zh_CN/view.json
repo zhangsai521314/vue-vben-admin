@@ -1,5 +1,6 @@
 {
-  "pleaseSelectTheSuperiorDepartment":"请选择上级部门",
+  "history": "历史",
+  "pleaseSelectTheSuperiorDepartment": "请选择上级部门",
   "superiorDepartment": "上级部门",
   "blacklistDataSynchronizationSuccessful": "黑名单数据同步成功",
   "eciDataSynchronizationSuccessful": "ECI数据同步成功",

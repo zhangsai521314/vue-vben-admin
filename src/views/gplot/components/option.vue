@@ -142,7 +142,7 @@
           </a-tooltip>
         </div> -->
         <a-dropdown :class="`${prefixCls}menu-item`" @open-change="hisOpenChange">
-          <a class="ant-dropdown-link" @click.prevent> 历史 </a>
+          <a class="ant-dropdown-link" @click.prevent> {{ t('view.history') }} </a>
           <template #overlay>
             <a-menu>
               <!-- <a-menu-item @click="getGplotHis">刷新历史记录</a-menu-item> -->
