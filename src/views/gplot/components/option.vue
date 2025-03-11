@@ -146,7 +146,9 @@
           <template #overlay>
             <a-menu>
               <!-- <a-menu-item @click="getGplotHis">刷新历史记录</a-menu-item> -->
-              <a-menu-item @click="clearGplot">清空当前页面</a-menu-item>
+              <a-menu-item @click="clearGplot">{{
+                t('view.clearTheConfigurationContent')
+              }}</a-menu-item>
               <a-menu-divider />
               <a-spin :spinning="isGetHisData">
                 <a-menu-item
@@ -223,6 +225,9 @@
   import { useGplotStoreWithOut } from '@/store/modules/gplot';
   import menuDrawer from '/@/components/MyMenu/index.vue';
   import gplotApi from '@/api/gplot';
+  import { useI18n } from '@/hooks/web/useI18n';
+
+  const { t } = useI18n();
 
   const gplotStore = useGplotStoreWithOut();
   const props = defineProps({
