@@ -64,5 +64,19 @@ const Gplot = {
       params,
     });
   },
+  //根据菜单id获取配置的最后5条
+  GetGplotHisMenuId: function (params) {
+    return defHttp.get({
+      url: '/Gplot/GetGplotHisMenuId/',
+      params,
+    });
+  },
+  //根据历史ID获取指定历史
+  GetGplotHisData: function (params) {
+    return defHttp.get({
+      url: '/Gplot/GetGplotHisData/',
+      params,
+    });
+  },
 };
 export default Gplot;

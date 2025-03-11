@@ -35,7 +35,6 @@
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
   import { useGo } from '/@/hooks/web/usePage';
-  import { forEach } from '@/utils/helper/treeHelper';
 
   const go = useGo();
   const { t } = useI18n();
@@ -90,15 +89,21 @@
   gplotStore.gplotKeyOb[gplotKey].containerConfig.menuId = props.menuId;
   shortcutKey_();
 
-  async function init() {
+  async function init(isClear, gpltHisId) {
+    if (graphOb) {
+      graphOb.destroy();
+    }
     rendering.value = true;
     // setInterval(() => {
     //   gplotStore.gplotKeyOb[gplotKey].lineWidth = gplotStore.gplotKeyOb[gplotKey].lineWidth + 2;
     // }, 2000);
     let gplotConfig = {};
-    if (gplotId != null || gplotStore.gplotKeyOb[gplotKey].containerConfig.menuId != null) {
+    if (
+      !isClear &&
+      (gplotId != null || gplotStore.gplotKeyOb[gplotKey].containerConfig.menuId != null)
+    ) {
       try {
-        const config = await getConfig();
+        const config = await getConfig(gpltHisId);
         gplotId = config.gplotId;
         if (config.gplotConfig) {
           gplotConfig = JSON.parse(config.gplotConfig);
@@ -125,7 +130,10 @@
       } catch (error) {
         message.warning(t('view.failedToRetrieveConfigurationInformation'));
       }
+    } else if (isClear) {
+      gplotStore.gplotKeyOb[gplotKey].selectedOb = null;
     }
+
     // //自定义边上的marker的渲染规则
     // class FlyMarkerCubic extends CubicHorizontal {
     //   getMarkerStyle(attributes, t) {
@@ -701,7 +709,6 @@
       if (comboSelectedObs.length == 0 && selectObCombo.length == 0) {
         //目前选中的对象都没组合
         const comboId = myCommon.uniqueId();
-        debugger;
         graphOb.addComboData([
           {
             id: comboId,
@@ -865,13 +872,11 @@
     }
   }
 
-  async function getConfig() {
-    if (gplotId) {
-      if (props.viewType == 'pre') {
-        return gplotApi.GetGplotHisLast(gplotId);
-      } else {
-        return gplotApi.GetGplot(gplotId);
-      }
+  async function getConfig(gpltHisId) {
+    if (gpltHisId) {
+      return gplotApi.GetGplotHisData(gpltHisId);
+    } else if (gplotId) {
+      return gplotApi.GetGplot(gplotId);
     } else {
       return gplotApi.GetGplotMenuId(gplotStore.gplotKeyOb[gplotKey].containerConfig.menuId);
     }
@@ -1079,7 +1084,7 @@
   );
 
   onMounted(() => {
-    init();
+    init(false, null);
     window.onresize = () => {
       if (graphOb) {
         setTimeout(() => {
@@ -1123,6 +1128,7 @@
       graphOb.zoomTo(v, true, [graphOb.getViewportCenter()[0], graphOb.getViewportCenter()[1]]);
       graphOb.draw();
     },
+    init,
   });
 
   //页面卸载后

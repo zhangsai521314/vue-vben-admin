@@ -141,6 +141,25 @@
             <IconFontClass @click="props.exportConfig" name="icon-baseui-xiazai" />
           </a-tooltip>
         </div> -->
+        <a-dropdown :class="`${prefixCls}menu-item`" @openChange="hisOpenChange">
+          <a class="ant-dropdown-link" @click.prevent> 历史 </a>
+          <template #overlay>
+            <a-menu>
+              <!-- <a-menu-item @click="getGplotHis">刷新历史记录</a-menu-item> -->
+              <a-menu-item @click="clearGplot">清空当前页面</a-menu-item>
+              <a-menu-divider />
+              <a-spin :spinning="isGetHisData">
+                <a-menu-item
+                  @click="backHisOnfig(item.gplotHisId)"
+                  v-for="(item, index) in hisData"
+                  :key="index"
+                >
+                  {{ item.createTime }}
+                </a-menu-item>
+              </a-spin>
+            </a-menu>
+          </template>
+        </a-dropdown>
         <div>
           <a-tooltip placement="top">
             <template #title>{{ t('view.save') }}</template>
@@ -203,6 +222,7 @@
   import { PlusOutlined } from '@ant-design/icons-vue';
   import { useGplotStoreWithOut } from '@/store/modules/gplot';
   import menuDrawer from '/@/components/MyMenu/index.vue';
+  import gplotApi from '@/api/gplot';
 
   const gplotStore = useGplotStoreWithOut();
   const props = defineProps({
@@ -328,7 +348,8 @@
   const isRunSavePreview = ref(false);
   const isShowShare = ref(false);
   const isShowSaveMenu = ref(false);
-
+  const hisData = ref([]);
+  const isGetHisData = ref(false);
   //获取分享地址
   function getShareUrl() {
     return `${window.location.origin}/#/modelingShare/index/${props.menuCheckedIds[0]}`;
@@ -438,19 +459,50 @@
 
   //前进
   function gplotAdvance() {
-    if (gplotStore.renderSuccess) {
-      const history = gplotStore.gplotOb.getPluginInstance('history');
+    if (gplotStore.gplotKeyOb[props.graphObRef.gplotKey].renderSuccess) {
+      const history = props.graphObRef.getGraphOb().getPluginInstance('history');
       if (history.canRedo()) history.redo();
     }
   }
 
   //后退
   function gplotBack() {
-    if (gplotStore.renderSuccess) {
-      const history = gplotStore.gplotOb.getPluginInstance('history');
+    if (gplotStore.gplotKeyOb[props.graphObRef.gplotKey].renderSuccess) {
+      const history = props.graphObRef.getGraphOb().getPluginInstance('history');
       if (history.canUndo()) history.undo();
     }
   }
+
+  //获取保存的历史
+  function getGplotHis() {
+    isGetHisData.value = true;
+    gplotApi
+      .GetGplotHisMenuId(gplotStore.gplotKeyOb[props.graphObRef.gplotKey].containerConfig.menuId)
+      .then((data) => {
+        isGetHisData.value = false;
+        hisData.value = data.source;
+      })
+      .catch(() => {
+        isGetHisData.value = false;
+      });
+  }
+
+  //清空布局
+  function clearGplot() {
+    props.graphObRef.init(true, null);
+  }
+
+  //恢复历史布局
+  function backHisOnfig(hisId) {
+    props.graphObRef.init(false, hisId);
+  }
+
+  function hisOpenChange(v) {
+    if (v) {
+      getGplotHis();
+    }
+  }
+
   watch(
     () => gplotStore.renderSuccess,
     () => {},

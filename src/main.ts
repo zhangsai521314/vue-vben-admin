@@ -256,7 +256,7 @@ function initMq() {
       client.on('message', function (topic, _message) {
         if (isDataInit) {
           let msg = decoder.decode(_message);
-          console.log('接收到信息', msg);
+          // console.log('接收到信息', msg);
           if (!myCommon.isnull(msg)) {
             try {
               msg = JSON.parse(msg);
