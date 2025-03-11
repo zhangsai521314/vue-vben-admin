@@ -141,7 +141,7 @@
             <IconFontClass @click="props.exportConfig" name="icon-baseui-xiazai" />
           </a-tooltip>
         </div> -->
-        <a-dropdown :class="`${prefixCls}menu-item`" @openChange="hisOpenChange">
+        <a-dropdown :class="`${prefixCls}menu-item`" @open-change="hisOpenChange">
           <a class="ant-dropdown-link" @click.prevent> 历史 </a>
           <template #overlay>
             <a-menu>
