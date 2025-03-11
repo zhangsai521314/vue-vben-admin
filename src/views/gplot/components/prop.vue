@@ -259,6 +259,7 @@
                 :label="t('view.textContentCn')"
               >
                 <a-textarea
+                  maxlength="60"
                   v-model:value="
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelTextCn
                   "
@@ -276,6 +277,7 @@
                 :label="t('view.textContentEn')"
               >
                 <a-textarea
+                  maxlength="60"
                   v-model:value="
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelTextEn
                   "
@@ -293,6 +295,7 @@
                 :label="t('view.textContentFr')"
               >
                 <a-textarea
+                  maxlength="60"
                   v-model:value="
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelTextFr
                   "
