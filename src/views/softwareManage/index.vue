@@ -1207,6 +1207,9 @@
     if (row.IsBack) {
       logTableStep--;
       logCollectionData.value = logTableStepData[logTableStep];
+      if (logCollectionData.value) {
+        logCollectionData.value = _.orderBy(logCollectionData.value, ['Time'], ['desc']);
+      }
       logTableStepData.splice(logTableStep + 1);
       logTableStepName.value.splice(logTableStep);
       nextTick(() => {
@@ -1218,6 +1221,9 @@
       logTableStepData.push(row.SubCollection);
       logTableStepName.value.push(row.Name);
       logCollectionData.value = row.SubCollection;
+      if (logCollectionData.value) {
+        logCollectionData.value = _.orderBy(logCollectionData.value, ['Time'], ['desc']);
+      }
       logTableStepDataRowIndex.push(row);
     }
   }
