@@ -143,209 +143,210 @@
             </div>
           </template>
         </vxe-toolbar>
-        <vxe-table
-          id="dictionariesManage"
-          :scroll-y="{ enabled: true }"
-          :border="true"
-          :auto-resize="true"
-          height="100%"
-          ref="tableRef"
-          :show-overflow="true"
-          :show-header-overflow="true"
-          :loading="loading"
-          :custom-config="{ storage: true }"
-          :row-config="{ isHover: true, useKey: true, keyField: 'dictionariesId' }"
-          :column-config="{ resizable: true }"
-          :tree-config="{ transform: true, rowField: 'dictionariesId', parentField: 'parentId' }"
-          :data="tableConfigData"
-        >
-          <vxe-column
-            field="seq_"
-            type="seq"
-            :title="t('view.serialNumber')"
-            :minWidth="locale == 'zh-CN' ? 70 : 160"
-            fixed="left"
-          />
-          <vxe-column
-            field="dictionariesId"
-            :title="t('view.recordId')"
-            :visible="false"
-            minWidth="136"
-            fixed="left"
-          />
-          <vxe-column
-            field="dictionariesClass"
-            :title="t('view.dictionaryType')"
-            :sortable="true"
-            minWidth="166"
-            fixed="left"
+        <div class="contentHeight">
+          <vxe-table
+            id="dictionariesManage"
+            :scroll-y="{ enabled: true }"
+            :border="true"
+            :auto-resize="true"
+            height="100%"
+            ref="tableRef"
+            :show-overflow="true"
+            :show-header-overflow="true"
+            :loading="loading"
+            :custom-config="{ storage: true }"
+            :row-config="{ isHover: true, useKey: true, keyField: 'dictionariesId' }"
+            :column-config="{ resizable: true }"
+            :tree-config="{ transform: true, rowField: 'dictionariesId', parentField: 'parentId' }"
+            :data="tableConfigData"
           >
-            <template #default="{ row }">
-              <span>{{
-                row.dictionariesClass == 'equipmentType'
-                  ? t('view.hardwareDevice')
-                  : row.dictionariesClass == 'systemType'
-                    ? t('view.operatingSystem')
-                    : row.dictionariesClass == 'serviceType'
-                      ? t('view.softwareService')
-                      : row.dictionariesClass == 'msgType'
-                        ? t('view.informationPrompt')
-                        : row.dictionariesClass == 'performanceAlarmType'
-                          ? t('view.devicePerformanceAlarmThreshold')
-                          : row.dictionariesClass == 'collectionFrequency'
-                            ? t('view.dataFrequency')
-                            : row.dictionariesClass == 'commonConfig'
-                              ? t('view.generalConfiguration')
-                              : row.dictionariesClass == 'cirType'
-                                ? t('view.locomotiveType')
-                                : row.dictionariesClass == 'userFunction'
-                                  ? t('view.userFunctionCode')
-                                  : row.dictionariesClass == 'dispatchUserFunction'
-                                    ? t('view.dispatchUserFunctionCode')
-                                    : row.dictionariesClass == 'vehicleType'
-                                      ? t('view.vehicleTypeCategory')
-                                      : row.dictionariesClass == 'handPower'
-                                        ? t('view.handheldTerminalPermissions')
-                                        : row.dictionariesClass == 'Ln_L4L5'
-                                          ? t('view.positionTypeL4L5')
-                                          : ''
-              }}</span>
-            </template>
-          </vxe-column>
-          <vxe-column
-            field="dictionariesName"
-            :title="t('view.dictionaryName')"
-            tree-node
-            :sortable="true"
-            minWidth="166"
-            fixed="left"
-          />
-          <vxe-column
-            field="dictionariesNameCn"
-            :title="t('view.dictionaryNameCn')"
-            tree-node
-            :sortable="true"
-            minWidth="220"
-            :visible="false"
-          />
-          <vxe-column
-            field="dictionariesNameEn"
-            :title="t('view.dictionaryNameEn')"
-            tree-node
-            :sortable="true"
-            minWidth="220"
-            :visible="false"
-          />
-          <vxe-column
-            field="dictionariesNameFr"
-            :title="t('view.dictionaryNameFr')"
-            tree-node
-            :sortable="true"
-            minWidth="226"
-            :visible="false"
-          />
-          <vxe-column
-            field="serviceTypeName"
-            :title="t('view.belongsToServiceType')"
-            :sortable="true"
-            minWidth="186"
-          />
-          <vxe-column field="isKeyMaster" :title="t('view.isCustomPrimaryKey')" minWidth="186">
-            <template #default="{ row }">
-              <span :style="{ color: row.isKeyMaster ? 'green' : 'red' }">{{
-                row.isKeyMaster ? t('view.yes') : t('view.no')
-              }}</span>
-            </template>
-          </vxe-column>
-          <vxe-column
-            field="dictionariesKey"
-            :title="t('view.customPrimaryKeyValue')"
-            :sortable="true"
-            minWidth="260"
-          />
-          <vxe-column field="isSystem" :title="t('view.isSystem')" minWidth="140">
-            <template #default="{ row }">
-              <span :style="{ color: row.isSystem ? 'green' : 'red' }">{{
-                row.isSystem ? t('view.yes') : t('view.no')
-              }}</span>
-            </template>
-          </vxe-column>
-          <vxe-column
-            field="isSync"
-            :title="t('view.isSynchronized')"
-            minWidth="170"
-            :visible="false"
-          >
-            <template #default="{ row }">
-              <span
-                v-if="row.dictionariesClass == 'collectionFrequency'"
-                :style="{ color: row.isSync ? 'green' : 'red' }"
-                >{{ row.isSync ? t('view.yes') : t('view.no') }}</span
-              >
-              <span v-else style="color: green">{{ t('view.noSynchronizationNeeded') }}</span>
-            </template>
-          </vxe-column>
-          <vxe-column
-            field="syncTime"
-            :title="t('view.synchronizationTime')"
-            :visible="false"
-            :sortable="true"
-            minWidth="196"
-          />
-          <vxe-column
-            field="orderIndex"
-            :title="t('view.sorting')"
-            :visible="false"
-            :sortable="true"
-            minWidth="100"
-          />
-          <vxe-column
-            field="other"
-            :title="t('view.auxiliaryInformation')"
-            :showOverflow="true"
-            :sortable="true"
-            minWidth="196"
-          />
-          <vxe-column
-            field="remark"
-            :title="t('view.remarks')"
-            :showOverflow="true"
-            :sortable="true"
-            minWidth="230"
-          />
-          <vxe-column
-            field="createTime"
-            :title="t('view.creationTime')"
-            :visible="false"
-            :sortable="true"
-            minWidth="150"
-          />
-          <vxe-column
-            field="createUser"
-            :title="t('view.creator')"
-            :visible="false"
-            :sortable="true"
-            minWidth="130"
-          />
-          <vxe-column
-            field="modifyTime"
-            :title="t('view.modificationTime')"
-            :visible="false"
-            :sortable="true"
-            minWidth="170"
-          />
-          <vxe-column
-            field="modifyUser"
-            :title="t('view.modifier')"
-            :visible="false"
-            :sortable="true"
-            minWidth="130"
-          />
-          <vxe-column field="action_" :title="t('view.action')" width="140" fixed="right">
-            <template #default="{ row }">
-              <div :class="`tableStyle`">
-                <template v-if="!row.isSystem">
-                  <!-- <AuthDom auth="dictionariesManage_table_add">
+            <vxe-column
+              field="seq_"
+              type="seq"
+              :title="t('view.serialNumber')"
+              :minWidth="locale == 'zh-CN' ? 70 : 160"
+              fixed="left"
+            />
+            <vxe-column
+              field="dictionariesId"
+              :title="t('view.recordId')"
+              :visible="false"
+              minWidth="136"
+              fixed="left"
+            />
+            <vxe-column
+              field="dictionariesClass"
+              :title="t('view.dictionaryType')"
+              :sortable="true"
+              minWidth="166"
+              fixed="left"
+            >
+              <template #default="{ row }">
+                <span>{{
+                  row.dictionariesClass == 'equipmentType'
+                    ? t('view.hardwareDevice')
+                    : row.dictionariesClass == 'systemType'
+                      ? t('view.operatingSystem')
+                      : row.dictionariesClass == 'serviceType'
+                        ? t('view.softwareService')
+                        : row.dictionariesClass == 'msgType'
+                          ? t('view.informationPrompt')
+                          : row.dictionariesClass == 'performanceAlarmType'
+                            ? t('view.devicePerformanceAlarmThreshold')
+                            : row.dictionariesClass == 'collectionFrequency'
+                              ? t('view.dataFrequency')
+                              : row.dictionariesClass == 'commonConfig'
+                                ? t('view.generalConfiguration')
+                                : row.dictionariesClass == 'cirType'
+                                  ? t('view.locomotiveType')
+                                  : row.dictionariesClass == 'userFunction'
+                                    ? t('view.userFunctionCode')
+                                    : row.dictionariesClass == 'dispatchUserFunction'
+                                      ? t('view.dispatchUserFunctionCode')
+                                      : row.dictionariesClass == 'vehicleType'
+                                        ? t('view.vehicleTypeCategory')
+                                        : row.dictionariesClass == 'handPower'
+                                          ? t('view.handheldTerminalPermissions')
+                                          : row.dictionariesClass == 'Ln_L4L5'
+                                            ? t('view.positionTypeL4L5')
+                                            : ''
+                }}</span>
+              </template>
+            </vxe-column>
+            <vxe-column
+              field="dictionariesName"
+              :title="t('view.dictionaryName')"
+              tree-node
+              :sortable="true"
+              minWidth="166"
+              fixed="left"
+            />
+            <vxe-column
+              field="dictionariesNameCn"
+              :title="t('view.dictionaryNameCn')"
+              tree-node
+              :sortable="true"
+              minWidth="220"
+              :visible="false"
+            />
+            <vxe-column
+              field="dictionariesNameEn"
+              :title="t('view.dictionaryNameEn')"
+              tree-node
+              :sortable="true"
+              minWidth="220"
+              :visible="false"
+            />
+            <vxe-column
+              field="dictionariesNameFr"
+              :title="t('view.dictionaryNameFr')"
+              tree-node
+              :sortable="true"
+              minWidth="226"
+              :visible="false"
+            />
+            <vxe-column
+              field="serviceTypeName"
+              :title="t('view.belongsToServiceType')"
+              :sortable="true"
+              minWidth="186"
+            />
+            <vxe-column field="isKeyMaster" :title="t('view.isCustomPrimaryKey')" minWidth="186">
+              <template #default="{ row }">
+                <span :style="{ color: row.isKeyMaster ? 'green' : 'red' }">{{
+                  row.isKeyMaster ? t('view.yes') : t('view.no')
+                }}</span>
+              </template>
+            </vxe-column>
+            <vxe-column
+              field="dictionariesKey"
+              :title="t('view.customPrimaryKeyValue')"
+              :sortable="true"
+              minWidth="260"
+            />
+            <vxe-column field="isSystem" :title="t('view.isSystem')" minWidth="140">
+              <template #default="{ row }">
+                <span :style="{ color: row.isSystem ? 'green' : 'red' }">{{
+                  row.isSystem ? t('view.yes') : t('view.no')
+                }}</span>
+              </template>
+            </vxe-column>
+            <vxe-column
+              field="isSync"
+              :title="t('view.isSynchronized')"
+              minWidth="170"
+              :visible="false"
+            >
+              <template #default="{ row }">
+                <span
+                  v-if="row.dictionariesClass == 'collectionFrequency'"
+                  :style="{ color: row.isSync ? 'green' : 'red' }"
+                  >{{ row.isSync ? t('view.yes') : t('view.no') }}</span
+                >
+                <span v-else style="color: green">{{ t('view.noSynchronizationNeeded') }}</span>
+              </template>
+            </vxe-column>
+            <vxe-column
+              field="syncTime"
+              :title="t('view.synchronizationTime')"
+              :visible="false"
+              :sortable="true"
+              minWidth="196"
+            />
+            <vxe-column
+              field="orderIndex"
+              :title="t('view.sorting')"
+              :visible="false"
+              :sortable="true"
+              minWidth="100"
+            />
+            <vxe-column
+              field="other"
+              :title="t('view.auxiliaryInformation')"
+              :showOverflow="true"
+              :sortable="true"
+              minWidth="196"
+            />
+            <vxe-column
+              field="remark"
+              :title="t('view.remarks')"
+              :showOverflow="true"
+              :sortable="true"
+              minWidth="230"
+            />
+            <vxe-column
+              field="createTime"
+              :title="t('view.creationTime')"
+              :visible="false"
+              :sortable="true"
+              minWidth="150"
+            />
+            <vxe-column
+              field="createUser"
+              :title="t('view.creator')"
+              :visible="false"
+              :sortable="true"
+              minWidth="130"
+            />
+            <vxe-column
+              field="modifyTime"
+              :title="t('view.modificationTime')"
+              :visible="false"
+              :sortable="true"
+              minWidth="170"
+            />
+            <vxe-column
+              field="modifyUser"
+              :title="t('view.modifier')"
+              :visible="false"
+              :sortable="true"
+              minWidth="130"
+            />
+            <vxe-column field="action_" :title="t('view.action')" width="140" fixed="right">
+              <template #default="{ row }">
+                <div :class="`tableStyle`">
+                  <template v-if="!row.isSystem">
+                    <!-- <AuthDom auth="dictionariesManage_table_add">
                       <IconFontClass
                         name="icon-baseui-tianjiawukuang"
                         @click="showFrom('add', row, row.dictionariesId)"
@@ -353,30 +354,31 @@
                         :title="增加子级"
                       />
                     </AuthDom> -->
-                  <AuthDom auth="dictionariesManage_table_edit">
-                    <IconFontClass
-                      name="icon-baseui-edit-fill"
-                      @click="showFrom('edit', row, row.parentId)"
-                      style="color: #0a61bd"
-                      :title="t('view.edit')"
-                    />
-                  </AuthDom>
-                  <AuthDom auth="dictionariesManage_table_delete">
-                    <IconFontClass
-                      name="icon-baseui-guanbicuowu"
-                      @click="remove(row)"
-                      style="color: red"
-                      :title="t('view.delete')"
-                    />
-                  </AuthDom>
-                </template>
-                <span v-else style="color: red">{{
-                  t('view.systemDictionaryCannotBeModified')
-                }}</span>
-              </div>
-            </template>
-          </vxe-column>
-        </vxe-table>
+                    <AuthDom auth="dictionariesManage_table_edit">
+                      <IconFontClass
+                        name="icon-baseui-edit-fill"
+                        @click="showFrom('edit', row, row.parentId)"
+                        style="color: #0a61bd"
+                        :title="t('view.edit')"
+                      />
+                    </AuthDom>
+                    <AuthDom auth="dictionariesManage_table_delete">
+                      <IconFontClass
+                        name="icon-baseui-guanbicuowu"
+                        @click="remove(row)"
+                        style="color: red"
+                        :title="t('view.delete')"
+                      />
+                    </AuthDom>
+                  </template>
+                  <span v-else style="color: red">{{
+                    t('view.systemDictionaryCannotBeModified')
+                  }}</span>
+                </div>
+              </template>
+            </vxe-column>
+          </vxe-table>
+        </div>
       </div>
     </a-spin>
     <a-drawer
@@ -836,8 +838,37 @@
 <style lang="less" scoped>
   @prefixCls: ~'@{namespace}-DictionariesManage-';
 
+  .contentHeight {
+    width: 100%;
+    height: calc(100% - 80px);
+  }
+
+  @media (min-width: 500px) {
+    .contentHeight {
+      height: calc(100% - 160px);
+    }
+  }
+
+  @media (min-width: 800px) {
+    .contentHeight {
+      height: calc(100% - 160px);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .contentHeight {
+      height: calc(100% - 120px);
+    }
+  }
+
+  @media (min-width: 1300px) {
+    .contentHeight {
+      height: calc(100% - 80px);
+    }
+  }
+
   .@{prefixCls} {
-    overflow: hidden;
+    overflow-y: hidden;
 
     .@{prefixCls}tableBtn {
       width: 100%;

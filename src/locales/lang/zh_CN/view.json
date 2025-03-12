@@ -1,4 +1,11 @@
 {
+  "replayAgain": "重放",
+  "fastForward": "快进",
+  "playPause": "播放|暂停",
+  "fastBackward": "快退",
+  "volumeLevel": "音量",
+  "playbackWithSpeedMultiplier": "倍速播放",
+  "speedMultiple": "倍速",
   "clearTheConfigurationContent": "清空配置内容",
   "history": "历史",
   "pleaseSelectTheSuperiorDepartment": "请选择上级部门",

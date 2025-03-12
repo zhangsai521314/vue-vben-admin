@@ -8,10 +8,10 @@
       <div style="height: 44px; padding: 6px" :class="`${prefixCls}option`">
         <a-space :size="16">
           <AuthDom auth="myPlay_beisu">
-            <label>倍速：</label>
+            <label>{{ t('view.speedMultiple') }}：</label>
             <a-select
               v-model:value="selectDoubleSpeedPlay"
-              placeholder="倍速播放"
+              :placeholder="t('view.playbackWithSpeedMultiplier')"
               @change="doublePlay"
               style="width: 80px"
             >
@@ -28,7 +28,7 @@
               <IconFontClass
                 @click="mute"
                 :name="isMute ? 'icon-baseui-jingyin01' : 'icon-baseui-yinliang'"
-                title="音量"
+                :title="t('view.volumeLevel')"
               />
               <a-slider
                 :class="`${prefixCls}slider`"
@@ -43,7 +43,7 @@
             <IconFontClass
               @click="retreat"
               name="icon-baseui-kuaitui"
-              title="快退"
+              :title="t('view.fastBackward')"
               @mousedown="retreatMousedown"
               @mouseout="retreatMouseout"
             />
@@ -52,20 +52,24 @@
             <IconFontClass
               @click="clickPlay"
               :name="isPaly ? 'icon-baseui-zanting' : 'icon-baseui-bofang'"
-              title="播放|暂停"
+              :title="t('view.playPause')"
             />
           </AuthDom>
           <AuthDom auth="myPlay_kuaijin">
             <IconFontClass
               @click="advance"
               name="icon-baseui-kuaijin"
-              title="快进"
+              :title="t('view.fastForward')"
               @mousedown="retreatMousedown('advance')"
               @mouseout="retreatMouseout('advance')"
             />
           </AuthDom>
           <AuthDom auth="myPlay_refresh">
-            <IconFontClass @click="replay" name="icon-baseui-refresh" title="重放" />
+            <IconFontClass
+              @click="replay"
+              name="icon-baseui-refresh"
+              :title="t('view.replayAgain')"
+            />
           </AuthDom>
         </a-space>
       </div>
@@ -79,7 +83,9 @@
   import { tryOnUnmounted } from '@vueuse/core';
   import { useDesign } from '@/hooks/web/useDesign';
   // import CursorPlugin from 'wavesurfer.js/dist/plugins/cursor';
+  import { useI18n } from '@/hooks/web/useI18n';
 
+  const { t } = useI18n();
   const { prefixCls } = useDesign('MyPlay-');
   // 播放倍速
   const selectDoubleSpeedPlay = ref(1.0);

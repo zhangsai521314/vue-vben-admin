@@ -50,7 +50,7 @@
             </div>
           </template>
         </vxe-toolbar>
-        <div style="width: 100%; height: calc(100% - 60px)">
+        <div class="contentHeight">
           <vxe-table
             :show-overflow="true"
             :show-header-overflow="true"
@@ -719,6 +719,35 @@
 </script>
 <style lang="less" scoped>
   @prefixCls: ~'@{namespace}-menuManage-';
+
+  .contentHeight {
+    width: 100%;
+    height: calc(100% - 40px);
+  }
+
+  @media (min-width: 500px) {
+    .contentHeight {
+      height: calc(100% - 80px);
+    }
+  }
+
+  @media (min-width: 800px) {
+    .contentHeight {
+      height: calc(100% - 40px);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .contentHeight {
+      height: calc(100% - 40px);
+    }
+  }
+
+  @media (min-width: 1500px) {
+    .contentHeight {
+      height: calc(100% - 40px);
+    }
+  }
 
   .@{prefixCls} {
     overflow-x: hidden;
