@@ -341,6 +341,14 @@
         fixed: 'left',
       },
       {
+        field: 'serilaNumber',
+        title: t('view.equipmentNumber'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: locale == 'zh-CN' ? 100 : 130,
+        fixed: 'left',
+      },
+      {
         field: 'handIsdn',
         title: t('view.isdnNumber'),
         showOverflow: true,
