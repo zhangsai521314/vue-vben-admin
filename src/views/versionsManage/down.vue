@@ -1,10 +1,12 @@
 <template>
   <div class="content">
-    <div v-for="(item, i) in downData" :key="i">
+    <div v-for="(item, i) in downData" :key="i" class="ItemDiv">
       <IconFontClass
         :name="item.runPlatform == 1 ? 'icon-baseui-Windows101' : 'icon-baseui-anzhuo1'"
       />
-      <img :src="item.icon" @click="downFile(item)" />
+      <a-spin tip="Downloading" :spinning="item.isDownloading" style="width: 100%">
+        <img :src="item.icon" @click="downFile(item)" />
+      </a-spin>
       <span class="title">{{ item.name }}</span>
       <span class="version" @click="remarksChange(item)">{{ item.versionNumber }}</span>
       <div
@@ -43,6 +45,7 @@
   }
 
   function downFile(item) {
+    item.isDownloading = true;
     commonApi
       .GetServiceFile({
         ServiceType: item.serviceType,
@@ -50,7 +53,11 @@
         execompleteBefore: () => {},
       })
       .then((data) => {
+        item.isDownloading = false;
         myCommon.downLoadFile(data);
+      })
+      .catch((e) => {
+        item.isDownloading = false;
       });
   }
 </script>
@@ -70,6 +77,10 @@
   }
 </style>
 <style lang="less" scoped>
+  .ant-spin-nested-loading {
+    width: 100%;
+  }
+
   .content {
     display: flex;
     flex-wrap: wrap;
@@ -81,7 +92,7 @@
     overflow-y: auto;
     font-family: cursive;
 
-    > div {
+    .ItemDiv {
       display: flex;
       position: relative;
       align-items: center;

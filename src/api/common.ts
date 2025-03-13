@@ -69,11 +69,20 @@ const common = {
   },
   //下载版本文件
   GetServiceFile: function (params) {
-    return defHttp.get({
-      url: '/Common/GetServiceFile',
-      params,
-      responseType: 'blob',
-    });
+    return defHttp.get(
+      {
+        url: '/Common/GetServiceFile',
+        params,
+        responseType: 'blob',
+      },
+      {
+        retryRequest: {
+          isOpenRetry: false,
+          count: 5,
+          waitTime: 1000,
+        },
+      },
+    );
   },
 };
 export default common;
