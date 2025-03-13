@@ -253,7 +253,9 @@
                 :class="{
                   'not-click':
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
-                    'combo',
+                      'combo' ||
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
+                      'edge',
                 }"
                 name="labelTextCn"
                 :label="t('view.textContentCn')"
@@ -271,7 +273,9 @@
                 :class="{
                   'not-click':
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
-                    'combo',
+                      'combo' ||
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
+                      'edge',
                 }"
                 name="labelTextEn"
                 :label="t('view.textContentEn')"
@@ -289,7 +293,9 @@
                 :class="{
                   'not-click':
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
-                    'combo',
+                      'combo' ||
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
+                      'edge',
                 }"
                 name="labelTextFr"
                 :label="t('view.textContentFr')"
@@ -307,7 +313,9 @@
                 :class="{
                   'not-click':
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
-                    'combo',
+                      'combo' ||
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
+                      'edge',
                 }"
                 name="labelFill"
                 :label="t('view.textColor')"
@@ -331,7 +339,9 @@
                 :class="{
                   'not-click':
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
-                    'combo',
+                      'combo' ||
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
+                      'edge',
                 }"
                 name="labelFontSize"
                 :label="t('view.textSize')"
@@ -366,7 +376,9 @@
                 :class="{
                   'not-click':
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
-                    'combo',
+                      'combo' ||
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
+                      'edge',
                 }"
                 name="labelOffsetX"
                 :label="t('view.textOffsetX')"
@@ -382,7 +394,9 @@
                 :class="{
                   'not-click':
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
-                    'combo',
+                      'combo' ||
+                    gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myType ==
+                      'edge',
                 }"
                 name="labelOffsetY"
                 :label="t('view.textOffsetY')"

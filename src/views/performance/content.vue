@@ -60,7 +60,7 @@
     <div :class="`${prefixCls}div-max`">
       <div :class="`${prefixCls}div-max-title`">
         <div>{{ props.name }}</div>
-        <div>%{{ selectedMaxShowName }}{{ t('view.usageRate') }}</div>
+        <div>{{ t('view.usageRate') }}</div>
       </div>
       <echarts
         :isShowYX="true"

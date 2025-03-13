@@ -69,7 +69,7 @@
   },
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
-    "@antv/g6": "^5.0.35",
+    "@antv/g6": "^5.0.13",
     "@ckpack/vue-color": "^1.6.0",
     "@codemirror/lang-javascript": "^6.2.2",
     "@codemirror/lang-json": "^6.0.1",

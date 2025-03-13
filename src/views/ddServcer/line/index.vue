@@ -142,7 +142,9 @@
         <template #footer>
           <a-spin :spinning="fromSpinning">
             <a-button type="primary" @click="saveMap">{{ t('view.save') }}</a-button>
-            <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
+            <a-button style="margin-left: 8px" @click="formMapClose">{{
+              t('view.close')
+            }}</a-button>
           </a-spin>
         </template>
       </a-drawer>
@@ -478,9 +480,7 @@
         <template #footer>
           <a-spin :spinning="fromMapSpinning">
             <a-button type="primary" @click="saveFrom">{{ t('view.save') }}</a-button>
-            <a-button style="margin-left: 8px" @click="formMapClose">{{
-              t('view.close')
-            }}</a-button>
+            <a-button style="margin-left: 8px" @click="formClose">{{ t('view.close') }}</a-button>
           </a-spin>
         </template>
       </a-drawer>

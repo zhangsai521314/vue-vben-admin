@@ -286,7 +286,7 @@
             if (d == 'DiskSize') {
               baseColumns.push({
                 field: name,
-                title: `${col}${t('view.driveSize')}(G)`,
+                title: `${col} ${t('view.driveSize')}(G)`,
                 showOverflow: true,
                 sortable: false,
                 minWidth: locale == 'zh-CN' ? 110 : 150,
@@ -294,13 +294,13 @@
             } else {
               baseColumns.push({
                 field: name,
-                title: `${col}${t('view.driveUsage')}(%)`,
+                title: `${col} ${t('view.driveUsage')}(%)`,
                 showOverflow: true,
                 sortable: false,
                 minWidth: locale == 'zh-CN' ? 110 : 210,
               });
               baseColumnsChart.push({
-                name: `${col}${t('view.driveUsage')}(%)`,
+                name: `${col} ${t('view.driveUsage')}(%)`,
                 col: name,
                 color: diskColor[baseColumnsChart.length - 2],
               });
