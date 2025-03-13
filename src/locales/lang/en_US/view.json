@@ -1,4 +1,8 @@
 {
+  "blacklistDataSynchronizationFailed": "The blacklist data synchronization failed",
+  "eciDataSynchronizationFailed":"The ECI data synchronization failed",
+  "stationDataSynchronizationFailed": "The station data synchronization failed",
+  "lineDataSynchronizationFailed": "The line data synchronization failed",
   "quanhuLocomotive": "Quanhua LocomotiveAll-T",
   "failedToRetrieveRecordingFilePleaseTryAgain": "Recording file acquisition failed. Please re-acquire",
   "replayAgain": "RJ",

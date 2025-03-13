@@ -1,4 +1,8 @@
 {
+  "blacklistDataSynchronizationFailed": "La synchronisation des données de la liste noire a échoué",
+  "eciDataSynchronizationFailed":"La synchronisation des données ECI a échoué",
+  "stationDataSynchronizationFailed": "La synchronisation des données de la gare a échoué",
+  "lineDataSynchronizationFailed": "La synchronisation des données de ligne a échoué",
   "failedToRetrieveRecordingFilePleaseTryAgain": "Obtention fichier d'enregistrement échouée. Veuillez réobtenir",
   "replayAgain": "RP",
   "fastForward":"AR",

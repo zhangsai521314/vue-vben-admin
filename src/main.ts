@@ -385,6 +385,18 @@ function initMq() {
                 case '黑名单数据同步成功！':
                   tMsg = t('view.blacklistDataSynchronizationSuccessful');
                   break;
+                case '线路数据同步失败！':
+                  tMsg = t('view.lineDataSynchronizationFailed');
+                  break;
+                case '车站数据同步失败！':
+                  tMsg = t('view.stationDataSynchronizationFailed');
+                  break;
+                case 'ECI数据同步失败！':
+                  tMsg = t('view.eciDataSynchronizationFailed');
+                  break;
+                case '黑名单数据同步失败！':
+                  tMsg = t('view.blacklistDataSynchronizationFailed');
+                  break;
               }
               msg.Result == 0 ? message.success(tMsg) : message.error(tMsg);
             } else {
