@@ -63,6 +63,18 @@ const DDDev = {
       params,
     });
   },
+  GetDevFnList: function (params) {
+    return defHttp.post({
+      url: '/DDDev/GetDevFnList',
+      params,
+    });
+  },
+  GetDevFnSimple: function (params) {
+    return defHttp.post({
+      url: '/DDDev/GetDevFnSimple',
+      params,
+    });
+  },
 };
 const Lacci = {
   //获取未绑定过车站的小区号

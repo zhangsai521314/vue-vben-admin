@@ -1,4 +1,5 @@
 {
+  "bindingDetails": "Binding details",
   "blacklistDataSynchronizationFailed": "The blacklist data synchronization failed",
   "eciDataSynchronizationFailed":"The ECI data synchronization failed",
   "stationDataSynchronizationFailed": "The station data synchronization failed",

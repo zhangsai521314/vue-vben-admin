@@ -99,6 +99,18 @@
           </a-space>
         </div>
       </template>
+      <template #default="{ row }">
+        <div :class="`tableOption`">
+          <AuthDom auth="cirStatus_table_show">
+            <IconFontClass
+              name="icon-baseui-show"
+              @click="showFn(row)"
+              style="color: #0fc10e"
+              :title="t('view.bindingDetails')"
+            />
+          </AuthDom>
+        </div>
+      </template>
       <template #pager>
         <vxe-pager
           background
@@ -129,6 +141,19 @@
         }}
       </template>
     </vxe-grid>
+    <a-drawer
+      :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
+      :width="locale == 'zh-CN' ? 900 : 1000"
+      :visible="isShowDevFn"
+      :title="t('view.bindingDetails')"
+      :footer-style="{ textAlign: 'right' }"
+      @close="devFnClose"
+    >
+      <devfn :isdn="newRow.isdn" deviceType="1" :time="dayjs()" />
+      <template #footer>
+        <a-button style="margin-left: 8px" @click="devFnClose">{{ t('view.close') }}</a-button>
+      </template>
+    </a-drawer>
   </MyContent>
 </template>
 <script setup lang="ts">
@@ -143,6 +168,7 @@
   import 'dayjs/locale/zh-cn';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
+  import devfn from '../components/devfn.vue';
 
   const { t } = useI18n();
   const localeStore = useLocaleStore();
@@ -289,17 +315,16 @@
         showOverflow: true,
         sortable: true,
       },
-      // {
-      // field: 'action_',
-      //   title: t('view.action'),
-      //   width: 140,
-      //   slots: {
-      //     default: 'default',
-      //   },
-      //   showOverflow: true,
-      //
-      //   fixed: 'right',
-      // },
+      {
+        field: 'action_',
+        title: t('view.action'),
+        width: 100,
+        slots: {
+          default: 'default',
+        },
+        showOverflow: true,
+        fixed: 'right',
+      },
     ],
     toolbarConfig: {
       custom: true,
@@ -339,6 +364,8 @@
   let refreshTimeId;
   const lineDatas = ref([]);
   const stationDatas = ref([]);
+  const newRow = ref(null);
+  const isShowDevFn = ref(false);
 
   getStatus(true);
   getDDServerStationSimple();
@@ -481,6 +508,15 @@
   tryOnUnmounted(() => {
     stopRefresh();
   });
+
+  function showFn(row) {
+    newRow.value = row;
+    isShowDevFn.value = true;
+  }
+
+  function devFnClose() {
+    isShowDevFn.value = false;
+  }
 </script>
 <style lang="less" scoped>
   @prefixCls: ~'@{namespace}-DDServcerCirStatus-';

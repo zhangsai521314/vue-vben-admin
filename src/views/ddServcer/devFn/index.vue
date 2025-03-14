@@ -3,7 +3,7 @@
     <vxe-grid
       :scroll-y="{ enabled: true }"
       v-bind="tableConfig"
-      id="ddServcerRegisterHistory"
+      id="DDServcerDevFn"
       ref="tableRef"
       :loading="loading"
       :seq-config="{ startIndex: (page.current - 1) * page.size }"
@@ -21,7 +21,7 @@
                     <label>{{ t('view.operationTime') }}：</label>
                     <a-config-provider :locale="zhCN">
                       <a-range-picker
-                        :allowClear="false"
+                        :allowClear="true"
                         v-model:value="timeValue"
                         :showTime="true"
                         format="YYYY-MM-DD HH:mm:ss"
@@ -31,20 +31,16 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.operationType') }}：</label>
+                    <label>{{ t('view.deviceType') }}：</label>
                     <a-select
-                      :placeholder="t('view.pleaseSelectOperationType')"
+                      :placeholder="t('view.pleaseSelectDeviceType')"
                       :style="{ width: locale == 'zh-CN' ? '170px' : '260px' }"
                       allow-clear
-                      v-model:value="seacthContent.regType"
+                      v-model:value="seacthContent.deviceType"
                     >
-                      <a-select-option :value="224">{{ t('view.register') }}</a-select-option>
-                      <a-select-option :value="225">{{ t('view.generalLogout') }}</a-select-option>
-                      <a-select-option :value="226">{{ t('view.forcedLogout') }}</a-select-option>
-                      <a-select-option :value="227">{{ t('view.timeoutLogout') }}</a-select-option>
-                      <a-select-option :value="228">{{
-                        t('view.allCancellation')
-                      }}</a-select-option>
+                      <a-select-option :value="1">{{ t('view.cabRadio') }}</a-select-option>
+                      <a-select-option :value="2">{{ t('view.handheldTerminal') }}</a-select-option>
+                      <a-select-option :value="3">{{ t('view.stationDutyDesk') }}</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
@@ -53,7 +49,7 @@
                     <label>{{ t('view.functionNumber') }}：</label>
                     <a-input
                       @press-enter="initPage()"
-                      v-model:value="seacthContent.fn"
+                      v-model:value="seacthContent.fnNumber"
                       :placeholder="t('view.inputFunctionNumberForQuery')"
                     />
                   </a-space>
@@ -99,20 +95,6 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.operationResult') }}：</label>
-                    <a-select
-                      :placeholder="t('view.pleaseSelectOperationResult')"
-                      style="width: 120px"
-                      allow-clear
-                      v-model:value="seacthContent.regResult"
-                    >
-                      <a-select-option :value="0">{{ t('view.success') }}</a-select-option>
-                      <a-select-option :value="1">{{ t('view.failure') }}</a-select-option>
-                    </a-select>
-                  </a-space>
-                </div>
-                <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
                     <a-button @click="initPage()" type="primary">{{ t('view.query') }}</a-button>
                     <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                     <a-radio-group v-model:value="refresh" button-style="solid">
@@ -138,26 +120,21 @@
           @page-change="handlePageChange"
         />
       </template>
-      <template #ipport="{ row }"> {{ row.ip }}{{ row.port ? ':' + row.port : '' }} </template>
       <template #regResult="{ row }">
         <span :style="{ color: row.regResult == 0 ? 'green' : 'red' }">
           {{ row.regResult == 0 ? t('view.success') : t('view.failure', [`(${row.regResult})`]) }}
         </span>
       </template>
 
-      <template #regType="{ row }">
+      <template #typeD="{ row }">
         {{
-          row.regType == 224
-            ? t('view.register')
-            : row.regType == 225
-              ? t('view.generalLogout')
-              : row.regType == 226
-                ? t('view.forcedLogout')
-                : row.regType == 227
-                  ? t('view.timeoutLogout')
-                  : row.regType == 228
-                    ? t('view.allCancellation')
-                    : row.regType
+          row.typeD == 1
+            ? t('view.cabRadio')
+            : row.typeD == 2
+              ? t('view.handheldTerminal')
+              : row.typeD == 3
+                ? t('view.stationDutyDesk')
+                : row.typeD
         }}
       </template>
       <template #fnType="{ row }">
@@ -182,11 +159,7 @@
   import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
-  import {
-    RegisterHistory as registerHistoryApi,
-    Line as lineApi,
-    Station as stationApi,
-  } from '@/api/ddServcer';
+  import { Line as lineApi, DDDev as DDDevApi } from '@/api/ddServcer';
   import { tryOnUnmounted } from '@vueuse/core';
   import zhCN from 'ant-design-vue/es/locale/zh_CN';
   import dayjs from 'dayjs';
@@ -197,8 +170,8 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
-  defineOptions({ name: 'DDServcerRegisterHistory' });
-  const { prefixCls } = useDesign('DDServcerRegisterHistory-');
+  defineOptions({ name: 'DDServcerDevFn' });
+  const { prefixCls } = useDesign('DDServcerDevFn-');
   const loading = ref(true);
   const tableConfig = reactive<VxeGridProps>({
     showOverflow: true,
@@ -223,13 +196,39 @@
         minWidth: locale == 'zh-CN' ? 130 : 150,
       },
       {
-        field: 'regType',
-        title: t('view.operationType'),
+        field: 'lineName',
+        title: t('view.lineName'),
+        showOverflow: true,
+        visible: false,
+        sortable: true,
+        minWidth: 200,
+        fixed: 'left',
+      },
+      {
+        field: 'stationCode',
+        title: t('view.stationCode'),
+        showOverflow: true,
+        visible: false,
+        sortable: true,
+        minWidth: locale == 'zh-CN' ? 130 : 140,
+        fixed: 'left',
+      },
+      {
+        field: 'stationName',
+        title: t('view.stationName'),
         showOverflow: true,
         sortable: true,
-        minWidth: locale == 'zh-CN' ? 110 : 210,
+        minWidth: 200,
+        fixed: 'left',
+      },
+      {
+        field: 'typeD',
+        title: t('view.deviceType'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: locale == 'zh-CN' ? 100 : 160,
         slots: {
-          default: 'regType',
+          default: 'typeD',
         },
       },
       {
@@ -257,17 +256,7 @@
         minWidth: 100,
       },
       {
-        field: 'regResult',
-        title: t('view.operationResult'),
-        showOverflow: true,
-        slots: {
-          default: 'regResult',
-        },
-        sortable: true,
-        minWidth: locale == 'zh-CN' ? 100 : 170,
-      },
-      {
-        field: 'regTime',
+        field: 'addTime',
         title: t('view.operationTime'),
         minWidth: 150,
         showOverflow: true,
@@ -302,10 +291,9 @@
   ]);
   const seacthContent = ref({
     isdn: null,
-    fn: null,
+    fnNumber: null,
     fnType: null,
-    regType: null,
-    regResult: null,
+    deviceType: null,
     startTime: null,
     endTime: null,
   });
@@ -313,16 +301,16 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['regTime desc'],
+    sortlist: [],
   });
   const refresh = ref('yes');
   const refreshTime = ref(10);
   let refreshTimeId;
 
-  getStatus(true);
+  getDevFnList(true);
 
   //获取列表
-  function getStatus(isAuto = false) {
+  function getDevFnList(isAuto = false) {
     if (!isAuto) {
       refresh.value = 'no';
     }
@@ -331,16 +319,15 @@
     seacthContent.value.endTime =
       timeValue.value == null ? null : timeValue.value[1].format('YYYY-MM-DD HH:mm:ss');
     loading.value = true;
-    registerHistoryApi
-      .GetDDServerRegisterHistorys({
-        PageIndex: page.current,
-        PageSize: page.size,
-        ...seacthContent.value,
-        fullSort: getFullSort(),
-        execompleteBefore: () => {
-          loading.value = false;
-        },
-      })
+    DDDevApi.GetDevFnList({
+      PageIndex: page.current,
+      PageSize: page.size,
+      ...seacthContent.value,
+      fullSort: getFullSort(),
+      execompleteBefore: () => {
+        loading.value = false;
+      },
+    })
       .then((data) => {
         tableConfig.data = data.source;
         page.total = data.totalCount;
@@ -357,17 +344,16 @@
   function initPage() {
     page.current = 1;
     page.total = 0;
-    getStatus();
+    getDevFnList();
   }
 
   //重置搜索条件
   function resetSeacth() {
     seacthContent.value = {
       isdn: null,
-      fn: null,
+      fnNumber: null,
       fnType: null,
-      regType: null,
-      regResult: null,
+      deviceType: null,
       startTime: null,
       endTime: null,
     };
@@ -378,7 +364,7 @@
   }
 
   function handlePageChange() {
-    getStatus();
+    getDevFnList();
   }
 
   /**
@@ -390,7 +376,7 @@
       var tempstr = item.field + ' ' + item.order;
       page.sortlist.push(tempstr);
     });
-    getStatus(false);
+    getDevFnList(false);
   }
   /**
    * 获取排序条件
@@ -409,7 +395,7 @@
         if (refreshTime.value <= 0) {
           refreshTime.value = 10;
           nextTick(() => {
-            getStatus(true);
+            getDevFnList(true);
           });
         } else {
           refreshTime.value = refreshTime.value - 1;
@@ -444,7 +430,7 @@
   });
 </script>
 <style lang="less" scoped>
-  @prefixCls: ~'@{namespace}-DDServcerRegisterHistory-';
+  @prefixCls: ~'@{namespace}-DDServcerDevFn-';
 
   .tableBtn {
     width: 100%;

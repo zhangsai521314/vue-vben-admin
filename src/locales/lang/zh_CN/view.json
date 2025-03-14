@@ -1,4 +1,5 @@
 {
+  "bindingDetails": "绑定详情",
   "blacklistDataSynchronizationFailed": "黑名单数据同步失败",
   "eciDataSynchronizationFailed": "ECI数据同步失败",
   "stationDataSynchronizationFailed": "车站数据同步失败",

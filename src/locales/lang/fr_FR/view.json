@@ -1,4 +1,5 @@
 {
+  "bindingDetails": "Détails de liaison",
   "blacklistDataSynchronizationFailed": "La synchronisation des données de la liste noire a échoué",
   "eciDataSynchronizationFailed":"La synchronisation des données ECI a échoué",
   "stationDataSynchronizationFailed": "La synchronisation des données de la gare a échoué",

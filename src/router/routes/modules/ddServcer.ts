@@ -14,6 +14,15 @@ const ddServcer: AppRouteModule = {
   },
   children: [
     {
+      path: 'devFn',
+      name: 'DDServcerDevFn',
+      component: () => import('/@/views/ddServcer/devFn/index.vue'),
+      meta: {
+        //功能号记录
+        title: '',
+      },
+    },
+    {
       path: 'black',
       name: 'DDServcerBlack',
       component: () => import('/@/views/ddServcer/black/index.vue'),
