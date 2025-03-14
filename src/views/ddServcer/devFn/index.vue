@@ -19,9 +19,9 @@
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>{{ t('view.operationTime') }}：</label>
-                     <a-config-provider
-                    :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
-                  >
+                    <a-config-provider
+                      :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
+                    >
                       <a-range-picker
                         :allowClear="true"
                         v-model:value="timeValue"

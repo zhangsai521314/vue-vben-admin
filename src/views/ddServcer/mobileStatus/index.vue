@@ -104,7 +104,7 @@
       </template>
       <template #default="{ row }">
         <div :class="`tableOption`">
-          <AuthDom auth="cirStatus_table_show">
+          <AuthDom auth="mobileStatus_table_show">
             <IconFontClass
               name="icon-baseui-show"
               @click="showFn(row)"

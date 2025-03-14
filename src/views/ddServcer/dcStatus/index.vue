@@ -33,9 +33,9 @@
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>{{ t('view.heartbeatTime') }}：</label>
-                     <a-config-provider
-                    :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
-                  >
+                    <a-config-provider
+                      :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
+                    >
                       <a-range-picker
                         :allowClear="false"
                         v-model:value="timeValue"
@@ -123,7 +123,7 @@
       </template>
       <template #default="{ row }">
         <div :class="`tableOption`">
-          <AuthDom auth="cirStatus_table_show">
+          <AuthDom auth="dcStatus_table_show">
             <IconFontClass
               name="icon-baseui-show"
               @click="showFn(row)"
