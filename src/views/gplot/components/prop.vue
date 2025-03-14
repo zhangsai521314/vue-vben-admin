@@ -856,7 +856,7 @@
                   show-search
                   style="width: 100%"
                   :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                  placeholder="请选择绑定软件服务"
+                  :placeholder="t('view.pleaseSelectTheBindingSoftwareService')"
                   allow-clear
                   show-arrow
                   :filterTreeNode="AntVueCommon.filterTreeNode"
