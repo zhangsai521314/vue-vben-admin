@@ -21,9 +21,9 @@
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>{{ t('view.selfCheckTime') }}：</label>
-                     <a-config-provider
-                    :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
-                  >
+                    <a-config-provider
+                      :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
+                    >
                       <a-range-picker
                         :allowClear="false"
                         v-model:value="timeValue"
@@ -314,7 +314,7 @@
     const $table = tableRef.value;
     if ($table) {
       $table.exportData({
-        filename: `自检记录信息导出${dayjs().format('YYYYMMDDHHmmss')}`,
+        filename: `${t('view.selfTestRecords')}_${dayjs().format('YYYYMMDDHHmmss')}`,
         type: 'xlsx',
         excludeFields: ['seq_', 'action_'],
       });

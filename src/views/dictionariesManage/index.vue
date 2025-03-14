@@ -653,6 +653,8 @@
   function remove(row) {
     Modal.confirm({
       maskClosable: true,
+      okText: t('view.confirm'),
+      cancelText: t('view.cancel'),
       // title: '删除该项，子集数据也将被删除，是否删除?',
       title: t('view.areYouSureYouWantToDelete'),
       icon: createVNode(ExclamationCircleOutlined),

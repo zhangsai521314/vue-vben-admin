@@ -21,9 +21,9 @@
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>{{ t('view.startTime') }}：</label>
-                     <a-config-provider
-                    :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
-                  >
+                    <a-config-provider
+                      :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
+                    >
                       <a-range-picker
                         :allowClear="false"
                         v-model:value="timeValue"
@@ -257,7 +257,7 @@
               name="icon-baseui-queren"
               :style="{ color: row.confirmTime ? '#d9d9d9' : '#0749df' }"
               @click="okMsg(row)"
-              ::title="row.confirmTime ? t('view.confirmed') : t('view.unconfirmed')"
+              :title="row.confirmTime ? t('view.confirmed') : t('view.unconfirmed')"
             />
           </AuthDom>
           <AuthDom auth="message_show_detail">
@@ -266,7 +266,7 @@
               name="icon-baseui-show"
               @click="showMgsHis(row)"
               style="color: #0fc10e"
-              ::title="t('view.viewAlarmRecords')"
+              :title="t('view.viewAlarmRecords')"
             />
           </AuthDom>
           <AuthDom auth="message_repair">
@@ -275,7 +275,7 @@
               name="icon-baseui-zijianrizhi"
               @click="showRepair(row)"
               style="color: #0749df"
-              ::title="t('view.alarmHandling')"
+              :title="t('view.alarmHandling')"
             />
           </AuthDom>
         </div>
@@ -836,7 +836,7 @@
     const $table = tableRef.value;
     if ($table) {
       $table.exportData({
-        filename: `告警信息导出${dayjs().format('YYYYMMDDHHmmss')}`,
+        filename: `${t('view.alarmInformationExport')}_${dayjs().format('YYYYMMDDHHmmss')}`,
         type: 'xlsx',
         excludeFields: ['seq_', 'action_'],
       });

@@ -391,6 +391,8 @@
   function removeMenu(node) {
     Modal.confirm({
       maskClosable: true,
+      okText: t('view.confirm'),
+      cancelText: t('view.cancel'),
       title: '是否删除该菜单?',
       icon: createVNode(ExclamationCircleOutlined),
       content: '',

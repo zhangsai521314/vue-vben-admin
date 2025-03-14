@@ -82,7 +82,7 @@
             <a-select-option :value="60">1小时后提示</a-select-option>
           </a-select> -->
         </div>
-        <!-- @click="handleTitleClick(row)" title="点击查看详情" -->
+        <!-- @click="handleTitleClick(row)"          :title="t('view.clickToViewDetails')" -->
         <div
           style="position: relative; width: 100%; padding-left: 8px; overflow: hidden"
           @click="handleTitleClick(row)"

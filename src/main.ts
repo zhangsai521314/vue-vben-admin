@@ -369,7 +369,6 @@ function initMq() {
                 '/' + client.options.clientId,
               )
             ) {
-              debugger;
               //调度服务数据变更，更改回复
               let tMsg = msg.Msg;
               switch (tMsg) {

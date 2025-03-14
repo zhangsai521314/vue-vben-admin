@@ -1,4 +1,5 @@
 {
+  "alarmInformationExport": "EIA",
   "bindingDetails": "Détails de liaison",
   "blacklistDataSynchronizationFailed": "La synchronisation des données de la liste noire a échoué",
   "eciDataSynchronizationFailed":"La synchronisation des données ECI a échoué",
@@ -17,7 +18,7 @@
   "pleaseSelectTheSuperiorDepartment":"Veuillez sélectionner le service supérieur",
   "superiorDepartment": "Service supérieur",
   "blacklistDataSynchronizationSuccessful":"Synchronisation des données de la liste noire réussie",
-  "eciDataSynchronizationSuccessful":"ECI data synchronization successful",
+  "eciDataSynchronizationSuccessful":"Synchronisation des données ECI réussie",
   "stationDataSynchronizationSuccessful":"Synchronisation des données de la station réussie",
   "lineDataSynchronizationSuccessful": "Synchronisation des données de ligne réussie",
   "yourAccountLoggedOutElsewhereIfNotYouChangePassword": "Votre compte déconnecté ailleurs. Si ce n'est pas vous, changez le mot de passe",
@@ -336,7 +337,7 @@
   "phonebookManagement": "Service de dispatching",
   "callRecords": "Historique des appels",
   "keyPressRecords": "Enregistrement des touches",
-  "self-testRecords": "Enregistrements d'auto-test",
+  "selfTestRecords": "Enregistrements d'auto-test",
   "dispatchService": "Service de dispatching",
   "dispatchDesk/on-dutyDeskStatus": "État de la centrale dispatching/table de garde",
   "cirStatus": "État CIR",

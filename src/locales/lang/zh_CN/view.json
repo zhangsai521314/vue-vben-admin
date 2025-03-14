@@ -1,4 +1,5 @@
 {
+  "alarmInformationExport": "告警信息导出",
   "bindingDetails": "绑定详情",
   "blacklistDataSynchronizationFailed": "黑名单数据同步失败",
   "eciDataSynchronizationFailed": "ECI数据同步失败",
@@ -335,7 +336,7 @@
   "phonebookManagement": "电话薄管理",
   "callRecords": "通话记录",
   "keyPressRecords": "按键记录",
-  "self-testRecords": "自检记录",
+  "selfTestRecords": "自检记录",
   "dispatchService": "调度服务",
   "dispatchDesk/on-dutyDeskStatus": "调度台/值班台状态",
   "cirStatus": "CIR状态",

@@ -773,7 +773,7 @@
     const $table = tableRef.value;
     if ($table) {
       $table.exportData({
-        filename: `通话记录导出${dayjs().format('YYYYMMDDHHmmss')}`,
+        filename: `${t('view.callRecords')}_${dayjs().format('YYYYMMDDHHmmss')}`,
         type: 'xlsx',
         excludeFields: ['seq_', 'action_'],
       });

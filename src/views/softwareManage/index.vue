@@ -131,7 +131,7 @@
                 name="icon-baseui-wenben1"
                 @click="showConfig(row)"
                 style="color: #0fc10e"
-                title="查看配置"
+                :title="t('view.serviceConfiguration')"
               />
             </AuthDom>
             <AuthDom auth="softwareManage_table_showlog">
@@ -139,7 +139,7 @@
                 name="icon-baseui-flowcontrol-log"
                 @click="showLog(row)"
                 style="color: #0fc10e"
-                title="查看日志"
+                :title="t('view.viewLog')"
               />
             </AuthDom>
             <AuthDom auth="softwareManage_table_edit">
@@ -898,6 +898,8 @@
   function remove(row) {
     Modal.confirm({
       maskClosable: true,
+      okText: t('view.confirm'),
+      cancelText: t('view.cancel'),
       title: t('view.areYouSureYouWantToDelete'),
       icon: createVNode(ExclamationCircleOutlined),
       content: '',

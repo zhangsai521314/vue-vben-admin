@@ -569,6 +569,8 @@
   function remove(row) {
     Modal.confirm({
       maskClosable: true,
+      okText: t('view.confirm'),
+      cancelText: t('view.cancel'),
       title: t('view.deleteLevelOk'),
       icon: createVNode(ExclamationCircleOutlined),
       content: '',

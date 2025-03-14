@@ -1,4 +1,5 @@
 {
+  "alarmInformationExport": "Alarm information export",
   "bindingDetails": "Binding details",
   "blacklistDataSynchronizationFailed": "The blacklist data synchronization failed",
   "eciDataSynchronizationFailed":"The ECI data synchronization failed",
@@ -18,7 +19,7 @@
   "pleaseSelectTheSuperiorDepartment":"PleaseSelectTheSuperiorDepartment",
   "superiorDepartment": "SuperiorDepartment",
   "blacklistDataSynchronizationSuccessful":"Blacklist data synchronization successful",
-  "eciDataSynchronizationSuccessful":"Synchronisation des données ECI réussie",
+  "eciDataSynchronizationSuccessful":"ECI data synchronization successful",
   "stationDataSynchronizationSuccessful":"Station data synchronization successful",
   "lineDataSynchronizationSuccessful": "Line data synchronization successful",
   "yourAccountLoggedOutElsewhereIfNotYouChangePassword": "Your account logged out elsewhere. If not you, change password",
@@ -337,7 +338,7 @@
   "phonebookManagement": "Phonebook Management",
   "callRecords": "Call Records",
   "keyPressRecords": "Key Press Records",
-  "self-testRecords": "Self-Test Records",
+  "selfTestRecords": "Self-Test Records",
   "dispatchService": "Dispatch Service",
   "dispatchDesk/on-dutyDeskStatus": "Dispatch Desk/On-Duty Desk Status",
   "cirStatus": "CIR Status",
