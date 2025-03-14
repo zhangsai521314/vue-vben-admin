@@ -33,7 +33,9 @@
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>{{ t('view.heartbeatTime') }}：</label>
-                    <a-config-provider :locale="zhCN">
+                     <a-config-provider
+                    :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
+                  >
                       <a-range-picker
                         :allowClear="false"
                         v-model:value="timeValue"
@@ -155,6 +157,8 @@
   import { DDDev as dcStatusApi, Line as lineApi, Station as stationApi } from '@/api/ddServcer';
   import { tryOnUnmounted } from '@vueuse/core';
   import zhCN from 'ant-design-vue/es/locale/zh_CN';
+  import enUS from 'ant-design-vue/es/locale/en_US';
+  import frFR from 'ant-design-vue/es/locale/fr_FR';
   import dayjs from 'dayjs';
   import 'dayjs/locale/zh-cn';
   import { useI18n } from '@/hooks/web/useI18n';

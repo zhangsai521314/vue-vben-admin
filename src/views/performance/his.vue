@@ -10,7 +10,9 @@
           <div class="row-div">
             <a-space direction="horizontal" size="small" :wrap="true">
               <label>{{ t('view.dataTime') }}：</label>
-              <a-config-provider :locale="zhCN">
+               <a-config-provider
+                    :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
+                  >
                 <a-range-picker
                   :allowClear="false"
                   v-model:value="timeValue"
@@ -95,6 +97,8 @@
   import { useDesign } from '@/hooks/web/useDesign';
   import { VxeGrid, VxeGridProps } from 'vxe-table';
   import zhCN from 'ant-design-vue/es/locale/zh_CN';
+  import enUS from 'ant-design-vue/es/locale/en_US';
+  import frFR from 'ant-design-vue/es/locale/fr_FR';
   import dayjs from 'dayjs';
   import 'dayjs/locale/zh-cn';
   import performanceApi from '@/api/performance';

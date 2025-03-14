@@ -21,7 +21,9 @@
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>{{ t('view.selfCheckTime') }}：</label>
-                    <a-config-provider :locale="zhCN">
+                     <a-config-provider
+                    :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
+                  >
                       <a-range-picker
                         :allowClear="false"
                         v-model:value="timeValue"
@@ -90,6 +92,8 @@
 </template>
 <script setup lang="ts">
   import zhCN from 'ant-design-vue/es/locale/zh_CN';
+  import enUS from 'ant-design-vue/es/locale/en_US';
+  import frFR from 'ant-design-vue/es/locale/fr_FR';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import { ref, reactive, onMounted } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';

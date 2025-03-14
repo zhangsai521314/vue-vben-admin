@@ -292,7 +292,9 @@
             </a-select>
           </a-form-item>
           <a-form-item :label="t('view.putIntoUse')" name="putIntoUse">
-            <a-config-provider :locale="zhCN">
+             <a-config-provider
+                    :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
+                  >
               <a-date-picker
                 style="width: 332px"
                 v-model:value="formData.usageTime"
@@ -363,6 +365,8 @@
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
   import zhCN from 'ant-design-vue/es/locale/zh_CN';
+  import enUS from 'ant-design-vue/es/locale/en_US';
+  import frFR from 'ant-design-vue/es/locale/fr_FR';
   import dayjs from 'dayjs';
   import 'dayjs/locale/zh-cn';
 
