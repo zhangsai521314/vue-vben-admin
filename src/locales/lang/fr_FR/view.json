@@ -1,6 +1,6 @@
 {
   "alarmInformationExport": "EIA",
-  "bindingDetails": "Détails de liaison",
+  "bindingDetails": "Liste des numéros de fonction",
   "blacklistDataSynchronizationFailed": "La synchronisation des données de la liste noire a échoué",
   "eciDataSynchronizationFailed":"La synchronisation des données ECI a échoué",
   "stationDataSynchronizationFailed": "La synchronisation des données de la gare a échoué",
@@ -236,7 +236,7 @@
   "clickToSelectVersionFile": "Cliquez pour sélectionner le fichier de version",
   "pleaseUploadVersionFile": "Veuillez téléverser le fichier de version",
   "versionFile": "fichier de version",
-  "uploadVersionFile": "Upload the version file",
+  "uploadVersionFile": "Téléversez le fichier de version",
   "addNewVersion": "Ajouter une nouvelle version",
   "updateTerminalVersionSuccessfully": "La version du terminal a été mise à jour avec succès",
   "updateFailure": "La mise à jour a échoué",

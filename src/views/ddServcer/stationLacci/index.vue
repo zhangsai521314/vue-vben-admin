@@ -183,7 +183,7 @@
             </a-select>
           </a-form-item>
           <a-form-item
-            :rules="[{ required: true, message: '请选择ECI名称集合' }]"
+            :rules="[{ required: true, message: t('view.pleaseSelectECINumber') }]"
             :label="t('view.eciNumber')"
             name="lacciIds"
           >

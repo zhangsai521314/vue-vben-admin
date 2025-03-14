@@ -1,6 +1,6 @@
 {
   "alarmInformationExport": "Alarm information export",
-  "bindingDetails": "Binding details",
+  "bindingDetails": "Function number list",
   "blacklistDataSynchronizationFailed": "The blacklist data synchronization failed",
   "eciDataSynchronizationFailed":"The ECI data synchronization failed",
   "stationDataSynchronizationFailed": "The station data synchronization failed",
@@ -236,7 +236,7 @@
   "clickToSelectVersionFile": "Click to select the version file",
   "pleaseUploadVersionFile": "Please upload the version file",
   "versionFile": "version file",
-  "uploadVersionFile": "Téléversez le fichier de version",
+  "uploadVersionFile": "Upload the version file",
   "addNewVersion": "Add a new version",
   "updateTerminalVersionSuccessfully": "The terminal version has been updated successfully",
   "updateFailure": "Update failed",
