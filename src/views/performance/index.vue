@@ -82,7 +82,7 @@
   //获取设备
   function getEquipments() {
     equipmentApi
-      .GetEquipmentSimple({
+      .GetPerformanceEquipmentSimple({
         execompleteBefore: () => {
           loadingEquipment.value = false;
         },

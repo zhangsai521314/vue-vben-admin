@@ -1,5 +1,6 @@
 //硬件设备
 import { defHttp } from '@/utils/http/axios';
+
 const Equipment = {
   //根据ID获取详情
   GetEquipment: function (params) {
@@ -12,6 +13,13 @@ const Equipment = {
   GetEquipmentSimple: function (params) {
     return defHttp.post({
       url: '/Equipment/GetEquipmentSimple',
+      params,
+    });
+  },
+  //获取性能上传设备下拉列表
+  GetPerformanceEquipmentSimple: function (params) {
+    return defHttp.post({
+      url: '/Equipment/GetPerformanceEquipmentSimple',
       params,
     });
   },

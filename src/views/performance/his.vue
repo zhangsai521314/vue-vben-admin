@@ -10,9 +10,9 @@
           <div class="row-div">
             <a-space direction="horizontal" size="small" :wrap="true">
               <label>{{ t('view.dataTime') }}：</label>
-               <a-config-provider
-                    :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
-                  >
+              <a-config-provider
+                :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
+              >
                 <a-range-picker
                   :allowClear="false"
                   v-model:value="timeValue"
@@ -457,7 +457,7 @@
   //获取设备
   function getEquipments() {
     equipmentApi
-      .GetEquipmentSimple({})
+      .GetPerformanceEquipmentSimple({})
       .then((data) => {
         equipmentData.value = data;
       })
