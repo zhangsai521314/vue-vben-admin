@@ -893,12 +893,16 @@
             if (stateOb) {
               var serviceStatus = nodeState.find((m) => m.serviceId == stateOb.data.myServiceId);
               let color = null;
-              for (let i = 0; i < stateOb.data.mySimpleState.filter((m) => m.open).length; i++) {
-                const element = stateOb.data.mySimpleState[i];
-                if (serviceStatus[element.code] == element.value) {
-                  color = element.color;
-                  break;
+              if (serviceStatus) {
+                for (let i = 0; i < stateOb.data.mySimpleState.filter((m) => m.open).length; i++) {
+                  const element = stateOb.data.mySimpleState[i];
+                  if (serviceStatus[element.code] == element.value) {
+                    color = element.color;
+                    break;
+                  }
                 }
+              } else {
+                color = '#5D5D5D';
               }
               if (color == null) {
                 //回复原始状态
