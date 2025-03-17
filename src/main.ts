@@ -298,7 +298,25 @@ function initMq() {
               ) {
                 //用户信息已被修改（基础信息-部门信息|角色信息，权限信息）
                 userStore.logout(true, false);
-                message.info(`${msg.msg}`, 10);
+                let tMsg = msg.msg;
+                switch (tMsg) {
+                  case 'rolePermissionsHaveBeenModifiedPleaseRelogin':
+                    tMsg = t('view.rolePermissionsHaveBeenModifiedPleaseRelogin');
+                    break;
+                  case 'roleHasBeenDisabledPleaseRelogin':
+                    tMsg = t('view.roleHasBeenDisabledPleaseRelogin');
+                    break;
+                  case 'roleHasBeenEnabledPleaseRelogin':
+                    tMsg = t('view.roleHasBeenEnabledPleaseRelogin');
+                    break;
+                  case 'theUserPasswordHasBeenModifiedPleaseLogInAgain':
+                    tMsg = t('view.theUserPasswordHasBeenModifiedPleaseLogInAgain');
+                    break;
+                  case 'userPrivilegeHasBeenModifiedPleaseRelogin':
+                    tMsg = t('view.userPrivilegeHasBeenModifiedPleaseRelogin');
+                    break;
+                }
+                message.info(`${tMsg}`, 10);
               }
             } else if (
               topic == mqttConfig.WebMsg.replace('+', '') + 'Insert' &&
