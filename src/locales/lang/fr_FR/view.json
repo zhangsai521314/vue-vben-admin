@@ -1,6 +1,6 @@
 {
   "userPrivilegeHasBeenModifiedPleaseRelogin":"Perm. utilisateur modifiée. Veuillez vous connecter à nouv",
-  "theUserPasswordHasBeenModifiedPleaseLogInAgain":"Le mot de passe de l'utilisateur a été modifié. Veuillez vous connecter à nouveau",
+  "theUserInformationHasBeenModifiedPleaseLogInAgain":"Les informations de l'utilisateur ont été modifiées. Veuillez vous connecter à nouveau",
   "roleHasBeenEnabledPleaseRelogin":"Le rôle est activé, veuillez vous reconnecter",
   "roleHasBeenDisabledPleaseRelogin":"Le rôle est désactivé, veuillez vous reconnecter",
   "rolePermissionsHaveBeenModifiedPleaseRelogin": "Le rôle est activé, veuillez vous reconnecter",

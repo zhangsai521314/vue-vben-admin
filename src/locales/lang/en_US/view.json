@@ -1,6 +1,6 @@
 {
   "userPrivilegeHasBeenModifiedPleaseRelogin":"The user's privilege has been modified. Please log in again",
-  "theUserPasswordHasBeenModifiedPleaseLogInAgain":"The user password has been modified. Please log in again",
+  "theUserInformationHasBeenModifiedPleaseLogInAgain":"The user information has been modified. Please log in again",
   "roleHasBeenEnabledPleaseRelogin":"The role is enabled, please log in again",
   "roleHasBeenDisabledPleaseRelogin":"The role is disabled, please log in again",
   "rolePermissionsHaveBeenModifiedPleaseRelogin":"The role is enabled, please log in again",

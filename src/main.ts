@@ -309,8 +309,8 @@ function initMq() {
                   case 'roleHasBeenEnabledPleaseRelogin':
                     tMsg = t('view.roleHasBeenEnabledPleaseRelogin');
                     break;
-                  case 'theUserPasswordHasBeenModifiedPleaseLogInAgain':
-                    tMsg = t('view.theUserPasswordHasBeenModifiedPleaseLogInAgain');
+                  case 'theUserInformationHasBeenModifiedPleaseLogInAgain':
+                    tMsg = t('view.theUserInformationHasBeenModifiedPleaseLogInAgain');
                     break;
                   case 'userPrivilegeHasBeenModifiedPleaseRelogin':
                     tMsg = t('view.userPrivilegeHasBeenModifiedPleaseRelogin');

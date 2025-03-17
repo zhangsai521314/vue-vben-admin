@@ -1,6 +1,6 @@
 {
   "userPrivilegeHasBeenModifiedPleaseRelogin":"用户权限被修改，请重新登录",
-  "theUserPasswordHasBeenModifiedPleaseLogInAgain":"用户密码被修改，请重新登录",
+  "theUserInformationHasBeenModifiedPleaseLogInAgain":"用户信息被修改，请重新登录",
   "roleHasBeenEnabledPleaseRelogin":"角色被启用，请重新登录",
   "roleHasBeenDisabledPleaseRelogin":"角色被禁用，请重新登录",
   "rolePermissionsHaveBeenModifiedPleaseRelogin":"角色权限被修改，请重新登录",
