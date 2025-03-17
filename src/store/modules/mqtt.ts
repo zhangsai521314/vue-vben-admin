@@ -219,7 +219,7 @@ export const useMqttStore = defineStore({
         this.changeNewInfoKey = `${keyId}_${item.msgStatus}`;
         if (!this.msgData?.find((m) => m.msgId == item.msgId)) {
           this.msgData = [item, ...(this.msgData || [])];
-          if (this.msgData.length > 500) {
+          if (this.msgData.length > 100) {
             this.msgData.splice(this.msgData.length - 1, 1);
           }
           this.msgData = _.orderBy(this.msgData, ['msgStartTime'], ['desc']);

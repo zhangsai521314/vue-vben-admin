@@ -235,7 +235,7 @@
         title: t('view.isdnNumber'),
         showOverflow: true,
         sortable: true,
-        minWidth: 100,
+        minWidth: locale == 'zh-CN' ? 100 : 120,
       },
       {
         field: 'addTime',

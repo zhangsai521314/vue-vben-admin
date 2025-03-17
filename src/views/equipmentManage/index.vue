@@ -292,9 +292,7 @@
             </a-select>
           </a-form-item>
           <a-form-item :label="t('view.putIntoUse')" name="putIntoUse">
-             <a-config-provider
-                    :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
-                  >
+            <a-config-provider :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN">
               <a-date-picker
                 style="width: 332px"
                 v-model:value="formData.usageTime"
@@ -728,6 +726,7 @@
             delete formData.value.createUserName;
             delete formData.value.createTime;
             myCommon.objectReplace(oldData, formData.value);
+            oldData.equipmentName = data.equipmentName;
             oldData.modifyTime = data.modifyTime;
             oldData.modifyUserName = data.modifyUserName;
             oldData.equipmentTypeName = dictionariesData.value.find(
