@@ -401,7 +401,7 @@
           :label="t('view.dictionaryNameCn')"
           :rules="[
             { required: true, message: '' },
-            { max: 40, message: t('view.dictionaryNameTooLong', [40]) },
+            { max: 64, message: t('view.dictionaryNameTooLong', [64]) },
             { validator: formValidator.empty, message: t('view.pleaseEnterDictionaryName') },
           ]"
         >
@@ -416,7 +416,7 @@
           :label="t('view.dictionaryNameEn')"
           :rules="[
             { required: true, message: '' },
-            { max: 40, message: t('view.dictionaryNameTooLong', [40]) },
+            { max: 64, message: t('view.dictionaryNameTooLong', [64]) },
             { validator: formValidator.empty, message: t('view.pleaseEnterDictionaryName') },
           ]"
         >
@@ -431,7 +431,7 @@
           :label="t('view.dictionaryNameFr')"
           :rules="[
             { required: true, message: '' },
-            { max: 40, message: t('view.dictionaryNameTooLong', [40]) },
+            { max: 64, message: t('view.dictionaryNameTooLong', [64]) },
             { validator: formValidator.empty, message: t('view.pleaseEnterDictionaryName') },
           ]"
         >
@@ -870,7 +870,7 @@
   }
 
   .@{prefixCls} {
-    overflow-y: hidden;
+    overflow: hidden;
 
     .@{prefixCls}tableBtn {
       width: 100%;
