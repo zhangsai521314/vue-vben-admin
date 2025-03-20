@@ -1,6 +1,6 @@
 <template>
   <MyContent :class="prefixCls">
-    <a-spin :spinning="isRunLoading">
+    <a-spin :spinning="isRunLoading" style="width: 100%; height: 100%">
       <div style="width: 100%; height: 100%">
         <!-- :refresh="{ queryMethod: getDictionariess }" -->
         <vxe-toolbar ref="toolbarRef" custom>
