@@ -136,9 +136,9 @@
           row.stationLocation == 1
             ? t('view.inStation')
             : row.stationLocation == 2
-              ? t('view.leftInterval')
+              ? t('view.leftSideOfThisStation')
               : row.stationLocation == 3
-                ? t('view.rightInterval')
+                ? t('view.rightSideOfThisStation')
                 : row.stationLocation
         }}
       </template>
