@@ -44,10 +44,10 @@ const Software = {
       params,
     });
   },
-  //获取设备和软件服务树数据
-  GetEServiceTreeDatas: function (params) {
+  //获取软件服务树上传性能数据的
+  GetServiceSimpleUppDatas: function (params) {
     return defHttp.get({
-      url: '/Software/GetEServiceTreeDatas',
+      url: '/Software/GetServiceSimpleUppDatas',
       params,
     });
   },

@@ -849,18 +849,16 @@
                 :label="t('view.bindingService')"
                 name="myServiceId"
               >
-                <a-tree-select
+                <a-select
+                  :placeholder="t('view.pleaseSelectTheBindingSoftwareService')"
+                  style="width: 170px"
+                  allow-clear
+                  show-search
+                  :filter-option="AntVueCommon.filterOption"
                   v-model:value="
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.data.myServiceId
                   "
-                  show-search
-                  style="width: 100%"
-                  :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                  :placeholder="t('view.pleaseSelectTheBindingSoftwareService')"
-                  allow-clear
-                  show-arrow
-                  :filterTreeNode="AntVueCommon.filterTreeNode"
-                  :tree-data="serviceTreeData"
+                  :options="serviceTreeData"
                 />
               </a-form-item>
               <a-table
@@ -1817,9 +1815,9 @@
     isShowSelectedObState.value = false;
   }
 
-  //获取设备服务树数据
+  //获取软件服务树上传性能数据的
   function getServiceTreeData() {
-    softwareApi.GetEServiceTreeDatas().then((data) => {
+    softwareApi.GetServiceSimpleUppDatas().then((data) => {
       serviceTreeData.value = data;
     });
   }
