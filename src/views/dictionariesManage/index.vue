@@ -157,7 +157,6 @@
             :custom-config="{ storage: true }"
             :row-config="{ isHover: true, useKey: true, keyField: 'dictionariesId' }"
             :column-config="{ resizable: true }"
-            :tree-config="{ transform: true, rowField: 'dictionariesId', parentField: 'parentId' }"
             :data="tableConfigData"
           >
             <vxe-column
@@ -216,7 +215,6 @@
             <vxe-column
               field="dictionariesName"
               :title="t('view.dictionaryName')"
-              tree-node
               :sortable="true"
               minWidth="166"
               fixed="left"
@@ -224,7 +222,6 @@
             <vxe-column
               field="dictionariesNameCn"
               :title="t('view.dictionaryNameCn')"
-              tree-node
               :sortable="true"
               minWidth="220"
               :visible="false"
@@ -232,7 +229,6 @@
             <vxe-column
               field="dictionariesNameEn"
               :title="t('view.dictionaryNameEn')"
-              tree-node
               :sortable="true"
               minWidth="220"
               :visible="false"
@@ -240,7 +236,6 @@
             <vxe-column
               field="dictionariesNameFr"
               :title="t('view.dictionaryNameFr')"
-              tree-node
               :sortable="true"
               minWidth="226"
               :visible="false"
