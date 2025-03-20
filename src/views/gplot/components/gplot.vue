@@ -939,7 +939,7 @@
     }
   }
 
-  //灵活配置节点的状态初始化
+  //灵活配置节点的状态初始化——
   function agileStateLastStatus() {
     messageApi
       .GetServiceMsgTypeLastSimple()
