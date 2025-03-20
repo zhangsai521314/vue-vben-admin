@@ -1,4 +1,9 @@
 {
+  "fileDownloadFailed": "Échec du téléchargement du fichier",
+  "youDoNotHaveThePermissionToOpenThisMenu": "Vous n'avez pas la permission d'ouvrir ce menu",
+  "readFailed": "Échec de la lecture",
+  "databaseConnectionFailed": "Échec de la connexion à la base de données",
+  "loginHasExpiredPleaseLoginAgain":"La connexion a expiré. Veuillez vous reconnecter",
   "userPrivilegeHasBeenModifiedPleaseRelogin":"Perm. utilisateur modifiée. Veuillez vous connecter à nouv",
   "theUserInformationHasBeenModifiedPleaseLogInAgain":"Les informations de l'utilisateur ont été modifiées. Veuillez vous connecter à nouveau",
   "roleHasBeenEnabledPleaseRelogin":"Le rôle est activé, veuillez vous reconnecter",

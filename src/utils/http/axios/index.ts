@@ -48,7 +48,7 @@ const transform: AxiosTransform = {
       //等待处理
     }
     if (!success) {
-      if (message == '登录已过期，请重新登录') {
+      if (message == 'loginHasExpiredPleaseLoginAgain') {
         // 直接回登陆页
         router.replace(PageEnum.BASE_LOGIN);
       }
@@ -60,8 +60,11 @@ const transform: AxiosTransform = {
         if (
           message.indexOf('连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确') != -1
         ) {
-          createMessage.error('数据库链接失败');
+          createMessage.error(t('view.databaseConnectionFailed'));
         } else {
+          if (message == 'loginHasExpiredPleaseLoginAgain') {
+            createMessage.error(t('view.loginHasExpiredPleaseLoginAgain'));
+          }
           createMessage.error(message);
         }
       }

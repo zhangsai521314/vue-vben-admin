@@ -1,6 +1,9 @@
 //公共方法
 import { message } from 'ant-design-vue';
 import dayjs from 'dayjs';
+import { useI18n } from '@/hooks/web/useI18n';
+
+const { t } = useI18n();
 
 let id = 0;
 //其他扩展
@@ -311,7 +314,7 @@ const Common = {
       window.URL.revokeObjectURL(href);
     } catch (error) {
       console.error(error);
-      message.warning('文件下载失败');
+      message.warning(t('view.fileDownloadFailed'));
     }
   },
   //下载文件，res为后台返回的FileStreamResult文件数据
@@ -328,7 +331,7 @@ const Common = {
       document.body.removeChild(downloadElement); // 下载完成移除元素
     } catch (error) {
       console.error(error);
-      message.warning('文件下载失败');
+      message.warning(t('view.fileDownloadFailed'));
     }
   },
   /**

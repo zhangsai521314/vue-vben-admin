@@ -29,6 +29,8 @@ import { message } from 'ant-design-vue';
 import { getAuthCache, setAuthCache } from '@/utils/auth';
 import { POWER_MENU_KEY } from '@/enums/cacheEnum';
 
+const { t } = useI18n();
+
 interface PermissionState {
   // Permission code list
   // 权限代码列表
@@ -324,13 +326,13 @@ export const usePermissionStore = defineStore({
                 menu.powerType.indexOf('2') == -1
               ) {
                 if (isShowMsg) {
-                  message.warning('您没有打开该菜单的权限');
+                  message.warning(t('view.youDoNotHaveThePermissionToOpenThisMenu'));
                 }
                 return false;
               }
             }
             if (!menu && isShowMsg) {
-              message.warning('您没有打开该菜单的权限');
+              message.warning(t('view.youDoNotHaveThePermissionToOpenThisMenu'));
             }
             return menu != undefined ? true : false;
           } else {

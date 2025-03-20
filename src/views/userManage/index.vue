@@ -374,7 +374,7 @@
   </MyContent>
 </template>
 <script setup lang="ts">
-  import vxetableMyCommon from '@/utils/MyCommon/VxetableMyCommon';
+  import vxetableMyCommon from '@/utils/MyCommon/vxetableMyCommon';
   import myCommon from '@/utils/MyCommon/common';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import formValidator from '@/utils/MyCommon/formValidator';

@@ -184,7 +184,7 @@
           .toString()
           .indexOf('连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确') != -1
       ) {
-        message.error('数据库链接失败');
+        message.error(t('view.databaseConnectionFailed'));
       } else {
         createErrorModal({
           title: t('sys.api.errorTip'),

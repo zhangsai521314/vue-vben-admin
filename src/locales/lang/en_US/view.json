@@ -1,4 +1,9 @@
 {
+  "fileDownloadFailed": "File download failed",
+  "youDoNotHaveThePermissionToOpenThisMenu": "You do not have the permission to open this menu",
+  "readFailed": "Read failed",
+  "databaseConnectionFailed": "Database connection failed",
+  "loginHasExpiredPleaseLoginAgain":"The login has expired. Please log in again",
   "userPrivilegeHasBeenModifiedPleaseRelogin":"The user's privilege has been modified. Please log in again",
   "theUserInformationHasBeenModifiedPleaseLogInAgain":"The user information has been modified. Please log in again",
   "roleHasBeenEnabledPleaseRelogin":"The role is enabled, please log in again",

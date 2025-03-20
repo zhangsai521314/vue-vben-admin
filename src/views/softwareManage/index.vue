@@ -479,7 +479,7 @@
   </MyContent>
 </template>
 <script setup lang="ts">
-  import vxetableMyCommon from '@/utils/MyCommon/VxetableMyCommon';
+  import vxetableMyCommon from '@/utils/MyCommon/vxetableMyCommon';
   import codemirror from '/@/components/MyCodemirror/codemirror.vue';
   import formValidator from '@/utils/MyCommon/formValidator';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';

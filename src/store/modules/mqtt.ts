@@ -5,7 +5,9 @@ import dayjs from 'dayjs';
 import messageApi from '@/api/message';
 import { message } from 'ant-design-vue';
 import { useUserStore } from '@/store/modules/user';
+import { useI18n } from '@/hooks/web/useI18n';
 
+const { t } = useI18n();
 export interface MqttState {
   //系统mqtt全部配置信息
   mqttConfig: Nullable<object>;
@@ -144,7 +146,7 @@ export const useMqttStore = defineStore({
           data['isRead'] = true;
         })
         .catch(() => {
-          message.error('已读失败');
+          message.error(t('view.readFailed'));
         });
     },
     //全部已读
@@ -166,7 +168,7 @@ export const useMqttStore = defineStore({
           });
         })
         .catch(() => {
-          message.error('已读失败');
+          message.error(t('view.readFailed'));
         });
     },
     //提交已读
