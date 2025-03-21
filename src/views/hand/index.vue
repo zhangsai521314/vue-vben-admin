@@ -22,9 +22,9 @@
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
                       <label>{{ t('view.heartbeatTime') }}：</label>
-                       <a-config-provider
-                    :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
-                  >
+                      <a-config-provider
+                        :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
+                      >
                         <a-range-picker
                           :allowClear="true"
                           v-model:value="timeValue"
@@ -79,8 +79,8 @@
                         allow-clear
                         v-model:value="seacthContent.isOnline"
                       >
-                        <a-select-option :value="true">{{ t('view.online') }}</a-select-option>
-                        <a-select-option :value="false">{{ t('view.offline') }}</a-select-option>
+                        <a-select-option :value="true">{{ t('view.yes') }}</a-select-option>
+                        <a-select-option :value="false">{{ t('view.no') }}</a-select-option>
                       </a-select>
                     </a-space>
                   </div>
