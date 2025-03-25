@@ -584,14 +584,14 @@
       },
       {
         field: 'groupAllCirNumber',
-        title: t('view.fullCallCirGroupCallSign'),
+        title: t('view.fullCallJiCheDianTaiGroupCallSign'),
         showOverflow: true,
         sortable: true,
         minWidth: locale == 'zh-CN' ? 150 : 340,
       },
       {
         field: 'groupAllCirPriority',
-        title: t('view.fullCallCirGroupCallPriority'),
+        title: t('view.fullCallJiCheDianTaiGroupCallPriority'),
         showOverflow: true,
         sortable: true,
         minWidth: locale == 'zh-CN' ? 160 : 340,

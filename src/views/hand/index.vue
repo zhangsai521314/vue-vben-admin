@@ -365,14 +365,12 @@
         title: t('view.stationName'),
         showOverflow: true,
         minWidth: 200,
-        visible: false,
         fixed: 'left',
       },
       {
         field: 'stationArea',
         title: t('view.stationArea'),
         showOverflow: true,
-        visible: false,
         minWidth: locale == 'zh-CN' ? 100 : 130,
         slots: {
           default: 'stationArea',
@@ -384,7 +382,6 @@
         showOverflow: true,
         sortable: true,
         minWidth: locale == 'zh-CN' ? 100 : 130,
-        visible: false,
       },
       {
         field: 'dataTime',

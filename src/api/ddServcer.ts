@@ -49,7 +49,7 @@ const DDDev = {
       params,
     });
   },
-  //获取CIR列表
+  //获取机车电台列表
   GetDDCirStatus: function (params) {
     return defHttp.post({
       url: '/DDDev/GetDDCirStatus',

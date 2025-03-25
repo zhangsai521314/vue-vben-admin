@@ -57,13 +57,11 @@
         :label="t('view.contactPhone')"
         name="mobile"
         :rules="[
-          { required: true, message: '' },
           { max: 18, message: t('view.contactNumberTooLong') },
           {
             validator: formValidator.positiveInteger,
             message: t('view.phoneNumberFormatMustBeANaturalNumber'),
           },
-          { validator: formValidator.empty, message: t('view.pleaseEnterThePhoneNumber') },
         ]"
       >
         <a-input v-model:value="userData.mobile" autocomplete="off" />
@@ -72,9 +70,8 @@
         :label="t('view.contactEmail')"
         name="email"
         :rules="[
-          { required: true, message: t('view.pleaseEnterContactEmail') },
           { type: 'email', message: t('view.contactEmailFormatIncorrect') },
-          { max: 64, message: t('view.contactEmailTooLong', [64]) },
+          { max: 80, message: t('view.contactEmailTooLong', [64]) },
         ]"
       >
         <a-input v-model:value="userData.email" autocomplete="off" />

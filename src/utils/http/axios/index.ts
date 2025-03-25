@@ -49,8 +49,15 @@ const transform: AxiosTransform = {
     }
     if (!success) {
       if (message == 'loginHasExpiredPleaseLoginAgain') {
+        res.data.message = t('view.loginHasExpiredPleaseLoginAgain');
         // 直接回登陆页
         router.replace(PageEnum.BASE_LOGIN);
+      }
+      if (message == 'accessDenied') {
+        res.data.message = t('view.accessDenied');
+      }
+      if (message == 'programError') {
+        res.data.message = t('view.programError');
       }
       // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
       // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
