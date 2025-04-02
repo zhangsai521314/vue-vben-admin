@@ -71,15 +71,15 @@
                 </div>
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
-                    <label>{{ t('view.loginStatus') }}：</label>
+                    <label>{{ t('view.onlineStatus') }}：</label>
                     <a-select
-                      :placeholder="t('view.pleaseSelectLoginStatus')"
+                      :placeholder="t('view.pleaseSelectTheOnlineStatus')"
                       style="width: 170px"
                       allow-clear
                       v-model:value="seacthContent.LoginStatus"
                     >
-                      <a-select-option :value="1">{{ t('view.login') }}</a-select-option>
-                      <a-select-option :value="0">{{ t('view.notLoggedIn') }}</a-select-option>
+                      <a-select-option :value="1">{{ t('view.online') }}</a-select-option>
+                      <a-select-option :value="0">{{ t('view.offline') }}</a-select-option>
                     </a-select>
                   </a-space>
                 </div>
@@ -128,7 +128,7 @@
           :style="{
             color: row.loginStatus == 1 ? 'green' : 'red',
           }"
-          >{{ row.loginStatus == 1 ? t('view.login') : t('view.notLoggedIn') }}</span
+          >{{ row.loginStatus == 1 ? t('view.online') : t('view.offline') }}</span
         >
       </template>
       <template #stationLocation="{ row }">
@@ -297,7 +297,7 @@
       },
       {
         field: 'loginStatus',
-        title: t('view.loginStatus'),
+        title: t('view.onlineStatus'),
         showOverflow: true,
         sortable: true,
         minWidth: locale == 'zh-CN' ? 100 : 150,

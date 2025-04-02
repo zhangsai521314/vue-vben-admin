@@ -228,6 +228,8 @@
             :rules="[
               { required: true, message: '' },
               { validator: formValidator.empty, message: t('view.pleaseEnterTheIsdnNumber') },
+              { min: 4, message: t('view.dispatchConsoleIsdnNameMustBe4To11Digits') },
+              { max: 11, message: t('view.dispatchConsoleIsdnNameMustBe4To11Digits') },
               {
                 validator: formValidator.positiveInteger,
                 message: t('view.isdnNumberFormatIsANaturalNumber'),
@@ -730,13 +732,13 @@
           tableConfig.data.splice(0, 0, data);
           formClose();
           message.success(t('view.additionSuccessful'));
+          page.total = page.total + 1;
         });
       } else {
         handApi.UpdateHand(formData.value).then((data) => {
           delete data.createUserName;
           delete data.createTime;
           const oldData = tableConfig.data.find((m) => m.handId == data.handId);
-          debugger;
           if (oldData) {
             myCommon.objectReplace(oldData, data);
           }

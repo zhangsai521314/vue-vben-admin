@@ -1,4 +1,6 @@
 {
+  "pleaseSelectTheOnlineStatus":"请选择在线状态",
+  "onlineStatus": "在线状态",
   "programError": "程序错误",
   "accessDenied": "禁止访问，用户不存在或没有权限或权限发生变化，请重新登录",
   "fileDownloadFailed": "文件下载失败",
@@ -573,8 +575,8 @@
   "functionCodeNameMustBe5To9Digits": "功能号名称是5至9位",
   "functionCodeFormatMustBeANaturalNumber": "功能号格式为自然数",
   "pleaseEnterFunctionCode": "请输入功能号",
-  "dispatchConsoleIsdnNameMustBe4To11Digits": "调度台ISDN名称是4至11位",
-  "dispatchConsoleIsdnFormatMustBeANaturalNumber": "调度台ISDN格式为自然数",
+  "dispatchConsoleIsdnNameMustBe4To11Digits": "ISDN号码是4至11位",
+  "dispatchConsoleIsdnFormatMustBeANaturalNumber": "ISDN号码格式为自然数",
   "pleaseEnterDispatchConsoleIsdn": "请输入调度台ISDN",
   "modifySecondaryInformation": "修改二级信息",
   "doNotModifySecondaryInformation": "不修改二级信息",

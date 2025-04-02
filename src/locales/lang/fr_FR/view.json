@@ -1,4 +1,6 @@
 {
+  "pleaseSelectTheOnlineStatus":"Veuillez sélectionner le statut en ligne",
+  "onlineStatus": "Statut en ligne",
   "programError": "Une erreur de programme",
   "accessDenied": "Accès refusé. L'utilisateur n'existe pas ou n'a pas les autorisations ou les autorisations ont changé. Veuillez vous reconnecter",
   "fileDownloadFailed": "Échec du téléchargement du fichier",
@@ -574,8 +576,8 @@
   "functionCodeNameMustBe5To9Digits": "Le nom de la fonction est de 5 à 9 chiffres",
   "functionCodeFormatMustBeANaturalNumber": "Le format du numéro de fonction est un nombre naturel",
   "pleaseEnterFunctionCode": "Veuillez saisir le numéro de fonction",
-  "dispatchConsoleIsdnNameMustBe4To11Digits": "Le nom ISDN de la console de dispatching est de 4 à 11 chiffres",
-  "dispatchConsoleIsdnFormatMustBeANaturalNumber": "Le format ISDN de la console de dispatching est un nombre naturel",
+  "dispatchConsoleIsdnNameMustBe4To11Digits": "Le numéro ISDN est compris entre 4 et 11 chiffres",
+  "dispatchConsoleIsdnFormatMustBeANaturalNumber": "Le format du numéro ISDN est un nombre naturel",
   "pleaseEnterDispatchConsoleIsdn": "Veuillez saisir le nom ISDN de la console de dispatching",
   "modifySecondaryInformation": "Modifier les informations secondaires",
   "doNotModifySecondaryInformation": "Ne pas modifier les informations secondaires",

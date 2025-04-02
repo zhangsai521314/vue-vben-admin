@@ -1,4 +1,6 @@
 {
+  "pleaseSelectTheOnlineStatus":"Please select the online status",
+  "onlineStatus": "Online Status",
   "programError": "The program error",
   "accessDenied": "Access denied. The user does not exist or has no permissions or the permissions have changed. Please log in again",
   "fileDownloadFailed": "File download failed",
@@ -575,8 +577,8 @@
   "functionCodeNameMustBe5To9Digits": "Function Code Name Must Be 5 to 9 Digits",
   "functionCodeFormatMustBeANaturalNumber": "Function Code Format Must Be a Natural Number",
   "pleaseEnterFunctionCode": "Please Enter Function Code",
-  "dispatchConsoleIsdnNameMustBe4To11Digits": "Dispatch Console ISDN Name Must Be 4 to 11 Digits",
-  "dispatchConsoleIsdnFormatMustBeANaturalNumber": "Dispatch Console ISDN Format Must Be a Natural Number",
+  "dispatchConsoleIsdnNameMustBe4To11Digits": "The ISDN number ranges from 4 to 11 digits",
+  "dispatchConsoleIsdnFormatMustBeANaturalNumber": "The format of the ISDN number is a natural number",
   "pleaseEnterDispatchConsoleIsdn": "Please Enter Dispatch Console ISDN",
   "modifySecondaryInformation": "Modify Secondary Information",
   "doNotModifySecondaryInformation": "Do Not Modify Secondary Information",
