@@ -219,7 +219,7 @@
   "fileName": "nom de fichier",
   "addOrUpdateAuthorization": "Ajouter ou mettre à jour l'autorisation",
   "dispatchingFunctionNumber": "Numéro de fonction de dispatching",
-  "shuntingTeamFunctionNumber": "Numéro de fonction de l'équipe de manutention ferroviaire",
+  "shuntingTeamFunctionNumber": "Équipe d'entretien et de classement",
   "carNumberFunctionNumber": "Numéro de fonction du numéro de voiture",
   "wagonNumberAddressing": "L'adressage par numéro de wagon",
   "dispatchAddressing": "L'adressage de la dispatching",

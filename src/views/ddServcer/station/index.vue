@@ -540,7 +540,7 @@
             :rules="[{ max: 250, message: t('view.remarkIsTooLong') }]"
           >
             <a-textarea
-              :placeholder="t('view.remarkIsTooLong')"
+              :placeholder="t('view.pleaseInputRemarkInformation')"
               :rows="3"
               v-model:value="formData.remark"
               autocomplete="off"

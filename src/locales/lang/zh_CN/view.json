@@ -218,7 +218,7 @@
   "fileName": "文件名称",
   "addOrUpdateAuthorization": "新增或更新授权",
   "dispatchingFunctionNumber": "调度功能号",
-  "shuntingTeamFunctionNumber": "调车组功能号",
+  "shuntingTeamFunctionNumber": "维修及调车组功能号",
   "carNumberFunctionNumber": "车号功能号",
   "wagonNumberAddressing": "车号寻址",
   "dispatchAddressing": "调度寻址",

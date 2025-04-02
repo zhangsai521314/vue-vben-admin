@@ -67,12 +67,14 @@ const transform: AxiosTransform = {
         if (
           message.indexOf('连接数据库过程中发生错误，检查服务器是否正常连接字符串是否正确') != -1
         ) {
+          res.data.message = t('view.databaseConnectionFailed');
           createMessage.error(t('view.databaseConnectionFailed'));
         } else {
           if (message == 'loginHasExpiredPleaseLoginAgain') {
+            res.data.message = t('view.loginHasExpiredPleaseLoginAgain');
             createMessage.error(t('view.loginHasExpiredPleaseLoginAgain'));
           }
-          createMessage.error(message);
+          createMessage.error(res.data.message);
         }
       }
       throw new Error(message || t('sys.api.apiRequestFailed'));

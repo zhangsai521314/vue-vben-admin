@@ -237,16 +237,16 @@
         sortable: true,
         minWidth: locale == 'zh-CN' ? 140 : 170,
       },
-      {
-        field: 'loginStatus',
-        title: t('view.loginStatus'),
-        showOverflow: true,
-        sortable: true,
-        minWidth: locale == 'zh-CN' ? 100 : 150,
-        slots: {
-          default: 'loginStatus',
-        },
-      },
+      // {
+      //   field: 'loginStatus',
+      //   title: t('view.loginStatus'),
+      //   showOverflow: true,
+      //   sortable: true,
+      //   minWidth: locale == 'zh-CN' ? 100 : 150,
+      //   slots: {
+      //     default: 'loginStatus',
+      //   },
+      // },
       {
         field: 'loginTime',
         title: t('view.loginTime'),
