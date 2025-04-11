@@ -174,7 +174,7 @@
         <a-form-item
           name="remark"
           :label="t('view.remarks')"
-          :rules="[{ max: 250, message: t('view,remarksTooLong', [250]) }]"
+          :rules="[{ max: 250, message: t('view.remarksTooLong', [250]) }]"
         >
           <a-textarea
             :placeholder="t('view.pleaseInputRemarkInformation')"
@@ -369,7 +369,12 @@
   function beforeUpload(file) {
     fileList.value = [];
     const isLt5M = file.size / 1024 / 1024 < 100;
-    if (!isLt5M) {
+    if (
+      file.name.indexOf('.') == -1 ||
+      !['zip', 'rar', 'apk'].includes(file.name.split('.')[file.name.split('.').length - 1])
+    ) {
+      message.warning(t('view.selectedFileTypeMismatch'));
+    } else if (!isLt5M) {
       file['remove'] = true;
       message.error(t('view.softwarePackageShouldNotExceed', [100]));
     } else {
@@ -380,6 +385,7 @@
         [
           formData.value.filePath.split('_').length - 1
         ].substring(0, formData.value.filePath.split('_')[formData.value.filePath.split('_').length - 1].lastIndexOf('.'));
+      formRef.value.validate();
     }
     return false;
   }

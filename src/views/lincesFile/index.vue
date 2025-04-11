@@ -335,7 +335,12 @@
   //选择
   function configBeforeUpload(file) {
     const isLt5M = file.size / 1024 / 1024 < 1;
-    if (!isLt5M) {
+    if (
+      file.name.indexOf('.') == -1 ||
+      !['pem'].includes(file.name.split('.')[file.name.split('.').length - 1])
+    ) {
+      message.warning(t('view.selectedFileTypeMismatch'));
+    } else if (!isLt5M) {
       message.error(t('view.softwarePackageShouldNotExceed', [1, file.name]));
     } else {
       if (

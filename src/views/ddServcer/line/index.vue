@@ -879,7 +879,13 @@
   function lineMapBeforeUpload(file) {
     lineMapFileList.value = [];
     const isLt5M = file.size / 1024 / 1024 < 20;
-    if (!isLt5M) {
+    if (
+      file.name.indexOf('.') == -1 ||
+      !['mdb'].includes(file.name.split('.')[file.name.split('.').length - 1])
+    ) {
+      file['remove'] = true;
+      message.warning(t('view.selectedFileTypeMismatch'));
+    } else if (!isLt5M) {
       file['remove'] = true;
       message.error(t('view.softwarePackageShouldNotExceed', [20]));
     } else {

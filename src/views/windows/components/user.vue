@@ -244,7 +244,15 @@
   //上传之前
   function beforeUpload(file) {
     const isLt5M = file.size / 1024 / 1024 < 1;
-    if (!isLt5M) {
+    if (
+      file.name.indexOf('.') == -1 ||
+      !['png', 'jpg', 'jpeg', 'svg'].includes(file.name.split('.')[file.name.split('.').length - 1])
+    ) {
+      file['remove'] = true;
+      fileList.value = [];
+      message.warning(t('view.selectedFileTypeMismatch'));
+      return false;
+    } else if (!isLt5M) {
       file['remove'] = true;
       fileList.value = [];
       message.error(t('view.avatarShouldNotExceed1MB'));
@@ -289,6 +297,9 @@
 <style lang="less" scoped>
   @prefixCls: ~'@{namespace}-windows-user-';
 
+  :deep(.ant-upload-list) {
+    display: none;
+  }
   .@{prefixCls}content {
     width: 100%;
     height: 100%;

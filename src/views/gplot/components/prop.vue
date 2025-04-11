@@ -1636,7 +1636,15 @@
   function beforeUpload(file, attr) {
     return new Promise((resolve, reject) => {
       const isLt5M = file.size / 1024 / 1024 < 3;
-      if (!isLt5M) {
+      if (
+        file.name.indexOf('.') == -1 ||
+        !['png', 'jpg', 'jpeg', 'svg'].includes(
+          file.name.split('.')[file.name.split('.').length - 1],
+        )
+      ) {
+        file['remove'] = true;
+        message.warning(t('view.selectedFileTypeMismatch'));
+      } else if (!isLt5M) {
         message.error(t('view.fileSizeMustNotExceed', ['3MB']));
       } else {
         myCommon

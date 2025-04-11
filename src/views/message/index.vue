@@ -311,7 +311,7 @@
           :label="t('view.processingContent')"
           :rules="[
             { required: true, message: t('view.pleaseEnterProcessingContent') },
-            { max: 1063, message: t('view.processingContentTooLong') },
+            { max: 1000, message: t('view.processingContentTooLong') },
           ]"
         >
           <a-textarea

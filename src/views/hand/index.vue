@@ -205,14 +205,14 @@
       </vxe-grid>
       <a-drawer
         :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
-        :width="500"
+        :width="locale == 'zh-CN' ? 500 : 500"
         :visible="isShowForm"
         :title="t('view.configuration')"
         :footer-style="{ textAlign: 'right' }"
         @close="formClose"
       >
         <a-form
-          :width="locale == 'zh-CN' ? 500 : 600"
+          :label-col="{ span: locale == 'zh-CN' ? 6 : 8 }"
           :style="{ paddingRight: '2px' }"
           :wrapper-col="{ span: 16 }"
           autocomplete="off"
@@ -407,22 +407,22 @@
         showOverflow: true,
         cellRender: { name: 'render_isno' },
       },
-      {
-        field: 'isCoerceOut',
-        title: t('view.forcedLogout'),
-        minWidth: locale == 'zh-CN' ? 100 : 140,
-        showOverflow: true,
-        // sortable: true,
-        cellRender: { name: 'render_isno' },
-      },
-      {
-        field: 'coerceOutTime',
-        title: t('view.forcedLogoutTime'),
-        minWidth: locale == 'zh-CN' ? 150 : 240,
-        showOverflow: true,
-        sortable: true,
-        visible: false,
-      },
+      // {
+      //   field: 'isCoerceOut',
+      //   title: t('view.forcedLogout'),
+      //   minWidth: locale == 'zh-CN' ? 100 : 140,
+      //   showOverflow: true,
+      //   // sortable: true,
+      //   cellRender: { name: 'render_isno' },
+      // },
+      // {
+      //   field: 'coerceOutTime',
+      //   title: t('view.forcedLogoutTime'),
+      //   minWidth: locale == 'zh-CN' ? 150 : 240,
+      //   showOverflow: true,
+      //   sortable: true,
+      //   visible: false,
+      // },
       {
         field: 'runVersion',
         title: t('view.officialVersion'),

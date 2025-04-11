@@ -515,7 +515,12 @@
   function beforeUpload(file) {
     fileList.value = [];
     const isLt5M = file.size / 1024 / 1024 < 5;
-    if (!isLt5M) {
+    if (
+      file.name.indexOf('.') == -1 ||
+      !['png', 'jpg', 'jpeg'].includes(file.name.split('.')[file.name.split('.').length - 1])
+    ) {
+      message.warning(t('view.selectedFileTypeMismatch'));
+    } else if (!isLt5M) {
       file['remove'] = true;
       message.error(t('view.logoShouldNotExceed', [5]));
     } else {
@@ -540,7 +545,12 @@
   function configBeforeUpload(file) {
     configFileList.value = [];
     const isLt5M = file.size / 1024 / 1024 < 20;
-    if (!isLt5M) {
+    if (
+      file.name.indexOf('.') == -1 ||
+      !['zip', 'rar'].includes(file.name.split('.')[file.name.split('.').length - 1])
+    ) {
+      message.warning(t('view.selectedFileTypeMismatch'));
+    } else if (!isLt5M) {
       file['remove'] = true;
       message.error(t('view.softwarePackageShouldNotExceed', [20]));
     } else {
