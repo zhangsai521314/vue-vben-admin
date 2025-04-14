@@ -77,7 +77,7 @@ const transform: AxiosTransform = {
           createMessage.error(res.data.message);
         }
       }
-      throw new Error(message || t('sys.api.apiRequestFailed'));
+      throw new Error(res.data.message || t('sys.api.apiRequestFailed'));
     } else {
       return res.data.data;
     }
