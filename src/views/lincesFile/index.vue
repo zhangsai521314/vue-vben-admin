@@ -37,32 +37,6 @@
                     />
                   </a-space>
                 </div>
-                <!-- <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-input-number
-                      class="duration"
-                      @press-enter="initPage()"
-                      v-model:value="remainingDays"
-                      :min="0"
-                      :max="3000"
-                      :placeholder="t('view.day')"
-                    >
-                      <template #addonBefore>
-                        <a-select
-                          v-model:value="durationQueryType"
-                          :style="{ width: locale == 'zh-CN' ? '130px' : '160px' }"
-                        >
-                          <a-select-option :value="3"
-                            >{{ t('view.remainingDays') }}{{ '>=' }}</a-select-option
-                          >
-                          <a-select-option :value="5"
-                            >{{ t('view.remainingDays') }}{{ '<=' }}</a-select-option
-                          >
-                        </a-select>
-                      </template>
-                    </a-input-number>
-                  </a-space>
-                </div> -->
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <a-button @click="getLincesList" type="primary">{{ t('view.query') }}</a-button>
@@ -97,16 +71,6 @@
           </a-space>
         </div>
       </template>
-      <!-- <template #remainingDays="{ row }">
-        <span
-          :style="{
-            fontSize: '20px',
-            fontWeight: 500,
-            color: row.remainingDays <= 0 ? 'red' : row.remainingDays <= 30 ? '#adad00' : 'green',
-          }"
-          >{{ row.remainingDays <= 0 ? t('view.hasExpired') : row.remainingDays }}</span
-        >
-      </template> -->
       <template #bindClientType="{ row }">
         {{ t('view.' + row.bindClientType) }}
       </template>
@@ -217,23 +181,6 @@
         sortable: true,
         minWidth: 186,
       },
-      // {
-      //   field: 'timeValid',
-      //   title: t('view.validityPeriod'),
-      //   showOverflow: true,
-      //   sortable: true,
-      //   minWidth: 160,
-      // },
-      // {
-      //   field: 'remainingDays',
-      //   title: t('view.remainingDays'),
-      //   minWidth: 200,
-      //   showOverflow: true,
-      //   sortable: true,
-      //   slots: {
-      //     default: 'remainingDays',
-      //   },
-      // },
       {
         field: 'lastGetTime',
         title: t('view.getTime'),
@@ -302,8 +249,6 @@
     equipmentCode: null,
     SearchParameters: [],
   });
-  const durationQueryType = ref(5);
-  const remainingDays = ref(null);
   const downLinceSourceSpinning = ref(false);
 
   getLincesList();
@@ -376,18 +321,6 @@
   //获取授权文件列表
   function getLincesList() {
     loading.value = true;
-    if (!myCommon.isnull(remainingDays.value)) {
-      seacthContent.value.SearchParameters = [
-        {
-          CSharpTypeName: 'int',
-          FieldName: 'RemainingDays',
-          ConditionalType: durationQueryType.value,
-          FieldValue: remainingDays.value,
-        },
-      ];
-    } else {
-      seacthContent.value.SearchParameters = [];
-    }
     lincesFileApi
       .GetLincesList({
         PageIndex: page.current,

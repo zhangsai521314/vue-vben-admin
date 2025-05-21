@@ -82,32 +82,6 @@
                       </a-radio-group>
                     </a-space>
                   </div>
-                  <!-- <div class="row-div">
-                  <a-space direction="horizontal" size="small" :wrap="true">
-                    <a-input-number
-                      class="duration"
-                      @press-enter="initPage()"
-                      v-model:value="remainingDays"
-                      :min="0"
-                      :max="3000"
-                      :placeholder="t('view.day')"
-                    >
-                      <template #addonBefore>
-                        <a-select
-                          v-model:value="durationQueryType"
-                          :style="{ width: locale == 'zh-CN' ? '130px' : '160px' }"
-                        >
-                          <a-select-option :value="3"
-                            >{{ t('view.remainingDays') }}{{ '>=' }}</a-select-option
-                          >
-                          <a-select-option :value="5"
-                            >{{ t('view.remainingDays') }}{{ '<=' }}</a-select-option
-                          >
-                        </a-select>
-                      </template>
-                    </a-input-number>
-                  </a-space>
-                </div> -->
                 </a-space>
               </AuthDom>
               <AuthDom auth="softwareManage_add">
@@ -165,17 +139,6 @@
             row.isAlarm ? t('view.yes') : t('view.no')
           }}</span>
         </template>
-        <!-- <template #remainingDays="{ row }">
-        <span
-          v-if="row.timeValid != null"
-          :style="{
-            fontSize: '20px',
-            fontWeight: 500,
-            color: row.remainingDays <= 0 ? 'red' : row.remainingDays <= 30 ? '#adad00' : 'green',
-          }"
-          >{{ row.remainingDays <= 0 ? t('view.hasExpired') : row.remainingDays }}</span
-        >
-      </template> -->
       </vxe-grid>
       <a-drawer
         :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
@@ -691,25 +654,6 @@
         visible: false,
         sortable: true,
       },
-      // {
-      //   field: 'timeValid',
-      //   title: t('view.validityPeriod'),
-      //   showOverflow: true,
-      //   visible: false,
-      //   sortable: true,
-      //   minWidth: 160,
-      // },
-      // {
-      //   field: 'remainingDays',
-      //   title: t('view.remainingDays'),
-      //   minWidth: 200,
-      //   showOverflow: true,
-      //   sortable: true,
-      //   visible: false,
-      //   slots: {
-      //     default: 'remainingDays',
-      //   },
-      // },
       {
         field: 'orderIndex',
         title: t('view.sorting'),
@@ -809,8 +753,6 @@
   const refresh = ref('yes');
   const refreshTime = ref(10);
   let refreshTimeId;
-  const remainingDays = ref(null);
-  const durationQueryType = ref(5);
 
   //配置信息
   const isRunGetConfig = ref(false);
@@ -954,22 +896,9 @@
     if (!isAuto) {
       refresh.value = 'no';
     }
-    if (!myCommon.isnull(remainingDays.value)) {
-      seacthContent.value.SearchParameters = [
-        {
-          CSharpTypeName: 'int',
-          FieldName: 'RemainingDays',
-          ConditionalType: durationQueryType.value,
-          FieldValue: remainingDays.value,
-        },
-      ];
-    } else {
-      seacthContent.value.SearchParameters = [];
-    }
     softwareApi
       .GetServices({
         ...seacthContent.value,
-        culture: 'fr-FR',
         FullSort: page.sortlist.join(','),
         PageIndex: page.current,
         PageSize: page.size,
