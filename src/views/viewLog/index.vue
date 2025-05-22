@@ -26,7 +26,7 @@
         <template #toolbar_buttons>
           <div :class="`tableBtn`">
             <a-space direction="horizontal" size="small" align="start" style="margin: 0 5px">
-              <AuthDom auth="softwareManage_query">
+              <AuthDom auth="viewLog_query">
                 <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                   <div class="row-div">
                     <a-space direction="horizontal" size="small" :wrap="true">
@@ -104,6 +104,22 @@
                       <a-button @click="resetSeacth">{{ t('view.resetForm') }}</a-button>
                     </a-space>
                   </div>
+                  <div class="row-div">
+                    <a-spin :spinning="showLogSpinning" style="height: 32px" class="showLog">
+                      <a-space direction="horizontal" size="small" :wrap="true">
+                        <AuthDom auth="viewLog_syslog">
+                          <a-button style="height: 32px" @click="showLog('WG')">{{
+                            t('view.systemLog')
+                          }}</a-button>
+                        </AuthDom>
+                        <AuthDom auth="viewLog_mqlog">
+                          <a-button style="height: 32px" @click="showLog('MQ')">{{
+                            t('view.communicationLog')
+                          }}</a-button>
+                        </AuthDom>
+                      </a-space>
+                    </a-spin>
+                  </div>
                 </a-space>
               </AuthDom>
             </a-space>
@@ -158,33 +174,33 @@
             <template #default="{ row }">
               <span @dblclick="logNamedblclick(row)" class="name">
                 <IconFontClass
-                  :title="row.IsBack ? t('view.returnToThePreviousDirectory') : row.Name"
+                  :title="row.isBack ? t('view.returnToThePreviousDirectory') : row.name"
                   :name="
-                    row.IsBack
+                    row.isBack
                       ? 'icon-baseui-fanhuishangyiji'
-                      : row.IsParent
+                      : row.isParent
                         ? 'icon-baseui-wenjianjia'
-                        : row.Name.lastIndexOf('.') == -1
+                        : row.name.lastIndexOf('.') == -1
                           ? 'icon-baseui-weizhiwenjian'
                           : ['txt', 'log'].includes(
-                                row.Name.substring(row.Name.lastIndexOf('.') + 1).toLowerCase(),
+                                row.name.substring(row.name.lastIndexOf('.') + 1).toLowerCase(),
                               )
                             ? 'icon-baseui-wenben1'
                             : 'icon-baseui-weizhiwenjian'
                   "
                 />
-                {{ row.Name }}
+                {{ row.name }}
               </span>
             </template>
           </vxe-column>
           <vxe-column field="Size" :title="t('view.size_kb')" align="right">
             <template #default="{ row }">
-              {{ row.Size != -1 ? row.Size : '' }}
+              {{ row.size != -1 ? row.size : '' }}
             </template>
           </vxe-column>
           <vxe-column field="Time" :title="t('view.lastModifiedTime')" align="right">
             <template #default="{ row }">
-              {{ row.Time ? dayjs(row.Time).format('YYYY-MM-DD HH:mm:ss') : '' }}
+              {{ row.time ? dayjs(row.time).format('YYYY-MM-DD HH:mm:ss') : '' }}
             </template>
           </vxe-column>
         </vxe-table>
@@ -350,6 +366,7 @@
   let isShowContent = false;
 
   //日志信息
+  const showLogSpinning = ref(false);
   const isShowLog = ref(false);
   const isRunGetLog = ref(false);
   const logCollectionData = ref([]);
@@ -378,10 +395,10 @@
   });
   const checkboxConfig = reactive({
     checkMethod: ({ row }) => {
-      return !row.IsBack;
+      return !row.isBack;
     },
     visibleMethod({ row }) {
-      return !row.IsBack;
+      return !row.isBack;
     },
   });
 
@@ -454,27 +471,23 @@
   }
 
   //显示查看服务日志
-  function showLog(row) {
-    if (row.isOnline) {
-      isShowLog.value = true;
-      newServerCode = row.serviceCode;
-      isRunGetLog.value = true;
-      mqttStore.publish(
-        mqttStore.lookLog.replace(mqttStore.monitorClient, '/' + row.serviceCode),
-        JSON.stringify({
-          ServiceCode: row.serviceCode,
-          ClientId: mqttStore.mqttClient.options.clientId,
-          UserId: userStore.getUserInfo.userId,
-          LogLevel: 0,
-        }),
-        function (msg) {
-          isRunGetLog.value = false;
-          msg ? message.error(msg) : message.success(t('view.requestSent'));
-        },
-      );
-    } else {
-      message.info(t('view.serviceOfflineTip'));
-    }
+  function showLog(logType) {
+    showLogSpinning.value = true;
+    viewLogApi
+      .GetLogDirectory(logType)
+      .then((data) => {
+        showLogSpinning.value = false;
+        isShowLog.value = true;
+        logCollectionData.value = data.logCollection;
+        if (logCollectionData.value) {
+          logCollectionData.value = _.orderBy(logCollectionData.value, ['Time'], ['desc']);
+        }
+        LogDirectory = data.logDirectory;
+        logTableStepData.push(logCollectionData.value);
+      })
+      .catch(() => {
+        showLogSpinning.value = false;
+      });
   }
 
   //关闭查看服务日志
@@ -497,30 +510,28 @@
         break;
     }
   }
-  //发送下载日志文件
+  //下载日志文件
   function downLogMqtt() {
+    fromSpinning.value = true;
     const checkDatas = logTableRef.value.getCheckboxRecords(false);
     if (checkDatas && checkDatas.length > 0) {
       const LogFileCollection = [];
       let name = logTableStepName.value.join('\\');
       name = name != '' ? '\\' + name : '';
       checkDatas.forEach((m) => {
-        LogFileCollection.push({ Name: `${LogDirectory}${name}\\${m.Name}`, IsParent: m.IsParent });
+        LogFileCollection.push(`${LogDirectory}${name}\\${m.name}`);
       });
-      mqttStore.publish(
-        mqttStore.downLog.replace(mqttStore.monitorClient, '/' + newServerCode),
-        JSON.stringify({
-          ServiceCode: newServerCode,
-          ClientId: mqttStore.mqttClient.options.clientId,
-          UserId: userStore.getUserInfo.userId,
-          LogFileCollection: LogFileCollection,
-        }),
-        function (msg) {
-          isRunGetLog.value = false;
-          msg ? message.error(msg) : message.success(t('view.requestSent'));
-        },
-      );
+      viewLogApi
+        .GetLogFile({ paths: LogFileCollection })
+        .then((data) => {
+          fromSpinning.value = false;
+          myCommon.downLoadFile(data);
+        })
+        .catch(() => {
+          fromSpinning.value = false;
+        });
     } else {
+      fromSpinning.value = false;
       message.info(t('view.pleaseSelectTheFilesToBeDownloadedFirst'));
     }
   }
@@ -549,11 +560,11 @@
 
   //双击日志名称
   function logNamedblclick(row) {
-    if (row.IsBack) {
+    if (row.isBack) {
       logTableStep--;
       logCollectionData.value = logTableStepData[logTableStep];
       if (logCollectionData.value) {
-        logCollectionData.value = _.orderBy(logCollectionData.value, ['Time'], ['desc']);
+        logCollectionData.value = _.orderBy(logCollectionData.value, ['time'], ['desc']);
       }
       logTableStepData.splice(logTableStep + 1);
       logTableStepName.value.splice(logTableStep);
@@ -561,40 +572,17 @@
         logTableRef.value.scrollToRow(logTableStepDataRowIndex[logTableStep - 1]);
         logTableStepDataRowIndex.splice(logTableStep);
       });
-    } else if (row.IsParent) {
+    } else if (row.isParent) {
       logTableStep++;
-      logTableStepData.push(row.SubCollection);
-      logTableStepName.value.push(row.Name);
-      logCollectionData.value = row.SubCollection;
+      logTableStepData.push(row.subCollection);
+      logTableStepName.value.push(row.name);
+      logCollectionData.value = row.subCollection;
       if (logCollectionData.value) {
-        logCollectionData.value = _.orderBy(logCollectionData.value, ['Time'], ['desc']);
+        logCollectionData.value = _.orderBy(logCollectionData.value, ['time'], ['desc']);
       }
       logTableStepDataRowIndex.push(row);
     }
   }
-
-  watch(
-    () => mqttStore.newServiceLogShowDirectory,
-    () => {
-      if (
-        mqttStore.newServiceLogShowDirectory != null &&
-        isShowLog.value &&
-        newServerCode == mqttStore.newServiceLogShowDirectory.ServiceCode &&
-        !isShowContent
-      ) {
-        isShowContent = true;
-        isRunGetLog.value = false;
-        nextTick(() => {
-          logCollectionData.value = mqttStore.newServiceLogShowDirectory.LogCollection;
-          if (logCollectionData.value) {
-            logCollectionData.value = _.orderBy(logCollectionData.value, ['Time'], ['desc']);
-          }
-          LogDirectory = mqttStore.newServiceLogShowDirectory.LogDirectory;
-          logTableStepData.push(logCollectionData.value);
-        });
-      }
-    },
-  );
 
   watch(
     () => logTableStepName.value,
@@ -602,10 +590,10 @@
       if (logTableStepName.value.length > 0) {
         nextTick(() => {
           logTableRef.value.insert({
-            Name: '...\\' + logTableStepName.value.join('\\'),
-            IsBack: true,
-            Size: -1,
-            Time: '',
+            name: '...\\' + logTableStepName.value.join('\\'),
+            isBack: true,
+            size: -1,
+            time: '',
           });
         });
       }

@@ -1,4 +1,7 @@
 {
+  "lastLoginIp": "DAIPC",
+  "communicationLog": "Journal de communication",
+  "systemLog": "Journal du système",
   "exceptionMessage": "Message d'exception",
   "exceptionSource": "Source de l'exception",
   "exceptionName": "Journal d'opération",

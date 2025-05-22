@@ -1,4 +1,7 @@
 {
+  "lastLoginIp": "Last login IP",
+  "communicationLog": "Communication log",
+  "systemLog": "System log",
   "exceptionMessage": "Exception message",
   "exceptionSource": "Exception source",
   "exceptionName": "Operation log",

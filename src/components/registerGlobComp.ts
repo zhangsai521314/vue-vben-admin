@@ -74,7 +74,7 @@ export function registerGlobComp(app: App) {
       emptyText: t('view.noDataAvailable'),
       columnConfig: {
         resizable: true,
-        isCurrent: true,
+        isCurrent: false,
         isHover: true,
       },
       rowConfig: {

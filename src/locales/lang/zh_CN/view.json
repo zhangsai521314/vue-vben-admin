@@ -1,4 +1,7 @@
 {
+  "lastLoginIp": "最后登录IP",
+  "communicationLog": "通信日志",
+  "systemLog": "系统日志",
   "exceptionMessage": "异常信息",
   "exceptionSource": "异常源",
   "exceptionName": "异常名称",
