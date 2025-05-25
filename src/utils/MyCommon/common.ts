@@ -3,8 +3,6 @@ import { message } from 'ant-design-vue';
 import dayjs from 'dayjs';
 import { useI18n } from '@/hooks/web/useI18n';
 
-const { t } = useI18n();
-
 let id = 0;
 //其他扩展
 String.prototype.replaceAll = function (f, e) {
@@ -313,8 +311,8 @@ const Common = {
       document.body.removeChild(downloadElement); // 下载完成移除元素
       window.URL.revokeObjectURL(href);
     } catch (error) {
-      debugger;
       console.error(error);
+      const { t } = useI18n();
       message.warning(t('view.fileDownloadFailed'));
     }
   },
@@ -331,8 +329,8 @@ const Common = {
       downloadElement.click(); // 点击下载
       document.body.removeChild(downloadElement); // 下载完成移除元素
     } catch (error) {
-      debugger;
       console.error(error);
+      const { t } = useI18n();
       message.warning(t('view.fileDownloadFailed'));
     }
   },
