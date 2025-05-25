@@ -313,6 +313,7 @@ const Common = {
       document.body.removeChild(downloadElement); // 下载完成移除元素
       window.URL.revokeObjectURL(href);
     } catch (error) {
+      debugger;
       console.error(error);
       message.warning(t('view.fileDownloadFailed'));
     }
@@ -330,6 +331,7 @@ const Common = {
       downloadElement.click(); // 点击下载
       document.body.removeChild(downloadElement); // 下载完成移除元素
     } catch (error) {
+      debugger;
       console.error(error);
       message.warning(t('view.fileDownloadFailed'));
     }

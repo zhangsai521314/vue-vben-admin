@@ -391,7 +391,6 @@
           :show-footer="false"
           :menu-config="logMenuConfig"
           :checkbox-config="checkboxConfig"
-          @menu-click="contextMenuClickEvent"
           :row-config="{ isCurrent: true, isHover: true }"
         >
           <vxe-column type="checkbox" width="60" />
@@ -1230,6 +1229,7 @@
   watch(
     () => logTableStepName.value,
     () => {
+      logTableRef.value.setAllCheckboxRow(false);
       if (logTableStepName.value.length > 0) {
         nextTick(() => {
           logTableRef.value.insert({

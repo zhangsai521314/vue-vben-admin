@@ -107,16 +107,12 @@
                   <div class="row-div">
                     <a-spin :spinning="showLogSpinning" style="height: 32px" class="showLog">
                       <a-space direction="horizontal" size="small" :wrap="true">
-                        <AuthDom auth="viewLog_syslog">
-                          <a-button style="height: 32px" @click="showLog('WG')">{{
-                            t('view.systemLog')
-                          }}</a-button>
-                        </AuthDom>
-                        <AuthDom auth="viewLog_mqlog">
-                          <a-button style="height: 32px" @click="showLog('MQ')">{{
-                            t('view.communicationLog')
-                          }}</a-button>
-                        </AuthDom>
+                        <a-button style="height: 32px" @click="showLog('WG')">{{
+                          t('view.systemLog')
+                        }}</a-button>
+                        <a-button style="height: 32px" @click="showLog('MQ')">{{
+                          t('view.communicationLog')
+                        }}</a-button>
                       </a-space>
                     </a-spin>
                   </div>
@@ -166,7 +162,6 @@
           :show-footer="false"
           :menu-config="logMenuConfig"
           :checkbox-config="checkboxConfig"
-          @menu-click="contextMenuClickEvent"
           :row-config="{ isCurrent: true, isHover: true }"
         >
           <vxe-column type="checkbox" width="60" />
@@ -519,6 +514,7 @@
       let name = logTableStepName.value.join('\\');
       name = name != '' ? '\\' + name : '';
       checkDatas.forEach((m) => {
+        // LogFileCollection.push({ Name: `${LogDirectory}${name}\\${m.name}`, IsParent: m.isParent });
         LogFileCollection.push(`${LogDirectory}${name}\\${m.name}`);
       });
       viewLogApi
@@ -587,6 +583,7 @@
   watch(
     () => logTableStepName.value,
     () => {
+      logTableRef.value.setAllCheckboxRow(false);
       if (logTableStepName.value.length > 0) {
         nextTick(() => {
           logTableRef.value.insert({
