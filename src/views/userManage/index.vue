@@ -506,7 +506,7 @@
       },
       {
         field: 'lastLoginIp',
-        title: '最后登录IP',
+        title: t('view.lastLoginIp'),
         showOverflow: true,
         minWidth: 160,
         sortable: true,
