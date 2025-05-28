@@ -389,7 +389,6 @@
           :show-header="true"
           :show-overflow="true"
           :show-footer="false"
-          :menu-config="logMenuConfig"
           :checkbox-config="checkboxConfig"
           :row-config="{ isCurrent: true, isHover: true }"
         >
@@ -979,11 +978,7 @@
   //获取设备
   function getEquipments() {
     equipmentApi
-      .GetEquipmentSimple({
-        execompleteBefore: () => {
-          loading.value = false;
-        },
-      })
+      .GetEquipmentSimple({})
       .then((data) => {
         equipmentData.value = data;
       })
@@ -1167,7 +1162,6 @@
         myCommon.generateList(_organizationDatas, organizationDatas.value, 'children');
       })
       .catch(() => {
-        loading.value = false;
         _organizationDatas = [];
       });
   }

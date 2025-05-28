@@ -160,7 +160,6 @@
           :show-header="true"
           :show-overflow="true"
           :show-footer="false"
-          :menu-config="logMenuConfig"
           :checkbox-config="checkboxConfig"
           :row-config="{ isCurrent: true, isHover: true }"
         >
