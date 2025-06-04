@@ -1,91 +1,44 @@
 <template>
-  <div ref="container"> </div>
+  <div>
+    <vxe-grid v-bind="gridOptions" />
+  </div>
 </template>
 
 <script lang="ts" setup>
-  import { Graph } from '@antv/g6';
-  import { onMounted, ref, watch } from 'vue';
+  import { reactive } from 'vue';
+  import type { VxeGridProps } from 'vxe-table';
 
-  const container = ref(null);
-  fetch('https://assets.antv.antgroup.com/g6/music-festival.json')
-    .then((res) => res.json())
-    .then((data) => {
-      const map = new Map();
+  interface RowVO {
+    id: number;
+    name: string;
+    role: string;
+    sex: string;
+    age: number;
+    address: string;
+  }
 
-      data.forEach((datum) => {
-        const { actors, venuecity } = datum;
-        actors.forEach((actor) => {
-          if (!map.has(actor)) map.set(actor, new Set([venuecity]));
-          else map.get(actor).add(venuecity);
-        });
-      });
-
-      const nodes = Array.from(map)
-        .filter(([, city]) => city.size >= 2)
-        .sort((a, b) => -a[1].size + b[1].size)
-        .map(([name, city]) => ({
-          id: name,
-          data: {
-            city: Array.from(city),
-            value: city.size,
-          },
-        }));
-
-      return { nodes };
-    })
-    .then((data) => {
-      const graph = new Graph({
-        container: container.value,
-        data,
-        node: {
-          type: 'rect',
-          style: {
-            size: [100, 20],
-            radius: 5,
-            iconText: (d) => d.id,
-            iconFill: '#000',
-            iconWordWrap: true,
-            iconWordWrapWidth: 80,
-            iconFontSize: 15,
-            iconTextOverflow: '...',
-            iconMaxLines: 1,
-            labelText: (d) => d.data.city.join('\n'),
-            labelFontSize: 12,
-            labelDy: 2,
-            labelFill: '#fff',
-          },
-          palette: {
-            type: 'group',
-            field: 'value',
-            color: [
-              '#FCE75A',
-              '#F5DB75',
-              '#EFCF90',
-              '#E8C3AB',
-              '#E1B7C6',
-              '#DBABE0',
-              '#D49FFB',
-              '#CD93FF',
-              '#B981F2',
-              '#7E45E8',
-            ],
-          },
-        },
-        layout: {
-          type: 'grid',
-          nodeSize: [100, 120],
-          sortBy: 'order',
-          cols: 5,
-        },
-        behaviors: [{ type: 'scroll-canvas', direction: 'y' }],
-        plugins: [
-          {
-            type: 'background',
-            background: 'red',
-          },
-        ],
-      });
-
-      graph.render();
-    });
+  const gridOptions = reactive<VxeGridProps<RowVO>>({
+    border: true,
+    height: 500,
+    rowConfig: {
+      isHover: true,
+    },
+    checkboxConfig: {
+      labelField: 'name',
+      highlight: true,
+    },
+    columns: [
+      { type: 'checkbox', title: 'Name', width: 300 },
+      { field: 'id', title: 'ID' },
+      { field: 'age', title: 'Age' },
+      { field: 'address', title: 'Address', showOverflow: true },
+    ],
+    data: [
+      { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
+      { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+      { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'test abc' },
+      { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' },
+    ],
+  });
 </script>

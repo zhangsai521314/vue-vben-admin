@@ -42,9 +42,17 @@
                 <a-button class="ant-btn" @click="showFrom()">{{ t('view.addNewLine') }}</a-button>
               </AuthDom>
               <AuthDom auth="ddServcer_line_pusMq">
-                <a-spin :spinning="isRunMushMq" :title="t('view.commandSending')">
-                  <a-button class="ant-btn" @click="pushMq()">{{ t('view.syncCommand') }}</a-button>
-                </a-spin>
+                <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
+                  <div class="row-div">
+                    <a-space direction="horizontal" size="small" :wrap="true">
+                      <a-spin :spinning="isRunMushMq" :title="t('view.commandSending')">
+                        <a-button class="ant-btn" @click="pushMq()">{{
+                          t('view.syncCommand')
+                        }}</a-button>
+                      </a-spin>
+                    </a-space>
+                  </div>
+                </a-space>
               </AuthDom>
             </a-space>
           </div>
