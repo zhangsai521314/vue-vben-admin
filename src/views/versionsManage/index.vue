@@ -447,7 +447,7 @@
   const defFromData = reactive({
     serviceType: null,
     orderIndex: null,
-    runPlatform: true,
+    runPlatform: null,
     isBrowserDown: true,
     iconBase64: null,
     configFilePath: null,

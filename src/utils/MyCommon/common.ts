@@ -295,21 +295,31 @@ const Common = {
   //下载文件，res为后台返回的FileStreamResult文件数据
   downLoadFile(res) {
     try {
-      const blob = new Blob([res.data], { type: 'application/octet-stream;charset=UTF-8' });
-      const contentDisposition = res.headers['content-disposition'];
-      const patt = new RegExp('filename=([^;]+\\.[^\\.;]+);*');
-      const result = patt.exec(contentDisposition);
-      const filename = result[1];
-      const downloadElement = document.createElement('a');
-      const href = window.URL.createObjectURL(blob); // 创建下载的链接
-      const reg = /^["](.*)["]$/g;
-      downloadElement.style.display = 'none';
-      downloadElement.href = href;
-      downloadElement.download = decodeURI(filename.replace(reg, '$1')); // 下载后文件名
-      document.body.appendChild(downloadElement);
-      downloadElement.click(); // 点击下载
-      document.body.removeChild(downloadElement); // 下载完成移除元素
-      window.URL.revokeObjectURL(href);
+      if (res.data.type.includes('json') || res.data.type.includes('html')) {
+        const reader = new FileReader();
+        reader.readAsText(res.data, 'utf-8');
+        reader.onload = () => {
+          // 解析并处理错误
+          const errorData = JSON.parse(reader.result);
+          message.warning(` ${errorData.message}`);
+        };
+      } else {
+        const blob = new Blob([res.data], { type: 'application/octet-stream;charset=UTF-8' });
+        const contentDisposition = res.headers['content-disposition'];
+        const patt = new RegExp('filename=([^;]+\\.[^\\.;]+);*');
+        const result = patt.exec(contentDisposition);
+        const filename = result[1];
+        const downloadElement = document.createElement('a');
+        const href = window.URL.createObjectURL(blob); // 创建下载的链接
+        const reg = /^["](.*)["]$/g;
+        downloadElement.style.display = 'none';
+        downloadElement.href = href;
+        downloadElement.download = decodeURI(filename.replace(reg, '$1')); // 下载后文件名
+        document.body.appendChild(downloadElement);
+        downloadElement.click(); // 点击下载
+        document.body.removeChild(downloadElement); // 下载完成移除元素
+        window.URL.revokeObjectURL(href);
+      }
     } catch (error) {
       console.error(error);
       const { t } = useI18n();
