@@ -20,9 +20,9 @@
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">
                     <label>{{ t('view.addressingTime') }}：</label>
-                     <a-config-provider
-                    :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
-                  >
+                    <a-config-provider
+                      :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
+                    >
                       <a-range-picker
                         :allowClear="false"
                         v-model:value="timeValue"
@@ -308,7 +308,7 @@
   const tableRef = ref({});
   const myContentRef = ref({});
   const timeValue = ref([
-    dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
+    dayjs(dayjs().subtract(0, 'day').format('YYYY-MM-DD')),
     dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
   ]);
   const seacthContent = ref({
@@ -325,7 +325,7 @@
     total: 0,
     sortlist: ['addTime desc'],
   });
-  const refresh = ref('yes');
+  const refresh = ref('no');
   const refreshTime = ref(10);
   let refreshTimeId;
 
@@ -374,7 +374,7 @@
       result: null,
     };
     timeValue.value = [
-      dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
+      dayjs(dayjs().subtract(0, 'day').format('YYYY-MM-DD')),
       dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
     ];
   }
