@@ -114,9 +114,18 @@
   }
 
   .@{prefix-cls} {
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
     min-height: 100%;
     overflow: hidden;
     background-image: url('/@/assets/images/loginback.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 
     @media (max-width: @screen-xl) {
       background-color: #293146;
