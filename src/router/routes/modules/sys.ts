@@ -20,7 +20,7 @@ const userInfo: AppRouteModule = {
   children: [
     {
       path: 'index',
-      name: 'noPower',
+      name: 'NPower',
       component: () => import('/@/views/sys/exception/noPower.vue'),
       meta: {
         title: '无权限',

@@ -21,7 +21,7 @@ const networkMonitor: AppRouteModule = {
   children: [
     {
       path: 'index',
-      name: 'networkMonitor',
+      name: 'NetworkMonitor',
       component: () => import('/@/views/networkMonitor/index.vue'),
       meta: {
         // 是否固定标签

@@ -109,7 +109,7 @@
   // import serviceApi from '@/api/software';
 
   // defineOptions({ name: 'NetworkMonitor' });
-  // const { prefixCls } = useDesign('networkMonitor-');
+  // const { prefixCls } = useDesign('NetworkMonitor-');
   // const mqttStore = useMqttStoreWithOut();
   // const appStore = useAppStore();
   // let graph;
