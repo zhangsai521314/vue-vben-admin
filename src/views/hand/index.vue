@@ -408,6 +408,13 @@
         sortable: true,
       },
       {
+        field: 'udpReceiveTime',
+        title: t('view.heartbeatTime'),
+        minWidth: locale == 'zh-CN' ? 150 : 170,
+        showOverflow: true,
+        sortable: true,
+      },
+      {
         field: 'isAutoRegister',
         title: t('view.autoRegister'),
         minWidth: locale == 'zh-CN' ? 100 : 200,
