@@ -348,13 +348,13 @@
         sortable: true,
         minWidth: locale == 'zh-CN' ? 100 : 130,
       },
-      {
-        field: 'dataTime',
-        title: t('view.heartbeatTime'),
-        minWidth: locale == 'zh-CN' ? 150 : 220,
-        showOverflow: true,
-        sortable: true,
-      },
+      // {
+      //   field: 'dataTime',
+      //   title: t('view.heartbeatTime'),
+      //   minWidth: locale == 'zh-CN' ? 150 : 220,
+      //   showOverflow: true,
+      //   sortable: true,
+      // },
       {
         title: t('view.enableOrDisable'),
         minWidth: 140,
