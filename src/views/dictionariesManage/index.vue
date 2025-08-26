@@ -470,9 +470,6 @@
               >{{ t('view.vehicleTypeCategory') }}
             </a-select-option>
             <a-select-option value="Ln_L4L5">{{ t('view.positionTypeL4L5') }} </a-select-option>
-            <a-select-option value="handPower"
-              >{{ t('view.handheldTerminalPermissions') }}
-            </a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item

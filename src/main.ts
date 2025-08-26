@@ -118,11 +118,16 @@ function interval() {
   //   }
   // }, 3000);
 
-  //有未确认未恢复的告警则一直播放告警声音
+  //有未确认未恢复未读的告警则一直播放告警声音
   setInterval(() => {
     if (!mqttStore.msgIsMute && userStore.userInfo) {
       const alarmDataCount = mqttStore.msgData.filter(
-        (m) => m.msgClass == 2 && m.msgStatus == 1 && m.webMsgIsShow && m.confirmTime == null,
+        (m) =>
+          m.isRead != true &&
+          m.msgClass == 2 &&
+          m.msgStatus == 1 &&
+          m.webMsgIsShow &&
+          m.confirmTime == null,
       ).length;
       if (alarmDataCount > 0) {
         try {
