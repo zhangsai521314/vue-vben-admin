@@ -27,6 +27,10 @@
   import { useDesign } from '@/hooks/web/useDesign';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useTabDropdown } from '../useTabDropdown';
+  import { useLocaleStore } from '@/store/modules/locale';
+
+  const localeStore = useLocaleStore();
+  const locale = localeStore.getLocale;
 
   defineOptions({ name: 'TabContent' });
 
@@ -43,7 +47,13 @@
 
   const getTitle = computed(() => {
     const { tabItem: { meta } = {} } = props;
-    return meta && t(meta.title as string);
+    if (locale == 'zh-CN') {
+      return meta && t(meta.titleCn as string);
+    } else if (locale == 'en-US') {
+      return meta && t(meta.titleEn as string);
+    } else if (locale == 'fr-FR') {
+      return meta && t(meta.titleFr as string);
+    }
   });
 
   const getIsTabs = computed(() => !props.isExtra);

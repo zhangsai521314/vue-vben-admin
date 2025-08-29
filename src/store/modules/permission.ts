@@ -242,6 +242,7 @@ export const usePermissionStore = defineStore({
             // !Simulate to obtain permission codes from the background,
             // this function may only need to be executed once, and the actual project can be put at the right time by itself
             let routeList: AppRouteRecordRaw[] = [];
+            const allMenus = [];
             try {
               // this.changePermissionCode();
               const datas = await getMenuList();
@@ -249,23 +250,22 @@ export const usePermissionStore = defineStore({
               //保存菜单信息
               this.setBackMenuList(datas.menus);
               this.setDomAuthList(datas.userAuths);
+              myCommon.generateList(allMenus, datas.menus, 'children');
             } catch (error) {
               console.error(error);
             }
-
             // Dynamically introduce components
             routeList = transformObjToRoute(routeList);
-
             // remove meta.ignoreRoute item
             routeList = filter(routeList, routeRemoveIgnoreFilter);
             routeList = routeList.filter(routeRemoveIgnoreFilter);
             routeList = flatMultiLevelRoutes(routeList);
             // this.removeAttr(routeList)
             routes = [...routes, ...routeList];
+            this.updateRouteTitle(routes, allMenus);
           }
           break;
       }
-
       routes.push(ERROR_LOG_ROUTE);
       patchHomeAffix(routes);
       return routes;
@@ -344,6 +344,20 @@ export const usePermissionStore = defineStore({
       } else {
         return true;
       }
+    },
+    //zs更改（添加）
+    updateRouteTitle(routes, allMenus) {
+      routes.forEach((r) => {
+        const menu = allMenus.find((m) => (r.redirect || r.path) == m.path);
+        if (menu && r.hasOwnProperty('meta')) {
+          r.meta.titleCn = menu.menuNameCn;
+          r.meta.titleEn = menu.menuNameEn;
+          r.meta.titleFr = menu.menuNameFr;
+        }
+        if (r.children && r.children.length > 0) {
+          this.updateRouteTitle(r.children, allMenus);
+        }
+      });
     },
   },
 });
