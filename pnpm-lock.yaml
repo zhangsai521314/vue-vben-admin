@@ -44,6 +44,9 @@ importers:
       '@microsoft/signalr':
         specifier: ^8.0.0
         version: 8.0.17
+      '@types/leaflet':
+        specifier: ^1.9.20
+        version: 1.9.20
       '@vben/hooks':
         specifier: workspace:*
         version: link:packages/hooks
@@ -107,6 +110,9 @@ importers:
       keymaster:
         specifier: ^1.6.2
         version: 1.6.2
+      leaflet:
+        specifier: ^1.9.4
+        version: 1.9.4
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -3880,6 +3886,12 @@ packages:
       '@types/keygrip': 1.0.6
       '@types/koa-compose': 3.2.8
       '@types/node': 20.19.9
+
+  /@types/leaflet@1.9.20:
+    resolution: {integrity: sha512-rooalPMlk61LCaLOvBF2VIf9M47HgMQqi5xQ9QRi7c8PkdIe0WrIi5IxXUXQjAdL0c+vcQ01mYWbthzmp9GHWw==}
+    dependencies:
+      '@types/geojson': 7946.0.16
+    dev: false
 
   /@types/lodash-es@4.17.12:
     resolution: {integrity: sha512-0NgftHUcV4v34VhXm8QBSftKVXtbkBG3ViCjs6+eJ5a6y6Mi/jiFGPc1sC7QK+9BFhWrURE3EOggmWaSxL9OzQ==}
@@ -10204,6 +10216,10 @@ packages:
     engines: {node: '>= 0.6.3'}
     dependencies:
       readable-stream: 2.3.8
+    dev: false
+
+  /leaflet@1.9.4:
+    resolution: {integrity: sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==}
     dev: false
 
   /less@4.4.0:

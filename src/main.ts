@@ -229,6 +229,8 @@ function initMq() {
         protocolId: 'MQIsdp', // 只支持MQTT 3.1(不符合3.1.1)的代理
         protocolVersion: 3, // 版本
         reconnectPeriod: mqttConfig.ReconnectPeriod * 1000, //设置多长时间进行重新连接 单位毫秒 两次重新连接之间的时间间隔。通过将设置为，禁用自动重新连接0
+        // 新增：断开连接时主动发送DISCONNECT包（强化清理信号）
+        disconnectTimeout: 5000, // 断开时等待5秒确保信号发送
       });
       mqttStore.lookLog = mqttConfig.LookLog;
       mqttStore.lookConfig = mqttConfig.LookConfig;
@@ -445,6 +447,10 @@ function initMq() {
       //客户端脱机下线触发回调
       client.on('offline', function () {
         console.log('offline');
+      });
+      //客户端断开连接
+      client.on('disconnect', function () {
+        client.end(true, { timeout: 2000 }); // 强制清理会话
       });
       //当客户端接收到任何数据包时发出。这包括来自订阅主题的信息包以及MQTT用于管理订阅和连接的信息包
       client.on('packetreceive', (packet) => {
