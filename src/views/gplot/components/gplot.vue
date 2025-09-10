@@ -928,13 +928,13 @@
           await graphOb.draw();
           noAgileStateChangeStatus_timeId = setTimeout(() => {
             noAgileStateChangeStatus();
-          }, 3000);
+          }, 5000);
         })
         .catch((e) => {
           console.error(e);
           noAgileStateChangeStatus_timeId = setTimeout(() => {
             noAgileStateChangeStatus();
-          }, 3000);
+          }, 5000);
         });
     }
   }
