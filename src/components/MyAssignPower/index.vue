@@ -167,7 +167,7 @@
   const id = myCommon.uniqueId();
   const tabsActiveKey = ref('menu');
   const visible = ref(false);
-  const treeAllSelectValue = ref(0);
+  const treeAllSelectValue = ref(null);
 
   const menuTreeData = ref([]);
   const menuExpandedKeys = ref([]);
@@ -452,10 +452,7 @@
               item.powerType = '';
             }
             if (item.powerType == '') {
-              const ii = menuTreeChecnk.value.indexOf(item.key);
-              if (ii != -1) {
-                menuTreeChecnk.value.splice(ii, 1);
-              }
+              menuTreeChecnk.value = menuTreeChecnk.value.filter((m) => m != item.key);
             }
             if (item.children.length > 0) {
               treeCheckChange_(isChecked, value, item.children, isPowerDbClick);

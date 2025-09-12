@@ -50,6 +50,9 @@ importers:
       '@vben/hooks':
         specifier: workspace:*
         version: link:packages/hooks
+      '@vue-leaflet/vue-leaflet':
+        specifier: ^0.10.1
+        version: 0.10.1(@types/leaflet@1.9.20)(leaflet@1.9.4)(typescript@5.9.2)
       '@vue/shared':
         specifier: ^3.4.19
         version: 3.5.18
@@ -113,6 +116,12 @@ importers:
       leaflet:
         specifier: ^1.9.4
         version: 1.9.4
+      leaflet-canvas-markers:
+        specifier: ^1.0.7
+        version: 1.0.7(leaflet@1.9.4)
+      leaflet.marker.slideto:
+        specifier: ^0.3.0
+        version: 0.3.0
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -4404,6 +4413,22 @@ packages:
       '@volar/language-core': 1.11.1
       path-browserify: 1.0.1
     dev: true
+
+  /@vue-leaflet/vue-leaflet@0.10.1(@types/leaflet@1.9.20)(leaflet@1.9.4)(typescript@5.9.2):
+    resolution: {integrity: sha512-RNEDk8TbnwrJl8ujdbKgZRFygLCxd0aBcWLQ05q/pGv4+d0jamE3KXQgQBqGAteE1mbQsk3xoNcqqUgaIGfWVg==}
+    peerDependencies:
+      '@types/leaflet': ^1.5.7
+      leaflet: ^1.6.0
+    peerDependenciesMeta:
+      '@types/leaflet':
+        optional: true
+    dependencies:
+      '@types/leaflet': 1.9.20
+      leaflet: 1.9.4
+      vue: 3.5.18(typescript@5.9.2)
+    transitivePeerDependencies:
+      - typescript
+    dev: false
 
   /@vue/babel-helper-vue-transform-on@1.4.0:
     resolution: {integrity: sha512-mCokbouEQ/ocRce/FpKCRItGo+013tHg7tixg3DUNS+6bmIchPt66012kBMm476vyEIJPafrvOf4E5OYj3shSw==}
@@ -10216,6 +10241,18 @@ packages:
     engines: {node: '>= 0.6.3'}
     dependencies:
       readable-stream: 2.3.8
+    dev: false
+
+  /leaflet-canvas-markers@1.0.7(leaflet@1.9.4):
+    resolution: {integrity: sha512-A2XQLTsIWA45MT7Q1w0JscHkabHJaWmw4+8YV9E6wg9lomUwT26yJQSjVaRxPs9seQ0YExufUS50WHU41oNKJw==}
+    peerDependencies:
+      leaflet: ^1.0.0
+    dependencies:
+      leaflet: 1.9.4
+    dev: false
+
+  /leaflet.marker.slideto@0.3.0:
+    resolution: {integrity: sha512-BQwOy5CuDBuEXIbeJ1mjO9SqlY3au65LhWJ1hjkwQYy/XhOhaF7kIF3+0DRasONIvbFYL+QwQ2/QjEjDUZgn4A==}
     dev: false
 
   /leaflet@1.9.4:
