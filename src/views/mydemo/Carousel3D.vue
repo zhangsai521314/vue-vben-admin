@@ -28,7 +28,11 @@
             @click.stop="switchToCard(renderIndex)"
           />
           <template v-if="item.title">
-            <div class="carousel-3d-title" @click.stop="showTitleAlert(item)">
+            <div
+              class="carousel-3d-title"
+              :style="{ backgroundColor: item.bColor }"
+              @click.stop="showTitleAlert(item)"
+            >
               {{ item.title }}
             </div>
           </template>
@@ -459,7 +463,7 @@
   .carousel-3d-img {
     display: block;
     width: 100%;
-    height: 75%;
+    height: 65%;
     object-fit: cover;
     cursor: pointer;
   }
@@ -469,7 +473,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 25%;
+    height: 35%;
     padding: 0 12px;
     overflow: hidden;
     background: #f8f9fa;

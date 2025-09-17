@@ -1,15 +1,17 @@
 <template>
-  <div class="app1111">
-    <Carousel3D
-      :perspective="300"
-      :items="carouselData"
-      :showControls="false"
-      :showIndicators="false"
-      :baseTiltAngle="-8"
-      :cardCountRatio="0.1"
-      :cardWidthRatio="0.3"
-      :autoPlayTime="300000"
-    />
+  <div style="width: 100%; height: 100%; background-image: url('/src/bj1.png')">
+    <div class="app1111">
+      <Carousel3D
+        :perspective="130"
+        :items="carouselData"
+        :showControls="false"
+        :showIndicators="false"
+        :baseTiltAngle="-5"
+        :cardCountRatio="0.3"
+        :cardWidthRatio="0.2"
+        :autoPlayTime="300000"
+      />
+    </div>
   </div>
 </template>
 
@@ -19,38 +21,120 @@
 
   // 10张卡片的轮播数据（示例）
   const carouselData = ref([
-    { imgUrl: 'https://picsum.photos/id/1/300/200', title: '卡片1', alt: '第1张' },
-    { imgUrl: 'https://picsum.photos/id/2/300/200', title: '卡片2', alt: '第2张' },
-    { imgUrl: 'https://picsum.photos/id/3/300/200', title: '卡片3', alt: '第3张' },
-    { imgUrl: 'https://picsum.photos/id/4/300/200', title: '卡片4', alt: '第4张' },
-    { imgUrl: 'https://picsum.photos/id/5/300/200', title: '卡片5', alt: '第5张' },
-    { imgUrl: 'https://picsum.photos/id/6/300/200', title: '卡片6', alt: '第6张' },
-    { imgUrl: 'https://picsum.photos/id/7/300/200', title: '卡片7', alt: '第7张' },
-    { imgUrl: 'https://picsum.photos/id/8/300/200', title: '卡片8', alt: '第8张' },
-    { imgUrl: 'https://picsum.photos/id/9/300/200', title: '卡片9', alt: '第9张' },
-    { imgUrl: 'https://picsum.photos/id/10/300/200', title: '卡片10', alt: '第10张' },
-    { imgUrl: 'https://picsum.photos/id/1/300/200', title: '卡片11', alt: '第1张' },
-    { imgUrl: 'https://picsum.photos/id/2/300/200', title: '卡片12', alt: '第2张' },
-    { imgUrl: 'https://picsum.photos/id/3/300/200', title: '卡片13', alt: '第3张' },
-    { imgUrl: 'https://picsum.photos/id/4/300/200', title: '卡片14', alt: '第4张' },
-    { imgUrl: 'https://picsum.photos/id/5/300/200', title: '卡片15', alt: '第5张' },
-    { imgUrl: 'https://picsum.photos/id/6/300/200', title: '卡片16', alt: '第6张' },
-    { imgUrl: 'https://picsum.photos/id/7/300/200', title: '卡片17', alt: '第7张' },
-    { imgUrl: 'https://picsum.photos/id/8/300/200', title: '卡片18', alt: '第8张' },
-    { imgUrl: 'https://picsum.photos/id/9/300/200', title: '卡片19', alt: '第9张' },
-    { imgUrl: 'https://picsum.photos/id/10/300/200', title: '卡片20', alt: '第10张' },
+    {
+      imgUrl: 'https://picsum.photos/id/1/300/200',
+      title: '马瑞巴亚港',
+      alt: '第1张',
+      bColor: '#D7D7D7',
+    },
+    { imgUrl: 'https://picsum.photos/id/2/300/200', title: '穆萨亚', alt: '第2张', bColor: 'red' },
+    {
+      imgUrl: 'https://picsum.photos/id/3/300/200',
+      title: '科里巴',
+      alt: '第3张',
+      bColor: 'green',
+    },
+    {
+      imgUrl: 'https://picsum.photos/id/4/300/200',
+      title: '乌尔卡巴',
+      alt: '第4张',
+      bColor: 'red',
+    },
+    {
+      imgUrl: 'https://picsum.photos/id/5/300/200',
+      title: '蒙加塔',
+      alt: '第5张',
+      bColor: 'yellow',
+    },
+    {
+      imgUrl: 'https://picsum.photos/id/6/300/200',
+      title: '法拉纳',
+      alt: '第6张',
+      bColor: 'green',
+    },
+    {
+      imgUrl: 'https://picsum.photos/id/7/300/200',
+      title: '杜瓦科',
+      alt: '第7张',
+      bColor: 'green',
+    },
+    {
+      imgUrl: 'https://picsum.photos/id/8/300/200',
+      title: '尼 亚林科',
+      alt: '第8张',
+      bColor: '#D7D7D7',
+    },
+    {
+      imgUrl: 'https://picsum.photos/id/9/300/200',
+      title: '迪安库亚',
+      alt: '第9张',
+      bColor: 'red',
+    },
+    {
+      imgUrl: 'https://picsum.photos/id/10/300/200',
+      title: '凯鲁阿内',
+      alt: '第10张',
+      bColor: 'red',
+    },
+    {
+      imgUrl: 'https://picsum.photos/id/1/300/200',
+      title: '西芒杜矿山',
+      alt: '第1张',
+      bColor: 'red',
+    },
+    {
+      imgUrl: 'https://picsum.photos/id/2/300/200',
+      title: '辛铁矿',
+      alt: '第2张',
+      bColor: 'yellow',
+    },
+    {
+      imgUrl: 'https://picsum.photos/id/3/300/200',
+      title: '线路所',
+      alt: '第3张',
+      bColor: 'green',
+    },
+    {
+      imgUrl: 'https://picsum.photos/id/4/300/200',
+      title: 'siding1',
+      alt: '第4张',
+      bColor: 'green',
+    },
+    {
+      imgUrl: 'https://picsum.photos/id/5/300/200',
+      title: 'siding2',
+      alt: '第5张',
+      bColor: '#D7D7D7',
+    },
+    {
+      imgUrl: 'https://picsum.photos/id/6/300/200',
+      title: 'siding3',
+      alt: '第6张',
+      bColor: 'yellow',
+    },
+    {
+      imgUrl: 'https://picsum.photos/id/7/300/200',
+      title: 'siding4',
+      alt: '第7张',
+      bColor: '#D7D7D7',
+    },
+    {
+      imgUrl: 'https://picsum.photos/id/8/300/200',
+      title: 'siding5',
+      alt: '第8张',
+      bColor: 'yellow',
+    },
   ]);
 </script>
 
 <style>
   .app1111 {
     position: absolute;
-    top: 200px;
-    left: 100px;
-    width: 570px;
+    top: -45px;
+    right: 440px;
+    width: 500px;
     height: 370px;
 
     /* background: #ffffff06; */
-    background-color: red;
   }
 </style>
