@@ -1,5 +1,11 @@
 <template>
-  <div style="width: 100%; height: 100%; background-image: url('/src/bj1.png')">
+  <div
+    style="
+      width: 100%;
+      height: 100%;
+      background-image: url('/src/assets/images/largeScreen/bj1.png');
+    "
+  >
     <div class="app1111">
       <Carousel3D
         :perspective="130"
@@ -8,8 +14,8 @@
         :showIndicators="false"
         :baseTiltAngle="-5"
         :cardCountRatio="0.3"
-        :cardWidthRatio="0.2"
-        :autoPlayTime="300000"
+        :cardWidthRatio="0.4"
+        :autoPlayTime="2000"
       />
     </div>
   </div>

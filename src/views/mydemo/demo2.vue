@@ -1,5 +1,5 @@
 <template>
-  <MyContent style="background-image: url('/src/bj1.png')">
+  <MyContent style="background-image: url('/src/assets/images/largeScreen/bj1.png')">
     <div class="map-container">
       <!-- 搜索和控制区 -->
       <div class="control-container">
@@ -22,9 +22,9 @@
       <!-- 地图容器 -->
       <div ref="mapContainer" class="map"></div>
 
-      <!-- 操作提示（新增缩放显示规则） -->
+      <!-- 操作提示 -->
       <div class="map-hint">
-        按住鼠标右键拖动可旋转地图 | 滚轮缩放地图 | 缩放至9级以上显示站点名称
+        按住鼠标右键拖动可旋转地图 | 滚轮缩放地图 | 7级以上显示站点名称 | 9级以上显示ISDN号码
       </div>
     </div>
   </MyContent>
@@ -37,10 +37,10 @@
   import 'leaflet.marker.slideto';
   import 'leaflet-rotate';
 
-  // 初始地图状态（用于重置）
+  // 初始地图状态（默认缩放8级）
   const initialMapState = {
     center: [11.5, -10.0],
-    zoom: 7,
+    zoom: 8, // 默认加载8级缩放
     bearing: 0,
   };
 
@@ -136,12 +136,12 @@
     },
   ];
 
-  // 线路B坐标（明确斜下方走向）
+  // 线路B坐标
   const lineBCoordinates = [
     [12.3, -8.5], // 西芒杜矿山（起点）
-    [12.0, -8.2], // 斜下方
-    [11.7, -7.9], // 继续斜下方
-    [11.4, -7.6], // 继续斜下方
+    [12.0, -8.2],
+    [11.7, -7.9],
+    [11.4, -7.6],
     [11.1, -7.3], // 辛铁矿（终点）
   ];
 
@@ -295,7 +295,7 @@
     },
   ];
 
-  // 组件变量 - 新增站点名称标记管理
+  // 组件变量
   const mapContainer = ref(null);
   const searchQuery = ref('');
   let map = null;
@@ -304,7 +304,9 @@
   let lastMouseX = 0;
   let stationPhotos = {};
   let lineLayers = { A: null, B: null };
-  let stationNameMarkers = {}; // 存储所有站点名称标记，用于控制显示/隐藏
+  let stationNameMarkers = {}; // 站点名称标记管理
+  let trainIsdnMarkers = {}; // 火车ISDN标签管理
+  let personIsdnMarkers = {}; // 人员ISDN标签管理
 
   // 初始化地图
   onMounted(() => {
@@ -322,7 +324,7 @@
       bearing: initialMapState.bearing,
     });
 
-    // 设置初始视图
+    // 设置初始视图（默认8级缩放）
     map.setView(initialMapState.center, initialMapState.zoom);
     map.getContainer().style.backgroundColor = 'transparent';
 
@@ -334,11 +336,9 @@
     lineLayers.A = drawLine(lineACoordinates);
     lineLayers.B = drawLine(lineBCoordinates);
 
-    // 添加车站（核心优化：名称与圆圈贴合）
+    // 添加车站、火车、人员
     addStations(lineAStations);
     addStations(lineBStations);
-
-    // 添加火车和人员
     addTrains();
     addPersons();
 
@@ -347,13 +347,13 @@
       map.flyTo(initialMapState.center, initialMapState.zoom, { duration: 2, easeLinearity: 0.2 });
     }, 500);
 
-    // 绑定事件（新增缩放控制名称显示）
+    // 绑定事件
     bindMapEvents();
-    // 初始化时根据缩放级别设置名称显示状态
-    updateStationNameVisibility(map.getZoom());
+    // 初始化时根据缩放级别设置所有标签状态
+    updateAllMarkersVisibility(map.getZoom());
   });
 
-  // 绘制线路（保持原有逻辑）
+  // 绘制线路
   const drawLine = (coordinates) => {
     L.polyline(coordinates, { color: '#ffffff', weight: 8, opacity: 1, lineCap: 'square' }).addTo(
       map,
@@ -368,10 +368,10 @@
     return line;
   };
 
-  // 核心优化：添加车站（名称与圆圈贴合，SidePanel风格标签）
+  // 添加车站（7级以上显示名称）
   const addStations = (stations) => {
     stations.forEach((station) => {
-      // 1. 绘制站点核心圆圈（粉色标记）
+      // 粉色圆圈标记
       const circleMarker = L.circleMarker(station.coordinate, {
         radius: 4,
         fillColor: '#FC09EF',
@@ -379,38 +379,33 @@
         weight: 2,
         opacity: 1,
         fillOpacity: 0.8,
-        zIndexOffset: 50, // 圆圈在下层，名称在上层
+        zIndexOffset: 50,
       }).addTo(map);
 
-      // 2. 创建SidePanel风格的名称标签（带箭头指向圆圈）
+      // 车站名称标签
       const nameDom = document.createElement('div');
-      nameDom.className = 'station-name-wrapper'; // 外层容器控制定位
-
-      // 标签内容区（黑色半透明背景，粉色文字）
+      nameDom.className = 'station-name-wrapper';
       const nameContent = document.createElement('div');
       nameContent.className = 'station-name-content';
       nameContent.textContent = station.name;
-      nameContent.style.color = '#FC09EF'; // 强制文字颜色与圆圈一致
-
+      nameContent.style.color = '#FC09EF'; // 车站名称颜色
       nameDom.appendChild(nameContent);
 
-      // 3. 创建Leaflet自定义图标（关键：调整锚点使标签紧贴圆圈右侧）
       const nameIcon = L.divIcon({
         html: nameDom,
-        className: 'station-name-icon', // 仅用于定位，无额外样式
-        iconSize: [120, 24], // 适配文字长度和高度
-        iconAnchor: [-10, 12], // X轴负偏移（标签在圆圈右侧），Y轴居中（与圆圈对齐）
+        className: 'station-name-icon',
+        iconSize: [120, 24],
+        iconAnchor: [-10, 12],
       });
 
-      // 4. 创建名称标记（默认隐藏，缩放后显示）
       const nameMarker = L.marker(station.coordinate, {
         icon: nameIcon,
-        zIndexOffset: 60, // 名称在上层，确保不被遮挡
-        opacity: 0, // 初始隐藏（9级以下不可见）
-        interactive: true, // 允许点击触发弹窗
+        zIndexOffset: 60,
+        opacity: 0, // 初始隐藏
+        interactive: true,
       }).addTo(map);
 
-      // 5. 统一点击事件（圆圈和名称都能打开弹窗）
+      // 点击事件
       const showStationInfo = () => {
         openPopup(
           station.coordinate,
@@ -425,51 +420,153 @@
       circleMarker.on('click', showStationInfo);
       nameMarker.on('click', showStationInfo);
 
-      // 6. 存储引用（用于后续控制显示/隐藏）
+      // 存储引用
       station.circleMarker = circleMarker;
       station.nameMarker = nameMarker;
       stationNameMarkers[station.id] = nameMarker;
     });
   };
 
-  // 控制站点名称显示/隐藏（根据缩放级别）
-  const updateStationNameVisibility = (zoomLevel) => {
-    const shouldShow = zoomLevel >= 7; // 9级以上显示，以下隐藏
-    Object.values(stationNameMarkers).forEach((marker) => {
-      marker.setOpacity(shouldShow ? 1 : 0); // 通过透明度控制，避免频繁添加/移除DOM
-    });
-  };
-
-  // 以下为原有逻辑（火车、人员、事件绑定等），仅补充缩放控制相关代码
+  // 添加火车（9级以上显示ISDN）
   const addTrains = () => {
     trains.forEach((train) => {
+      // 火车图标
       const icon = L.icon({
         iconUrl: train.isOnline
-          ? 'https://picsum.photos/id/237/40/40'
-          : 'https://picsum.photos/id/239/40/40',
-        iconSize: [30, 20],
-        iconAnchor: [15, 10], // 调整锚点居中
+          ? '/src/assets/images/largeScreen/huoche2.png'
+          : '/src/assets/images/largeScreen/huoche2.png',
+        iconSize: [30, 30],
+        iconAnchor: [15, 10],
         className: 'train-icon',
       });
-      const marker = L.marker(train.coordinate, { icon: icon, zIndexOffset: 200 }).addTo(map);
-      marker.on('click', () =>
+
+      const trainMarker = L.marker(train.coordinate, {
+        icon: icon,
+        zIndexOffset: 200, // 层级高于ISDN标签
+      }).addTo(map);
+
+      // 火车ISDN标签（9级显示，#FC09EF色）
+      const isdnDom = document.createElement('div');
+      isdnDom.className = 'isdn-label';
+      isdnDom.textContent = `ISDN: ${train.isdn}`;
+      isdnDom.style.fontSize = 25;
+      isdnDom.style.fontWeight = 700;
+      isdnDom.style.color = '#FC09EF'; // isdn颜色
+      const isdnIcon = L.divIcon({
+        html: isdnDom,
+        className: 'isdn-icon',
+        iconSize: [100, 20],
+        iconAnchor: [-10, 10], // 右侧对齐
+      });
+
+      const isdnMarker = L.marker(train.coordinate, {
+        icon: isdnIcon,
+        zIndexOffset: 190, // 层级低于火车图标
+        opacity: 0, // 初始隐藏
+        interactive: false,
+      }).addTo(map);
+
+      // 点击事件
+      trainMarker.on('click', () => {
         openPopup(
           train.coordinate,
           `
         <div class="popup-content">
           <h3>火车信息</h3>
-          <p>ISDN: ${train.isdn}</p>
-          <p>车站: ${train.station}</p>
-          <p>状态: ${train.isOnline ? '<span class="status-online">在线</span>' : '<span class="status-offline">离线</span>'}</p>
+          <p>ISDN号码: ${train.isdn}</p>
+          <p>所在车站: ${train.station}</p>
+          <p>区域位置: ${train.area}</p>
+          <p>状态: ${
+            train.isOnline
+              ? '<span class="status-online">在线</span>'
+              : '<span class="status-offline">离线</span>'
+          }</p>
         </div>
       `,
-        ),
-      );
-      train.marker = marker;
+        );
+      });
+
+      // 存储引用
+      train.marker = trainMarker;
+      train.isdnMarker = isdnMarker;
+      trainIsdnMarkers[train.id] = isdnMarker;
+
+      // 火车移动逻辑
       startTrainMovement(train);
     });
   };
 
+  // 添加人员（9级以上显示ISDN）
+  const addPersons = () => {
+    persons.forEach((person) => {
+      // 人员图标
+      const icon = L.icon({
+        iconUrl: person.isOnline
+          ? '/src/assets/images/largeScreen/zhibanyuan1.png'
+          : '/src/assets/images/largeScreen/zhibanyuan1.png',
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+        className: 'person-icon',
+      });
+
+      const personMarker = L.marker(person.coordinate, {
+        icon: icon,
+        zIndexOffset: 150, // 层级高于ISDN标签
+      }).addTo(map);
+
+      // 人员ISDN标签（9级显示，#FC09EF色）
+      const isdnDom = document.createElement('div');
+      isdnDom.className = 'isdn-label';
+      isdnDom.textContent = `ISDN: ${person.isdn}`;
+      isdnDom.style.fontSize = 25;
+      isdnDom.style.fontWeight = 700;
+      isdnDom.style.color = '#FC09EF'; // 人员isdn颜色
+      const isdnIcon = L.divIcon({
+        html: isdnDom,
+        className: 'isdn-icon',
+        iconSize: [100, 20],
+        iconAnchor: [-10, 15], // 右侧对齐
+      });
+
+      const isdnMarker = L.marker(person.coordinate, {
+        icon: isdnIcon,
+        zIndexOffset: 140, // 层级低于人员图标
+        opacity: 0, // 初始隐藏
+        interactive: false,
+      }).addTo(map);
+
+      // 点击事件
+      personMarker.on('click', () => {
+        openPopup(
+          person.coordinate,
+          `
+        <div class="popup-content">
+          <h3>人员信息</h3>
+          <p>角色: ${person.role}</p>
+          <p>ISDN号码: ${person.isdn}</p>
+          <p>所在车站: ${person.station}</p>
+          <p>区域位置: ${person.area}</p>
+          <p>状态: ${
+            person.isOnline
+              ? '<span class="status-online">在线</span>'
+              : '<span class="status-offline">离线</span>'
+          }</p>
+        </div>
+      `,
+        );
+      });
+
+      // 存储引用
+      person.marker = personMarker;
+      person.isdnMarker = isdnMarker;
+      personIsdnMarkers[person.id] = isdnMarker;
+
+      // 人员移动逻辑
+      startPersonMovement(person);
+    });
+  };
+
+  // 火车移动（ISDN标签同步移动）
   const startTrainMovement = (train) => {
     const linePoints = train.line === 'A' ? lineLayers.A.getLatLngs() : lineLayers.B.getLatLngs();
     let currentIndex =
@@ -482,7 +579,13 @@
     const moveTrain = () => {
       const nextIndex = currentIndex === linePoints.length - 1 ? 0 : currentIndex + 1;
       const nextPoint = linePoints[nextIndex];
+      // 同时移动火车图标和ISDN标签
       train.marker.slideTo(nextPoint, { duration: 4000 + Math.random() * 8, easeLinearity: 0.2 });
+      train.isdnMarker.slideTo(nextPoint, {
+        duration: 4000 + Math.random() * 8,
+        easeLinearity: 0.2,
+      });
+
       train.coordinate = [nextPoint.lat, nextPoint.lng];
       currentIndex = nextIndex;
       setTimeout(moveTrain, 4000 + Math.random() * 12000);
@@ -490,60 +593,41 @@
     setTimeout(moveTrain, 2000 + Math.random() * 6000);
   };
 
-  const addPersons = () => {
-    persons.forEach((person) => {
-      const icon = L.icon({
-        iconUrl: person.isOnline
-          ? 'https://picsum.photos/id/1012/30/30'
-          : 'https://picsum.photos/id/1005/30/30',
-        iconSize: [30, 30],
-        iconAnchor: [15, 15],
-        className: 'person-icon',
-      });
-      const marker = L.marker(person.coordinate, { icon: icon, zIndexOffset: 150 }).addTo(map);
-      marker.on('click', () =>
-        openPopup(
-          person.coordinate,
-          `
-        <div class="popup-content">
-          <h3>人员信息</h3>
-          <p>角色: ${person.role}</p>
-          <p>ISDN: ${person.isdn}</p>
-          <p>状态: ${person.isOnline ? '<span class="status-online">在线</span>' : '<span class="status-offline">离线</span>'}</p>
-        </div>
-      `,
-        ),
-      );
-      person.marker = marker;
-      startPersonMovement(person);
-    });
-  };
-
+  // 人员移动（ISDN标签同步移动）
   const startPersonMovement = (person) => {
     const movePerson = () => {
       const newPoint = L.latLng(
         person.coordinate[0] + (Math.random() - 0.5) * 0.08,
         person.coordinate[1] + (Math.random() - 0.5) * 0.08,
       );
+      // 同时移动人员图标和ISDN标签
       person.marker.slideTo(newPoint, { duration: 4000 + Math.random() * 6, easeLinearity: 0.5 });
+      person.isdnMarker.slideTo(newPoint, {
+        duration: 4000 + Math.random() * 6,
+        easeLinearity: 0.5,
+      });
+
       person.coordinate = [newPoint.lat, newPoint.lng];
       setTimeout(movePerson, 3000 + Math.random() * 7000);
     };
     setTimeout(movePerson, 1000 + Math.random() * 3000);
   };
 
-  // 绑定事件 - 新增缩放结束时更新名称显示状态
+  // 绑定地图事件
   const bindMapEvents = () => {
-    // 缩放结束：同时处理车站照片和名称显示
+    // 缩放结束时更新显示状态
     map.on('zoomend', () => {
+      const currentZoom = map.getZoom();
       handleZoomEnd();
-      updateStationNameVisibility(map.getZoom());
+      updateAllMarkersVisibility(currentZoom);
     });
 
-    // 原有旋转/拖拽事件（保持不变）
+    // 缩放开始时的处理
     map.on('zoomstart', (e) => {
       if (e.originalEvent) map.setZoomAround(map.mouseEventToLatLng(e.originalEvent));
     });
+
+    // 旋转控制
     mapContainer.value.addEventListener('mousedown', (e) => {
       if (e.button === 2) {
         isRotating = true;
@@ -564,7 +648,27 @@
     mapContainer.value.addEventListener('contextmenu', (e) => e.preventDefault());
   };
 
-  // 处理缩放结束（原有车站照片逻辑，保持不变）
+  // 核心：控制所有标签的显示/隐藏
+  const updateAllMarkersVisibility = (zoomLevel) => {
+    // 1. 车站名称：7级或7级以上显示
+    const showStationName = zoomLevel >= 7;
+    Object.values(stationNameMarkers).forEach((marker) => {
+      marker.setOpacity(showStationName ? 1 : 0);
+    });
+
+    // 2. ISDN标签：9级或9级以上显示
+    const showIsdn = zoomLevel >= 9;
+    // 火车ISDN标签
+    Object.values(trainIsdnMarkers).forEach((marker) => {
+      marker.setOpacity(showIsdn ? 1 : 0);
+    });
+    // 人员ISDN标签
+    Object.values(personIsdnMarkers).forEach((marker) => {
+      marker.setOpacity(showIsdn ? 1 : 0);
+    });
+  };
+
+  // 车站照片显示逻辑
   const handleZoomEnd = () => {
     const zoomLevel = map.getZoom();
     if (zoomLevel >= 8) {
@@ -586,7 +690,7 @@
     }
   };
 
-  // 打开弹窗（保持原有逻辑）
+  // 打开弹窗
   const openPopup = (coordinate, content) => {
     if (currentPopup && map.hasLayer(currentPopup)) map.removeLayer(currentPopup);
     currentPopup = L.popup({
@@ -600,7 +704,7 @@
       .openOn(map);
   };
 
-  // 搜索功能 - 补充：搜索到的站点强制显示名称
+  // 搜索功能
   const handleSearch = () => {
     if (!searchQuery.value.trim()) return;
     const query = searchQuery.value.trim().toLowerCase();
@@ -612,7 +716,7 @@
     [...lineAStations, ...lineBStations].forEach((station) => {
       if (station.name.toLowerCase().includes(query) && !found) {
         map.flyTo(station.coordinate, 10, { duration: 1 });
-        station.nameMarker.setOpacity(1); // 强制显示名称
+        station.nameMarker.setOpacity(1);
         openPopup(
           station.coordinate,
           `
@@ -628,13 +732,14 @@
 
     if (found) return;
 
-    // 搜索火车（保持原有逻辑）
+    // 搜索火车
     trains.forEach((train) => {
       if (
         (train.isdn.toLowerCase().includes(query) || train.station.toLowerCase().includes(query)) &&
         !found
       ) {
         map.flyTo(train.coordinate, 10, { duration: 1 });
+        train.isdnMarker.setOpacity(1);
         openPopup(
           train.coordinate,
           `
@@ -651,13 +756,14 @@
 
     if (found) return;
 
-    // 搜索人员（保持原有逻辑）
+    // 搜索人员
     persons.forEach((person) => {
       if (
-        (person.role.toLowerCase().includes(query) || person.isdn.toLowerCase().includes(query)) &&
+        (person.isdn.toLowerCase().includes(query) || person.role.toLowerCase().includes(query)) &&
         !found
       ) {
         map.flyTo(person.coordinate, 10, { duration: 1 });
+        person.isdnMarker.setOpacity(1);
         openPopup(
           person.coordinate,
           `
@@ -675,28 +781,30 @@
     if (!found) alert(`未找到与"${query}"相关的信息`);
   };
 
-  // 重置地图 - 补充：重置名称显示状态
+  // 重置地图
   const resetMap = () => {
     if (currentPopup) map.removeLayer(currentPopup);
     currentPopup = null;
 
+    // 移除车站照片
     Object.values(stationPhotos).forEach((layer) => map.removeLayer(layer));
     stationPhotos = {};
 
+    // 重置标签状态
+    updateAllMarkersVisibility(initialMapState.zoom);
+
+    // 恢复初始视图
     map.flyTo(initialMapState.center, initialMapState.zoom, { duration: 1, easeLinearity: 0.3 });
     map.setBearing(initialMapState.bearing);
     searchQuery.value = '';
-
-    // 重置名称显示（恢复到初始缩放级别对应的状态）
-    updateStationNameVisibility(initialMapState.zoom);
   };
 
-  // 监听搜索框 - 补充：清空搜索时恢复名称显示规则
+  // 监听搜索框
   watch(searchQuery, (newVal) => {
     if (!newVal.trim() && currentPopup) {
       map.removeLayer(currentPopup);
       currentPopup = null;
-      updateStationNameVisibility(map.getZoom()); // 按当前缩放级别恢复显示
+      updateAllMarkersVisibility(map.getZoom());
     }
   });
 </script>
@@ -709,7 +817,7 @@
     overflow: hidden;
   }
 
-  /* 控制区样式（保持不变） */
+  /* 控制区样式 */
   .control-container {
     display: flex;
     position: absolute;
@@ -776,13 +884,13 @@
     background: #c0392b;
   }
 
-  /* 地图容器（保持不变） */
+  /* 地图容器 */
   .map {
     width: 100%;
     height: 100%;
   }
 
-  /* 核心优化：SidePanel风格站点名称样式 */
+  /* 站点名称样式 */
   .station-name-wrapper {
     display: inline-block;
     position: relative;
@@ -790,30 +898,39 @@
 
   .station-name-content {
     padding: 2px 8px;
-    padding-left: 12px; /* 给左侧箭头留空间 */
+    padding-left: 12px;
     border-radius: 4px;
-    background-color: rgb(0 0 0 / 80%); /* 半透明黑色背景，贴合SidePanel风格 */
-    box-shadow: 0 2px 6px rgb(0 0 0 / 30%); /* 轻微阴影增强层次感 */
+    background-color: rgb(0 0 0 / 80%);
+    box-shadow: 0 2px 6px rgb(0 0 0 / 30%);
     font-size: 12px;
     font-weight: 600;
     white-space: nowrap;
   }
 
-  /* 左侧箭头（指向粉色圆圈，视觉上与圆圈连接） */
   .station-name-content::before {
     content: '';
     position: absolute;
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-
-    /* 三角形箭头（颜色与标签背景一致） */
     border-top: 5px solid transparent;
     border-right: 6px solid rgb(0 0 0 / 80%);
     border-bottom: 5px solid transparent;
   }
 
-  /* 操作提示（补充缩放规则说明） */
+  /* ISDN标签样式（#fc09ef色） */
+  .isdn-label {
+    padding: 2px 6px;
+    border-radius: 3px;
+    background-color: rgb(0 0 0 / 85%);
+    box-shadow: 0 1px 4px rgb(0 0 0 / 40%);
+    color: #fc09ef !important; /* 强制设置为#fc09ef */
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* 操作提示 */
   .map-hint {
     position: absolute;
     z-index: 900;
@@ -827,7 +944,7 @@
     font-size: 12px;
   }
 
-  /* 弹窗样式（保持不变） */
+  /* 弹窗样式 */
   :deep(.custom-popup) {
     padding: 5px;
     border: none;

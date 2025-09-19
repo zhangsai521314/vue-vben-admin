@@ -104,7 +104,7 @@
     "jquery.actual": "^1.0.19",
     "keymaster": "^1.6.2",
     "leaflet": "^1.9.4",
-    "leaflet-canvas-markers": "^1.0.7",
+    "leaflet-rotate": "^0.2.8",
     "leaflet.marker.slideto": "^0.3.0",
     "lodash-es": "^4.17.21",
     "mockjs": "^1.1.0",
