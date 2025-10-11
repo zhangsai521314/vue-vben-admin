@@ -69,7 +69,7 @@
   },
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
-    "@antv/g6": "^5.0.13",
+    "@antv/g6": "^5.0.49",
     "@ckpack/vue-color": "^1.6.0",
     "@codemirror/lang-javascript": "^6.2.2",
     "@codemirror/lang-json": "^6.0.1",
@@ -126,7 +126,6 @@
     "videojs-contrib-hls": "^5.15.0",
     "vue": "^3.4.19",
     "vue-codemirror": "^6.1.1",
-    "vue-grid-layout": "^2.4.0",
     "vue-i18n": "^9.9.1",
     "vue-json-pretty": "^2.3.0",
     "vue-router": "^4.2.5",

@@ -642,8 +642,8 @@
         tableConfigData.value = data;
         nextTick(() => {
           !myCommon.isnull(seacthContent.value.menuName)
-            ? tableRef.value.setAllTreeExpand(true)
-            : tableRef.value.clearTreeExpand();
+            ? tableRef.value?.setAllTreeExpand(true)
+            : tableRef.value?.clearTreeExpand();
         });
       })
       .catch(() => {

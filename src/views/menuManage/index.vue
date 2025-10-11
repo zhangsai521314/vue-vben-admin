@@ -103,7 +103,7 @@
               :title="t('view.menuNameCn')"
               :sortable="true"
               :minWidth="180"
-              visible="false"
+              :visible="false"
             >
               <template #default="{ row }">
                 <span>
@@ -119,7 +119,7 @@
               :title="t('view.menuNameEn')"
               :sortable="true"
               :minWidth="180"
-              visible="false"
+              :visible="false"
             >
               <template #default="{ row }">
                 <span>
@@ -135,7 +135,7 @@
               :title="t('view.menuNameFr')"
               :sortable="true"
               :minWidth="184"
-              visible="false"
+              :visible="false"
             >
               <template #default="{ row }">
                 <span>
@@ -641,8 +641,8 @@
         tableConfigData.value = data;
         nextTick(() => {
           !myCommon.isnull(seacthContent.value.menuName)
-            ? tableRef.value.setAllTreeExpand(true)
-            : tableRef.value.clearTreeExpand();
+            ? tableRef.value?.setAllTreeExpand(true)
+            : tableRef.value?.clearTreeExpand();
         });
       })
       .catch(() => {

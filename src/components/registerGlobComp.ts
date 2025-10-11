@@ -3,7 +3,6 @@ import Antd, { message } from 'ant-design-vue';
 import 'jquery-ui-dist/jquery-ui';
 //插件获取隐藏元素的高和宽
 import 'jquery.actual';
-import gridLayout from 'vue-grid-layout';
 import MyContent from './MyComponent/index.vue';
 import AuthDom from './MyAuthDom/index.vue';
 import myCommon from '@/utils/MyCommon/common';
@@ -53,7 +52,7 @@ export function registerGlobComp(app: App) {
   //VXETable的全局组件配置:https://vxetable.cn/#/table/start/global
 
   //VXETable的全局组件配置:https://vxetable.cn/#/table/base/basic
-  VXETable.config({
+  VXETable.setConfig({
     size: 'small', // 全局尺寸
     // zIndex: 999, // 全局 zIndex 起始值，如果项目的的 z-index 样式值过大时就需要跟随设置更大，避免被遮挡
     // version: 0, // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据
@@ -181,7 +180,7 @@ export function registerGlobComp(app: App) {
       proxyConfig: {
         autoLoad: true,
         message: true,
-        props: {
+        response: {
           list: null, // 用于列表，读取响应数据
           result: 'result', // 用于分页，读取响应数据
           total: 'page.total', // 用于分页，读取总条数
@@ -363,7 +362,7 @@ export function registerGlobComp(app: App) {
   });
 
   //全局注册组件
-  app.use(Antd).use(gridLayout).use(VxeUI).use(VXETable);
+  app.use(Antd).use(VxeUI).use(VXETable);
   //注册自己写的组件，避免在页面重复import
   app
     .component(

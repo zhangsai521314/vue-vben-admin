@@ -356,6 +356,7 @@
       //   sortable: true,
       // },
       {
+        field: 'isEnable',
         title: t('view.enableOrDisable'),
         minWidth: 140,
         slots: {

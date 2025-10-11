@@ -254,9 +254,14 @@ export const useMqttStore = defineStore({
       if (item.webMsgIsShow) {
         const data = this.msgData?.find((m) => m.msgId == item.msgId);
         if (data) {
-          myCommon.objectReplace(data, item);
-          this.msgData = _.orderBy(this.msgData, ['msgStartTime'], ['desc']);
-          this.playMsgAudio(data);
+          if (item.msgStatus == 2) {
+            //20251009李飞支马西现场反馈已恢复的告警不显示
+            this.msgData = this.msgData?.filter((m) => m.msgId != item.msgId);
+          } else {
+            myCommon.objectReplace(data, item);
+            this.msgData = _.orderBy(this.msgData, ['msgStartTime'], ['desc']);
+            this.playMsgAudio(data);
+          }
         }
       }
     },

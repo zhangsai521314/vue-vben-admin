@@ -400,7 +400,7 @@
       .then((data) => {
         tableConfigData.value = data;
         nextTick(() => {
-          tableRef.value.setAllTreeExpand(true);
+          tableRef.value?.setAllTreeExpand(true);
         });
       })
       .catch(() => {

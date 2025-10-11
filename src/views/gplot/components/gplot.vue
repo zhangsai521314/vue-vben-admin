@@ -274,6 +274,8 @@
             const data = graphOb.getData();
             if (data) {
               if (!data.edges.find((m) => m.source == e.source && m.target == e.target)) {
+                e.style.type = 'polyline'; //正交线
+                e['type'] = 'polyline'; //正交线
                 e['data'] = {
                   myType: 'edge',
                   //配置原有的样式
@@ -364,7 +366,9 @@
         //全部边线都是正交线
         type: 'polyline',
         style: {
-          router: true,
+          router: {
+            type: 'orth',
+          },
         },
       },
     };
@@ -1141,10 +1145,12 @@
 
   //页面卸载后
   tryOnUnmounted(() => {
+    console.log('gplot_tryOnUnmounted');
     isStop = true;
     clearTimeout(noAgileStateChangeStatus_timeId);
     if (graphOb) {
       graphOb.destroy();
+      console.log('gplot_tryOnUnmounted完成');
     }
   });
 </script>

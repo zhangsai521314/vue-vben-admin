@@ -211,6 +211,9 @@
   </MyContent>
 </template>
 <script setup lang="ts">
+  import zhCN from 'ant-design-vue/es/locale/zh_CN';
+  import enUS from 'ant-design-vue/es/locale/en_US';
+  import frFR from 'ant-design-vue/es/locale/fr_FR';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import { ref, reactive, nextTick, watch } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
