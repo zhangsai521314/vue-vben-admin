@@ -238,7 +238,10 @@
                 />
               </div>
               <div v-show="alarmSelectedContent != '0'" class="img">
-                <img :src="selectedAlarm?.data[alarmSelectedContent]?.src" />
+                <img
+                  style="max-width: 800px; max-height: 400px"
+                  :src="selectedAlarm?.data[alarmSelectedContent]?.src"
+                />
               </div>
             </div>
           </div>
@@ -2801,6 +2804,8 @@
       .alarmWai_content {
         display: flex;
         flex-direction: row;
+        height: 30px;
+        line-height: 30px;
         gap: 6px;
       }
 
@@ -2837,10 +2842,9 @@
 
   /* 控制区样式 */
   .control-container {
-    display: flex;
     position: absolute;
     z-index: 1000;
-    bottom: 20px;
+    bottom: 10%;
     left: 50%;
     flex-direction: column;
     width: 194px;
@@ -3201,11 +3205,6 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-
-            img {
-              max-width: 800px;
-              max-height: 400px;
-            }
 
             .video-player {
               width: 100%;
