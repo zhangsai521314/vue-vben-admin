@@ -354,9 +354,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -366,9 +366,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'https://media.w3.org/2010/05/sintel/trailer.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -378,9 +378,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -390,9 +390,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -402,9 +402,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -414,9 +414,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -426,9 +426,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -438,9 +438,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -450,9 +450,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -462,9 +462,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -474,9 +474,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -486,9 +486,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -498,9 +498,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -510,9 +510,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -522,9 +522,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -534,9 +534,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -546,9 +546,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -558,9 +558,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -570,9 +570,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -582,9 +582,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -594,9 +594,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -606,9 +606,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -618,9 +618,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -630,9 +630,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -642,9 +642,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
     {
@@ -654,9 +654,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
       ],
     },
   ]);
@@ -1121,16 +1121,36 @@
         interactive: true,
       }).addTo(map);
 
+      // <div class='info'>
+      //    <div>告警信息:</div>
+      //    <div style='cursor' @click='alarmOpenClick(null)'>点击查看</div>
+      // </div>
       // 点击事件
       const showStationInfo = () => {
         openPopup(
           station.coordinate,
           `
-            <div class="popup-content">
-              <h3>${station.name}</h3>
-              <p>坐标: ${station.coordinate[0].toFixed(4)}, ${station.coordinate[1].toFixed(4)}</p>
-            </div>
-          `,
+           <div class="popup-content">
+			<div class='title fontColor'>车站</div>
+			<div class='content'> 
+                <div class='info'>
+                   <div>ISDN:</div>
+                   <div>${station.name}</div>
+                 </div>
+                <div class='info'>
+                   <div>车站名称:</div>
+                   <div>${station.name}</div>
+                 </div>
+      
+                <div class='info_'>
+                   <div><img src='/src/assets/images/largeScreen/huoche2.png'/></div>
+                   <div>5</div>
+                   <div><img src='/src/assets/images/largeScreen/zhibanyuan1.png'/></div>
+                   <div>20</div>
+                </div>
+		    </div>	
+          </div>
+        `,
         );
       };
       circleMarker.on('click', showStationInfo);
@@ -1188,15 +1208,25 @@
           train.coordinate,
           `
           <div class="popup-content">
-            <h3>火车信息</h3>
-            <p>ISDN号码: ${train.isdn}</p>
-            <p>所在车站: ${train.station}</p>
-            <p>区域位置: ${train.area}</p>
-            <p>状态: ${
-              train.isOnline
-                ? '<span class="status-online">在线</span>'
-                : '<span class="status-offline">离线</span>'
-            }</p>
+			<div class='title fontColor'>列车</div>
+			<div class='content'> 
+                <div class='info'>
+                   <div>ISDN:</div>
+                   <div>${train.isdn}</div>
+                 </div>
+                <div class='info'>
+                   <div>机车号:</div>
+                   <div>${train.isdn}</div>
+                 </div>
+                <div class='info'>
+                   <div>所在车站:</div>
+                   <div>${train.station}</div>
+                </div>
+                <div class='info'>
+                   <div>所属区域:</div>
+                   <div>${train.area}</div>
+                </div>
+		    </div>	
           </div>
         `,
         );
@@ -1257,16 +1287,25 @@
           person.coordinate,
           `
           <div class="popup-content">
-            <h3>人员信息</h3>
-            <p>角色: ${person.role}</p>
-            <p>ISDN号码: ${person.isdn}</p>
-            <p>所在车站: ${person.station}</p>
-            <p>区域位置: ${person.area}</p>
-            <p>状态: ${
-              person.isOnline
-                ? '<span class="status-online">在线</span>'
-                : '<span class="status-offline">离线</span>'
-            }</p>
+			<div class='title fontColor'>人员</div>
+			<div class='content'> 
+                <div class='info'>
+                   <div>ISDN:</div>
+                   <div>${person.isdn}</div>
+                 </div>
+                <div class='info'>
+                   <div>人员角色:</div>
+                   <div>${person.role}</div>
+                 </div>
+                <div class='info'>
+                   <div>所在车站:</div>
+                   <div>${person.station}</div>
+                </div>
+                <div class='info'>
+                   <div>所属区域:</div>
+                   <div>${person.area}</div>
+                </div>
+		    </div>	
           </div>
         `,
         );
@@ -1428,6 +1467,10 @@
 
     if (currentPopup) map.removeLayer(currentPopup);
 
+    //     <div class='info'>
+    //    <div>告警信息:</div>
+    //    <div style='cursor' click='alarmOpenClick(null)'>点击查看</div>
+    // </div>
     // 搜索车站
     [...lineAStations, ...lineBStations].forEach((station) => {
       if (station.name.toLowerCase().includes(query) && !found) {
@@ -1436,11 +1479,26 @@
         openPopup(
           station.coordinate,
           `
-            <div class="popup-content">
-              <h3>${station.name}</h3>
-              <p>坐标: ${station.coordinate[0].toFixed(4)}, ${station.coordinate[1].toFixed(4)}</p>
-            </div>
-          `,
+           <div class="popup-content">
+			<div class='title fontColor'>车站</div>
+			<div class='content'> 
+                <div class='info'>
+                   <div>ISDN:</div>
+                   <div>${station.name}</div>
+                 </div>
+                <div class='info'>
+                   <div>车站名称:</div>
+                   <div>${station.name}</div>
+                 </div>
+                <div class='info_'>
+                   <div><img src='/src/assets/images/largeScreen/huoche2.png'/></div>
+                   <div>5</div>
+                   <div><img src='/src/assets/images/largeScreen/zhibanyuan1.png'/></div>
+                   <div>20</div>
+                </div>
+		    </div>	
+          </div>
+        `,
         );
         found = true;
       }
@@ -1459,12 +1517,28 @@
         openPopup(
           train.coordinate,
           `
-            <div class="popup-content">
-              <h3>火车 ${train.isdn}</h3>
-              <p>所在车站: ${train.station}</p>
-              <p>状态: ${train.isOnline ? '<span class="status-online">在线</span>' : '<span class="status-offline">离线</span>'}</p>
-            </div>
-          `,
+          <div class="popup-content">
+			<div class='title fontColor'>列车</div>
+			<div class='content'> 
+                <div class='info'>
+                   <div>ISDN:</div>
+                   <div>${train.isdn}</div>
+                 </div>
+                <div class='info'>
+                   <div>机车号:</div>
+                   <div>${train.isdn}</div>
+                 </div>
+                <div class='info'>
+                   <div>所在车站:</div>
+                   <div>${train.station}</div>
+                </div>
+                <div class='info'>
+                   <div>所属区域:</div>
+                   <div>${train.area}</div>
+                </div>
+		    </div>	
+          </div>
+        `,
         );
         found = true;
       }
@@ -1483,18 +1557,34 @@
         openPopup(
           person.coordinate,
           `
-            <div class="popup-content">
-              <h3>${person.role}</h3>
-              <p>ISDN: ${person.isdn}</p>
-              <p>状态: ${person.isOnline ? '<span class="status-online">在线</span>' : '<span class="status-offline">离线</span>'}</p>
-            </div>
-          `,
+          <div class="popup-content">
+			<div class='title fontColor'>人员</div>
+			<div class='content'> 
+                <div class='info'>
+                   <div>ISDN:</div>
+                   <div>${person.isdn}</div>
+                 </div>
+                <div class='info'>
+                   <div>人员角色:</div>
+                   <div>${person.role}</div>
+                 </div>
+                <div class='info'>
+                   <div>所在车站:</div>
+                   <div>${person.station}</div>
+                </div>
+                <div class='info'>
+                   <div>所属区域:</div>
+                   <div>${person.area}</div>
+                </div>
+		    </div>	
+          </div>
+        `,
         );
         found = true;
       }
     });
 
-    if (!found) alert(`未找到与"${query}"相关的信息`);
+    if (!found) message.info(`未找到与"${query}"相关的信息`);
   };
 
   // 重置地图
@@ -2883,7 +2973,75 @@
   }
 
   :deep(.popup-content) {
+    width: 330px;
+    height: 200px;
     padding: 10px 0;
+    background-image: url('@/assets/images/largeScreen/maptop.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+
+    .title {
+      position: relative;
+      top: -13px;
+      left: 133px;
+      width: 107px;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .content {
+      display: flex;
+      position: relative;
+      top: 17px;
+      left: 33px;
+      flex-direction: column;
+      width: 260px;
+      height: 135px;
+      font-size: 20px;
+      gap: 9px;
+
+      .info {
+        display: flex;
+        flex-direction: row;
+
+        > div:first-child {
+          width: 200px;
+          overflow: hidden;
+          color: #ad11a4;
+          text-align: right;
+          text-emphasis: inherit;
+        }
+
+        > div:last-child {
+          width: 100%;
+          padding-left: 2px;
+          overflow: hidden;
+          color: #fff;
+          text-align: left;
+          text-emphasis: inherit;
+        }
+      }
+
+      .info_ {
+        display: flex;
+        flex-direction: row;
+        gap: 4px;
+        justify-content: center;
+        color: #fff;
+      }
+    }
+
+    img {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  :deep(.leaflet-container a.leaflet-popup-close-button) {
+    top: 29px;
+    right: 16px;
   }
 
   .status-online {
@@ -2894,6 +3052,12 @@
   .status-offline {
     color: #e74c3c;
     font-weight: 500;
+  }
+
+  :deep(.leaflet-popup),
+  :deep(.leaflet-popup-content-wrapper) {
+    background-color: #fff0 !important;
+    box-shadow: none;
   }
 
   :deep(.leaflet-popup-tip-container) {
