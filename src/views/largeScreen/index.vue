@@ -25,28 +25,41 @@
           </div>
         </div>
         <div class="head">运行监控数据平台 </div>
-        <div class="headCenter">
-          <div class="headCenter1">
-            <div class="icon">
-              <IconFontClass name="icon-baseui-ziyuan" :style="{ fontSize: '30px' }"
-            /></div>
-            <div class="title" style="left: 48px; width: 90px">调度台/值班台</div>
-            <div class="count" style="color: #b97fff">19</div>
+        <div
+          style="
+            display: flex;
+            position: absolute;
+            top: 47px;
+            justify-content: center;
+            width: 100%;
+            height: 70px;
+          "
+        >
+          <div class="headCenter">
+            <div>
+              <div class="headCenter1">
+                <div class="icon">
+                  <IconFontClass name="icon-baseui-ziyuan" :style="{ fontSize: '30px' }"
+                /></div>
+                <div class="title" style="left: 48px; width: 90px">调度台/值班台</div>
+                <div class="count" style="color: #b97fff">19</div>
+              </div>
+              <div class="headCenter2">
+                <div class="icon">
+                  <IconFontClass name="icon-baseui-zhinengwangguan" :style="{ fontSize: '34px' }"
+                /></div>
+                <div class="title" style="left: 47px; width: 60px">机车电台</div>
+                <div class="count" style="color: #5ecdba">60</div></div
+              >
+              <div class="headCenter3">
+                <div class="icon" style="top: 2px">
+                  <IconFontClass name="icon-baseui-shouchidanbing" :style="{ fontSize: '36px' }"
+                /></div>
+                <div class="title" style="left: 46px; width: 60px">手持终端</div>
+                <div class="count" style="left: 50px; color: #3ec2e9">1020</div></div
+              >
+            </div>
           </div>
-          <div class="headCenter2">
-            <div class="icon">
-              <IconFontClass name="icon-baseui-zhinengwangguan" :style="{ fontSize: '34px' }"
-            /></div>
-            <div class="title" style="left: 47px; width: 60px">机车电台</div>
-            <div class="count" style="color: #5ecdba">60</div></div
-          >
-          <div class="headCenter3">
-            <div class="icon" style="top: 2px">
-              <IconFontClass name="icon-baseui-shouchidanbing" :style="{ fontSize: '36px' }"
-            /></div>
-            <div class="title" style="left: 46px; width: 60px">手持终端</div>
-            <div class="count" style="left: 50px; color: #3ec2e9">1020</div></div
-          >
         </div>
         <div class="wgdata fontColor">
           <div class="bottombg"></div>
@@ -100,15 +113,211 @@
         </div>
         <div class="video fontColor">
           <div class="bottombg"></div>
-          <div class="title">马瑞巴亚港</div>
+          <div class="title" @click="videoOpenClick(null)">马瑞巴亚港</div>
+          <div class="player-wrapper">
+            <video-player
+              ref="playerRefMin"
+              class="video-player vjs-custom-theme"
+              :options="playerOptionsMin"
+              :language="currentLang"
+              @ready="onPlayerReadyMin"
+              @play="onPlayMin"
+              @pause="onPauseMin"
+              @ended="onEndedMin"
+              @error="onErrorMin"
+            />
+          </div>
+        </div>
+        <div class="alarm fontColor">
+          <div class="bottombg"></div>
+          <div class="title" @click="alarmOpenClick(null)">告警信息</div>
+          <div class="alarmNo" v-show="pendingAlarmData.length == 0">
+            <div>无待处理告警</div>
+          </div>
+          <div v-show="pendingAlarmData.length > 0" class="data">
+            <vue3-seamless-scroll
+              class="scroll"
+              :list="pendingAlarmData"
+              :hover="true"
+              :limitScrollNum="13"
+              :isWatch="true"
+              :step="0.5"
+            >
+              <div
+                @click="alarmOpenClick(item)"
+                class="alarmWai_for"
+                v-for="(item, i) in pendingAlarmData"
+                :key="i"
+              >
+                <div class="alarmWai_content">
+                  <div class="alarm_title">{{ item.title }}</div>
+                  <div class="alarm_time">{{ item.time }}</div>
+                </div>
+              </div>
+            </vue3-seamless-scroll>
+          </div>
         </div>
       </div>
     </a-spin>
+    <a-modal
+      v-model:open="alarmOpen"
+      title=""
+      :closable="false"
+      :footer="null"
+      wrapClassName="zssssssssssssss"
+      width="84%"
+      @cancel="closeAlarmOpen"
+    >
+      <div class="alarmOpenContent fontColor">
+        <div class="alarmList">
+          <div class="title">告警列表</div>
+          <div class="alarmListDetail">
+            <div
+              :class="{ fontColorSelect: item.id == selectedAlarm?.id }"
+              @click="alarmOpenClick(item)"
+              class="alarmWai_for"
+              v-for="(item, i) in pendingAlarmData"
+              :key="i"
+            >
+              <div class="alarmWai_content">
+                <div class="alarm_title">{{ item.title }}</div>
+                <div class="alarm_time">{{ item.time }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          style="
+            position: absolute;
+            z-index: 2;
+            top: 13px;
+            right: -23px;
+            width: 100px;
+            color: rgb(255 255 255);
+            cursor: pointer;
+          "
+        >
+          <IconFontClass
+            name="icon-baseui-guanbicuowu"
+            @click="closeAlarmOpen"
+            :style="{ fontSize: '30px' }"
+          />
+        </div>
+        <div style="width: 30px"></div>
+        <div class="alarmDetail">
+          <div class="title">告警内容</div>
+          <div class="alarmDetailContent">
+            <div class="text">
+              请注意，请注意，
+              请注意，在科里巴至卡萨公里处出现落石，现场正在进行施工抢修工作，抢修施工预计的完成时间为2025.09.1815:30:00。
+              请注意，请注意，
+              请注意，在科里巴至卡萨公里处出现落石，现场正在进行施工抢修工作，抢修施工预计的完成时间为方法2025.09.1815:30:00
+              请注意，请注意，
+              请注意，在科里巴至卡萨公里处出现落石，现场正在进行施工抢修工作，抢修施工预计的完成时间为方法2025.09.1815:30:00
+            </div>
+            <div class="alarmSelectedContent">
+              <a-radio-group size="small" v-model:value="alarmSelectedContent" button-style="solid">
+                <a-radio-button value="0">视频</a-radio-button>
+                <a-radio-button value="1">图片1</a-radio-button>
+                <a-radio-button value="2">图片2</a-radio-button>
+                <a-radio-button value="3">图片3</a-radio-button>
+              </a-radio-group>
+            </div>
+            <div class="multimedia">
+              <div v-show="alarmSelectedContent == '0'" class="video">
+                <video-player
+                  ref="playerRefAlarm"
+                  class="video-player vjs-custom-theme"
+                  :options="playerOptionsAlarm"
+                  :language="currentLang"
+                  @ready="onPlayerReadyAlarm"
+                  @play="onPlayAlarm"
+                  @pause="onPauseAlarm"
+                  @ended="onEndedAlarm"
+                  @error="onErrorAlarm"
+                />
+              </div>
+              <div v-show="alarmSelectedContent != '0'" class="img">
+                <img :src="selectedAlarm?.data[alarmSelectedContent]?.src" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a-modal>
+    <a-modal
+      v-model:open="videoOpen"
+      title=""
+      :closable="false"
+      :footer="null"
+      wrapClassName="zssssssssssssss"
+      width="84%"
+      @cancel="closeVideoOpen"
+    >
+      <div class="videoOpenContent fontColor">
+        <div class="videoList">
+          <div class="title">视频线路列表</div>
+          <div class="videoListDetail">
+            <div
+              :class="{ fontColorSelect: item.name == selectedVideo?.name }"
+              @click="videoOpenClick(item)"
+              class="videoWai_for"
+              v-for="(item, i) in pendingVideoData"
+              :key="i"
+            >
+              <div class="videoWai_content">
+                <div class="video_title">{{ item.name }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          style="
+            position: absolute;
+            z-index: 2;
+            top: 13px;
+            right: -23px;
+            width: 100px;
+            color: rgb(255 255 255);
+            cursor: pointer;
+          "
+        >
+          <IconFontClass
+            name="icon-baseui-guanbicuowu"
+            @click="closeVideoOpen"
+            :style="{ fontSize: '30px' }"
+          />
+        </div>
+        <div style="width: 10px"></div>
+        <div class="video">
+          <video-player
+            ref="playerRefVideo"
+            class="video-player vjs-custom-theme"
+            :options="playerOptionsVideo"
+            :language="currentLang"
+            @ready="onPlayerReadyVideo"
+            @play="onPlayVideo"
+            @pause="onPauseVideo"
+            @ended="onEndedVideo"
+            @error="onErrorVideo"
+          />
+        </div>
+      </div>
+    </a-modal>
   </MyContent>
 </template>
 <script setup lang="ts">
   import Carousel3D from './Carousel3D.vue';
-  import { ref, reactive, createVNode, nextTick, watch, onMounted } from 'vue';
+  import {
+    ref,
+    reactive,
+    createVNode,
+    nextTick,
+    watch,
+    onMounted,
+    onUnmounted,
+    computed,
+  } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
@@ -117,6 +326,11 @@
   import 'leaflet/dist/leaflet.css';
   import 'leaflet.marker.slideto';
   import 'leaflet-rotate';
+  import { VideoPlayer } from '@videojs-player/vue';
+  import 'video.js/dist/video-js.css';
+  import videojs from 'video.js';
+  import { Vue3SeamlessScroll } from 'vue3-seamless-scroll';
+  import { message } from 'ant-design-vue';
 
   const { t } = useI18n();
   const localeStore = useLocaleStore();
@@ -128,6 +342,461 @@
   const chartJiCir = useECharts(chartJiCirRef);
   const chartHandRef = ref(null);
   const chartHand = useECharts(chartHandRef);
+  const alarmOpen = ref(false);
+  const alarmSelectedContent = ref('0');
+
+  //待处理告警数据
+  const pendingAlarmData = ref([
+    {
+      id: 166,
+      title: '1距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 1,
+      title: '2距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'https://media.w3.org/2010/05/sintel/trailer.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 2,
+      title: '3距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 3,
+      title: '4距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 4,
+      title: '5距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 5,
+      title: '6距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 6,
+      title: '7距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 7,
+      title: '8距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 8,
+      title: '9距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 9,
+      title: '10距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 10,
+      title: '11距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 11,
+      title: '6距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 12,
+      title: '12距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 13,
+      title: '13距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 14,
+      title: '14距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 15,
+      title: '15距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 16,
+      title: '16距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 14,
+      title: '14距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 15,
+      title: '15距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 16,
+      title: '16距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 14,
+      title: '14距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 15,
+      title: '15距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 16,
+      title: '16距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 14,
+      title: '14距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 15,
+      title: '15距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+    {
+      id: 30,
+      title: '30距离马瑞巴亚港100公里发生告警',
+      content: '具体告警内容',
+      time: '2025.10.14 15:20:15',
+      data: [
+        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '@/assets/images/largeScreen/huoche.png' },
+      ],
+    },
+  ]);
+  const selectedAlarm = ref({
+    id: 1,
+    title: '1距离马瑞巴亚港100公里发生告警',
+    content: '具体告警内容',
+    time: '2025.10.14 15:20:15',
+    data: [
+      { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+      { dateType: 'img', src: 'src/assets/images/largeScreen/9OvS3Pyr.jpg' },
+      { dateType: 'img', src: 'src/assets/images/largeScreen/222.jpeg' },
+      { dateType: 'img', src: 'src/assets/images/largeScreen/huoche.png' },
+    ],
+  });
+
+  const videoOpen = ref(false);
+  const pendingVideoData = ref([
+    {
+      name: '马西线路1',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路2',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路3',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路4',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路5',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路6',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路7',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路8',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路9',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路10',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路11',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路12',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路13',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路14',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路15',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路16',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路17',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    {
+      name: '马西线路18',
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+  ]);
+  const selectedVideo = ref({
+    name: '马西线路1',
+    type: 'application/x-mpegURL',
+    src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+  });
+
+  function alarmOpenClick(item) {
+    if (!item) {
+      if (pendingAlarmData.value.length <= 0) {
+        message.info('不存在告警');
+      } else {
+        selectedAlarm.value = pendingAlarmData.value[0];
+      }
+    } else {
+      selectedAlarm.value = item;
+    }
+    alarmOpen.value = true;
+  }
+
+  function videoOpenClick(item) {
+    if (!item) {
+      if (pendingVideoData.value.length <= 0) {
+        message.info('不存在视频列表');
+      } else {
+        selectedVideo.value = pendingVideoData.value[0];
+      }
+    } else {
+      selectedVideo.value = item;
+    }
+    videoOpen.value = true;
+  }
 
   // 初始地图状态（默认缩放8级）
   const initialMapState = {
@@ -457,11 +1126,11 @@
         openPopup(
           station.coordinate,
           `
-          <div class="popup-content">
-            <h3>${station.name}</h3>
-            <p>坐标: ${station.coordinate[0].toFixed(4)}, ${station.coordinate[1].toFixed(4)}</p>
-          </div>
-        `,
+            <div class="popup-content">
+              <h3>${station.name}</h3>
+              <p>坐标: ${station.coordinate[0].toFixed(4)}, ${station.coordinate[1].toFixed(4)}</p>
+            </div>
+          `,
         );
       };
       circleMarker.on('click', showStationInfo);
@@ -518,18 +1187,18 @@
         openPopup(
           train.coordinate,
           `
-        <div class="popup-content">
-          <h3>火车信息</h3>
-          <p>ISDN号码: ${train.isdn}</p>
-          <p>所在车站: ${train.station}</p>
-          <p>区域位置: ${train.area}</p>
-          <p>状态: ${
-            train.isOnline
-              ? '<span class="status-online">在线</span>'
-              : '<span class="status-offline">离线</span>'
-          }</p>
-        </div>
-      `,
+          <div class="popup-content">
+            <h3>火车信息</h3>
+            <p>ISDN号码: ${train.isdn}</p>
+            <p>所在车站: ${train.station}</p>
+            <p>区域位置: ${train.area}</p>
+            <p>状态: ${
+              train.isOnline
+                ? '<span class="status-online">在线</span>'
+                : '<span class="status-offline">离线</span>'
+            }</p>
+          </div>
+        `,
         );
       });
 
@@ -587,19 +1256,19 @@
         openPopup(
           person.coordinate,
           `
-        <div class="popup-content">
-          <h3>人员信息</h3>
-          <p>角色: ${person.role}</p>
-          <p>ISDN号码: ${person.isdn}</p>
-          <p>所在车站: ${person.station}</p>
-          <p>区域位置: ${person.area}</p>
-          <p>状态: ${
-            person.isOnline
-              ? '<span class="status-online">在线</span>'
-              : '<span class="status-offline">离线</span>'
-          }</p>
-        </div>
-      `,
+          <div class="popup-content">
+            <h3>人员信息</h3>
+            <p>角色: ${person.role}</p>
+            <p>ISDN号码: ${person.isdn}</p>
+            <p>所在车站: ${person.station}</p>
+            <p>区域位置: ${person.area}</p>
+            <p>状态: ${
+              person.isOnline
+                ? '<span class="status-online">在线</span>'
+                : '<span class="status-offline">离线</span>'
+            }</p>
+          </div>
+        `,
         );
       });
 
@@ -767,11 +1436,11 @@
         openPopup(
           station.coordinate,
           `
-          <div class="popup-content">
-            <h3>${station.name}</h3>
-            <p>坐标: ${station.coordinate[0].toFixed(4)}, ${station.coordinate[1].toFixed(4)}</p>
-          </div>
-        `,
+            <div class="popup-content">
+              <h3>${station.name}</h3>
+              <p>坐标: ${station.coordinate[0].toFixed(4)}, ${station.coordinate[1].toFixed(4)}</p>
+            </div>
+          `,
         );
         found = true;
       }
@@ -790,12 +1459,12 @@
         openPopup(
           train.coordinate,
           `
-          <div class="popup-content">
-            <h3>火车 ${train.isdn}</h3>
-            <p>所在车站: ${train.station}</p>
-            <p>状态: ${train.isOnline ? '<span class="status-online">在线</span>' : '<span class="status-offline">离线</span>'}</p>
-          </div>
-        `,
+            <div class="popup-content">
+              <h3>火车 ${train.isdn}</h3>
+              <p>所在车站: ${train.station}</p>
+              <p>状态: ${train.isOnline ? '<span class="status-online">在线</span>' : '<span class="status-offline">离线</span>'}</p>
+            </div>
+          `,
         );
         found = true;
       }
@@ -814,12 +1483,12 @@
         openPopup(
           person.coordinate,
           `
-          <div class="popup-content">
-            <h3>${person.role}</h3>
-            <p>ISDN: ${person.isdn}</p>
-            <p>状态: ${person.isOnline ? '<span class="status-online">在线</span>' : '<span class="status-offline">离线</span>'}</p>
-          </div>
-        `,
+            <div class="popup-content">
+              <h3>${person.role}</h3>
+              <p>ISDN: ${person.isdn}</p>
+              <p>状态: ${person.isOnline ? '<span class="status-online">在线</span>' : '<span class="status-offline">离线</span>'}</p>
+            </div>
+          `,
         );
         found = true;
       }
@@ -852,6 +1521,418 @@
       map.removeLayer(currentPopup);
       currentPopup = null;
       updateAllMarkersVisibility(map.getZoom());
+    }
+  });
+
+  function initMap() {
+    // 初始化地图
+    // 创建地图实例
+    map = L.map(mapContainer.value, {
+      crs: L.CRS.Simple,
+      attributionControl: false,
+      zoomControl: false,
+      minZoom: 3,
+      maxZoom: 12,
+      zoomSnap: 0.5,
+      dragging: true,
+      tap: false,
+      rotate: true,
+      bearing: initialMapState.bearing,
+    });
+
+    // 设置初始视图（默认8级缩放）
+    map.setView(initialMapState.center, initialMapState.zoom);
+    map.getContainer().style.backgroundColor = 'transparent';
+
+    // 添加缩放/旋转控制
+    L.control.zoom({ position: 'topright' }).addTo(map);
+    L.control.rotate({ position: 'topright', closeOnZeroBearing: false }).addTo(map);
+
+    // 绘制线路
+    lineLayers.A = drawLine(lineACoordinates);
+    lineLayers.B = drawLine(lineBCoordinates);
+
+    // 添加车站、火车、人员
+    addStations(lineAStations);
+    addStations(lineBStations);
+    addTrains();
+    addPersons();
+
+    // 页面进入动画
+    setTimeout(() => {
+      map.flyTo(initialMapState.center, initialMapState.zoom, {
+        duration: 2,
+        easeLinearity: 0.2,
+      });
+    }, 500);
+
+    // 绑定事件
+    bindMapEvents();
+    // 初始化时根据缩放级别设置所有标签状态
+    updateAllMarkersVisibility(map.getZoom());
+  }
+
+  //视频
+  const isMuted = ref(true); // 初始静音（满足浏览器自动播放条件）
+  // Video.js 播放器多语言配置
+  const videojsLanguages = {
+    'zh-CN': {
+      Play: '播放',
+      Pause: '暂停',
+      Mute: '静音',
+      Unmute: '取消静音',
+      Fullscreen: '全屏',
+      'Exit Fullscreen': '退出全屏',
+      'Picture-in-Picture': '画中画',
+      'Exit Picture-in-Picture': '退出画中画',
+      'Playback Rate': '播放速度',
+      Subtitles: '字幕',
+      'subtitles off': '关闭字幕',
+      Quality: '质量',
+      'Live Broadcast': '直播',
+      Loaded: '已加载',
+      Progress: '进度',
+      'Progress Bar': '进度条',
+      'volume level': '音量级别',
+      'Use Up/Down Arrow keys to increase or decrease volume.': '使用上下方向键调节音量',
+      'Use Left/Right Arrow keys to advance one second, Up/Down arrows to advance ten seconds.':
+        '使用左右方向键前进一秒，上下方向键前进十秒',
+    },
+    en: {
+      // 英语使用默认值
+    },
+    fr: {
+      Play: 'Lecture',
+      Pause: 'Pause',
+      Mute: 'Muet',
+      Unmute: 'Son activé',
+      Fullscreen: 'Plein écran',
+      'Exit Fullscreen': 'Fenêtré',
+      'Picture-in-Picture': "Image dans l'image",
+      'Exit Picture-in-Picture': "Quitter l'image dans l'image",
+      'Playback Rate': 'Vitesse de lecture',
+      Subtitles: 'Sous-titres',
+      'subtitles off': 'Sous-titres désactivés',
+      Quality: 'Qualité',
+      'Live Broadcast': 'Diffusion en direct',
+      Loaded: 'Chargé',
+      Progress: 'Progression',
+      'Progress Bar': 'Barre de progression',
+      'volume level': 'niveau du volume',
+      'Use Up/Down Arrow keys to increase or decrease volume.':
+        'Utilisez les touches fléchées haut/bas pour augmenter ou diminuer le volume.',
+      'Use Left/Right Arrow keys to advance one second, Up/Down arrows to advance ten seconds.':
+        "Utilisez les touches fléchées gauche/droite pour avancer d'une seconde, haut/bas pour avancer de dix secondes.",
+    },
+  };
+
+  // 小窗口视频
+  const currentLang = ref('zh-CN');
+  const currentSourceMin = ref('video');
+  const playerRefMin = ref();
+  const playerStatusMin = ref('ready');
+
+  //告警视频
+  const playerRefAlarm = ref();
+  const playerStatusAlarm = ref('ready');
+
+  //监控视频
+  const playerRefVideo = ref();
+  const playerStatusVideo = ref('ready');
+
+  // 视频源配置
+  const videoSources = {
+    video: {
+      type: 'video/mp4',
+      src: 'https://vjs.zencdn.net/v/oceans.mp4',
+      poster: 'https://vjs.zencdn.net/v/oceans.png',
+    },
+    live: {
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+    customLive: {
+      type: 'application/x-mpegURL',
+      src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    },
+  };
+
+  // 播放器配置
+  const playerOptionsMin = computed(() => ({
+    autoplay: true,
+    controls: false,
+    responsive: true,
+    fluid: true,
+    liveui: currentSourceMin.value !== 'video', // 直播模式启用实时控件
+    fill: true,
+    muted: isMuted.value,
+    sources: [videoSources[currentSourceMin.value]],
+    poster: currentSourceMin.value === 'video' ? videoSources.video.poster : undefined,
+    userActions: {
+      hotkeys: true,
+    },
+    html5: {
+      vhs: {
+        enableLowInitialPlaylist: true,
+        smoothQualityChange: true,
+        overrideNative: true,
+      },
+    },
+    controlBar: {
+      children: [
+        'playToggle',
+        'volumePanel',
+        'currentTimeDisplay',
+        'timeDivider',
+        'durationDisplay',
+        'progressControl',
+        'liveDisplay',
+        'remainingTimeDisplay',
+        'playbackRateMenuButton',
+        'fullscreenToggle',
+      ],
+    },
+  }));
+
+  const changeLanguage = (lang) => {
+    currentLang.value = lang;
+    if (playerRefMin.value?.player) {
+      playerRefMin.value.player.language(lang);
+    }
+  };
+
+  const changeSource = (source) => {
+    currentSourceMin.value = source;
+    playerStatusMin.value = 'ready';
+  };
+
+  // 播放器事件处理
+  const onPlayerReadyMin = (player) => {
+    console.log('播放器准备就绪');
+    // 注册所有语言
+    Object.keys(videojsLanguages).forEach((lang) => {
+      videojs.addLanguage(lang, videojsLanguages[lang]);
+    });
+    playerStatusMin.value = 'ready';
+  };
+
+  // 新增：重播视频核心逻辑（重置进度 + 播放）
+  const replayVideo = (player) => {
+    if (!player) return;
+    player.currentTime(0); // 重置播放进度到开头
+    player.play(); // 重新播放
+    playerStatusMin.value = 'playing';
+  };
+  const onPlayMin = () => {
+    playerStatusMin.value = 'playing';
+    console.log('开始播放');
+  };
+
+  const onPauseMin = () => {
+    playerStatusMin.value = 'paused';
+    console.log('播放暂停');
+  };
+
+  const onEndedMin = () => {
+    playerStatusMin.value = 'ended';
+    console.log('播放结束');
+    replayVideo(playerRefMin.value?.player);
+  };
+
+  const onErrorMin = (error) => {
+    playerStatusMin.value = 'error';
+    console.error('播放器错误:', error);
+  };
+
+  // 监听视频源变化
+  watch(currentSourceMin, (newSource) => {
+    if (playerRefMin.value?.player) {
+      const player = playerRefMin.value.player;
+      player.src(videoSources[newSource]);
+      playerStatusMin.value = 'ready';
+    }
+  });
+
+  function closeAlarmOpen() {
+    alarmOpen.value = false;
+    debugger;
+    if (playerRefAlarm.value) {
+      playerRefAlarm.value.player.dispose();
+    }
+  }
+
+  // 播放器配置
+  const playerOptionsAlarm = computed(() => ({
+    autoplay: false,
+    controls: true,
+    responsive: true,
+    fluid: true,
+    liveui: currentSourceMin.value !== 'video', // 直播模式启用实时控件
+    fill: true,
+    muted: isMuted.value,
+    sources: [videoSources[currentSourceMin.value]],
+    poster: currentSourceMin.value === 'video' ? videoSources.video.poster : undefined,
+    userActions: {
+      hotkeys: true,
+    },
+    html5: {
+      vhs: {
+        enableLowInitialPlaylist: true,
+        smoothQualityChange: true,
+        overrideNative: true,
+      },
+    },
+    controlBar: {
+      children: [
+        'playToggle',
+        'volumePanel',
+        'currentTimeDisplay',
+        'timeDivider',
+        'durationDisplay',
+        'progressControl',
+        'liveDisplay',
+        'remainingTimeDisplay',
+        'playbackRateMenuButton',
+        'fullscreenToggle',
+      ],
+    },
+  }));
+
+  // 播放器事件处理
+  const onPlayerReadyAlarm = (player) => {
+    console.log('播放器准备就绪');
+    // 注册所有语言
+    Object.keys(videojsLanguages).forEach((lang) => {
+      videojs.addLanguage(lang, videojsLanguages[lang]);
+    });
+    playerStatusMin.value = 'ready';
+  };
+
+  const onPlayAlarm = () => {
+    playerStatusAlarm.value = 'playing';
+    console.log('开始播放');
+  };
+
+  const onPauseAlarm = () => {
+    playerStatusAlarm.value = 'paused';
+    console.log('播放暂停');
+  };
+
+  const onEndedAlarm = () => {
+    playerStatusAlarm.value = 'ended';
+    console.log('播放结束');
+    replayVideo(playerRefAlarm.value?.player);
+  };
+
+  const onErrorAlarm = (error) => {
+    playerStatusAlarm.value = 'error';
+    console.error('播放器错误:', error);
+  };
+
+  // 监听视频源变化
+  watch(selectedAlarm, (newSource) => {
+    if (playerRefAlarm.value?.player) {
+      const player = playerRefAlarm.value.player;
+      player.src(videoSources[newSource]);
+      playerStatusAlarm.value = 'ready';
+    }
+  });
+
+  function closeVideoOpen() {
+    videoOpen.value = false;
+    debugger;
+    if (playerRefVideo.value) {
+      playerRefVideo.value.player.dispose();
+    }
+  }
+
+  // 播放器配置
+  const playerOptionsVideo = computed(() => ({
+    autoplay: false,
+    controls: true,
+    responsive: true,
+    fluid: true,
+    liveui: currentSourceMin.value !== 'video', // 直播模式启用实时控件
+    fill: true,
+    muted: isMuted.value,
+    sources: [videoSources[currentSourceMin.value]],
+    poster: currentSourceMin.value === 'video' ? videoSources.video.poster : undefined,
+    userActions: {
+      hotkeys: true,
+    },
+    html5: {
+      vhs: {
+        enableLowInitialPlaylist: true,
+        smoothQualityChange: true,
+        overrideNative: true,
+      },
+    },
+    controlBar: {
+      children: [
+        'playToggle',
+        'volumePanel',
+        'currentTimeDisplay',
+        'timeDivider',
+        'durationDisplay',
+        'progressControl',
+        'liveDisplay',
+        'remainingTimeDisplay',
+        'playbackRateMenuButton',
+        'fullscreenToggle',
+      ],
+    },
+  }));
+
+  // 播放器事件处理
+  const onPlayerReadyVideo = (player) => {
+    console.log('播放器准备就绪');
+    // 注册所有语言
+    Object.keys(videojsLanguages).forEach((lang) => {
+      videojs.addLanguage(lang, videojsLanguages[lang]);
+    });
+    playerStatusVideo.value = 'ready';
+  };
+
+  const onPlayVideo = () => {
+    playerStatusVideo.value = 'playing';
+    console.log('开始播放');
+  };
+
+  const onPauseVideo = () => {
+    playerStatusVideo.value = 'paused';
+    console.log('播放暂停');
+  };
+
+  const onEndedVideo = () => {
+    playerStatusVideo.value = 'ended';
+    console.log('播放结束');
+    replayVideo(playerRefVideo.value?.player);
+  };
+
+  const onErrorVideo = (error) => {
+    playerStatusVideo.value = 'error';
+    console.error('播放器错误:', error);
+  };
+
+  // 监听视频源变化
+  watch(selectedVideo, (newSource) => {
+    if (playerRefVideo.value?.player) {
+      const player = playerRefVideo.value.player;
+      player.src(videoSources[newSource]);
+      playerStatusplayerRefVideo.value = 'ready';
+    }
+  });
+
+  onUnmounted(() => {
+    console.log('播放器卸载');
+    if (playerRefMin.value?.player) {
+      playerRefMin.value.player.dispose();
+    }
+    if (playerRefAlarm.value?.player) {
+      playerRefAlarm.value.player.dispose();
+    }
+    if (playerRefMonitor.value?.player) {
+      playerRefMonitor.value.player.dispose();
     }
   });
 
@@ -1303,63 +2384,26 @@
       console.error(error);
     }
   }
+
   onMounted(() => {
     setCirChart();
     setHandChart();
-    // 初始化地图
-    // 创建地图实例
-    map = L.map(mapContainer.value, {
-      crs: L.CRS.Simple,
-      attributionControl: false,
-      zoomControl: false,
-      minZoom: 3,
-      maxZoom: 12,
-      zoomSnap: 0.5,
-      dragging: true,
-      tap: false,
-      rotate: true,
-      bearing: initialMapState.bearing,
-    });
-
-    // 设置初始视图（默认8级缩放）
-    map.setView(initialMapState.center, initialMapState.zoom);
-    map.getContainer().style.backgroundColor = 'transparent';
-
-    // 添加缩放/旋转控制
-    L.control.zoom({ position: 'topright' }).addTo(map);
-    L.control.rotate({ position: 'topright', closeOnZeroBearing: false }).addTo(map);
-
-    // 绘制线路
-    lineLayers.A = drawLine(lineACoordinates);
-    lineLayers.B = drawLine(lineBCoordinates);
-
-    // 添加车站、火车、人员
-    addStations(lineAStations);
-    addStations(lineBStations);
-    addTrains();
-    addPersons();
-
-    // 页面进入动画
-    setTimeout(() => {
-      map.flyTo(initialMapState.center, initialMapState.zoom, {
-        duration: 2,
-        easeLinearity: 0.2,
-      });
-    }, 500);
-
-    // 绑定事件
-    bindMapEvents();
-    // 初始化时根据缩放级别设置所有标签状态
-    updateAllMarkersVisibility(map.getZoom());
+    initMap();
   });
 </script>
 <style lang="less" scoped>
+  :deep(.ant-modal .ant-modal-content) {
+    padding: 0;
+    background-color: #3498db !important;
+  }
   @prefixCls: ~'@{namespace}-largeScreen-';
 
   .@{prefixCls} {
     width: 100%;
-    height: 100vh;
-    min-height: 100%;
+    min-width: 1224px !important;
+    height: 100%;
+    min-height: 760px !important;
+    overflow: auto;
     overflow: hidden;
     background-image: url('@/assets/images/largeScreen/bj1.png');
     background-repeat: no-repeat;
@@ -1391,25 +2435,27 @@
 
     .headCenter {
       display: flex;
-      position: absolute;
-      top: 47px;
-      flex-direction: row;
-      width: 50%;
-      height: 70px;
-      margin-left: 23%;
+      justify-content: center;
+      width: 38%;
       padding-top: 10px;
-      padding-left: 210px;
       background-image: url('/src/assets/images/largeScreen/xbj2.png');
       background-repeat: no-repeat;
       background-position: center;
       background-size: cover;
-      color: #fff;
-      font-size: 24px;
-      line-height: 46px;
-      text-align: center;
-      gap: 90px;
 
       > div {
+        display: flex;
+        flex-direction: row;
+        width: 400px;
+        margin-left: 54px;
+        color: #fff;
+        font-size: 24px;
+        line-height: 46px;
+        text-align: center;
+        gap: 90px;
+      }
+
+      > div > div {
         width: 50px;
         height: 50px;
         background-repeat: no-repeat;
@@ -1455,8 +2501,10 @@
       position: absolute;
       top: 40px;
       left: 4px;
-      width: 310px;
-      height: 136px;
+      width: 16.15%;
+      min-width: 310px;
+      height: 14.59%;
+      min-height: 136px;
       background-image: url('@/assets/images/largeScreen/xbj7.png');
       background-repeat: no-repeat;
       background-position: center;
@@ -1464,8 +2512,8 @@
 
       .title {
         position: relative;
-        top: 6px;
-        left: 18px;
+        top: 2%;
+        left: 5%;
         font-size: 20px;
       }
 
@@ -1509,8 +2557,10 @@
       position: absolute;
       top: 40px;
       left: 4px;
-      width: 310px;
-      height: 136px;
+      width: 16.15%;
+      min-width: 310px;
+      height: 14.59%;
+      min-height: 136px;
       background-image: url('@/assets/images/largeScreen/xbj72.png');
       background-repeat: no-repeat;
       background-position: center;
@@ -1518,8 +2568,8 @@
 
       .title {
         position: relative;
-        top: 6px;
-        right: -214px;
+        top: 2%;
+        right: -71%;
         font-size: 20px;
       }
 
@@ -1535,10 +2585,12 @@
     .jccir,
     .hand {
       position: absolute;
-      top: 188px;
+      top: 25%;
       left: 4px;
-      width: 386px;
-      height: 250px;
+      width: 24.1%;
+      min-width: 386px;
+      height: 32.15%;
+      min-height: 250px;
       background-image: url('@/assets/images/largeScreen/xbj_12.png');
       background-repeat: no-repeat;
       background-position: center;
@@ -1546,29 +2598,31 @@
 
       .title {
         position: relative;
-        top: 6px;
-        left: 18px;
+        top: 2%;
+        left: 7%;
         font-size: 20px;
       }
 
       .data {
-        width: 342px;
-        height: calc(100% - 60px);
-        margin-top: 18px;
-        margin-left: 25px;
+        width: 85%;
+        height: 75%;
+        margin-top: 6%;
+        margin-left: 7%;
       }
     }
 
     .hand {
-      top: 444px;
+      top: 59%;
     }
 
     .video {
       position: absolute;
-      top: 188px;
+      top: 25%;
       right: 4px;
-      width: 386px;
-      height: 250px;
+      width: 24.1%;
+      min-width: 386px;
+      height: 32.15%;
+      min-height: 250px;
       background-image: url('@/assets/images/largeScreen/xbj_1_1.png');
       background-repeat: no-repeat;
       background-position: center;
@@ -1576,25 +2630,111 @@
 
       .title {
         position: relative;
-        top: 6px;
-        right: -256px;
+        top: 2%;
+        right: -55%;
+        width: 39%;
+        overflow: hidden;
         font-size: 20px;
+        text-align: right;
+        text-emphasis: inherit;
+        cursor: pointer;
       }
 
       .data {
-        width: 342px;
-        height: calc(100% - 60px);
-        margin-top: 18px;
-        margin-left: 25px;
+        width: 85%;
+        height: 75%;
+        margin-top: 6%;
+        margin-left: 7%;
+      }
+
+      .player-wrapper {
+        position: relative;
+        top: 9%;
+        left: 4%;
+        width: 91%;
+        height: 76%;
+      }
+
+      :deep(.vjs-control-bar) {
+        border-radius: 0 0 19px 19px !important;
+      }
+
+      .video-player {
+        width: 100%;
+        height: 100% !important;
+        border-radius: 19px !important;
+      }
+    }
+
+    .alarm {
+      position: absolute;
+      top: 59%;
+      right: 4px;
+      width: 24.1%;
+      min-width: 386px;
+      height: 32.15%;
+      min-height: 250px;
+      background-image: url('@/assets/images/largeScreen/xbj_1_1.png');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+
+      .title {
+        position: relative;
+        top: 2%;
+        right: -55%;
+        width: 39%;
+        overflow: hidden;
+        font-size: 20px;
+        text-align: right;
+        text-emphasis: inherit;
+        cursor: pointer;
+      }
+
+      .alarmNo {
+        display: flex;
+        align-items: center; /* 垂直居中 */
+        justify-content: center; /* 水平居中 */
+        width: 89%;
+        height: 74%;
+      }
+
+      .data {
+        width: 89%;
+        height: 74%;
+        margin-top: 6%;
+        margin-left: 4%;
+        overflow: hidden;
+        cursor: pointer;
+      }
+
+      .alarmWai_content {
+        display: flex;
+        flex-direction: row;
+        gap: 6px;
+      }
+
+      .alarm_title {
+        width: 64%;
+        overflow: hidden; /* 隐藏超出容器的文本 */
+        font-size: 13px;
+        font-weight: 600;
+        text-overflow: ellipsis; /* 显示省略符号来代表被修剪的文本 */
+        white-space: nowrap; /* 防止文本换行 */
+      }
+
+      .alarm_time {
+        width: 35%;
+        overflow: hidden; /* 隐藏超出容器的文本 */
+        font-size: 13px;
+        font-weight: 600;
+        text-overflow: ellipsis; /* 显示省略符号来代表被修剪的文本 */
+        white-space: nowrap; /* 防止文本换行 */
       }
     }
   }
 
   /* 地图 */
-  .leaflet-control-container {
-    display: none !important;
-  }
-
   .map-container {
     position: absolute;
     z-index: 0;
@@ -1764,5 +2904,219 @@
     border-radius: 4px;
     background: #fff;
     box-shadow: 0 1px 5px rgb(0 0 0 / 20%);
+  }
+</style>
+<style lang="less">
+  .fontColor {
+    color: #08d4fc;
+  }
+
+  .fontColorSelect {
+    color: #fff;
+  }
+
+  .zssssssssssssss > div {
+    top: 55px;
+    padding: 0;
+  }
+
+  .zssssssssssssss > div > div > div.ant-modal-content {
+    padding: 0;
+    // opacity: 0.9 !important;
+    background-color: #125ed000 !important;
+  }
+
+  .alarmOpenContent {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 88vh;
+    padding: 30px;
+    padding-bottom: 45px;
+    background-image: url('@/assets/images/largeScreen/alarmOpen.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+
+    .alarmList {
+      display: flex;
+      position: relative;
+      flex-direction: column;
+      width: 400px;
+      height: 100%;
+
+      .title {
+        position: relative;
+        top: -7px;
+        left: 0;
+        height: 30px;
+        font-size: 20px;
+      }
+
+      .alarmListDetail {
+        height: 100%;
+        overflow-y: auto;
+
+        .alarmWai_for {
+          width: 100%;
+          height: 30px;
+          line-height: 30px;
+          cursor: pointer;
+        }
+
+        .alarmWai_content {
+          display: flex;
+          flex-direction: row;
+          gap: 6px;
+        }
+
+        .alarm_title {
+          width: 286px;
+          overflow: hidden; /* 隐藏超出容器的文本 */
+          font-size: 13px;
+          font-weight: 600;
+          text-overflow: ellipsis; /* 显示省略符号来代表被修剪的文本 */
+          white-space: nowrap; /* 防止文本换行 */
+        }
+
+        .alarm_time {
+          width: 140px;
+          overflow: hidden; /* 隐藏超出容器的文本 */
+          font-size: 13px;
+          font-weight: 600;
+          text-overflow: ellipsis; /* 显示省略符号来代表被修剪的文本 */
+          white-space: nowrap; /* 防止文本换行 */
+        }
+      }
+    }
+
+    .alarmDetail {
+      display: flex;
+      position: relative;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+
+      .title {
+        height: 30px;
+        font-size: 20px;
+      }
+
+      .alarmDetailContent {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        gap: 6px;
+
+        .text {
+          height: 16%;
+          padding: 0 10px;
+          overflow-y: auto;
+          font-size: 20px;
+          text-indent: 40px; /* 首行缩进20像素 */
+        }
+
+        .alarmSelectedContent {
+          padding: 0 10px;
+
+          :deep(.ant-radio-button-wrapper) {
+            color: #fff !important;
+          }
+        }
+
+        .multimedia {
+          width: 100%;
+          height: 100%;
+          opacity: 1;
+
+          > div {
+            display: flex;
+            align-items: center; /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+
+            img {
+              max-width: 800px;
+              max-height: 400px;
+            }
+
+            .video-player {
+              width: 100%;
+              height: 100% !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .videoOpenContent {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 88vh;
+    padding: 30px;
+    padding-bottom: 45px;
+    background-image: url('@/assets/images/largeScreen/alarmOpen.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+
+    .videoList {
+      display: flex;
+      position: relative;
+      flex-direction: column;
+      width: 250px;
+      height: 100%;
+
+      .title {
+        position: relative;
+        top: -7px;
+        left: 0;
+        height: 30px;
+        font-size: 20px;
+      }
+
+      .videoListDetail {
+        height: 100%;
+        overflow-y: auto;
+
+        .videoWai_for {
+          width: 100%;
+          height: 30px;
+          line-height: 30px;
+          cursor: pointer;
+        }
+
+        .video_title {
+          width: 100%;
+          overflow: hidden; /* 隐藏超出容器的文本 */
+          font-size: 13px;
+          font-weight: 600;
+          text-overflow: ellipsis; /* 显示省略符号来代表被修剪的文本 */
+          white-space: nowrap; /* 防止文本换行 */
+        }
+      }
+    }
+
+    .video {
+      width: 100%;
+      height: 100%;
+      padding: 24px;
+      overflow: hidden;
+      opacity: 1;
+
+      .video-player {
+        width: 100%;
+        height: 100% !important;
+      }
+    }
+  }
+
+  .leaflet-control-container {
+    display: none !important;
   }
 </style>

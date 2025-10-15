@@ -50,6 +50,9 @@ importers:
       '@vben/hooks':
         specifier: workspace:*
         version: link:packages/hooks
+      '@videojs-player/vue':
+        specifier: ^1.0.0
+        version: 1.0.0(@types/video.js@7.3.58)(video.js@8.23.3)(vue@3.5.18)
       '@vue-leaflet/vue-leaflet':
         specifier: ^0.10.1
         version: 0.10.1(@types/leaflet@1.9.20)(leaflet@1.9.4)(typescript@5.9.2)
@@ -173,9 +176,9 @@ importers:
       video.js:
         specifier: ^8.10.0
         version: 8.23.3
-      videojs-contrib-hls:
-        specifier: ^5.15.0
-        version: 5.15.0
+      videojs-flash:
+        specifier: ^2.2.1
+        version: 2.2.1
       vue:
         specifier: ^3.4.19
         version: 3.5.18(typescript@5.9.2)
@@ -3869,6 +3872,10 @@ packages:
       '@types/estree': 1.0.8
     dev: true
 
+  /@types/video.js@7.3.58:
+    resolution: {integrity: sha512-1CQjuSrgbv1/dhmcfQ83eVyYbvGyqhTvb2Opxr0QCV+iJ4J6/J+XWQ3Om59WiwCd1MN3rDUHasx5XRrpUtewYQ==}
+    dev: false
+
   /@types/web-bluetooth@0.0.20:
     resolution: {integrity: sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==}
     dev: false
@@ -4203,6 +4210,18 @@ packages:
       vite: 5.4.19(@types/node@20.19.9)
     transitivePeerDependencies:
       - rollup
+
+  /@videojs-player/vue@1.0.0(@types/video.js@7.3.58)(video.js@8.23.3)(vue@3.5.18):
+    resolution: {integrity: sha512-WonTezRfKu3fYdQLt/ta+nuKH6gMZUv8l40Jke/j4Lae7IqeO/+lLAmBnh3ni88bwR+vkFXIlZ2Ci7VKInIYJg==}
+    peerDependencies:
+      '@types/video.js': 7.x
+      video.js: 7.x
+      vue: 3.x
+    dependencies:
+      '@types/video.js': 7.3.58
+      video.js: 8.23.3
+      vue: 3.5.18(typescript@5.9.2)
+    dev: false
 
   /@videojs/http-streaming@3.17.2(video.js@8.23.3):
     resolution: {integrity: sha512-VBQ3W4wnKnVKb/limLdtSD2rAd5cmHN70xoMf4OmuDd0t2kfJX04G+sfw6u2j8oOm2BXYM9E1f4acHruqKnM1g==}
@@ -4784,12 +4803,6 @@ packages:
   /adler-32@1.3.1:
     resolution: {integrity: sha512-ynZ4w/nUUv5rrsR8UUGoe1VC9hZj6V5hU9Qw1HlMDJGEJw5S7TfTErWTjMys6M7vr0YWcPqs3qAr4ss0nDfP+A==}
     engines: {node: '>=0.8'}
-    dev: false
-
-  /aes-decrypter@1.0.3:
-    resolution: {integrity: sha512-rsx8pfx7wJsn+ziYbpJ8XA5c93hKAtBCrfydxJqJCMT+qfjipd/B5wC2xHtBcoxyvlqJcpeAo3K55t0lXOn9yQ==}
-    dependencies:
-      pkcs7: 0.2.3
     dev: false
 
   /aes-decrypter@4.0.2:
@@ -10581,10 +10594,6 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /m3u8-parser@2.1.0:
-    resolution: {integrity: sha512-WbEpQ2FUaNGbJ0YanSeyj9D9ruu4FUvz+ZvebIzI2bSME+PUwcPXO1kKXZkjcPUAFruDikoOI5fWQNIA6JCCOQ==}
-    dev: false
-
   /m3u8-parser@7.2.0:
     resolution: {integrity: sha512-CRatFqpjVtMiMaKXxNvuI3I++vUumIXVVT/JpCpdU/FynV/ceVw1qpPyyBNindL+JlPMSesx+WX1QJaZEJSaMQ==}
     dependencies:
@@ -10996,10 +11005,6 @@ packages:
   /mute-stream@0.0.8:
     resolution: {integrity: sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==}
     dev: true
-
-  /mux.js@4.3.2:
-    resolution: {integrity: sha512-g0q6DPdvb3yYcoK7ElBGobdSSrhY/RjPt19U7uUc733aqvc5bCS/aCvL9z+448y+IoCZnYDwyZfQBBXMSmGOaQ==}
-    dev: false
 
   /mux.js@7.1.0:
     resolution: {integrity: sha512-NTxawK/BBELJrYsZThEulyUMDVlLizKdxyAsMuzoCD1eFj97BVaA8D/CvKsKu6FOLYkFojN5CbM9h++ZTZtknA==}
@@ -11621,12 +11626,6 @@ packages:
   /pirates@4.0.7:
     resolution: {integrity: sha512-TfySrs/5nm8fQJDcBDuUng3VOUKsd7S+zqvbOTiGXHfxX4wK31ard+hoNuvkicM/2YFzlpDgABOevKSsB4G/FA==}
     engines: {node: '>= 6'}
-
-  /pkcs7@0.2.3:
-    resolution: {integrity: sha512-kJRwmADEQUg+qJyRgWLtpEL9q9cFjZschejTEK3GRjKvnsU9G5WWoe/wKqRgbBoqWdVSeTUKP6vIA3Y72M3rWA==}
-    engines: {node: ^0.10, npm: ^1.4.6}
-    hasBin: true
-    dev: false
 
   /pkcs7@1.0.4:
     resolution: {integrity: sha512-afRERtHn54AlwaF2/+LFszyAANTCggGilmcmILUzEjvs3XgFZT+xE6+QWQcAGmu4xajy+Xtj7acLOPdx5/eXWQ==}
@@ -14580,10 +14579,6 @@ packages:
       requires-port: 1.0.0
     dev: false
 
-  /url-toolkit@2.2.5:
-    resolution: {integrity: sha512-mtN6xk+Nac+oyJ/PrI7tzfmomRVNFIWKUbG8jdYFt52hxbiReFAXIjYskvu64/dvuW71IcB7lV8l0HvZMac6Jg==}
-    dev: false
-
   /use@3.1.1:
     resolution: {integrity: sha512-cwESVXlO3url9YWlFW/TA9cshCEhtu7IKJ/p5soJ/gGpj7vbvFrAY/eIioQ6Dw23KjZhYgiIo8HOs1nQ2vr/oQ==}
     engines: {node: '>=0.10.0'}
@@ -14673,29 +14668,6 @@ packages:
       videojs-vtt.js: 0.15.5
     dev: false
 
-  /videojs-contrib-hls@5.15.0:
-    resolution: {integrity: sha512-18zbMYZ0XRBKTPEayA9bFTWWrqhT9b4G8+zf0czJLD7Epe5PcK1I/3dflTHQeQ5rwlWir+/XnFU3sMg/B2MMcw==}
-    engines: {node: '>= 0.10.12'}
-    dependencies:
-      aes-decrypter: 1.0.3
-      global: 4.4.0
-      m3u8-parser: 2.1.0
-      mux.js: 4.3.2
-      url-toolkit: 2.2.5
-      video.js: 6.13.0
-      videojs-contrib-media-sources: 4.7.2
-      webwackify: 0.1.6
-    dev: false
-
-  /videojs-contrib-media-sources@4.7.2:
-    resolution: {integrity: sha512-e6iCHWBFuV05EGo7v+pS9iepObXnJ9joms467gzi8ZjpKVb3ifha9M0Ja24Rd8JfvYpzjltsgDVtGFDvIg4hQQ==}
-    dependencies:
-      global: 4.4.0
-      mux.js: 4.3.2
-      video.js: 6.13.0
-      webwackify: 0.1.6
-    dev: false
-
   /videojs-contrib-quality-levels@4.1.0(video.js@8.23.3):
     resolution: {integrity: sha512-TfrXJJg1Bv4t6TOCMEVMwF/CoS8iENYsWNKip8zfhB5kTcegiFYezEA0eHAJPU64ZC8NQbxQgOwAsYU8VXbOWA==}
     engines: {node: '>=16', npm: '>=8'}
@@ -14704,6 +14676,15 @@ packages:
     dependencies:
       global: 4.4.0
       video.js: 8.23.3
+    dev: false
+
+  /videojs-flash@2.2.1:
+    resolution: {integrity: sha512-mHu6TD12EKkxMvr8tg4AcfV/DuVLff427nneoZom3N9Dd2bv0sJOWwdLPQH1v5BCuAuXAVuAOba56ovTl+G3tQ==}
+    engines: {node: '>=4.4.0'}
+    dependencies:
+      global: 4.4.0
+      video.js: 6.13.0
+      videojs-swf: 5.4.2
     dev: false
 
   /videojs-font@2.1.0:
@@ -14718,6 +14699,10 @@ packages:
     resolution: {integrity: sha512-0Zb2T4MLkpfZbeGMK/Z93b8Lrepr+rLFoHgQV1CoDeFqXvH7b+Vsd/VHoILGxQrgCSHFQ7mAODR6oyMjuiD4/g==}
     dependencies:
       es5-shim: 4.6.7
+    dev: false
+
+  /videojs-swf@5.4.2:
+    resolution: {integrity: sha512-FGg+Csioa8/A/EacvFefBdb9Z0rSiMlheHDunZnN3xXfUF43jvjawcWFQnZvrv1Cs1nE1LBrHyUZjF7j2mKOLw==}
     dev: false
 
   /videojs-vtt.js@0.12.6:
@@ -15254,10 +15239,6 @@ packages:
       - '@swc/core'
       - esbuild
       - uglify-js
-    dev: false
-
-  /webwackify@0.1.6:
-    resolution: {integrity: sha512-pGcw1T3HpNnM/UTRQqqRkkkzythSLts05mB+7Gr00B+0VbL0m39dFL5g20rSIEUt9Wrpw+/8k+snxRlUFHhcqA==}
     dev: false
 
   /whatwg-encoding@1.0.5:

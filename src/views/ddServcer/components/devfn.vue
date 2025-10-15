@@ -126,7 +126,6 @@
   import 'dayjs/locale/zh-cn';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
-  import { tryOnUnmounted } from '@vueuse/core';
 
   const { t } = useI18n();
   const localeStore = useLocaleStore();

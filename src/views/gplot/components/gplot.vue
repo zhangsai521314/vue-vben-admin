@@ -1145,13 +1145,15 @@
 
   //页面卸载后
   tryOnUnmounted(() => {
-    console.log('gplot_tryOnUnmounted');
-    isStop = true;
-    clearTimeout(noAgileStateChangeStatus_timeId);
-    if (graphOb) {
-      graphOb.destroy();
-      console.log('gplot_tryOnUnmounted完成');
-    }
+    setTimeout(() => {
+      console.log('gplot_tryOnUnmounted');
+      isStop = true;
+      clearTimeout(noAgileStateChangeStatus_timeId);
+      if (graphOb) {
+        graphOb.destroy();
+        console.log('gplot_tryOnUnmounted完成');
+      }
+    });
   });
 </script>
 

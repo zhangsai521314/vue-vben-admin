@@ -6,6 +6,153 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "18049651",
+      "name": "翻页",
+      "font_class": "fanye",
+      "unicode": "e75d",
+      "unicode_decimal": 59229
+    },
+    {
+      "icon_id": "31598680",
+      "name": "制造",
+      "font_class": "zhizao",
+      "unicode": "ea42",
+      "unicode_decimal": 59970
+    },
+    {
+      "icon_id": "24954178",
+      "name": "重置",
+      "font_class": "zhongzhi",
+      "unicode": "e732",
+      "unicode_decimal": 59186
+    },
+    {
+      "icon_id": "15151280",
+      "name": "人员定位",
+      "font_class": "renyuandingwei",
+      "unicode": "e730",
+      "unicode_decimal": 59184
+    },
+    {
+      "icon_id": "4322020",
+      "name": "人员-轨迹",
+      "font_class": "renyuan-guiji",
+      "unicode": "e72c",
+      "unicode_decimal": 59180
+    },
+    {
+      "icon_id": "11895194",
+      "name": "技术人员",
+      "font_class": "jishurenyuan",
+      "unicode": "e72f",
+      "unicode_decimal": 59183
+    },
+    {
+      "icon_id": "12584278",
+      "name": "巡检人员-",
+      "font_class": "xunjianrenyuan-",
+      "unicode": "e7f2",
+      "unicode_decimal": 59378
+    },
+    {
+      "icon_id": "2596777",
+      "name": "火车",
+      "font_class": "huoche1",
+      "unicode": "e769",
+      "unicode_decimal": 59241
+    },
+    {
+      "icon_id": "3741657",
+      "name": "火车",
+      "font_class": "huoche2",
+      "unicode": "e727",
+      "unicode_decimal": 59175
+    },
+    {
+      "icon_id": "3882820",
+      "name": "火车",
+      "font_class": "huoche3",
+      "unicode": "e728",
+      "unicode_decimal": 59176
+    },
+    {
+      "icon_id": "4188512",
+      "name": "火车",
+      "font_class": "huoche4",
+      "unicode": "e729",
+      "unicode_decimal": 59177
+    },
+    {
+      "icon_id": "7576929",
+      "name": "火车",
+      "font_class": "huoche5",
+      "unicode": "e98e",
+      "unicode_decimal": 59790
+    },
+    {
+      "icon_id": "22117964",
+      "name": "火车司机",
+      "font_class": "huochesiji",
+      "unicode": "e733",
+      "unicode_decimal": 59187
+    },
+    {
+      "icon_id": "31410081",
+      "name": "客运值班员",
+      "font_class": "keyunzhibanyuan-02",
+      "unicode": "e76b",
+      "unicode_decimal": 59243
+    },
+    {
+      "icon_id": "31426135",
+      "name": "行车值班员",
+      "font_class": "hangchezhibanyuan",
+      "unicode": "e76c",
+      "unicode_decimal": 59244
+    },
+    {
+      "icon_id": "38405908",
+      "name": "火车-copy",
+      "font_class": "huoche6",
+      "unicode": "e72a",
+      "unicode_decimal": 59178
+    },
+    {
+      "icon_id": "17449676",
+      "name": "摄像头",
+      "font_class": "shexiangtouA",
+      "unicode": "eca5",
+      "unicode_decimal": 60581
+    },
+    {
+      "icon_id": "11735392",
+      "name": "监控 摄像头",
+      "font_class": "jiankongshexiangtou",
+      "unicode": "e725",
+      "unicode_decimal": 59173
+    },
+    {
+      "icon_id": "21195918",
+      "name": "监控摄像头2",
+      "font_class": "jiankongshexiangtou2",
+      "unicode": "e726",
+      "unicode_decimal": 59174
+    },
+    {
+      "icon_id": "19849923",
+      "name": "BGP",
+      "font_class": "BGPguojiduoxianmiaojifugai",
+      "unicode": "e722",
+      "unicode_decimal": 59170
+    },
+    {
+      "icon_id": "13146534",
+      "name": "相机",
+      "font_class": "xiangji",
+      "unicode": "e721",
+      "unicode_decimal": 59169
+    },
+    {
       "icon_id": "11764105",
       "name": "手持单兵",
       "font_class": "shouchidanbing",

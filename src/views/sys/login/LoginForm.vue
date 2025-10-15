@@ -206,8 +206,10 @@
     window.addEventListener('beforeunload', handleBeforeunload);
   });
   tryOnUnmounted(() => {
-    //组件卸载
-    window.removeEventListener('beforeunload', handleBeforeunload);
+    setTimeout(() => {
+      //组件卸载
+      window.removeEventListener('beforeunload', handleBeforeunload);
+    });
   });
 </script>
 <style lang="less" scoped>

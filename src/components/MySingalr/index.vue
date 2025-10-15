@@ -226,11 +226,13 @@
   defineExpose({ hide, show });
 
   tryOnUnmounted(() => {
-    if (connection) {
-      try {
-        connection.stop();
-      } catch (error) {}
-    }
+    setTimeout(() => {
+      if (connection) {
+        try {
+          connection.stop();
+        } catch (error) {}
+      }
+    });
   });
 </script>
 <style scoped>

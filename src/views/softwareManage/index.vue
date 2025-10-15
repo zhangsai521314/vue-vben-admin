@@ -1240,7 +1240,9 @@
 
   //页面卸载后
   tryOnUnmounted(() => {
-    stopRefresh();
+    setTimeout(() => {
+      stopRefresh();
+    });
   });
 </script>
 <style lang="less" scoped>

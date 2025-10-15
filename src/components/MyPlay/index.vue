@@ -158,10 +158,12 @@
 
   //页面卸载后
   tryOnUnmounted(() => {
-    isPaly.value = false;
-    if (wavesurferOb != null) {
-      wavesurferOb.stop();
-    }
+    setTimeout(() => {
+      isPaly.value = false;
+      if (wavesurferOb != null) {
+        wavesurferOb.stop();
+      }
+    });
   });
 
   defineExpose({

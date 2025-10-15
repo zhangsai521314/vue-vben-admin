@@ -781,9 +781,11 @@
 
   //页面卸载后
   tryOnUnmounted(() => {
-    if (playRef.value != null) {
-      playRef.value.dispose();
-    }
+    setTimeout(() => {
+      if (playRef.value != null) {
+        playRef.value.dispose();
+      }
+    });
   });
 
   //监控查询出来记录的录音文件在网管系统服务器上的状态变化

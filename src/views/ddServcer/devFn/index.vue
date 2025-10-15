@@ -430,9 +430,11 @@
 
   //页面卸载后
   tryOnUnmounted(() => {
-    console.log('devFn_tryOnUnmounted');
-    stopRefresh();
-    console.log('devFn_tryOnUnmounted完成');
+    setTimeout(() => {
+      console.log('devFn_tryOnUnmounted');
+      stopRefresh();
+      console.log('devFn_tryOnUnmounted完成');
+    });
   });
 </script>
 <style lang="less" scoped>

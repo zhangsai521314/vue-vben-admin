@@ -444,7 +444,9 @@
 
   //页面卸载后
   tryOnUnmounted(() => {
-    stopRefresh();
+    setTimeout(() => {
+      stopRefresh();
+    });
   });
 
   function showFn(row) {
