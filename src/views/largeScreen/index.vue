@@ -100,13 +100,13 @@
           <div class="title">服务状态</div>
           <div class="data">
             <Carousel3D
-              :perspective="130"
+              :perspective="200"
               :items="carouselData"
               :showControls="false"
               :showIndicators="false"
               :baseTiltAngle="-12"
               :cardCountRatio="0.36"
-              :cardWidthRatio="0.35"
+              :cardWidthRatio="0.45"
               :autoPlayTime="2000"
             />
           </div>
@@ -190,8 +190,8 @@
           style="
             position: absolute;
             z-index: 2;
-            top: 13px;
-            right: -23px;
+            top: 3%;
+            right: 1%;
             width: 100px;
             color: rgb(255 255 255);
             cursor: pointer;
@@ -278,8 +278,8 @@
           style="
             position: absolute;
             z-index: 2;
-            top: 13px;
-            right: -23px;
+            top: 3%;
+            right: 1%;
             width: 100px;
             color: rgb(255 255 255);
             cursor: pointer;
@@ -2154,14 +2154,14 @@
         grid: {
           left: '1%',
           right: '1%',
-          bottom: '10',
-          top: '60',
+          bottom: '1%',
+          top: '20%',
           containLabel: true,
         },
         legend: {
           data: ['左侧', '站内', '右侧'],
           right: 10,
-          top: 12,
+          top: 0,
           textStyle: {
             color: '#fff',
           },
@@ -2325,14 +2325,14 @@
         grid: {
           left: '1%',
           right: '1%',
-          bottom: '10',
-          top: '60',
+          bottom: '1%',
+          top: '20%',
           containLabel: true,
         },
         legend: {
           data: ['左侧', '站内', '右侧'],
           right: 10,
-          top: 12,
+          top: 0,
           textStyle: {
             color: '#fff',
           },
@@ -2594,11 +2594,11 @@
       position: absolute;
       top: 40px;
       left: 4px;
-      width: 16.15%;
+      width: 24.15%;
       min-width: 310px;
-      height: 14.59%;
+      height: 18.9%;
       min-height: 136px;
-      background-image: url('@/assets/images/largeScreen/xbj7.png');
+      background-image: url('/src/assets/images/largeScreen/xbj7.png');
       background-repeat: no-repeat;
       background-position: center;
       background-size: cover;
@@ -2615,22 +2615,25 @@
         flex-direction: row;
         width: 92%;
         height: calc(100% - 32px);
-        margin-top: 8px;
-        margin-left: 12px;
+        margin-top: 3%;
+        margin-left: 4%;
         gap: 10px;
 
         > div {
-          width: 90px;
-          height: 90px;
-          background-image: url('@/assets/images/largeScreen/xbj3.png');
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 33%;
+          height: 78%;
+          padding-top: 5%;
+          background-image: url('/src/assets/images/largeScreen/xbj3.png');
           background-repeat: no-repeat;
           background-position: center;
           background-size: cover;
 
           > div {
             width: 90%;
-            margin-top: 36px;
-            margin-left: 5px;
+            height: 30%;
             text-align: center;
 
             > div.number {
@@ -2649,10 +2652,10 @@
     .servicedata {
       position: absolute;
       top: 40px;
-      left: 4px;
-      width: 16.15%;
+      right: 4px;
+      width: 24.15%;
       min-width: 310px;
-      height: 14.59%;
+      height: 18.9%;
       min-height: 136px;
       background-image: url('@/assets/images/largeScreen/xbj72.png');
       background-repeat: no-repeat;
@@ -2678,13 +2681,13 @@
     .jccir,
     .hand {
       position: absolute;
-      top: 25%;
+      top: 33%;
       left: 4px;
       width: 24.1%;
       min-width: 386px;
-      height: 32.15%;
+      height: 27.65%;
       min-height: 250px;
-      background-image: url('@/assets/images/largeScreen/xbj_12.png');
+      background-image: url('/src/assets/images/largeScreen/xbj_12.png');
       background-repeat: no-repeat;
       background-position: center;
       background-size: cover;
@@ -2705,16 +2708,16 @@
     }
 
     .hand {
-      top: 59%;
+      top: 70%;
     }
 
     .video {
       position: absolute;
-      top: 25%;
+      top: 33%;
       right: 4px;
       width: 24.1%;
       min-width: 386px;
-      height: 32.15%;
+      height: 27.65%;
       min-height: 250px;
       background-image: url('@/assets/images/largeScreen/xbj_1_1.png');
       background-repeat: no-repeat;
@@ -2742,7 +2745,7 @@
 
       .player-wrapper {
         position: relative;
-        top: 9%;
+        top: 10%;
         left: 4%;
         width: 91%;
         height: 76%;
@@ -2761,11 +2764,11 @@
 
     .alarm {
       position: absolute;
-      top: 59%;
+      top: 70%;
       right: 4px;
       width: 24.1%;
       min-width: 386px;
-      height: 32.15%;
+      height: 27.65%;
       min-height: 250px;
       background-image: url('@/assets/images/largeScreen/xbj_1_1.png');
       background-repeat: no-repeat;
@@ -2812,7 +2815,7 @@
       .alarm_title {
         width: 64%;
         overflow: hidden; /* 隐藏超出容器的文本 */
-        font-size: 13px;
+        font-size: 16px;
         font-weight: 600;
         text-overflow: ellipsis; /* 显示省略符号来代表被修剪的文本 */
         white-space: nowrap; /* 防止文本换行 */
@@ -2821,7 +2824,7 @@
       .alarm_time {
         width: 35%;
         overflow: hidden; /* 隐藏超出容器的文本 */
-        font-size: 13px;
+        font-size: 16px;
         font-weight: 600;
         text-overflow: ellipsis; /* 显示省略符号来代表被修剪的文本 */
         white-space: nowrap; /* 防止文本换行 */
@@ -2844,7 +2847,7 @@
   .control-container {
     position: absolute;
     z-index: 1000;
-    bottom: 10%;
+    bottom: 10px;
     left: 50%;
     flex-direction: column;
     width: 194px;
@@ -3084,7 +3087,7 @@
   }
 
   .zssssssssssssss > div {
-    top: 55px;
+    top: 15%;
     padding: 0;
   }
 
@@ -3098,9 +3101,9 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: 88vh;
-    padding: 30px;
-    padding-bottom: 45px;
+    height: 72vh;
+    padding: 2.4%;
+    padding-bottom: 4%;
     background-image: url('@/assets/images/largeScreen/alarmOpen.png');
     background-repeat: no-repeat;
     background-position: center;
@@ -3141,7 +3144,7 @@
         .alarm_title {
           width: 286px;
           overflow: hidden; /* 隐藏超出容器的文本 */
-          font-size: 13px;
+          font-size: 16px;
           font-weight: 600;
           text-overflow: ellipsis; /* 显示省略符号来代表被修剪的文本 */
           white-space: nowrap; /* 防止文本换行 */
@@ -3220,9 +3223,9 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: 88vh;
-    padding: 30px;
-    padding-bottom: 45px;
+    height: 72vh;
+    padding: 2.4%;
+    padding-bottom: 4%;
     background-image: url('@/assets/images/largeScreen/alarmOpen.png');
     background-repeat: no-repeat;
     background-position: center;
@@ -3257,7 +3260,7 @@
         .video_title {
           width: 100%;
           overflow: hidden; /* 隐藏超出容器的文本 */
-          font-size: 13px;
+          font-size: 16px;
           font-weight: 600;
           text-overflow: ellipsis; /* 显示省略符号来代表被修剪的文本 */
           white-space: nowrap; /* 防止文本换行 */
