@@ -116,10 +116,10 @@
           <div class="title" @click="videoOpenClick(null)">马瑞巴亚港</div>
           <div class="player-wrapper">
             <video-player
-              ref="playerRefMin"
               class="video-player vjs-custom-theme"
               :options="playerOptionsMin"
               :language="currentLang"
+              @mounted="handleMounted"
               @ready="onPlayerReadyMin"
               @play="onPlayMin"
               @pause="onPauseMin"
@@ -226,10 +226,10 @@
             <div class="multimedia">
               <div v-show="alarmSelectedContent == '0'" class="video">
                 <video-player
-                  ref="playerRefAlarm"
                   class="video-player vjs-custom-theme"
                   :options="playerOptionsAlarm"
                   :language="currentLang"
+                  @mounted="handleMountedAlarm"
                   @ready="onPlayerReadyAlarm"
                   @play="onPlayAlarm"
                   @pause="onPauseAlarm"
@@ -294,10 +294,10 @@
         <div style="width: 10px"></div>
         <div class="video">
           <video-player
-            ref="playerRefVideo"
             class="video-player vjs-custom-theme"
             :options="playerOptionsVideo"
             :language="currentLang"
+            @mounted="handleMountedVideo"
             @ready="onPlayerReadyVideo"
             @play="onPlayVideo"
             @pause="onPauseVideo"
@@ -830,73 +830,73 @@
       id: 'A1',
       name: '马瑞巴亚港',
       coordinate: [10.4, -14.0],
-      photo: 'https://picsum.photos/id/1015/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'A2',
       name: '穆萨亚',
       coordinate: [10.7, -13.3],
-      photo: 'https://picsum.photos/id/1016/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'A3',
       name: '科里巴',
       coordinate: [10.9, -12.9],
-      photo: 'https://picsum.photos/id/1018/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'A4',
       name: '卡萨',
       coordinate: [11.2, -12.4],
-      photo: 'https://picsum.photos/id/1019/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'A5',
       name: '乌尔卡巴',
       coordinate: [11.4, -12.1],
-      photo: 'https://picsum.photos/id/1022/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'A6',
       name: '蒙加塔',
       coordinate: [11.6, -11.7],
-      photo: 'https://picsum.photos/id/1023/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'A7',
       name: '法拉纳',
       coordinate: [11.8, -11.2],
-      photo: 'https://picsum.photos/id/1024/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'A8',
       name: '杜瓦科',
       coordinate: [11.9, -10.7],
-      photo: 'https://picsum.photos/id/1025/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'A9',
       name: '尼亚林科',
       coordinate: [12.0, -10.2],
-      photo: 'https://picsum.photos/id/1026/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'A10',
       name: '迪安库亚',
       coordinate: [12.1, -9.7],
-      photo: 'https://picsum.photos/id/1027/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'A11',
       name: '凯鲁阿内',
       coordinate: [12.2, -9.2],
-      photo: 'https://picsum.photos/id/1028/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'A12',
       name: '西芒杜矿山',
       coordinate: [12.3, -8.5],
-      photo: 'https://picsum.photos/id/1029/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
   ];
 
@@ -915,49 +915,49 @@
       id: 'B1',
       name: '线路所',
       coordinate: [12.3, -8.5],
-      photo: 'https://picsum.photos/id/1030/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'B2',
       name: 'siding0',
       coordinate: [12.2, -8.4],
-      photo: 'https://picsum.photos/id/1031/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'B3',
       name: 'siding1',
       coordinate: [12.1, -8.3],
-      photo: 'https://picsum.photos/id/1032/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'B4',
       name: 'siding2',
       coordinate: [12.0, -8.2],
-      photo: 'https://picsum.photos/id/1033/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'B5',
       name: 'siding3',
       coordinate: [11.8, -8.0],
-      photo: 'https://picsum.photos/id/1034/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'B6',
       name: 'siding4',
       coordinate: [11.6, -7.8],
-      photo: 'https://picsum.photos/id/1035/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'B7',
       name: 'siding5',
       coordinate: [11.3, -7.5],
-      photo: 'https://picsum.photos/id/1036/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
     {
       id: 'B8',
       name: '辛铁矿',
       coordinate: [11.1, -7.3],
-      photo: 'https://picsum.photos/id/1037/400/300',
+      photo: 'src/assets/images/largeScreen/222.jpeg',
     },
   ];
 
@@ -1722,22 +1722,23 @@
   // 小窗口视频
   const currentLang = ref('zh-CN');
   const currentSourceMin = ref('video');
-  const playerRefMin = ref();
+  let playerRefMin = null;
   const playerStatusMin = ref('ready');
 
   //告警视频
-  const playerRefAlarm = ref();
+  let playerRefAlarm = null;
   const playerStatusAlarm = ref('ready');
 
   //监控视频
-  const playerRefVideo = ref();
+  let playerRefVideo = null;
   const playerStatusVideo = ref('ready');
 
   // 视频源配置
   const videoSources = {
     video: {
       type: 'video/mp4',
-      src: 'https://vjs.zencdn.net/v/oceans.mp4',
+      src: 'src/assets/images/largeScreen/video.mp4',
+      // src: 'http://vjs.zencdn.net/v/oceans.mp4',
       poster: 'https://vjs.zencdn.net/v/oceans.png',
     },
     live: {
@@ -1758,9 +1759,10 @@
     fluid: true,
     liveui: currentSourceMin.value !== 'video', // 直播模式启用实时控件
     fill: true,
+    loop: true,
     muted: isMuted.value,
     sources: [videoSources[currentSourceMin.value]],
-    poster: currentSourceMin.value === 'video' ? videoSources.video.poster : undefined,
+    poster: undefined,
     userActions: {
       hotkeys: true,
     },
@@ -1799,6 +1801,11 @@
     playerStatusMin.value = 'ready';
   };
 
+  const handleMounted = (payload) => {
+    playerRefMin = payload;
+    playerRefMin.player.aspectRatio('16:9');
+  };
+
   // 播放器事件处理
   const onPlayerReadyMin = (player) => {
     console.log('播放器准备就绪');
@@ -1809,13 +1816,6 @@
     playerStatusMin.value = 'ready';
   };
 
-  // 新增：重播视频核心逻辑（重置进度 + 播放）
-  const replayVideo = (player) => {
-    if (!player) return;
-    player.currentTime(0); // 重置播放进度到开头
-    player.play(); // 重新播放
-    playerStatusMin.value = 'playing';
-  };
   const onPlayMin = () => {
     playerStatusMin.value = 'playing';
     console.log('开始播放');
@@ -1829,7 +1829,6 @@
   const onEndedMin = () => {
     playerStatusMin.value = 'ended';
     console.log('播放结束');
-    replayVideo(playerRefMin.value?.player);
   };
 
   const onErrorMin = (error) => {
@@ -1839,8 +1838,8 @@
 
   // 监听视频源变化
   watch(currentSourceMin, (newSource) => {
-    if (playerRefMin.value?.player) {
-      const player = playerRefMin.value.player;
+    if (playerRefMin?.player) {
+      const player = playerRefMin.player;
       player.src(videoSources[newSource]);
       playerStatusMin.value = 'ready';
     }
@@ -1848,23 +1847,25 @@
 
   function closeAlarmOpen() {
     alarmOpen.value = false;
-    debugger;
-    if (playerRefAlarm.value) {
-      playerRefAlarm.value.player.dispose();
+    if (playerRefMin?.player) {
+      playerRefAlarm.player.pause();
     }
   }
 
   // 播放器配置
   const playerOptionsAlarm = computed(() => ({
+    width: '100%',
+    height: '200px',
     autoplay: false,
     controls: true,
     responsive: true,
     fluid: true,
     liveui: currentSourceMin.value !== 'video', // 直播模式启用实时控件
     fill: true,
+    loop: true,
     muted: isMuted.value,
     sources: [videoSources[currentSourceMin.value]],
-    poster: currentSourceMin.value === 'video' ? videoSources.video.poster : undefined,
+    poster: undefined,
     userActions: {
       hotkeys: true,
     },
@@ -1891,6 +1892,10 @@
     },
   }));
 
+  const handleMountedAlarm = (payload) => {
+    playerRefAlarm = payload;
+    playerRefAlarm.player.aspectRatio('16:9');
+  };
   // 播放器事件处理
   const onPlayerReadyAlarm = (player) => {
     console.log('播放器准备就绪');
@@ -1914,7 +1919,6 @@
   const onEndedAlarm = () => {
     playerStatusAlarm.value = 'ended';
     console.log('播放结束');
-    replayVideo(playerRefAlarm.value?.player);
   };
 
   const onErrorAlarm = (error) => {
@@ -1924,8 +1928,8 @@
 
   // 监听视频源变化
   watch(selectedAlarm, (newSource) => {
-    if (playerRefAlarm.value?.player) {
-      const player = playerRefAlarm.value.player;
+    if (playerRefVideo) {
+      const player = playerRefVideo.player;
       player.src(videoSources[newSource]);
       playerStatusAlarm.value = 'ready';
     }
@@ -1933,9 +1937,8 @@
 
   function closeVideoOpen() {
     videoOpen.value = false;
-    debugger;
-    if (playerRefVideo.value) {
-      playerRefVideo.value.player.dispose();
+    if (playerRefVideo) {
+      playerRefVideo?.player.pause();
     }
   }
 
@@ -1947,9 +1950,10 @@
     fluid: true,
     liveui: currentSourceMin.value !== 'video', // 直播模式启用实时控件
     fill: true,
+    loop: true,
     muted: isMuted.value,
     sources: [videoSources[currentSourceMin.value]],
-    poster: currentSourceMin.value === 'video' ? videoSources.video.poster : undefined,
+    poster: undefined,
     userActions: {
       hotkeys: true,
     },
@@ -1976,6 +1980,10 @@
     },
   }));
 
+  const handleMountedVideo = (payload) => {
+    playerRefVideo = payload;
+    playerRefVideo.player.aspectRatio('16:9');
+  };
   // 播放器事件处理
   const onPlayerReadyVideo = (player) => {
     console.log('播放器准备就绪');
@@ -1999,7 +2007,6 @@
   const onEndedVideo = () => {
     playerStatusVideo.value = 'ended';
     console.log('播放结束');
-    replayVideo(playerRefVideo.value?.player);
   };
 
   const onErrorVideo = (error) => {
@@ -2009,127 +2016,133 @@
 
   // 监听视频源变化
   watch(selectedVideo, (newSource) => {
-    if (playerRefVideo.value?.player) {
-      const player = playerRefVideo.value.player;
+    if (playerRefVideo?.player) {
+      const player = playerRefVideo?.player;
       player.src(videoSources[newSource]);
-      playerStatusplayerRefVideo.value = 'ready';
+      playerStatusVideo.value = 'ready';
     }
   });
 
   onUnmounted(() => {
+    debugger;
     console.log('播放器卸载');
-    if (playerRefMin.value?.player) {
-      playerRefMin.value.player.dispose();
+    if (playerRefMin?.player) {
+      playerRefMin.player.dispose();
     }
-    if (playerRefAlarm.value?.player) {
-      playerRefAlarm.value.player.dispose();
+    if (playerRefAlarm?.player) {
+      playerRefAlarm.player.dispose();
     }
-    if (playerRefMonitor.value?.player) {
-      playerRefMonitor.value.player.dispose();
+    if (playerRefVideo?.player) {
+      playerRefVideo.player.dispose();
     }
   });
 
   //服务状态
   const carouselData = ref([
     {
-      imgUrl: 'https://picsum.photos/id/1/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: '马瑞巴亚港',
       alt: '第1张',
       bColor: '#D7D7D7',
     },
-    { imgUrl: 'https://picsum.photos/id/2/300/200', title: '穆萨亚', alt: '第2张', bColor: 'red' },
     {
-      imgUrl: 'https://picsum.photos/id/3/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      title: '穆萨亚',
+      alt: '第2张',
+      bColor: 'red',
+    },
+    {
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: '科里巴',
       alt: '第3张',
       bColor: 'green',
     },
     {
-      imgUrl: 'https://picsum.photos/id/4/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: '乌尔卡巴',
       alt: '第4张',
       bColor: 'red',
     },
     {
-      imgUrl: 'https://picsum.photos/id/5/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: '蒙加塔',
       alt: '第5张',
       bColor: 'yellow',
     },
     {
-      imgUrl: 'https://picsum.photos/id/6/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: '法拉纳',
       alt: '第6张',
       bColor: 'green',
     },
     {
-      imgUrl: 'https://picsum.photos/id/7/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: '杜瓦科',
       alt: '第7张',
       bColor: 'green',
     },
     {
-      imgUrl: 'https://picsum.photos/id/8/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: '尼 亚林科',
       alt: '第8张',
       bColor: '#D7D7D7',
     },
     {
-      imgUrl: 'https://picsum.photos/id/9/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: '迪安库亚',
       alt: '第9张',
       bColor: 'red',
     },
     {
-      imgUrl: 'https://picsum.photos/id/10/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: '凯鲁阿内',
       alt: '第10张',
       bColor: 'red',
     },
     {
-      imgUrl: 'https://picsum.photos/id/1/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: '西芒杜矿山',
       alt: '第1张',
       bColor: 'red',
     },
     {
-      imgUrl: 'https://picsum.photos/id/2/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: '辛铁矿',
       alt: '第2张',
       bColor: 'yellow',
     },
     {
-      imgUrl: 'https://picsum.photos/id/3/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: '线路所',
       alt: '第3张',
       bColor: 'green',
     },
     {
-      imgUrl: 'https://picsum.photos/id/4/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: 'siding1',
       alt: '第4张',
       bColor: 'green',
     },
     {
-      imgUrl: 'https://picsum.photos/id/5/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: 'siding2',
       alt: '第5张',
       bColor: '#D7D7D7',
     },
     {
-      imgUrl: 'https://picsum.photos/id/6/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: 'siding3',
       alt: '第6张',
       bColor: 'yellow',
     },
     {
-      imgUrl: 'https://picsum.photos/id/7/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: 'siding4',
       alt: '第7张',
       bColor: '#D7D7D7',
     },
     {
-      imgUrl: 'https://picsum.photos/id/8/300/200',
+      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
       title: 'siding5',
       alt: '第8张',
       bColor: 'yellow',
@@ -2724,6 +2737,25 @@
       background-position: center;
       background-size: cover;
 
+      @media (max-width: 1920px) {
+        .player-wrapper {
+          top: 7%;
+        }
+      }
+
+      @media (min-width: 1921px) {
+        .player-wrapper {
+          top: 9%;
+        }
+      }
+
+      .player-wrapper {
+        position: relative;
+        left: 4%;
+        width: 91%;
+        height: 76%;
+      }
+
       .title {
         position: relative;
         top: 2%;
@@ -2743,14 +2775,6 @@
         margin-left: 7%;
       }
 
-      .player-wrapper {
-        position: relative;
-        top: 10%;
-        left: 4%;
-        width: 91%;
-        height: 76%;
-      }
-
       :deep(.vjs-control-bar) {
         border-radius: 0 0 19px 19px !important;
       }
@@ -2758,7 +2782,8 @@
       .video-player {
         width: 100%;
         height: 100% !important;
-        border-radius: 19px !important;
+        padding-top: 0 !important;
+        background-color: #fc09f000;
       }
     }
 
@@ -3104,6 +3129,7 @@
     height: 72vh;
     padding: 2.4%;
     padding-bottom: 4%;
+    border-radius: 4%;
     background-image: url('@/assets/images/largeScreen/alarmOpen.png');
     background-repeat: no-repeat;
     background-position: center;
@@ -3176,8 +3202,8 @@
       .alarmDetailContent {
         display: flex;
         flex-direction: column;
+        flex-grow: 1;
         width: 100%;
-        height: 100%;
         gap: 6px;
 
         .text {
@@ -3207,11 +3233,11 @@
             justify-content: center; /* 水平居中 */
             width: 100%;
             height: 100%;
-            overflow: hidden;
 
             .video-player {
               width: 100%;
               height: 100% !important;
+              padding-top: 0 !important;
             }
           }
         }
@@ -3226,6 +3252,7 @@
     height: 72vh;
     padding: 2.4%;
     padding-bottom: 4%;
+    border-radius: 4%;
     background-image: url('@/assets/images/largeScreen/alarmOpen.png');
     background-repeat: no-repeat;
     background-position: center;
@@ -3271,13 +3298,13 @@
     .video {
       width: 100%;
       height: 100%;
-      padding: 24px;
       overflow: hidden;
       opacity: 1;
 
       .video-player {
         width: 100%;
         height: 100% !important;
+        padding-top: 0 !important;
       }
     }
   }
