@@ -356,10 +356,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -369,9 +369,9 @@
       time: '2025.10.14 15:20:15',
       data: [
         { dateType: 'video', src: 'https://media.w3.org/2010/05/sintel/trailer.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -380,10 +380,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -392,10 +392,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -404,10 +404,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -416,10 +416,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -428,10 +428,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -440,10 +440,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -452,10 +452,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -464,10 +464,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -476,10 +476,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -488,10 +488,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -500,10 +500,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -512,10 +512,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -524,10 +524,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -536,10 +536,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -548,10 +548,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -560,10 +560,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -572,10 +572,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -584,10 +584,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -596,10 +596,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -608,10 +608,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -620,10 +620,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -632,10 +632,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -644,10 +644,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
     {
@@ -656,10 +656,10 @@
       content: '具体告警内容',
       time: '2025.10.14 15:20:15',
       data: [
-        { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/222.jpeg' },
-        { dateType: 'img', src: '/src/assets/images/largeScreen/huoche.png' },
+        { dateType: 'video', src: '/largeScreen/video.mp4' },
+        { dateType: 'img', src: '/largeScreen/9OvS3Pyr.jpg' },
+        { dateType: 'img', src: '/largeScreen/222.jpeg' },
+        { dateType: 'img', src: '/largeScreen/huoche.png' },
       ],
     },
   ]);
@@ -669,9 +669,9 @@
     content: '具体告警内容',
     time: '2025.10.14 15:20:15',
     data: [
-      { dateType: 'video', src: 'http://vjs.zencdn.net/v/oceans.mp4' },
+      { dateType: 'video', src: '/largeScreen/video.mp4' },
       { dateType: 'img', src: 'src/assets/images/largeScreen/9OvS3Pyr.jpg' },
-      { dateType: 'img', src: 'src/assets/images/largeScreen/222.jpeg' },
+      { dateType: 'img', src: '/largeScreen/222.jpeg' },
       { dateType: 'img', src: 'src/assets/images/largeScreen/huoche.png' },
     ],
   });
@@ -830,73 +830,73 @@
       id: 'A1',
       name: '马瑞巴亚港',
       coordinate: [10.4, -14.0],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'A2',
       name: '穆萨亚',
       coordinate: [10.7, -13.3],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'A3',
       name: '科里巴',
       coordinate: [10.9, -12.9],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'A4',
       name: '卡萨',
       coordinate: [11.2, -12.4],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'A5',
       name: '乌尔卡巴',
       coordinate: [11.4, -12.1],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'A6',
       name: '蒙加塔',
       coordinate: [11.6, -11.7],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'A7',
       name: '法拉纳',
       coordinate: [11.8, -11.2],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'A8',
       name: '杜瓦科',
       coordinate: [11.9, -10.7],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'A9',
       name: '尼亚林科',
       coordinate: [12.0, -10.2],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'A10',
       name: '迪安库亚',
       coordinate: [12.1, -9.7],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'A11',
       name: '凯鲁阿内',
       coordinate: [12.2, -9.2],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'A12',
       name: '西芒杜矿山',
       coordinate: [12.3, -8.5],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
   ];
 
@@ -915,49 +915,49 @@
       id: 'B1',
       name: '线路所',
       coordinate: [12.3, -8.5],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'B2',
       name: 'siding0',
       coordinate: [12.2, -8.4],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'B3',
       name: 'siding1',
       coordinate: [12.1, -8.3],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'B4',
       name: 'siding2',
       coordinate: [12.0, -8.2],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'B5',
       name: 'siding3',
       coordinate: [11.8, -8.0],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'B6',
       name: 'siding4',
       coordinate: [11.6, -7.8],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'B7',
       name: 'siding5',
       coordinate: [11.3, -7.5],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
     {
       id: 'B8',
       name: '辛铁矿',
       coordinate: [11.1, -7.3],
-      photo: 'src/assets/images/largeScreen/222.jpeg',
+      photo: '/largeScreen/222.jpeg',
     },
   ];
 
@@ -1146,9 +1146,9 @@
                  </div>
       
                 <div class='info_'>
-                   <div><img src='/src/assets/images/largeScreen/huoche2.png'/></div>
+                   <div><img src='/largeScreen/huoche2.png'/></div>
                    <div>5</div>
-                   <div><img src='/src/assets/images/largeScreen/zhibanyuan1.png'/></div>
+                   <div><img src='/largeScreen/zhibanyuan1.png'/></div>
                    <div>20</div>
                 </div>
 		    </div>	
@@ -1171,9 +1171,7 @@
     trains.forEach((train) => {
       // 火车图标
       const icon = L.icon({
-        iconUrl: train.isOnline
-          ? '/src/assets/images/largeScreen/huoche2.png'
-          : '/src/assets/images/largeScreen/huoche2.png',
+        iconUrl: train.isOnline ? '/largeScreen/huoche2.png' : '/largeScreen/huoche2.png',
         iconSize: [30, 30],
         iconAnchor: [15, 10],
         className: 'train-icon',
@@ -1250,9 +1248,7 @@
     persons.forEach((person) => {
       // 人员图标
       const icon = L.icon({
-        iconUrl: person.isOnline
-          ? '/src/assets/images/largeScreen/zhibanyuan1.png'
-          : '/src/assets/images/largeScreen/zhibanyuan1.png',
+        iconUrl: person.isOnline ? '/largeScreen/zhibanyuan1.png' : '/largeScreen/zhibanyuan1.png',
         iconSize: [30, 30],
         iconAnchor: [15, 15],
         className: 'person-icon',
@@ -1494,9 +1490,9 @@
                    <div>${station.name}</div>
                  </div>
                 <div class='info_'>
-                   <div><img src='/src/assets/images/largeScreen/huoche2.png'/></div>
+                   <div><img src='/largeScreen/huoche2.png'/></div>
                    <div>5</div>
-                   <div><img src='/src/assets/images/largeScreen/zhibanyuan1.png'/></div>
+                   <div><img src='/largeScreen/zhibanyuan1.png'/></div>
                    <div>20</div>
                 </div>
 		    </div>	
@@ -1737,8 +1733,8 @@
   const videoSources = {
     video: {
       type: 'video/mp4',
-      src: 'src/assets/images/largeScreen/video.mp4',
-      // src: 'http://vjs.zencdn.net/v/oceans.mp4',
+      src: '/largeScreen/video.mp4',
+      // src: '/largeScreen/video.mp4',
       poster: 'https://vjs.zencdn.net/v/oceans.png',
     },
     live: {
@@ -2024,7 +2020,6 @@
   });
 
   onUnmounted(() => {
-    debugger;
     console.log('播放器卸载');
     if (playerRefMin?.player) {
       playerRefMin.player.dispose();
@@ -2040,109 +2035,109 @@
   //服务状态
   const carouselData = ref([
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: '马瑞巴亚港',
       alt: '第1张',
       bColor: '#D7D7D7',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: '穆萨亚',
       alt: '第2张',
       bColor: 'red',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: '科里巴',
       alt: '第3张',
       bColor: 'green',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: '乌尔卡巴',
       alt: '第4张',
       bColor: 'red',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: '蒙加塔',
       alt: '第5张',
       bColor: 'yellow',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: '法拉纳',
       alt: '第6张',
       bColor: 'green',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: '杜瓦科',
       alt: '第7张',
       bColor: 'green',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: '尼 亚林科',
       alt: '第8张',
       bColor: '#D7D7D7',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: '迪安库亚',
       alt: '第9张',
       bColor: 'red',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: '凯鲁阿内',
       alt: '第10张',
       bColor: 'red',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: '西芒杜矿山',
       alt: '第1张',
       bColor: 'red',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: '辛铁矿',
       alt: '第2张',
       bColor: 'yellow',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: '线路所',
       alt: '第3张',
       bColor: 'green',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: 'siding1',
       alt: '第4张',
       bColor: 'green',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: 'siding2',
       alt: '第5张',
       bColor: '#D7D7D7',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: 'siding3',
       alt: '第6张',
       bColor: 'yellow',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: 'siding4',
       alt: '第7张',
       bColor: '#D7D7D7',
     },
     {
-      imgUrl: 'src/assets/images/largeScreen/222.jpeg',
+      imgUrl: '/largeScreen/222.jpeg',
       title: 'siding5',
       alt: '第8张',
       bColor: 'yellow',
