@@ -21,7 +21,6 @@
         >
           <img
             :src="item.imgUrl"
-            :alt="item.alt || `轮播图${getOriginalIndex(renderIndex) + 1}`"
             class="carousel-3d-img"
             loading="lazy"
             @error="(e) => handleImgError(e, item)"
