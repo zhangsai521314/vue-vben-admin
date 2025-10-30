@@ -49,7 +49,9 @@
                   <IconFontClass name="icon-baseui-zhinengwangguan" :style="{ fontSize: '34px' }"
                 /></div>
                 <div class="title" style="left: 47px; width: 60px">机车电台</div>
-                <div class="count" style="color: #5ecdba">{{ deviceCount.cirCount }}</div></div
+                <div class="count" style="left: 46px; color: #5ecdba">{{
+                  deviceCount.cirCount
+                }}</div></div
               >
               <div class="headCenter3">
                 <div class="icon" style="top: 2px">
@@ -169,7 +171,7 @@
   // 初始地图状态（默认缩放8级）
   const initialMapState = {
     center: [10.5821, 9.1271],
-    zoom: 7.4,
+    zoom: 8,
     bearing: 260,
   };
 
@@ -898,8 +900,8 @@
       crs: L.CRS.Simple,
       attributionControl: false,
       zoomControl: false,
-      minZoom: 6,
-      maxZoom: 14,
+      minZoom: 8,
+      maxZoom: 20,
       zoomSnap: 0.5,
       dragging: true,
       tap: false,
@@ -1304,12 +1306,12 @@
         );
         setTimeout(() => {
           getDeviceLocationCount();
-        }, 10 * 1000);
+        }, 60 * 1000);
       })
       .catch(() => {
         setTimeout(() => {
           getDeviceLocationCount();
-        }, 10 * 1000);
+        }, 60 * 1000);
       });
   }
 
@@ -1334,12 +1336,12 @@
         updatePersonPositions(data.handData || []);
         setTimeout(() => {
           getCirHandLocation();
-        }, 5 * 1000);
+        }, 60 * 1000);
       })
       .catch(() => {
         setTimeout(() => {
           getCirHandLocation();
-        }, 5 * 1000);
+        }, 60 * 1000);
       });
   }
 
@@ -1352,7 +1354,7 @@
       .catch(() => {
         setTimeout(() => {
           getServiceInfo();
-        }, 10 * 1000);
+        }, 30 * 1000);
       });
   }
 
