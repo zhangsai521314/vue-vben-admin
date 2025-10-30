@@ -97,10 +97,9 @@
           <div class="title">手持终端位置分析</div>
           <div class="data" ref="chartHandRef"> </div>
         </div>
-
         <div class="alarm fontColor">
           <div class="bottombg"></div>
-          <div class="title" @click="alarmOpenClick(null)">服务状态</div>
+          <div class="title">服务状态</div>
           <div class="alarmNo" v-show="pendingAlarmData.length == 0">
             <div>无待处理告警</div>
           </div>
@@ -113,13 +112,8 @@
               :isWatch="true"
               :step="0.5"
             >
-              <div
-                @click="alarmOpenClick(item)"
-                class="alarmWai_for"
-                v-for="(item, i) in pendingAlarmData"
-                :key="i"
-              >
-                <div class="alarmWai_content" :style="{ color: item.color }">
+              <div class="alarmWai_for" v-for="(item, i) in pendingAlarmData" :key="i">
+                <div class="alarmWai_content" :style="{ color: item.color }" @click="goIndex(item)">
                   <div class="alarm_title">{{ item.name }}</div>
                   <div class="alarm_time">{{ item.time }}</div>
                 </div>
@@ -132,7 +126,6 @@
   </MyContent>
 </template>
 <script setup lang="ts">
-  import Carousel3D from './Carousel3D.vue';
   import { ref, watch, onMounted } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { useI18n } from '@/hooks/web/useI18n';
@@ -145,7 +138,9 @@
   import { message } from 'ant-design-vue';
   import largeScreenApi from '@/api/largeScreen';
   import { Vue3SeamlessScroll } from 'vue3-seamless-scroll';
+  import { useGo } from '/@/hooks/web/usePage';
 
+  const go = useGo();
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
@@ -171,13 +166,11 @@
 
   const pendingAlarmData = ref([]);
 
-  function alarmOpenClick(item) {}
-
   // 初始地图状态（默认缩放8级）
   const initialMapState = {
-    center: [-11.6821, 9.1271],
-    zoom: 7,
-    bearing: 0,
+    center: [10.5821, 9.1271],
+    zoom: 7.4,
+    bearing: 260,
   };
 
   // 定义线路接口
@@ -898,13 +891,15 @@
   });
 
   function initMap() {
+    // // 修改CRS.Simple的变换参数，将原点移至左上角，Y轴向下为正
+    // L.CRS.Simple.transformation = new L.Transformation(1, 0, 1, 0);
     // 初始化地图
     map = L.map(mapContainer.value, {
       crs: L.CRS.Simple,
       attributionControl: false,
       zoomControl: false,
-      minZoom: 3,
-      maxZoom: 12,
+      minZoom: 6,
+      maxZoom: 14,
       zoomSnap: 0.5,
       dragging: true,
       tap: false,
@@ -942,7 +937,7 @@
   function setCirChart(xAxisData, leftData, centerData, rightData) {
     try {
       const option = {
-        backgroundColor: '#031939',
+        backgroundColor: 'transparent', // 设置图表背景为透明
         title: {
           show: false,
         },
@@ -973,6 +968,7 @@
           type: 'category',
           data: xAxisData,
           axisLabel: {
+            interval: 0,
             textStyle: {
               color: '#fff',
               fontStyle: 'normal',
@@ -994,7 +990,7 @@
             },
           },
           splitLine: {
-            show: true,
+            show: false,
             lineStyle: {
               color: '#1B2848',
             },
@@ -1102,7 +1098,7 @@
   function setHandChart(xAxisData, leftData, centerData, rightData) {
     try {
       const option = {
-        backgroundColor: '#031939',
+        backgroundColor: 'transparent', // 设置图表背景为透明
         title: {
           show: false,
         },
@@ -1154,7 +1150,7 @@
             },
           },
           splitLine: {
-            show: true,
+            show: false,
             lineStyle: {
               color: '#1B2848',
             },
@@ -1338,12 +1334,12 @@
         updatePersonPositions(data.handData || []);
         setTimeout(() => {
           getCirHandLocation();
-        }, 10 * 1000);
+        }, 5 * 1000);
       })
       .catch(() => {
         setTimeout(() => {
           getCirHandLocation();
-        }, 10 * 1000);
+        }, 5 * 1000);
       });
   }
 
@@ -1358,6 +1354,10 @@
           getServiceInfo();
         }, 10 * 1000);
       });
+  }
+
+  function goIndex(item) {
+    go(`/message/index/${item.id}`);
   }
 
   onMounted(() => {
