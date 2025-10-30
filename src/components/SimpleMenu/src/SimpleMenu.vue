@@ -32,6 +32,7 @@
   import { isFunction, isHttpUrl } from '@/utils/is';
   import { openWindow } from '@/utils';
   import { useOpenKeys } from './useOpenKeys';
+  import { usePermissionStore } from '@/store/modules/permission';
 
   defineOptions({ name: 'SimpleMenu', inheritAttrs: false });
 
@@ -75,7 +76,6 @@
     mixSider as any,
     collapse as any,
   );
-
   const getBindValues = computed(() => ({ ...attrs, ...props }));
 
   watch(
@@ -119,7 +119,6 @@
       return;
     }
     const path = (route || unref(currentRoute)).path;
-
     menuState.activeName = path;
 
     setOpenKeys(path);
@@ -129,6 +128,16 @@
     if (isHttpUrl(key)) {
       openWindow(key);
       return;
+    }
+    const menuId = myCommon.getQueryByUrl(key, 'menuid');
+    if (menuId) {
+      const permissionStore = usePermissionStore();
+      const menuType = permissionStore.allMenus.find((m) => m.menuId == menuId)?.menuType;
+      if (menuType == 5) {
+        key = `${window.location.origin}/#${key}`;
+        openWindow(key);
+        return;
+      }
     }
     const { beforeClickFn } = props;
     if (beforeClickFn && isFunction(beforeClickFn)) {

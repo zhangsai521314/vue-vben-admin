@@ -47,6 +47,7 @@ interface PermissionState {
   // 菜单列表
   frontMenuList: Menu[];
   domAuthList: [];
+  allMenus: [];
 }
 
 export const usePermissionStore = defineStore({
@@ -68,6 +69,7 @@ export const usePermissionStore = defineStore({
     frontMenuList: [],
     //页面操作按钮权限
     domAuthList: [],
+    allMenus: [],
   }),
   getters: {
     getPermCodeList(state): string[] | number[] {
@@ -99,7 +101,9 @@ export const usePermissionStore = defineStore({
       setAuthCache(POWER_MENU_KEY, list);
       list?.length > 0 && this.setLastBuildMenuTime();
     },
-
+    setAllMenu(list) {
+      this.allMenus = list;
+    },
     setFrontMenuList(list: Menu[]) {
       this.frontMenuList = list;
     },
@@ -118,6 +122,7 @@ export const usePermissionStore = defineStore({
       this.isDynamicAddedRoute = false;
       this.permCodeList = [];
       this.backMenuList = [];
+      this.allMenus = [];
       this.lastBuildMenuTime = 0;
     },
     async changePermissionCode() {
@@ -249,6 +254,7 @@ export const usePermissionStore = defineStore({
               routeList = datas.routers;
               //保存菜单信息
               this.setBackMenuList(datas.menus);
+              this.setAllMenu(datas.allMenus);
               this.setDomAuthList(datas.userAuths);
               myCommon.generateList(allMenus, datas.menus, 'children');
             } catch (error) {
