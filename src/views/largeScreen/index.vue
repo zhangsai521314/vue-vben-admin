@@ -11,7 +11,7 @@
               <input
                 v-model="searchQuery"
                 type="text"
-                placeholder="搜索车站、火车或人员..."
+                placeholder="输入ISDN搜索..."
                 @keyup.enter="handleSearch"
                 class="search-input"
               />
@@ -127,8 +127,9 @@
     </a-spin>
   </MyContent>
 </template>
+
 <script setup lang="ts">
-  import { ref, watch, onMounted } from 'vue';
+  import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
@@ -137,6 +138,9 @@
   import 'leaflet/dist/leaflet.css';
   import 'leaflet.marker.slideto';
   import 'leaflet-rotate';
+  import 'leaflet.markercluster';
+  import 'leaflet.markercluster/dist/MarkerCluster.css';
+  import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
   import { message } from 'ant-design-vue';
   import largeScreenApi from '@/api/largeScreen';
   import { Vue3SeamlessScroll } from 'vue3-seamless-scroll';
@@ -168,14 +172,14 @@
 
   const pendingAlarmData = ref([]);
 
-  // 初始地图状态（默认缩放8级）
+  // 初始地图状态
   const initialMapState = {
-    center: [10.5821, 9.1271],
+    center: [-10.5821, 9.1271],
     zoom: 8,
     bearing: 260,
   };
 
-  // 定义线路接口
+  // 定义接口
   interface Line {
     id: string;
     name: string;
@@ -184,7 +188,6 @@
     stations: Station[];
   }
 
-  // 定义站点接口
   interface Station {
     id: string;
     name: string;
@@ -194,7 +197,6 @@
     nameMarker?: any;
   }
 
-  // 定义火车接口
   interface Train {
     id: string;
     isdn: string;
@@ -205,10 +207,9 @@
     marker?: any;
     isdnMarker?: any;
     lineId?: string;
-    moving?: boolean; // 标记是否正在移动
+    moving?: boolean;
   }
 
-  // 定义人员接口
   interface Person {
     id: string;
     role: string;
@@ -219,16 +220,12 @@
     coordinate: [number, number];
     marker?: any;
     isdnMarker?: any;
-    moving?: boolean; // 标记是否正在移动
+    moving?: boolean;
   }
 
-  // 线路数据 - 支持多条线路
+  // 数据
   const lines = ref<Line[]>([]);
-
-  // 火车数据
   const trains = ref<Train[]>([]);
-
-  // 人员数据
   const persons = ref<Person[]>([]);
 
   // 组件变量
@@ -238,15 +235,73 @@
   let currentPopup = null;
   let isRotating = false;
   let lastMouseX = 0;
-  let stationPhotos = {};
-  let lineLayers = {};
-  let stationNameMarkers = {};
-  let trainIsdnMarkers = {};
-  let personIsdnMarkers = {};
-  let trainMarkers = {};
-  let personMarkers = {};
 
-  // 绘制线路 - 支持多条线路
+  // 聚合图层
+  let trainCluster = null;
+  let personCluster = null;
+
+  // 标记存储
+  let stationNameMarkers = {};
+  let trainMarkers = new Map();
+  let personMarkers = new Map();
+
+  // 性能优化变量
+  let updateInterval = null;
+  let lastTrainUpdateTime = 0;
+  let lastPersonUpdateTime = 0;
+  const UPDATE_INTERVAL = 5000; // 5秒更新一次
+  const DEBOUNCE_DELAY = 300;
+
+  // 地图初始化状态
+  let isMapInitialized = false;
+  let pendingPersonData: Person[] = [];
+  let pendingTrainData: Train[] = [];
+
+  // 执行队列控制
+  let isUpdatingTrains = false;
+  let isUpdatingPersons = false;
+  let personUpdateQueue: Person[] = [];
+  let trainUpdateQueue: Train[] = [];
+
+  // 创建火车图标
+  const createTrainIcon = (isOnline: boolean) => {
+    return L.divIcon({
+      html: `<div class="custom-train-marker ${isOnline ? 'online' : 'offline'}"></div>`,
+      className: 'custom-train-marker-container',
+      iconSize: [30, 30],
+      iconAnchor: [15, 15],
+    });
+  };
+
+  // 创建人员图标
+  const createPersonIcon = (isOnline: boolean) => {
+    return L.divIcon({
+      html: `<div class="custom-person-marker ${isOnline ? 'online' : 'offline'}"></div>`,
+      className: 'custom-person-marker-container',
+      iconSize: [30, 30],
+      iconAnchor: [15, 15],
+    });
+  };
+
+  // 创建车站名称标签
+  const createStationNameLabel = (name: string) => {
+    const nameDom = document.createElement('div');
+    nameDom.className = 'station-name-wrapper';
+    const nameContent = document.createElement('div');
+    nameContent.className = 'station-name-content';
+    nameContent.textContent = name;
+    nameContent.style.color = '#FC09EF';
+    nameDom.appendChild(nameContent);
+
+    return L.divIcon({
+      html: nameDom,
+      className: 'station-name-icon',
+      iconSize: [120, 24],
+      iconAnchor: [-10, 12],
+    });
+  };
+
+  // 绘制线路
   const drawLines = () => {
     lines.value.forEach((line) => {
       if (line.coordinates.length > 0) {
@@ -259,25 +314,22 @@
         }).addTo(map);
 
         // 绘制线路主色
-        const lineLayer = L.polyline(line.coordinates, {
+        L.polyline(line.coordinates, {
           color: line.color,
           weight: 8,
           opacity: 1,
           dashArray: '35, 35',
           lineCap: 'square',
         }).addTo(map);
-
-        // 存储线路图层
-        lineLayers[line.id] = lineLayer;
       }
     });
   };
 
-  // 添加车站（7级以上显示名称）
+  // 添加车站
   const addStations = () => {
     lines.value.forEach((line) => {
       line.stations.forEach((station) => {
-        if (station.coordinate.length == 2) {
+        if (station.coordinate.length === 2) {
           // 粉色圆圈标记
           const circleMarker = L.circleMarker(station.coordinate, {
             radius: 4,
@@ -289,60 +341,44 @@
           }).addTo(map);
 
           // 车站名称标签
-          const nameDom = document.createElement('div');
-          nameDom.className = 'station-name-wrapper';
-          const nameContent = document.createElement('div');
-          nameContent.className = 'station-name-content';
-          nameContent.textContent = station.name;
-          nameContent.style.color = '#FC09EF';
-          nameDom.appendChild(nameContent);
-
-          const nameIcon = L.divIcon({
-            html: nameDom,
-            className: 'station-name-icon',
-            iconSize: [120, 24],
-            iconAnchor: [-10, 12],
-          });
-
           const nameMarker = L.marker(station.coordinate, {
-            icon: nameIcon,
+            icon: createStationNameLabel(station.name),
             zIndexOffset: 60,
             opacity: 0,
             interactive: true,
           }).addTo(map);
 
-          // 点击事件
-          const showStationInfo = () => {
-            openPopup(
-              station.coordinate,
-              `
-            <div class="popup-content">
-        <div class='title fontColor'>车站</div>
-        <div class='content'>
-                  <div class='info'>
-                     <div>ISDN:</div>
-                     <div>${station.name}</div>
-                   </div>
-                  <div class='info'>
-                     <div>车站名称:</div>
-                     <div>${station.name}</div>
-                   </div>
+          // // 点击事件
+          // const showStationInfo = () => {
+          //   openPopup(
+          //     station.coordinate,
+          //     `
+          //     <div class="popup-content">
+          //       <div class='title fontColor'>车站</div>
+          //       <div class='content'>
+          //         <div class='info'>
+          //           <div>ISDN:</div>
+          //           <div>${station.name}</div>
+          //         </div>
+          //         <div class='info'>
+          //           <div>车站名称:</div>
+          //           <div>${station.name}</div>
+          //         </div>
+          //         <div class='info_'>
+          //           <div><img src='/largeScreen/huoche2.png'/></div>
+          //           <div>5</div>
+          //           <div><img src='/largeScreen/zhibanyuan1.png'/></div>
+          //           <div>20</div>
+          //         </div>
+          //       </div>
+          //     </div>
+          //     `,
+          //   );
+          // };
 
-                  <div class='info_'>
-                     <div><img src='/largeScreen/huoche2.png'/></div>
-                     <div>5</div>
-                     <div><img src='/largeScreen/zhibanyuan1.png'/></div>
-                     <div>20</div>
-                  </div>
-          </div>
-            </div>
-          `,
-            );
-          };
-          circleMarker.on('click', showStationInfo);
-          nameMarker.on('click', showStationInfo);
+          // circleMarker.on('click', showStationInfo);
+          // nameMarker.on('click', showStationInfo);
 
-          // 存储引用
           station.circleMarker = circleMarker;
           station.nameMarker = nameMarker;
           stationNameMarkers[station.id] = nameMarker;
@@ -351,167 +387,152 @@
     });
   };
 
-  // 添加火车（9级以上显示ISDN）
-  const addTrains = () => {
-    trains.value.forEach((train) => {
-      addTrainMarker(train);
+  // 初始化聚合图层
+  const initClusters = () => {
+    // 火车聚合图层 - 使用较小的聚合半径，在较低缩放级别就显示单个标记
+    trainCluster = L.markerClusterGroup({
+      chunkedLoading: true,
+      maxClusterRadius: 30, // 减小聚合半径
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: true,
+      disableClusteringAtZoom: 14, // 降低禁用聚合的缩放级别
+      iconCreateFunction: function (cluster) {
+        const count = cluster.getChildCount();
+        let size = 'small';
+        if (count > 20) size = 'large';
+        else if (count > 5) size = 'medium';
+
+        return L.divIcon({
+          html: `<div class="train-cluster cluster-${size}">${count}</div>`,
+          className: 'marker-cluster train-marker-cluster',
+          iconSize: L.point(40, 40),
+        });
+      },
     });
+
+    // 人员聚合图层 - 使用较大的聚合半径，在较高缩放级别才显示单个标记
+    personCluster = L.markerClusterGroup({
+      chunkedLoading: true,
+      maxClusterRadius: 60, // 保持较大的聚合半径
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: true,
+      disableClusteringAtZoom: 16, // 提高禁用聚合的缩放级别
+      iconCreateFunction: function (cluster) {
+        const count = cluster.getChildCount();
+        let size = 'small';
+        if (count > 50) size = 'large';
+        else if (count > 20) size = 'medium';
+
+        return L.divIcon({
+          html: `<div class="person-cluster cluster-${size}">${count}</div>`,
+          className: 'marker-cluster person-marker-cluster',
+          iconSize: L.point(40, 40),
+        });
+      },
+    });
+
+    // 先添加人员聚合图层（底层），再添加火车聚合图层（上层）
+    map.addLayer(personCluster);
+    map.addLayer(trainCluster);
   };
 
-  // 添加单个火车标记
-  const addTrainMarker = (train: Train) => {
-    // 火车图标
-    const icon = L.icon({
-      iconUrl: train.isOnline ? '/largeScreen/huoche2.png' : '/largeScreen/huoche2.png',
-      iconSize: [30, 30],
-      iconAnchor: [15, 10],
-      className: 'train-icon',
+  // 添加单个火车到聚合图层
+  const addTrainToCluster = (train: Train) => {
+    // 检查是否已存在相同ID的标记
+    if (trainMarkers.has(train.id)) {
+      return;
+    }
+
+    const marker = L.marker(train.coordinate, {
+      icon: createTrainIcon(train.isOnline),
+      zIndexOffset: 1000, // 提高火车z-index，确保显示在人员上方
     });
 
-    const trainMarker = L.marker(train.coordinate, {
-      icon: icon,
-      zIndexOffset: 200,
-    }).addTo(map);
-
-    // 火车ISDN标签（9级显示，#FC09EF色）
-    const isdnDom = document.createElement('div');
-    isdnDom.className = 'isdn-label';
-    isdnDom.textContent = `ISDN: ${train.isdn}`;
-    isdnDom.style.fontSize = 25;
-    isdnDom.style.fontWeight = 700;
-    isdnDom.style.color = '#FC09EF';
-    const isdnIcon = L.divIcon({
-      html: isdnDom,
-      className: 'isdn-icon',
-      iconSize: [100, 20],
-      iconAnchor: [-10, 10],
-    });
-
-    const isdnMarker = L.marker(train.coordinate, {
-      icon: isdnIcon,
-      zIndexOffset: 190,
-      opacity: 0,
-      interactive: false,
-    }).addTo(map);
-
-    // 点击事件
-    trainMarker.on('click', () => {
+    marker.on('click', () => {
       openPopup(
         train.coordinate,
         `
-          <div class="popup-content">
-        <div class='title fontColor'>列车</div>
-        <div class='content'>
-                  <div class='info'>
-                     <div>ISDN:</div>
-                     <div>${train.isdn}</div>
-                   </div>
-                  <div class='info'>
-                     <div>机车号:</div>
-                     <div>${train.isdn}</div>
-                   </div>
-                  <div class='info'>
-                     <div>所在车站:</div>
-                     <div>${train.station}</div>
-                  </div>
-                  <div class='info'>
-                     <div>所属区域:</div>
-                     <div>${train.area}</div>
-                  </div>
+        <div class="popup-content">
+          <div class='title fontColor'>列车</div>
+          <div class='content'>
+            <div class='info'>
+              <div>ISDN:</div>
+              <div>${train.isdn}</div>
+            </div>
+            <div class='info'>
+              <div>机车号:</div>
+              <div>${train.isdn}</div>
+            </div>
+            <div class='info'>
+              <div>所在车站:</div>
+              <div>${train.station}</div>
+            </div>
+            <div class='info'>
+              <div>所属区域:</div>
+              <div>${train.area}</div>
+                                               <div>${train.coordinate[0]},${train.coordinate[1]}</div>
+            </div>
           </div>
-          </div>
+        </div>
         `,
       );
     });
 
-    // 存储引用
-    train.marker = trainMarker;
-    train.isdnMarker = isdnMarker;
-    trainIsdnMarkers[train.id] = isdnMarker;
-    trainMarkers[train.id] = { marker: trainMarker, isdnMarker: isdnMarker };
+    trainCluster.addLayer(marker);
+    train.marker = marker;
+    trainMarkers.set(train.id, marker);
   };
 
-  // 添加人员（9级以上显示ISDN）
-  const addPersons = () => {
-    persons.value.forEach((person) => {
-      addPersonMarker(person);
-    });
-  };
+  // 添加单个人员到聚合图层
+  const addPersonToCluster = (person: Person) => {
+    // 检查是否已存在相同ID的标记
+    if (personMarkers.has(person.id)) {
+      return;
+    }
 
-  // 添加单个人员标记
-  const addPersonMarker = (person: Person) => {
-    // 人员图标
-    const icon = L.icon({
-      iconUrl: person.isOnline ? '/largeScreen/zhibanyuan1.png' : '/largeScreen/zhibanyuan1.png',
-      iconSize: [30, 30],
-      iconAnchor: [15, 15],
-      className: 'person-icon',
+    const marker = L.marker(person.coordinate, {
+      icon: createPersonIcon(person.isOnline),
+      zIndexOffset: 500, // 降低人员z-index，确保火车显示在上方
     });
 
-    const personMarker = L.marker(person.coordinate, {
-      icon: icon,
-      zIndexOffset: 150,
-    }).addTo(map);
-
-    // 人员ISDN标签（9级显示，#FC09EF色）
-    const isdnDom = document.createElement('div');
-    isdnDom.className = 'isdn-label';
-    isdnDom.textContent = `ISDN: ${person.isdn}`;
-    isdnDom.style.fontSize = 25;
-    isdnDom.style.fontWeight = 700;
-    isdnDom.style.color = '#FC09EF';
-    const isdnIcon = L.divIcon({
-      html: isdnDom,
-      className: 'isdn-icon',
-      iconSize: [100, 20],
-      iconAnchor: [-10, 15],
-    });
-
-    const isdnMarker = L.marker(person.coordinate, {
-      icon: isdnIcon,
-      zIndexOffset: 140,
-      opacity: 0,
-      interactive: false,
-    }).addTo(map);
-
-    // 点击事件
-    personMarker.on('click', () => {
+    marker.on('click', () => {
       openPopup(
         person.coordinate,
         `
-          <div class="popup-content">
-        <div class='title fontColor'>人员</div>
-        <div class='content'>
-                  <div class='info'>
-                     <div>ISDN:</div>
-                     <div>${person.isdn}</div>
-                   </div>
-                  <div class='info'>
-                     <div>人员角色:</div>
-                     <div>${person.role}</div>
-                   </div>
-                  <div class='info'>
-                     <div>所在车站:</div>
-                     <div>${person.station}</div>
-                  </div>
-                  <div class='info'>
-                     <div>所属区域:</div>
-                     <div>${person.area}</div>
-                  </div>
+        <div class="popup-content">
+          <div class='title fontColor'>人员</div>
+          <div class='content'>
+            <div class='info'>
+              <div>ISDN:</div>
+              <div>${person.isdn}</div>
+            </div>
+            <div class='info'>
+              <div>人员角色:</div>
+              <div>${person.role}</div>
+            </div>
+            <div class='info'>
+              <div>所在车站:</div>
+              <div>${person.station}</div>
+            </div>
+            <div class='info'>
+              <div>所属区域:</div>
+              <div>${person.area}</div>
+              <div>${person.coordinate[0]},${person.coordinate[1]}</div>
+            </div>
           </div>
-          </div>
+        </div>
         `,
       );
     });
 
-    // 存储引用
-    person.marker = personMarker;
-    person.isdnMarker = isdnMarker;
-    personIsdnMarkers[person.id] = isdnMarker;
-    personMarkers[person.id] = { marker: personMarker, isdnMarker: isdnMarker };
+    personCluster.addLayer(marker);
+    person.marker = marker;
+    personMarkers.set(person.id, marker);
   };
 
-  // 平滑移动标记到新位置
+  // 平滑移动标记
   const smoothMoveTo = (marker: any, newLatLng: L.LatLng, duration: number = 3000) => {
     return new Promise<void>((resolve) => {
       marker.slideTo(newLatLng, {
@@ -519,163 +540,264 @@
         keepAtCenter: false,
       });
 
-      // 在动画结束后解析 Promise
       setTimeout(() => {
         resolve();
       }, duration);
     });
   };
 
-  // 更新火车位置
-  const updateTrainPositions = async (newTrainData: Train[]) => {
-    // 移除不存在的火车
-    Object.keys(trainMarkers).forEach((id) => {
-      if (!newTrainData.find((train) => train.id === id)) {
-        const markers = trainMarkers[id];
-        if (markers.marker && map.hasLayer(markers.marker)) {
-          map.removeLayer(markers.marker);
-        }
-        if (markers.isdnMarker && map.hasLayer(markers.isdnMarker)) {
-          map.removeLayer(markers.isdnMarker);
-        }
-        delete trainMarkers[id];
-        delete trainIsdnMarkers[id];
+  // 防抖函数
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+  };
 
-        const index = trains.value.findIndex((t) => t.id === id);
-        if (index !== -1) {
-          trains.value.splice(index, 1);
+  // 处理待处理数据
+  const processPendingData = () => {
+    if (!isMapInitialized) return;
+
+    if (pendingTrainData.length > 0) {
+      console.log(`处理 ${pendingTrainData.length} 个待处理火车数据`);
+      updateTrainPositions(pendingTrainData);
+      pendingTrainData = [];
+    }
+
+    if (pendingPersonData.length > 0) {
+      console.log(`处理 ${pendingPersonData.length} 个待处理人员数据`);
+      updatePersonPositions(pendingPersonData);
+      pendingPersonData = [];
+    }
+  };
+
+  // 更新火车位置 - 优化版本
+  const updateTrainPositions = async (newTrainData: Train[]) => {
+    // 如果地图未初始化，保存数据等待初始化完成
+    if (!isMapInitialized) {
+      pendingTrainData = [...newTrainData];
+      return;
+    }
+
+    // 如果正在更新，将数据加入队列
+    if (isUpdatingTrains) {
+      trainUpdateQueue = [...newTrainData];
+      return;
+    }
+
+    const now = Date.now();
+    if (now - lastTrainUpdateTime < UPDATE_INTERVAL) {
+      return;
+    }
+    lastTrainUpdateTime = now;
+
+    isUpdatingTrains = true;
+    console.log(`开始更新火车位置，数据量: ${newTrainData.length}`);
+
+    try {
+      // 移除不存在的火车
+      const currentTrainIds = new Set(newTrainData.map((train) => train.id));
+      const trainsToRemove = [];
+
+      for (const [id, marker] of trainMarkers.entries()) {
+        if (!currentTrainIds.has(id)) {
+          trainsToRemove.push({ id, marker });
         }
       }
-    });
 
-    // 更新或添加火车
-    for (const train of newTrainData) {
-      if (trainMarkers[train.id]) {
-        // 更新现有火车位置
-        const markers = trainMarkers[train.id];
-        const existingTrain = trains.value.find((t) => t.id === train.id);
-
-        if (existingTrain && !existingTrain.moving) {
-          const newLatLng = L.latLng(train.coordinate[0], train.coordinate[1]);
-          const currentLatLng = markers.marker.getLatLng();
-
-          // 只有当位置确实发生变化时才移动
-          if (newLatLng.distanceTo(currentLatLng) > 10) {
-            // 10米阈值
-            existingTrain.moving = true;
-
-            try {
-              // 同时移动火车图标和ISDN标签
-              await Promise.all([
-                smoothMoveTo(markers.marker, newLatLng, 3000),
-                smoothMoveTo(markers.isdnMarker, newLatLng, 3000),
-              ]);
-
-              // 更新数据
-              existingTrain.coordinate = [newLatLng.lat, newLatLng.lng];
-              existingTrain.station = train.station;
-              existingTrain.area = train.area;
-              existingTrain.isOnline = train.isOnline;
-            } catch (error) {
-              console.error('移动火车时出错:', error);
-            } finally {
-              existingTrain.moving = false;
-            }
-          } else {
-            // 小距离移动，直接设置位置
-            markers.marker.setLatLng(newLatLng);
-            markers.isdnMarker.setLatLng(newLatLng);
-            existingTrain.coordinate = [newLatLng.lat, newLatLng.lng];
+      // 批量移除标记
+      if (trainsToRemove.length > 0) {
+        trainCluster.removeLayers(trainsToRemove.map((item) => item.marker));
+        trainsToRemove.forEach((item) => {
+          trainMarkers.delete(item.id);
+          const index = trains.value.findIndex((t) => t.id === item.id);
+          if (index !== -1) {
+            trains.value.splice(index, 1);
           }
+        });
+      }
+
+      // 批量更新位置
+      const updatePromises = [];
+
+      for (const train of newTrainData) {
+        if (trainMarkers.has(train.id)) {
+          const marker = trainMarkers.get(train.id);
+          const existingTrain = trains.value.find((t) => t.id === train.id);
+
+          if (existingTrain && !existingTrain.moving) {
+            const newLatLng = L.latLng(train.coordinate[0], train.coordinate[1]);
+            const currentLatLng = marker.getLatLng();
+
+            if (newLatLng.distanceTo(currentLatLng) > 10) {
+              existingTrain.moving = true;
+
+              updatePromises.push(
+                smoothMoveTo(marker, newLatLng, 3000)
+                  .then(() => {
+                    existingTrain.coordinate = [newLatLng.lat, newLatLng.lng];
+                    existingTrain.station = train.station;
+                    existingTrain.area = train.area;
+                    existingTrain.isOnline = train.isOnline;
+                    existingTrain.moving = false;
+                  })
+                  .catch((error) => {
+                    console.error('移动火车时出错:', error);
+                    existingTrain.moving = false;
+                  }),
+              );
+            } else {
+              marker.setLatLng(newLatLng);
+              existingTrain.coordinate = [newLatLng.lat, newLatLng.lng];
+            }
+          }
+        } else {
+          // 添加新火车
+          console.log(`添加新火车: ${train.id}`);
+          addTrainToCluster(train);
+          trains.value.push(train);
         }
-      } else {
-        // 添加新火车
-        addTrainMarker(train);
-        trains.value.push(train);
+      }
+
+      // 限制并发数量
+      const batchSize = 10;
+      for (let i = 0; i < updatePromises.length; i += batchSize) {
+        const batch = updatePromises.slice(i, i + batchSize);
+        await Promise.all(batch);
+      }
+
+      console.log(`火车位置更新完成，当前火车数量: ${trains.value.length}`);
+    } catch (error) {
+      console.error('更新火车位置时发生错误:', error);
+    } finally {
+      isUpdatingTrains = false;
+
+      // 处理队列中的下一个更新
+      if (trainUpdateQueue.length > 0) {
+        const nextData = [...trainUpdateQueue];
+        trainUpdateQueue = [];
+        setTimeout(() => updateTrainPositions(nextData), 100);
       }
     }
   };
 
-  // 更新人员位置
+  // 更新人员位置 - 优化版本
   const updatePersonPositions = async (newPersonData: Person[]) => {
-    // 移除不存在的人员
-    Object.keys(personMarkers).forEach((id) => {
-      if (!newPersonData.find((person) => person.id === id)) {
-        const markers = personMarkers[id];
-        if (markers.marker && map.hasLayer(markers.marker)) {
-          map.removeLayer(markers.marker);
-        }
-        if (markers.isdnMarker && map.hasLayer(markers.isdnMarker)) {
-          map.removeLayer(markers.isdnMarker);
-        }
-        delete personMarkers[id];
-        delete personIsdnMarkers[id];
+    // 如果地图未初始化，保存数据等待初始化完成
+    if (!isMapInitialized) {
+      pendingPersonData = [...newPersonData];
+      return;
+    }
 
-        const index = persons.value.findIndex((p) => p.id === id);
-        if (index !== -1) {
-          persons.value.splice(index, 1);
+    // 如果正在更新，将数据加入队列
+    if (isUpdatingPersons) {
+      personUpdateQueue = [...newPersonData];
+      return;
+    }
+
+    const now = Date.now();
+    if (now - lastPersonUpdateTime < UPDATE_INTERVAL) {
+      return;
+    }
+
+    isUpdatingPersons = true;
+    console.log(`开始更新人员位置，数据量: ${newPersonData.length}`);
+
+    try {
+      // 移除不存在的人员
+      const currentPersonIds = new Set(newPersonData.map((person) => person.id));
+      const personsToRemove = [];
+
+      for (const [id, marker] of personMarkers.entries()) {
+        if (!currentPersonIds.has(id)) {
+          personsToRemove.push({ id, marker });
         }
       }
-    });
 
-    // 更新或添加人员
-    for (const person of newPersonData) {
-      if (personMarkers[person.id]) {
-        // 更新现有人员位置
-        const markers = personMarkers[person.id];
-        const existingPerson = persons.value.find((p) => p.id === person.id);
-
-        if (existingPerson && !existingPerson.moving) {
-          const newLatLng = L.latLng(person.coordinate[0], person.coordinate[1]);
-          const currentLatLng = markers.marker.getLatLng();
-
-          // 只有当位置确实发生变化时才移动
-          if (newLatLng.distanceTo(currentLatLng) > 10) {
-            // 10米阈值
-            existingPerson.moving = true;
-
-            try {
-              // 同时移动人员图标和ISDN标签
-              await Promise.all([
-                smoothMoveTo(markers.marker, newLatLng, 2000),
-                smoothMoveTo(markers.isdnMarker, newLatLng, 2000),
-              ]);
-
-              // 更新数据
-              existingPerson.coordinate = [newLatLng.lat, newLatLng.lng];
-              existingPerson.station = person.station;
-              existingPerson.area = person.area;
-              existingPerson.isOnline = person.isOnline;
-            } catch (error) {
-              console.error('移动人员时出错:', error);
-            } finally {
-              existingPerson.moving = false;
-            }
-          } else {
-            // 小距离移动，直接设置位置
-            markers.marker.setLatLng(newLatLng);
-            markers.isdnMarker.setLatLng(newLatLng);
-            existingPerson.coordinate = [newLatLng.lat, newLatLng.lng];
+      // 批量移除标记
+      if (personsToRemove.length > 0) {
+        personCluster.removeLayers(personsToRemove.map((item) => item.marker));
+        personsToRemove.forEach((item) => {
+          personMarkers.delete(item.id);
+          const index = persons.value.findIndex((p) => p.id === item.id);
+          if (index !== -1) {
+            persons.value.splice(index, 1);
           }
+        });
+      }
+
+      // 批量更新位置
+      const updatePromises = [];
+
+      for (const person of newPersonData) {
+        if (personMarkers.has(person.id)) {
+          const marker = personMarkers.get(person.id);
+          const existingPerson = persons.value.find((p) => p.id === person.id);
+
+          if (existingPerson && !existingPerson.moving) {
+            const newLatLng = L.latLng(person.coordinate[0], person.coordinate[1]);
+            const currentLatLng = marker.getLatLng();
+
+            if (newLatLng.distanceTo(currentLatLng) > 10) {
+              existingPerson.moving = true;
+
+              updatePromises.push(
+                smoothMoveTo(marker, newLatLng, 2000)
+                  .then(() => {
+                    existingPerson.coordinate = [newLatLng.lat, newLatLng.lng];
+                    existingPerson.station = person.station;
+                    existingPerson.area = person.area;
+                    existingPerson.isOnline = person.isOnline;
+                    existingPerson.moving = false;
+                  })
+                  .catch((error) => {
+                    console.error('移动人员时出错:', error);
+                    existingPerson.moving = false;
+                  }),
+              );
+            } else {
+              marker.setLatLng(newLatLng);
+              existingPerson.coordinate = [newLatLng.lat, newLatLng.lng];
+            }
+          }
+        } else {
+          // 添加新人员
+          console.log(`添加新人员: ${person.id}`);
+          addPersonToCluster(person);
+          persons.value.push(person);
         }
-      } else {
-        // 添加新人员
-        addPersonMarker(person);
-        persons.value.push(person);
+      }
+
+      // 限制并发数量
+      const batchSize = 20;
+      for (let i = 0; i < updatePromises.length; i += batchSize) {
+        const batch = updatePromises.slice(i, i + batchSize);
+        await Promise.all(batch);
+      }
+
+      console.log(`人员位置更新完成，当前人员数量: ${persons.value.length}`);
+    } catch (error) {
+      console.error('更新人员位置时发生错误:', error);
+    } finally {
+      isUpdatingPersons = false;
+
+      // 处理队列中的下一个更新
+      if (personUpdateQueue.length > 0) {
+        const nextData = [...personUpdateQueue];
+        personUpdateQueue = [];
+        setTimeout(() => updatePersonPositions(nextData), 100);
       }
     }
   };
 
   // 绑定地图事件
   const bindMapEvents = () => {
-    // 缩放结束时更新显示状态
     map.on('zoomend', () => {
       const currentZoom = map.getZoom();
-      handleZoomEnd();
       updateAllMarkersVisibility(currentZoom);
     });
 
-    // 缩放开始时的处理
     map.on('zoomstart', (e) => {
       if (e.originalEvent) map.setZoomAround(map.mouseEventToLatLng(e.originalEvent));
     });
@@ -688,42 +810,28 @@
         map.dragging.disable();
       }
     });
+
     document.addEventListener('mousemove', (e) => {
       if (isRotating) map.setBearing(map.getBearing() + (e.clientX - lastMouseX) * 0.5);
       lastMouseX = e.clientX;
     });
+
     document.addEventListener('mouseup', (e) => {
       if (e.button === 2) {
         isRotating = false;
         map.dragging.enable();
       }
     });
+
     mapContainer.value.addEventListener('contextmenu', (e) => e.preventDefault());
   };
 
-  // 核心：控制所有标签的显示/隐藏
+  // 控制标签显示/隐藏
   const updateAllMarkersVisibility = (zoomLevel) => {
-    // 1. 车站名称：7级或7级以上显示
     const showStationName = zoomLevel >= 7;
     Object.values(stationNameMarkers).forEach((marker) => {
       marker.setOpacity(showStationName ? 1 : 0);
     });
-
-    // 2. ISDN标签：9级或9级以上显示
-    const showIsdn = zoomLevel >= 9;
-    // 火车ISDN标签
-    Object.values(trainIsdnMarkers).forEach((marker) => {
-      marker.setOpacity(showIsdn ? 1 : 0);
-    });
-    // 人员ISDN标签
-    Object.values(personIsdnMarkers).forEach((marker) => {
-      marker.setOpacity(showIsdn ? 1 : 0);
-    });
-  };
-
-  // 车站照片显示逻辑
-  const handleZoomEnd = () => {
-    // 可以根据需要添加车站照片显示逻辑
   };
 
   // 打开弹窗
@@ -741,82 +849,79 @@
   };
 
   // 搜索功能
-  const handleSearch = () => {
+  const handleSearch = debounce(() => {
     if (!searchQuery.value.trim()) return;
     const query = searchQuery.value.trim().toLowerCase();
     let found = false;
     if (currentPopup) map.removeLayer(currentPopup);
 
-    // 搜索车站
-    lines.value.forEach((line) => {
-      line.stations.forEach((station) => {
-        if (station.name.toLowerCase().includes(query) && !found) {
-          map.flyTo(station.coordinate, 10, { duration: 1 });
-          station.nameMarker.setOpacity(1);
-          openPopup(
-            station.coordinate,
-            `
-             <div class="popup-content">
-        <div class='title fontColor'>车站</div>
-        <div class='content'>
-                  <div class='info'>
-                     <div>ISDN:</div>
-                     <div>${station.name}</div>
-                   </div>
-                  <div class='info'>
-                     <div>车站名称:</div>
-                     <div>${station.name}</div>
-                   </div>
-                  <div class='info_'>
-                     <div><img src='/largeScreen/huoche2.png'/></div>
-                     <div>5</div>
-                     <div><img src='/largeScreen/zhibanyuan1.png'/></div>
-                     <div>20</div>
-                  </div>
-          </div>
-            </div>
-          `,
-          );
-          found = true;
-        }
-      });
-    });
+    // // 搜索车站
+    // lines.value.forEach((line) => {
+    //   line.stations.forEach((station) => {
+    //     if (station.name.toLowerCase().includes(query) && !found) {
+    //       map.flyTo(station.coordinate, 10, { duration: 1 });
+    //       station.nameMarker.setOpacity(1);
+    //       openPopup(
+    //         station.coordinate,
+    //         `
+    //         <div class="popup-content">
+    //           <div class='title fontColor'>车站</div>
+    //           <div class='content'>
+    //             <div class='info'>
+    //               <div>ISDN:</div>
+    //               <div>${station.name}</div>
+    //             </div>
+    //             <div class='info'>
+    //               <div>车站名称:</div>
+    //               <div>${station.name}</div>
+    //             </div>
+    //             <div class='info_'>
+    //               <div><img src='/largeScreen/huoche2.png'/></div>
+    //               <div>5</div>
+    //               <div><img src='/largeScreen/zhibanyuan1.png'/></div>
+    //               <div>20</div>
+    //             </div>
+    //           </div>
+    //         </div>
+    //         `,
+    //       );
+    //       found = true;
+    //     }
+    //   });
+    // });
 
     if (found) return;
 
     // 搜索火车
     trains.value.forEach((train) => {
-      if (
-        (train.isdn.toLowerCase().includes(query) || train.station.toLowerCase().includes(query)) &&
-        !found
-      ) {
+      if (train.isdn.toLowerCase().includes(query) && !found) {
         map.flyTo(train.coordinate, 10, { duration: 1 });
-        train.isdnMarker.setOpacity(1);
         openPopup(
           train.coordinate,
           `
           <div class="popup-content">
-        <div class='title fontColor'>列车</div>
-        <div class='content'>
-                  <div class='info'>
-                     <div>ISDN:</div>
-                     <div>${train.isdn}</div>
-                   </div>
-                  <div class='info'>
-                     <div>机车号:</div>
-                     <div>${train.isdn}</div>
-                   </div>
-                  <div class='info'>
-                     <div>所在车站:</div>
-                     <div>${train.station}</div>
-                  </div>
-                  <div class='info'>
-                     <div>所属区域:</div>
-                     <div>${train.area}</div>
-                  </div>
+            <div class='title fontColor'>列车</div>
+            <div class='content'>
+              <div class='info'>
+                <div>ISDN:</div>
+                <div>${train.isdn}</div>
+              </div>
+              <div class='info'>
+                <div>机车号:</div>
+                <div>${train.isdn}</div>
+              </div>
+              <div class='info'>
+                <div>所在车站:</div>
+                <div>${train.station}</div>
+              </div>
+              <div class='info'>
+                <div>所属区域:</div>
+                <div>${train.area}</div>
+                 <div>${train.coordinate[0]},${train.coordinate[1]}</div>
+              </div>
+            </div>
           </div>
-          </div>
-        `,
+          `,
         );
         found = true;
       }
@@ -826,53 +931,46 @@
 
     // 搜索人员
     persons.value.forEach((person) => {
-      if (
-        (person.isdn.toLowerCase().includes(query) || person.role.toLowerCase().includes(query)) &&
-        !found
-      ) {
+      if (person.isdn.toLowerCase().includes(query) && !found) {
         map.flyTo(person.coordinate, 10, { duration: 1 });
-        person.isdnMarker.setOpacity(1);
         openPopup(
           person.coordinate,
           `
           <div class="popup-content">
-        <div class='title fontColor'>人员</div>
-        <div class='content'>
-                  <div class='info'>
-                     <div>ISDN:</div>
-                     <div>${person.isdn}</div>
-                   </div>
-                  <div class='info'>
-                     <div>人员角色:</div>
-                     <div>${person.role}</div>
-                   </div>
-                  <div class='info'>
-                     <div>所在车站:</div>
-                     <div>${person.station}</div>
-                  </div>
-                  <div class='info'>
-                     <div>所属区域:</div>
-                     <div>${person.area}</div>
-                  </div>
+            <div class='title fontColor'>人员</div>
+            <div class='content'>
+              <div class='info'>
+                <div>ISDN:</div>
+                <div>${person.isdn}</div>
+              </div>
+              <div class='info'>
+                <div>人员角色:</div>
+                <div>${person.role}</div>
+              </div>
+              <div class='info'>
+                <div>所在车站:</div>
+                <div>${person.station}</div>
+              </div>
+              <div class='info'>
+                <div>所属区域:</div>
+                <div>${person.area}</div>
+                                 <div>${person.coordinate[0]},${person.coordinate[1]}</div>
+              </div>
+            </div>
           </div>
-          </div>
-        `,
+          `,
         );
         found = true;
       }
     });
 
     if (!found) message.info(`未找到与"${query}"相关的信息`);
-  };
+  }, DEBOUNCE_DELAY);
 
   // 重置地图
   const resetMap = () => {
     if (currentPopup) map.removeLayer(currentPopup);
     currentPopup = null;
-
-    // 移除车站照片
-    Object.values(stationPhotos).forEach((layer) => map.removeLayer(layer));
-    stationPhotos = {};
 
     // 重置标签状态
     updateAllMarkersVisibility(initialMapState.zoom);
@@ -892,15 +990,19 @@
     }
   });
 
+  // 初始化地图
   function initMap() {
-    // // 修改CRS.Simple的变换参数，将原点移至左上角，Y轴向下为正
-    // L.CRS.Simple.transformation = new L.Transformation(1, 0, 1, 0);
-    // 初始化地图
+    if (map) {
+      map.remove();
+      map = null;
+    }
+    //更改地图0.0点为左上
+    L.CRS.Simple.transformation = new L.Transformation(1, 0, 1, 0);
     map = L.map(mapContainer.value, {
       crs: L.CRS.Simple,
       attributionControl: false,
       zoomControl: false,
-      minZoom: 8,
+      minZoom: 4,
       maxZoom: 20,
       zoomSnap: 0.5,
       dragging: true,
@@ -913,13 +1015,12 @@
     map.setView(initialMapState.center, initialMapState.zoom);
     map.getContainer().style.backgroundColor = 'transparent';
 
-    // 绘制所有线路
-    drawLines();
+    // 初始化聚合图层
+    initClusters();
 
-    // 添加车站、火车、人员
+    // 绘制所有元素
+    drawLines();
     addStations();
-    addTrains();
-    addPersons();
 
     // 页面进入动画
     setTimeout(() => {
@@ -931,15 +1032,47 @@
 
     // 绑定事件
     bindMapEvents();
-    // 初始化时根据缩放级别设置所有标签状态
     updateAllMarkersVisibility(map.getZoom());
+
+    // 标记地图初始化完成
+    isMapInitialized = true;
+    console.log('地图初始化完成');
+
+    // 处理待处理数据
+    nextTick(() => {
+      processPendingData();
+    });
   }
 
-  //机车图表
+  // 清理资源
+  const cleanup = () => {
+    if (updateInterval) {
+      clearInterval(updateInterval);
+      updateInterval = null;
+    }
+
+    if (map) {
+      map.remove();
+      map = null;
+    }
+
+    trainMarkers.clear();
+    personMarkers.clear();
+    stationNameMarkers = {};
+    isMapInitialized = false;
+    pendingPersonData = [];
+    pendingTrainData = [];
+    isUpdatingTrains = false;
+    isUpdatingPersons = false;
+    personUpdateQueue = [];
+    trainUpdateQueue = [];
+  };
+
+  // 机车图表
   function setCirChart(xAxisData, leftData, centerData, rightData) {
     try {
       const option = {
-        backgroundColor: 'transparent', // 设置图表背景为透明
+        backgroundColor: 'transparent',
         title: {
           show: false,
         },
@@ -1096,11 +1229,11 @@
     }
   }
 
-  //手持图表
+  // 手持图表
   function setHandChart(xAxisData, leftData, centerData, rightData) {
     try {
       const option = {
-        backgroundColor: 'transparent', // 设置图表背景为透明
+        backgroundColor: 'transparent',
         title: {
           show: false,
         },
@@ -1320,28 +1453,51 @@
       .GetMapLocation()
       .then((data) => {
         lines.value = data;
-        getCirHandLocation();
+        console.log('获取到线路数据:', data.length);
         initMap();
+        // 确保地图初始化完成后再获取人员数据
+        setTimeout(() => {
+          getCirHandLocation();
+        }, 500);
       })
-      .catch(() => {});
+      .catch((error) => {
+        console.error('获取地图位置失败:', error);
+      });
   }
 
   function getCirHandLocation() {
     largeScreenApi
       .GetCirHandLocation()
       .then((data) => {
-        // 更新火车位置
-        updateTrainPositions(data.cirData || []);
-        // 更新人员位置
-        updatePersonPositions(data.handData || []);
+        console.log('获取到机车和人员数据:', {
+          cirCount: data.cirData?.length || 0,
+          handCount: data.handData?.length || 0,
+        });
+
+        // 使用setTimeout分离两个更新操作，避免互相干扰
+        setTimeout(() => {
+          // 更新火车位置
+          if (data.cirData && data.cirData.length > 0) {
+            updateTrainPositions(data.cirData);
+          }
+        }, 0);
+
+        setTimeout(() => {
+          // 更新人员位置
+          if (data.handData && data.handData.length > 0) {
+            updatePersonPositions(data.handData);
+          }
+        }, 100); // 延迟100ms执行人员更新，确保与火车更新分开
+
         setTimeout(() => {
           getCirHandLocation();
-        }, 60 * 1000);
+        }, 2 * 1000);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('获取机车和人员位置失败:', error);
         setTimeout(() => {
           getCirHandLocation();
-        }, 60 * 1000);
+        }, 2 * 1000);
       });
   }
 
@@ -1363,11 +1519,17 @@
   }
 
   onMounted(() => {
+    console.log('大屏页面已挂载');
     getServiceInfo();
     getSysRequest();
     getDeviceCount();
     getDeviceLocationCount();
     getMapLocation();
+  });
+
+  onUnmounted(() => {
+    console.log('大屏页面已卸载');
+    cleanup();
   });
 </script>
 
@@ -1531,35 +1693,6 @@
       }
     }
 
-    .servicedata {
-      position: absolute;
-      top: 40px;
-      right: 4px;
-      width: 24.15%;
-      min-width: 310px;
-      height: 18.9%;
-      min-height: 136px;
-      background-image: url('@/assets/images/largeScreen/xbj72.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-
-      .title {
-        position: relative;
-        top: 2%;
-        right: -71%;
-        font-size: 20px;
-      }
-
-      .data {
-        width: 92%;
-        height: calc(100% - 32px);
-        margin-top: 8px;
-        margin-left: 7px;
-        overflow: hidden;
-      }
-    }
-
     .jccir,
     .hand {
       position: absolute;
@@ -1594,69 +1727,6 @@
 
     .jccir {
       right: 4px;
-    }
-
-    .video {
-      position: absolute;
-      top: 33%;
-      right: 4px;
-      width: 24.1%;
-      min-width: 386px;
-      height: 27.65%;
-      min-height: 250px;
-      background-image: url('@/assets/images/largeScreen/xbj_1_1.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-
-      @media (max-width: 1920px) {
-        .player-wrapper {
-          top: 7%;
-        }
-      }
-
-      @media (min-width: 1921px) {
-        .player-wrapper {
-          top: 9%;
-        }
-      }
-
-      .player-wrapper {
-        position: relative;
-        left: 4%;
-        width: 91%;
-        height: 76%;
-      }
-
-      .title {
-        position: relative;
-        top: 2%;
-        right: -55%;
-        width: 39%;
-        overflow: hidden;
-        font-size: 20px;
-        text-align: right;
-        text-emphasis: inherit;
-        cursor: pointer;
-      }
-
-      .data {
-        width: 85%;
-        height: 75%;
-        margin-top: 6%;
-        margin-left: 7%;
-      }
-
-      :deep(.vjs-control-bar) {
-        border-radius: 0 0 19px 19px !important;
-      }
-
-      .video-player {
-        width: 100%;
-        height: 100% !important;
-        padding-top: 0 !important;
-        background-color: #fc09f000;
-      }
     }
 
     .alarm {
@@ -1775,39 +1845,6 @@
     box-shadow: 0 0 0 2px rgb(52 152 219 / 20%);
   }
 
-  .search-button {
-    padding: 8px 16px;
-    transition: background 0.3s;
-    border: none;
-    border-radius: 4px;
-    background: #3498db;
-    color: #fff;
-    cursor: pointer;
-  }
-
-  .search-button:hover {
-    background: #2980b9;
-  }
-
-  .reset-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 16px;
-    transition: all 0.3s;
-    border: none;
-    border-radius: 4px;
-    background: #e74c3c;
-    color: #fff;
-    cursor: pointer;
-    gap: 6px;
-  }
-
-  .reset-button:hover {
-    transform: translateY(-2px);
-    background: #c0392b;
-  }
-
   /* 地图容器 */
   .map {
     width: 100%;
@@ -1842,32 +1879,6 @@
     border-bottom: 5px solid transparent;
   }
 
-  /* ISDN标签样式（#fc09ef色） */
-  .isdn-label {
-    padding: 2px 6px;
-    border-radius: 3px;
-    background-color: rgb(0 0 0 / 85%);
-    box-shadow: 0 1px 4px rgb(0 0 0 / 40%);
-    color: #fc09ef !important;
-    font-size: 11px;
-    font-weight: 500;
-    white-space: nowrap;
-  }
-
-  /* 操作提示 */
-  .map-hint {
-    position: absolute;
-    z-index: 900;
-    bottom: 20px;
-    left: 20px;
-    padding: 6px 12px;
-    border-radius: 4px;
-    background: rgb(0 0 0 / 70%);
-    box-shadow: 0 1px 5px rgb(0 0 0 / 20%);
-    color: #fff;
-    font-size: 12px;
-  }
-
   /* 弹窗样式 */
   :deep(.custom-popup) {
     padding: 5px;
@@ -1899,9 +1910,9 @@
       display: flex;
       position: relative;
       top: 17px;
-      left: 33px;
+      left: 9px;
       flex-direction: column;
-      width: 260px;
+      width: 299px;
       height: 135px;
       font-size: 20px;
       gap: 9px;
@@ -1948,16 +1959,6 @@
     right: 16px;
   }
 
-  .status-online {
-    color: #2ecc71;
-    font-weight: 500;
-  }
-
-  .status-offline {
-    color: #e74c3c;
-    font-weight: 500;
-  }
-
   :deep(.leaflet-popup),
   :deep(.leaflet-popup-content-wrapper) {
     background-color: #fff0 !important;
@@ -1966,6 +1967,115 @@
 </style>
 
 <style lang="less">
+  /* 自定义标记样式 */
+  .custom-train-marker {
+    width: 30px;
+    height: 30px;
+    background-image: url('/largeScreen/huoche2.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    filter: drop-shadow(0 0 2px rgb(0 0 0 / 70%));
+
+    &.online {
+      filter: drop-shadow(0 0 4px #0f0);
+    }
+
+    &.offline {
+      filter: grayscale(1) brightness(0.7);
+    }
+  }
+
+  .custom-person-marker {
+    width: 30px;
+    height: 30px;
+    background-image: url('/largeScreen/zhibanyuan1.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    filter: drop-shadow(0 0 2px rgb(0 0 0 / 70%));
+
+    &.online {
+      filter: drop-shadow(0 0 4px #0f0);
+    }
+
+    &.offline {
+      filter: grayscale(1) brightness(0.7);
+    }
+  }
+
+  /* 聚合样式 */
+  .train-cluster,
+  .person-cluster {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 0 2px rgb(0 0 0 / 80%);
+  }
+
+  .train-cluster {
+    z-index: 1000; /* 确保火车聚合显示在人员聚合上方 */
+    border: 3px solid #ff9f43;
+    background: radial-gradient(circle, #ff6b6b, #c44569);
+  }
+
+  .person-cluster {
+    z-index: 500; /* 人员聚合在火车聚合下方 */
+    border: 3px solid #686de0;
+    background: radial-gradient(circle, #4834d4, #130f40);
+  }
+
+  .cluster-small {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+
+  .cluster-medium {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .cluster-large {
+    width: 50px;
+    height: 50px;
+    font-size: 16px;
+  }
+
+  /* 聚合图层样式重写 - 确保火车聚合显示在人员聚合上方 */
+  :deep(.marker-cluster-train) {
+    z-index: 1000 !important;
+    background-color: rgb(255 107 107 / 60%);
+
+    div {
+      z-index: 1000 !important;
+      background-color: rgb(196 69 105 / 80%);
+      color: white;
+    }
+  }
+
+  :deep(.marker-cluster-person) {
+    z-index: 500 !important;
+    background-color: rgb(72 52 212 / 60%);
+
+    div {
+      z-index: 500 !important;
+      background-color: rgb(19 15 64 / 80%);
+      color: white;
+    }
+  }
+
+  /* 确保单个标记的层级关系 */
+  .custom-train-marker-container {
+    z-index: 1000 !important;
+  }
+
+  .custom-person-marker-container {
+    z-index: 500 !important;
+  }
+
   .fontColor {
     color: #08d4fc;
   }
@@ -1974,204 +2084,16 @@
     color: #fff;
   }
 
-  .zssssssssssssss > div {
-    top: 15%;
-    padding: 0;
-  }
-
-  .zssssssssssssss > div > div > div.ant-modal-content {
-    padding: 0;
-    background-color: #125ed000 !important;
-  }
-
-  .alarmOpenContent {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: 72vh;
-    padding: 2.4%;
-    padding-bottom: 4%;
-    border-radius: 4%;
-    background-image: url('@/assets/images/largeScreen/alarmOpen.png');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-
-    .alarmList {
-      display: flex;
-      position: relative;
-      flex-direction: column;
-      width: 400px;
-      height: 100%;
-
-      .title {
-        position: relative;
-        top: -7px;
-        left: 0;
-        height: 30px;
-        font-size: 20px;
-      }
-
-      .alarmListDetail {
-        height: 100%;
-        overflow-y: auto;
-
-        .alarmWai_for {
-          width: 100%;
-          height: 30px;
-          line-height: 30px;
-          cursor: pointer;
-        }
-
-        .alarmWai_content {
-          display: flex;
-          flex-direction: row;
-          gap: 6px;
-        }
-
-        .alarm_title {
-          width: 286px;
-          overflow: hidden;
-          font-size: 16px;
-          font-weight: 600;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-
-        .alarm_time {
-          width: 140px;
-          overflow: hidden;
-          font-size: 13px;
-          font-weight: 600;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-      }
-    }
-
-    .alarmDetail {
-      display: flex;
-      position: relative;
-      flex-direction: column;
-      width: 100%;
-      height: 100%;
-
-      .title {
-        height: 30px;
-        font-size: 20px;
-      }
-
-      .alarmDetailContent {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        width: 100%;
-        gap: 6px;
-
-        .text {
-          height: 16%;
-          padding: 0 10px;
-          overflow-y: auto;
-          font-size: 20px;
-          text-indent: 40px;
-        }
-
-        .alarmSelectedContent {
-          padding: 0 10px;
-
-          :deep(.ant-radio-button-wrapper) {
-            color: #fff !important;
-          }
-        }
-
-        .multimedia {
-          width: 100%;
-          height: 100%;
-          opacity: 1;
-
-          > div {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-
-            .video-player {
-              width: 100%;
-              height: 100% !important;
-              padding-top: 0 !important;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  .videoOpenContent {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: 72vh;
-    padding: 2.4%;
-    padding-bottom: 4%;
-    border-radius: 4%;
-    background-image: url('@/assets/images/largeScreen/alarmOpen.png');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-
-    .videoList {
-      display: flex;
-      position: relative;
-      flex-direction: column;
-      width: 250px;
-      height: 100%;
-
-      .title {
-        position: relative;
-        top: -7px;
-        left: 0;
-        height: 30px;
-        font-size: 20px;
-      }
-
-      .videoListDetail {
-        height: 100%;
-        overflow-y: auto;
-
-        .videoWai_for {
-          width: 100%;
-          height: 30px;
-          line-height: 30px;
-          cursor: pointer;
-        }
-
-        .video_title {
-          width: 100%;
-          overflow: hidden;
-          font-size: 16px;
-          font-weight: 600;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-      }
-    }
-
-    .video {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      opacity: 1;
-
-      .video-player {
-        width: 100%;
-        height: 100% !important;
-        padding-top: 0 !important;
-      }
-    }
-  }
-
   .leaflet-control-container {
     display: none !important;
+  }
+
+  /* 确保聚合图层的层级关系 */
+  .leaflet-marker-pane {
+    z-index: 600;
+  }
+
+  .leaflet-marker-icon {
+    z-index: auto;
   }
 </style>
