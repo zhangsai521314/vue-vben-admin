@@ -10,7 +10,7 @@ const largeScreen: AppRouteModule = {
   name: 'LargeScreen',
   component: IFrame,
   meta: {
-    title: t('routes.demo.iframe.doc'),
+    title: '',
   },
 };
 

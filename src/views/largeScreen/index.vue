@@ -1869,7 +1869,7 @@
         .alarm_time {
           flex-grow: 1;
           overflow: hidden;
-          font-size: 16px;
+          font-size: 14px;
           font-weight: 600;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -1877,7 +1877,7 @@
       }
     }
 
-    @media (min-height: 850px) {
+    @media (min-height: 801px) {
       .head {
         position: relative;
         width: 100%;
@@ -2112,7 +2112,7 @@
         .alarm_time {
           flex-grow: 1;
           overflow: hidden;
-          font-size: 16px;
+          font-size: 14px;
           font-weight: 600;
           text-overflow: ellipsis;
           white-space: nowrap;
