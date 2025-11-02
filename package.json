@@ -107,6 +107,7 @@
     "leaflet": "^1.9.4",
     "leaflet-rotate": "^0.2.8",
     "leaflet.marker.slideto": "^0.3.0",
+    "leaflet.markercluster": "^1.5.3",
     "lodash-es": "^4.17.21",
     "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",

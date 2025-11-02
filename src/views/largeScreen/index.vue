@@ -11,20 +11,20 @@
               <input
                 v-model="searchQuery"
                 type="text"
-                placeholder="输入ISDN搜索..."
+                :placeholder="t('view.integratedServicesDigitalNetworkSearch')"
                 @keyup.enter="handleSearch"
                 class="search-input"
               />
               <IconFontClass
                 name="icon-baseui-zhizao"
                 @click="resetMap"
-                title="重置地图"
+                :title="t('view.resetMap')"
                 :style="{ fontSize: '30px', color: 'rgb(219 78 244)' }"
               />
             </div>
           </div>
         </div>
-        <div class="head">运行监控数据平台 </div>
+        <div class="head">{{ t('view.operationMonitoringPlatform') }} </div>
         <div
           style="
             display: flex;
@@ -41,15 +41,21 @@
                 <div class="icon">
                   <IconFontClass name="icon-baseui-ziyuan" :style="{ fontSize: '30px' }"
                 /></div>
-                <div class="title" style="left: 48px; width: 90px">调度台/值班台</div>
-                <div class="count" style="color: #b97fff">{{ deviceCount.optionCount }}</div>
+                <div class="title" style="left: 48px; width: 90px; text-align: left">{{
+                  t('view.dutyDesk')
+                }}</div>
+                <div class="count" style="left: 50px; color: #b97fff; text-align: left">{{
+                  deviceCount.optionCount
+                }}</div>
               </div>
               <div class="headCenter2">
                 <div class="icon">
                   <IconFontClass name="icon-baseui-zhinengwangguan" :style="{ fontSize: '34px' }"
                 /></div>
-                <div class="title" style="left: 47px; width: 60px">机车电台</div>
-                <div class="count" style="left: 46px; color: #5ecdba">{{
+                <div class="title" style="left: 48px; width: 60px; text-align: left">{{
+                  t('view._cabRadio')
+                }}</div>
+                <div class="count" style="left: 50px; color: #5ecdba; text-align: left">{{
                   deviceCount.cirCount
                 }}</div></div
               >
@@ -57,8 +63,10 @@
                 <div class="icon" style="top: 2px">
                   <IconFontClass name="icon-baseui-shouchidanbing" :style="{ fontSize: '36px' }"
                 /></div>
-                <div class="title" style="left: 46px; width: 60px">手持终端</div>
-                <div class="count" style="left: 50px; color: #3ec2e9">{{
+                <div class="title" style="left: 48px; width: 60px; text-align: left">{{
+                  t('view.handheldRadio')
+                }}</div>
+                <div class="count" style="left: 50px; color: #3ec2e9; text-align: left">{{
                   deviceCount.handCount
                 }}</div></div
               >
@@ -67,45 +75,42 @@
         </div>
         <div class="wgdata fontColor">
           <div class="bottombg"></div>
-          <div class="title">网管数据统计分析</div>
+          <div class="title">{{ t('view.requestStatistics') }}</div>
           <div class="data">
             <div>
               <div>
                 <div class="number">{{ requestData.requestCount }}</div>
-                <div class="label">今日请求</div>
+                <div class="label">{{ t('view.request') }}</div>
               </div>
             </div>
             <div>
               <div>
                 <div class="number">{{ requestData.onlineCount }}</div>
-                <div class="label">在线人数</div>
+                <div class="label">{{ t('view.onlineUser') }}</div>
               </div>
             </div>
             <div>
               <div>
                 <div class="number">{{ requestData.userCount }}</div>
-                <div class="label">用户总数</div>
+                <div class="label">{{ t('view.totalUsersCount') }}</div>
               </div>
             </div>
           </div>
         </div>
         <div class="jccir fontColor">
           <div class="bottombg"></div>
-          <div class="title">机车电台位置分析</div>
+          <div class="title">{{ t('view.locomotiveRadioLocation') }}</div>
           <div class="data" ref="chartJiCirRef"> </div>
         </div>
         <div class="hand fontColor">
           <div class="bottombg"></div>
-          <div class="title">手持终端位置分析</div>
+          <div class="title">{{ t('view.handheldTerminalLocation') }}</div>
           <div class="data" ref="chartHandRef"> </div>
         </div>
         <div class="alarm fontColor">
           <div class="bottombg"></div>
-          <div class="title">服务状态</div>
-          <div class="alarmNo" v-show="pendingAlarmData.length == 0">
-            <div>无待处理告警</div>
-          </div>
-          <div v-show="pendingAlarmData.length > 0" class="data">
+          <div class="title">{{ t('view.serviceStatus') }}</div>
+          <div class="data">
             <vue3-seamless-scroll
               class="scroll"
               :list="pendingAlarmData"
@@ -146,8 +151,8 @@
   import { Vue3SeamlessScroll } from 'vue3-seamless-scroll';
   import { useGo } from '/@/hooks/web/usePage';
 
-  const go = useGo();
   const { t } = useI18n();
+  const go = useGo();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
   defineOptions({ name: 'LargeScreen' });
@@ -174,9 +179,9 @@
 
   // 初始地图状态
   const initialMapState = {
-    center: [-10.5821, 9.1271],
+    center: [9.2271, -10.9921],
     zoom: 8,
-    bearing: 260,
+    bearing: -10,
   };
 
   // 定义接口
@@ -208,6 +213,9 @@
     isdnMarker?: any;
     lineId?: string;
     moving?: boolean;
+    lastValidCoordinate?: [number, number]; // 记录最后有效坐标
+    hasValidCoordinate?: boolean; // 标记是否有过有效坐标
+    glb?: number;
   }
 
   interface Person {
@@ -221,6 +229,8 @@
     marker?: any;
     isdnMarker?: any;
     moving?: boolean;
+    lastValidCoordinate?: [number, number]; // 记录最后有效坐标
+    hasValidCoordinate?: boolean; // 标记是否有过有效坐标
   }
 
   // 数据
@@ -263,20 +273,34 @@
   let personUpdateQueue: Person[] = [];
   let trainUpdateQueue: Train[] = [];
 
-  // 创建火车图标
-  const createTrainIcon = (isOnline: boolean) => {
+  // 检查是否为0点坐标
+  const isZeroCoordinate = (coord: [number, number]): boolean => {
+    return coord[0] === 0 && coord[1] === 0;
+  };
+
+  // 检查是否为有效坐标
+  const isValidCoordinate = (coord: [number, number]): boolean => {
+    return (
+      !isNaN(coord[0]) && !isNaN(coord[1]) && Math.abs(coord[0]) < 90 && Math.abs(coord[1]) < 180
+    );
+  };
+
+  // 创建火车图标 - 区分0点坐标和有效坐标
+  const createTrainIcon = (isOnline: boolean, isZeroCoord: boolean = false) => {
+    const className = `custom-train-marker ${isOnline ? 'online' : 'offline'} ${isZeroCoord ? 'zero-coord' : ''}`;
     return L.divIcon({
-      html: `<div class="custom-train-marker ${isOnline ? 'online' : 'offline'}"></div>`,
+      html: `<div class="${className}"></div>`,
       className: 'custom-train-marker-container',
       iconSize: [30, 30],
       iconAnchor: [15, 15],
     });
   };
 
-  // 创建人员图标
-  const createPersonIcon = (isOnline: boolean) => {
+  // 创建人员图标 - 区分0点坐标和有效坐标
+  const createPersonIcon = (isOnline: boolean, isZeroCoord: boolean = false) => {
+    const className = `custom-person-marker ${isOnline ? 'online' : 'offline'} ${isZeroCoord ? 'zero-coord' : ''}`;
     return L.divIcon({
-      html: `<div class="custom-person-marker ${isOnline ? 'online' : 'offline'}"></div>`,
+      html: `<div class="${className}"></div>`,
       className: 'custom-person-marker-container',
       iconSize: [30, 30],
       iconAnchor: [15, 15],
@@ -329,7 +353,7 @@
   const addStations = () => {
     lines.value.forEach((line) => {
       line.stations.forEach((station) => {
-        if (station.coordinate.length === 2) {
+        if (station.coordinate.length === 2 && isValidCoordinate(station.coordinate)) {
           // 粉色圆圈标记
           const circleMarker = L.circleMarker(station.coordinate, {
             radius: 4,
@@ -348,37 +372,6 @@
             interactive: true,
           }).addTo(map);
 
-          // // 点击事件
-          // const showStationInfo = () => {
-          //   openPopup(
-          //     station.coordinate,
-          //     `
-          //     <div class="popup-content">
-          //       <div class='title fontColor'>车站</div>
-          //       <div class='content'>
-          //         <div class='info'>
-          //           <div>ISDN:</div>
-          //           <div>${station.name}</div>
-          //         </div>
-          //         <div class='info'>
-          //           <div>车站名称:</div>
-          //           <div>${station.name}</div>
-          //         </div>
-          //         <div class='info_'>
-          //           <div><img src='/largeScreen/huoche2.png'/></div>
-          //           <div>5</div>
-          //           <div><img src='/largeScreen/zhibanyuan1.png'/></div>
-          //           <div>20</div>
-          //         </div>
-          //       </div>
-          //     </div>
-          //     `,
-          //   );
-          // };
-
-          // circleMarker.on('click', showStationInfo);
-          // nameMarker.on('click', showStationInfo);
-
           station.circleMarker = circleMarker;
           station.nameMarker = nameMarker;
           stationNameMarkers[station.id] = nameMarker;
@@ -389,14 +382,14 @@
 
   // 初始化聚合图层
   const initClusters = () => {
-    // 火车聚合图层 - 使用较小的聚合半径，在较低缩放级别就显示单个标记
+    // 火车聚合图层
     trainCluster = L.markerClusterGroup({
       chunkedLoading: true,
-      maxClusterRadius: 30, // 减小聚合半径
+      maxClusterRadius: 40,
       spiderfyOnMaxZoom: true,
       showCoverageOnHover: false,
       zoomToBoundsOnClick: true,
-      disableClusteringAtZoom: 14, // 降低禁用聚合的缩放级别
+      disableClusteringAtZoom: 12,
       iconCreateFunction: function (cluster) {
         const count = cluster.getChildCount();
         let size = 'small';
@@ -411,14 +404,14 @@
       },
     });
 
-    // 人员聚合图层 - 使用较大的聚合半径，在较高缩放级别才显示单个标记
+    // 人员聚合图层
     personCluster = L.markerClusterGroup({
       chunkedLoading: true,
-      maxClusterRadius: 60, // 保持较大的聚合半径
+      maxClusterRadius: 60,
       spiderfyOnMaxZoom: true,
       showCoverageOnHover: false,
       zoomToBoundsOnClick: true,
-      disableClusteringAtZoom: 16, // 提高禁用聚合的缩放级别
+      disableClusteringAtZoom: 14,
       iconCreateFunction: function (cluster) {
         const count = cluster.getChildCount();
         let size = 'small';
@@ -433,21 +426,20 @@
       },
     });
 
-    // 先添加人员聚合图层（底层），再添加火车聚合图层（上层）
     map.addLayer(personCluster);
     map.addLayer(trainCluster);
   };
 
   // 添加单个火车到聚合图层
   const addTrainToCluster = (train: Train) => {
-    // 检查是否已存在相同ID的标记
     if (trainMarkers.has(train.id)) {
       return;
     }
 
+    const isZeroCoord = isZeroCoordinate(train.coordinate);
     const marker = L.marker(train.coordinate, {
-      icon: createTrainIcon(train.isOnline),
-      zIndexOffset: 1000, // 提高火车z-index，确保显示在人员上方
+      icon: createTrainIcon(train.isOnline, isZeroCoord),
+      zIndexOffset: 1000,
     });
 
     marker.on('click', () => {
@@ -455,24 +447,23 @@
         train.coordinate,
         `
         <div class="popup-content">
-          <div class='title fontColor'>列车</div>
+          <div class='title fontColor'>${t('view._cabRadio')}</div>
           <div class='content'>
             <div class='info'>
               <div>ISDN:</div>
               <div>${train.isdn}</div>
             </div>
             <div class='info'>
-              <div>机车号:</div>
-              <div>${train.isdn}</div>
+              <div>${t('view._kilometerMarker')}:</div>
+              <div>${train.glb}</div>
             </div>
             <div class='info'>
-              <div>所在车站:</div>
+              <div>${t('view.locationStation')}:</div>
               <div>${train.station}</div>
             </div>
             <div class='info'>
-              <div>所属区域:</div>
+              <div>${t('view.affiliatedRegion')}:</div>
               <div>${train.area}</div>
-                                               <div>${train.coordinate[0]},${train.coordinate[1]}</div>
             </div>
           </div>
         </div>
@@ -482,44 +473,48 @@
 
     trainCluster.addLayer(marker);
     train.marker = marker;
+    train.lastValidCoordinate = [...train.coordinate] as [number, number];
+    train.hasValidCoordinate = !isZeroCoord;
     trainMarkers.set(train.id, marker);
+
+    console.log(`添加火车: ${train.id}, 坐标:`, train.coordinate, `0点坐标: ${isZeroCoord}`);
   };
 
   // 添加单个人员到聚合图层
   const addPersonToCluster = (person: Person) => {
-    // 检查是否已存在相同ID的标记
     if (personMarkers.has(person.id)) {
       return;
     }
 
+    const isZeroCoord = isZeroCoordinate(person.coordinate);
     const marker = L.marker(person.coordinate, {
-      icon: createPersonIcon(person.isOnline),
-      zIndexOffset: 500, // 降低人员z-index，确保火车显示在上方
+      icon: createPersonIcon(person.isOnline, isZeroCoord),
+      zIndexOffset: 500,
     });
 
     marker.on('click', () => {
+      //       <div class='info'>
+      //   <div>${t('view.terminalRole')}:</div>
+      //   <div>${person.role}</div>
+      // </div>
       openPopup(
         person.coordinate,
         `
         <div class="popup-content">
-          <div class='title fontColor'>人员</div>
+          <div class='title fontColor'>${t('view.handheldRadio')}</div>
           <div class='content'>
             <div class='info'>
               <div>ISDN:</div>
               <div>${person.isdn}</div>
             </div>
+
             <div class='info'>
-              <div>人员角色:</div>
-              <div>${person.role}</div>
-            </div>
-            <div class='info'>
-              <div>所在车站:</div>
+              <div>${t('view.locationStation')}:</div>
               <div>${person.station}</div>
             </div>
             <div class='info'>
-              <div>所属区域:</div>
+              <div>${t('view.affiliatedRegion')}:</div>
               <div>${person.area}</div>
-              <div>${person.coordinate[0]},${person.coordinate[1]}</div>
             </div>
           </div>
         </div>
@@ -529,7 +524,29 @@
 
     personCluster.addLayer(marker);
     person.marker = marker;
+    person.lastValidCoordinate = [...person.coordinate] as [number, number];
+    person.hasValidCoordinate = !isZeroCoord;
     personMarkers.set(person.id, marker);
+
+    console.log(`添加人员: ${person.id}, 坐标:`, person.coordinate, `0点坐标: ${isZeroCoord}`);
+  };
+
+  // 更新火车图标状态
+  const updateTrainIcon = (train: Train) => {
+    if (train.marker) {
+      const isZeroCoord = isZeroCoordinate(train.coordinate);
+      const newIcon = createTrainIcon(train.isOnline, isZeroCoord);
+      train.marker.setIcon(newIcon);
+    }
+  };
+
+  // 更新人员图标状态
+  const updatePersonIcon = (person: Person) => {
+    if (person.marker) {
+      const isZeroCoord = isZeroCoordinate(person.coordinate);
+      const newIcon = createPersonIcon(person.isOnline, isZeroCoord);
+      person.marker.setIcon(newIcon);
+    }
   };
 
   // 平滑移动标记
@@ -574,13 +591,11 @@
 
   // 更新火车位置 - 优化版本
   const updateTrainPositions = async (newTrainData: Train[]) => {
-    // 如果地图未初始化，保存数据等待初始化完成
     if (!isMapInitialized) {
       pendingTrainData = [...newTrainData];
       return;
     }
 
-    // 如果正在更新，将数据加入队列
     if (isUpdatingTrains) {
       trainUpdateQueue = [...newTrainData];
       return;
@@ -606,7 +621,6 @@
         }
       }
 
-      // 批量移除标记
       if (trainsToRemove.length > 0) {
         trainCluster.removeLayers(trainsToRemove.map((item) => item.marker));
         trainsToRemove.forEach((item) => {
@@ -618,10 +632,15 @@
         });
       }
 
-      // 批量更新位置
       const updatePromises = [];
 
       for (const train of newTrainData) {
+        // 检查坐标有效性
+        if (!isValidCoordinate(train.coordinate)) {
+          console.warn(`火车 ${train.id} 坐标无效:`, train.coordinate);
+          continue;
+        }
+
         if (trainMarkers.has(train.id)) {
           const marker = trainMarkers.get(train.id);
           const existingTrain = trains.value.find((t) => t.id === train.id);
@@ -630,7 +649,41 @@
             const newLatLng = L.latLng(train.coordinate[0], train.coordinate[1]);
             const currentLatLng = marker.getLatLng();
 
-            if (newLatLng.distanceTo(currentLatLng) > 10) {
+            // 检查是否涉及0点坐标变化
+            const isFromZero =
+              existingTrain.lastValidCoordinate &&
+              isZeroCoordinate(existingTrain.lastValidCoordinate) &&
+              !isZeroCoordinate(train.coordinate);
+
+            const isToZero =
+              existingTrain.lastValidCoordinate &&
+              !isZeroCoordinate(existingTrain.lastValidCoordinate) &&
+              isZeroCoordinate(train.coordinate);
+
+            // 更新图标状态
+            if (isZeroCoordinate(train.coordinate) !== isZeroCoordinate(existingTrain.coordinate)) {
+              updateTrainIcon(existingTrain);
+            }
+
+            // 如果是从0点到非0点，或从非0点到0点，直接设置位置，不使用动画
+            if (isFromZero || isToZero) {
+              console.log(
+                `火车 ${train.id} 坐标从${isFromZero ? '0点' : '非0点'}到${isToZero ? '0点' : '非0点'}，直接设置位置`,
+              );
+              marker.setLatLng(newLatLng);
+              existingTrain.coordinate = [newLatLng.lat, newLatLng.lng];
+              existingTrain.station = train.station;
+              existingTrain.area = train.area;
+              existingTrain.isOnline = train.isOnline;
+              existingTrain.lastValidCoordinate = [...train.coordinate] as [number, number];
+              existingTrain.hasValidCoordinate = !isZeroCoordinate(train.coordinate);
+              continue;
+            }
+
+            const distance = newLatLng.distanceTo(currentLatLng);
+
+            // 如果移动距离较大，使用平滑移动
+            if (distance > 100 && !isZeroCoordinate(train.coordinate)) {
               existingTrain.moving = true;
 
               updatePromises.push(
@@ -640,6 +693,8 @@
                     existingTrain.station = train.station;
                     existingTrain.area = train.area;
                     existingTrain.isOnline = train.isOnline;
+                    existingTrain.lastValidCoordinate = [...train.coordinate] as [number, number];
+                    existingTrain.hasValidCoordinate = true;
                     existingTrain.moving = false;
                   })
                   .catch((error) => {
@@ -648,13 +703,19 @@
                   }),
               );
             } else {
+              // 小距离移动，直接设置位置
               marker.setLatLng(newLatLng);
               existingTrain.coordinate = [newLatLng.lat, newLatLng.lng];
+              existingTrain.station = train.station;
+              existingTrain.area = train.area;
+              existingTrain.isOnline = train.isOnline;
+              existingTrain.lastValidCoordinate = [...train.coordinate] as [number, number];
+              existingTrain.hasValidCoordinate = !isZeroCoordinate(train.coordinate);
             }
           }
         } else {
-          // 添加新火车
-          console.log(`添加新火车: ${train.id}`);
+          // 添加新火车，包括0点坐标的火车
+          console.log(`添加新火车: ${train.id}, 坐标:`, train.coordinate);
           addTrainToCluster(train);
           trains.value.push(train);
         }
@@ -667,13 +728,14 @@
         await Promise.all(batch);
       }
 
-      console.log(`火车位置更新完成，当前火车数量: ${trains.value.length}`);
+      console.log(
+        `火车位置更新完成，当前火车数量: ${trains.value.length}, 地图标记数量: ${trainMarkers.size}`,
+      );
     } catch (error) {
       console.error('更新火车位置时发生错误:', error);
     } finally {
       isUpdatingTrains = false;
 
-      // 处理队列中的下一个更新
       if (trainUpdateQueue.length > 0) {
         const nextData = [...trainUpdateQueue];
         trainUpdateQueue = [];
@@ -684,13 +746,11 @@
 
   // 更新人员位置 - 优化版本
   const updatePersonPositions = async (newPersonData: Person[]) => {
-    // 如果地图未初始化，保存数据等待初始化完成
     if (!isMapInitialized) {
       pendingPersonData = [...newPersonData];
       return;
     }
 
-    // 如果正在更新，将数据加入队列
     if (isUpdatingPersons) {
       personUpdateQueue = [...newPersonData];
       return;
@@ -705,7 +765,6 @@
     console.log(`开始更新人员位置，数据量: ${newPersonData.length}`);
 
     try {
-      // 移除不存在的人员
       const currentPersonIds = new Set(newPersonData.map((person) => person.id));
       const personsToRemove = [];
 
@@ -715,7 +774,6 @@
         }
       }
 
-      // 批量移除标记
       if (personsToRemove.length > 0) {
         personCluster.removeLayers(personsToRemove.map((item) => item.marker));
         personsToRemove.forEach((item) => {
@@ -727,10 +785,15 @@
         });
       }
 
-      // 批量更新位置
       const updatePromises = [];
 
       for (const person of newPersonData) {
+        // 检查坐标有效性
+        if (!isValidCoordinate(person.coordinate)) {
+          console.warn(`人员 ${person.id} 坐标无效:`, person.coordinate);
+          continue;
+        }
+
         if (personMarkers.has(person.id)) {
           const marker = personMarkers.get(person.id);
           const existingPerson = persons.value.find((p) => p.id === person.id);
@@ -739,7 +802,42 @@
             const newLatLng = L.latLng(person.coordinate[0], person.coordinate[1]);
             const currentLatLng = marker.getLatLng();
 
-            if (newLatLng.distanceTo(currentLatLng) > 10) {
+            // 检查是否涉及0点坐标变化
+            const isFromZero =
+              existingPerson.lastValidCoordinate &&
+              isZeroCoordinate(existingPerson.lastValidCoordinate) &&
+              !isZeroCoordinate(person.coordinate);
+
+            const isToZero =
+              existingPerson.lastValidCoordinate &&
+              !isZeroCoordinate(existingPerson.lastValidCoordinate) &&
+              isZeroCoordinate(person.coordinate);
+
+            // 更新图标状态
+            if (
+              isZeroCoordinate(person.coordinate) !== isZeroCoordinate(existingPerson.coordinate)
+            ) {
+              updatePersonIcon(existingPerson);
+            }
+
+            // 如果是从0点到非0点，或从非0点到0点，直接设置位置，不使用动画
+            if (isFromZero || isToZero) {
+              console.log(
+                `人员 ${person.id} 坐标从${isFromZero ? '0点' : '非0点'}到${isToZero ? '0点' : '非0点'}，直接设置位置`,
+              );
+              marker.setLatLng(newLatLng);
+              existingPerson.coordinate = [newLatLng.lat, newLatLng.lng];
+              existingPerson.station = person.station;
+              existingPerson.area = person.area;
+              existingPerson.isOnline = person.isOnline;
+              existingPerson.lastValidCoordinate = [...person.coordinate] as [number, number];
+              existingPerson.hasValidCoordinate = !isZeroCoordinate(person.coordinate);
+              continue;
+            }
+
+            const distance = newLatLng.distanceTo(currentLatLng);
+
+            if (distance > 100 && !isZeroCoordinate(person.coordinate)) {
               existingPerson.moving = true;
 
               updatePromises.push(
@@ -749,6 +847,8 @@
                     existingPerson.station = person.station;
                     existingPerson.area = person.area;
                     existingPerson.isOnline = person.isOnline;
+                    existingPerson.lastValidCoordinate = [...person.coordinate] as [number, number];
+                    existingPerson.hasValidCoordinate = true;
                     existingPerson.moving = false;
                   })
                   .catch((error) => {
@@ -759,30 +859,35 @@
             } else {
               marker.setLatLng(newLatLng);
               existingPerson.coordinate = [newLatLng.lat, newLatLng.lng];
+              existingPerson.station = person.station;
+              existingPerson.area = person.area;
+              existingPerson.isOnline = person.isOnline;
+              existingPerson.lastValidCoordinate = [...person.coordinate] as [number, number];
+              existingPerson.hasValidCoordinate = !isZeroCoordinate(person.coordinate);
             }
           }
         } else {
-          // 添加新人员
-          console.log(`添加新人员: ${person.id}`);
+          // 添加新人员，包括0点坐标的人员
+          console.log(`添加新人员: ${person.id}, 坐标:`, person.coordinate);
           addPersonToCluster(person);
           persons.value.push(person);
         }
       }
 
-      // 限制并发数量
       const batchSize = 20;
       for (let i = 0; i < updatePromises.length; i += batchSize) {
         const batch = updatePromises.slice(i, i + batchSize);
         await Promise.all(batch);
       }
 
-      console.log(`人员位置更新完成，当前人员数量: ${persons.value.length}`);
+      console.log(
+        `人员位置更新完成，当前人员数量: ${persons.value.length}, 地图标记数量: ${personMarkers.size}`,
+      );
     } catch (error) {
       console.error('更新人员位置时发生错误:', error);
     } finally {
       isUpdatingPersons = false;
 
-      // 处理队列中的下一个更新
       if (personUpdateQueue.length > 0) {
         const nextData = [...personUpdateQueue];
         personUpdateQueue = [];
@@ -855,73 +960,36 @@
     let found = false;
     if (currentPopup) map.removeLayer(currentPopup);
 
-    // // 搜索车站
-    // lines.value.forEach((line) => {
-    //   line.stations.forEach((station) => {
-    //     if (station.name.toLowerCase().includes(query) && !found) {
-    //       map.flyTo(station.coordinate, 10, { duration: 1 });
-    //       station.nameMarker.setOpacity(1);
-    //       openPopup(
-    //         station.coordinate,
-    //         `
-    //         <div class="popup-content">
-    //           <div class='title fontColor'>车站</div>
-    //           <div class='content'>
-    //             <div class='info'>
-    //               <div>ISDN:</div>
-    //               <div>${station.name}</div>
-    //             </div>
-    //             <div class='info'>
-    //               <div>车站名称:</div>
-    //               <div>${station.name}</div>
-    //             </div>
-    //             <div class='info_'>
-    //               <div><img src='/largeScreen/huoche2.png'/></div>
-    //               <div>5</div>
-    //               <div><img src='/largeScreen/zhibanyuan1.png'/></div>
-    //               <div>20</div>
-    //             </div>
-    //           </div>
-    //         </div>
-    //         `,
-    //       );
-    //       found = true;
-    //     }
-    //   });
-    // });
-
-    if (found) return;
-
     // 搜索火车
     trains.value.forEach((train) => {
       if (train.isdn.toLowerCase().includes(query) && !found) {
         map.flyTo(train.coordinate, 10, { duration: 1 });
+        const coordStatus = isZeroCoordinate(train.coordinate) ? ' (坐标未知)' : '';
         openPopup(
           train.coordinate,
           `
-          <div class="popup-content">
-            <div class='title fontColor'>列车</div>
-            <div class='content'>
-              <div class='info'>
-                <div>ISDN:</div>
-                <div>${train.isdn}</div>
-              </div>
-              <div class='info'>
-                <div>机车号:</div>
-                <div>${train.isdn}</div>
-              </div>
-              <div class='info'>
-                <div>所在车站:</div>
-                <div>${train.station}</div>
-              </div>
-              <div class='info'>
-                <div>所属区域:</div>
-                <div>${train.area}</div>
-                 <div>${train.coordinate[0]},${train.coordinate[1]}</div>
-              </div>
+        <div class="popup-content">
+          <div class='title fontColor'>${t('view._cabRadio')}</div>
+          <div class='content'>
+            <div class='info'>
+              <div>ISDN:</div>
+              <div>${train.isdn}</div>
+            </div>
+            <div class='info'>
+              <div>${t('view.kilometerMarker')}:</div>
+              <div>${train.glb}</div>
+            </div>
+            <div class='info'>
+              <div>${t('view.locationStation')}:</div>
+              <div>${train.station}</div>
+            </div>
+            <div class='info'>
+              <div>${t('view.affiliatedRegion')}:</div>
+              <div>${train.area}</div>
             </div>
           </div>
-          `,
+        </div>
+        `,
         );
         found = true;
       }
@@ -931,40 +999,41 @@
 
     // 搜索人员
     persons.value.forEach((person) => {
+      //       <div class='info'>
+      //   <div>${t('view.terminalRole')}:</div>
+      //   <div>${person.role}</div>
+      // </div>
       if (person.isdn.toLowerCase().includes(query) && !found) {
         map.flyTo(person.coordinate, 10, { duration: 1 });
+        const coordStatus = isZeroCoordinate(person.coordinate) ? ' (坐标未知)' : '';
         openPopup(
           person.coordinate,
           `
-          <div class="popup-content">
-            <div class='title fontColor'>人员</div>
-            <div class='content'>
-              <div class='info'>
-                <div>ISDN:</div>
-                <div>${person.isdn}</div>
-              </div>
-              <div class='info'>
-                <div>人员角色:</div>
-                <div>${person.role}</div>
-              </div>
-              <div class='info'>
-                <div>所在车站:</div>
-                <div>${person.station}</div>
-              </div>
-              <div class='info'>
-                <div>所属区域:</div>
-                <div>${person.area}</div>
-                                 <div>${person.coordinate[0]},${person.coordinate[1]}</div>
-              </div>
+        <div class="popup-content">
+          <div class='title fontColor'>${t('view.GPH')}</div>
+          <div class='content'>
+            <div class='info'>
+              <div>ISDN:</div>
+              <div>${person.isdn}</div>
+            </div>
+   
+            <div class='info'>
+              <div>${t('view.locationStation')}:</div>
+              <div>${person.station}</div>
+            </div>
+            <div class='info'>
+              <div>${t('view.affiliatedRegion')}:</div>
+              <div>${person.area}</div>
             </div>
           </div>
-          `,
+        </div>
+        `,
         );
         found = true;
       }
     });
 
-    if (!found) message.info(`未找到与"${query}"相关的信息`);
+    if (!found) message.info(`${t('view.queryResultIsEmpty')}`);
   }, DEBOUNCE_DELAY);
 
   // 重置地图
@@ -972,10 +1041,8 @@
     if (currentPopup) map.removeLayer(currentPopup);
     currentPopup = null;
 
-    // 重置标签状态
     updateAllMarkersVisibility(initialMapState.zoom);
 
-    // 恢复初始视图
     map.flyTo(initialMapState.center, initialMapState.zoom, { duration: 1, easeLinearity: 0.3 });
     map.setBearing(initialMapState.bearing);
     searchQuery.value = '';
@@ -996,8 +1063,7 @@
       map.remove();
       map = null;
     }
-    //更改地图0.0点为左上
-    L.CRS.Simple.transformation = new L.Transformation(1, 0, 1, 0);
+
     map = L.map(mapContainer.value, {
       crs: L.CRS.Simple,
       attributionControl: false,
@@ -1090,7 +1156,7 @@
           containLabel: true,
         },
         legend: {
-          data: ['左侧', '站内', '右侧'],
+          data: [t('view.leftSide'), t('view.inStation'), t('view.rightSide')],
           right: 10,
           top: 0,
           textStyle: {
@@ -1143,7 +1209,7 @@
         ],
         series: [
           {
-            name: '左侧',
+            name: t('view.leftSide'),
             type: 'bar',
             barWidth: '20%',
             label: {
@@ -1169,7 +1235,7 @@
             data: leftData,
           },
           {
-            name: '站内',
+            name: t('view.inStation'),
             type: 'bar',
             barWidth: '20%',
             label: {
@@ -1195,7 +1261,7 @@
             data: centerData,
           },
           {
-            name: '右侧',
+            name: t('view.rightSide'),
             type: 'bar',
             barWidth: '20%',
             label: {
@@ -1251,7 +1317,7 @@
           containLabel: true,
         },
         legend: {
-          data: ['左侧', '站内', '右侧'],
+          data: [t('view.leftSide'), t('view.inStation'), t('view.rightSide')],
           right: 10,
           top: 0,
           textStyle: {
@@ -1303,7 +1369,7 @@
         ],
         series: [
           {
-            name: '左侧',
+            name: t('view.leftSide'),
             type: 'bar',
             barWidth: '20%',
             label: {
@@ -1329,7 +1395,7 @@
             data: leftData,
           },
           {
-            name: '站内',
+            name: t('view.inStation'),
             type: 'bar',
             barWidth: '20%',
             label: {
@@ -1355,7 +1421,7 @@
             data: centerData,
           },
           {
-            name: '右侧',
+            name: t('view.rightSide'),
             type: 'bar',
             barWidth: '20%',
             label: {
@@ -1412,12 +1478,12 @@
         deviceCount.value = data;
         setTimeout(() => {
           getDeviceCount();
-        }, 60 * 1000);
+        }, 30 * 1000);
       })
       .catch(() => {
         setTimeout(() => {
           getDeviceCount();
-        }, 60 * 1000);
+        }, 30 * 1000);
       });
   }
 
@@ -1439,12 +1505,12 @@
         );
         setTimeout(() => {
           getDeviceLocationCount();
-        }, 60 * 1000);
+        }, 30 * 1000);
       })
       .catch(() => {
         setTimeout(() => {
           getDeviceLocationCount();
-        }, 60 * 1000);
+        }, 30 * 1000);
       });
   }
 
@@ -1474,30 +1540,28 @@
           handCount: data.handData?.length || 0,
         });
 
-        // 使用setTimeout分离两个更新操作，避免互相干扰
+        // 分离处理火车和人员数据
         setTimeout(() => {
-          // 更新火车位置
           if (data.cirData && data.cirData.length > 0) {
             updateTrainPositions(data.cirData);
           }
         }, 0);
 
         setTimeout(() => {
-          // 更新人员位置
           if (data.handData && data.handData.length > 0) {
             updatePersonPositions(data.handData);
           }
-        }, 100); // 延迟100ms执行人员更新，确保与火车更新分开
+        }, 500);
 
         setTimeout(() => {
           getCirHandLocation();
-        }, 2 * 1000);
+        }, 30 * 1000);
       })
       .catch((error) => {
         console.error('获取机车和人员位置失败:', error);
         setTimeout(() => {
           getCirHandLocation();
-        }, 2 * 1000);
+        }, 30 * 1000);
       });
   }
 
@@ -1557,244 +1621,502 @@
     width: 100%;
     height: 100%;
 
-    .head {
-      position: absolute;
-      width: 100%;
-      height: 150px;
-      background-image: url('@/assets/images/largeScreen/top.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-      color: #fff;
-      font-size: 24px;
-      line-height: 46px;
-      text-align: center;
-    }
-
-    .headCenter {
-      display: flex;
-      justify-content: center;
-      width: 38%;
-      padding-top: 10px;
-      background-image: url('/src/assets/images/largeScreen/xbj2.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-
-      > div {
-        display: flex;
-        flex-direction: row;
-        width: 400px;
-        margin-left: 54px;
+    @media (max-height: 800px) {
+      .head {
+        position: absolute;
+        width: 100%;
+        height: 150px;
+        background-image: url('@/assets/images/largeScreen/top.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
         color: #fff;
         font-size: 24px;
         line-height: 46px;
         text-align: center;
-        gap: 90px;
       }
 
-      > div > div {
-        width: 50px;
-        height: 50px;
+      .headCenter {
+        display: flex;
+        justify-content: center;
+        width: 38%;
+        padding-top: 10px;
+        background-image: url('/src/assets/images/largeScreen/xbj2.png');
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
-      }
-
-      .icon {
-        position: relative;
-        top: 4px;
-        left: 5px;
-        width: 40px;
-        height: 42px;
-      }
-
-      .title {
-        position: relative;
-        top: -52px;
-        font-size: 13px;
-      }
-
-      .count {
-        position: relative;
-        top: -73px;
-        left: 38px;
-        font-size: 26px;
-      }
-
-      .headCenter1 {
-        background-image: url('@/assets/images/largeScreen/xbj6.png');
-      }
-
-      .headCenter2 {
-        background-image: url('@/assets/images/largeScreen/xbj4.png');
-      }
-
-      .headCenter3 {
-        background-image: url('@/assets/images/largeScreen/xbj5.png');
-      }
-    }
-
-    .wgdata {
-      position: absolute;
-      top: 40px;
-      left: 4px;
-      width: 24.15%;
-      min-width: 310px;
-      height: 18.9%;
-      min-height: 136px;
-      background-image: url('/src/assets/images/largeScreen/xbj7.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-
-      .title {
-        position: relative;
-        top: 2%;
-        left: 5%;
-        font-size: 20px;
-      }
-
-      .data {
-        display: flex;
-        flex-direction: row;
-        width: 92%;
-        height: calc(100% - 32px);
-        margin-top: 3%;
-        margin-left: 4%;
-        gap: 10px;
 
         > div {
           display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 33%;
-          height: 78%;
-          background-image: url('/src/assets/images/largeScreen/xbj3.png');
+          flex-direction: row;
+          width: 400px;
+          margin-left: 54px;
+          color: #fff;
+          font-size: 24px;
+          line-height: 46px;
+          text-align: center;
+          gap: 90px;
+        }
+
+        > div > div {
+          width: 50px;
+          height: 50px;
           background-repeat: no-repeat;
           background-position: center;
           background-size: cover;
+        }
+
+        .icon {
+          position: relative;
+          top: 4px;
+          left: 5px;
+          width: 40px;
+          height: 42px;
+        }
+
+        .title {
+          position: relative;
+          top: -52px;
+          font-size: 13px;
+        }
+
+        .count {
+          position: relative;
+          top: -73px;
+          left: 38px;
+          font-size: 26px;
+        }
+
+        .headCenter1 {
+          background-image: url('@/assets/images/largeScreen/xbj6.png');
+        }
+
+        .headCenter2 {
+          background-image: url('@/assets/images/largeScreen/xbj4.png');
+        }
+
+        .headCenter3 {
+          background-image: url('@/assets/images/largeScreen/xbj5.png');
+        }
+      }
+
+      .wgdata {
+        position: absolute;
+        top: 40px;
+        left: 4px;
+        width: 21.15%;
+        min-width: 310px;
+        height: 18.9%;
+        min-height: 136px;
+        background-image: url('/src/assets/images/largeScreen/xbj7.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+
+        .title {
+          position: relative;
+          top: 2%;
+          left: 5%;
+          font-size: 20px;
+        }
+
+        .data {
+          display: flex;
+          flex-direction: row;
+          width: 92%;
+          height: calc(100% - 32px);
+          margin-top: 3%;
+          margin-left: 4%;
+          gap: 10px;
 
           > div {
-            width: 90%;
-            height: 30%;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 33%;
+            height: 78%;
+            background-image: url('/src/assets/images/largeScreen/xbj3.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
 
-            > div.number {
-              color: #fff;
-            }
+            > div {
+              width: 90%;
+              height: 30%;
+              text-align: center;
 
-            > div.label {
-              margin-top: 6px;
-              font-size: 9px;
+              > div.number {
+                color: #fff;
+              }
+
+              > div.label {
+                margin-top: 6px;
+                font-size: 9px;
+              }
             }
           }
         }
       }
+
+      .jccir,
+      .hand {
+        position: absolute;
+        top: 59%;
+        width: 21.15%;
+        min-width: 386px;
+        height: 27.65%;
+        min-height: 250px;
+        background-image: url('/src/assets/images/largeScreen/xbj_12.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+
+        .title {
+          position: relative;
+          top: 2%;
+          left: 7%;
+          font-size: 20px;
+        }
+
+        .data {
+          width: 85%;
+          height: 75%;
+          margin-top: 6%;
+          margin-left: 7%;
+        }
+      }
+
+      .hand {
+        left: 4px;
+      }
+
+      .jccir {
+        right: 4px;
+        background-image: url('/src/assets/images/largeScreen/xbj_1_1.png');
+
+        .title {
+          position: absolute;
+          right: 7%;
+          left: auto;
+          width: 63%;
+          text-align: right;
+        }
+
+        .data {
+          margin-top: 11%;
+        }
+      }
+
+      .alarm {
+        position: absolute;
+        top: 40px;
+        right: 4px;
+        width: 21.15%;
+        min-width: 310px;
+        height: 18.9%;
+        min-height: 136px;
+        background-image: url('@/assets/images/largeScreen/xbj72.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+
+        .title {
+          position: relative;
+          top: 2%;
+          right: 19px;
+          width: 100%;
+          overflow: hidden;
+          font-size: 20px;
+          text-align: right;
+          text-emphasis: inherit;
+          cursor: pointer;
+        }
+
+        .alarmNo {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 89%;
+          height: 74%;
+        }
+
+        .data {
+          width: 92%;
+          height: calc(100% - 32px);
+          margin-top: 8px;
+          margin-left: 7px;
+          overflow: hidden;
+          cursor: pointer;
+        }
+
+        .alarmWai_content {
+          display: flex;
+          flex-direction: row;
+          height: 30px;
+          line-height: 30px;
+          gap: 6px;
+        }
+
+        .alarm_title {
+          width: 56%;
+          overflow: hidden;
+          font-size: 16px;
+          font-weight: 600;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .alarm_time {
+          flex-grow: 1;
+          overflow: hidden;
+          font-size: 16px;
+          font-weight: 600;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
     }
 
-    .jccir,
-    .hand {
-      position: absolute;
-      top: 70%;
-      width: 24.1%;
-      min-width: 386px;
-      height: 27.65%;
-      min-height: 250px;
-      background-image: url('/src/assets/images/largeScreen/xbj_12.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-
-      .title {
+    @media (min-height: 850px) {
+      .head {
         position: relative;
-        top: 2%;
-        left: 7%;
-        font-size: 20px;
+        width: 100%;
+        height: 150px;
+        background-image: url('@/assets/images/largeScreen/top.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        color: #fff;
+        font-size: 24px;
+        line-height: 46px;
+        text-align: center;
       }
 
-      .data {
-        width: 85%;
-        height: 75%;
-        margin-top: 6%;
-        margin-left: 7%;
-      }
-    }
-
-    .hand {
-      left: 4px;
-    }
-
-    .jccir {
-      right: 4px;
-    }
-
-    .alarm {
-      position: absolute;
-      top: 40px;
-      right: 4px;
-      width: 24.15%;
-      min-width: 310px;
-      height: 18.9%;
-      min-height: 136px;
-      background-image: url('@/assets/images/largeScreen/xbj72.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-
-      .title {
-        position: relative;
-        top: 2%;
-        right: -55%;
-        width: 39%;
-        overflow: hidden;
-        font-size: 20px;
-        text-align: right;
-        text-emphasis: inherit;
-        cursor: pointer;
-      }
-
-      .alarmNo {
+      .headCenter {
         display: flex;
-        align-items: center;
         justify-content: center;
-        width: 89%;
-        height: 74%;
+        width: 38%;
+        padding-top: 10px;
+        background-image: url('/src/assets/images/largeScreen/xbj2.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+
+        > div {
+          display: flex;
+          flex-direction: row;
+          width: 400px;
+          margin-left: 54px;
+          color: #fff;
+          font-size: 24px;
+          line-height: 46px;
+          text-align: center;
+          gap: 90px;
+        }
+
+        > div > div {
+          width: 50px;
+          height: 50px;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+        }
+
+        .icon {
+          position: relative;
+          top: 4px;
+          left: 5px;
+          width: 40px;
+          height: 42px;
+        }
+
+        .title {
+          position: relative;
+          top: -52px;
+          font-size: 13px;
+        }
+
+        .count {
+          position: relative;
+          top: -73px;
+          left: 38px;
+          font-size: 26px;
+        }
+
+        .headCenter1 {
+          background-image: url('@/assets/images/largeScreen/xbj6.png');
+        }
+
+        .headCenter2 {
+          background-image: url('@/assets/images/largeScreen/xbj4.png');
+        }
+
+        .headCenter3 {
+          background-image: url('@/assets/images/largeScreen/xbj5.png');
+        }
       }
 
-      .data {
-        width: 92%;
-        height: calc(100% - 32px);
-        margin-top: 8px;
-        margin-left: 7px;
-        overflow: hidden;
-        cursor: pointer;
+      .wgdata {
+        position: absolute;
+        top: 40px;
+        left: 4px;
+        width: 24.15%;
+        min-width: 310px;
+        height: 18.9%;
+        min-height: 136px;
+        background-image: url('/src/assets/images/largeScreen/xbj7.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+
+        .title {
+          position: relative;
+          top: 2%;
+          left: 5%;
+          font-size: 20px;
+        }
+
+        .data {
+          display: flex;
+          flex-direction: row;
+          width: 92%;
+          height: calc(100% - 32px);
+          margin-top: 3%;
+          margin-left: 4%;
+          gap: 10px;
+
+          > div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 33%;
+            height: 78%;
+            background-image: url('/src/assets/images/largeScreen/xbj3.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+
+            > div {
+              width: 90%;
+              height: 30%;
+              text-align: center;
+
+              > div.number {
+                color: #fff;
+              }
+
+              > div.label {
+                margin-top: 6px;
+                font-size: 9px;
+              }
+            }
+          }
+        }
       }
 
-      .alarmWai_content {
-        display: flex;
-        flex-direction: row;
-        height: 30px;
-        line-height: 30px;
-        gap: 6px;
+      .jccir,
+      .hand {
+        position: absolute;
+        top: 70%;
+        width: 24.1%;
+        min-width: 386px;
+        height: 27.65%;
+        min-height: 250px;
+        background-image: url('/src/assets/images/largeScreen/xbj_12.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+
+        .title {
+          position: relative;
+          top: 2%;
+          left: 7%;
+          font-size: 20px;
+        }
+
+        .data {
+          width: 85%;
+          height: 75%;
+          margin-top: 6%;
+          margin-left: 7%;
+        }
       }
 
-      .alarm_title {
-        width: 56%;
-        overflow: hidden;
-        font-size: 16px;
-        font-weight: 600;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+      .hand {
+        left: 4px;
       }
 
-      .alarm_time {
-        flex-grow: 1;
-        overflow: hidden;
-        font-size: 16px;
-        font-weight: 600;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+      .jccir {
+        right: 4px;
+      }
+
+      .alarm {
+        position: absolute;
+        top: 40px;
+        right: 4px;
+        width: 24.15%;
+        min-width: 310px;
+        height: 18.9%;
+        min-height: 136px;
+        background-image: url('@/assets/images/largeScreen/xbj72.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+
+        .title {
+          position: relative;
+          top: 2%;
+          right: 19px;
+          width: 100%;
+          overflow: hidden;
+          font-size: 20px;
+          text-align: right;
+          text-emphasis: inherit;
+          cursor: pointer;
+        }
+
+        .alarmNo {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 89%;
+          height: 74%;
+        }
+
+        .data {
+          width: 92%;
+          height: calc(100% - 32px);
+          margin-top: 8px;
+          margin-left: 7px;
+          overflow: hidden;
+          cursor: pointer;
+        }
+
+        .alarmWai_content {
+          display: flex;
+          flex-direction: row;
+          height: 30px;
+          line-height: 30px;
+          gap: 6px;
+        }
+
+        .alarm_title {
+          width: 56%;
+          overflow: hidden;
+          font-size: 16px;
+          font-weight: 600;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .alarm_time {
+          flex-grow: 1;
+          overflow: hidden;
+          font-size: 16px;
+          font-weight: 600;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
       }
     }
   }
@@ -1812,14 +2134,27 @@
 
   /* 控制区样式 */
   .control-container {
-    position: absolute;
-    z-index: 1000;
-    bottom: 10px;
-    left: 50%;
-    flex-direction: column;
-    width: 194px;
-    transform: translateX(-50%);
-    gap: 10px;
+    @media (min-height: 850px) {
+      position: absolute;
+      z-index: 1000;
+      bottom: 10px;
+      left: 50%;
+      flex-direction: column;
+      width: 194px;
+      transform: translateX(-50%);
+      gap: 10px;
+    }
+
+    @media (max-height: 800px) {
+      position: absolute;
+      z-index: 1000;
+      bottom: 70px;
+      left: 50%;
+      flex-direction: column;
+      width: 194px;
+      transform: translateX(-50%);
+      gap: 10px;
+    }
   }
 
   .search-box {
@@ -1922,7 +2257,7 @@
         flex-direction: row;
 
         > div:first-child {
-          width: 200px;
+          width: 226px;
           overflow: hidden;
           color: #ad11a4;
           text-align: right;
@@ -1977,11 +2312,19 @@
     filter: drop-shadow(0 0 2px rgb(0 0 0 / 70%));
 
     &.online {
-      filter: drop-shadow(0 0 4px #0f0);
+      // filter: drop-shadow(0 0 4px #0f0);
     }
 
     &.offline {
-      filter: grayscale(1) brightness(0.7);
+      // filter: grayscale(1) brightness(0.7);
+    }
+
+    /* 0点坐标的特殊样式 */
+    &.zero-coord {
+      // border: 2px solid orange;
+      // border-radius: 50%;
+      // opacity: 0.6;
+      // filter: grayscale(0.8) brightness(0.8) drop-shadow(0 0 2px rgb(255 165 0 / 70%));
     }
   }
 
@@ -1994,11 +2337,19 @@
     filter: drop-shadow(0 0 2px rgb(0 0 0 / 70%));
 
     &.online {
-      filter: drop-shadow(0 0 4px #0f0);
+      // filter: drop-shadow(0 0 4px #0f0);
     }
 
     &.offline {
-      filter: grayscale(1) brightness(0.7);
+      // filter: grayscale(1) brightness(0.7);
+    }
+
+    /* 0点坐标的特殊样式 */
+    &.zero-coord {
+      // border: 2px solid orange;
+      // border-radius: 50%;
+      // opacity: 0.6;
+      // filter: grayscale(0.8) brightness(0.8) drop-shadow(0 0 2px rgb(255 165 0 / 70%));
     }
   }
 
@@ -2015,13 +2366,13 @@
   }
 
   .train-cluster {
-    z-index: 1000; /* 确保火车聚合显示在人员聚合上方 */
+    z-index: 1000;
     border: 3px solid #ff9f43;
     background: radial-gradient(circle, #ff6b6b, #c44569);
   }
 
   .person-cluster {
-    z-index: 500; /* 人员聚合在火车聚合下方 */
+    z-index: 500;
     border: 3px solid #686de0;
     background: radial-gradient(circle, #4834d4, #130f40);
   }
@@ -2044,7 +2395,7 @@
     font-size: 16px;
   }
 
-  /* 聚合图层样式重写 - 确保火车聚合显示在人员聚合上方 */
+  /* 聚合图层样式重写 */
   :deep(.marker-cluster-train) {
     z-index: 1000 !important;
     background-color: rgb(255 107 107 / 60%);
