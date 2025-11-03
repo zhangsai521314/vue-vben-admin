@@ -135,7 +135,8 @@
       const menuType = permissionStore.allMenus.find((m) => m.menuId == menuId)?.menuType;
       if (menuType == 5) {
         key = `${window.location.origin}/#${key}`;
-        openWindow(key);
+        // openWindow(key);
+        window.open(key, '_blank');
         return;
       }
     }

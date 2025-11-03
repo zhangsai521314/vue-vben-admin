@@ -243,7 +243,7 @@
         },
       },
       {
-        field: 'longitude',
+        field: '_Longitude',
         title: t('view.longitude'),
         showOverflow: true,
         sortable: true,

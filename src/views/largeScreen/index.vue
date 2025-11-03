@@ -441,7 +441,7 @@
       icon: createTrainIcon(train.isOnline, isZeroCoord),
       zIndexOffset: 1000,
     });
-
+  // <div class='info'>${train.coordinate[1]}|${train.coordinate[0]}</div>
     marker.on('click', () => {
       openPopup(
         train.coordinate,
@@ -464,7 +464,7 @@
             <div class='info'>
               <div>${t('view.affiliatedRegion')}:</div>
               <div>${train.area}</div>
-            </div>
+            </div> 
           </div>
         </div>
         `,

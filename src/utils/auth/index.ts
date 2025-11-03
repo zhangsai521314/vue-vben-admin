@@ -1,12 +1,14 @@
 import { Persistent, BasicKeys } from '@/utils/cache/persistent';
 import { CacheTypeEnum, TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/enums/cacheEnum';
 import projectSetting from '@/settings/projectSetting';
+import { useUserStore } from '@/store/modules/user';
 
 const { permissionCacheType } = projectSetting;
 const isLocal = permissionCacheType === CacheTypeEnum.LOCAL;
 
 export function getToken() {
-  return getAuthCache(TOKEN_KEY);
+  const userStore = useUserStore();
+  return userStore.getToken;
 }
 
 export function getRefreshToken() {

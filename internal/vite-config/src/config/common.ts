@@ -5,8 +5,9 @@ const commonConfig: (mode: string) => UserConfig = (mode) => ({
   server: {
     host: true,
   },
+  //生成环境移除console', 'debugger'
   esbuild: {
-    drop: mode === 'production' ? ['console', 'debugger'] : [],
+    drop: mode === 'production' ? ['console'] : [],
   },
   build: {
     reportCompressedSize: false,

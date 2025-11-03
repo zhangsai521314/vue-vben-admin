@@ -166,6 +166,9 @@ const transform: AxiosTransform = {
    */
   requestInterceptors: (config, options) => {
     const token = getToken();
+    // if (token == '' || token == undefined || token == null) {
+    //   debugger;
+    // }
     if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
       // jwt token
       (config as Recordable).headers.Authorization = options.authenticationScheme

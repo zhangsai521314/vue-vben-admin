@@ -398,7 +398,6 @@
       content: '',
       onOk() {
         menuApi.DeleteMenu(node.key).then((data) => {
-          debugger;
           message.success('删除菜单成功');
           if (node.parentId == 0 || node.parentId == null) {
             treeData.value = treeData.value.filter((m) => m.key != node.key);

@@ -269,7 +269,7 @@
         minWidth: locale == 'zh-CN' ? 100 : 110,
       },
       {
-        field: 'longitude',
+        field: '_Longitude',
         title: t('view.longitude'),
         showOverflow: true,
         sortable: true,
