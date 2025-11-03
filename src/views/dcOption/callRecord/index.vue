@@ -233,6 +233,12 @@
                         : '-'
         }}</span>
       </template>
+      <template #callTimeSpan="{ row }">
+        <span v-if="row.callTimeSpan == '00:00:00'" style="color: red">{{
+          t('view.noAnswer')
+        }}</span>
+        <span v-else>{{ row.callTimeSpan }}</span>
+      </template>
       <template #recordState="{ row }">
         <span>{{
           row.recordState == '0'
@@ -404,6 +410,9 @@
         showOverflow: true,
         sortable: true,
         minWidth: locale == 'zh-CN' ? 120 : 160,
+        slots: {
+          default: 'callTimeSpan',
+        },
       },
       {
         field: 'startTime',

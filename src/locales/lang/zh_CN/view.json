@@ -1,4 +1,5 @@
 {
+  "noAnswer": "未接通",
   "_cabRadio": "机车电台",
   "_kilometerMarker": "公里标",
   "handheldRadio": "手持终端",
@@ -18,7 +19,7 @@
   "requestStatistics": "请求统计",
   "operationMonitoringPlatform": "运行监控",
   "resetMap": "重置地图",
-  "integratedServicesDigitalNetworkSearch": "输入ISDN搜索",
+  "integratedServicesDigitalNetworkSearch": "输入ISDN后按回车搜索",
   "lastLoginIp": "最后登录IP",
   "communicationLog": "通信日志",
   "systemLog": "系统日志",

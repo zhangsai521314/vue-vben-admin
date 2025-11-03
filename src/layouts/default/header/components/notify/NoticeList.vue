@@ -88,7 +88,7 @@
           @click="handleTitleClick(row)"
           :title="t('view.clickToViewDetails')"
         >
-          <div style="position: absolute; top: 66px; right: 0">
+          <div style="position: absolute; right: 0; bottom: 0">
             <a-tag
               style="position: relative; right: -6px; font-size: 12px; cursor: pointer"
               v-if="row.msgClass == 2 && row.confirmTime == null"

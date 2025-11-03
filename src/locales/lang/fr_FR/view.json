@@ -1,4 +1,5 @@
 {
+  "noAnswer": "Pas de réponse",
   "_cabRadio": "Locomotive",
   "_kilometerMarker": "Km. Mk.",
   "handheldRadio": "GPH",
@@ -18,7 +19,7 @@
   "requestStatistics": "Statistiques des Demandes",
   "operationMonitoringPlatform": "Platf. Surveillance Opérationnelle",
   "resetMap": "Réinitialiser la Carte",
-  "integratedServicesDigitalNetworkSearch": "recherche sur le RNIS",
+  "integratedServicesDigitalNetworkSearch": "ISDN → Entrée pour rechercher",
   "lastLoginIp": "DAIPC",
   "communicationLog": "Journal de communication",
   "systemLog": "Journal du système",

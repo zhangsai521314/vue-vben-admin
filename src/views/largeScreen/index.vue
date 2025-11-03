@@ -122,7 +122,7 @@
               <div class="alarmWai_for" v-for="(item, i) in pendingAlarmData" :key="i">
                 <div class="alarmWai_content" :style="{ color: item.color }" @click="goIndex(item)">
                   <div class="alarm_title">{{ item.name }}</div>
-                  <div class="alarm_time">{{ item.time }}</div>
+                  <div class="alarm_time">{{ t('view.' + item.alarmType) }}</div>
                 </div>
               </div>
             </vue3-seamless-scroll>
@@ -1478,12 +1478,12 @@
         deviceCount.value = data;
         setTimeout(() => {
           getDeviceCount();
-        }, 30 * 1000);
+        }, 10 * 1000);
       })
       .catch(() => {
         setTimeout(() => {
           getDeviceCount();
-        }, 30 * 1000);
+        }, 10 * 1000);
       });
   }
 
@@ -1505,12 +1505,12 @@
         );
         setTimeout(() => {
           getDeviceLocationCount();
-        }, 30 * 1000);
+        }, 10 * 1000);
       })
       .catch(() => {
         setTimeout(() => {
           getDeviceLocationCount();
-        }, 30 * 1000);
+        }, 10 * 1000);
       });
   }
 
@@ -1555,13 +1555,13 @@
 
         setTimeout(() => {
           getCirHandLocation();
-        }, 30 * 1000);
+        }, 20 * 1000);
       })
       .catch((error) => {
         console.error('获取机车和人员位置失败:', error);
         setTimeout(() => {
           getCirHandLocation();
-        }, 30 * 1000);
+        }, 20 * 1000);
       });
   }
 
@@ -1570,11 +1570,14 @@
       .GetServiceInfo()
       .then((data) => {
         pendingAlarmData.value = data;
+        setTimeout(() => {
+          getServiceInfo();
+        }, 10 * 1000);
       })
       .catch(() => {
         setTimeout(() => {
           getServiceInfo();
-        }, 30 * 1000);
+        }, 10 * 1000);
       });
   }
 
@@ -1621,7 +1624,7 @@
     width: 100%;
     height: 100%;
 
-    @media (max-height: 800px) {
+    @media (max-width: 1999px) {
       .head {
         position: absolute;
         width: 100%;
@@ -1704,9 +1707,9 @@
         position: absolute;
         top: 40px;
         left: 4px;
-        width: 21.15%;
+        width: 384px;
         min-width: 310px;
-        height: 18.9%;
+        height: 168px;
         min-height: 136px;
         background-image: url('/src/assets/images/largeScreen/xbj7.png');
         background-repeat: no-repeat;
@@ -1761,15 +1764,20 @@
       .jccir,
       .hand {
         position: absolute;
-        top: 59%;
-        width: 21.15%;
-        min-width: 386px;
-        height: 27.65%;
-        min-height: 250px;
+        width: 386px;
+        height: 250px;
         background-image: url('/src/assets/images/largeScreen/xbj_12.png');
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
+
+        @media (min-height: 850px) {
+          bottom: 14px;
+        }
+
+        @media (max-height: 800px) {
+          bottom: 64px;
+        }
 
         .title {
           position: relative;
@@ -1811,9 +1819,9 @@
         position: absolute;
         top: 40px;
         right: 4px;
-        width: 21.15%;
+        width: 384px;
         min-width: 310px;
-        height: 18.9%;
+        height: 168px;
         min-height: 136px;
         background-image: url('@/assets/images/largeScreen/xbj72.png');
         background-repeat: no-repeat;
@@ -1858,7 +1866,7 @@
         }
 
         .alarm_title {
-          width: 56%;
+          width: 68%;
           overflow: hidden;
           font-size: 16px;
           font-weight: 600;
@@ -1877,7 +1885,7 @@
       }
     }
 
-    @media (min-height: 801px) {
+    @media (min-width: 2000px) {
       .head {
         position: relative;
         width: 100%;
@@ -1960,9 +1968,9 @@
         position: absolute;
         top: 40px;
         left: 4px;
-        width: 24.15%;
+        width: 494px;
         min-width: 310px;
-        height: 18.9%;
+        height: 217px;
         min-height: 136px;
         background-image: url('/src/assets/images/largeScreen/xbj7.png');
         background-repeat: no-repeat;
@@ -2017,10 +2025,10 @@
       .jccir,
       .hand {
         position: absolute;
-        top: 70%;
-        width: 24.1%;
+        bottom: 14px;
+        width: 482px;
         min-width: 386px;
-        height: 27.65%;
+        height: 312px;
         min-height: 250px;
         background-image: url('/src/assets/images/largeScreen/xbj_12.png');
         background-repeat: no-repeat;
@@ -2054,9 +2062,9 @@
         position: absolute;
         top: 40px;
         right: 4px;
-        width: 24.15%;
+        width: 494px;
         min-width: 310px;
-        height: 18.9%;
+        height: 217px;
         min-height: 136px;
         background-image: url('@/assets/images/largeScreen/xbj72.png');
         background-repeat: no-repeat;
@@ -2101,7 +2109,7 @@
         }
 
         .alarm_title {
-          width: 56%;
+          width: 68%;
           overflow: hidden;
           font-size: 16px;
           font-weight: 600;

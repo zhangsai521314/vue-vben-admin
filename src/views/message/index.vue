@@ -25,7 +25,7 @@
                       :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
                     >
                       <a-range-picker
-                        :allowClear="false"
+                        :allowClear="true"
                         v-model:value="timeValue"
                         :showTime="true"
                         format="YYYY-MM-DD HH:mm:ss"

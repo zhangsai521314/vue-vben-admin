@@ -1,4 +1,5 @@
 {
+  "noAnswer": "no answer",
   "_cabRadio": "Cab Radio",
   "_kilometerMarker": "Km. Mk.",
   "handheldRadio": "OPH",
@@ -18,7 +19,7 @@
   "requestStatistics": "Request Statistics",
   "operationMonitoringPlatform": "Operation Monitoring Platform",
   "resetMap": "réinitialiser la carte",
-  "integratedServicesDigitalNetworkSearch": "Integrated Services Digital Network search",
+  "integratedServicesDigitalNetworkSearch": "Enter ISDN and press enter to search",
   "lastLoginIp": "Last login IP",
   "communicationLog": "Communication log",
   "systemLog": "System log",
