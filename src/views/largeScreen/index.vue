@@ -15,12 +15,38 @@
                 @keyup.enter="handleSearch"
                 class="search-input"
               />
-              <IconFontClass
-                name="icon-baseui-zhizao"
-                @click="resetMap"
-                :title="t('view.resetMap')"
-                :style="{ fontSize: '30px', color: 'rgb(219 78 244)' }"
-              />
+            </div>
+            <!-- 新增：显示/隐藏控制按钮 -->
+            <div class="toggle-controls">
+              <div
+                class="toggle-btn"
+                :class="{ active: showTrains }"
+                @click="toggleTrainsVisibility"
+              >
+                <IconFontClass
+                  name="icon-baseui-zhinengwangguan"
+                  :style="{ fontSize: '20px', marginRight: '5px' }"
+                />
+                {{ t('view._cabRadio') }}
+              </div>
+              <div
+                class="toggle-btn"
+                :class="{ active: showPersons }"
+                @click="togglePersonsVisibility"
+              >
+                <IconFontClass
+                  name="icon-baseui-shouchidanbing"
+                  :style="{ fontSize: '20px', marginRight: '5px' }"
+                />
+                {{ t('view.handheldRadio') }}
+              </div>
+              <div class="toggle-btn active" @click="resetMap">
+                <IconFontClass
+                  name="icon-baseui-zhizao"
+                  :style="{ fontSize: '20px', marginRight: '5px' }"
+                />
+                {{ t('view.resetMap') }}
+              </div>
             </div>
           </div>
         </div>
@@ -159,6 +185,11 @@
   const chartJiCir = useECharts(chartJiCirRef);
   const chartHandRef = ref(null);
   const chartHand = useECharts(chartHandRef);
+
+  // 新增：显示/隐藏控制状态
+  const showTrains = ref(true);
+  const showPersons = ref(true);
+
   const requestData = ref({
     userCount: 0,
     requestCount: 0,
@@ -269,6 +300,30 @@
   let isUpdatingPersons = false;
   let personUpdateQueue: Person[] = [];
   let trainUpdateQueue: Train[] = [];
+
+  // 新增：切换火车显示/隐藏
+  const toggleTrainsVisibility = () => {
+    showTrains.value = !showTrains.value;
+    if (trainLayerGroup) {
+      if (showTrains.value) {
+        map.addLayer(trainLayerGroup);
+      } else {
+        map.removeLayer(trainLayerGroup);
+      }
+    }
+  };
+
+  // 新增：切换人员显示/隐藏
+  const togglePersonsVisibility = () => {
+    showPersons.value = !showPersons.value;
+    if (personLayerGroup) {
+      if (showPersons.value) {
+        map.addLayer(personLayerGroup);
+      } else {
+        map.removeLayer(personLayerGroup);
+      }
+    }
+  };
 
   // 检查是否为0点坐标
   const isZeroCoordinate = (coord: [number, number]): boolean => {
@@ -384,8 +439,13 @@
     // 人员图层组
     personLayerGroup = L.layerGroup();
 
-    map.addLayer(personLayerGroup);
-    map.addLayer(trainLayerGroup);
+    // 根据初始状态决定是否添加到地图
+    if (showPersons.value) {
+      map.addLayer(personLayerGroup);
+    }
+    if (showTrains.value) {
+      map.addLayer(trainLayerGroup);
+    }
   };
 
   // 添加单个火车到图层组
@@ -2055,26 +2115,20 @@
 
   /* 控制区样式 */
   .control-container {
+    position: absolute;
+    z-index: 1000;
+    left: 50%;
+    flex-direction: column;
+    width: 280px;
+    transform: translateX(-50%);
+    gap: 10px;
+
     @media (min-height: 850px) {
-      position: absolute;
-      z-index: 1000;
       bottom: 10px;
-      left: 50%;
-      flex-direction: column;
-      width: 194px;
-      transform: translateX(-50%);
-      gap: 10px;
     }
 
     @media (max-height: 800px) {
-      position: absolute;
-      z-index: 1000;
       bottom: 70px;
-      left: 50%;
-      flex-direction: column;
-      width: 194px;
-      transform: translateX(-50%);
-      gap: 10px;
     }
   }
 
@@ -2099,6 +2153,37 @@
     border-color: #3498db;
     outline: none;
     box-shadow: 0 0 0 2px rgb(52 152 219 / 20%);
+  }
+
+  /* 新增：显示/隐藏控制按钮样式 */
+  .toggle-controls {
+    display: flex;
+    gap: 2px;
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  .toggle-btn {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    border: 1px solid #ac33c1;
+    border-radius: 4px;
+    background: transparent;
+    color: #fff;
+    font-size: 10px;
+    cursor: pointer;
+  }
+
+  .toggle-btn:hover {
+    background: rgb(172 51 193 / 20%);
+  }
+
+  .toggle-btn.active {
+    background: #ac33c1;
+    color: #fff;
   }
 
   /* 地图容器 */
