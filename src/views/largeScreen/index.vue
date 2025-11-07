@@ -1528,13 +1528,13 @@
 
         setTimeout(() => {
           getCirHandLocation();
-        }, 20 * 1000);
+        }, 10 * 1000);
       })
       .catch((error) => {
         console.error('获取机车和人员位置失败:', error);
         setTimeout(() => {
           getCirHandLocation();
-        }, 20 * 1000);
+        }, 10 * 1000);
       });
   }
 
