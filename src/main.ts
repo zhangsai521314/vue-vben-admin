@@ -95,15 +95,13 @@ errTopicRetry();
 watch(
   () => userStore.userInfo,
   () => {
-    if (userStore.userInfo) {
+    if (
+      userStore.userInfo &&
+      !isDataInit &&
+      window.location.hash.toLowerCase().indexOf('/largescreen/index') == -1
+    ) {
       //初始化数据仓库
       dataInit();
-    } else {
-      isDataInit = false;
-      //不刷新断开后重连不能接收新信息
-      // mqttStore.disConnect();
-      // errTopic = [];
-      mqttStore.clearMsgData();
     }
   },
 );
@@ -119,7 +117,7 @@ function interval() {
   // }, 3000);
 
   //有未确认未恢复未读的告警则一直播放告警声音
-  if (window.location.hash.indexOf('/largeScreen/index') == -1) {
+  if (window.location.hash.toLowerCase().indexOf('/largescreen/index') == -1) {
     setInterval(() => {
       if (!mqttStore.msgIsMute && userStore.userInfo) {
         const alarmDataCount = mqttStore.msgData.filter(

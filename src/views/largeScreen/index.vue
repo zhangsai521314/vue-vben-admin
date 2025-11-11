@@ -1742,7 +1742,7 @@
         background-position: center;
         background-size: cover;
 
-        @media (min-height: 850px) {
+        @media (min-height: 801px) {
           bottom: 14px;
         }
 
@@ -2123,7 +2123,7 @@
     transform: translateX(-50%);
     gap: 10px;
 
-    @media (min-height: 850px) {
+    @media (min-height: 801px) {
       bottom: 10px;
     }
 
