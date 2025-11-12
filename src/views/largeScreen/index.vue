@@ -138,19 +138,20 @@
           <div class="title">{{ t('view.serviceStatus') }}</div>
           <div class="data">
             <vue3-seamless-scroll
-              class="scroll"
+              ref="scrollRef"
               :list="pendingAlarmData"
               :hover="true"
-              :limitScrollNum="7"
-              :isWatch="true"
-              :step="0.5"
+              :step="0.7"
+              :visibleCount="5"
+              direction="up"
+              class="scroll-wrapper"
             >
-              <div class="alarmWai_for" v-for="(item, i) in pendingAlarmData" :key="i">
-                <div class="alarmWai_content" :style="{ color: item.color }" @click="goIndex(item)">
-                  <div class="alarm_title">{{ item.name }}</div>
-                  <div class="alarm_time">{{ t('view.' + item.alarmType) }}</div>
+              <template #default="{ data }">
+                <div class="alarmWai_content" :style="{ color: data.color }" @click="goIndex(data)">
+                  <div class="alarm_title">{{ data.name }}</div>
+                  <div class="alarm_time">{{ t('view.' + data.alarmType) }}</div>
                 </div>
-              </div>
+              </template>
             </vue3-seamless-scroll>
           </div>
         </div>
@@ -163,7 +164,6 @@
   import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { useI18n } from '@/hooks/web/useI18n';
-  import { useLocaleStore } from '@/store/modules/locale';
   import { useECharts } from '@/hooks/web/useECharts';
   import L from 'leaflet';
   import 'leaflet/dist/leaflet.css';
@@ -171,13 +171,9 @@
   import 'leaflet-rotate';
   import { message } from 'ant-design-vue';
   import largeScreenApi from '@/api/largeScreen';
-  import { Vue3SeamlessScroll } from 'vue3-seamless-scroll';
-  import { useGo } from '/@/hooks/web/usePage';
+  import { Vue3SeamlessScroll } from 'vue3-seamless-scroll/dist/vue3-seamless-scroll.es.js';
 
   const { t } = useI18n();
-  const go = useGo();
-  const localeStore = useLocaleStore();
-  const locale = localeStore.getLocale;
   defineOptions({ name: 'LargeScreen' });
   const { prefixCls } = useDesign('largeScreen-');
   const isRunLoading = ref(false);
@@ -185,6 +181,8 @@
   const chartJiCir = useECharts(chartJiCirRef);
   const chartHandRef = ref(null);
   const chartHand = useECharts(chartHandRef);
+
+  const scrollRef = ref();
 
   // 新增：显示/隐藏控制状态
   const showTrains = ref(true);
@@ -203,7 +201,9 @@
   let isFirstHandE = true;
   let isFirstCirE = true;
 
-  const pendingAlarmData = ref([]);
+  const pendingAlarmData = ref([
+    // { id: 1, name: '1', color: 'red', alarmType: 'on' }
+  ]);
 
   // 初始地图状态
   const initialMapState = {
@@ -464,28 +464,28 @@
       openPopup(
         train.coordinate,
         `
-        <div class="popup-content">
-          <div class='title fontColor'>${t('view._cabRadio')}</div>
-          <div class='content'>
-            <div class='info'>
-              <div>ISDN:</div>
-              <div>${train.isdn}</div>
+          <div class="popup-content">
+            <div class='title fontColor'>${t('view._cabRadio')}</div>
+            <div class='content'>
+              <div class='info'>
+                <div>ISDN:</div>
+                <div>${train.isdn}</div>
+              </div>
+              <div class='info'>
+                <div>${t('view._kilometerMarker')}:</div>
+                <div>${train.glb}</div>
+              </div>
+              <div class='info'>
+                <div>${t('view.locationStation')}:</div>
+                <div>${train.station}</div>
+              </div>
+              <div class='info'>
+                <div>${t('view.affiliatedRegion')}:</div>
+                <div>${train.area}</div>
+              </div>
             </div>
-            <div class='info'>
-              <div>${t('view._kilometerMarker')}:</div>
-              <div>${train.glb}</div>
-            </div>
-            <div class='info'>
-              <div>${t('view.locationStation')}:</div>
-              <div>${train.station}</div>
-            </div>
-            <div class='info'>
-              <div>${t('view.affiliatedRegion')}:</div>
-              <div>${train.area}</div>
-            </div> 
           </div>
-        </div>
-        `,
+          `,
       );
     });
 
@@ -512,24 +512,24 @@
       openPopup(
         person.coordinate,
         `
-        <div class="popup-content">
-          <div class='title fontColor'>${t('view.handheldRadio')}</div>
-          <div class='content'>
-            <div class='info'>
-              <div  class='min'>ISDN:</div>
-              <div>${person.isdn}</div>
-            </div>
-            <div class='info'>
-              <div  class='min'>${t('view.locationStation')}:</div>
-              <div>${person.station}</div>
-            </div>
-            <div class='info'>
-              <div  class='min'>${t('view.affiliatedRegion')}:</div>
-              <div>${person.area}</div>
+          <div class="popup-content">
+            <div class='title fontColor'>${t('view.handheldRadio')}</div>
+            <div class='content'>
+              <div class='info'>
+                <div  class='min'>ISDN:</div>
+                <div>${person.isdn}</div>
+              </div>
+              <div class='info'>
+                <div  class='min'>${t('view.locationStation')}:</div>
+                <div>${person.station}</div>
+              </div>
+              <div class='info'>
+                <div  class='min'>${t('view.affiliatedRegion')}:</div>
+                <div>${person.area}</div>
+              </div>
             </div>
           </div>
-        </div>
-        `,
+          `,
       );
     });
 
@@ -953,28 +953,28 @@
         openPopup(
           train.coordinate,
           `
-        <div class="popup-content">
-          <div class='title fontColor'>${t('view._cabRadio')}</div>
-          <div class='content'>
-            <div class='info'>
-              <div>ISDN:</div>
-              <div>${train.isdn}</div>
-            </div>
-            <div class='info'>
-              <div>${t('view.kilometerMarker')}:</div>
-              <div>${train.glb}</div>
-            </div>
-            <div class='info'>
-              <div>${t('view.locationStation')}:</div>
-              <div>${train.station}</div>
-            </div>
-            <div class='info'>
-              <div>${t('view.affiliatedRegion')}:</div>
-              <div>${train.area}</div>
+          <div class="popup-content">
+            <div class='title fontColor'>${t('view._cabRadio')}</div>
+            <div class='content'>
+              <div class='info'>
+                <div>ISDN:</div>
+                <div>${train.isdn}</div>
+              </div>
+              <div class='info'>
+                <div>${t('view.kilometerMarker')}:</div>
+                <div>${train.glb}</div>
+              </div>
+              <div class='info'>
+                <div>${t('view.locationStation')}:</div>
+                <div>${train.station}</div>
+              </div>
+              <div class='info'>
+                <div>${t('view.affiliatedRegion')}:</div>
+                <div>${train.area}</div>
+              </div>
             </div>
           </div>
-        </div>
-        `,
+          `,
         );
         found = true;
       }
@@ -989,24 +989,24 @@
         openPopup(
           person.coordinate,
           `
-        <div class="popup-content">
-          <div class='title fontColor'>${t('view.GPH')}</div>
-          <div class='content'>
-            <div class='info'>
-              <div  class='min'>ISDN:</div>
-              <div>${person.isdn}</div>
-            </div>
-            <div class='info'>
-              <div  class='min'>${t('view.locationStation')}:</div>
-              <div>${person.station}</div>
-            </div>
-            <div class='info'>
-              <div  class='min'>${t('view.affiliatedRegion')}:</div>
-              <div>${person.area}</div>
+          <div class="popup-content">
+            <div class='title fontColor'>${t('view.GPH')}</div>
+            <div class='content'>
+              <div class='info'>
+                <div  class='min'>ISDN:</div>
+                <div>${person.isdn}</div>
+              </div>
+              <div class='info'>
+                <div  class='min'>${t('view.locationStation')}:</div>
+                <div>${person.station}</div>
+              </div>
+              <div class='info'>
+                <div  class='min'>${t('view.affiliatedRegion')}:</div>
+                <div>${person.area}</div>
+              </div>
             </div>
           </div>
-        </div>
-        `,
+          `,
         );
         found = true;
       }
@@ -1542,7 +1542,24 @@
     largeScreenApi
       .GetServiceInfo()
       .then((data) => {
-        pendingAlarmData.value = data;
+        if (pendingAlarmData.value.length == 0) {
+          scrollRef.value?.add(0, data);
+        } else {
+          data.forEach((item, index) => {
+            const newData = pendingAlarmData.value.find((m) => m.id == item.id);
+            if (newData == undefined) {
+              scrollRef.value?.add(item.orderIndex, [item]);
+            } else {
+              scrollRef.value?.update(index, item);
+            }
+          });
+          pendingAlarmData.value.forEach((item, index) => {
+            const oldData = data.value.find((m) => m.id == item.id);
+            if (oldData == undefined) {
+              scrollRef.value?.remove(index, 1);
+            }
+          });
+        }
         setTimeout(() => {
           getServiceInfo();
         }, 10 * 1000);
@@ -1560,6 +1577,7 @@
 
   onMounted(() => {
     getServiceInfo();
+
     getSysRequest();
     getDeviceCount();
     getDeviceLocationCount();
@@ -1799,6 +1817,12 @@
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
+
+        .scroll-wrapper {
+          box-sizing: border-box;
+          width: 100%;
+          height: 100%;
+        }
 
         .title {
           position: relative;
