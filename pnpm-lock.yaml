@@ -122,6 +122,9 @@ importers:
       leaflet-rotate:
         specifier: ^0.2.8
         version: 0.2.8(leaflet@1.9.4)
+      leaflet.featuregroup.subgroup:
+        specifier: ^1.0.2
+        version: 1.0.2
       leaflet.marker.slideto:
         specifier: ^0.3.0
         version: 0.3.0
@@ -203,9 +206,12 @@ importers:
       vue3-draggable-resizable:
         specifier: ^1.6.5
         version: 1.6.5
+      vue3-infinite-list:
+        specifier: ^0.2.5
+        version: 0.2.5(vue@3.5.18)
       vue3-seamless-scroll:
-        specifier: ^2.0.1
-        version: 2.0.1
+        specifier: ^3.0.2
+        version: 3.0.2(vue@3.5.18)
       vuedraggable:
         specifier: ^4.1.0
         version: 4.1.0(vue@3.5.18)
@@ -932,7 +938,7 @@ packages:
       '@babel/traverse': 7.28.0
       '@babel/types': 7.28.2
       convert-source-map: 2.0.0
-      debug: 4.4.1
+      debug: 4.4.3
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -1661,6 +1667,14 @@ packages:
     resolution: {integrity: sha512-+nxncfwHM5SgAtrVzgpzJOI1ol0PkumhVo469KCf9lUi21IGcY90G98VuHm9VRrUypmAzawAHO9bs6hqeADaVg==}
     dev: true
 
+  /@element-plus/icons-vue@2.3.2(vue@3.5.18):
+    resolution: {integrity: sha512-OzIuTaIfC8QXEPmJvB4Y4kw34rSXdCJzxcD1kFStBvr8bK6X1zQAYDo0CNMjojnfTqRQCJ0I7prlErcoRiET2A==}
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      vue: 3.5.18(typescript@5.9.2)
+    dev: false
+
   /@emotion/hash@0.9.2:
     resolution: {integrity: sha512-MyqliTZGuOm3+5ZRSaaBGP3USLw6+EGykkwZns2EPC5g8jJ4z9OrdZY9apkl3+UP9+sdz76YYkwCKP5gh8iY3g==}
 
@@ -2350,6 +2364,23 @@ packages:
       lodash.isnil: 4.0.0
       lodash.isundefined: 3.0.1
       lodash.uniq: 4.5.0
+    dev: false
+
+  /@floating-ui/core@1.7.3:
+    resolution: {integrity: sha512-sGnvb5dmrJaKEZ+LDIpguvdX3bDlEllmv4/ClQ9awcmCZrlx5jQyyMWFM5kBI+EyNOCDDiKk8il0zeuX3Zlg/w==}
+    dependencies:
+      '@floating-ui/utils': 0.2.10
+    dev: false
+
+  /@floating-ui/dom@1.7.4:
+    resolution: {integrity: sha512-OOchDgh4F2CchOX94cRVqhvy7b3AFb+/rQXyswmzmGakRfkMgoWVjfnLWkRirfLEfuD4ysVW16eXzwt3jHIzKA==}
+    dependencies:
+      '@floating-ui/core': 1.7.3
+      '@floating-ui/utils': 0.2.10
+    dev: false
+
+  /@floating-ui/utils@0.2.10:
+    resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
     dev: false
 
   /@hapi/bourne@3.0.0:
@@ -3122,8 +3153,8 @@ packages:
     resolution: {integrity: sha512-AtJbZv5Yy+vWX5v32DPTr+CW7AkSK8HJx52orDbrYt/9s4lGM2t4KKAmwaTQEH2HYr2HVh1mlqs54/S1s3WT1g==}
     dependencies:
       '@iconify/iconify': 2.1.2
-      axios: 0.26.1(debug@4.4.1)
-      debug: 4.4.1
+      axios: 0.26.1(debug@4.4.3)
+      debug: 4.4.3
       fast-glob: 3.3.3
       fs-extra: 10.1.0
     transitivePeerDependencies:
@@ -3454,6 +3485,10 @@ packages:
       '@sinonjs/commons': 1.8.6
     dev: false
 
+  /@sxzz/popperjs-es@2.11.7:
+    resolution: {integrity: sha512-Ccy0NlLkzr0Ex2FKvh2X+OyERHXJ88XJ1MXtsI9y9fGexlaXaVTPzBCRBwIxFkORuOb+uBqeu+RqnpgYTEZRUQ==}
+    dev: false
+
   /@tootallnate/once@1.1.2:
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
     engines: {node: '>= 6'}
@@ -3780,11 +3815,9 @@ packages:
     resolution: {integrity: sha512-0NgftHUcV4v34VhXm8QBSftKVXtbkBG3ViCjs6+eJ5a6y6Mi/jiFGPc1sC7QK+9BFhWrURE3EOggmWaSxL9OzQ==}
     dependencies:
       '@types/lodash': 4.17.20
-    dev: true
 
   /@types/lodash@4.17.20:
     resolution: {integrity: sha512-H3MHACvFUEiujabxhaI/ImO6gUrd8oOurg7LQtS7mbwIXA/cUqWrvBsaeJ23aZEPk1TAYkurjfMbSELfoCXlGA==}
-    dev: true
 
   /@types/mime@1.3.5:
     resolution: {integrity: sha512-/pyBZWSLD2n0dcHE3hq8s8ZvcETHtEuF+3E7XVt0Ig2nvsVQXdghHVcEkIWjy9A0wKfTn97a/PSDYohKIlnP/w==}
@@ -3879,6 +3912,10 @@ packages:
     resolution: {integrity: sha512-1CQjuSrgbv1/dhmcfQ83eVyYbvGyqhTvb2Opxr0QCV+iJ4J6/J+XWQ3Om59WiwCd1MN3rDUHasx5XRrpUtewYQ==}
     dev: false
 
+  /@types/web-bluetooth@0.0.16:
+    resolution: {integrity: sha512-oh8q2Zc32S6gd/j50GowEjKLoOVOwHP/bWVjKJInBwQqdOYMdPrf1oVlelTlyfFK3CKxL1uahMDAr+vy8T7yMQ==}
+    dev: false
+
   /@types/web-bluetooth@0.0.20:
     resolution: {integrity: sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==}
     dev: false
@@ -3961,7 +3998,7 @@ packages:
     dependencies:
       '@typescript-eslint/typescript-estree': 7.18.0(typescript@5.9.3)
       '@typescript-eslint/utils': 7.18.0(eslint@8.57.1)(typescript@5.9.3)
-      debug: 4.4.1
+      debug: 4.4.3
       eslint: 8.57.1
       ts-api-utils: 1.4.3(typescript@5.9.3)
       typescript: 5.9.3
@@ -3985,7 +4022,7 @@ packages:
     dependencies:
       '@typescript-eslint/types': 7.18.0
       '@typescript-eslint/visitor-keys': 7.18.0
-      debug: 4.4.1
+      debug: 4.4.3
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.5
@@ -4567,12 +4604,37 @@ packages:
       - vue
     dev: false
 
+  /@vueuse/core@9.13.0(vue@3.5.18):
+    resolution: {integrity: sha512-pujnclbeHWxxPRqXWmdkKV5OX4Wk4YeK7wusHqRwU0Q7EFusHoqNA/aPhB6KCh9hEqJkLAJo7bb0Lh9b+OIVzw==}
+    dependencies:
+      '@types/web-bluetooth': 0.0.16
+      '@vueuse/metadata': 9.13.0
+      '@vueuse/shared': 9.13.0(vue@3.5.18)
+      vue-demi: 0.14.10(vue@3.5.18)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: false
+
   /@vueuse/metadata@10.11.1:
     resolution: {integrity: sha512-IGa5FXd003Ug1qAZmyE8wF3sJ81xGLSqTqtQ6jaVfkeZ4i5kS2mwQF61yhVqojRnenVew5PldLyRgvdl4YYuSw==}
     dev: false
 
+  /@vueuse/metadata@9.13.0:
+    resolution: {integrity: sha512-gdU7TKNAUVlXXLbaF+ZCfte8BjRJQWPCa2J55+7/h+yDtzw3vOoGQDRXzI6pyKyo6bXFT5/QoPE4hAknExjRLQ==}
+    dev: false
+
   /@vueuse/shared@10.11.1(vue@3.5.18):
     resolution: {integrity: sha512-LHpC8711VFZlDaYUXEBbFBCQ7GS3dVU9mjOhhMhXP6txTV4EhYQg/KGnQuvt/sPAtoUKq7VVUnL6mVtFoL42sA==}
+    dependencies:
+      vue-demi: 0.14.10(vue@3.5.18)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: false
+
+  /@vueuse/shared@9.13.0(vue@3.5.18):
+    resolution: {integrity: sha512-UrnhU+Cnufu4S6JLCPZnkWh0WwZGUp72ktOF2DFptMlOs3TOdVv8xJN53zhHGARmVOsz5KqOls09+J1NR6sBKw==}
     dependencies:
       vue-demi: 0.14.10(vue@3.5.18)
     transitivePeerDependencies:
@@ -5239,10 +5301,10 @@ packages:
       possible-typed-array-names: 1.1.0
     dev: true
 
-  /axios@0.26.1(debug@4.4.1):
+  /axios@0.26.1(debug@4.4.3):
     resolution: {integrity: sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==}
     dependencies:
-      follow-redirects: 1.15.11(debug@4.4.1)
+      follow-redirects: 1.15.11(debug@4.4.3)
     transitivePeerDependencies:
       - debug
     dev: true
@@ -5250,7 +5312,7 @@ packages:
   /axios@1.11.0:
     resolution: {integrity: sha512-1Lx3WLFQWm3ooKDYZD1eXmoGO9fxYQjrycfHFC8P0sCfQVXyROp0p9PFWBehewBOdCwHc+f/b8I0fMto5eSfwA==}
     dependencies:
-      follow-redirects: 1.15.11(debug@4.4.1)
+      follow-redirects: 1.15.11(debug@4.4.3)
       form-data: 4.0.4
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -6609,6 +6671,10 @@ packages:
   /dayjs@1.11.13:
     resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
 
+  /dayjs@1.11.19:
+    resolution: {integrity: sha512-t5EcLVS6QPBNqM2z8fakk/NKel+Xzshgt8FFKAn+qwlD1pzZWxh0nVCrvFK7ZDb6XucZeF9z8C7CBWTRIVApAw==}
+    dev: false
+
   /dayjs@1.8.36:
     resolution: {integrity: sha512-3VmRXEtw7RZKAf+4Tv1Ym9AGeo8r8+CjDi26x+7SYQil1UqtqdaokhzoEJohqlzt0m5kacJSDhJQkG/LWhpRBw==}
     dev: true
@@ -7053,6 +7119,30 @@ packages:
 
   /electron-to-chromium@1.5.230:
     resolution: {integrity: sha512-A6A6Fd3+gMdaed9wX83CvHYJb4UuapPD5X5SLq72VZJzxHSY0/LUweGXRWmQlh2ln7KV7iw7jnwXK7dlPoOnHQ==}
+    dev: false
+
+  /element-plus@2.11.7(vue@3.5.18):
+    resolution: {integrity: sha512-Bh47wuzsqaNBNDkbtlOlZER1cGcOB8GsXp/+C9b95MOrk0wvoHUV4NKKK7xMkfYNFYdYysQ752oMhnExgAL6+g==}
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      '@ctrl/tinycolor': 3.6.1
+      '@element-plus/icons-vue': 2.3.2(vue@3.5.18)
+      '@floating-ui/dom': 1.7.4
+      '@popperjs/core': /@sxzz/popperjs-es@2.11.7
+      '@types/lodash': 4.17.20
+      '@types/lodash-es': 4.17.12
+      '@vueuse/core': 9.13.0(vue@3.5.18)
+      async-validator: 4.2.5
+      dayjs: 1.11.19
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      lodash-unified: 1.0.3(@types/lodash-es@4.17.12)(lodash-es@4.17.21)(lodash@4.17.21)
+      memoize-one: 6.0.0
+      normalize-wheel-es: 1.2.0
+      vue: 3.5.18(typescript@5.9.2)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
     dev: false
 
   /element-resize-detector@1.2.4:
@@ -8159,7 +8249,7 @@ packages:
       debug: 4.3.7
     dev: true
 
-  /follow-redirects@1.15.11(debug@4.4.1):
+  /follow-redirects@1.15.11(debug@4.4.3):
     resolution: {integrity: sha512-deG2P0JfjrTxl50XGCDyfI97ZGVCxIpfKYmfyrQ54n5FO/0gfIES8C/Psl6kWVDolizcaaxZJnTS0QSMxvnsBQ==}
     engines: {node: '>=4.0'}
     peerDependencies:
@@ -8168,7 +8258,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.4.1
+      debug: 4.4.3
 
   /for-each@0.3.5:
     resolution: {integrity: sha512-dKx12eRCVIzqCxFGplyFKJMPvLEWgmNtUrpTiJIR5u97zEhRG8ySrtboPHZXx7daLxQVrl643cTzbab2tkQjxg==}
@@ -10301,6 +10391,10 @@ packages:
       leaflet: 1.9.4
     dev: false
 
+  /leaflet.featuregroup.subgroup@1.0.2:
+    resolution: {integrity: sha512-9nCVg8nUe686+BtPbUT7ALOe/IA+8Mum+rkA8pfPpCkH0WvKevRrH+JMcMTjAoNQKVI0uxrWrLV5w298SS3ESA==}
+    dev: false
+
   /leaflet.marker.slideto@0.3.0:
     resolution: {integrity: sha512-BQwOy5CuDBuEXIbeJ1mjO9SqlY3au65LhWJ1hjkwQYy/XhOhaF7kIF3+0DRasONIvbFYL+QwQ2/QjEjDUZgn4A==}
     dev: false
@@ -10452,6 +10546,18 @@ packages:
 
   /lodash-es@4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+
+  /lodash-unified@1.0.3(@types/lodash-es@4.17.12)(lodash-es@4.17.21)(lodash@4.17.21):
+    resolution: {integrity: sha512-WK9qSozxXOD7ZJQlpSqOT+om2ZfcT4yO+03FuzAHD0wF6S0l0090LRPDx3vhTTLZ8cFKpBn+IOcVXK6qOcIlfQ==}
+    peerDependencies:
+      '@types/lodash-es': '*'
+      lodash: '*'
+      lodash-es: '*'
+    dependencies:
+      '@types/lodash-es': 4.17.12
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+    dev: false
 
   /lodash.camelcase@4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
@@ -10695,6 +10801,10 @@ packages:
   /media-typer@0.3.0:
     resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /memoize-one@6.0.0:
+    resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
     dev: false
 
   /meow@12.1.1:
@@ -11185,6 +11295,10 @@ packages:
     resolution: {integrity: sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /normalize-wheel-es@1.2.0:
+    resolution: {integrity: sha512-Wj7+EJQ8mSuXr2iWfnujrimU35R2W4FAErEyTmJoJ7ucwTn2hOUSsRehMb5RSYkxXGTM7Y9QpvPmp++w5ftoJw==}
+    dev: false
 
   /npm-run-path@4.0.1:
     resolution: {integrity: sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw==}
@@ -13910,11 +14024,6 @@ packages:
     resolution: {integrity: sha512-WKexMoJj3vEuK0yFEapj8y64V0A6xcuPuK9Gt1d0R+dzCSJc0lHqQytAbSB4cDAK0dWh4T0E2ETkoLE2WZ41OQ==}
     dev: false
 
-  /throttle-debounce@5.0.0:
-    resolution: {integrity: sha512-2iQTSgkkc1Zyk0MeVrt/3BvuOXYPl/R8Z0U2xxo9rjwNciaHDG3R+Lm6dh4EeUci49DanvBnuqI6jshoQQRGEg==}
-    engines: {node: '>=12.22'}
-    dev: false
-
   /throttle-debounce@5.0.2:
     resolution: {integrity: sha512-B71/4oyj61iNH0KeCamLuE2rmKuTO5byTOSVwECM5FA7TiAiAW+UqTKZ9ERueC4qvgSttUhdmq1mXC3kJqGX7A==}
     engines: {node: '>=12.22'}
@@ -15028,10 +15137,26 @@ packages:
     resolution: {integrity: sha512-31142E31fGNnq3HKqvmFLSsqIbhck7TyGuQWhUKrDw6DOcGAuRx4ddRjaxvT6fe7dgeKH53qAh+i0ZlWtPLl2g==}
     dev: false
 
-  /vue3-seamless-scroll@2.0.1:
-    resolution: {integrity: sha512-mI3BaDU3pjcPUhVSw3/xNKdfPBDABTi/OdZaZqKysx4cSdNfGRbVvGNDzzptBbJ5S7imv5T55l6x/SqgnxKreg==}
+  /vue3-infinite-list@0.2.5(vue@3.5.18):
+    resolution: {integrity: sha512-3G8ePqOtJJ/TW/0vdbcy9wFdN7vXxsTjXjp0u22FjOVMCQFJrs45Vjaws2ffoPU3kXn+waT1qOP+w3fuwKcqaw==}
+    peerDependencies:
+      '@vue/composition-api': '1'
+      vue: ^2.0.0 || >=3.0.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
     dependencies:
-      throttle-debounce: 5.0.0
+      vue: 3.5.18(typescript@5.9.2)
+      vue-demi: 0.14.10(vue@3.5.18)
+    dev: false
+
+  /vue3-seamless-scroll@3.0.2(vue@3.5.18):
+    resolution: {integrity: sha512-LpKoL1ht71MASabUBsoSqbhLqcuKSrD+u01dgHac+/cthPAShKvcdM7dSGtaxjVntSFqdeViqJssjcwy/KqRSA==}
+    dependencies:
+      element-plus: 2.11.7(vue@3.5.18)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
     dev: false
 
   /vue@3.5.18(typescript@5.9.2):

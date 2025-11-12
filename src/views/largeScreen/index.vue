@@ -1,162 +1,154 @@
 <template>
   <MyContent :class="prefixCls">
-    <a-spin :spinning="isRunLoading">
-      <div class="content">
-        <div class="map-container">
-          <!-- 地图容器 -->
-          <div ref="mapContainer" class="map"></div>
-          <!-- 搜索和控制区 -->
-          <div class="control-container">
-            <div class="search-box">
-              <input
-                v-model="searchQuery"
-                type="text"
-                :placeholder="t('view.integratedServicesDigitalNetworkSearch')"
-                @keyup.enter="handleSearch"
-                class="search-input"
+    <div class="content">
+      <div class="map-container">
+        <!-- 地图容器 -->
+        <div ref="mapContainer" class="map"></div>
+        <!-- 搜索和控制区 -->
+        <div class="control-container">
+          <div class="search-box">
+            <input
+              v-model="searchQuery"
+              type="text"
+              :placeholder="t('view.integratedServicesDigitalNetworkSearch')"
+              @keyup.enter="handleSearch"
+              class="search-input"
+            />
+          </div>
+          <!-- 新增：显示/隐藏控制按钮 -->
+          <div class="toggle-controls">
+            <div class="toggle-btn" :class="{ active: showTrains }" @click="toggleTrainsVisibility">
+              <IconFontClass
+                name="icon-baseui-zhinengwangguan"
+                :style="{ fontSize: '20px', marginRight: '5px' }"
               />
+              {{ t('view._cabRadio') }}
             </div>
-            <!-- 新增：显示/隐藏控制按钮 -->
-            <div class="toggle-controls">
-              <div
-                class="toggle-btn"
-                :class="{ active: showTrains }"
-                @click="toggleTrainsVisibility"
-              >
-                <IconFontClass
-                  name="icon-baseui-zhinengwangguan"
-                  :style="{ fontSize: '20px', marginRight: '5px' }"
-                />
-                {{ t('view._cabRadio') }}
-              </div>
-              <div
-                class="toggle-btn"
-                :class="{ active: showPersons }"
-                @click="togglePersonsVisibility"
-              >
-                <IconFontClass
-                  name="icon-baseui-shouchidanbing"
-                  :style="{ fontSize: '20px', marginRight: '5px' }"
-                />
-                {{ t('view.handheldRadio') }}
-              </div>
-              <div class="toggle-btn active" @click="resetMap">
-                <IconFontClass
-                  name="icon-baseui-zhizao"
-                  :style="{ fontSize: '20px', marginRight: '5px' }"
-                />
-                {{ t('view.resetMap') }}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="head">{{ t('view.operationMonitoringPlatform') }} </div>
-        <div
-          style="
-            display: flex;
-            position: absolute;
-            top: 47px;
-            justify-content: center;
-            width: 100%;
-            height: 70px;
-          "
-        >
-          <div class="headCenter">
-            <div>
-              <div class="headCenter1">
-                <div class="icon">
-                  <IconFontClass name="icon-baseui-ziyuan" :style="{ fontSize: '30px' }"
-                /></div>
-                <div class="title" style="left: 48px; width: 90px; text-align: left">{{
-                  t('view.dutyDesk')
-                }}</div>
-                <div class="count" style="left: 50px; color: #b97fff; text-align: left">{{
-                  deviceCount.optionCount
-                }}</div>
-              </div>
-              <div class="headCenter2">
-                <div class="icon">
-                  <IconFontClass name="icon-baseui-zhinengwangguan" :style="{ fontSize: '34px' }"
-                /></div>
-                <div class="title" style="left: 48px; width: 60px; text-align: left">{{
-                  t('view._cabRadio')
-                }}</div>
-                <div class="count" style="left: 50px; color: #5ecdba; text-align: left">{{
-                  deviceCount.cirCount
-                }}</div></div
-              >
-              <div class="headCenter3">
-                <div class="icon" style="top: 2px">
-                  <IconFontClass name="icon-baseui-shouchidanbing" :style="{ fontSize: '36px' }"
-                /></div>
-                <div class="title" style="left: 48px; width: 60px; text-align: left">{{
-                  t('view.handheldRadio')
-                }}</div>
-                <div class="count" style="left: 50px; color: #3ec2e9; text-align: left">{{
-                  deviceCount.handCount
-                }}</div></div
-              >
-            </div>
-          </div>
-        </div>
-        <div class="wgdata fontColor">
-          <div class="bottombg"></div>
-          <div class="title">{{ t('view.requestStatistics') }}</div>
-          <div class="data">
-            <div>
-              <div>
-                <div class="number">{{ requestData.requestCount }}</div>
-                <div class="label">{{ t('view.request') }}</div>
-              </div>
-            </div>
-            <div>
-              <div>
-                <div class="number">{{ requestData.onlineCount }}</div>
-                <div class="label">{{ t('view.onlineUser') }}</div>
-              </div>
-            </div>
-            <div>
-              <div>
-                <div class="number">{{ requestData.userCount }}</div>
-                <div class="label">{{ t('view.totalUsersCount') }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="jccir fontColor">
-          <div class="bottombg"></div>
-          <div class="title">{{ t('view.locomotiveRadioLocation') }}</div>
-          <div class="data" ref="chartJiCirRef"> </div>
-        </div>
-        <div class="hand fontColor">
-          <div class="bottombg"></div>
-          <div class="title">{{ t('view.handheldTerminalLocation') }}</div>
-          <div class="data" ref="chartHandRef"> </div>
-        </div>
-        <div class="alarm fontColor">
-          <div class="bottombg"></div>
-          <div class="title">{{ t('view.serviceStatus') }}</div>
-          <div class="data">
-            <vue3-seamless-scroll
-              ref="scrollRef"
-              :list="_pendingAlarmData"
-              :hover="true"
-              :step="0.7"
-              :visibleCount="5"
-              direction="up"
-              class="scroll-wrapper"
+            <div
+              class="toggle-btn"
+              :class="{ active: showPersons }"
+              @click="togglePersonsVisibility"
             >
-              <template #default="{ data }">
-                <div class="alarmWai_content" :style="{ color: data.color }" @click="goIndex(data)">
-                  <div class="alarm_title">{{ data.name }}</div>
-                  <div class="alarm_time">{{ t('view.' + data.alarmType) }}</div>
-                </div>
-              </template>
-            </vue3-seamless-scroll>
+              <IconFontClass
+                name="icon-baseui-shouchidanbing"
+                :style="{ fontSize: '20px', marginRight: '5px' }"
+              />
+              {{ t('view.handheldRadio') }}
+            </div>
+            <div class="toggle-btn active" @click="resetMap">
+              <IconFontClass
+                name="icon-baseui-zhizao"
+                :style="{ fontSize: '20px', marginRight: '5px' }"
+              />
+              {{ t('view.resetMap') }}
+            </div>
           </div>
         </div>
       </div>
-    </a-spin>
+      <div class="head">{{ t('view.operationMonitoringPlatform') }} </div>
+      <div
+        style="
+          display: flex;
+          position: absolute;
+          top: 47px;
+          justify-content: center;
+          width: 100%;
+          height: 70px;
+        "
+      >
+        <div class="headCenter">
+          <div>
+            <div class="headCenter1">
+              <div class="icon">
+                <IconFontClass name="icon-baseui-ziyuan" :style="{ fontSize: '30px' }"
+              /></div>
+              <div class="title" style="left: 48px; width: 90px; text-align: left">{{
+                t('view.dutyDesk')
+              }}</div>
+              <div class="count" style="left: 50px; color: #b97fff; text-align: left">{{
+                deviceCount.optionCount
+              }}</div>
+            </div>
+            <div class="headCenter2">
+              <div class="icon">
+                <IconFontClass name="icon-baseui-zhinengwangguan" :style="{ fontSize: '34px' }"
+              /></div>
+              <div class="title" style="left: 48px; width: 60px; text-align: left">{{
+                t('view._cabRadio')
+              }}</div>
+              <div class="count" style="left: 50px; color: #5ecdba; text-align: left">{{
+                deviceCount.cirCount
+              }}</div></div
+            >
+            <div class="headCenter3">
+              <div class="icon" style="top: 2px">
+                <IconFontClass name="icon-baseui-shouchidanbing" :style="{ fontSize: '36px' }"
+              /></div>
+              <div class="title" style="left: 48px; width: 60px; text-align: left">{{
+                t('view.handheldRadio')
+              }}</div>
+              <div class="count" style="left: 50px; color: #3ec2e9; text-align: left">{{
+                deviceCount.handCount
+              }}</div></div
+            >
+          </div>
+        </div>
+      </div>
+      <div class="wgdata fontColor">
+        <div class="bottombg"></div>
+        <div class="title">{{ t('view.requestStatistics') }}</div>
+        <div class="data">
+          <div>
+            <div>
+              <div class="number">{{ requestData.requestCount }}</div>
+              <div class="label">{{ t('view.request') }}</div>
+            </div>
+          </div>
+          <div>
+            <div>
+              <div class="number">{{ requestData.onlineCount }}</div>
+              <div class="label">{{ t('view.onlineUser') }}</div>
+            </div>
+          </div>
+          <div>
+            <div>
+              <div class="number">{{ requestData.userCount }}</div>
+              <div class="label">{{ t('view.totalUsersCount') }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="jccir fontColor">
+        <div class="bottombg"></div>
+        <div class="title">{{ t('view.locomotiveRadioLocation') }}</div>
+        <div class="data" ref="chartJiCirRef"> </div>
+      </div>
+      <div class="hand fontColor">
+        <div class="bottombg"></div>
+        <div class="title">{{ t('view.handheldTerminalLocation') }}</div>
+        <div class="data" ref="chartHandRef"> </div>
+      </div>
+      <div class="alarm fontColor">
+        <div class="bottombg"></div>
+        <div class="title">{{ t('view.serviceStatus') }}</div>
+        <div class="data">
+          <SeamlessScrollList
+            ref="scrollList"
+            :list="pendingAlarmData"
+            container-height="300px"
+            :speed="50"
+            :pause-on-hover="true"
+          >
+            <template #default="{ item, index }">
+              <div class="alarmWai_content" :style="{ color: item.color }" @click="goIndex(item)">
+                <div class="alarm_title">{{ item.name }}</div>
+                <div class="alarm_time">{{ t('view.' + item.alarmType) }}</div>
+              </div>
+            </template>
+          </SeamlessScrollList>
+        </div>
+      </div>
+    </div>
   </MyContent>
 </template>
 
@@ -174,18 +166,15 @@
   import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
   import { message } from 'ant-design-vue';
   import largeScreenApi from '@/api/largeScreen';
-  import { Vue3SeamlessScroll } from 'vue3-seamless-scroll/dist/vue3-seamless-scroll.es.js';
+  import SeamlessScrollList from '@/components/MyScroll/index.vue';
 
   const { t } = useI18n();
   defineOptions({ name: 'LargeScreen' });
   const { prefixCls } = useDesign('largeScreen-');
-  const isRunLoading = ref(false);
   const chartJiCirRef = ref(null);
   const chartJiCir = useECharts(chartJiCirRef);
   const chartHandRef = ref(null);
   const chartHand = useECharts(chartHandRef);
-
-  const scrollRef = ref();
 
   // 新增：显示/隐藏控制状态
   const showTrains = ref(true);
@@ -204,8 +193,7 @@
   let isFirstHandE = true;
   let isFirstCirE = true;
 
-  let pendingAlarmData = [];
-  const _pendingAlarmData = ref([]);
+  const pendingAlarmData = ref([]);
 
   // 初始地图状态
   const initialMapState = {
@@ -1525,11 +1513,7 @@
     largeScreenApi
       .GetServiceInfo()
       .then((data) => {
-        if (pendingAlarmData.length > 0) {
-          scrollRef.value?.remove(0, pendingAlarmData.length);
-        }
-        scrollRef.value?.add(0, data);
-        pendingAlarmData = data;
+        pendingAlarmData.value = data;
         setTimeout(() => {
           getServiceInfo();
         }, 5 * 1000);
@@ -1546,12 +1530,12 @@
   }
 
   onMounted(() => {
-    //getServiceInfo();
+    getServiceInfo();
 
-    getSysRequest();
-    getDeviceCount();
-    getDeviceLocationCount();
-    getMapLocation();
+    // getSysRequest();
+    // getDeviceCount();
+    // getDeviceLocationCount();
+    // getMapLocation();
   });
 
   onUnmounted(() => {
