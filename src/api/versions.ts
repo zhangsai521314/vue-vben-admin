@@ -58,6 +58,20 @@ const versions = {
       params,
     });
   },
+  //强制升级
+  UpdateForceHis: function (params) {
+    return defHttp.post({
+      url: '/VerSions/UpdateForceHis',
+      params,
+    });
+  },
+  //强制升级
+  UpdateForce: function (params) {
+    return defHttp.post({
+      url: '/VerSions/UpdateForce',
+      params,
+    });
+  },
   //根据id获取版本信息
   GetVersion: function (params) {
     return defHttp.post({

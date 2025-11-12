@@ -44,22 +44,28 @@
             row.isSync ? t('view.yes') : t('view.no')
           }}</span>
           <AuthDom auth="versionsManage_his_table_sync">
-            <a-spin v-if="row.isRunSync != undefined" :spinning="row.isRunSync">
-              <a-button
-                :title="t('view.setAsRunningVersion')"
-                type="primary"
-                size="small"
-                @click="syncChange(row)"
-                >{{ t('view.synchronizeVersion') }}</a-button
-              >
-            </a-spin>
             <a-button
               :title="t('view.setAsRunningVersion')"
-              v-else
               type="primary"
               size="small"
               @click="syncChange(row)"
               >{{ t('view.synchronizeVersion') }}</a-button
+            >
+          </AuthDom>
+        </a-space>
+      </template>
+      <template #isForce="{ row }">
+        <a-space v-if="row.isForce != null">
+          <span :style="{ color: row.isForce ? 'green' : 'red' }">{{
+            row.isForce ? t('view.yes') : t('view.no')
+          }}</span>
+          <AuthDom auth="versionsManage_his_table_force">
+            <a-button
+              :title="t('view.setAsRunningVersion')"
+              type="primary"
+              size="small"
+              @click="upgradeChange(row)"
+              >{{ t('view.forcedUpgrade') }}</a-button
             >
           </AuthDom>
         </a-space>
@@ -259,9 +265,11 @@
       {
         field: 'isForce',
         title: t('view.isForcedUpgradeRequired'),
-        minWidth: locale == 'zh-CN' ? 120 : 170,
+        minWidth: locale == 'zh-CN' ? 120 : 220,
         showOverflow: true,
-        cellRender: { name: 'render_isno' },
+        slots: {
+          default: 'isForce',
+        },
       },
       {
         field: 'isSync',
@@ -419,16 +427,38 @@
 
   //同步
   function syncChange(row) {
-    row.isRunSync = true;
+    loading.value = true;
     versionsApi
       .UpdateRunVersionsHis(row.hisId.toString())
       .then(() => {
-        row.isRunSync = false;
+        loading.value = false;
         message.success(t('view.updateTerminalVersionSuccessfully'));
         getVersionsHis();
       })
       .catch(() => {
-        row.isRunSync = false;
+        loading.value = false;
+      });
+  }
+
+  //强制升级
+  function upgradeChange(row) {
+    loading.value = true;
+    versionsApi
+      .UpdateForceHis({
+        id: row.hisId,
+        force: !row.isForce,
+      })
+      .then((data) => {
+        loading.value = false;
+        if (data) {
+          row.isForce = !row.isForce;
+          message.success(t('view.updateSuccessful'));
+        } else {
+          message.success(t('view.updateFailure'));
+        }
+      })
+      .catch(() => {
+        loading.value = false;
       });
   }
 
