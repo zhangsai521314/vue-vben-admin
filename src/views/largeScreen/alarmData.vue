@@ -13,8 +13,7 @@
         <template #default="{ item, index }">
           <div class="alarmWai_content" :style="{ color: item.color }" @click="goIndex(item)">
             <div class="alarm_title">{{ item.name }}</div>
-            <!-- <div class="alarm_time">{{ t('view.' + item.alarmType) }}</div> -->
-            <div class="alarm_time">2</div>
+            <div class="alarm_time">{{ item.alarmType }}</div>
           </div>
         </template>
       </VirtualScroll>
@@ -32,6 +31,7 @@
   const refreshTimer = ref<NodeJS.Timeout>();
   const { t } = useI18n();
   interface ScrollItem {
+    id: string;
     name: string;
     color: string;
     alarmType: string;
@@ -44,6 +44,7 @@
     try {
       let data = await largeScreenApi.GetServiceInfo();
       data = data.map((m) => ({
+        id: m.id,
         name: m.name,
         color: m.color,
         alarmType: m.alarmType,

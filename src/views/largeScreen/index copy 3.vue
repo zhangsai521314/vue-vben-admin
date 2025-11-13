@@ -46,26 +46,74 @@
         </div>
       </div>
       <div class="head">{{ t('view.operationMonitoringPlatform') }} </div>
+      <div
+        style="
+          display: flex;
+          position: absolute;
+          top: 47px;
+          justify-content: center;
+          width: 100%;
+          height: 70px;
+        "
+      >
+        <div class="headCenter">
+          <div>
+            <div class="headCenter1">
+              <div class="icon">
+                <IconFontClass name="icon-baseui-ziyuan" :style="{ fontSize: '30px' }"
+              /></div>
+              <div class="title" style="left: 48px; width: 90px; text-align: left">{{
+                t('view.dutyDesk')
+              }}</div>
+              <div class="count" style="left: 50px; color: #b97fff; text-align: left">{{
+                deviceCount.optionCount
+              }}</div>
+            </div>
+            <div class="headCenter2">
+              <div class="icon">
+                <IconFontClass name="icon-baseui-zhinengwangguan" :style="{ fontSize: '34px' }"
+              /></div>
+              <div class="title" style="left: 48px; width: 60px; text-align: left">{{
+                t('view._cabRadio')
+              }}</div>
+              <div class="count" style="left: 50px; color: #5ecdba; text-align: left">{{
+                deviceCount.cirCount
+              }}</div></div
+            >
+            <div class="headCenter3">
+              <div class="icon" style="top: 2px">
+                <IconFontClass name="icon-baseui-shouchidanbing" :style="{ fontSize: '36px' }"
+              /></div>
+              <div class="title" style="left: 48px; width: 60px; text-align: left">{{
+                t('view.handheldRadio')
+              }}</div>
+              <div class="count" style="left: 50px; color: #3ec2e9; text-align: left">{{
+                deviceCount.handCount
+              }}</div></div
+            >
+          </div>
+        </div>
+      </div>
       <div class="wgdata fontColor">
         <div class="bottombg"></div>
         <div class="title">{{ t('view.requestStatistics') }}</div>
         <div class="data">
           <div>
             <div>
-              <div class="number">{{ deviceCount.optionCount }}</div>
-              <div class="label">{{ t('view.dutyDesk') }}</div>
+              <div class="number">{{ requestData.requestCount }}</div>
+              <div class="label">{{ t('view.request') }}</div>
             </div>
           </div>
           <div>
             <div>
-              <div class="number">{{ deviceCount.cirCount }}</div>
-              <div class="label">{{ t('view._cabRadio') }}</div>
+              <div class="number">{{ requestData.onlineCount }}</div>
+              <div class="label">{{ t('view.onlineUser') }}</div>
             </div>
           </div>
           <div>
             <div>
-              <div class="number">{{ deviceCount.handCount }}</div>
-              <div class="label">{{ t('view.handheldRadio') }}</div>
+              <div class="number">{{ requestData.userCount }}</div>
+              <div class="label">{{ t('view.totalUsersCount') }}</div>
             </div>
           </div>
         </div>
@@ -80,7 +128,7 @@
         <div class="title">{{ t('view.handheldTerminalLocation') }}</div>
         <div class="data" ref="chartHandRef"> </div>
       </div>
-      <!-- <div class="alarm fontColor">
+      <div class="alarm fontColor">
         <div class="bottombg"></div>
         <div class="title">{{ t('view.serviceStatus') }}</div>
         <div class="data">
@@ -99,8 +147,7 @@
             </template>
           </VirtualScroll>
         </div>
-      </div> -->
-      <alarmData />
+      </div>
     </div>
   </MyContent>
 </template>
@@ -119,8 +166,7 @@
   import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
   import { message } from 'ant-design-vue';
   import largeScreenApi from '@/api/largeScreen';
-  // import VirtualScroll from '@/components/MyScroll/index.vue';
-  import alarmData from './alarmData.vue';
+  import VirtualScroll from '@/components/MyScroll/index.vue';
 
   const { t } = useI18n();
   defineOptions({ name: 'LargeScreen' });
@@ -148,7 +194,6 @@
   let isFirstCirE = true;
 
   interface ScrollItem {
-    id: string;
     name: string;
     color: string;
     alarmType: string;
@@ -1474,7 +1519,6 @@
       .GetServiceInfo()
       .then((data) => {
         const datas = data.map((m) => ({
-          id: m.id,
           name: m.name,
           color: m.color,
           alarmType: m.alarmType,
@@ -1501,8 +1545,9 @@
   }
 
   onMounted(() => {
-    // getServiceInfo();
-    // getSysRequest();
+    getServiceInfo();
+
+    getSysRequest();
     getDeviceCount();
     getDeviceLocationCount();
     getMapLocation();
