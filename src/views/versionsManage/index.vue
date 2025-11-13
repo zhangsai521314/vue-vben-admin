@@ -87,13 +87,9 @@
               row.isForce ? t('view.yes') : t('view.no')
             }}</span>
             <AuthDom auth="versionsManage_table_force">
-              <a-button
-                :title="t('view.setAsRunningVersion')"
-                type="primary"
-                size="small"
-                @click="upgradeChange(row)"
-                >{{ t('view.forcedUpgrade') }}</a-button
-              >
+              <a-button type="primary" size="small" @click="upgradeChange(row)">{{
+                t('view.forcedUpgrade')
+              }}</a-button>
             </AuthDom>
           </a-space>
         </template>
