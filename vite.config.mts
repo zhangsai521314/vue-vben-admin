@@ -27,7 +27,7 @@ export default defineApplicationConfig({
           // secure: false
         },
         '/uploads': {
-          target: 'http://127.0.0.1:8088/uploads',
+          target: 'http://192.168.12.239:8088/uploads',
           changeOrigin: true,
           ws: true,
           rewrite: (path) => path.replace(new RegExp(`^/uploads`), ''),

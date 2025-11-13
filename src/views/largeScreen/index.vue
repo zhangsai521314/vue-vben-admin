@@ -132,20 +132,20 @@
         <div class="bottombg"></div>
         <div class="title">{{ t('view.serviceStatus') }}</div>
         <div class="data">
-          <SeamlessScrollList
-            ref="scrollList"
-            :list="pendingAlarmData"
-            container-height="300px"
-            :speed="50"
-            :pause-on-hover="true"
+          <VirtualScroll
+            :data="alarmList"
+            :speed="40"
+            :container-height="200"
+            :item-height="30"
+            :hover-pause="true"
           >
             <template #default="{ item, index }">
               <div class="alarmWai_content" :style="{ color: item.color }" @click="goIndex(item)">
                 <div class="alarm_title">{{ item.name }}</div>
-                <div class="alarm_time">{{ t('view.' + item.alarmType) }}</div>
+                <div class="alarm_time">{{ item.alarmType }}</div>
               </div>
             </template>
-          </SeamlessScrollList>
+          </VirtualScroll>
         </div>
       </div>
     </div>
@@ -166,7 +166,7 @@
   import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
   import { message } from 'ant-design-vue';
   import largeScreenApi from '@/api/largeScreen';
-  import SeamlessScrollList from '@/components/MyScroll/index.vue';
+  import VirtualScroll from '@/components/MyScroll/index.vue';
 
   const { t } = useI18n();
   defineOptions({ name: 'LargeScreen' });
@@ -193,7 +193,12 @@
   let isFirstHandE = true;
   let isFirstCirE = true;
 
-  const pendingAlarmData = ref([]);
+  interface ScrollItem {
+    name: string;
+    color: string;
+    alarmType: string;
+  }
+  const alarmList = ref<ScrollItem[]>([]);
 
   // 初始地图状态
   const initialMapState = {
@@ -1019,7 +1024,7 @@
       attributionControl: false,
       zoomControl: false,
       minZoom: 4,
-      maxZoom: 20,
+      maxZoom: 30,
       zoomSnap: 0.5,
       dragging: true,
       tap: false,
@@ -1513,15 +1518,25 @@
     largeScreenApi
       .GetServiceInfo()
       .then((data) => {
-        pendingAlarmData.value = data;
-        setTimeout(() => {
-          getServiceInfo();
-        }, 5 * 1000);
+        const datas = data.map((m) => ({
+          name: m.name,
+          color: m.color,
+          alarmType: m.alarmType,
+        }));
+        alarmList.value = [...datas];
+        nextTick(() => {
+          setTimeout(() => {
+            getCirHandLocation();
+          }, 12 * 1000);
+        });
       })
-      .catch(() => {
-        setTimeout(() => {
-          getServiceInfo();
-        }, 5 * 1000);
+      .catch((ex) => {
+        console.error('getServiceInfo失败:', ex);
+        nextTick(() => {
+          setTimeout(() => {
+            getCirHandLocation();
+          }, 12 * 1000);
+        });
       });
   }
 
@@ -1532,10 +1547,10 @@
   onMounted(() => {
     getServiceInfo();
 
-    // getSysRequest();
-    // getDeviceCount();
-    // getDeviceLocationCount();
-    // getMapLocation();
+    getSysRequest();
+    getDeviceCount();
+    getDeviceLocationCount();
+    getMapLocation();
   });
 
   onUnmounted(() => {

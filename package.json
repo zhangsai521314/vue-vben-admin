@@ -138,7 +138,7 @@
     "vue3-seamless-scroll": "^3.0.2",
     "vuedraggable": "^4.1.0",
     "vxe-pc-ui": "^4.6.11",
-    "vxe-table": "^4.13.30",
+    "vxe-table": "^4.17.14",
     "vxe-table-plugin-export-xlsx": "^4.0.7",
     "wavesurfer.js": "^7.7.11",
     "xe-utils": "^3.5.20",

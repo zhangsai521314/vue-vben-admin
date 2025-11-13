@@ -1,33 +1,31 @@
-<!-- SeamlessScrollList.vue -->
 <template>
   <div
     class="seamless-scroll-container"
-    :style="{ height: containerHeight }"
+    :style="{ height: containerHeight + 'px' }"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
-    ref="container"
   >
-    <div class="scroll-wrapper">
+    <!-- 滚动包装器 -->
+    <div class="scroll-wrapper" :style="{ height: wrapperHeight + 'px' }">
+      <!-- 滚动内容 -->
       <div
+        ref="scrollContentRef"
         class="scroll-content"
-        :class="{ paused: isPaused || (pauseOnHover && isHovering) }"
-        :style="scrollContentStyle"
-        ref="scrollContent"
+        :style="{
+          transform: `translateY(${-scrollOffset}px)`,
+        }"
       >
-        <!-- 使用两个相同的列表实现无缝循环 -->
-        <div class="scroll-section" v-for="section in 2" :key="section">
-          <div
-            v-for="(item, index) in props.list"
-            :key="getItemKey(item, index, section)"
-            class="scroll-item"
-          >
-            <slot :item="item" :index="index">
-              <!-- 默认插槽内容 -->
-              <div class="default-item">
-                {{ item }}
-              </div>
-            </slot>
-          </div>
+        <!-- 虚拟渲染的可见项 -->
+        <div
+          v-for="item in visibleItems"
+          :key="item.uniqueKey"
+          class="scroll-item"
+          :style="{
+            height: itemHeight + 'px',
+            top: item.actualTop + 'px',
+          }"
+        >
+          <slot :item="item.data" :index="item.originalIndex"></slot>
         </div>
       </div>
     </div>
@@ -35,359 +33,224 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, onMounted, onUnmounted, watch, nextTick, CSSProperties } from 'vue';
+  import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue';
 
-  // 定义组件属性
   interface Props {
     // 数据列表
-    list: any[];
+    data: any[];
+    // 每项高度
+    itemHeight?: number;
     // 容器高度
-    containerHeight?: string;
+    containerHeight?: number;
     // 滚动速度（像素/秒）
     speed?: number;
-    // 是否自动开始
-    autoStart?: boolean;
-    // 是否暂停
-    paused?: boolean;
-    // 鼠标悬停时是否暂停
-    pauseOnHover?: boolean;
-    // 数据项的唯一键字段名
-    itemKey?: string;
+    // 是否鼠标悬停暂停
+    hoverPause?: boolean;
+    // 缓冲项数量
+    bufferSize?: number;
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    containerHeight: '300px',
-    speed: 30, // 默认30像素/秒
-    autoStart: true,
-    paused: false,
-    pauseOnHover: true,
-    itemKey: 'id',
+    itemHeight: 60,
+    containerHeight: 400,
+    speed: 30,
+    hoverPause: true,
+    bufferSize: 3,
   });
 
-  // 定义事件
   const emit = defineEmits<{
     itemClick: [item: any, index: number];
   }>();
 
   // 响应式数据
-  const container = ref<HTMLElement | null>(null);
-  const scrollContent = ref<HTMLElement | null>(null);
-  const isPaused = ref(!props.autoStart || props.paused);
+  const scrollContentRef = ref<HTMLDivElement>();
+  const scrollOffset = ref(0);
   const isHovering = ref(false);
-  const currentOffset = ref(0);
-  const contentHeight = ref(0);
-  const containerHeightPx = ref(0);
+  const animationFrameId = ref<number>();
+  const lastTimestamp = ref<number>(0);
+  const itemCounter = ref(0);
 
-  // 内存管理相关变量
-  const isMounted = ref(false);
-  let memoryLeakCheck = 0;
-  const MAX_MEMORY_CHECKS = 1000;
-  let resizeObserver: ResizeObserver | null = null;
-
-  // 计算属性
-  const scrollContentStyle = computed<CSSProperties>(() => {
-    return {
-      transform: `translateY(${currentOffset.value}px)`,
-      transition: 'none', // 禁用过渡，防止抖动
-    };
+  // 计算包装器高度（足够大以支持无缝滚动）
+  const wrapperHeight = computed(() => {
+    return props.data.length * props.itemHeight * 3; // 三倍高度确保无缝
   });
 
-  // 方法
-  const getItemKey = (item: any, index: number, section: number): string => {
-    if (props.itemKey && item[props.itemKey]) {
-      return `${item[props.itemKey]}-section-${section}`;
-    }
-    return `item-${index}-section-${section}`;
-  };
+  // 计算可见项目数量
+  const visibleItemCount = computed(() => {
+    return Math.ceil(props.containerHeight / props.itemHeight) + props.bufferSize * 2;
+  });
 
+  // 获取循环数据 - 关键：生成足够的数据来填充滚动空间
+  const cyclingData = computed(() => {
+    if (props.data.length === 0) return [];
+
+    const result = [];
+    const neededItems = Math.ceil(wrapperHeight.value / props.itemHeight) + visibleItemCount.value;
+
+    for (let i = 0; i < neededItems; i++) {
+      const originalIndex = i % props.data.length;
+      result.push({
+        data: props.data[originalIndex],
+        originalIndex,
+        uniqueKey: `${originalIndex}-${i}`,
+        position: i * props.itemHeight,
+      });
+    }
+
+    return result;
+  });
+
+  // 计算可见项 - 修复循环逻辑
+  const visibleItems = computed(() => {
+    if (cyclingData.value.length === 0) return [];
+
+    const startIndex = Math.floor(scrollOffset.value / props.itemHeight);
+    const endIndex = Math.min(cyclingData.value.length, startIndex + visibleItemCount.value);
+
+    return cyclingData.value.slice(startIndex, endIndex).map((item) => ({
+      ...item,
+      actualTop: item.position,
+    }));
+  });
+
+  // 处理鼠标进入
   const handleMouseEnter = () => {
-    isHovering.value = true;
+    if (props.hoverPause) {
+      isHovering.value = true;
+    }
   };
 
+  // 处理鼠标离开
   const handleMouseLeave = () => {
-    isHovering.value = false;
+    if (props.hoverPause) {
+      isHovering.value = false;
+    }
   };
 
-  // 计算尺寸
-  const calculateSizes = () => {
-    if (!isMounted.value || !container.value || !scrollContent.value) return;
+  // 滚动动画 - 实现真正的无缝循环
+  const scrollAnimation = (timestamp: number) => {
+    if (!lastTimestamp.value) {
+      lastTimestamp.value = timestamp;
+    }
 
-    try {
-      // 获取容器高度
-      containerHeightPx.value = container.value.clientHeight;
+    const deltaTime = timestamp - lastTimestamp.value;
+    lastTimestamp.value = timestamp;
 
-      // 计算内容高度（一个section的高度）
-      const sections = scrollContent.value.querySelectorAll('.scroll-section');
-      if (sections.length > 0) {
-        const firstSection = sections[0] as HTMLElement;
-        contentHeight.value = firstSection.offsetHeight || 0;
+    if (!isHovering.value && props.data.length > 0) {
+      // 计算滚动距离
+      const deltaScroll = (props.speed * deltaTime) / 1000;
+      let newOffset = scrollOffset.value + deltaScroll;
+
+      // 实现真正的无缝循环
+      // 当滚动超过一个循环时，回到开始位置继续滚动
+      const cycleHeight = props.data.length * props.itemHeight;
+      if (newOffset >= cycleHeight) {
+        newOffset = newOffset % cycleHeight;
       }
-    } catch (error) {
-      console.warn('计算尺寸时发生错误:', error);
-    }
-  };
 
-  // 优化的防抖函数
-  const debounce = <T extends (...args: any[]) => any>(
-    func: T,
-    delay: number,
-  ): ((...args: Parameters<T>) => void) => {
-    let timeoutId: ReturnType<typeof setTimeout>;
-    return (...args: Parameters<T>) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func.apply(this, args), delay);
-    };
-  };
-
-  // 防抖的计算尺寸函数
-  const debouncedCalculateSizes = debounce(calculateSizes, 100);
-
-  // 滚动控制
-  let animationFrameId: number | null = null;
-  let lastTimestamp: number | null = null;
-
-  const animateScroll = (timestamp: number) => {
-    if (!isMounted.value) {
-      return;
+      scrollOffset.value = newOffset;
     }
 
-    if (!lastTimestamp) lastTimestamp = timestamp;
-
-    const elapsed = timestamp - lastTimestamp;
-    lastTimestamp = timestamp;
-
-    // 内存保护：定期重置计数器
-    memoryLeakCheck++;
-    if (memoryLeakCheck > MAX_MEMORY_CHECKS) {
-      memoryLeakCheck = 0;
-      // 强制重置滚动位置，防止长时间运行导致的精度问题
-      if (Math.abs(currentOffset.value) >= contentHeight.value) {
-        currentOffset.value = 0;
-      }
-    }
-
-    if (!isPaused.value && !(props.pauseOnHover && isHovering.value) && contentHeight.value > 0) {
-      // 计算滚动速度（像素/毫秒）- 固定速度
-      const scrollSpeed = props.speed / 1000; // 转换为像素/毫秒
-
-      // 更新偏移量
-      currentOffset.value -= scrollSpeed * elapsed;
-
-      // 当滚动超过一个section高度时，重置位置
-      if (Math.abs(currentOffset.value) >= contentHeight.value) {
-        currentOffset.value = 0;
-      }
-    }
-
-    if (isMounted.value) {
-      animationFrameId = requestAnimationFrame(animateScroll);
-    }
+    animationFrameId.value = requestAnimationFrame(scrollAnimation);
   };
 
-  // 控制方法
-  const play = () => {
-    isPaused.value = false;
+  // 开始滚动
+  const startScrolling = () => {
+    if (animationFrameId.value) {
+      cancelAnimationFrame(animationFrameId.value);
+    }
+    lastTimestamp.value = 0;
+    animationFrameId.value = requestAnimationFrame(scrollAnimation);
   };
 
-  const pause = () => {
-    isPaused.value = true;
-  };
-
-  const toggle = () => {
-    isPaused.value = !isPaused.value;
+  // 停止滚动
+  const stopScrolling = () => {
+    if (animationFrameId.value) {
+      cancelAnimationFrame(animationFrameId.value);
+      animationFrameId.value = undefined;
+    }
   };
 
   // 重置滚动位置
   const resetScroll = () => {
-    currentOffset.value = 0;
+    scrollOffset.value = 0;
   };
 
-  // 强制清理方法 - 用于内存管理
-  const forceCleanup = () => {
-    currentOffset.value = 0;
-    memoryLeakCheck = 0;
-
-    // 取消当前动画帧
-    if (animationFrameId) {
-      cancelAnimationFrame(animationFrameId);
-      animationFrameId = null;
-    }
-
-    // 重新启动动画
-    if (isMounted.value && !isPaused.value) {
-      lastTimestamp = null;
-      animationFrameId = requestAnimationFrame(animateScroll);
-    }
-  };
-
-  // 暴露方法给父组件
-  defineExpose({
-    play,
-    pause,
-    toggle,
-    resetScroll,
-    forceCleanup, // 新增内存清理方法
-  });
-
-  // 监听属性变化
+  // 监听数据变化
   watch(
-    () => props.paused,
-    (newVal) => {
-      isPaused.value = newVal;
-    },
-  );
-
-  // 优化列表监听 - 使用浅监听和性能优化
-  watch(
-    () => props.list,
-    async (newList, oldList) => {
-      if (!isMounted.value) return;
-
-      // 只有当列表实际发生变化时才重新计算
-      const isSameLength = newList.length === oldList.length;
-      const isSameContent =
-        isSameLength &&
-        newList.every((item, index) => {
-          const oldItem = oldList[index];
-          return oldItem && item[props.itemKey || 'id'] === oldItem[props.itemKey || 'id'];
-        });
-
-      if (!isSameLength || !isSameContent) {
-        await nextTick();
-        if (isMounted.value) {
-          calculateSizes();
-        }
+    () => props.data,
+    (newData, oldData) => {
+      if (newData.length === 0) {
+        resetScroll();
+        return;
       }
-    },
-    { deep: false }, // 改为浅监听，提高性能
-  );
 
-  // 监听容器高度变化
-  watch(
-    () => props.containerHeight,
-    () => {
-      if (!isMounted.value) return;
-
+      // 数据更新时保持滚动连续性
       nextTick(() => {
-        if (isMounted.value) {
-          debouncedCalculateSizes();
+        // 如果数据长度变化，调整滚动位置以保持连续性
+        if (oldData.length > 0 && newData.length !== oldData.length) {
+          const progress = scrollOffset.value / (oldData.length * props.itemHeight);
+          scrollOffset.value = progress * (newData.length * props.itemHeight);
         }
+        startScrolling();
       });
     },
+    { deep: true },
   );
 
-  // 监听速度变化
+  // 监听其他属性变化
   watch(
-    () => props.speed,
+    () => [props.containerHeight, props.speed],
     () => {
-      // 速度变化时不需要特殊处理，因为速度是实时计算的
+      startScrolling();
     },
   );
-
-  // 初始化 ResizeObserver 监听容器尺寸变化
-  const initResizeObserver = () => {
-    if (!container.value) return;
-
-    try {
-      resizeObserver = new ResizeObserver((entries) => {
-        for (const entry of entries) {
-          if (entry.target === container.value) {
-            debouncedCalculateSizes();
-          }
-        }
-      });
-
-      resizeObserver.observe(container.value);
-    } catch (error) {
-      console.warn('ResizeObserver 初始化失败，回退到窗口 resize 监听:', error);
-      // 回退到窗口 resize 监听
-      window.addEventListener('resize', debouncedCalculateSizes);
-    }
-  };
 
   // 生命周期
   onMounted(() => {
-    isMounted.value = true;
-
-    // 初始计算尺寸
-    nextTick(() => {
-      calculateSizes();
-    });
-
-    // 初始化尺寸变化监听
-    initResizeObserver();
-
-    // 开始动画
-    if (props.autoStart && !props.paused) {
-      isPaused.value = false;
-    }
-
-    // 启动动画循环
-    animationFrameId = requestAnimationFrame(animateScroll);
+    startScrolling();
   });
 
-  // 完整的清理函数
-  const completeCleanup = () => {
-    isMounted.value = false;
-
-    // 清理动画帧
-    if (animationFrameId) {
-      cancelAnimationFrame(animationFrameId);
-      animationFrameId = null;
-    }
-
-    // 清理 ResizeObserver
-    if (resizeObserver) {
-      resizeObserver.disconnect();
-      resizeObserver = null;
-    }
-
-    // 移除事件监听器
-    window.removeEventListener('resize', debouncedCalculateSizes);
-
-    // 清理响应式引用
-    container.value = null;
-    scrollContent.value = null;
-
-    // 重置状态
-    currentOffset.value = 0;
-    memoryLeakCheck = 0;
-    lastTimestamp = null;
-  };
-
   onUnmounted(() => {
-    completeCleanup();
+    stopScrolling();
+  });
+
+  // 暴露给父组件的方法
+  defineExpose({
+    resetScroll,
+    startScrolling,
+    stopScrolling,
+    getScrollOffset: () => scrollOffset.value,
   });
 </script>
 
 <style scoped>
   .seamless-scroll-container {
     position: relative;
+    box-sizing: border-box;
+    width: 100%;
     overflow: hidden;
   }
 
   .scroll-wrapper {
     position: relative;
-    height: 100%;
+    box-sizing: border-box;
+    width: 100%;
     overflow: hidden;
   }
 
   .scroll-content {
-    position: absolute;
+    position: relative;
+    box-sizing: border-box;
     width: 100%;
-    will-change: transform; /* 优化性能 */
-  }
-
-  .scroll-section {
-    width: 100%;
+    will-change: transform;
   }
 
   .scroll-item {
+    position: absolute;
+    left: 0;
+    box-sizing: border-box;
     width: 100%;
-  }
-
-  .default-item {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
+    overflow: hidden;
   }
 </style>

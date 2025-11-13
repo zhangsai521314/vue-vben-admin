@@ -70,6 +70,11 @@ export function registerGlobComp(app: App) {
       stripe: false,
       border: true,
       round: false,
+      //竖向虚拟滚动
+      virtualYConfig: {
+        enabled: true,
+        gt: 0,
+      },
       emptyText: t('view.noDataAvailable'),
       columnConfig: {
         resizable: true,
