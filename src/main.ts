@@ -98,7 +98,7 @@ watch(
     if (
       userStore.userInfo &&
       !isDataInit &&
-      window.location.hash.toLowerCase().indexOf('/largescreen/index') == -1
+      window.location.hash.toLowerCase().indexOf('/largescreen') == -1
     ) {
       //初始化数据仓库
       dataInit();
@@ -117,7 +117,7 @@ function interval() {
   // }, 3000);
 
   //有未确认未恢复未读的告警则一直播放告警声音
-  if (window.location.hash.toLowerCase().indexOf('/largescreen/index') == -1) {
+  if (window.location.hash.toLowerCase().indexOf('/largescreen') == -1) {
     setInterval(() => {
       if (!mqttStore.msgIsMute && userStore.userInfo) {
         const alarmDataCount = mqttStore.msgData.filter(

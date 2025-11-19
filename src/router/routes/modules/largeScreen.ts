@@ -1,17 +1,34 @@
 import type { AppRouteModule } from '@/router/types';
-
 import { LAYOUT } from '@/router/constant';
-import { t } from '@/hooks/web/useI18n';
-
-const IFrame = () => import('/@/views/largeScreen/index.vue');
 
 const largeScreen: AppRouteModule = {
-  path: '/largeScreen/index',
-  name: 'LargeScreen',
-  component: IFrame,
+  path: '/largeScreen',
+  name: 'largeScreen',
   meta: {
-    title: '',
+    // 隐藏所有子菜单
+    hideChildrenInMenu: true,
+    // 菜单排序，只对第一级有效
+    orderNo: 1,
+    icon: 'ion:grid-outline',
   },
+  children: [
+    {
+      path: 'index',
+      name: 'LargeScreen',
+      component: () => import('/@/views/largeScreen/index.vue'),
+      meta: {
+        hideMenu: true,
+      },
+    },
+    {
+      path: 'noAlarm',
+      name: 'LargeScreenNoAlarm',
+      component: () => import('/@/views/largeScreen/indexNoAlarm.vue'),
+      meta: {
+        hideMenu: true,
+      },
+    },
+  ],
 };
 
 export default largeScreen;

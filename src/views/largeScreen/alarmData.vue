@@ -10,7 +10,7 @@
         :item-height="30"
         :hover-pause="true"
       >
-        <template #default="{ item, index }">
+        <template #default="{ item }">
           <div class="alarmWai_content" :style="{ color: item.color }" @click="goIndex(item)">
             <div class="alarm_title">{{ item.name }}</div>
             <div class="alarm_time">{{ item.alarmType }}</div>

@@ -3,7 +3,7 @@ import Antd, { message } from 'ant-design-vue';
 import 'jquery-ui-dist/jquery-ui';
 //插件获取隐藏元素的高和宽
 import 'jquery.actual';
-import MyContent from './MyComponent/index.vue';
+import MyContent from './MyContent/index.vue';
 import AuthDom from './MyAuthDom/index.vue';
 import myCommon from '@/utils/MyCommon/common';
 import VXETable from 'vxe-table';
@@ -19,6 +19,7 @@ import { useLocaleStore } from '@/store/modules/locale';
 import type { LocaleType } from '#/config';
 import VxeUIPluginExportXLSX from '@vxe-ui/plugin-export-xlsx';
 import ExcelJS from 'exceljs';
+// import { memoryManagerPlugin } from '@/utils/memoryManager/memoryManager';
 // import 'dayjs/locale/zh-cn';
 // import 'dayjs/locale/en-Us';
 // import 'dayjs/locale/fr-Fr';
@@ -368,6 +369,14 @@ export function registerGlobComp(app: App) {
 
   //全局注册组件
   app.use(Antd).use(VxeUI).use(VXETable);
+  // .use(memoryManagerPlugin, {
+  //   leakThreshold: 700,
+  //   checkInterval: 60000,
+  //   autoCleanupThreshold: 1000,
+  //   maxCleanupAttempts: 2,
+  //   autoStartMonitoring: true,
+  //   cleanupResetWindow: 900000, // 15分钟
+  // });
   //注册自己写的组件，避免在页面重复import
   app
     .component(

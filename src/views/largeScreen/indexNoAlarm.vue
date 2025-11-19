@@ -42,14 +42,6 @@
               />
               {{ t('view.resetMap') }}
             </div>
-            <!-- 新增：手动重置按钮 -->
-            <div class="toggle-btn" @click="manualReset" title="手动重置页面释放内存">
-              <IconFontClass
-                name="icon-baseui-zhizao"
-                :style="{ fontSize: '20px', marginRight: '5px' }"
-              />
-              手动重置
-            </div>
           </div>
         </div>
       </div>
@@ -88,7 +80,7 @@
         <div class="title">{{ t('view.handheldTerminalLocation') }}</div>
         <div class="data" ref="chartHandRef"> </div>
       </div>
-      <div class="alarm fontColor">
+      <!-- <div class="alarm fontColor">
         <div class="bottombg"></div>
         <div class="title">{{ t('view.serviceStatus') }}</div>
         <div class="data">
@@ -99,7 +91,7 @@
             :item-height="30"
             :hover-pause="true"
           >
-            <template #default="{ item }">
+            <template #default="{ item, index }">
               <div class="alarmWai_content" :style="{ color: item.color }" @click="goIndex(item)">
                 <div class="alarm_title">{{ item.name }}</div>
                 <div class="alarm_time">{{ item.alarmType }}</div>
@@ -107,7 +99,8 @@
             </template>
           </VirtualScroll>
         </div>
-      </div>
+      </div> -->
+      <!-- <alarmData /> -->
     </div>
   </MyContent>
 </template>
@@ -126,15 +119,50 @@
   import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
   import { message } from 'ant-design-vue';
   import largeScreenApi from '@/api/largeScreen';
-  import VirtualScroll from '@/components/MyScroll/index.vue';
-  // 类型定义
+  // import VirtualScroll from '@/components/MyScroll/index.vue';
+  // import alarmData from './alarmData.vue';
+
+  const { t } = useI18n();
+  defineOptions({ name: 'LargeScreen' });
+  const { prefixCls } = useDesign('largeScreen-');
+  const chartJiCirRef = ref(null);
+  const chartJiCir = useECharts(chartJiCirRef);
+  const chartHandRef = ref(null);
+  const chartHand = useECharts(chartHandRef);
+
+  // 新增：显示/隐藏控制状态
+  const showTrains = ref(true);
+  const showPersons = ref(true);
+
+  const requestData = ref({
+    userCount: 0,
+    requestCount: 0,
+    onlineCount: 0,
+  });
+  const deviceCount = ref({
+    cirCount: 0,
+    handCount: 0,
+    optionCount: 0,
+  });
+  let isFirstHandE = true;
+  let isFirstCirE = true;
+
   interface ScrollItem {
     id: string;
     name: string;
     color: string;
     alarmType: string;
   }
+  const alarmList = ref<ScrollItem[]>([]);
 
+  // 初始地图状态
+  const initialMapState = {
+    center: [9.2271, -10.9921],
+    zoom: 8,
+    bearing: -10,
+  };
+
+  // 定义接口
   interface Line {
     id: string;
     name: string;
@@ -148,8 +176,8 @@
     name: string;
     coordinate: [number, number];
     photo: string;
-    circleMarker?: L.CircleMarker;
-    nameMarker?: L.Marker;
+    circleMarker?: any;
+    nameMarker?: any;
   }
 
   interface Train {
@@ -159,8 +187,8 @@
     area: string;
     isOnline: boolean;
     coordinate: [number, number];
-    marker?: L.Marker;
-    isdnMarker?: L.Marker;
+    marker?: any;
+    isdnMarker?: any;
     lineId?: string;
     moving?: boolean;
     lastValidCoordinate?: [number, number];
@@ -176,412 +204,91 @@
     area: string;
     isOnline: boolean;
     coordinate: [number, number];
-    marker?: L.Marker;
-    isdnMarker?: L.Marker;
+    marker?: any;
+    isdnMarker?: any;
     moving?: boolean;
     lastValidCoordinate?: [number, number];
     hasValidCoordinate?: boolean;
   }
 
-  interface MemoryStats {
-    used: number;
-    total: number;
-    limit: number;
-  }
-
-  interface ResetStats {
-    beforeReset: MemoryStats | null;
-    afterReset: MemoryStats | null;
-    reduction: number | null;
-    resetCount: number;
-    lastResetTime: string | null;
-  }
-
-  // 组件定义
-  defineOptions({ name: 'LargeScreen' });
-  const { prefixCls } = useDesign('largeScreen-');
-  const { t } = useI18n();
-
-  // Refs
-  const chartJiCirRef = ref<HTMLDivElement | null>(null);
-  const chartHandRef = ref<HTMLDivElement | null>(null);
-  const mapContainer = ref<HTMLDivElement | null>(null);
-  const searchQuery = ref<string>('');
-
-  const chartJiCir = useECharts(chartJiCirRef);
-  const chartHand = useECharts(chartHandRef);
-
-  const legendDatas = [t('view.leftSide'), t('view.inStation'), t('view.rightSide')];
-  const showTrains = ref<boolean>(true);
-  const showPersons = ref<boolean>(true);
-  const resetInProgress = ref<boolean>(false);
-
-  // 数据状态
-  const requestData = ref({
-    userCount: 0,
-    requestCount: 0,
-    onlineCount: 0,
-  });
-
-  const deviceCount = ref({
-    cirCount: 0,
-    handCount: 0,
-    optionCount: 0,
-  });
-
-  const alarmList = ref<ScrollItem[]>([]);
+  // 数据
   const lines = ref<Line[]>([]);
   const trains = ref<Train[]>([]);
   const persons = ref<Person[]>([]);
 
-  // 内存监控状态
-  const memoryStats = ref<ResetStats>({
-    beforeReset: null,
-    afterReset: null,
-    reduction: null,
-    resetCount: 0,
-    lastResetTime: null,
-  });
+  // 组件变量
+  const mapContainer = ref(null);
+  const searchQuery = ref('');
+  let map = null;
+  let currentPopup = null;
+  let isRotating = false;
+  let lastMouseX = 0;
 
-  // 配置常量
-  const RESET_INTERVAL = 60 * 60 * 1000; //10分钟重置一次
+  // 使用简单的 LayerGroup 替代聚合图层
+  let trainLayerGroup = null;
+  let personClusterGroup = null; // 改为使用 MarkerClusterGroup
+
+  // 标记存储 - 简化的管理方式
+  let stationNameMarkers = {};
+  const trainMarkers = new Map();
+  const personMarkers = new Map();
+
+  // 性能优化变量
+  let updateInterval = null;
+  let lastTrainUpdateTime = 0;
+  let lastPersonUpdateTime = 0;
   const UPDATE_INTERVAL = 5000;
   const DEBOUNCE_DELAY = 300;
 
-  const initialMapState = {
-    center: [9.2271, -10.9921] as [number, number],
-    zoom: 8,
-    bearing: -10,
-  };
-
-  // 地图相关变量
-  let map: L.Map | null = null;
-  let currentPopup: L.Popup | null = null;
-  let trainLayerGroup: L.LayerGroup | null = null;
-  let personClusterGroup: L.MarkerClusterGroup | null = null;
-
-  // 标记存储
-  const stationNameMarkers: Record<string, L.Marker> = {};
-  const trainMarkers = new Map<string, L.Marker>();
-  const personMarkers = new Map<string, L.Marker>();
-
-  // 状态变量
-  let isRotating = false;
-  let lastMouseX = 0;
+  // 地图初始化状态
   let isMapInitialized = false;
-  let isFirstHandE = true;
-  let isFirstCirE = true;
-
-  // 更新控制
-  let updateInterval: NodeJS.Timeout | null = null;
-  let resetTimer: NodeJS.Timeout | null = null;
-  let lastTrainUpdateTime = 0;
-  let lastPersonUpdateTime = 0;
-
-  // 数据队列
   let pendingPersonData: Person[] = [];
   let pendingTrainData: Train[] = [];
+
+  // 执行队列控制
   let isUpdatingTrains = false;
   let isUpdatingPersons = false;
   let personUpdateQueue: Person[] = [];
   let trainUpdateQueue: Train[] = [];
 
-  // 内存监控函数
-  const getMemoryUsage = (): MemoryStats | null => {
-    try {
-      if (window.performance && (performance as any).memory) {
-        const memory = (performance as any).memory;
-        return {
-          used: Math.round((memory.usedJSHeapSize / 1048576) * 100) / 100,
-          total: Math.round((memory.totalJSHeapSize / 1048576) * 100) / 100,
-          limit: Math.round((memory.jsHeapSizeLimit / 1048576) * 100) / 100,
-        };
-      }
-      return null;
-    } catch (error) {
-      console.error('获取内存使用情况失败:', error);
-      return null;
-    }
-  };
-
-  const logMemoryStats = (phase: string): MemoryStats | null => {
-    try {
-      const memory = getMemoryUsage();
-      if (memory) {
-        console.group(`🚀 内存使用情况 - ${phase}`);
-        console.log(`📊 已使用内存: ${memory.used} MB`);
-        console.log(`💾 总内存: ${memory.total} MB`);
-        console.log(`⚡ 内存限制: ${memory.limit} MB`);
-        console.log(`📈 使用率: ${Math.round((memory.used / memory.limit) * 100)}%`);
-
-        console.log(`🗺️  地图对象数量: ${map ? '存在' : '不存在'}`);
-        console.log(`🚂 火车标记数量: ${trainMarkers.size}`);
-        console.log(`👤 人员标记数量: ${personMarkers.size}`);
-        console.log(`🚉 车站标记数量: ${Object.keys(stationNameMarkers).length}`);
-        console.log(`📊 火车数据条数: ${trains.value.length}`);
-        console.log(`👥 人员数据条数: ${persons.value.length}`);
-        console.log(`🛤️  线路数据条数: ${lines.value.length}`);
-        console.groupEnd();
-
-        return memory;
+  // 新增：切换火车显示/隐藏
+  const toggleTrainsVisibility = () => {
+    showTrains.value = !showTrains.value;
+    if (trainLayerGroup) {
+      if (showTrains.value) {
+        map.addLayer(trainLayerGroup);
       } else {
-        console.warn(`⚠️  无法获取内存信息 - ${phase}`);
-        return null;
-      }
-    } catch (error) {
-      console.error(`记录内存统计信息失败 (${phase}):`, error);
-      return null;
-    }
-  };
-
-  // 重置管理函数
-  const startResetTimer = (): void => {
-    try {
-      if (resetTimer) {
-        clearTimeout(resetTimer);
-      }
-      resetTimer = setTimeout(() => {
-        performPageReset();
-      }, RESET_INTERVAL);
-
-      console.log(`⏰ 已启动重置定时器，将在 ${RESET_INTERVAL / 1000 / 60} 分钟后自动重置页面`);
-    } catch (error) {
-      console.error('启动重置定时器失败:', error);
-    }
-  };
-
-  const manualReset = (): void => {
-    if (resetInProgress.value) {
-      return;
-    }
-    performPageReset();
-  };
-
-  const performPageReset = async (): Promise<void> => {
-    if (resetInProgress.value) return;
-    message.loading('资源清理中...', 0);
-    resetInProgress.value = true;
-    memoryStats.value.lastResetTime = new Date().toLocaleString();
-
-    console.group('🔄 开始执行页面重置...');
-
-    try {
-      // 记录重置前的内存状态
-      console.log('📊 重置前内存状态:');
-
-      memoryStats.value.beforeReset = logMemoryStats('重置前');
-
-      // 停止所有数据更新
-      stopAllIntervals();
-
-      // 清理所有资源
-      cleanup();
-
-      // 重置所有数据状态
-      resetDataStates();
-
-      // 重置图表状态
-      resetCharts();
-
-      await nextTick();
-
-      //强制等待5秒
-      await new Promise((resolve) => setTimeout(resolve, 10000));
-
-      // 强制垃圾回收（如果可用）
-      triggerGarbageCollection();
-
-      // 等待垃圾回收
-      await new Promise((resolve) => setTimeout(resolve, 10000));
-
-      // 记录重置后的内存状态
-      console.log('📊 重置后内存状态:');
-      memoryStats.value.afterReset = logMemoryStats('重置后');
-
-      // 计算内存减少量
-      calculateMemoryReduction();
-
-      memoryStats.value.resetCount++;
-
-      // 重新初始化页面
-      console.log('🔄 开始重新初始化页面...');
-      resetInProgress.value = false;
-      await initializePage();
-
-      console.log('✅ 页面重置完成');
-    } catch (error) {
-      resetInProgress.value = false;
-      console.error('❌ 页面重置过程中发生错误:', error);
-    } finally {
-      message.destroy();
-      console.groupEnd();
-      // 重新启动重置计时器
-      startResetTimer();
-    }
-  };
-
-  const stopAllIntervals = (): void => {
-    if (updateInterval) {
-      clearInterval(updateInterval);
-      updateInterval = null;
-      console.log('⏹️  已停止数据更新定时器');
-    }
-  };
-
-  const resetDataStates = (): void => {
-    trains.value = [];
-    persons.value = [];
-    lines.value = [];
-    alarmList.value = [];
-    deviceCount.value = {
-      cirCount: 0,
-      handCount: 0,
-      optionCount: 0,
-    };
-    requestData.value = {
-      userCount: 0,
-      requestCount: 0,
-      onlineCount: 0,
-    };
-    console.log('🗑️  已清空所有数据状态');
-  };
-
-  const resetCharts = (): void => {
-    isFirstHandE = true;
-    isFirstCirE = true;
-
-    try {
-      if (chartJiCir.getInstance()) {
-        chartJiCir.getInstance().clear();
-        console.log('📈 已清空机车图表');
-      }
-      if (chartHand.getInstance()) {
-        chartHand.getInstance().clear();
-        console.log('📊 已清空手持终端图表');
-      }
-    } catch (error) {
-      console.error('重置图表失败:', error);
-    }
-  };
-
-  const triggerGarbageCollection = (): void => {
-    if (window.gc) {
-      try {
-        window.gc();
-        console.log('🧹 已触发垃圾回收');
-      } catch (error) {
-        console.error('触发垃圾回收失败:', error);
-      }
-    }
-  };
-
-  const calculateMemoryReduction = (): void => {
-    if (memoryStats.value.beforeReset && memoryStats.value.afterReset) {
-      const reduction = memoryStats.value.beforeReset.used - memoryStats.value.afterReset.used;
-      memoryStats.value.reduction = Math.round(reduction * 100) / 100;
-      console.log(`🎉 内存释放: ${memoryStats.value.reduction} MB`);
-    }
-  };
-
-  const initializePage = async (): Promise<void> => {
-    try {
-      await nextTick();
-      await Promise.all([
-        getServiceInfo(),
-        getDeviceCount(),
-        getDeviceLocationCount(),
-        getMapLocation(),
-      ]);
-      console.log('✅ 页面重新初始化完成');
-    } catch (error) {
-      console.error('❌ 页面初始化失败:', error);
-      throw error;
-    }
-  };
-
-  // 资源清理函数
-  const cleanup = (): void => {
-    console.log('🧹 开始清理资源...');
-
-    // 停止重置计时器
-    if (resetTimer) {
-      clearTimeout(resetTimer);
-      resetTimer = null;
-      console.log('⏹️  已停止重置定时器');
-    }
-
-    // 清理地图资源
-    cleanupMapResources();
-
-    // 清理标记
-    cleanupMarkers();
-
-    // 重置状态
-    resetInternalStates();
-
-    console.log('✅ 资源清理完成');
-  };
-
-  const cleanupMapResources = (): void => {
-    if (map) {
-      // 移除所有图层
-      if (trainLayerGroup) {
         map.removeLayer(trainLayerGroup);
-        trainLayerGroup = null;
-        console.log('🗑️  已移除火车图层');
       }
-      if (personClusterGroup) {
-        map.removeLayer(personClusterGroup);
-        personClusterGroup = null;
-        console.log('🗑️  已移除人员聚合图层');
-      }
-
-      // 移除地图
-      map.remove();
-      map = null;
-      console.log('🗑️  已移除地图实例');
     }
   };
 
-  const cleanupMarkers = (): void => {
-    const trainMarkerCount = trainMarkers.size;
-    const personMarkerCount = personMarkers.size;
-    const stationMarkerCount = Object.keys(stationNameMarkers).length;
-
-    trainMarkers.clear();
-    personMarkers.clear();
-    Object.keys(stationNameMarkers).forEach((key) => {
-      delete stationNameMarkers[key];
-    });
-
-    console.log(
-      `🗑️  已清理标记: 火车 ${trainMarkerCount}个, 人员 ${personMarkerCount}个, 车站 ${stationMarkerCount}个`,
-    );
+  // 新增：切换人员显示/隐藏
+  const togglePersonsVisibility = () => {
+    showPersons.value = !showPersons.value;
+    if (personClusterGroup) {
+      if (showPersons.value) {
+        map.addLayer(personClusterGroup);
+      } else {
+        map.removeLayer(personClusterGroup);
+      }
+    }
   };
 
-  const resetInternalStates = (): void => {
-    isMapInitialized = false;
-    pendingPersonData = [];
-    pendingTrainData = [];
-    isUpdatingTrains = false;
-    isUpdatingPersons = false;
-    personUpdateQueue = [];
-    trainUpdateQueue = [];
-    currentPopup = null;
-  };
-
-  // 地图相关函数
+  // 检查是否为0点坐标
   const isZeroCoordinate = (coord: [number, number]): boolean => {
     return coord[0] === 0 && coord[1] === 0;
   };
 
+  // 检查是否为有效坐标
   const isValidCoordinate = (coord: [number, number]): boolean => {
     return (
       !isNaN(coord[0]) && !isNaN(coord[1]) && Math.abs(coord[0]) < 90 && Math.abs(coord[1]) < 180
     );
   };
 
-  const createTrainIcon = (isOnline: boolean, isZeroCoord: boolean = false): L.DivIcon => {
+  // 创建火车图标
+  const createTrainIcon = (isOnline: boolean, isZeroCoord: boolean = false) => {
     const className = `custom-train-marker ${isOnline ? 'online' : 'offline'} ${isZeroCoord ? 'zero-coord' : ''}`;
     return L.divIcon({
       html: `<div class="${className}"></div>`,
@@ -591,7 +298,8 @@
     });
   };
 
-  const createPersonIcon = (isOnline: boolean, isZeroCoord: boolean = false): L.DivIcon => {
+  // 创建人员图标
+  const createPersonIcon = (isOnline: boolean, isZeroCoord: boolean = false) => {
     const className = `custom-person-marker ${isOnline ? 'online' : 'offline'} ${isZeroCoord ? 'zero-coord' : ''}`;
     return L.divIcon({
       html: `<div class="${className}"></div>`,
@@ -601,7 +309,8 @@
     });
   };
 
-  const createStationNameLabel = (name: string): L.DivIcon => {
+  // 创建车站名称标签
+  const createStationNameLabel = (name: string) => {
     const nameDom = document.createElement('div');
     nameDom.className = 'station-name-wrapper';
     const nameContent = document.createElement('div');
@@ -618,111 +327,112 @@
     });
   };
 
-  const drawLines = (): void => {
-    try {
-      lines.value.forEach((line) => {
-        if (line.coordinates.length > 0) {
-          L.polyline(line.coordinates, {
-            color: '#ffffff',
-            weight: 8,
-            opacity: 1,
-            lineCap: 'square',
-          }).addTo(map!);
+  // 绘制线路
+  const drawLines = () => {
+    lines.value.forEach((line) => {
+      if (line.coordinates.length > 0) {
+        // 绘制线路底色
+        L.polyline(line.coordinates, {
+          color: '#ffffff',
+          weight: 8,
+          opacity: 1,
+          lineCap: 'square',
+        }).addTo(map);
 
-          L.polyline(line.coordinates, {
-            color: line.color,
-            weight: 8,
+        // 绘制线路主色
+        L.polyline(line.coordinates, {
+          color: line.color,
+          weight: 8,
+          opacity: 1,
+          dashArray: '35, 35',
+          lineCap: 'square',
+        }).addTo(map);
+      }
+    });
+  };
+
+  // 添加车站
+  const addStations = () => {
+    lines.value.forEach((line) => {
+      line.stations.forEach((station) => {
+        if (station.coordinate.length === 2 && isValidCoordinate(station.coordinate)) {
+          // 粉色圆圈标记
+          const circleMarker = L.circleMarker(station.coordinate, {
+            radius: 4,
+            fillColor: '#FC09EF',
+            color: '#FC09EF',
+            weight: 2,
             opacity: 1,
-            dashArray: '35, 35',
-            lineCap: 'square',
-          }).addTo(map!);
+            fillOpacity: 0.8,
+          }).addTo(map);
+
+          // 车站名称标签
+          const nameMarker = L.marker(station.coordinate, {
+            icon: createStationNameLabel(station.name),
+            zIndexOffset: 60,
+            opacity: 0,
+            interactive: true,
+          }).addTo(map);
+
+          station.circleMarker = circleMarker;
+          station.nameMarker = nameMarker;
+          stationNameMarkers[station.id] = nameMarker;
         }
       });
-    } catch (error) {
-      console.error('绘制线路失败:', error);
-    }
+    });
   };
 
-  const addStations = (): void => {
-    try {
-      lines.value.forEach((line) => {
-        line.stations.forEach((station) => {
-          if (station.coordinate.length === 2 && isValidCoordinate(station.coordinate)) {
-            const circleMarker = L.circleMarker(station.coordinate, {
-              radius: 4,
-              fillColor: '#FC09EF',
-              color: '#FC09EF',
-              weight: 2,
-              opacity: 1,
-              fillOpacity: 0.8,
-            }).addTo(map!);
+  // 初始化图层组
+  const initLayerGroups = () => {
+    // 人员聚合图层组
+    personClusterGroup = L.markerClusterGroup({
+      chunkedLoading: true, // 分块加载提高性能
+      chunkInterval: 100, // 每100ms处理一批标记
+      maxClusterRadius: 80, // 聚合半径
+      spiderfyOnMaxZoom: true, // 在最大缩放级别时展开聚合
+      showCoverageOnHover: true, // 悬停时显示覆盖范围
+      zoomToBoundsOnClick: true, // 点击时缩放到边界
+      // 自定义聚合图标样式 - 统一为40px圆形
+      iconCreateFunction: function (cluster) {
+        const count = cluster.getChildCount();
 
-            const nameMarker = L.marker(station.coordinate, {
-              icon: createStationNameLabel(station.name),
-              zIndexOffset: 60,
-              opacity: 0,
-              interactive: true,
-            }).addTo(map!);
-
-            station.circleMarker = circleMarker;
-            station.nameMarker = nameMarker;
-            stationNameMarkers[station.id] = nameMarker;
-          }
+        return L.divIcon({
+          html: `<div class="cluster-marker">${count}</div>`,
+          className: 'marker-cluster-custom',
+          iconSize: L.point(40, 40),
         });
-      });
-    } catch (error) {
-      console.error('添加车站失败:', error);
+      },
+    });
+
+    // 火车图层组
+    trainLayerGroup = L.layerGroup();
+
+    // 根据初始状态决定是否添加到地图
+    // 注意：先添加人员图层，后添加火车图层，确保火车图层在上层显示
+    if (showPersons.value) {
+      map.addLayer(personClusterGroup);
+    }
+    if (showTrains.value) {
+      map.addLayer(trainLayerGroup);
     }
   };
 
-  const initLayerGroups = (): void => {
-    try {
-      personClusterGroup = L.markerClusterGroup({
-        chunkedLoading: true,
-        chunkInterval: 100,
-        maxClusterRadius: 80,
-        spiderfyOnMaxZoom: true,
-        showCoverageOnHover: true,
-        zoomToBoundsOnClick: true,
-        iconCreateFunction: function (cluster) {
-          const count = cluster.getChildCount();
-          return L.divIcon({
-            html: `<div class="cluster-marker">${count}</div>`,
-            className: 'marker-cluster-custom',
-            iconSize: L.point(40, 40),
-          });
-        },
-      });
-
-      trainLayerGroup = L.layerGroup();
-
-      if (showPersons.value) {
-        map!.addLayer(personClusterGroup);
-      }
-      if (showTrains.value) {
-        map!.addLayer(trainLayerGroup);
-      }
-    } catch (error) {
-      console.error('初始化图层组失败:', error);
+  // 添加单个火车到图层组
+  const addTrainToLayerGroup = (train: Train) => {
+    if (trainMarkers.has(train.id)) {
+      return;
     }
-  };
 
-  const addTrainToLayerGroup = (train: Train): void => {
-    try {
-      if (trainMarkers.has(train.id) || !trainLayerGroup) {
-        return;
-      }
+    const isZeroCoord = isZeroCoordinate(train.coordinate);
+    const marker = L.marker(train.coordinate, {
+      icon: createTrainIcon(train.isOnline, isZeroCoord),
+      zIndexOffset: 60, // 提高z-index确保在人员图层之上
+    });
 
-      const isZeroCoord = isZeroCoordinate(train.coordinate);
-      const marker = L.marker(train.coordinate, {
-        icon: createTrainIcon(train.isOnline, isZeroCoord),
-        zIndexOffset: 60,
-      });
-
-      marker.on('click', () => {
-        openPopup(
-          train.coordinate,
-          `
+    marker.on('click', () => {
+      openPopup(
+        train.coordinate,
+        `
           <div class="popup-content">
             <div class='title fontColor'>${t('view._cabRadio')}</div>
             <div class='content'>
@@ -745,35 +455,32 @@
             </div>
           </div>
           `,
-        );
-      });
+      );
+    });
 
-      trainLayerGroup.addLayer(marker);
-      train.marker = marker;
-      train.lastValidCoordinate = [...train.coordinate] as [number, number];
-      train.hasValidCoordinate = !isZeroCoord;
-      trainMarkers.set(train.id, marker);
-    } catch (error) {
-      console.error(`添加火车标记失败 (ID: ${train.id}):`, error);
-    }
+    trainLayerGroup.addLayer(marker);
+    train.marker = marker;
+    train.lastValidCoordinate = [...train.coordinate] as [number, number];
+    train.hasValidCoordinate = !isZeroCoord;
+    trainMarkers.set(train.id, marker);
   };
 
-  const addPersonToClusterGroup = (person: Person): void => {
-    try {
-      if (personMarkers.has(person.id) || !personClusterGroup) {
-        return;
-      }
+  // 添加单个人员到聚合图层组
+  const addPersonToClusterGroup = (person: Person) => {
+    if (personMarkers.has(person.id)) {
+      return;
+    }
 
-      const isZeroCoord = isZeroCoordinate(person.coordinate);
-      const marker = L.marker(person.coordinate, {
-        icon: createPersonIcon(person.isOnline, isZeroCoord),
-        zIndexOffset: 50,
-      });
+    const isZeroCoord = isZeroCoordinate(person.coordinate);
+    const marker = L.marker(person.coordinate, {
+      icon: createPersonIcon(person.isOnline, isZeroCoord),
+      zIndexOffset: 50, // 人员标记的z-index低于火车标记
+    });
 
-      marker.on('click', () => {
-        openPopup(
-          person.coordinate,
-          `
+    marker.on('click', () => {
+      openPopup(
+        person.coordinate,
+        `
           <div class="popup-content">
             <div class='title fontColor'>${t('view.handheldRadio')}</div>
             <div class='content'>
@@ -792,74 +499,59 @@
             </div>
           </div>
           `,
-        );
+      );
+    });
+
+    personClusterGroup.addLayer(marker);
+    person.marker = marker;
+    person.lastValidCoordinate = [...person.coordinate] as [number, number];
+    person.hasValidCoordinate = !isZeroCoord;
+    personMarkers.set(person.id, marker);
+  };
+
+  // 更新火车图标状态
+  const updateTrainIcon = (train: Train) => {
+    if (train.marker) {
+      const isZeroCoord = isZeroCoordinate(train.coordinate);
+      const newIcon = createTrainIcon(train.isOnline, isZeroCoord);
+      train.marker.setIcon(newIcon);
+    }
+  };
+
+  // 更新人员图标状态
+  const updatePersonIcon = (person: Person) => {
+    if (person.marker) {
+      const isZeroCoord = isZeroCoordinate(person.coordinate);
+      const newIcon = createPersonIcon(person.isOnline, isZeroCoord);
+      person.marker.setIcon(newIcon);
+    }
+  };
+
+  // 平滑移动标记 - 仅用于火车
+  const smoothMoveTo = (marker: any, newLatLng: L.LatLng, duration: number = 3000) => {
+    return new Promise<void>((resolve) => {
+      marker.slideTo(newLatLng, {
+        duration: duration,
+        keepAtCenter: false,
       });
 
-      personClusterGroup.addLayer(marker);
-      person.marker = marker;
-      person.lastValidCoordinate = [...person.coordinate] as [number, number];
-      person.hasValidCoordinate = !isZeroCoord;
-      personMarkers.set(person.id, marker);
-    } catch (error) {
-      console.error(`添加人员标记失败 (ID: ${person.id}):`, error);
-    }
-  };
-
-  const updateTrainIcon = (train: Train): void => {
-    try {
-      if (train.marker) {
-        const isZeroCoord = isZeroCoordinate(train.coordinate);
-        const newIcon = createTrainIcon(train.isOnline, isZeroCoord);
-        train.marker.setIcon(newIcon);
-      }
-    } catch (error) {
-      console.error(`更新火车图标失败 (ID: ${train.id}):`, error);
-    }
-  };
-
-  const updatePersonIcon = (person: Person): void => {
-    try {
-      if (person.marker) {
-        const isZeroCoord = isZeroCoordinate(person.coordinate);
-        const newIcon = createPersonIcon(person.isOnline, isZeroCoord);
-        person.marker.setIcon(newIcon);
-      }
-    } catch (error) {
-      console.error(`更新人员图标失败 (ID: ${person.id}):`, error);
-    }
-  };
-
-  const smoothMoveTo = (
-    marker: L.Marker,
-    newLatLng: L.LatLng,
-    duration: number = 3000,
-  ): Promise<void> => {
-    return new Promise<void>((resolve) => {
-      try {
-        (marker as any).slideTo(newLatLng, {
-          duration: duration,
-          keepAtCenter: false,
-        });
-
-        setTimeout(() => {
-          resolve();
-        }, duration);
-      } catch (error) {
-        console.error('平滑移动标记失败:', error);
+      setTimeout(() => {
         resolve();
-      }
+      }, duration);
     });
   };
 
-  const debounce = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
-    let timeoutId: NodeJS.Timeout;
-    return ((...args: any[]) => {
+  // 防抖函数
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => func.apply(this, args), delay);
-    }) as T;
+    };
   };
 
-  const processPendingData = (): void => {
+  // 处理待处理数据
+  const processPendingData = () => {
     if (!isMapInitialized) return;
 
     if (pendingTrainData.length > 0) {
@@ -873,8 +565,8 @@
     }
   };
 
-  const updateTrainPositions = async (newTrainData: Train[]): Promise<void> => {
-    if (resetInProgress.value) return;
+  // 更新火车位置 - 保持原有平滑移动
+  const updateTrainPositions = async (newTrainData: Train[]) => {
     if (!isMapInitialized) {
       pendingTrainData = [...newTrainData];
       return;
@@ -897,16 +589,16 @@
       const currentTrainIds = new Set(newTrainData.map((train) => train.id));
 
       // 移除不存在的火车
-      const trainsToRemove: Array<{ id: string; marker: L.Marker }> = [];
+      const trainsToRemove = [];
       for (const [id, marker] of trainMarkers.entries()) {
         if (!currentTrainIds.has(id)) {
           trainsToRemove.push({ id, marker });
         }
       }
 
-      if (trainsToRemove.length > 0 && trainLayerGroup) {
+      if (trainsToRemove.length > 0) {
         trainsToRemove.forEach((item) => {
-          trainLayerGroup!.removeLayer(item.marker);
+          trainLayerGroup.removeLayer(item.marker);
           trainMarkers.delete(item.id);
           const index = trains.value.findIndex((t) => t.id === item.id);
           if (index !== -1) {
@@ -915,21 +607,22 @@
         });
       }
 
-      const updatePromises: Promise<void>[] = [];
+      const updatePromises = [];
 
       for (const train of newTrainData) {
-        if (!isValidCoordinate(train.coordinate) || resetInProgress.value) {
+        if (!isValidCoordinate(train.coordinate)) {
           continue;
         }
 
         if (trainMarkers.has(train.id)) {
-          const marker = trainMarkers.get(train.id)!;
+          const marker = trainMarkers.get(train.id);
           const existingTrain = trains.value.find((t) => t.id === train.id);
 
           if (existingTrain) {
             const newLatLng = L.latLng(train.coordinate[0], train.coordinate[1]);
             const currentLatLng = marker.getLatLng();
 
+            // 检查是否涉及0点坐标变化
             const isFromZero =
               existingTrain.lastValidCoordinate &&
               isZeroCoordinate(existingTrain.lastValidCoordinate) &&
@@ -940,10 +633,12 @@
               !isZeroCoordinate(existingTrain.lastValidCoordinate) &&
               isZeroCoordinate(train.coordinate);
 
+            // 更新图标状态
             if (isZeroCoordinate(train.coordinate) !== isZeroCoordinate(existingTrain.coordinate)) {
               updateTrainIcon(existingTrain);
             }
 
+            // 如果是从0点到非0点，或从非0点到0点，直接设置位置，不使用动画
             if (isFromZero || isToZero) {
               marker.setLatLng(newLatLng);
               existingTrain.coordinate = [newLatLng.lat, newLatLng.lng];
@@ -957,13 +652,13 @@
 
             const distance = newLatLng.distanceTo(currentLatLng);
 
+            // 如果移动距离较大，使用平滑移动
             if (distance > 100 && !isZeroCoordinate(train.coordinate) && !existingTrain.moving) {
               existingTrain.moving = true;
 
               updatePromises.push(
                 smoothMoveTo(marker, newLatLng, 3000)
                   .then(() => {
-                    if (resetInProgress.value) return;
                     existingTrain.coordinate = [newLatLng.lat, newLatLng.lng];
                     existingTrain.station = train.station;
                     existingTrain.area = train.area;
@@ -978,6 +673,7 @@
                   }),
               );
             } else if (!existingTrain.moving) {
+              // 小距离移动，直接设置位置
               marker.setLatLng(newLatLng);
               existingTrain.coordinate = [newLatLng.lat, newLatLng.lng];
               existingTrain.station = train.station;
@@ -988,11 +684,13 @@
             }
           }
         } else {
+          // 添加新火车
           addTrainToLayerGroup(train);
           trains.value.push(train);
         }
       }
 
+      // 限制并发数量
       const batchSize = 10;
       for (let i = 0; i < updatePromises.length; i += batchSize) {
         const batch = updatePromises.slice(i, i + batchSize);
@@ -1002,7 +700,8 @@
       console.error('更新火车位置时发生错误:', error);
     } finally {
       isUpdatingTrains = false;
-      if (trainUpdateQueue.length > 0 && !resetInProgress.value) {
+
+      if (trainUpdateQueue.length > 0) {
         const nextData = [...trainUpdateQueue];
         trainUpdateQueue = [];
         setTimeout(() => updateTrainPositions(nextData), 100);
@@ -1010,8 +709,8 @@
     }
   };
 
-  const updatePersonPositions = async (newPersonData: Person[]): Promise<void> => {
-    if (resetInProgress.value) return;
+  // 更新人员位置 - 简化版本，不使用平滑移动
+  const updatePersonPositions = async (newPersonData: Person[]) => {
     if (!isMapInitialized) {
       pendingPersonData = [...newPersonData];
       return;
@@ -1032,16 +731,17 @@
     try {
       const currentPersonIds = new Set(newPersonData.map((person) => person.id));
 
-      const personsToRemove: Array<{ id: string; marker: L.Marker }> = [];
+      // 移除不存在的人员
+      const personsToRemove = [];
       for (const [id, marker] of personMarkers.entries()) {
         if (!currentPersonIds.has(id)) {
           personsToRemove.push({ id, marker });
         }
       }
 
-      if (personsToRemove.length > 0 && personClusterGroup) {
+      if (personsToRemove.length > 0) {
         personsToRemove.forEach((item) => {
-          personClusterGroup!.removeLayer(item.marker);
+          personClusterGroup.removeLayer(item.marker);
           personMarkers.delete(item.id);
           const index = persons.value.findIndex((p) => p.id === item.id);
           if (index !== -1) {
@@ -1051,17 +751,18 @@
       }
 
       for (const person of newPersonData) {
-        if (!isValidCoordinate(person.coordinate) || resetInProgress.value) {
+        if (!isValidCoordinate(person.coordinate)) {
           continue;
         }
 
         if (personMarkers.has(person.id)) {
-          const marker = personMarkers.get(person.id)!;
+          const marker = personMarkers.get(person.id);
           const existingPerson = persons.value.find((p) => p.id === person.id);
 
           if (existingPerson) {
             const newLatLng = L.latLng(person.coordinate[0], person.coordinate[1]);
 
+            // 检查是否涉及0点坐标变化
             const isFromZero =
               existingPerson.lastValidCoordinate &&
               isZeroCoordinate(existingPerson.lastValidCoordinate) &&
@@ -1072,12 +773,14 @@
               !isZeroCoordinate(existingPerson.lastValidCoordinate) &&
               isZeroCoordinate(person.coordinate);
 
+            // 更新图标状态
             if (
               isZeroCoordinate(person.coordinate) !== isZeroCoordinate(existingPerson.coordinate)
             ) {
               updatePersonIcon(existingPerson);
             }
 
+            // 直接设置位置，不使用动画
             marker.setLatLng(newLatLng);
             existingPerson.coordinate = [newLatLng.lat, newLatLng.lng];
             existingPerson.station = person.station;
@@ -1087,12 +790,14 @@
             existingPerson.hasValidCoordinate = !isZeroCoordinate(person.coordinate);
           }
         } else {
+          // 添加新人员
           addPersonToClusterGroup(person);
           persons.value.push(person);
         }
       }
 
-      if (personClusterGroup && !resetInProgress.value) {
+      // 批量刷新聚合显示
+      if (personClusterGroup) {
         personClusterGroup.refreshClusters();
       }
     } catch (error) {
@@ -1100,7 +805,7 @@
     } finally {
       isUpdatingPersons = false;
 
-      if (personUpdateQueue.length > 0 && !resetInProgress.value) {
+      if (personUpdateQueue.length > 0) {
         const nextData = [...personUpdateQueue];
         personUpdateQueue = [];
         setTimeout(() => updatePersonPositions(nextData), 100);
@@ -1108,87 +813,72 @@
     }
   };
 
-  const bindMapEvents = (): void => {
-    if (!map) return;
+  // 绑定地图事件
+  const bindMapEvents = () => {
+    map.on('zoomend', () => {
+      const currentZoom = map.getZoom();
+      updateAllMarkersVisibility(currentZoom);
+    });
 
-    try {
-      map.on('zoomend', () => {
-        const currentZoom = map!.getZoom();
-        updateAllMarkersVisibility(currentZoom);
-      });
+    map.on('zoomstart', (e) => {
+      if (e.originalEvent) map.setZoomAround(map.mouseEventToLatLng(e.originalEvent));
+    });
 
-      map.on('zoomstart', (e) => {
-        if (e.originalEvent) map!.setZoomAround(map!.mouseEventToLatLng(e.originalEvent));
-      });
-
-      if (mapContainer.value) {
-        mapContainer.value.addEventListener('mousedown', (e) => {
-          if (e.button === 2) {
-            isRotating = true;
-            lastMouseX = e.clientX;
-            map!.dragging.disable();
-          }
-        });
-
-        mapContainer.value.addEventListener('contextmenu', (e) => e.preventDefault());
-      }
-
-      document.addEventListener('mousemove', (e) => {
-        if (isRotating) map!.setBearing(map!.getBearing() + (e.clientX - lastMouseX) * 0.5);
+    // 旋转控制
+    mapContainer.value.addEventListener('mousedown', (e) => {
+      if (e.button === 2) {
+        isRotating = true;
         lastMouseX = e.clientX;
-      });
+        map.dragging.disable();
+      }
+    });
 
-      document.addEventListener('mouseup', (e) => {
-        if (e.button === 2) {
-          isRotating = false;
-          map!.dragging.enable();
-        }
-      });
-    } catch (error) {
-      console.error('绑定地图事件失败:', error);
-    }
+    document.addEventListener('mousemove', (e) => {
+      if (isRotating) map.setBearing(map.getBearing() + (e.clientX - lastMouseX) * 0.5);
+      lastMouseX = e.clientX;
+    });
+
+    document.addEventListener('mouseup', (e) => {
+      if (e.button === 2) {
+        isRotating = false;
+        map.dragging.enable();
+      }
+    });
+
+    mapContainer.value.addEventListener('contextmenu', (e) => e.preventDefault());
   };
 
-  const updateAllMarkersVisibility = (zoomLevel: number): void => {
+  // 控制标签显示/隐藏
+  const updateAllMarkersVisibility = (zoomLevel) => {
     const showStationName = zoomLevel >= 7;
     Object.values(stationNameMarkers).forEach((marker) => {
       marker.setOpacity(showStationName ? 1 : 0);
     });
   };
 
-  const openPopup = (coordinate: [number, number], content: string): void => {
-    if (!map) return;
-
-    try {
-      if (currentPopup && map.hasLayer(currentPopup)) {
-        map.removeLayer(currentPopup);
-      }
-      currentPopup = L.popup({
-        autoClose: false,
-        closeButton: true,
-        className: 'custom-popup',
-        maxWidth: 300,
-      })
-        .setLatLng(coordinate)
-        .setContent(content)
-        .openOn(map);
-    } catch (error) {
-      console.error('打开弹窗失败:', error);
-    }
+  // 打开弹窗
+  const openPopup = (coordinate, content) => {
+    if (currentPopup && map.hasLayer(currentPopup)) map.removeLayer(currentPopup);
+    currentPopup = L.popup({
+      autoClose: false,
+      closeButton: true,
+      className: 'custom-popup',
+      maxWidth: 300,
+    })
+      .setLatLng(coordinate)
+      .setContent(content)
+      .openOn(map);
   };
 
-  const handleSearch = debounce((): void => {
-    if (!searchQuery.value.trim() || resetInProgress.value || !map) return;
-
+  // 搜索功能
+  const handleSearch = debounce(() => {
+    if (!searchQuery.value.trim()) return;
     const query = searchQuery.value.trim().toLowerCase();
     let found = false;
-
-    if (currentPopup) {
-      map.removeLayer(currentPopup);
-    }
+    if (currentPopup) map.removeLayer(currentPopup);
 
     // 搜索火车
-    for (const train of trains.value) {
+    trains.value.forEach((train) => {
       if (train.isdn.toLowerCase().includes(query) && !found) {
         map.flyTo(train.coordinate, 10, { duration: 1 });
         openPopup(
@@ -1218,14 +908,13 @@
           `,
         );
         found = true;
-        break;
       }
-    }
+    });
 
     if (found) return;
 
     // 搜索人员
-    for (const person of persons.value) {
+    persons.value.forEach((person) => {
       if (person.isdn.toLowerCase().includes(query) && !found) {
         map.flyTo(person.coordinate, 10, { duration: 1 });
         openPopup(
@@ -1251,44 +940,16 @@
           `,
         );
         found = true;
-        break;
       }
-    }
+    });
 
-    if (!found) {
-      message.info(`${t('view.queryResultIsEmpty')}`);
-    }
+    if (!found) message.info(`${t('view.queryResultIsEmpty')}`);
   }, DEBOUNCE_DELAY);
 
-  const toggleTrainsVisibility = (): void => {
-    showTrains.value = !showTrains.value;
-    if (trainLayerGroup && map) {
-      if (showTrains.value) {
-        map.addLayer(trainLayerGroup);
-      } else {
-        map.removeLayer(trainLayerGroup);
-      }
-    }
-  };
-
-  const togglePersonsVisibility = (): void => {
-    showPersons.value = !showPersons.value;
-    if (personClusterGroup && map) {
-      if (showPersons.value) {
-        map.addLayer(personClusterGroup);
-      } else {
-        map.removeLayer(personClusterGroup);
-      }
-    }
-  };
-
-  const resetMap = (): void => {
-    if (!map) return;
-
-    if (currentPopup) {
-      map.removeLayer(currentPopup);
-      currentPopup = null;
-    }
+  // 重置地图
+  const resetMap = () => {
+    if (currentPopup) map.removeLayer(currentPopup);
+    currentPopup = null;
 
     updateAllMarkersVisibility(initialMapState.zoom);
 
@@ -1297,15 +958,93 @@
     searchQuery.value = '';
   };
 
-  // 图表函数
-  const setCirChart = (
-    xAxisData: string[],
-    leftData: number[],
-    centerData: number[],
-    rightData: number[],
-  ): void => {
-    if (resetInProgress.value) return;
+  // 监听搜索框
+  watch(searchQuery, (newVal) => {
+    if (!newVal.trim() && currentPopup) {
+      map.removeLayer(currentPopup);
+      currentPopup = null;
+      updateAllMarkersVisibility(map.getZoom());
+    }
+  });
 
+  // 初始化地图
+  function initMap() {
+    if (map) {
+      map.remove();
+      map = null;
+    }
+
+    map = L.map(mapContainer.value, {
+      crs: L.CRS.Simple,
+      attributionControl: false,
+      zoomControl: false,
+      minZoom: 4,
+      maxZoom: 30,
+      zoomSnap: 0.5,
+      dragging: true,
+      tap: false,
+      rotate: true,
+      bearing: initialMapState.bearing,
+    });
+
+    // 设置初始视图
+    map.setView(initialMapState.center, initialMapState.zoom);
+    map.getContainer().style.backgroundColor = 'transparent';
+
+    // 初始化图层组
+    initLayerGroups();
+
+    // 绘制所有元素
+    drawLines();
+    addStations();
+
+    // 页面进入动画
+    setTimeout(() => {
+      map.flyTo(initialMapState.center, initialMapState.zoom, {
+        duration: 2,
+        easeLinearity: 0.2,
+      });
+    }, 200);
+
+    // 绑定事件
+    bindMapEvents();
+    updateAllMarkersVisibility(map.getZoom());
+
+    // 标记地图初始化完成
+    isMapInitialized = true;
+
+    // 处理待处理数据
+    nextTick(() => {
+      processPendingData();
+    });
+  }
+
+  // 清理资源
+  const cleanup = () => {
+    if (updateInterval) {
+      clearInterval(updateInterval);
+      updateInterval = null;
+    }
+
+    if (map) {
+      map.remove();
+      map = null;
+    }
+
+    trainMarkers.clear();
+    personMarkers.clear();
+    stationNameMarkers = {};
+    isMapInitialized = false;
+    pendingPersonData = [];
+    pendingTrainData = [];
+    isUpdatingTrains = false;
+    isUpdatingPersons = false;
+    personUpdateQueue = [];
+    trainUpdateQueue = [];
+  };
+
+  // 机车图表
+  function setCirChart(xAxisData, leftData, centerData, rightData) {
     try {
       const option = {
         backgroundColor: 'transparent',
@@ -1326,7 +1065,7 @@
           containLabel: true,
         },
         legend: {
-          data: legendDatas,
+          data: [t('view.leftSide'), t('view.inStation'), t('view.rightSide')],
           right: 10,
           top: 0,
           textStyle: {
@@ -1340,9 +1079,11 @@
           data: xAxisData,
           axisLabel: {
             interval: 0,
-            color: '#fff',
-            fontStyle: 'normal',
-            fontSize: 12,
+            textStyle: {
+              color: '#fff',
+              fontStyle: 'normal',
+              fontSize: 12,
+            },
           },
           axisLine: {
             lineStyle: {
@@ -1377,7 +1118,7 @@
         ],
         series: [
           {
-            name: legendDatas[0],
+            name: t('view.leftSide'),
             type: 'bar',
             barWidth: '20%',
             label: {
@@ -1386,22 +1127,24 @@
               color: '#fff',
             },
             itemStyle: {
-              color: new chartJiCir.echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: '#12F7D0',
-                },
-                {
-                  offset: 1,
-                  color: '#65CFBD',
-                },
-              ]),
-              borderRadius: 12,
+              normal: {
+                color: new chartJiCir.echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 0,
+                    color: '#12F7D0',
+                  },
+                  {
+                    offset: 1,
+                    color: '#65CFBD',
+                  },
+                ]),
+                barBorderRadius: 12,
+              },
             },
             data: leftData,
           },
           {
-            name: legendDatas[1],
+            name: t('view.inStation'),
             type: 'bar',
             barWidth: '20%',
             label: {
@@ -1410,22 +1153,24 @@
               color: '#fff',
             },
             itemStyle: {
-              color: new chartJiCir.echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: '#D94CE6',
-                },
-                {
-                  offset: 1,
-                  color: '#DE08FC',
-                },
-              ]),
-              borderRadius: 11,
+              normal: {
+                color: new chartJiCir.echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 0,
+                    color: '#D94CE6',
+                  },
+                  {
+                    offset: 1,
+                    color: '#DE08FC',
+                  },
+                ]),
+                barBorderRadius: 11,
+              },
             },
             data: centerData,
           },
           {
-            name: legendDatas[2],
+            name: t('view.rightSide'),
             type: 'bar',
             barWidth: '20%',
             label: {
@@ -1434,41 +1179,33 @@
               color: '#fff',
             },
             itemStyle: {
-              color: new chartJiCir.echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: '#3EC2EA',
-                },
-                {
-                  offset: 1,
-                  color: '#248ff7',
-                },
-              ]),
-              borderRadius: 11,
+              normal: {
+                color: new chartJiCir.echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 0,
+                    color: '#3EC2EA',
+                  },
+                  {
+                    offset: 1,
+                    color: '#248ff7',
+                  },
+                ]),
+                barBorderRadius: 11,
+              },
             },
             data: rightData,
           },
         ],
       };
-
-      chartJiCir.getInstance().setOption(isFirstCirE ? option : { series: option.series }, {
-        notMerge: false,
-        lazyUpdate: true,
-      });
+      chartJiCir.getInstance().setOption(isFirstCirE ? option : { series: option.series });
       isFirstCirE = false;
     } catch (error) {
-      console.error('设置机车图表失败:', error);
+      console.error(error);
     }
-  };
+  }
 
-  const setHandChart = (
-    xAxisData: string[],
-    leftData: number[],
-    centerData: number[],
-    rightData: number[],
-  ): void => {
-    if (resetInProgress.value) return;
-
+  // 手持图表
+  function setHandChart(xAxisData, leftData, centerData, rightData) {
     try {
       const option = {
         backgroundColor: 'transparent',
@@ -1489,7 +1226,7 @@
           containLabel: true,
         },
         legend: {
-          data: legendDatas,
+          data: [t('view.leftSide'), t('view.inStation'), t('view.rightSide')],
           right: 10,
           top: 0,
           textStyle: {
@@ -1503,9 +1240,11 @@
           data: xAxisData,
           axisLabel: {
             interval: 0,
-            color: '#fff',
-            fontStyle: 'normal',
-            fontSize: 12,
+            textStyle: {
+              color: '#fff',
+              fontStyle: 'normal',
+              fontSize: 12,
+            },
           },
           axisLine: {
             lineStyle: {
@@ -1540,7 +1279,7 @@
         ],
         series: [
           {
-            name: legendDatas[0],
+            name: t('view.leftSide'),
             type: 'bar',
             barWidth: '20%',
             label: {
@@ -1549,22 +1288,24 @@
               color: '#fff',
             },
             itemStyle: {
-              color: new chartHand.echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: '#12F7D0',
-                },
-                {
-                  offset: 1,
-                  color: '#65CFBD',
-                },
-              ]),
-              borderRadius: 12,
+              normal: {
+                color: new chartHand.echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 0,
+                    color: '#12F7D0',
+                  },
+                  {
+                    offset: 1,
+                    color: '#65CFBD',
+                  },
+                ]),
+                barBorderRadius: 12,
+              },
             },
             data: leftData,
           },
           {
-            name: legendDatas[1],
+            name: t('view.inStation'),
             type: 'bar',
             barWidth: '20%',
             label: {
@@ -1573,22 +1314,24 @@
               color: '#fff',
             },
             itemStyle: {
-              color: new chartHand.echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: '#D94CE6',
-                },
-                {
-                  offset: 1,
-                  color: '#DE08FC',
-                },
-              ]),
-              borderRadius: 11,
+              normal: {
+                color: new chartHand.echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 0,
+                    color: '#D94CE6',
+                  },
+                  {
+                    offset: 1,
+                    color: '#DE08FC',
+                  },
+                ]),
+                barBorderRadius: 11,
+              },
             },
             data: centerData,
           },
           {
-            name: legendDatas[2],
+            name: t('view.rightSide'),
             type: 'bar',
             barWidth: '20%',
             label: {
@@ -1597,35 +1340,48 @@
               color: '#fff',
             },
             itemStyle: {
-              color: new chartHand.echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: '#3EC2EA',
-                },
-                {
-                  offset: 1,
-                  color: '#248ff7',
-                },
-              ]),
-              borderRadius: 11,
+              normal: {
+                color: new chartHand.echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 0,
+                    color: '#3EC2EA',
+                  },
+                  {
+                    offset: 1,
+                    color: '#248ff7',
+                  },
+                ]),
+                barBorderRadius: 11,
+              },
             },
             data: rightData,
           },
         ],
       };
-
-      chartHand.getInstance().setOption(isFirstHandE ? option : { series: option.series }, {
-        notMerge: false,
-        lazyUpdate: true,
-      });
+      chartHand.getInstance().setOption(isFirstHandE ? option : { series: option.series });
       isFirstHandE = false;
     } catch (error) {
-      console.error('设置手持终端图表失败:', error);
+      console.error(error);
     }
-  };
+  }
 
-  const getDeviceCount = (): void => {
-    if (resetInProgress.value) return;
+  function getSysRequest() {
+    largeScreenApi
+      .GetSysRequest()
+      .then((data) => {
+        requestData.value = data;
+        setTimeout(() => {
+          getSysRequest();
+        }, 60 * 1000);
+      })
+      .catch(() => {
+        setTimeout(() => {
+          getSysRequest();
+        }, 60 * 1000);
+      });
+  }
+
+  function getDeviceCount() {
     largeScreenApi
       .GetDeviceCount()
       .then((data) => {
@@ -1634,17 +1390,14 @@
           getDeviceCount();
         }, 10 * 1000);
       })
-      .catch((error) => {
-        console.error('获取设备数量失败:', error);
+      .catch(() => {
         setTimeout(() => {
           getDeviceCount();
         }, 10 * 1000);
       });
-  };
+  }
 
-  const getDeviceLocationCount = (): void => {
-    if (resetInProgress.value) return;
-
+  function getDeviceLocationCount() {
     largeScreenApi
       .GetDeviceLocationCount()
       .then((data) => {
@@ -1662,24 +1415,22 @@
         );
         setTimeout(() => {
           getDeviceLocationCount();
-        }, 11 * 1000);
+        }, 12 * 1000);
       })
-      .catch((error) => {
-        console.error('获取设备位置数量失败:', error);
+      .catch(() => {
         setTimeout(() => {
           getDeviceLocationCount();
-        }, 11 * 1000);
+        }, 12 * 1000);
       });
-  };
+  }
 
-  const getMapLocation = (): void => {
-    if (resetInProgress.value) return;
-
+  function getMapLocation() {
     largeScreenApi
       .GetMapLocation()
       .then((data) => {
         lines.value = data;
         initMap();
+        // 确保地图初始化完成后再获取人员数据
         setTimeout(() => {
           getCirHandLocation();
         }, 500);
@@ -1687,16 +1438,25 @@
       .catch((error) => {
         console.error('获取地图位置失败:', error);
       });
-  };
+  }
 
-  const getCirHandLocation = (): void => {
-    if (resetInProgress.value) return;
-
+  function getCirHandLocation() {
     largeScreenApi
       .GetCirHandLocation()
       .then((data) => {
-        updateTrainPositions(data.cirData);
-        updatePersonPositions(data.handData);
+        // 分离处理火车和人员数据
+        setTimeout(() => {
+          if (data.cirData) {
+            updateTrainPositions(data.cirData);
+          }
+        }, 0);
+
+        setTimeout(() => {
+          if (data.handData) {
+            updatePersonPositions(data.handData);
+          }
+        }, 500);
+
         setTimeout(() => {
           getCirHandLocation();
         }, 10 * 1000);
@@ -1707,10 +1467,9 @@
           getCirHandLocation();
         }, 10 * 1000);
       });
-  };
+  }
 
-  const getServiceInfo = (): void => {
-    if (resetInProgress.value) return;
+  function getServiceInfo() {
     largeScreenApi
       .GetServiceInfo()
       .then((data) => {
@@ -1727,101 +1486,30 @@
           }, 12 * 1000);
         });
       })
-      .catch((error) => {
-        console.error('getServiceInfo失败:', error);
+      .catch((ex) => {
+        console.error('getServiceInfo失败:', ex);
         nextTick(() => {
           setTimeout(() => {
             getCirHandLocation();
           }, 12 * 1000);
         });
       });
-  };
+  }
 
-  const goIndex = (item: ScrollItem): void => {
+  function goIndex(item) {
     window.open(`${window.location.origin}/#/message/index/${item.id}`, '_blank');
-  };
+  }
 
-  // 地图初始化
-  const initMap = (): void => {
-    if (!mapContainer.value) {
-      console.error('地图容器未找到');
-      return;
-    }
-
-    try {
-      if (map) {
-        map.remove();
-        map = null;
-      }
-
-      map = L.map(mapContainer.value, {
-        crs: L.CRS.Simple,
-        attributionControl: false,
-        zoomControl: false,
-        minZoom: 4,
-        maxZoom: 30,
-        zoomSnap: 0.5,
-        dragging: true,
-        tap: false,
-        rotate: true,
-        bearing: initialMapState.bearing,
-      });
-
-      map.setView(initialMapState.center, initialMapState.zoom);
-      map.getContainer().style.backgroundColor = 'transparent';
-
-      initLayerGroups();
-      drawLines();
-      addStations();
-
-      setTimeout(() => {
-        map!.flyTo(initialMapState.center, initialMapState.zoom, {
-          duration: 2,
-          easeLinearity: 0.2,
-        });
-      }, 200);
-
-      bindMapEvents();
-      updateAllMarkersVisibility(map.getZoom());
-
-      isMapInitialized = true;
-
-      nextTick(() => {
-        processPendingData();
-      });
-    } catch (error) {
-      console.error('初始化地图失败:', error);
-    }
-  };
-
-  // 生命周期
   onMounted(() => {
-    console.log('🚀 大屏页面初始化开始');
-    logMemoryStats('页面初始化');
-    // 启动重置计时器
-    startResetTimer();
-
-    // 初始化数据
-    getServiceInfo();
+    // getServiceInfo();
+    // getSysRequest();
     getDeviceCount();
     getDeviceLocationCount();
     getMapLocation();
   });
 
   onUnmounted(() => {
-    console.log('🔚 大屏页面卸载，开始清理资源');
-    logMemoryStats('页面卸载前');
     cleanup();
-    console.log('✅ 大屏页面资源清理完成');
-  });
-
-  // 监听器
-  watch(searchQuery, (newVal) => {
-    if (!newVal.trim() && currentPopup && map) {
-      map.removeLayer(currentPopup);
-      currentPopup = null;
-      updateAllMarkersVisibility(map.getZoom());
-    }
   });
 </script>
 
@@ -1830,8 +1518,11 @@
 
   .@{prefixCls} {
     width: 100%;
+    min-width: 1224px !important;
     height: 100%;
-    overflow: scroll !important;
+    min-height: 760px !important;
+    overflow: auto;
+    overflow: hidden;
     background-image: url('@/assets/images/largeScreen/bj1.png');
     background-repeat: no-repeat;
     background-position: center;
@@ -1843,11 +1534,8 @@
   }
 
   .content {
-    position: relative;
     width: 100%;
-    min-width: 1230px !important;
     height: 100%;
-    min-height: 760px !important;
 
     @media (max-width: 1999px) {
       .head {
@@ -1862,6 +1550,70 @@
         font-size: 24px;
         line-height: 46px;
         text-align: center;
+      }
+
+      .headCenter {
+        display: flex;
+        justify-content: center;
+        width: 38%;
+        padding-top: 10px;
+        background-image: url('/src/assets/images/largeScreen/xbj2.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+
+        > div {
+          display: flex;
+          flex-direction: row;
+          width: 400px;
+          margin-left: 54px;
+          color: #fff;
+          font-size: 24px;
+          line-height: 46px;
+          text-align: center;
+          gap: 90px;
+        }
+
+        > div > div {
+          width: 50px;
+          height: 50px;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+        }
+
+        .icon {
+          position: relative;
+          top: 4px;
+          left: 5px;
+          width: 40px;
+          height: 42px;
+        }
+
+        .title {
+          position: relative;
+          top: -52px;
+          font-size: 13px;
+        }
+
+        .count {
+          position: relative;
+          top: -73px;
+          left: 38px;
+          font-size: 26px;
+        }
+
+        .headCenter1 {
+          background-image: url('@/assets/images/largeScreen/xbj6.png');
+        }
+
+        .headCenter2 {
+          background-image: url('@/assets/images/largeScreen/xbj4.png');
+        }
+
+        .headCenter3 {
+          background-image: url('@/assets/images/largeScreen/xbj5.png');
+        }
       }
 
       .wgdata {
@@ -1925,13 +1677,20 @@
       .jccir,
       .hand {
         position: absolute;
-        bottom: 4px;
         width: 386px;
         height: 250px;
         background-image: url('/src/assets/images/largeScreen/xbj_12.png');
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
+
+        @media (min-height: 801px) {
+          bottom: 14px;
+        }
+
+        @media (max-height: 800px) {
+          bottom: 64px;
+        }
 
         .title {
           position: relative;
@@ -2061,6 +1820,70 @@
         text-align: center;
       }
 
+      .headCenter {
+        display: flex;
+        justify-content: center;
+        width: 38%;
+        padding-top: 10px;
+        background-image: url('/src/assets/images/largeScreen/xbj2.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+
+        > div {
+          display: flex;
+          flex-direction: row;
+          width: 400px;
+          margin-left: 54px;
+          color: #fff;
+          font-size: 24px;
+          line-height: 46px;
+          text-align: center;
+          gap: 90px;
+        }
+
+        > div > div {
+          width: 50px;
+          height: 50px;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+        }
+
+        .icon {
+          position: relative;
+          top: 4px;
+          left: 5px;
+          width: 40px;
+          height: 42px;
+        }
+
+        .title {
+          position: relative;
+          top: -52px;
+          font-size: 13px;
+        }
+
+        .count {
+          position: relative;
+          top: -73px;
+          left: 38px;
+          font-size: 26px;
+        }
+
+        .headCenter1 {
+          background-image: url('@/assets/images/largeScreen/xbj6.png');
+        }
+
+        .headCenter2 {
+          background-image: url('@/assets/images/largeScreen/xbj4.png');
+        }
+
+        .headCenter3 {
+          background-image: url('@/assets/images/largeScreen/xbj5.png');
+        }
+      }
+
       .wgdata {
         position: absolute;
         top: 40px;
@@ -2122,7 +1945,7 @@
       .jccir,
       .hand {
         position: absolute;
-        bottom: 4px;
+        bottom: 14px;
         width: 482px;
         min-width: 386px;
         height: 312px;
@@ -2242,12 +2065,19 @@
   .control-container {
     position: absolute;
     z-index: 1000;
-    bottom: 4px;
     left: 50%;
     flex-direction: column;
     width: 280px;
     transform: translateX(-50%);
     gap: 10px;
+
+    @media (min-height: 801px) {
+      bottom: 10px;
+    }
+
+    @media (max-height: 800px) {
+      bottom: 70px;
+    }
   }
 
   .search-box {
