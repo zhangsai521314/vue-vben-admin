@@ -244,9 +244,9 @@
   });
 
   // 配置常量
-  const RESET_INTERVAL = 60 * 60 * 1000; //10分钟重置一次
   const UPDATE_INTERVAL = 5000;
   const DEBOUNCE_DELAY = 300;
+  const TWO_HOURS_MS = 2 * 60 * 60 * 1000; // 2小时的毫秒数
 
   const initialMapState = {
     center: [9.2271, -10.9921] as [number, number],
@@ -340,11 +340,41 @@
       if (resetTimer) {
         clearTimeout(resetTimer);
       }
+
+      const now = new Date();
+      const todayElevenPM = new Date(now);
+      todayElevenPM.setHours(23, 0, 0, 0); // 设置为今天23点
+
+      const tomorrowElevenPM = new Date(now);
+      tomorrowElevenPM.setDate(tomorrowElevenPM.getDate() + 1);
+      tomorrowElevenPM.setHours(23, 0, 0, 0); // 设置为明天23点
+
+      let nextResetTime: Date;
+
+      // 计算距离今天23点的时间差
+      const timeToTodayElevenPM = todayElevenPM.getTime() - now.getTime();
+
+      // 如果距离今天23点小于2小时，则使用明天23点
+      if (timeToTodayElevenPM < TWO_HOURS_MS && timeToTodayElevenPM > 0) {
+        nextResetTime = tomorrowElevenPM;
+        console.log('⏰ 距离今天23点不足2小时，将使用明天23点作为重置时间');
+      } else {
+        nextResetTime = timeToTodayElevenPM > 0 ? todayElevenPM : tomorrowElevenPM;
+        console.log('⏰ 使用今天23点作为重置时间');
+      }
+
+      const timeUntilReset = nextResetTime.getTime() - now.getTime();
+
       resetTimer = setTimeout(() => {
         performPageReset();
-      }, RESET_INTERVAL);
+        // 重置后重新设置定时器，以便每天执行
+        startResetTimer();
+      }, timeUntilReset);
 
-      console.log(`⏰ 已启动重置定时器，将在 ${RESET_INTERVAL / 1000 / 60} 分钟后自动重置页面`);
+      console.log(
+        `⏰ 已启动重置定时器，将在 ${Math.round(timeUntilReset / 1000 / 60)} 分钟后自动重置页面`,
+      );
+      console.log(`📅 下次重置时间: ${nextResetTime.toLocaleString()}`);
     } catch (error) {
       console.error('启动重置定时器失败:', error);
     }
@@ -359,7 +389,7 @@
 
   const performPageReset = async (): Promise<void> => {
     if (resetInProgress.value) return;
-    message.loading('资源清理中...', 0);
+    message.loading(t('view.resourceCleaning'), 0);
     resetInProgress.value = true;
     memoryStats.value.lastResetTime = new Date().toLocaleString();
 
@@ -415,8 +445,6 @@
     } finally {
       message.destroy();
       console.groupEnd();
-      // 重新启动重置计时器
-      startResetTimer();
     }
   };
 
@@ -571,16 +599,32 @@
   };
 
   // 地图相关函数
+  /**
+   * 检查坐标是否为(0,0)
+   * @param coord 坐标数组
+   * @returns 是否为(0,0)坐标
+   */
   const isZeroCoordinate = (coord: [number, number]): boolean => {
     return coord[0] === 0 && coord[1] === 0;
   };
 
+  /**
+   * 验证坐标是否有效
+   * @param coord 坐标数组
+   * @returns 坐标是否有效
+   */
   const isValidCoordinate = (coord: [number, number]): boolean => {
     return (
       !isNaN(coord[0]) && !isNaN(coord[1]) && Math.abs(coord[0]) < 90 && Math.abs(coord[1]) < 180
     );
   };
 
+  /**
+   * 创建火车图标
+   * @param isOnline 是否在线
+   * @param isZeroCoord 是否为(0,0)坐标
+   * @returns Leaflet DivIcon
+   */
   const createTrainIcon = (isOnline: boolean, isZeroCoord: boolean = false): L.DivIcon => {
     const className = `custom-train-marker ${isOnline ? 'online' : 'offline'} ${isZeroCoord ? 'zero-coord' : ''}`;
     return L.divIcon({
@@ -591,6 +635,12 @@
     });
   };
 
+  /**
+   * 创建人员图标
+   * @param isOnline 是否在线
+   * @param isZeroCoord 是否为(0,0)坐标
+   * @returns Leaflet DivIcon
+   */
   const createPersonIcon = (isOnline: boolean, isZeroCoord: boolean = false): L.DivIcon => {
     const className = `custom-person-marker ${isOnline ? 'online' : 'offline'} ${isZeroCoord ? 'zero-coord' : ''}`;
     return L.divIcon({
@@ -601,6 +651,11 @@
     });
   };
 
+  /**
+   * 创建车站名称标签
+   * @param name 车站名称
+   * @returns Leaflet DivIcon
+   */
   const createStationNameLabel = (name: string): L.DivIcon => {
     const nameDom = document.createElement('div');
     nameDom.className = 'station-name-wrapper';
@@ -618,10 +673,15 @@
     });
   };
 
+  /**
+   * 绘制线路
+   * 在地图上绘制所有线路，包括白色背景线和彩色虚线
+   */
   const drawLines = (): void => {
     try {
       lines.value.forEach((line) => {
         if (line.coordinates.length > 0) {
+          // 绘制白色背景线
           L.polyline(line.coordinates, {
             color: '#ffffff',
             weight: 8,
@@ -629,6 +689,7 @@
             lineCap: 'square',
           }).addTo(map!);
 
+          // 绘制彩色虚线线路
           L.polyline(line.coordinates, {
             color: line.color,
             weight: 8,
@@ -643,11 +704,16 @@
     }
   };
 
+  /**
+   * 添加车站标记
+   * 在地图上添加车站的圆形标记和名称标签
+   */
   const addStations = (): void => {
     try {
       lines.value.forEach((line) => {
         line.stations.forEach((station) => {
           if (station.coordinate.length === 2 && isValidCoordinate(station.coordinate)) {
+            // 创建车站圆形标记
             const circleMarker = L.circleMarker(station.coordinate, {
               radius: 4,
               fillColor: '#FC09EF',
@@ -657,6 +723,7 @@
               fillOpacity: 0.8,
             }).addTo(map!);
 
+            // 创建车站名称标签
             const nameMarker = L.marker(station.coordinate, {
               icon: createStationNameLabel(station.name),
               zIndexOffset: 60,
@@ -675,8 +742,13 @@
     }
   };
 
+  /**
+   * 初始化图层组
+   * 创建人员聚合图层和火车图层组
+   */
   const initLayerGroups = (): void => {
     try {
+      // 创建人员标记聚合组
       personClusterGroup = L.markerClusterGroup({
         chunkedLoading: true,
         chunkInterval: 100,
@@ -694,8 +766,10 @@
         },
       });
 
+      // 创建火车图层组
       trainLayerGroup = L.layerGroup();
 
+      // 根据显示状态添加图层到地图
       if (showPersons.value) {
         map!.addLayer(personClusterGroup);
       }
@@ -707,6 +781,10 @@
     }
   };
 
+  /**
+   * 添加火车到图层组
+   * @param train 火车数据
+   */
   const addTrainToLayerGroup = (train: Train): void => {
     try {
       if (trainMarkers.has(train.id) || !trainLayerGroup) {
@@ -719,6 +797,7 @@
         zIndexOffset: 60,
       });
 
+      // 添加点击事件
       marker.on('click', () => {
         openPopup(
           train.coordinate,
@@ -758,6 +837,10 @@
     }
   };
 
+  /**
+   * 添加人员到聚合组
+   * @param person 人员数据
+   */
   const addPersonToClusterGroup = (person: Person): void => {
     try {
       if (personMarkers.has(person.id) || !personClusterGroup) {
@@ -770,6 +853,7 @@
         zIndexOffset: 50,
       });
 
+      // 添加点击事件
       marker.on('click', () => {
         openPopup(
           person.coordinate,
@@ -805,6 +889,10 @@
     }
   };
 
+  /**
+   * 更新火车图标状态
+   * @param train 火车数据
+   */
   const updateTrainIcon = (train: Train): void => {
     try {
       if (train.marker) {
@@ -817,6 +905,10 @@
     }
   };
 
+  /**
+   * 更新人员图标状态
+   * @param person 人员数据
+   */
   const updatePersonIcon = (person: Person): void => {
     try {
       if (person.marker) {
@@ -829,6 +921,13 @@
     }
   };
 
+  /**
+   * 平滑移动标记到新位置
+   * @param marker Leaflet标记
+   * @param newLatLng 新位置
+   * @param duration 移动持续时间
+   * @returns Promise
+   */
   const smoothMoveTo = (
     marker: L.Marker,
     newLatLng: L.LatLng,
@@ -859,6 +958,10 @@
     }) as T;
   };
 
+  /**
+   * 处理待处理数据
+   * 在地图初始化后处理之前积累的火车和人员数据
+   */
   const processPendingData = (): void => {
     if (!isMapInitialized) return;
 
@@ -873,6 +976,11 @@
     }
   };
 
+  /**
+   * 更新火车位置
+   * 批量更新火车标记的位置和状态，处理平滑移动
+   * @param newTrainData 新的火车数据
+   */
   const updateTrainPositions = async (newTrainData: Train[]): Promise<void> => {
     if (resetInProgress.value) return;
     if (!isMapInitialized) {
@@ -1010,6 +1118,11 @@
     }
   };
 
+  /**
+   * 更新人员位置
+   * 批量更新人员标记的位置和状态
+   * @param newPersonData 新的人员数据
+   */
   const updatePersonPositions = async (newPersonData: Person[]): Promise<void> => {
     if (resetInProgress.value) return;
     if (!isMapInitialized) {
@@ -1108,6 +1221,10 @@
     }
   };
 
+  /**
+   * 绑定地图事件
+   * 设置地图的缩放、旋转等交互事件
+   */
   const bindMapEvents = (): void => {
     if (!map) return;
 
@@ -1149,6 +1266,11 @@
     }
   };
 
+  /**
+   * 更新所有标记的可见性
+   * 根据缩放级别控制车站名称的显示
+   * @param zoomLevel 当前缩放级别
+   */
   const updateAllMarkersVisibility = (zoomLevel: number): void => {
     const showStationName = zoomLevel >= 7;
     Object.values(stationNameMarkers).forEach((marker) => {
@@ -1156,6 +1278,11 @@
     });
   };
 
+  /**
+   * 打开信息弹窗
+   * @param coordinate 坐标位置
+   * @param content 弹窗内容
+   */
   const openPopup = (coordinate: [number, number], content: string): void => {
     if (!map) return;
 
@@ -1741,7 +1868,10 @@
     window.open(`${window.location.origin}/#/message/index/${item.id}`, '_blank');
   };
 
-  // 地图初始化
+  /**
+   * 初始化地图
+   * 创建Leaflet地图实例，设置初始视图和图层
+   */
   const initMap = (): void => {
     if (!mapContainer.value) {
       console.error('地图容器未找到');
@@ -1845,9 +1975,9 @@
   .content {
     position: relative;
     width: 100%;
-    min-width: 1230px !important;
+    min-width: 1140px !important;
     height: 100%;
-    min-height: 760px !important;
+    min-height: 610px !important;
 
     @media (max-width: 1999px) {
       .head {
