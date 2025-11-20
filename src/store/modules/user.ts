@@ -86,6 +86,7 @@ export const useUserStore = defineStore({
       setAuthCache(ROLES_KEY, roleList);
     },
     setUserInfo(info: UserInfo | null) {
+      debugger;
       this.userInfo = info;
       this.lastUpdateTime = new Date().getTime();
       setAuthCache(USER_INFO_KEY, info);

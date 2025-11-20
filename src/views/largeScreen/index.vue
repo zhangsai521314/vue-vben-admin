@@ -166,11 +166,12 @@
     lastValidCoordinate?: [number, number];
     hasValidCoordinate?: boolean;
     glb?: number;
+    roleName: string;
   }
 
   interface Person {
     id: string;
-    role: string;
+    roleName: string;
     isdn: string;
     station: string;
     area: string;
@@ -805,6 +806,9 @@
           <div class="popup-content">
             <div class='title fontColor'>${t('view._cabRadio')}</div>
             <div class='content'>
+              <div class='roleName'>
+                  ${train.roleName}
+              </div>
               <div class='info'>
                 <div>ISDN:</div>
                 <div>${train.isdn}</div>
@@ -861,6 +865,9 @@
           <div class="popup-content">
             <div class='title fontColor'>${t('view.handheldRadio')}</div>
             <div class='content'>
+              <div class='roleName'>
+                  ${person.roleName}
+              </div>
               <div class='info'>
                 <div  class='min'>ISDN:</div>
                 <div>${person.isdn}</div>
@@ -1324,6 +1331,9 @@
           <div class="popup-content">
             <div class='title fontColor'>${t('view._cabRadio')}</div>
             <div class='content'>
+              <div class='roleName'>
+                  ${train.roleName}
+              </div>
               <div class='info'>
                 <div>ISDN:</div>
                 <div>${train.isdn}</div>
@@ -1361,6 +1371,9 @@
           <div class="popup-content">
             <div class='title fontColor'>${t('view.GPH')}</div>
             <div class='content'>
+              <div class='roleName'>
+                  ${person.roleName}
+              </div>
               <div class='info'>
                 <div  class='min'>ISDN:</div>
                 <div>${person.isdn}</div>
@@ -1983,7 +1996,7 @@
       .head {
         position: absolute;
         width: 100%;
-        height: 150px;
+        height: 54px;
         background-image: url('@/assets/images/largeScreen/top.png');
         background-repeat: no-repeat;
         background-position: center;
@@ -2477,8 +2490,8 @@
   }
 
   :deep(.popup-content) {
-    width: 330px;
-    height: 200px;
+    width: 390px;
+    height: 240px;
     padding: 10px 0;
     background-image: url('@/assets/images/largeScreen/maptop.png');
     background-repeat: no-repeat;
@@ -2488,8 +2501,8 @@
     .title {
       position: relative;
       top: -13px;
-      left: 133px;
-      width: 107px;
+      left: 157px;
+      width: 126px;
       font-size: 15px;
       font-weight: 600;
       text-align: center;
@@ -2501,10 +2514,19 @@
       top: 17px;
       left: 9px;
       flex-direction: column;
-      width: 299px;
-      height: 135px;
+      width: 355px;
+      height: 170px;
       font-size: 20px;
       gap: 9px;
+
+      .roleName {
+        width: 100%;
+        overflow: hidden;
+        color: #fff;
+        text-align: center;
+        text-overflow: ellipsis; // 文本溢出添加省略号
+        white-space: nowrap; // 碰到有边界不要折行
+      }
 
       .info {
         display: flex;
@@ -2549,7 +2571,7 @@
 
   :deep(.leaflet-container a.leaflet-popup-close-button) {
     top: 29px;
-    right: 16px;
+    right: -40px;
   }
 
   :deep(.leaflet-popup),
@@ -2564,7 +2586,7 @@
   .custom-train-marker {
     width: 30px;
     height: 30px;
-    background-image: url('/largeScreen/huoche2.png');
+    background-image: url('@/assets/images/largeScreen/huoche2.png');
     background-repeat: no-repeat;
     background-size: contain;
     filter: drop-shadow(0 0 2px rgb(0 0 0 / 70%));
@@ -2573,7 +2595,7 @@
   .custom-person-marker {
     width: 30px;
     height: 30px;
-    background-image: url('/largeScreen/zhibanyuan1.png');
+    background-image: url('@/assets/images/largeScreen/zhibanyuan1.png');
     background-repeat: no-repeat;
     background-size: contain;
     filter: drop-shadow(0 0 2px rgb(0 0 0 / 70%));
