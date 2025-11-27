@@ -1,4 +1,5 @@
 {
+  "noPower": "无权限",
   "resourceCleaning": "资源清理中...",
   "forcedUpgrade": "变更",
   "noAnswer": "未接通",
@@ -21,7 +22,7 @@
   "requestStatistics": "在线设备统计",
   "operationMonitoringPlatform": "运行监控平台",
   "resetMap": "重置地图",
-  "integratedServicesDigitalNetworkSearch": "输入ISDN后按回车搜索",
+  "integratedServicesDigitalNetworkSearch": "ISDN或功能号",
   "lastLoginIp": "最后登录IP",
   "communicationLog": "通信日志",
   "systemLog": "系统日志",

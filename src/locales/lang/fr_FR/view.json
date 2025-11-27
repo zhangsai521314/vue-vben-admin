@@ -1,4 +1,5 @@
 {
+  "noPower": "Aucune autorisation",
   "resourceCleaning": "Nettoyage des ressources...",
   "forcedUpgrade": "Changement",
   "noAnswer": "Pas de réponse",
@@ -21,7 +22,7 @@
   "requestStatistics": "Statistiques des appareils en ligne",
   "operationMonitoringPlatform": "Platf. Surveillance Opérationnelle",
   "resetMap": "Réinitialiser la Carte",
-  "integratedServicesDigitalNetworkSearch": "ISDN → Entrée pour rechercher",
+  "integratedServicesDigitalNetworkSearch": "ISDN ou numéro de fonction",
   "lastLoginIp": "DAIPC",
   "communicationLog": "Journal de communication",
   "systemLog": "Journal du système",

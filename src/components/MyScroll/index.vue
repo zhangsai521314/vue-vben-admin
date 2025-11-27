@@ -5,9 +5,7 @@
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
-    <!-- 滚动包装器 -->
     <div class="scroll-wrapper" :style="{ height: wrapperHeight + 'px' }">
-      <!-- 滚动内容 -->
       <div
         ref="scrollContentRef"
         class="scroll-content"
@@ -15,14 +13,13 @@
           transform: `translateY(${-scrollOffset}px)`,
         }"
       >
-        <!-- 虚拟渲染的可见项 -->
         <div
           v-for="item in visibleItems"
           :key="item.uniqueKey"
           class="scroll-item"
           :style="{
             height: itemHeight + 'px',
-            top: item.actualTop + 'px',
+            top: item.position + 'px',
           }"
         >
           <slot :item="item.data" :index="item.originalIndex"></slot>
@@ -36,17 +33,11 @@
   import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue';
 
   interface Props {
-    // 数据列表
     data: any[];
-    // 每项高度
     itemHeight?: number;
-    // 容器高度
     containerHeight?: number;
-    // 滚动速度（像素/秒）
     speed?: number;
-    // 是否鼠标悬停暂停
     hoverPause?: boolean;
-    // 缓冲项数量
     bufferSize?: number;
   }
 
@@ -58,21 +49,16 @@
     bufferSize: 3,
   });
 
-  const emit = defineEmits<{
-    itemClick: [item: any, index: number];
-  }>();
-
   // 响应式数据
   const scrollContentRef = ref<HTMLDivElement>();
   const scrollOffset = ref(0);
   const isHovering = ref(false);
   const animationFrameId = ref<number>();
   const lastTimestamp = ref<number>(0);
-  const itemCounter = ref(0);
 
-  // 计算包装器高度（足够大以支持无缝滚动）
+  // 计算包装器高度
   const wrapperHeight = computed(() => {
-    return props.data.length * props.itemHeight * 3; // 三倍高度确保无缝
+    return props.data.length * props.itemHeight * 3;
   });
 
   // 计算可见项目数量
@@ -80,7 +66,8 @@
     return Math.ceil(props.containerHeight / props.itemHeight) + props.bufferSize * 2;
   });
 
-  // 获取循环数据 - 关键：生成足够的数据来填充滚动空间
+  // 获取循环数据
+  // 这里预先计算好 position，避免在滚动每一帧中重复计算
   const cyclingData = computed(() => {
     if (props.data.length === 0) return [];
 
@@ -93,24 +80,24 @@
         data: props.data[originalIndex],
         originalIndex,
         uniqueKey: `${originalIndex}-${i}`,
-        position: i * props.itemHeight,
+        position: i * props.itemHeight, // position 已经在数据源生成时计算好了
       });
     }
 
     return result;
   });
 
-  // 计算可见项 - 修复循环逻辑
+  // 【修改点】计算可见项
+  // 移除了 .map() 操作，直接返回数组切片。
+  // 这样返回的是对象的引用，不会每帧创建新对象，极大降低 GC 压力。
   const visibleItems = computed(() => {
     if (cyclingData.value.length === 0) return [];
 
     const startIndex = Math.floor(scrollOffset.value / props.itemHeight);
     const endIndex = Math.min(cyclingData.value.length, startIndex + visibleItemCount.value);
 
-    return cyclingData.value.slice(startIndex, endIndex).map((item) => ({
-      ...item,
-      actualTop: item.position,
-    }));
+    // 直接切片返回，零内存分配
+    return cyclingData.value.slice(startIndex, endIndex);
   });
 
   // 处理鼠标进入
@@ -127,7 +114,7 @@
     }
   };
 
-  // 滚动动画 - 实现真正的无缝循环
+  // 滚动动画
   const scrollAnimation = (timestamp: number) => {
     if (!lastTimestamp.value) {
       lastTimestamp.value = timestamp;
@@ -137,12 +124,9 @@
     lastTimestamp.value = timestamp;
 
     if (!isHovering.value && props.data.length > 0) {
-      // 计算滚动距离
       const deltaScroll = (props.speed * deltaTime) / 1000;
       let newOffset = scrollOffset.value + deltaScroll;
 
-      // 实现真正的无缝循环
-      // 当滚动超过一个循环时，回到开始位置继续滚动
       const cycleHeight = props.data.length * props.itemHeight;
       if (newOffset >= cycleHeight) {
         newOffset = newOffset % cycleHeight;
@@ -184,10 +168,7 @@
         resetScroll();
         return;
       }
-
-      // 数据更新时保持滚动连续性
       nextTick(() => {
-        // 如果数据长度变化，调整滚动位置以保持连续性
         if (oldData.length > 0 && newData.length !== oldData.length) {
           const progress = scrollOffset.value / (oldData.length * props.itemHeight);
           scrollOffset.value = progress * (newData.length * props.itemHeight);
@@ -198,7 +179,6 @@
     { deep: true },
   );
 
-  // 监听其他属性变化
   watch(
     () => [props.containerHeight, props.speed],
     () => {
@@ -206,7 +186,6 @@
     },
   );
 
-  // 生命周期
   onMounted(() => {
     startScrolling();
   });
@@ -215,7 +194,6 @@
     stopScrolling();
   });
 
-  // 暴露给父组件的方法
   defineExpose({
     resetScroll,
     startScrolling,

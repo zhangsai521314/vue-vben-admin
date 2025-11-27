@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
   import { useRouter } from 'vue-router';
-  import gplot from './components/gplot.vue';
+  import gplot from './components/gplotNew.vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { unref, ref } from 'vue';
 
@@ -42,6 +42,7 @@
   @prefixCls: ~'@{namespace}-GplotIndex-';
   .@{prefixCls} {
     height: calc(100vh - 48px);
+
     > div {
       display: flex;
       flex-direction: column;

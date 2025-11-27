@@ -1,6 +1,10 @@
 <template>
   <div style="padding: 10px; color: red; font-size: 18px; font-weight: 800">
-    您没有权限打开该页面！
+    {{ t('view.noPower') }}
   </div>
 </template>
-<script setup></script>
+<script setup>
+  import { useI18n } from '@/hooks/web/useI18n';
+
+  const { t } = useI18n();
+</script>

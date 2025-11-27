@@ -25,10 +25,6 @@
   import { message } from 'ant-design-vue';
   import { tryOnUnmounted } from '@vueuse/core';
   import { useGplotStoreWithOut } from '@/store/modules/gplot';
-  import html2Canvas from 'html2canvas';
-  import * as echarts from 'echarts';
-  //快捷键监控
-  import shortcutKey from 'keymaster';
   import gplotApi from '@/api/gplot';
   import softwareApi from '@/api/software';
   import messageApi from '@/api/message';

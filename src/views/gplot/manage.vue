@@ -49,7 +49,7 @@
   import option_ from './components/option.vue';
   import assembly from './components/assembly.vue';
   import prop from './components/prop.vue';
-  import gplot from './components/gplot.vue';
+  import gplot from './components/gplotNew.vue';
   import { ref, unref, watch, nextTick } from 'vue';
   import { useI18n } from '@/hooks/web/useI18n';
 

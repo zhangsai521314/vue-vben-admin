@@ -7,13 +7,21 @@
         <!-- 搜索和控制区 -->
         <div class="control-container">
           <div class="search-box">
-            <input
-              v-model="searchQuery"
-              type="text"
-              :placeholder="t('view.integratedServicesDigitalNetworkSearch')"
-              @keyup.enter="handleSearch"
-              class="search-input"
-            />
+            <a-space direction="horizontal" size="small">
+              <input
+                v-model="searchQuery"
+                type="text"
+                :placeholder="t('view.integratedServicesDigitalNetworkSearch')"
+                @keyup.enter="handleSearch"
+                class="search-input"
+              />
+              <a-button
+                @click="handleSearch"
+                style="border: none; background-color: #ac33c1; color: #fff"
+              >
+                {{ t('view.query') }}</a-button
+              >
+            </a-space>
           </div>
           <!-- 新增：显示/隐藏控制按钮 -->
           <div class="toggle-controls">
@@ -43,13 +51,13 @@
               {{ t('view.resetMap') }}
             </div>
             <!-- 新增：手动重置按钮 -->
-            <div class="toggle-btn" @click="manualReset" title="手动重置页面释放内存">
+            <!-- <div class="toggle-btn" @click="manualReset" title="手动重置页面释放内存">
               <IconFontClass
                 name="icon-baseui-zhizao"
                 :style="{ fontSize: '20px', marginRight: '5px' }"
               />
               手动重置
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -1323,7 +1331,11 @@
 
     // 搜索火车
     for (const train of trains.value) {
-      if (train.isdn.toLowerCase().includes(query) && !found) {
+      if (
+        (train.isdn.toLowerCase().includes(query) ||
+          train.roleName.toLowerCase().includes(query)) &&
+        !found
+      ) {
         map.flyTo(train.coordinate, 10, { duration: 1 });
         openPopup(
           train.coordinate,
@@ -1363,7 +1375,11 @@
 
     // 搜索人员
     for (const person of persons.value) {
-      if (person.isdn.toLowerCase().includes(query) && !found) {
+      if (
+        (person.isdn.toLowerCase().includes(query) ||
+          person.roleName.toLowerCase().includes(query)) &&
+        !found
+      ) {
         map.flyTo(person.coordinate, 10, { duration: 1 });
         openPopup(
           person.coordinate,
@@ -2193,7 +2209,7 @@
       .head {
         position: relative;
         width: 100%;
-        height: 150px;
+        height: 74px;
         background-image: url('@/assets/images/largeScreen/top.png');
         background-repeat: no-repeat;
         background-position: center;
@@ -2401,13 +2417,13 @@
 
   .search-input {
     flex: 1;
-    padding: 8px 12px;
+    width: 210px;
+    height: 32px;
     transition: all 0.3s;
     border: 1px solid #ac33c1;
     border-radius: 4px;
     background: transparent;
     color: #fff;
-    font-size: 14px;
   }
 
   .search-input:focus {

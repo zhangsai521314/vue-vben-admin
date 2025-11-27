@@ -21,9 +21,9 @@ const largeScreen: AppRouteModule = {
       },
     },
     {
-      path: 'noAlarm',
-      name: 'LargeScreenNoAlarm',
-      component: () => import('/@/views/largeScreen/indexNoAlarm.vue'),
+      path: 'noClear',
+      name: 'LargeScreenNoClear',
+      component: () => import('/@/views/largeScreen/indexNoClear.vue'),
       meta: {
         hideMenu: true,
       },

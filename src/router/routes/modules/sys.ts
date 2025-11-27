@@ -14,8 +14,6 @@ const userInfo: AppRouteModule = {
     // 菜单排序，只对第一级有效
     orderNo: 1,
     icon: 'ion:grid-outline',
-    //配置名称，可直接输入字符串，也可使用
-    title: '无权限',
   },
   children: [
     {
@@ -23,7 +21,9 @@ const userInfo: AppRouteModule = {
       name: 'NPower',
       component: () => import('/@/views/sys/exception/noPower.vue'),
       meta: {
-        title: '无权限',
+        titleCn: '无权限',
+        titleEn: 'NPower',
+        titleFr: 'Aucune autorisation',
         hideMenu: true,
       },
     },

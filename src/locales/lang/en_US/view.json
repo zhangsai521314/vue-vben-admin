@@ -1,4 +1,5 @@
 {
+  "noPower": "NoPower",
   "resourceCleaning": "Resource cleaning in progress...",
   "forcedUpgrade": "Change",
   "noAnswer": "no answer",
@@ -21,7 +22,7 @@
   "requestStatistics": "Online device statistics",
   "operationMonitoringPlatform": "Operation Monitoring Platform",
   "resetMap": "Reset map",
-  "integratedServicesDigitalNetworkSearch": "Enter ISDN and press enter to search",
+  "integratedServicesDigitalNetworkSearch": "ISDN ou numéro de fonction",
   "lastLoginIp": "Last login IP",
   "communicationLog": "Communication log",
   "systemLog": "System log",
