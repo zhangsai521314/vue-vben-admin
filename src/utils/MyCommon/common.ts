@@ -18,11 +18,6 @@ const Common = {
       sm2: {
         publicKey:
           '048a39b1c0800a2b01d93cc7a5d7c2d4cb20d1a2b062b52dba9dbb36ebf5ac996f234213978318d78a2e4a374317e4e2397d18803187540a8392b65913ba5746db',
-        privateKey: 'cf78bbd30b569643c2c26d6a12f4a82c1a2c6a0f0be656649fa4e3db8e95726e',
-      },
-      sm4: {
-        key: '0123456789txceeffetxce9876543210',
-        iv: 'txce98c7c6fdtxce0402f804c33dtxce',
       },
     };
   },
@@ -180,7 +175,7 @@ const Common = {
       return (
         (a = a.concat(d)),
         e.replace(/YYYY|MM|DD|hh|mm|ss/g, function () {
-          return (a.index = 0 | ++a.index), digit(a[a.index]);
+          return ((a.index = 0 | ++a.index), digit(a[a.index]));
         })
       );
     };

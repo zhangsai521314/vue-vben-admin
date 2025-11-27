@@ -1,4 +1,9 @@
 {
+  "clickToSelectTheAuthorizationInformationFile": "点击选择授权信息文件",
+  "authorizationInformationFile": "授权信息文件",
+  "authorizedQuantity": "授权数量",
+  "authorizationItemName": "授权项名称",
+  "uploadAuthorizationFile": "上传授权信息文件",
   "noPower": "无权限",
   "resourceCleaning": "资源清理中...",
   "forcedUpgrade": "变更",

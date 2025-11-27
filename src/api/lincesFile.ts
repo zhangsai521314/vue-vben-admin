@@ -26,5 +26,19 @@ const lincesFile = {
       responseType: 'blob',
     });
   },
+  //获取授权文件列表
+  GetLincesInfos: function () {
+    return defHttp.get({
+      url: '/Linces/GetLincesInfos',
+    });
+  },
+  //授权信息文件
+  UpLoadLincesInfoFile: function (params) {
+    return defHttp.post({
+      url: '/Linces/UpLoadLincesInfoFile',
+      params,
+      headers: { 'Content-Type': ContentTypeEnum.FORM_DATA },
+    });
+  },
 };
 export default lincesFile;

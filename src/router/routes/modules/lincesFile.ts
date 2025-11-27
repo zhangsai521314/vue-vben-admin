@@ -29,6 +29,16 @@ const Hand: AppRouteModule = {
         hideMenu: true,
       },
     },
+    {
+      path: 'info',
+      name: 'LincesInfo',
+      component: () => import('/@/views/lincesFile/info.vue'),
+      meta: {
+        //授权文件管理
+        title: '',
+        hideMenu: true,
+      },
+    },
   ],
 };
 

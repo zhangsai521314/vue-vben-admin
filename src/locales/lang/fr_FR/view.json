@@ -1,4 +1,9 @@
 {
+  "clickToSelectTheAuthorizationInformationFile": "Cliquez sur Sélectionner le fichier d'information d'autorisation",
+  "authorizationInformationFile": "Document d'information sur l'autorisation",
+  "authorizedQuantity": "Nombre d'autorisations",
+  "authorizationItemName": "Nom de l'élément autorisé",
+  "uploadAuthorizationFile": "Télécharger le fichier d'information d'autorisation",
   "noPower": "Aucune autorisation",
   "resourceCleaning": "Nettoyage des ressources...",
   "forcedUpgrade": "Changement",

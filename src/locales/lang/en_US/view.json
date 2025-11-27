@@ -1,4 +1,9 @@
 {
+  "clickToSelectTheAuthorizationInformationFile": "Click to select the authorization information file",
+  "authorizationInformationFile": "Authorization Information File",
+  "authorizedQuantity": "Authorized quantity",
+  "authorizationItemName": "Authorization item name",
+  "uploadAuthorizationFile": "Upload authorization information file",
   "noPower": "NoPower",
   "resourceCleaning": "Resource cleaning in progress...",
   "forcedUpgrade": "Change",
