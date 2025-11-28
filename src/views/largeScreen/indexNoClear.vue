@@ -502,13 +502,13 @@
         }));
         alarmList.value = [...datas];
         nextTick(() => {
-          setSafeTimeout(getCirHandLocation, 12 * 1000);
+          setSafeTimeout(getServiceInfo, 12 * 1000);
         });
       })
       .catch((error) => {
         console.error('getServiceInfo失败:', error);
         nextTick(() => {
-          setSafeTimeout(getCirHandLocation, 12 * 1000);
+          setSafeTimeout(getServiceInfo, 12 * 1000);
         });
       });
   };
@@ -860,13 +860,11 @@
     const title = type === 'cab' ? t('view._cabRadio') : t('view.handheldRadio');
     const label1 = type === 'cab' ? t('view.kilometerMarker') : 'ISDN';
     const val1 = type === 'cab' ? data.glb : data.isdn;
-
     const content = `
         <div class="popup-content">
             <div class='title fontColor'>${title}</div>
             <div class='content'>
-                <div class='roleName'>${data.roleName || ''}</div>
-                <div class='info'><div class='min'>ISDN:</div><div>${data.isdn}</div></div>
+                <div class='roleName'>${data.roleName || '--'}</div>
                 <div class='info'><div class='min'>${label1}:</div><div>${val1}</div></div>
                 <div class='info'><div class='min'>${t('view.locationStation')}:</div><div>${data.station}</div></div>
                 <div class='info'><div class='min'>${t('view.affiliatedRegion')}:</div><div>${data.area}</div></div>

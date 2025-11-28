@@ -14,7 +14,7 @@
       <template #toolbar_buttons>
         <div :class="`tableBtn`">
           <a-space direction="horizontal" size="small" style="margin-left: 5px">
-            <AuthDom auth="lincesFile_add">
+            <AuthDom auth="lincesInfoFile_add">
               <a-space direction="horizontal" size="small" :wrap="true" style="margin-bottom: 0">
                 <div class="row-div">
                   <a-space direction="horizontal" size="small" :wrap="true">

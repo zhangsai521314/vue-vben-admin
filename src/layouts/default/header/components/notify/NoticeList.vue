@@ -138,8 +138,22 @@
               cursor: pointer;
             "
           >
-            {{ row.msgTitle }}</div
-          >
+            <template v-if="locale == 'zh-CN'">{{
+              dictionariesData.find((m) => m.key == row.msgType)
+                ? dictionariesData.find((m) => m.key == row.msgType).dictionariesNameCn
+                : row.msgType
+            }}</template>
+            <template v-else-if="locale == 'en-US'">{{
+              dictionariesData.find((m) => m.key == row.msgType)
+                ? dictionariesData.find((m) => m.key == row.msgType).dictionariesNameEn
+                : row.msgType
+            }}</template>
+            <template v-else>{{
+              dictionariesData.find((m) => m.key == row.msgType)
+                ? dictionariesData.find((m) => m.key == row.msgType).dictionariesNameFr
+                : row.msgType
+            }}</template>
+          </div>
           <div
             style="
               display: -webkit-box;
@@ -172,11 +186,13 @@
   import messageApi from '@/api/message';
   import { useI18n } from '@/hooks/web/useI18n';
   import { useLocaleStore } from '@/store/modules/locale';
+  import dictionariesApi from '@/api/dictionaries';
 
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const locale = localeStore.getLocale;
   const mqttStore = useMqttStoreWithOut();
+  const dictionariesData = ref([]);
 
   const props = defineProps({
     //原始数据
@@ -188,7 +204,7 @@
       type: Function as PropType<(Recordable) => void>,
     },
   });
-
+  getDictionaries();
   // 最终展示数据
   const viewData: MsgData[] = reactive([]);
   // 外部容器dom元素
@@ -262,6 +278,20 @@
       })
       .catch(() => {
         message.error(t('view.failToConfirmAlarm'));
+      });
+  }
+
+  //获取字典
+  function getDictionaries() {
+    dictionariesApi
+      .GetDictionariesSimpleKey({
+        dictionariesclass: ['msgType'],
+      })
+      .then((data) => {
+        dictionariesData.value = data;
+      })
+      .catch(() => {
+        dictionariesData.value = [];
       });
   }
 
