@@ -1879,7 +1879,7 @@
         alarmList.value = [...datas];
         nextTick(() => {
           setTimeout(() => {
-            getCirHandLocation();
+            getServiceInfo();
           }, 12 * 1000);
         });
       })
@@ -1887,7 +1887,7 @@
         console.error('getServiceInfo失败:', error);
         nextTick(() => {
           setTimeout(() => {
-            getCirHandLocation();
+            getServiceInfo();
           }, 12 * 1000);
         });
       });
