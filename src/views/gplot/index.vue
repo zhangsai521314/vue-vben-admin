@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
   import { useRouter } from 'vue-router';
-  import gplot from './components/gplotNew.vue';
+  import gplot from './components/gplot.vue';
   import { useDesign } from '@/hooks/web/useDesign';
   import { unref, ref } from 'vue';
 

@@ -1,5 +1,6 @@
 <template>
   <a-spin :spinning="rendering">
+    <!-- <button @click="executeCode">执行后端代码</button> -->
     <div
       onclick=""
       @contextmenu="rightClick"
@@ -81,9 +82,6 @@
   const agileStateData = [];
   let noAgileStateChangeStatus_timeId = 0;
   let isStop = false;
-  // 存储节点当前状态，避免重复更新
-  const nodeStatusMap = new Map();
-
   gplotStore.gplotKeyOb[gplotKey].containerConfig.menuId = props.menuId;
   shortcutKey_();
 
@@ -92,7 +90,9 @@
       graphOb.destroy();
     }
     rendering.value = true;
-
+    // setInterval(() => {
+    //   gplotStore.gplotKeyOb[gplotKey].lineWidth = gplotStore.gplotKeyOb[gplotKey].lineWidth + 2;
+    // }, 2000);
     let gplotConfig = {};
     if (
       !isClear &&
@@ -130,9 +130,40 @@
       gplotStore.gplotKeyOb[gplotKey].selectedOb = null;
     }
 
+    // //自定义边上的marker的渲染规则
+    // class FlyMarkerCubic extends CubicHorizontal {
+    //   getMarkerStyle(attributes, t) {
+    //     console.log(attributes);
+    //     console.log(t);
+    //     return {
+    //       r: 5,
+    //       fill: 'red',
+    //       offsetPath: this.shapeMap.key,
+    //       ...subStyleProps(attributes, 'marker'),
+    //     };
+    //   }
+
+    //   override onCreate() {
+    //     const marker = this.upsert(
+    //       'marker',
+    //       Circle,
+    //       this.getMarkerStyle(this.attributes, this),
+    //       this,
+    //     );
+    //     marker?.animate([{ offsetDistance: 0 }, { offsetDistance: 1 }], {
+    //       duration: 1000,
+    //       iterations: Infinity,
+    //     });
+    //   }
+    // }
+    // register(ExtensionCategory.EDGE, 'fly-marker-cubic', FlyMarkerCubic);
+    // //自定义边上的marker的渲染规则
+    //画布配置：https://g6-next.antv.antgroup.com/api/graph/option
+
     const graphConfig = {
       //画布容器
       container: mountRef.value,
+      // renderer: () => new Renderer(),
       //是否自动调整大小
       autoResize: true,
       // //画布背景色，暂有bug
@@ -239,8 +270,8 @@
             const data = graphOb.getData();
             if (data) {
               if (!data.edges.find((m) => m.source == e.source && m.target == e.target)) {
-                e.style.type = 'polyline';
-                e['type'] = 'polyline';
+                e.style.type = 'polyline'; //正交线
+                e['type'] = 'polyline'; //正交线
                 e['data'] = {
                   myType: 'edge',
                   //配置原有的样式
@@ -268,10 +299,11 @@
       plugins: [
         gplotStore.gplotKeyOb[gplotKey].containerConfig.grid,
         gplotStore.gplotKeyOb[gplotKey].containerConfig.background,
+        //右键菜单
         {
           key: 'ContextMenu',
           type: 'contextmenu',
-          trigger: 'contextmenu',
+          trigger: 'contextmenu', // 'click' or 'contextmenu'
           getContent: (e) => {
             console.log(e);
             if (gplotStore.gplotKeyOb[gplotKey].selectedOb != null) {
@@ -280,6 +312,13 @@
                   x: e.client.x,
                   y: e.client.y,
                   items: [
+                    // {
+                    //   label: '复制',
+                    //   icon: '',
+                    //   onClick: () => {
+                    //     alert('复制');
+                    //   },
+                    // },
                     {
                       label: t('view.delete'),
                       icon: '',
@@ -311,6 +350,13 @@
           },
         },
       ],
+      // layout: {
+      //   //
+      //   type: 'antv-dagre',
+      //   ranksep: 50,
+      //   nodesep: 5,
+      //   sortByCombo: true,
+      // },
       data: gplotConfig,
       edge: {
         //全部边线都是正交线
@@ -359,6 +405,8 @@
               };
             }
           }
+          // const contextmenu = graphOb.getPluginInstance('ContextMenu');
+          // contextmenu?.hide();
         } else if (e.target.id != undefined) {
           const clickOb = graphOb.getElementData(e.target.id);
           if (clickOb && clickOb.data && clickOb.data.myServiceId) {
@@ -369,11 +417,21 @@
         console.log('点击图谱元素报错', error);
       }
     });
-
+    // graphOb.on('contextmenu', (a, b, c) => {
+    //   //阻止系统右键事件
+    //   event.preventDefault();
+    //   return false;
+    // });
     graphOb.render().then(() => {
+      // graphOb.setBackground('#0960BD');
+      // graphOb.draw();
+      // console.log('背景颜色', graphOb.getBackground());
       $('.g6-background').css({ backgroundRepeat: 'no-repeat', backgroundSize: '100% 100%' });
       if (props.viewType == 'edit') {
         window.addEventListener('beforeunload', beforeunloadHandler);
+        //将图缩放至合适大小并平移至视口中心，编辑状态下使用户拖拽位置计算不正确
+        // graphOb.fitView();
+        //平移至中心
         graphOb.fitCenter();
       } else {
         if (gplotStore.gplotKeyOb[gplotKey].containerConfig.fit == 'fitCenter') {
@@ -383,7 +441,8 @@
         }
       }
       gplotStore.gplotKeyOb[gplotKey].renderSuccess = true;
-
+      //更新功能
+      //graphOb.updateBehavior({key: 'key', ...});
       if (props.viewType == 'edit') {
         watch(
           () => gplotStore.gplotKeyOb[gplotKey].selectedOb,
@@ -416,6 +475,9 @@
         watch(
           () => gplotStore.gplotKeyOb[gplotKey].containerConfig.grid.myIsShow,
           () => {
+            //根据插件的key获取插件
+            // const plugin = graphOb.getPluginInstance('GridLine');
+            //更新组件
             graphOb.updatePlugin({
               key: 'GridLine',
               lineWidth: gplotStore.gplotKeyOb[gplotKey].containerConfig.grid.myIsShow ? 1 : 0,
@@ -430,7 +492,10 @@
               gplotStore.gplotKeyOb[gplotKey].containerConfig.background.background =
                 gplotStore.gplotKeyOb[gplotKey].containerConfig.background.myBackground;
               graphOb.updatePlugin(gplotStore.gplotKeyOb[gplotKey].containerConfig.background);
+            } else {
+              //  delete gplotStore.gplotKeyOb[gplotKey].containerConfig.background.background;
             }
+            // graphOb.updatePlugin(gplotStore.gplotKeyOb[gplotKey].containerConfig.background);
           },
         );
         watch(
@@ -438,6 +503,7 @@
           () => {
             if (gplotStore.gplotKeyOb[gplotKey].containerConfig.background.backgroundImage != '') {
               gplotStore.gplotKeyOb[gplotKey].containerConfig.background.background = '';
+              //  delete gplotStore.gplotKeyOb[gplotKey].containerConfig.background.background;
             } else {
               gplotStore.gplotKeyOb[gplotKey].containerConfig.background.background =
                 gplotStore.gplotKeyOb[gplotKey].containerConfig.background.myBackground;
@@ -455,13 +521,9 @@
             }
           });
         }
-        //修复新增加的配置对象
+        // 修复新增加的配置对象
       } else {
-        // 清空状态缓存
-        nodeStatusMap.clear();
-        serviceIdDatas.length = 0;
-        agileStateData.length = 0;
-
+        //区别是否灵活配置更改状态
         const datas = graphOb.getData();
         for (const key in datas) {
           datas[key].forEach((changeNode) => {
@@ -478,45 +540,12 @@
         if (serviceIdDatas.length > 0) {
           noAgileStateChangeStatus();
         }
-        //灵活配置的变化监控
         if (agileStateData.length > 0) {
           agileStateLastStatus();
         }
       }
       rendering.value = false;
     });
-  }
-
-  // 根据状态优先级确定节点颜色 - 使用配置的mySimpleState
-  function determineNodeStatus(serviceStatus, stateOb) {
-    if (!serviceStatus) {
-      return '#5D5D5D'; // 未知状态
-    }
-
-    // 按照配置的优先级（level从低到高）检查状态
-    const sortedStates = _.sortBy(
-      stateOb.data.mySimpleState.filter((state) => state.open),
-      'level',
-    );
-
-    for (const state of sortedStates) {
-      // 检查服务状态是否匹配配置的状态条件
-      if (serviceStatus[state.code] === state.value) {
-        return state.color;
-      }
-    }
-
-    // 如果没有匹配任何状态，返回原始颜色
-    switch (stateOb.data.myType) {
-      case 'node':
-        return stateOb.data.myOldStyle.iconFill;
-      case 'edge':
-        return stateOb.data.myOldStyle.fill;
-      case 'combo':
-        return stateOb.data.myOldStyle.stroke;
-      default:
-        return stateOb.data.myOldStyle.iconFill || '#00FF00';
-    }
   }
 
   //动态保存配置
@@ -621,6 +650,9 @@
         isDownShift = false;
       }
     };
+    // shortcutKey('ctrl', function () {
+    //   event.preventDefault();
+    // });
   }
 
   function rightClick() {
@@ -651,9 +683,9 @@
       style: {
         x: zuoBiao[0],
         y: zuoBiao[1],
+        //图标
         iconText: eval(`'${ob.iconUnicode}'`),
         lineWidth: 0,
-        //图标
         labelText: t('view.defaultText'),
         labelTextCn: '默认文本',
         labelTextEn: 'Default text',
@@ -693,10 +725,12 @@
             },
             data: {
               myType: 'combo',
+              //配置原有的样式
               myOldStyle: {
                 iconFill: '',
                 labelFill: '',
               },
+              //锁定
               myLockAll: false,
               myEvent: [],
               myAgileState: [],
@@ -705,6 +739,20 @@
             },
           },
         ]);
+
+        // const nodeConfig = _.cloneDeep(gplotStore.gplotKeyOb[gplotKey].nodeConfig);
+        // myCommon.objectToObject(nodeConfig, {
+        //   id: comboId,
+        //   type: 'rect',
+        //   style: {
+        //     lineWidth: 2,
+        //   },
+        //   //自定义信息
+        //   data: {
+        //     type: 'combo',
+        //   },
+        // });
+        // graphOb.addComboData([nodeConfig]);
 
         selectedObs.forEach((m) => (m['combo'] = comboId));
         //更新的方式：https://github.com/antvis/G6/issues/5857
@@ -784,6 +832,7 @@
       const deleteOb = {
         nodes: [],
         edges: [],
+        // , combos: []
       };
       const comboIds = [];
       data.forEach((m) => {
@@ -793,6 +842,7 @@
           deleteOb.edges.push(m.id);
         } else if (m.data.myType == 'combo') {
           comboIds.push(m.id);
+          // deleteOb.combos.push(m.id);
         }
       });
       graphOb.removeData(deleteOb);
@@ -836,77 +886,61 @@
     }
   }
 
-  //非灵活配置的变化监控 - 优化版本
+  //非灵活配置的变化监控
   function noAgileStateChangeStatus() {
-    if (isStop || serviceIdDatas.length === 0) {
-      return;
-    }
-
-    softwareApi
-      .GetServiceStatus(serviceIdDatas.map((m) => m.data.myServiceId))
-      .then(async (nodeState) => {
-        const updates = [];
-
-        serviceIdDatas.forEach((node) => {
-          const stateOb = graphOb.getElementData(node.id);
-          if (stateOb) {
-            const serviceStatus = nodeState.find((m) => m.serviceId === stateOb.data.myServiceId);
-            const newColor = determineNodeStatus(serviceStatus, stateOb);
-
-            // 检查状态是否变化，避免不必要的更新
-            const nodeId = stateOb.id;
-            const oldStatus = nodeStatusMap.get(nodeId);
-            const newStatus = {
-              color: newColor,
-              serviceStatus: serviceStatus
-                ? {
-                    isOnline: serviceStatus.isOnline,
-                    isAlarm: serviceStatus.isAlarm,
-                    isPerformanceNormal: serviceStatus.isPerformanceNormal,
+    if (!isStop) {
+      softwareApi
+        .GetServiceStatus(serviceIdDatas.map((m) => m.data.myServiceId))
+        .then(async (nodeState) => {
+          serviceIdDatas.forEach((node) => {
+            const stateOb = graphOb.getElementData(node.id);
+            if (stateOb) {
+              var serviceStatus = nodeState.find((m) => m.serviceId == stateOb.data.myServiceId);
+              let color = null;
+              if (serviceStatus) {
+                for (let i = 0; i < stateOb.data.mySimpleState.filter((m) => m.open).length; i++) {
+                  debugger;
+                  const element = stateOb.data.mySimpleState[i];
+                  if (serviceStatus[element.code] == element.value) {
+                    color = element.color;
+                    break;
                   }
-                : null,
-            };
-
-            // 只有当状态真正变化时才更新
-            if (
-              !oldStatus ||
-              oldStatus.color !== newStatus.color ||
-              (serviceStatus &&
-                (oldStatus.serviceStatus?.isOnline !== serviceStatus.isOnline ||
-                  oldStatus.serviceStatus?.isAlarm !== serviceStatus.isAlarm ||
-                  oldStatus.serviceStatus?.isPerformanceNormal !==
-                    serviceStatus.isPerformanceNormal))
-            ) {
-              nodeStatusMap.set(nodeId, newStatus);
-              changeStyle(stateOb.data.myType, node.id, newColor);
-              updates.push(node.id);
+                }
+              } else {
+                color = '#5D5D5D';
+              }
+              if (color == null) {
+                //回复原始状态
+                switch (stateOb.data.myType) {
+                  case 'node':
+                    color = stateOb.data.myOldStyle.iconFill;
+                    break;
+                  case 'edge':
+                    color = stateOb.data.myOldStyle.fill;
+                    break;
+                  case 'combo':
+                    color = stateOb.data.myOldStyle.stroke;
+                    break;
+                }
+              }
+              changeStyle(stateOb.data.myType, node.id, color);
             }
-          }
-        });
-
-        // 只有在有更新时才重绘画布
-        if (updates.length > 0) {
+          });
           await graphOb.draw();
-        }
-
-        // 使用requestAnimationFrame来避免堆积调用
-        if (!isStop) {
           noAgileStateChangeStatus_timeId = setTimeout(() => {
             noAgileStateChangeStatus();
-          }, 10000);
-        }
-      })
-      .catch((e) => {
-        console.error('状态监控错误', e);
-        if (!isStop) {
+          }, 5000);
+        })
+        .catch((e) => {
+          console.error(e);
           noAgileStateChangeStatus_timeId = setTimeout(() => {
             noAgileStateChangeStatus();
-          }, 15000); // 出错时延长间隔
-        }
-      });
+          }, 5000);
+        });
+    }
   }
 
-  //灵活配置节点的状态初始化
+  //灵活配置节点的状态初始化——
   function agileStateLastStatus() {
     messageApi
       .GetServiceMsgTypeLastSimple()
@@ -916,7 +950,7 @@
           changeAllDataConfig(state);
         });
         console.log(gplotStore.gplotKeyOb[gplotKey].containerConfig.allDataValue);
-        await agileStateChange();
+        agileStateChange();
         agileStateChangeStatus();
       })
       .catch((e) => {
@@ -939,14 +973,13 @@
       }
     });
   }
-
   //灵活配置状态判定及改变
   async function agileStateChange() {
     if (Object.keys(gplotStore.gplotKeyOb[gplotKey].containerConfig.allDataValue).length > 0) {
-      const updates = [];
-
+      //画布节点灵活配置赋值
       agileStateData.forEach((node) => {
         let color = null;
+        //获取画布节点
         const stateOb = graphOb.getElementData(node.id);
         if (stateOb) {
           const orderData = _.sortBy(stateOb.data.myAgileState, (m) => m.level);
@@ -956,52 +989,48 @@
               const runValue = executeFunc(
                 gplotStore.gplotKeyOb[gplotKey].containerConfig.allDataValue,
               );
-              if (typeof runValue === 'boolean' && runValue) {
-                color = orderData[i].color;
-                break;
+              if (typeof runValue === 'boolean') {
+                if (runValue) {
+                  //灵活配置颜色
+                  color = orderData[i].color;
+                }
+                if (color == null) {
+                  //回复原始状态
+                  switch (stateOb.data.myType) {
+                    case 'node':
+                      color = stateOb.data.myOldStyle.iconFill;
+                      break;
+                    case 'edge':
+                      color = stateOb.data.myOldStyle.fill;
+                      break;
+                    case 'combo':
+                      color = stateOb.data.myOldStyle.stroke;
+                      break;
+                  }
+                }
+                changeStyle(stateOb.data.myType, node.id, color);
+                if (runValue) {
+                  //按优先级计算,有满足则跳出
+                  break;
+                }
+              } else {
+                console.error('设置画布节点变量值返回值错误', orderData[i]);
               }
             } catch (error) {
               console.error('设置画布节点变量值出错', orderData[i]);
             }
           }
-          if (color == null) {
-            //回复原始状态
-            switch (stateOb.data.myType) {
-              case 'node':
-                color = stateOb.data.myOldStyle.iconFill;
-                break;
-              case 'edge':
-                color = stateOb.data.myOldStyle.fill;
-                break;
-              case 'combo':
-                color = stateOb.data.myOldStyle.stroke;
-                break;
-            }
-          }
-
-          // 检查颜色是否变化
-          const nodeId = stateOb.id;
-          const oldColor = nodeStatusMap.get(nodeId)?.color;
-          if (oldColor !== color) {
-            nodeStatusMap.set(nodeId, { color });
-            changeStyle(stateOb.data.myType, node.id, color);
-            updates.push(node.id);
-          }
         }
       });
-
-      if (updates.length > 0) {
-        await graphOb.draw();
-      }
+      await graphOb.draw();
     }
   }
-
   //灵活配置的变化监控
   function agileStateChangeStatus() {
     watch(
       () => gplotStore.mqttMsgChange,
       async () => {
-        if (gplotStore.mqttMsgChange && !isStop) {
+        if (gplotStore.mqttMsgChange) {
           changeAllDataConfig(gplotStore.mqttMsgChange);
           await agileStateChange();
         }
@@ -1011,6 +1040,7 @@
 
   function changeStyle(type, id, color) {
     if (color != null) {
+      //更改成对应状态
       switch (type) {
         case 'node':
           graphOb.updateNodeData([
@@ -1024,7 +1054,7 @@
           ]);
           break;
         case 'edge':
-          graphOb.updateEdgeData([
+          graphOb.updateComboData([
             {
               id: id,
               style: {
@@ -1035,7 +1065,7 @@
           ]);
           break;
         case 'combo':
-          graphOb.updateComboData([
+          graphOb.updateEdgeData([
             {
               id: id,
               style: {
@@ -1047,7 +1077,6 @@
       }
     }
   }
-
   watch(
     () => appStore.projectConfig!.menuSetting.collapsed,
     () => {
@@ -1111,33 +1140,17 @@
     init,
   });
 
-  //页面卸载后 - 优化清理逻辑
+  //页面卸载后
   tryOnUnmounted(() => {
-    console.log('gplot_tryOnUnmounted');
-    isStop = true;
-
-    // 清除所有定时器
-    clearTimeout(noAgileStateChangeStatus_timeId);
-    clearTimeout(changeSaveTimeId);
-
-    // 移除事件监听
-    window.removeEventListener('beforeunload', beforeunloadHandler);
-    document.onkeydown = null;
-    document.onkeyup = null;
-    window.onresize = null;
-
-    // 清空数据引用
-    serviceIdDatas.length = 0;
-    agileStateData.length = 0;
-    nodeStatusMap.clear();
-
-    // 销毁图形实例
-    if (graphOb) {
-      setTimeout(() => {
+    setTimeout(() => {
+      console.log('gplot_tryOnUnmounted');
+      isStop = true;
+      clearTimeout(noAgileStateChangeStatus_timeId);
+      if (graphOb) {
         graphOb.destroy();
         console.log('gplot_tryOnUnmounted完成');
-      }, 100);
-    }
+      }
+    });
   });
 </script>
 
@@ -1177,6 +1190,8 @@
     position: relative;
     bottom: 19px;
   }
+
+  /* 其他元素的-展示（视频） */
 
   /* 元素的拖拽及改变大小的样式 */
   .ineuos-point {
@@ -1264,4 +1279,6 @@
     margin-top: -5px;
     cursor: w-resize;
   }
+
+  /* 元素的拖拽及改变大小的样式 */
 </style>

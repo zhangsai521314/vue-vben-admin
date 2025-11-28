@@ -49,7 +49,7 @@
   import option_ from './components/option.vue';
   import assembly from './components/assembly.vue';
   import prop from './components/prop.vue';
-  import gplot from './components/gplotNew.vue';
+  import gplot from './components/gplot.vue';
   import { ref, unref, watch, nextTick } from 'vue';
   import { useI18n } from '@/hooks/web/useI18n';
 
@@ -128,8 +128,9 @@
     display: flex;
     //弹性布局方向为列(上下排列)
     flex-direction: column;
-    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'Segoe UI', Arial,
-      Roboto, 'PingFang SC', miui, 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
+    font-family:
+      -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'Segoe UI', Arial, Roboto,
+      'PingFang SC', miui, 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
     font-size: 13px;
     font-weight: 400;
     //user-select: none;

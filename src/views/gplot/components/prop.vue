@@ -261,7 +261,7 @@
                 :label="t('view.textContentCn')"
               >
                 <a-textarea
-                  maxlength="60"
+                  :maxlength="60"
                   v-model:value="
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelTextCn
                   "
@@ -281,7 +281,7 @@
                 :label="t('view.textContentEn')"
               >
                 <a-textarea
-                  maxlength="60"
+                  :maxlength="60"
                   v-model:value="
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelTextEn
                   "
@@ -301,7 +301,7 @@
                 :label="t('view.textContentFr')"
               >
                 <a-textarea
-                  maxlength="60"
+                  :maxlength="60"
                   v-model:value="
                     gplotStore.gplotKeyOb[props.graphObRef.gplotKey].selectedOb.style.labelTextFr
                   "
@@ -1800,7 +1800,7 @@
   }
   //显示选中节点的状态配置
   function showSelectedObState(data) {
-    (newSelectedObState.value = data
+    ((newSelectedObState.value = data
       ? _.cloneDeep(data)
       : {
           key: myCommon.uniqueId(),
@@ -1814,7 +1814,7 @@
           //状态名称
           name: '',
         }),
-      (isSaveSelectedObStateAdd.value = data ? false : true);
+      (isSaveSelectedObStateAdd.value = data ? false : true));
     isShowSelectedObState.value = true;
   }
   //关闭选中节点的状态配置
