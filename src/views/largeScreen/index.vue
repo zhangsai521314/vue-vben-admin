@@ -1351,7 +1351,7 @@
                 <div>${train.isdn}</div>
               </div>
               <div class='info'>
-                <div>${t('view.kilometerMarker')}:</div>
+                <div>${t('view._kilometerMarker')}:</div>
                 <div>${train.glb}</div>
               </div>
               <div class='info'>

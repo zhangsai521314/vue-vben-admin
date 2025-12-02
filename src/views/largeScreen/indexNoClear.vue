@@ -858,7 +858,7 @@
     }
 
     const title = type === 'cab' ? t('view._cabRadio') : t('view.handheldRadio');
-    const label1 = type === 'cab' ? t('view.kilometerMarker') : 'ISDN';
+    const label1 = type === 'cab' ? t('view._kilometerMarker') : 'ISDN';
     const val1 = type === 'cab' ? data.glb : data.isdn;
     const content = `
         <div class="popup-content">
@@ -1645,7 +1645,7 @@
         }
 
         > div.min:first-child {
-          width: 140px;
+          width: 170px;
         }
 
         > div:last-child {
