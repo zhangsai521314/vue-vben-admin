@@ -864,7 +864,8 @@
         <div class="popup-content">
             <div class='title fontColor'>${title}</div>
             <div class='content'>
-                <div class='roleName' style='display:${data.roleName == '' ? 'none' : 'block'}'>${data.roleName || '--'}</div>
+                <div class='roleName' style='display:${data.roleName == '' ? 'none' : 'block'}'>${data.roleName}</div>
+                <div class='info' style='display:${type == 'hand' ? 'none' : 'flex'}'><div class='min'>ISDN:</div><div>${data.isdn}</div></div>
                 <div class='info'><div class='min'>${label1}:</div><div>${val1}</div></div>
                 <div class='info'><div class='min'>${t('view.locationStation')}:</div><div>${data.station}</div></div>
                 <div class='info'><div class='min'>${t('view.affiliatedRegion')}:</div><div>${data.area}</div></div>
