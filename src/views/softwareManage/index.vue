@@ -792,10 +792,10 @@
   });
   const checkboxConfig = reactive({
     checkMethod: ({ row }) => {
-      return !row.IsBack;
+      return !row.IsBack && !row.IsParent;
     },
     visibleMethod({ row }) {
-      return !row.IsBack;
+      return !row.IsBack && !row.IsParent;
     },
   });
 
@@ -805,7 +805,8 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['orgOrderIndex asc', 'serviceTypeNameCn asc', 'orderIndex asc'],
+    // sortlist: ['orgOrderIndex asc', 'serviceTypeNameCn asc', 'orderIndex asc'],
+    sortlist: ['orderIndex asc'],
   });
 
   getEquipments();
@@ -1105,10 +1106,16 @@
     if (checkDatas && checkDatas.length > 0) {
       const LogFileCollection = [];
       let name = logTableStepName.value.join('\\');
+      let sumSize = 0;
       name = name != '' ? '\\' + name : '';
       checkDatas.forEach((m) => {
+        sumSize += m.Size;
         LogFileCollection.push({ Name: `${LogDirectory}${name}\\${m.Name}`, IsParent: m.IsParent });
       });
+      if (sumSize > 512000) {
+        message.info(t('view.downFileMax', ['500MB']));
+        return;
+      }
       mqttStore.publish(
         mqttStore.downLog.replace(mqttStore.monitorClient, '/' + newServerCode),
         JSON.stringify({

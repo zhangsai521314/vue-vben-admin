@@ -1615,7 +1615,7 @@
     .content {
       display: flex;
       position: relative;
-      top: 17px;
+      top: 22px;
       left: 9px;
       flex-direction: column;
       width: 355px;

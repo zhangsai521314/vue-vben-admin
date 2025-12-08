@@ -893,7 +893,7 @@
         if (!isStop) {
           noAgileStateChangeStatus_timeId = setTimeout(() => {
             noAgileStateChangeStatus();
-          }, 10000);
+          }, 5000);
         }
       })
       .catch((e) => {
@@ -901,7 +901,7 @@
         if (!isStop) {
           noAgileStateChangeStatus_timeId = setTimeout(() => {
             noAgileStateChangeStatus();
-          }, 15000); // 出错时延长间隔
+          }, 10000); // 出错时延长间隔
         }
       });
   }

@@ -1,4 +1,5 @@
 {
+  "downFileMax": "下载文件大小不能超过{0}",
   "clickToSelectTheAuthorizationInformationFile": "点击选择授权信息文件",
   "authorizationInformationFile": "授权信息文件",
   "authorizedQuantity": "授权数量",

@@ -1,4 +1,5 @@
 {
+  "downFileMax": "Le fichier téléchargé ne peut pas dépasser{0}",
   "clickToSelectTheAuthorizationInformationFile": "Cliquez sur Sélectionner le fichier d'information d'autorisation",
   "authorizationInformationFile": "Document d'information sur l'autorisation",
   "authorizedQuantity": "Nombre d'autorisations",

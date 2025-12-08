@@ -95,11 +95,7 @@ errTopicRetry();
 watch(
   () => userStore.userInfo,
   () => {
-    if (
-      userStore.userInfo &&
-      !isDataInit &&
-      window.location.hash.toLowerCase().indexOf('/largescreen') == -1
-    ) {
+    if (userStore.userInfo && !isDataInit) {
       //初始化数据仓库
       dataInit();
     }

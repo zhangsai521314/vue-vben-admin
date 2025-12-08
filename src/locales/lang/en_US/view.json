@@ -1,4 +1,5 @@
 {
+  "downFileMax": "The download file cannot exceed {0}",
   "clickToSelectTheAuthorizationInformationFile": "Click to select the authorization information file",
   "authorizationInformationFile": "Authorization Information File",
   "authorizedQuantity": "Authorized quantity",

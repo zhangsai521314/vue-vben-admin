@@ -249,7 +249,8 @@
   const businessSearchContent = ref('');
 
   const isGetTree = ref(true);
-  const lodingTile = ref(t('view.getting'));
+  const tttt = t('view.getting');
+  const lodingTile = ref(tttt);
   //单击节点文字选中和折叠展开实现
   function treeTitleClick(node) {
     if (node.children.length > 0 || (node.isLeaf != undefined && !node.isLeaf)) {
@@ -481,7 +482,7 @@
       (tabsActiveKey.value == 'business' && businessTreeData.value.length == 0)
     ) {
       if (props.userId != null) {
-        lodingTile.value = t('viwe.getting');
+        lodingTile.value = tttt;
         isGetTree.value = true;
         if (props.isRead) {
           getUserAllPower();
@@ -540,7 +541,7 @@
             });
         }
       } else if (props.roleId != null) {
-        lodingTile.value = t('view.getting');
+        lodingTile.value = tttt;
         isGetTree.value = true;
         roleApi
           .GetRoleAssignPower({
@@ -1057,7 +1058,7 @@
 
   //获取用户只读权限
   function getUserAllPower() {
-    lodingTile.value = t('view.getting');
+    lodingTile.value = tttt;
     isGetTree.value = true;
     userApi
       .GetUserAllPower({

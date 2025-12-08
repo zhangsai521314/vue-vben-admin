@@ -403,6 +403,7 @@
         showOverflow: true,
         sortable: true,
         minWidth: 176,
+        visible: false,
         fixed: 'left',
       },
       {
@@ -587,7 +588,8 @@
     current: 1,
     size: 20,
     total: 0,
-    sortlist: ['orgOrderIndex asc', 'dicOrderIndex asc', 'orderIndex asc'],
+    // sortlist: ['orgOrderIndex asc', 'dicOrderIndex asc', 'orderIndex asc'],
+    sortlist: ['orderIndex asc'],
   });
 
   getOrganization();

@@ -392,10 +392,10 @@
   });
   const checkboxConfig = reactive({
     checkMethod: ({ row }) => {
-      return !row.isBack;
+      return !row.isBack && !row.isParent;
     },
     visibleMethod({ row }) {
-      return !row.isBack;
+      return !row.isBack && !row.isParent;
     },
   });
 
@@ -514,11 +514,17 @@
     if (checkDatas && checkDatas.length > 0) {
       const LogFileCollection = [];
       let name = logTableStepName.value.join('\\');
+      let sumSize = 0;
       name = name != '' ? '\\' + name : '';
       checkDatas.forEach((m) => {
+        sumSize += m.size;
         // LogFileCollection.push({ Name: `${LogDirectory}${name}\\${m.name}`, IsParent: m.isParent });
         LogFileCollection.push(`${LogDirectory}${name}\\${m.name}`);
       });
+      if (sumSize > 512000) {
+        message.info(t('view.downFileMax', ['500MB']));
+        return;
+      }
       viewLogApi
         .GetLogFile({ paths: LogFileCollection })
         .then((data) => {

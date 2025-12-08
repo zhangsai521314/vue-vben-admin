@@ -375,8 +375,8 @@
               name="dcIsdn"
               :rules="[
                 { required: true, message: '' },
-                { min: 4, message: t('view.isdnNumberIs4Digits') },
-                { max: 4, message: t('view.isdnNumberIs4Digits') },
+                { min: 4, message: t('view.dispatchConsoleIsdnNameMustBe4To11Digits') },
+                { max: 11, message: t('view.dispatchConsoleIsdnNameMustBe4To11Digits') },
                 { validator: formValidator.empty, message: t('view.pleaseEnterTheIsdnNumber') },
                 {
                   validator: formValidator.positiveInteger,
