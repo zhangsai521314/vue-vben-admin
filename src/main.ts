@@ -282,11 +282,9 @@ function initMq() {
               //token改变
               if (
                 !myCommon.isnull(userStore.getToken) &&
-                !myCommon.isnull(msg.Token) &&
                 !myCommon.isnull(userStore.userInfo?.userId) &&
                 !myCommon.isnull(msg.UserId) &&
-                userStore.userInfo?.userId == msg.UserId &&
-                userStore.getToken != msg.Token
+                userStore.userInfo?.userId == msg.UserId
               ) {
                 //用户在别处已登录
                 userStore.logout(true);
