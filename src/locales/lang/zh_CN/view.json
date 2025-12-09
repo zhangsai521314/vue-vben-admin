@@ -51,7 +51,7 @@
   "pleaseSelectTheOnlineStatus": "请选择在线状态",
   "onlineStatus": "在线状态",
   "programError": "程序错误",
-  "accessDenied": "禁止访问，用户不存在或没有权限或权限发生变化，请重新登录",
+  "accessDenied": "禁止访问，用户在别处登录或用户不存在或没有权限或权限发生变化，请重新登录",
   "fileDownloadFailed": "文件下载失败",
   "youDoNotHaveThePermissionToOpenThisMenu": "您没有打开该菜单的权限",
   "readFailed": "已读失败",

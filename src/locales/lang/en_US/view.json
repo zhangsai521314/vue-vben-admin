@@ -51,7 +51,7 @@
   "pleaseSelectTheOnlineStatus": "Please select the online status",
   "onlineStatus": "Online Status",
   "programError": "The program error",
-  "accessDenied": "Access denied. The user does not exist or has no permissions or the permissions have changed. Please log in again",
+  "accessDenied": "Access prohibited, user logged in elsewhere or the user does not exist or does not have permission or permission has changed, please log in again",
   "fileDownloadFailed": "File download failed",
   "youDoNotHaveThePermissionToOpenThisMenu": "You do not have the permission to open this menu",
   "readFailed": "Read failed",

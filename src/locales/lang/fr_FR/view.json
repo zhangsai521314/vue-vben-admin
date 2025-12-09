@@ -51,7 +51,7 @@
   "pleaseSelectTheOnlineStatus": "Veuillez sélectionner le statut en ligne",
   "onlineStatus": "Statut en ligne",
   "programError": "Une erreur de programme",
-  "accessDenied": "Accès refusé. L'utilisateur n'existe pas ou n'a pas les autorisations ou les autorisations ont changé. Veuillez vous reconnecter",
+  "accessDenied": "Accès interdit, l'utilisateur est connecté ailleurs ou l'utilisateur n'existe pas ou n'a pas d'autorisations ou les autorisations changent, veuillez vous reconnecter",
   "fileDownloadFailed": "Échec du téléchargement du fichier",
   "youDoNotHaveThePermissionToOpenThisMenu": "Vous n'avez pas la permission d'ouvrir ce menu",
   "readFailed": "Échec de la lecture",
