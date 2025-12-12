@@ -243,7 +243,7 @@
             //加载完成
             wavesurferOb.setVolume(volume.value / 100);
             isPaly.value = true;
-            wavesurferOb.play(1);
+            wavesurferOb.play(0);
           });
           wavesurferOb.on('finish', function (e) {
             isPaly.value = false;
