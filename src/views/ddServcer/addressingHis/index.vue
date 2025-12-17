@@ -53,9 +53,9 @@
                       <a-select-option :value="241">{{
                         t('view.inSiteGroupCallAddressing')
                       }}</a-select-option>
-                      <a-select-option :value="242">{{
+                      <!-- <a-select-option :value="242">{{
                         t('view.adjacentStationGroupCallAddressing')
-                      }}</a-select-option>
+                      }}</a-select-option> -->
                       <a-select-option :value="243">{{
                         t('view.emergencyGroupCallAddressing')
                       }}</a-select-option>
