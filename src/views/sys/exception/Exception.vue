@@ -115,7 +115,7 @@
             title={props.title || title}
             sub-title={props.subTitle || subTitle}
           >
-            {{
+            {/* {{
               extra: () =>
                 btnText && (
                   <Button type="primary" onClick={handler}>
@@ -129,7 +129,7 @@
                 status && ExceptionEnum[status] === void 0
                   ? () => (icon ? <img src={icon} /> : null)
                   : undefined,
-            }}
+            }} */}
           </Result>
         );
       };

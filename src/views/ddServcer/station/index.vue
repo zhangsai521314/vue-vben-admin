@@ -489,7 +489,7 @@
                 v-model:value="formData.groupCallPriority"
               />
             </a-form-item>
-            <a-form-item
+            <!-- <a-form-item
               name="tempCallNumber"
               :label="t('view.adjacentStationGroupCallNumber')"
               :rules="[
@@ -540,7 +540,7 @@
                 :precision="0"
                 v-model:value="formData.tempCallPriority"
               />
-            </a-form-item>
+            </a-form-item> -->
           </template>
           <a-form-item
             name="remark"
@@ -728,20 +728,20 @@
         sortable: true,
         minWidth: locale == 'zh-CN' ? 170 : 260,
       },
-      {
-        field: 'tempCallNumber',
-        title: t('view.adjacentStationGroupCallNumber'),
-        showOverflow: true,
-        sortable: true,
-        minWidth: locale == 'zh-CN' ? 150 : 260,
-      },
-      {
-        field: 'tempCallPriority',
-        title: t('view.adjacentStationGroupCallPriority'),
-        showOverflow: true,
-        sortable: true,
-        minWidth: locale == 'zh-CN' ? 170 : 260,
-      },
+      // {
+      //   field: 'tempCallNumber',
+      //   title: t('view.adjacentStationGroupCallNumber'),
+      //   showOverflow: true,
+      //   sortable: true,
+      //   minWidth: locale == 'zh-CN' ? 150 : 260,
+      // },
+      // {
+      //   field: 'tempCallPriority',
+      //   title: t('view.adjacentStationGroupCallPriority'),
+      //   showOverflow: true,
+      //   sortable: true,
+      //   minWidth: locale == 'zh-CN' ? 170 : 260,
+      // },
       {
         field: 'startGlb',
         title: t('view.startingMileageMarkerMmeters'),

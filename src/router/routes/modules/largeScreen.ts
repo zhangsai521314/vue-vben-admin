@@ -12,14 +12,14 @@ const largeScreen: AppRouteModule = {
     icon: 'ion:grid-outline',
   },
   children: [
-    {
-      path: 'index',
-      name: 'LargeScreen',
-      component: () => import('/@/views/largeScreen/index.vue'),
-      meta: {
-        hideMenu: true,
-      },
-    },
+    // {
+    //   path: 'index',
+    //   name: 'LargeScreen',
+    //   component: () => import('/@/views/largeScreen/index.vue'),
+    //   meta: {
+    //     hideMenu: true,
+    //   },
+    // },
     {
       path: 'noClear',
       name: 'LargeScreenNoClear',
