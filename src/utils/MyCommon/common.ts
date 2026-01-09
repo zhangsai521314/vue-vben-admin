@@ -412,5 +412,30 @@ const Common = {
     }, '');
     return `#${hex.toUpperCase()}`; // 返回完整的HEX颜色代码（需将字母转换为大写）
   },
+  //公里标转换
+  // 如果数字小于1000，比如0=K0+000,1=K0+001,2=K0+002，50=K0+050,100=K0+100，999=K0+999。
+  // 如果数字大于等于1000，比如1000=K1+000,1001=K1+001,1002=K1+002,1300=K1+300,1999=K1+999,16777215=K16777+215。
+  // 小数点后面的数字需要保留3位
+  formatKilometer(val) {
+    if (val == null || val == undefined || val === '' || val == 16777215) {
+      return '----';
+    }
+
+    // 安全处理：确保是数字
+    const num = Number(val);
+    if (isNaN(num)) return val;
+
+    // 1. 计算 K 部分 (整除 1000)
+    const kPart = Math.floor(num / 1000);
+
+    // 2. 计算余数部分 (对 1000 取余)
+    const mPart = num % 1000;
+
+    // 3. 核心步骤：将余数转字符串，并使用 padStart 填充 '0' 到 3 位
+    const mStr = String(mPart).padStart(3, '0');
+
+    // 4. 拼接返回
+    return `K${kPart}+${mStr}`;
+  },
 };
 export default Common;

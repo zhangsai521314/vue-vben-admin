@@ -142,6 +142,9 @@
                 : row.stationLocation
         }}
       </template>
+      <template #glb="{ row }">
+        {{ myCommon.formatKilometer(row.glb) }}
+      </template>
     </vxe-grid>
     <a-drawer
       :headerStyle="{ height: '49px', borderBottom: '2px solid #eee' }"
@@ -159,6 +162,7 @@
   </MyContent>
 </template>
 <script setup lang="ts">
+  import myCommon from '@/utils/MyCommon/common';
   import AntVueCommon from '@/utils/MyCommon/AntVueCommon';
   import { ref, reactive, nextTick, watch } from 'vue';
   import { useDesign } from '@/hooks/web/useDesign';
@@ -259,6 +263,9 @@
         sortable: true,
         visible: false,
         minWidth: locale == 'zh-CN' ? 100 : 176,
+        slots: {
+          default: 'glb',
+        },
       },
       {
         field: 'operatorUser',

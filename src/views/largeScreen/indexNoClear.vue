@@ -859,7 +859,12 @@
 
     const title = type === 'cab' ? t('view._cabRadio') : t('view.handheldRadio');
     const label1 = type === 'cab' ? t('view._kilometerMarker') : 'ISDN';
-    const val1 = type === 'cab' ? data.glb : data.isdn;
+    let val1;
+    if (type === 'cab') {
+      val1 = myCommon.formatKilometer(data.glb);
+    } else {
+      val1 = data.isdn;
+    }
     const content = `
         <div class="popup-content">
             <div class='title fontColor'>${title}</div>
