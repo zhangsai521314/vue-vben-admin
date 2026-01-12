@@ -93,7 +93,7 @@
                         v-model:value="seacthContent.logType"
                       >
                         <a-select-option :value="2">{{ t('view.operationLog') }}</a-select-option>
-                        <a-select-option :value="1">{{ t('view.loginLog') }}</a-select-option>
+                        <!-- <a-select-option :value="1">{{ t('view.loginLog') }}</a-select-option> -->
                         <a-select-option :value="3">{{ t('view.errorLog') }}</a-select-option>
                       </a-select>
                     </a-space>
