@@ -162,21 +162,23 @@
             </a-menu>
           </template>
         </a-dropdown>
-        <div>
-          <a-tooltip placement="top">
-            <template #title>{{ t('view.save') }}</template>
-            <div style="float: right">
-              <!-- @click="saveClick" -->
-              <a-spin :spinning="isShowSaveMenu">
-                <IconFontClass
-                  style="font-weight: 600"
-                  @click="saveConfig"
-                  name="icon-baseui-baocun"
-                />
-              </a-spin>
-            </div>
-          </a-tooltip>
-        </div>
+        <AuthDom auth="gplot_save">
+          <div>
+            <a-tooltip placement="top">
+              <template #title>{{ t('view.save') }}</template>
+              <div style="float: right">
+                <!-- @click="saveClick" -->
+                <a-spin :spinning="isShowSaveMenu">
+                  <IconFontClass
+                    style="font-weight: 600"
+                    @click="saveConfig"
+                    name="icon-baseui-baocun"
+                  />
+                </a-spin>
+              </div>
+            </a-tooltip>
+          </div>
+        </AuthDom>
         <!-- <div>
           <a-tooltip placement="top">
             <template #title>预览</template>

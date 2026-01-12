@@ -173,22 +173,22 @@
   const menuExpandedKeys = ref([]);
   const menuOptions = {
     sys: [
-      { label: t('view.all'), value: '1' },
-      { label: t('view.display'), value: '5' },
-      { label: t('view.edit'), value: '2' },
-      { label: t('view.delete'), value: '4' },
-      { label: t('view.addSubset'), value: '3' },
+      // { label: t('view.all'), value: '1' },
+      { label: t('view.menuDisplay'), value: '5' },
+      // { label: t('view.edit'), value: '2' },
+      // { label: t('view.delete'), value: '4' },
+      // { label: t('view.addSubset'), value: '3' },
     ],
     nosys: [
-      { label: t('view.all'), value: '1' },
-      { label: t('view.display'), value: '5' },
-      { label: t('view.edit'), value: '2' },
-      { label: t('view.delete'), value: '4' },
-      { label: t('view.addSubset'), value: '3' },
+      // { label: t('view.all'), value: '1' },
+      { label: t('view.menuDisplay'), value: '5' },
+      // { label: t('view.edit'), value: '2' },
+      // { label: t('view.delete'), value: '4' },
+      // { label: t('view.addSubset'), value: '3' },
     ],
     btn: [
-      { label: t('view.all'), value: '1' },
-      { label: t('view.display'), value: '5' },
+      // { label: t('view.all'), value: '1' },
+      { label: t('view.btnDisplay'), value: '5' },
       { label: t('view.clickAction'), value: '9' },
     ],
   };

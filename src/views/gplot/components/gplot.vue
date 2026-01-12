@@ -408,7 +408,8 @@
                 }
                 graphOb.draw();
               }
-              changeSave();
+              //20260109保存按钮增加权限控制，取消自动保存
+              // changeSave();
             }
           },
           { deep: true },

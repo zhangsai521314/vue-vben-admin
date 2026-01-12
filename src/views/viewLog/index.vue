@@ -266,6 +266,22 @@
         fixed: 'left',
       },
       {
+        field: 'mClassName',
+        title: t('view.operatingFunction'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 200,
+        fixed: 'left',
+      },
+      {
+        field: 'functionName',
+        title: t('view.performTheOperation'),
+        showOverflow: true,
+        sortable: true,
+        minWidth: 200,
+        fixed: 'left',
+      },
+      {
         field: 'logType',
         title: t('view.logType'),
         showOverflow: true,
@@ -523,6 +539,7 @@
       });
       if (sumSize > 512000) {
         message.info(t('view.downFileMax', ['500MB']));
+        fromSpinning.value = false;
         return;
       }
       viewLogApi

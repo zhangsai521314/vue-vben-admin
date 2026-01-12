@@ -289,10 +289,7 @@
   });
   const tableRef = ref({});
   const myContentRef = ref({});
-  const timeValue = ref([
-    dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
-    dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
-  ]);
+  const timeValue = ref(null);
   const seacthContent = ref({
     isdn: null,
     fnNumber: null,
@@ -361,10 +358,7 @@
       startTime: null,
       endTime: null,
     };
-    timeValue.value = [
-      dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
-      dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
-    ];
+    timeValue.value = null;
   }
 
   function handlePageChange() {

@@ -23,7 +23,7 @@
                       :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
                     >
                       <a-range-picker
-                        :allowClear="false"
+                        :allowClear="true"
                         v-model:value="timeValue"
                         :showTime="true"
                         format="YYYY-MM-DD HH:mm:ss"
@@ -324,10 +324,7 @@
     total: 0,
     sortlist: ['updateTime desc'],
   });
-  const timeValue = ref([
-    dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
-    dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
-  ]);
+  const timeValue = ref(null);
   const refresh = ref('yes');
   const refreshTime = ref(10);
   let refreshTimeId;

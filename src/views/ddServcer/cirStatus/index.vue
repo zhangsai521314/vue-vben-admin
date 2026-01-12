@@ -24,7 +24,7 @@
                       :locale="locale == 'fr-FR' ? frFR : locale == 'en-US' ? enUS : zhCN"
                     >
                       <a-range-picker
-                        :allowClear="false"
+                        :allowClear="true"
                         v-model:value="timeValue"
                         :showTime="true"
                         format="YYYY-MM-DD HH:mm:ss"
@@ -347,10 +347,7 @@
   });
   const tableRef = ref({});
   const myContentRef = ref({});
-  const timeValue = ref([
-    dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
-    dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
-  ]);
+  const timeValue = ref(null);
   const seacthContent = ref({
     lineCode: null,
     stationId: null,
@@ -430,10 +427,7 @@
       startTime: null,
       endTime: null,
     };
-    timeValue.value = [
-      dayjs(dayjs().subtract(7, 'day').format('YYYY-MM-DD')),
-      dayjs(dayjs().add(1, 'day').format('YYYY-MM-DD')),
-    ];
+    timeValue.value = null;
   }
 
   function handlePageChange() {
