@@ -428,10 +428,15 @@
                 item.powerType = pt.join(',');
               }
             } else {
+              // if (item.menuType == 7) {
+              //   item.powerType = '1,5,9';
+              // } else {
+              //   item.powerType = '1,2,3,4,5';
+              // }
               if (item.menuType == 7) {
-                item.powerType = '1,5,9';
+                item.powerType = '5,9';
               } else {
-                item.powerType = '1,2,3,4,5';
+                item.powerType = '5';
               }
             }
             if (menuTreeChecnk.value.indexOf(item.key) == -1) {
